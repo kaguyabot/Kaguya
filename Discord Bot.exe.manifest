@@ -3,7 +3,7 @@
   <asmv1:assemblyIdentity name="Discord Bot.exe" version="0.0.0.5" publicKeyToken="0000000000000000" language="en" processorArchitecture="msil" type="win32" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="Discord Bot" version="1.0.0.0" publicKeyToken="6DB83CE680B19EBD" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="Discord Bot" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
     <commandLine file="Discord Bot.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="35808">
-      <assemblyIdentity name="Discord Bot" version="1.0.0.0" publicKeyToken="6DB83CE680B19EBD" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="35328">
+      <assemblyIdentity name="Discord Bot" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>0MRPerb7oPeeHub0PGc2Momq3OcsfKDSndZDl8TVijk=</dsig:DigestValue>
+        <dsig:DigestValue>j6IRe8ph0l3onPrSPqVh1aGTlUGSajSQesjmkQQojJA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -126,26 +126,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Extensions.DependencyInjection.dll" size="45048">
-      <assemblyIdentity name="Microsoft.Extensions.DependencyInjection" version="1.1.1.0" publicKeyToken="ADB9793829DDAE60" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Extensions.DependencyInjection.dll" size="60480">
+      <assemblyIdentity name="Microsoft.Extensions.DependencyInjection" version="2.2.0.0" publicKeyToken="ADB9793829DDAE60" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>CA5NQtuGG5sjkeH0rAO5GlJTrXGy/7hmGHZfIsx7oM8=</dsig:DigestValue>
+        <dsig:DigestValue>dyrXZ0KEwPYuXJDQdyKDuBUq1wTmEtXUYIjHfRcxTRw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Extensions.DependencyInjection.Abstractions.dll" size="35320">
-      <assemblyIdentity name="Microsoft.Extensions.DependencyInjection.Abstractions" version="1.1.1.0" publicKeyToken="ADB9793829DDAE60" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Extensions.DependencyInjection.Abstractions.dll" size="37440">
+      <assemblyIdentity name="Microsoft.Extensions.DependencyInjection.Abstractions" version="2.2.0.0" publicKeyToken="ADB9793829DDAE60" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>8mY+4ILukozpvNFvCMZNEr+3LMbVPlW1ZsM5lxWa0q0=</dsig:DigestValue>
+        <dsig:DigestValue>TLr7XICxFpJjjYV8AidCn1bNJ97o+/hbdcsamMiob4Q=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -162,48 +162,48 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Collections.Immutable.dll" size="244432">
-      <assemblyIdentity name="System.Collections.Immutable" version="1.2.1.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Collections.Immutable.dll" size="302216">
+      <assemblyIdentity name="System.Collections.Immutable" version="1.2.3.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>qOnOXU2xiXqTnmCGAVRhcwCw36TE0+EDQfIa8N5Lv9U=</dsig:DigestValue>
+        <dsig:DigestValue>LwWixInC0wpsyjRtTOGEMj1w609a+mvtNNWAAnRETlc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Diagnostics.DiagnosticSource.dll" size="35760">
-      <assemblyIdentity name="System.Diagnostics.DiagnosticSource" version="4.0.1.0" publicKeyToken="CC7B13FFCD2DDD51" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Diagnostics.DiagnosticSource.dll" size="58416">
+      <assemblyIdentity name="System.Diagnostics.DiagnosticSource" version="4.0.3.1" publicKeyToken="CC7B13FFCD2DDD51" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>0iEzgYowMT4L7PAQ14pValazTqNh29M1iMmBdjH+1UA=</dsig:DigestValue>
+        <dsig:DigestValue>iuWqiYe6bpaX9tuwP6QR+3FQQg0wMKCEIXnnh0zGZ3k=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Interactive.Async.dll" size="236320">
-      <assemblyIdentity name="System.Interactive.Async" version="3.0.3000.0" publicKeyToken="94BC3704CDDFC263" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Interactive.Async.dll" size="252344">
+      <assemblyIdentity name="System.Interactive.Async" version="3.2.0.0" publicKeyToken="94BC3704CDDFC263" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Cgg/fjnlLNIF3kQB/NVGOP2TmC7F7Rgzw3SlCGilJ+g=</dsig:DigestValue>
+        <dsig:DigestValue>w6UJKek8bIxax5mllvoRMaASPrTpF4sHOZTQF1ncLho=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Discord Bot.exe.config" size="544">
+  <file name="Discord Bot.exe.config" size="1044">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>Cf5i63X/uhJm6yhWIAxzTQPXM9PfkTGL+lKfDwuetOU=</dsig:DigestValue>
+      <dsig:DigestValue>zu/BoeOaqV6cOXy5lYsEioXGn3CZ+q7LmiOxs0rwGJs=</dsig:DigestValue>
     </hash>
   </file>
   <file name="SystemLang\ReadMe.txt" size="545">

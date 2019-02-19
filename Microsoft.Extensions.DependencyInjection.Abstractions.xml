@@ -4,58 +4,282 @@
         <name>Microsoft.Extensions.DependencyInjection.Abstractions</name>
     </assembly>
     <members>
-        <member name="T:Microsoft.Extensions.DependencyInjection.ActivatorUtilities">
+        <member name="T:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions">
             <summary>
-            Helper code for the various activator services.
+            Extension methods for adding and removing services to an <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />.
             </summary>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance(System.IServiceProvider,System.Type,System.Object[])">
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Add(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)">
             <summary>
-            Instantiate a type with constructor arguments provided directly and/or from an <see cref="T:System.IServiceProvider"/>.
+            Adds the specified <paramref name="descriptor"/> to the <paramref name="collection"/>.
             </summary>
-            <param name="provider">The service provider used to resolve dependencies</param>
-            <param name="instanceType">The type to activate</param>
-            <param name="parameters">Constructor arguments not provided by the <paramref name="provider"/>.</param>
-            <returns>An activated object of type instanceType</returns>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="descriptor">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> to add.</param>
+            <returns>A reference to the current instance of <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactory(System.Type,System.Type[])">
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Add(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{Microsoft.Extensions.DependencyInjection.ServiceDescriptor})">
             <summary>
-            Create a delegate that will instantiate a type with constructor arguments provided directly
-            and/or from an <see cref="T:System.IServiceProvider"/>.
+            Adds a sequence of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> to the <paramref name="collection"/>.
             </summary>
-            <param name="instanceType">The type to activate</param>
-            <param name="argumentTypes">
-            The types of objects, in order, that will be passed to the returned function as its second parameter
-            </param>
-            <returns>
-            A factory that will instantiate instanceType using an <see cref="T:System.IServiceProvider"/>
-            and an argument array containing objects matching the types defined in argumentTypes
-            </returns>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="descriptors">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>s to add.</param>
+            <returns>A reference to the current instance of <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance``1(System.IServiceProvider,System.Object[])">
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAdd(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)">
             <summary>
-            Instantiate a type with constructor arguments provided directly and/or from an <see cref="T:System.IServiceProvider"/>.
+            Adds the specified <paramref name="descriptor"/> to the <paramref name="collection"/> if the
+            service type hasn't already been registered.
             </summary>
-            <typeparam name="T">The type to activate</typeparam>
-            <param name="provider">The service provider used to resolve dependencies</param>
-            <param name="parameters">Constructor arguments not provided by the <paramref name="provider"/>.</param>
-            <returns>An activated object of type T</returns>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="descriptor">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> to add.</param>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetServiceOrCreateInstance``1(System.IServiceProvider)">
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAdd(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{Microsoft.Extensions.DependencyInjection.ServiceDescriptor})">
             <summary>
-            Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
+            Adds the specified <paramref name="descriptors"/> to the <paramref name="collection"/> if the
+            service type hasn't already been registered.
             </summary>
-            <typeparam name="T">The type of the service</typeparam>
-            <param name="provider">The service provider used to resolve dependencies</param>
-            <returns>The resolved service or created instance</returns>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="descriptors">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>s to add.</param>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetServiceOrCreateInstance(System.IServiceProvider,System.Type)">
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddTransient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type)">
             <summary>
-            Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
+            Adds the specified <paramref name="service"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> service
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
             </summary>
-            <param name="provider">The service provider</param>
-            <param name="type">The type of the service</param>
-            <returns>The resolved service or created instance</returns>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="service">The type of the service to register.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddTransient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Type)">
+            <summary>
+            Adds the specified <paramref name="service"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> service
+            with the <paramref name="implementationType"/> implementation
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="service">The type of the service to register.</param>
+            <param name="implementationType">The implementation type of the service.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddTransient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Func{System.IServiceProvider,System.Object})">
+            <summary>
+            Adds the specified <paramref name="service"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> service
+            using the factory specified in <paramref name="implementationFactory"/>
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="service">The type of the service to register.</param>
+            <param name="implementationFactory">The factory that creates the service.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddTransient``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> service
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddTransient``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> service
+            implementation type specified in <typeparamref name="TImplementation"/>
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddTransient``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,``0})">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> service
+            using the factory specified in <paramref name="implementationFactory"/>
+            to the <paramref name="services"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="implementationFactory">The factory that creates the service.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddScoped(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type)">
+            <summary>
+            Adds the specified <paramref name="service"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> service
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="service">The type of the service to register.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddScoped(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Type)">
+            <summary>
+            Adds the specified <paramref name="service"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> service
+            with the <paramref name="implementationType"/> implementation
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="service">The type of the service to register.</param>
+            <param name="implementationType">The implementation type of the service.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddScoped(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Func{System.IServiceProvider,System.Object})">
+            <summary>
+            Adds the specified <paramref name="service"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> service
+            using the factory specified in <paramref name="implementationFactory"/>
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="service">The type of the service to register.</param>
+            <param name="implementationFactory">The factory that creates the service.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddScoped``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> service
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddScoped``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> service
+            implementation type specified in <typeparamref name="TImplementation"/>
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddScoped``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,``0})">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> service
+            using the factory specified in <paramref name="implementationFactory"/>
+            to the <paramref name="services"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="implementationFactory">The factory that creates the service.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddSingleton(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type)">
+            <summary>
+            Adds the specified <paramref name="service"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> service
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="service">The type of the service to register.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddSingleton(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Type)">
+            <summary>
+            Adds the specified <paramref name="service"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> service
+            with the <paramref name="implementationType"/> implementation
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="service">The type of the service to register.</param>
+            <param name="implementationType">The implementation type of the service.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddSingleton(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Func{System.IServiceProvider,System.Object})">
+            <summary>
+            Adds the specified <paramref name="service"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> service
+            using the factory specified in <paramref name="implementationFactory"/>
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="service">The type of the service to register.</param>
+            <param name="implementationFactory">The factory that creates the service.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddSingleton``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> service
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddSingleton``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> service
+            implementation type specified in <typeparamref name="TImplementation"/>
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddSingleton``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0)">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> service
+            with an instance specified in <paramref name="instance"/>
+            to the <paramref name="collection"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="instance">The instance of the service to add.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddSingleton``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,``0})">
+            <summary>
+            Adds the specified <typeparamref name="TService"/> as a <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> service
+            using the factory specified in <paramref name="implementationFactory"/>
+            to the <paramref name="services"/> if the service type hasn't already been registered.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="implementationFactory">The factory that creates the service.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)">
+            <summary>
+            Adds a <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> if an existing descriptor with the same
+            <see cref="P:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.ServiceType"/> and an implementation that does not already exist
+            in <paramref name="services.."/>.
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="descriptor">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</param>
+            <remarks>
+            Use <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> when registing a service implementation of a
+            service type that
+            supports multiple registrations of the same service type. Using
+            <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Add(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> is not idempotent and can add
+            duplicate
+            <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> instances if called twice. Using
+            <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> will prevent registration
+            of multiple implementation types.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{Microsoft.Extensions.DependencyInjection.ServiceDescriptor})">
+            <summary>
+            Adds the specified <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>s if an existing descriptor with the same
+            <see cref="P:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.ServiceType"/> and an implementation that does not already exist
+            in <paramref name="services.."/>.
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="descriptors">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>s.</param>
+            <remarks>
+            Use <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> when registing a service
+            implementation of a service type that
+            supports multiple registrations of the same service type. Using
+            <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Add(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> is not idempotent and can add
+            duplicate
+            <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> instances if called twice. Using
+            <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> will prevent registration
+            of multiple implementation types.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Replace(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)">
+            <summary>
+            Removes the first service in <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> with the same service type
+            as <paramref name="descriptor"/> and adds <paramef name="descriptor"/> to the collection.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="descriptor">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> to replace with.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.RemoveAll``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Removes all services of type <typeparamef name="T"/> in <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.RemoveAll(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type)">
+            <summary>
+            Removes all services of type <paramef name="serviceType"/> in <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            </summary>
+            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
+            <param name="serviceType">The service type to remove.</param>
+            <returns></returns>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.IServiceCollection">
             <summary>
@@ -94,6 +318,12 @@
             The <see cref="T:System.IServiceProvider"/> used to resolve dependencies from the scope.
             </summary>
         </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.IServiceScopeFactory">
+            <summary>
+            A factory for creating instances of <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceScope"/>, which is used to create
+            services within a scope.
+            </summary>
+        </member>
         <member name="M:Microsoft.Extensions.DependencyInjection.IServiceScopeFactory.CreateScope">
             <summary>
             Create an <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceScope"/> which
@@ -122,13 +352,65 @@
             <returns>A service object of type <paramref name="serviceType"/>.
             Throws an exception if the <see cref="T:System.IServiceProvider"/> cannot create the object.</returns>
         </member>
-        <member name="T:Microsoft.Extensions.DependencyInjection.ObjectFactory">
+        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.AmbiguousConstructorMatch">
             <summary>
-            The result of <see cref="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactory(System.Type,System.Type[])"/>.
+            Multiple constructors accepting all given argument types have been found in type '{0}'. There should only be one applicable constructor.
             </summary>
-            <param name="serviceProvider">The <see cref="T:System.IServiceProvider"/> to get service arguments from.</param>
-            <param name="arguments">Additional constructor arguments.</param>
-            <returns>The instantiated type.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatAmbiguousConstructorMatch(System.Object)">
+            <summary>
+            Multiple constructors accepting all given argument types have been found in type '{0}'. There should only be one applicable constructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.CannotLocateImplementation">
+            <summary>
+            Unable to locate implementation '{0}' for service '{1}'.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatCannotLocateImplementation(System.Object,System.Object)">
+            <summary>
+            Unable to locate implementation '{0}' for service '{1}'.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.CannotResolveService">
+            <summary>
+            Unable to resolve service for type '{0}' while attempting to activate '{1}'.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatCannotResolveService(System.Object,System.Object)">
+            <summary>
+            Unable to resolve service for type '{0}' while attempting to activate '{1}'.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.NoConstructorMatch">
+            <summary>
+            A suitable constructor for type '{0}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatNoConstructorMatch(System.Object)">
+            <summary>
+            A suitable constructor for type '{0}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.NoServiceRegistered">
+            <summary>
+            No service for type '{0}' has been registered.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatNoServiceRegistered(System.Object)">
+            <summary>
+            No service for type '{0}' has been registered.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.TryAddIndistinguishableTypeToEnumerable">
+            <summary>
+            Implementation type cannot be '{0}' because it is indistinguishable from other services registered for '{1}'.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatTryAddIndistinguishableTypeToEnumerable(System.Object,System.Object)">
+            <summary>
+            Implementation type cannot be '{0}' because it is indistinguishable from other services registered for '{1}'.
+            </summary>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions">
             <summary>
@@ -404,6 +686,11 @@
             <returns>A reference to this instance after the operation has completed.</returns>
             <seealso cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/>
         </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor">
+            <summary>
+            Describes a service with its service type, implementation, and lifetime.
+            </summary>
+        </member>
         <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.#ctor(System.Type,System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
             <summary>
             Initializes a new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified <paramref name="implementationType"/>.
@@ -442,6 +729,204 @@
         </member>
         <member name="P:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.ImplementationFactory">
             <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Transient``2">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <typeparamref name="TImplementation"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation.</typeparam>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Transient(System.Type,System.Type)">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <paramref name="service"/> and <paramref name="implementationType"/>
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> lifetime.
+            </summary>
+            <param name="service">The type of the service.</param>
+            <param name="implementationType">The type of the implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Transient``2(System.Func{System.IServiceProvider,``1})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <typeparamref name="TImplementation"/>,
+            <paramref name="implementationFactory"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation.</typeparam>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Transient``1(System.Func{System.IServiceProvider,``0})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <paramref name="implementationFactory"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Transient(System.Type,System.Func{System.IServiceProvider,System.Object})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <paramref name="service"/>, <paramref name="implementationFactory"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/> lifetime.
+            </summary>
+            <param name="service">The type of the service.</param>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Scoped``2">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <typeparamref name="TImplementation"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation.</typeparam>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Scoped(System.Type,System.Type)">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <paramref name="service"/> and <paramref name="implementationType"/>
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> lifetime.
+            </summary>
+            <param name="service">The type of the service.</param>
+            <param name="implementationType">The type of the implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Scoped``2(System.Func{System.IServiceProvider,``1})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <typeparamref name="TImplementation"/>,
+            <paramref name="implementationFactory"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation.</typeparam>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Scoped``1(System.Func{System.IServiceProvider,``0})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <paramref name="implementationFactory"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Scoped(System.Type,System.Func{System.IServiceProvider,System.Object})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <paramref name="service"/>, <paramref name="implementationFactory"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> lifetime.
+            </summary>
+            <param name="service">The type of the service.</param>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Singleton``2">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <typeparamref name="TImplementation"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation.</typeparam>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Singleton(System.Type,System.Type)">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <paramref name="service"/> and <paramref name="implementationType"/>
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> lifetime.
+            </summary>
+            <param name="service">The type of the service.</param>
+            <param name="implementationType">The type of the implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Singleton``2(System.Func{System.IServiceProvider,``1})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <typeparamref name="TImplementation"/>,
+            <paramref name="implementationFactory"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation.</typeparam>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Singleton``1(System.Func{System.IServiceProvider,``0})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <paramref name="implementationFactory"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Singleton(System.Type,System.Func{System.IServiceProvider,System.Object})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <paramref name="serviceType"/>, <paramref name="implementationFactory"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton"/> lifetime.
+            </summary>
+            <param name="serviceType">The type of the service.</param>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Singleton``1(``0)">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <typeparamref name="TService"/>, <paramref name="implementationInstance"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> lifetime.
+            </summary>
+            <typeparam name="TService">The type of the service.</typeparam>
+            <param name="implementationInstance">The instance of the implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Singleton(System.Type,System.Object)">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <paramref name="serviceType"/>, <paramref name="implementationInstance"/>,
+            and the <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/> lifetime.
+            </summary>
+            <param name="serviceType">The type of the service.</param>
+            <param name="implementationInstance">The instance of the implementation.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Describe(System.Type,System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <paramref name="serviceType"/>, <paramref name="implementationType"/>,
+            and <paramref name="lifetime"/>.
+            </summary>
+            <param name="serviceType">The type of the service.</param>
+            <param name="implementationType">The type of the implementation.</param>
+            <param name="lifetime">The lifetime of the service.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.Describe(System.Type,System.Func{System.IServiceProvider,System.Object},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> with the specified
+            <paramref name="serviceType"/>, <paramref name="implementationFactory"/>,
+            and <paramref name="lifetime"/>.
+            </summary>
+            <param name="serviceType">The type of the service.</param>
+            <param name="implementationFactory">A factory to create new instances of the service implementation.</param>
+            <param name="lifetime">The lifetime of the service.</param>
+            <returns>A new instance of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</returns>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime">
             <summary>
@@ -520,144 +1005,71 @@
             <param name="provider">The <see cref="T:System.IServiceProvider"/> to create the scope from.</param>
             <returns>A <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceScope"/> that can be used to resolve scoped services.</returns>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Add(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)">
+        <member name="T:Microsoft.Extensions.DependencyInjection.ActivatorUtilities">
             <summary>
-            Adds the specified <paramref name="descriptor"/> to the <paramref name="collection"/>.
-            </summary>
-            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
-            <param name="descriptor">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</param>
-            <returns>A reference to the current instance of <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Add(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{Microsoft.Extensions.DependencyInjection.ServiceDescriptor})">
-            <summary>
-            Adds a sequence of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> to the <paramref name="collection"/>.
-            </summary>
-            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
-            <param name="descriptors">The <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>s to add.</param>
-            <returns>A reference to the current instance of <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</returns>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAdd(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)">
-            <summary>
-            Adds the specified <paramref name="descriptor"/> to the <paramref name="collection"/> if the
-            service type hasn't been already registered.
-            </summary>
-            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
-            <param name="descriptor">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</param>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAdd(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{Microsoft.Extensions.DependencyInjection.ServiceDescriptor})">
-            <summary>
-            Adds the specified <paramref name="descriptors"/> to the <paramref name="collection"/> if the
-            service type hasn't been already registered.
-            </summary>
-            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
-            <param name="descriptors">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>s.</param>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)">
-            <summary>
-            Adds a <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> if an existing descriptor with the same
-            <see cref="P:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.ServiceType"/> and an implementation that does not already exist
-            in <paramref name="services.."/>.
-            </summary>
-            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
-            <param name="descriptor">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>.</param>
-            <remarks>
-            Use <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> when registing a service implementation of a
-            service type that
-            supports multiple registrations of the same service type. Using
-            <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Add(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> is not idempotent and can add
-            duplicate
-            <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> instances if called twice. Using
-            <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> will prevent registration
-            of multiple implementation types.
-            </remarks>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{Microsoft.Extensions.DependencyInjection.ServiceDescriptor})">
-            <summary>
-            Adds the specified <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>s if an existing descriptor with the same
-            <see cref="P:Microsoft.Extensions.DependencyInjection.ServiceDescriptor.ServiceType"/> and an implementation that does not already exist
-            in <paramref name="services.."/>.
-            </summary>
-            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
-            <param name="descriptors">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/>s.</param>
-            <remarks>
-            Use <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> when registing a service
-            implementation of a service type that
-            supports multiple registrations of the same service type. Using
-            <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Add(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> is not idempotent and can add
-            duplicate
-            <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> instances if called twice. Using
-            <see cref="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddEnumerable(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)"/> will prevent registration
-            of multiple implementation types.
-            </remarks>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.Replace(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceDescriptor)">
-            <summary>
-            Removes the first service in <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> with the same service type
-            as <paramref name="descriptor"/> and adds <paramef name="descriptor"/> to the collection.
-            </summary>
-            <param name="collection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.</param>
-            <param name="descriptor">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceDescriptor"/> to replace with.</param>
-            <returns></returns>
-        </member>
-        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.AmbiguousConstructorMatch">
-            <summary>
-            Multiple constructors accepting all given argument types have been found in type '{0}'. There should only be one applicable constructor.
+            Helper code for the various activator services.
             </summary>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatAmbiguousConstructorMatch(System.Object)">
+        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance(System.IServiceProvider,System.Type,System.Object[])">
             <summary>
-            Multiple constructors accepting all given argument types have been found in type '{0}'. There should only be one applicable constructor.
+            Instantiate a type with constructor arguments provided directly and/or from an <see cref="T:System.IServiceProvider"/>.
+            </summary>
+            <param name="provider">The service provider used to resolve dependencies</param>
+            <param name="instanceType">The type to activate</param>
+            <param name="parameters">Constructor arguments not provided by the <paramref name="provider"/>.</param>
+            <returns>An activated object of type instanceType</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactory(System.Type,System.Type[])">
+            <summary>
+            Create a delegate that will instantiate a type with constructor arguments provided directly
+            and/or from an <see cref="T:System.IServiceProvider"/>.
+            </summary>
+            <param name="instanceType">The type to activate</param>
+            <param name="argumentTypes">
+            The types of objects, in order, that will be passed to the returned function as its second parameter
+            </param>
+            <returns>
+            A factory that will instantiate instanceType using an <see cref="T:System.IServiceProvider"/>
+            and an argument array containing objects matching the types defined in argumentTypes
+            </returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance``1(System.IServiceProvider,System.Object[])">
+            <summary>
+            Instantiate a type with constructor arguments provided directly and/or from an <see cref="T:System.IServiceProvider"/>.
+            </summary>
+            <typeparam name="T">The type to activate</typeparam>
+            <param name="provider">The service provider used to resolve dependencies</param>
+            <param name="parameters">Constructor arguments not provided by the <paramref name="provider"/>.</param>
+            <returns>An activated object of type T</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetServiceOrCreateInstance``1(System.IServiceProvider)">
+            <summary>
+            Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
+            </summary>
+            <typeparam name="T">The type of the service</typeparam>
+            <param name="provider">The service provider used to resolve dependencies</param>
+            <returns>The resolved service or created instance</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetServiceOrCreateInstance(System.IServiceProvider,System.Type)">
+            <summary>
+            Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
+            </summary>
+            <param name="provider">The service provider</param>
+            <param name="type">The type of the service</param>
+            <returns>The resolved service or created instance</returns>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructorAttribute">
+            <summary>
+            Marks the constructor to be used when activating type using <see cref="T:Microsoft.Extensions.DependencyInjection.ActivatorUtilities"/>.
             </summary>
         </member>
-        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.CannotLocateImplementation">
+        <member name="T:Microsoft.Extensions.DependencyInjection.ObjectFactory">
             <summary>
-            Unable to locate implementation '{0}' for service '{1}'.
+            The result of <see cref="M:Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactory(System.Type,System.Type[])"/>.
             </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatCannotLocateImplementation(System.Object,System.Object)">
-            <summary>
-            Unable to locate implementation '{0}' for service '{1}'.
-            </summary>
-        </member>
-        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.CannotResolveService">
-            <summary>
-            Unable to resolve service for type '{0}' while attempting to activate '{1}'.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatCannotResolveService(System.Object,System.Object)">
-            <summary>
-            Unable to resolve service for type '{0}' while attempting to activate '{1}'.
-            </summary>
-        </member>
-        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.NoConstructorMatch">
-            <summary>
-            A suitable constructor for type '{0}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatNoConstructorMatch(System.Object)">
-            <summary>
-            A suitable constructor for type '{0}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.
-            </summary>
-        </member>
-        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.NoServiceRegistered">
-            <summary>
-            No service for type '{0}' has been registered.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatNoServiceRegistered(System.Object)">
-            <summary>
-            No service for type '{0}' has been registered.
-            </summary>
-        </member>
-        <member name="P:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.TryAddIndistinguishableTypeToEnumerable">
-            <summary>
-            Implementation type cannot be '{0}' because it is indistinguishable from other services registered for '{1}'.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.Abstractions.Resources.FormatTryAddIndistinguishableTypeToEnumerable(System.Object,System.Object)">
-            <summary>
-            Implementation type cannot be '{0}' because it is indistinguishable from other services registered for '{1}'.
-            </summary>
+            <param name="serviceProvider">The <see cref="T:System.IServiceProvider"/> to get service arguments from.</param>
+            <param name="arguments">Additional constructor arguments.</param>
+            <returns>The instantiated type.</returns>
         </member>
     </members>
 </doc>
