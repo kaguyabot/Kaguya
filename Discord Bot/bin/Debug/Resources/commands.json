@@ -1,4 +1,4 @@
 {
-  "timelyHours": 24,
-  "timelyPoints": 500
+  "token": null,
+  "cmdPrefix": "!"
 }

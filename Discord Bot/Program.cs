@@ -28,7 +28,7 @@ namespace Discord_Bot
             string message = Utilities.GetFormattedAlert("WELCOME_&NAME_&VERSION", name, version);
             Console.WriteLine(message);
             EditableCommands.JsonInit();
-            if (Config.bot.token == "" || Config.bot.token == null && Config.bot.cmdPrefix == "" || Config.bot.cmdPrefix == null)
+            if (Config.bot.token == "" || Config.bot.token == null && Config.bot.cmdPrefix == "" || Config.bot.cmdPrefix == null) //default values in config.json when first launched, first time setup essentially.
             {
                 Console.WriteLine("Bot token not found. Get your bot's token from the Discord Developer portal and paste it here: ");
                 string token = Console.ReadLine();
@@ -71,11 +71,6 @@ namespace Discord_Bot
         private async Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.Message);
-        }
-
-        private static void Sync()
-        {
-
         }
     }
 }

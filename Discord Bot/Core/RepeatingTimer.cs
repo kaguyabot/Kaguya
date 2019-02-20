@@ -19,7 +19,7 @@ namespace Discord_Bot.Core
         {
             channel = Global.Client.GetGuild(407648193392803851).GetTextChannel(407723395556311043);
 
-            loopingTimer = new Timer()
+            loopingTimer = new Timer() //Placeholder, doesn't do anything.
             {
                 Interval = 5000,
                 AutoReset = true,
