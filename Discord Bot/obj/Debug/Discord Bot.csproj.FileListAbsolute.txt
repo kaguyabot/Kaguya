@@ -1,0 +1,39 @@
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord Bot.exe.config
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord Bot.exe
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord Bot.pdb
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.csproj.CoreCompileInputs.cache
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.exe
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.pdb
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\SystemLang\alerts.json
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Newtonsoft.Json.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Newtonsoft.Json.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.csproj.CopyComplete
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Commands.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Core.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Rest.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Webhook.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.WebSocket.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Collections.Immutable.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Interactive.Async.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Commands.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Core.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Rest.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Webhook.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.WebSocket.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Collections.Immutable.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Interactive.Async.xml
+C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.csprojAssemblyReference.cache
+C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\RedCell.Diagnostics.Update.dll
+C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\RedCell.Net.dll
+C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Ionic.Zip.Reduced.dll
+C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord Bot.exe.manifest
+C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord Bot.application
+C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.exe.manifest
+C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.application
