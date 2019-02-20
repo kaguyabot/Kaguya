@@ -1,0 +1,25 @@
+Welcome to the StageBot ChangeLog. (Last updated: Version 0.0.0.6)
+
+
+Changelog:
+
+Version 0.0.0.6:
+
+- Added in currency, utility, and 'fun' modules
+- Added commands for said modules (cmds <module name>)
+- Help and h commands are now usable without additional parameters, will result in a
+    DM to the command user with helpful information
+- Reorganized the code in Misc.cs -- Commands are "soft grouped" by their respective modules
+    instead of having them be all over the place
+- Removed some unnecessary commands/code
+- If commands.json is not found, program will automatically create the file with 
+    defaults of 500 points for timelyPoints and 24 hours for timelyHours (Used with timely command)
+- Added many more command specific help commands.
+- Permission requirement updated for CreateTextChannel and DeleteTextChannel:
+    Old: Requires Administrator
+    New: Only requires ManageChannels permission
+    
+
+Version 0.0.0.5: 
+
+- First release of core structure to GitHub.
