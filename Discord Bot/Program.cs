@@ -40,7 +40,8 @@ namespace Discord_Bot
                 bot.cmdPrefix = prefix;
                 string json = JsonConvert.SerializeObject(bot, Formatting.Indented);
                 File.WriteAllText("Resources" + "/" + "config.json", json);
-                Console.WriteLine("Confirmed. Restarting.");
+                Console.WriteLine("Confirmed. Restarting in 5 seconds...(If app doesn't restart, close and open again.)");
+                Thread.Sleep(5000);
                 Environment.Exit(0);
                 System.Diagnostics.Process.Start(System.AppDomain.CurrentDomain.FriendlyName);
             }
