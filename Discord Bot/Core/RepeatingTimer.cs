@@ -17,7 +17,7 @@ namespace Discord_Bot.Core
 
         internal static Task StartTimer()
         {
-            channel = Global.Client.GetGuild(407648193392803851).GetTextChannel(407723395556311043);
+            //channel = Global.Client.GetGuild(/*gID*/)GetTextChannel(/*cID*/);
 
             loopingTimer = new Timer() //Placeholder, doesn't do anything.
             {

@@ -1,7 +1,24 @@
-Welcome to the StageBot ChangeLog. (Last updated: Version 0.0.0.6)
+Welcome to the StageBot ChangeLog. (Last updated: Version 0.0.0.7)
 
 
 Changelog:
+
+Version 0.0.0.7:
+
+- Fixed wording issue with DeleteTextChannel command.
+- Added in "fun" module
+- Added in bot permission requirements for commands that require them (checking to make sure the bot has the permissions 
+    it needs to execute a specific command).
+- Added in "clear" command to delete messages in bulk
+- New "purge" command does the same thing
+- Fixed improper spacing with two help commands
+- Added in a little documentation (for self hosters).
+- System.Net.Http.HttpRequestException now handled (bot no longer crashes/throws an exception
+    if a user doesn't have a [stable] internet connection.)
+- Added in kick command
+- Added in ban command
+- Added removeallroles (rar) command
+
 
 Version 0.0.0.6:
 
@@ -18,7 +35,7 @@ Version 0.0.0.6:
 - Permission requirement updated for CreateTextChannel and DeleteTextChannel:
     Old: Requires Administrator
     New: Only requires ManageChannels permission
-    
+
 
 Version 0.0.0.5: 
 

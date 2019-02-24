@@ -26,6 +26,7 @@ namespace Discord_Bot
         {
             string name = Environment.UserName; // Greets user in console
             string message = Utilities.GetFormattedAlert("WELCOME_&NAME_&VERSION", name, version);
+            
             Console.WriteLine(message);
             EditableCommands.JsonInit();
             if (Config.bot.token == "" || Config.bot.token == null && Config.bot.cmdPrefix == "" || Config.bot.cmdPrefix == null) //default values in config.json when first launched, first time setup essentially.
@@ -43,7 +44,7 @@ namespace Discord_Bot
                 Console.WriteLine("Confirmed. Restarting in 5 seconds...(If app doesn't restart, close and open again.)");
                 Thread.Sleep(5000);
                 Environment.Exit(0);
-                System.Diagnostics.Process.Start(System.AppDomain.CurrentDomain.FriendlyName);
+                System.Diagnostics.Process.Start(AppDomain.CurrentDomain.FriendlyName);
             }
             try
             {
@@ -53,7 +54,18 @@ namespace Discord_Bot
                 });
                 _client.Log += Log;
                 _client.Ready += RepeatingTimer.StartTimer;
-                await _client.LoginAsync(TokenType.Bot, Config.bot.token);
+                try
+                {
+                    await _client.LoginAsync(TokenType.Bot, Config.bot.token);
+                }
+                catch (System.Net.Http.HttpRequestException)
+                {
+                    Console.WriteLine("Error: Could not successfully connect. Do you have a stable internet connection?");
+                    Thread.Sleep(10000);
+                    Console.WriteLine("Exiting...");
+                    Thread.Sleep(1500);
+                    Environment.Exit(0);
+                }
                 await _client.StartAsync();
                 Global.Client = _client;
                 _handler = new CommandHandler();
