@@ -44,6 +44,7 @@ namespace Discord_Bot.Modules
                 $"\n{cmdPrefix}currency" +
                 $"\n{cmdPrefix}utility" +
                 $"\n{cmdPrefix}fun" +
+                $"\n{cmdPrefix}osu" +
                 "\n```");
         }
 
@@ -56,8 +57,13 @@ namespace Discord_Bot.Modules
                 embed.WithDescription("```css" +
                         "\nAll commands in category: Administration" +
                         "\n" +
-                        $"\n{cmdPrefix}kick" +
-                        $"\n{cmdPrefix}ban" +
+                        $"\n{cmdPrefix}kick [k]" +
+                        $"\n{cmdPrefix}ban [b]" +
+                        $"\n{cmdPrefix}masskick" +
+                        $"\n{cmdPrefix}massban" +
+                        $"\n{cmdPrefix}removeallroles [rar]" +
+                        $"\n{cmdPrefix}deleterole [dr]" +
+                        $"\n{cmdPrefix}clear [c] [purge]" +
                         $"\n" +
                         $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                         "\n```");
@@ -101,11 +107,14 @@ namespace Discord_Bot.Modules
                 ("```css" +
                 "\nAll commands in category: Utility" +
                 "\n" +
-                $"\n{cmdPrefix}createtextchannel" +
-                $"\n{cmdPrefix}deletetextchannel" +
+                $"\n{cmdPrefix}help [h]" +
+                $"\n{cmdPrefix}createtextchannel [ctc]" +
+                $"\n{cmdPrefix}deletetextchannel [dtc]" +
+                $"\n{cmdPrefix}createvoicechannel [cvc]" +
+                $"\n{cmdPrefix}deletevoicechannel [dvc]" +
+                $"\n{cmdPrefix}changelog" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
-                $"\n" +
                 $"\n```");
                 embed.WithColor(Pink);
                 BE();
@@ -123,64 +132,103 @@ namespace Discord_Bot.Modules
                 embed.WithColor(Pink);
                 BE();
             }
+            else if (category == "osu".ToLower())
+            {
+                embed.WithTitle("Module: osu!");
+                embed.WithDescription("```css" +
+                    "\n" +
+                    $"\n{cmdPrefix}createteamrole [ctr]" +
+                    $"\n" +
+                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                    $"\n```");
+                embed.WithColor(Pink);
+                BE();
+            }
         }
 
         [Command("h")] //The BIG fish
+        [Alias("help")]
         public async Task Help([Remainder]string command)
         {
             switch (command.ToLower())
             {
                 case "exp":
-                    embed.WithTitle("Help: EXP");
+                    embed.WithTitle($"Help: EXP | `{cmdPrefix}exp`");
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}exp`." +
                         $"\nReturns the value of experience points a user has in their account.");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "expadd":
-                    embed.WithTitle("Help: Adding experience points");
+                    embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
                         $"\n{Context.User.Mention} Syntax: `{cmdPrefix}expadd <number of experience points to add>`. The number of exp you are adding must be a positive whole number.");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "points":
-                    embed.WithTitle("Help: Points");
+                    embed.WithTitle($"Help: Points | `{cmdPrefix}points`");
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}points`." +
                         $"\nReturns the value of points a user has in their account.");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "pointsadd":
-                    embed.WithTitle("Help: Adding Points");
+                    embed.WithTitle($"Help: Adding Points | `{cmdPrefix}pointsadd`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
                         $"\n{Context.User.Mention} Syntax: `{cmdPrefix}pointsadd <number of points to add>`. The number of points you are adding must be a positive whole number.");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "createtextchannel":
-                    embed.WithTitle("Help: Creating Text Channels");
+                case "ctc":
+                    embed.WithTitle($"Help: Creating Text Channels | `{cmdPrefix}createtextchannel`, `{cmdPrefix}ctc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
                         "\n" +
-                        $"\n{Context.User.Mention} Creates a text channel with the speficied name. Syntax: `{cmdPrefix}createtextchannel <channel name>`. " +
+                        $"\n{Context.User.Mention} Creates a text channel with the speficied name. " +
+                        $"\nSyntax: `{cmdPrefix}createtextchannel <channel name>`. " +
                         $"\nThis name can have spaces. Example: `{cmdPrefix}createtextchannel testing 123`.");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "deletetextchannel":
-                    embed.WithTitle("Help: Deleting Text Channels");
+                case "dtc":
+                    embed.WithTitle($"Help: Deleting Text Channels | `{cmdPrefix}deletetextchannel`, `{cmdPrefix}dtc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
                         "\n" +
-                        $"\n{Context.User.Mention} Deletes a text channel with the speficied name. Syntax: `{cmdPrefix}deletetextchannel <channel name>`. " +
+                        $"\n{Context.User.Mention} Deletes a text channel with the speficied name. " +
                         $"\nThis name can **not** have spaces. Type the text channel exactly as displayed; If the text channel contains a `-`, type that in." +
+                        $"\nSyntax: `{cmdPrefix}deletetextchannel <channel name>`." +
                         $"Example: `{cmdPrefix}deletetextchannel super-long-name-with-lots-of-spaces`.");
                     embed.WithColor(Pink);
                     BE(); break;
+                case "createvoicechannel":
+                case "cvc":
+                    embed.WithTitle($"Help: Creating Voice Channels | `{cmdPrefix}createvoicechannel`, `{cmdPrefix}cvc`");
+                    embed.WithDescription("**Permissions Required: Manage Channels**" +
+                        "\n" +
+                        $"\n{Context.User.Mention} Creates a voice channel with the speficied name. Syntax: `{cmdPrefix}createvoicechannel <channel name>`. " +
+                        $"\nThis name can have spaces." +
+                        $"\nSyntax: `{cmdPrefix}createvoicechannel <channel name>`." +
+                        $"\nExample: `{cmdPrefix}cvc testing 123`.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "deletevoicechannel":
+                case "dvc":
+                    embed.WithTitle($"Help: Deleting Voice Channels | `{cmdPrefix}deletevoicechannel`, `{cmdPrefix}dvc");
+                    embed.WithDescription("**Permissions Required: Manage Channels**" +
+                        "\n" +
+                        $"\n{Context.User.Mention} Deletes a voice channel with the speficied name. " +
+                        $"\nThis name can **not** have spaces. Type the text channel exactly as displayed; If the text channel contains a `-`, type that in." +
+                        $"\nSyntax: `{cmdPrefix}deletevoicechannel <channel name>`." +
+                        $"Example: `{cmdPrefix}deletevoicechannel super-long-name-with-lots-of-spaces`.");
+                    embed.WithColor(Pink);
+                    BE(); break;
                 case "echo":
-                    embed.WithTitle("Help: Echoed Messages");
+                    embed.WithTitle($"Help: Echoed Messages | `{cmdPrefix}echo`");
                     embed.WithDescription($"{Context.User.Mention} Makes the bot repeat anything you say!" +
                         $"\nSyntax: `{cmdPrefix}echo <message>`.");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "pick":
-                    embed.WithTitle("Help: Pick");
+                    embed.WithTitle($"Help: Pick | `{cmdPrefix}pick");
                     embed.WithDescription($"{Context.User.Mention} Tells the bot to pick between any amount of options, randomly." +
                         $"\nSyntax: `{cmdPrefix}pick option1|option2|option3|option4`...etc." +
                         $"\nYou may have as many \"Options\" as you'd like!" +
@@ -188,8 +236,8 @@ namespace Discord_Bot.Modules
                     embed.WithColor(Pink);
                     BE(); break;
                 case "timely":
-                    embed.WithTitle("Help: Timely Points");
-                    embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim 500 free points every 24 hours." +
+                    embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely");
+                    embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim free points every certain amount hours." +
                         "\nThese points are added to your StageBot account." +
                         "\nIf you are in a server with a self-hosted version of StageBot, these values may be different." +
                         $"\nSyntax: `{cmdPrefix}timely`.");
@@ -197,7 +245,8 @@ namespace Discord_Bot.Modules
                     BE(); break;
                 case "clear":
                 case "purge":
-                    embed.WithTitle("Help: Clearing Messages");
+                case "c":
+                    embed.WithTitle($"Help: Clearing Messages | `{cmdPrefix}clear`, `{cmdPrefix}purge`, `{cmdPrefix}c`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Messages**" +
                         $"\n" +
                         $"\nDeletes a specified number of messages in a given channel." +
@@ -208,7 +257,8 @@ namespace Discord_Bot.Modules
                     embed.WithColor(Pink);
                     BE(); break;
                 case "kick":
-                    embed.WithTitle("Help: Kicking users");
+                case "k":
+                    embed.WithTitle($"Help: Kicking Users | `{cmdPrefix}kick`, `{cmdPrefix}k`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Kick Members**" +
                         $"\n" +
                         $"\nKicks an individual member from the server." +
@@ -216,7 +266,8 @@ namespace Discord_Bot.Modules
                     embed.WithColor(Pink);
                     BE(); break;
                 case "ban":
-                    embed.WithTitle("Help: Banning users");
+                case "b":
+                    embed.WithTitle($"Help: Banning Users | `{cmdPrefix}ban`, `{cmdPrefix}b`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
                         $"\n" +
                         $"\nBans an individual member from the server." +
@@ -225,56 +276,84 @@ namespace Discord_Bot.Modules
                     BE(); break;
                 case "removeallroles":
                 case "rar":
-                    embed.WithTitle("Help: Removing All Roles");
-                    embed.WithDescription($"{Context.User.Mention}**Permissions Required: Manage Roles**" +
+                    embed.WithTitle($"Help: Removing All Roles | `{cmdPrefix}removeallroles`, `{cmdPrefix}rar`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
                         "\n" +
                         "\nRemoves all roles from the specified user." +
                         $"\nSyntax: `{cmdPrefix}removeallroles @User#0000`.");
                     embed.WithColor(Pink);
                     BE(); break;
+                case "deleterole":
+                case "dr":
+                    embed.WithTitle($"Help: Deleting Roles | `{cmdPrefix}deleterole`, `{cmdPrefix}dr`");
+                    embed.WithDescription($"{ Context.User.Mention} **Permissions Required: Manage Roles**" +
+                        $"\n" +
+                        $"\nDeletes a role from the server (and in the process, removes said role from everyone who had it)." +
+                        $"\nSyntax: `{cmdPrefix}deleterole/dr <role name>`");
+                    BE(); break;
+                case "createteamrole":
+                case "ctr":
+                    embed.WithTitle($"Help: Create Team Roles | `{cmdPrefix}createteamrole`, `{cmdPrefix}ctr`");
+                    embed.WithDescription($"{Context.User.Mention}**Permissions Required: Manage Roles**" +
+                        $"\n" +
+                        $"\nCreates a role, then applies it to all mentioned users." +
+                        $"\nThis is very ideal for managing many groups of people (such as teams in a tournament, hence the name)." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}createteamrole <role name> <mentioned users>`" +
+                        $"\nExample: `{cmdPrefix}createteamrole Smelly Sushi @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "changelog":
+                    embed.WithTitle($"Help: Changelog | `{cmdPrefix}changelog`");
+                    embed.WithDescription($"{Context.User.Mention} Displays the most recent StageBot changelog. Find out what's new!");
+                    embed.WithColor(Pink);
+                    BE(); break;
+
+                default:
+                    embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
+                    embed.WithColor(Pink);
+                    BE(); break;
             }
         }
 
-        [Command("h")]
+        [Command("help")] //utility, pinned
+        [Alias("h")]
         public async Task Help()
         {
             embed.WithTitle("Help");
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
             embed.WithColor(Pink);
             BE();
-            Context.User.SendMessageAsync("Add me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=8" +
-                $"\nNeed help with a specific command? Type `{cmdPrefix}h <command name>` for more information on said command." +
-                $"\nAre you a self hoster? Search for the \"README.txt\" file inside of the bot's files." +
+            Context.User.SendMessageAsync("Need help with a specific command? Type `{cmdPrefix}h <command name>` for more information on said command." +
+                $"\nAdd me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=8" +
+                $"\nWant to keep track of all the changes or feel like self hosting? Feel free to check out the StageBot Github page!: https://github.com/stageosu/StageBot" +
                 $"\nStill need help? Feel free to join the StageBot Development server and ask for help there!: https://discord.gg/yhcNC97");
         }
 
-        [Command("h")] //isolated help command, "h". Same thing as below.
-        public async Task HelpDMISO()
+        [Command("changelog")] //utility, pinned
+        public async Task ChangeLog()
         {
-            embed.WithTitle("Help");
-            embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
-            embed.WithColor(Pink);
-            BE();
-            Context.User.SendMessageAsync("Add me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=8" +
-                $"\nNeed help with a specific command? Type `{cmdPrefix}h <command name>` for more information on said command." +
-                $"\nAre you a self hoster? Search for the \"README.txt\" file inside of the bot's files." +
-                $"\nStill need help? Feel free to join the StageBot Development server and ask for help there!: https://discord.gg/yhcNC97");
+            await Context.User.SendMessageAsync($"Changelog for StageBot {version}:" +
+                $"\n" +
+                $"\n");
         }
 
-        [Command("help")] //same as above just uses "help" instead
-        public async Task HelpDM()
+        [Command("createteamrole")] //osu
+        [Alias("ctr")]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        public async Task CreateTeamRoles(string teamName, [Remainder]List<SocketGuildUser> users)
         {
-            embed.WithTitle("Help");
-            embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
-            embed.WithColor(Pink);
-            BE();
-            Context.User.SendMessageAsync("Add me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=8" +
-                $"\nNeed help with a specific command? Type `{cmdPrefix}h <command name>` for more information on said command." +
-                $"\nAre you a self hoster? Search for the \"README.txt\" file inside of the bot's files." +
-                $"\nStill need help? Feel free to join the StageBot Development server and ask for help there!: https://discord.gg/yhcNC97");
+            var teamRole = await Context.Guild.CreateRoleAsync(teamName);
+            foreach (var user in users)
+            {
+                await user.AddRoleAsync(teamRole);
+                await ReplyAsync($"{user} has been added to {teamRole.Mention}.");
+            }
         }
 
-        [Command("removeallroles")]
+        [Command("removeallroles")] //admin
+        [Alias("rar")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task RemoveAllRoles(IGuildUser user)
@@ -285,18 +364,21 @@ namespace Discord_Bot.Modules
             embed.WithColor(Pink);
         }
 
-        [Command("rar")]
+        [Command("deleterole")] //admin
+        [Alias("dr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task RAR(IGuildUser user)
+        public async Task DeleteRole(IRole role)
         {
-            await RemoveAllRoles(user);
-            embed.WithTitle("Remove All Roles");
-            embed.WithDescription($"All roles have been removed from `{user}`.");
+            await role.DeleteAsync();
+            embed.WithTitle("Role Deleted");
+            embed.WithDescription($"{Context.User.Mention} role **{role}** has been deleted.");
             embed.WithColor(Pink);
+            BE();
         }
 
-        [Command("kick")]
+        [Command("kick")] //admin
+        [Alias("k")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
         public async Task Kick(IGuildUser user, string reason = "No reason provided.")
@@ -319,7 +401,8 @@ namespace Discord_Bot.Modules
             }
         }
 
-        [Command("ban")]
+        [Command("ban")] //admin
+        [Alias("b")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
         public async Task Ban(IGuildUser user, string reason = "No reason provided.")
@@ -342,7 +425,32 @@ namespace Discord_Bot.Modules
             }
         }
 
-        [Command("clear")]
+        [Command("massban")] //admin
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task MassBan([Remainder]List<SocketGuildUser> users)
+        {
+            foreach (var user in users)
+            {
+                await user.BanAsync();
+                await ReplyAsync($"**{user} has been permanently banned by {Context.User.Mention}.**");
+            }
+        }
+
+        [Command("masskick")] //admin
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task MassKick([Remainder]List<SocketGuildUser> users)
+        {
+            foreach (var user in users)
+            {
+                await user.BanAsync();
+                await ReplyAsync($"**{user} has been kicked by {Context.User.Mention}.**");
+            }
+        }
+
+        [Command("clear")] //admin
+        [Alias("c", "purge")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task ClearMessages([Remainder]uint amount)
@@ -355,20 +463,8 @@ namespace Discord_Bot.Modules
             await m.DeleteAsync();
         }
 
-        [Command("purge")]
-        [RequireUserPermission(GuildPermission.ManageMessages)]
-        [RequireBotPermission(GuildPermission.ManageMessages)]
-        public async Task PurgeMessages([Remainder]uint amount)
-        {
-            var messages = await Context.Channel.GetMessagesAsync(100).FlattenAsync(); //defualt is 100
-            await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
-            const int delay = 5000;
-            var m = await this.ReplyAsync($"Clearing of messages completed. This message will be deleted in {delay / 1000} seconds.");
-            await Task.Delay(delay);
-            await m.DeleteAsync();
-        }
-
-        [Command("createtextchannel")]
+        [Command("createtextchannel")] //utility
+        [Alias("ctc")]
         [RequireUserPermission(GuildPermission.ManageChannels)]
         [RequireBotPermission(GuildPermission.ManageChannels)]
         public async Task GuildCreateTextChannel([Remainder]string name)
@@ -379,7 +475,8 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        [Command("deletetextchannel")]
+        [Command("deletetextchannel")] //utility
+        [Alias("dtc")]
         [RequireUserPermission(GuildPermission.ManageChannels)]
         [RequireBotPermission(GuildPermission.ManageChannels)]
         public async Task GuildDeleteTextChannel([Remainder]string name)
@@ -390,7 +487,31 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        [Command("timely")]
+        [Command("createvoicechannel")] //utility
+        [Alias("cvc")]
+        [RequireUserPermission(GuildPermission.ManageChannels)]
+        [RequireBotPermission(GuildPermission.ManageChannels)]
+        public async Task GuildCreateVoiceChannel([Remainder]string name)
+        {
+            var channel = await Context.Guild.CreateVoiceChannelAsync(name);
+            embed.WithDescription($"{Context.User.Mention} has successfully created the voicechannel #{name}.");
+            embed.WithColor(Pink);
+            BE();
+        }
+
+        [Command("deletevoicechannel")] //utility
+        [Alias("dvc")]
+        [RequireUserPermission(GuildPermission.ManageChannels)]
+        [RequireBotPermission(GuildPermission.ManageChannels)]
+        public async Task GuildDeleteVoiceChannel([Remainder]string name)
+        {
+            foreach (var Channel in Context.Guild.VoiceChannels) { if (Channel.Name == (name.ToLower())) { await Channel.DeleteAsync(); } }
+            embed.WithDescription($"{Context.User.Mention} has successfully deleted the voice channel #{name}.");
+            embed.WithColor(Pink);
+            BE();
+        }
+
+        [Command("timely")] //currency
         public async Task DailyPoints()
         {
             uint bonus = EditableCommands.bot.timelyPoints;
@@ -404,7 +525,7 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        [Command("exp")]
+        [Command("exp")] //exp
         public async Task EXP()
         {
             var account = UserAccounts.GetAccount(Context.User);
@@ -427,7 +548,7 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        [Command("pointsadd")]
+        [Command("pointsadd")] //currency
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireOwner]
         public async Task PointsAdd([Remainder]uint points)
@@ -449,7 +570,7 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        [Command("expadd")]
+        [Command("expadd")] //exp
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireOwner]
         public async Task ExpAdd([Remainder]uint exp)
@@ -471,7 +592,7 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        [Command("echo")]
+        [Command("echo")] //fun
         public async Task Echo([Remainder]string message)
         {
             var embed = new EmbedBuilder();
@@ -482,7 +603,7 @@ namespace Discord_Bot.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
-        [Command("pick")]
+        [Command("pick")] //fun
         public async Task PickOne([Remainder]string message)
         {
             string[] options = message.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);

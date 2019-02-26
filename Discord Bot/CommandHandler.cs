@@ -13,12 +13,16 @@ namespace Discord_Bot
     {
         DiscordSocketClient _client;
         CommandService _service;
+        private IServiceProvider _services;
 
         public async Task InitializeAsync(DiscordSocketClient client)
         {
             _client = client;
             _service = new CommandService();
-            await _service.AddModulesAsync(Assembly.GetEntryAssembly(), null);
+            _service.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTR());
+            await _service.AddModulesAsync(
+              Assembly.GetExecutingAssembly(),
+              _services);
             _client.MessageReceived += HandleCommandAsync;
         }
 

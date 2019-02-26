@@ -3,6 +3,23 @@ Welcome to the StageBot ChangeLog. (Last updated: Version 0.0.0.7)
 
 Changelog:
 
+Version 0.0.0.8:
+
+- Added in "osuTournament" module. This module is designed to help with the management of osu! community tournaments.
+- Added in createteamrole command. This allows anyone with the ManageRoles server permission to add an infinite amount of users to the same role.
+    This is extremely ideal for osu!Tournament servers, making organizing participants very easy.
+- If a user requests help on a command that doesn't exist, the bot now responds to this.
+- Updated general help command
+- Refined code using aliases for some commands
+- clear can now be executed with "clear", "purge", and "c"
+- kick and ban can now be executed with k and b respectively
+- Added "deleterole" command. dr also executes this.
+- Added "massban" command.
+- Added "masskick" command.
+- Added "changelog" command.
+- Updated all command specific help commands to look more clean and consistent.
+
+
 Version 0.0.0.7:
 
 - Fixed wording issue with DeleteTextChannel command.

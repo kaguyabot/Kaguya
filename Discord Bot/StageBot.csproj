@@ -267,6 +267,7 @@
     <Compile Include="Core\UserAccounts\UserAccounts.cs" />
     <Compile Include="EditableCommands.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="ListSocketGuildUserTR.cs" />
     <Compile Include="Modules\Misc.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
