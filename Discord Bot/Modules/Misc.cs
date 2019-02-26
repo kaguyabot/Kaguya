@@ -39,12 +39,12 @@ namespace Discord_Bot.Modules
                 $"\nStageBot Modules for {version}:" +
                 $"\nType {cmdPrefix}cmds <module> for a list of commands in said module." +
                 $"\n" +
-                $"\n{cmdPrefix}administration" +
-                $"\n{cmdPrefix}exp" +
-                $"\n{cmdPrefix}currency" +
-                $"\n{cmdPrefix}utility" +
-                $"\n{cmdPrefix}fun" +
-                $"\n{cmdPrefix}osu" +
+                $"\nadministration" +
+                $"\nexp" +
+                $"\ncurrency" +
+                $"\nutility" +
+                $"\nfun" +
+                $"\nosu" +
                 "\n```");
         }
 
@@ -453,9 +453,9 @@ namespace Discord_Bot.Modules
         [Alias("c", "purge")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
-        public async Task ClearMessages([Remainder]uint amount)
+        public async Task ClearMessages([Remainder]int amount)
         {
-            var messages = await Context.Channel.GetMessagesAsync(100).FlattenAsync(); //defualt is 100
+            var messages = await Context.Channel.GetMessagesAsync(amount).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
             const int delay = 5000;
             var m = await this.ReplyAsync($"Clearing of messages completed. This message will be deleted in {delay / 1000} seconds.");
