@@ -330,14 +330,6 @@ namespace Discord_Bot.Modules
                 $"\nStill need help? Feel free to join the StageBot Development server and ask for help there!: https://discord.gg/yhcNC97");
         }
 
-        [Command("changelog")] //utility, pinned
-        public async Task ChangeLog()
-        {
-            await Context.User.SendMessageAsync($"Changelog for StageBot {version}:" +
-                $"\n" +
-                $"\n");
-        }
-
         [Command("createteamrole")] //osu
         [Alias("ctr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
