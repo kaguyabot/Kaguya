@@ -3,6 +3,11 @@ Welcome to the StageBot ChangeLog. (Last updated: Version 0.0.0.9)
 
 Changelog:
 
+Version 0.9.1
+- Changed version numbering scheme
+- Removed changelog command.
+
+
 Version 0.0.0.9:
 
 - Removed {cmdPrefix} from all modules (it's a list of modules, not of commands).
