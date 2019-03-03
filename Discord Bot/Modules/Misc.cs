@@ -9,6 +9,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Discord_Bot.Core.UserAccounts;
+using System.Net;
 
 #pragma warning disable
 
@@ -294,7 +295,7 @@ namespace Discord_Bot.Modules
                 case "createteamrole":
                 case "ctr":
                     embed.WithTitle($"Help: Create Team Roles | `{cmdPrefix}createteamrole`, `{cmdPrefix}ctr`");
-                    embed.WithDescription($"{Context.User.Mention}**Permissions Required: Manage Roles**" +
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
                         $"\n" +
                         $"\nCreates a role, then applies it to all mentioned users." +
                         $"\nThis is very ideal for managing many groups of people (such as teams in a tournament, hence the name)." +
@@ -303,11 +304,25 @@ namespace Discord_Bot.Modules
                         $"\nExample: `{cmdPrefix}createteamrole Smelly Sushi @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
                     embed.WithColor(Pink);
                     BE(); break;
-                case "changelog":
-                    embed.WithTitle($"Help: Changelog | `{cmdPrefix}changelog`");
-                    embed.WithDescription($"{Context.User.Mention} Displays the most recent StageBot changelog. Find out what's new!");
+                case "osutop":
+                    embed.WithTitle($"Help: osu! Top | `{cmdPrefix}osutop`");
+                    embed.WithDescription($"\n" +
+                        $"\n{Context.User.Mention} Displays the specified amount of top osu! plays for a given player." +
+                        $"\nThe number of requested plays to display may not be more than 10." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 8 \"Smelly sushi\"`");
                     embed.WithColor(Pink);
                     BE(); break;
+                case "delteams":
+                    embed.WithTitle("Help: Deleting Teams");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: `Manage Roles`, `Administrator`, `Bot Owner`**" +
+                        $"\n" +
+                        $"\nDeletes all team roles. A team role is any role that has the word \"Team: \" inside of it (with the space)." +
+                        $"\nThis command will delete ALL team roles upon execution, making this command dangerous and irreversable." +
+                        $"\nSyntax: `{cmdPrefix}delteams`");
+                    embed.WithColor(Pink);
+                    BE(); break;
+
 
                 default:
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
@@ -330,17 +345,100 @@ namespace Discord_Bot.Modules
                 $"\nStill need help? Feel free to join the StageBot Development server and ask for help there!: https://discord.gg/yhcNC97");
         }
 
+        [Command("osutop")] //osu
+        public async Task osuTop(int num, [Remainder]string player)
+        {
+            if (num > 10)
+            {
+                embed.WithDescription($"{Context.User.Mention} You may not request more than 10 top plays.");
+                return;
+            }
+            string jsonTop = "";
+            using (WebClient client = new WebClient())
+            {
+                jsonTop = client.DownloadString("https://osu.ppy.sh/api/get_user_best?k=4e6a621061b5e2b8c28afa7b98b3b3b5ac7bd6ed&u=" + player + "&limit=" + num);
+            }
+            PlayData[] PlayDataArray = new PlayData[num];
+
+            for (var i = 0; i < num; i++)
+            {
+                var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonTop)[i];
+                string mapID = playerObject.beatmap_id.ToString();
+                double pp = playerObject.pp;
+
+
+                string jsonMap = "";
+                using (WebClient client = new WebClient())
+                {
+                    jsonMap = client.DownloadString("https://osu.ppy.sh/api/get_beatmaps?k=4e6a621061b5e2b8c28afa7b98b3b3b5ac7bd6ed&b=" + mapID);
+                }
+
+                var mapObject = JsonConvert.DeserializeObject<dynamic>(jsonMap)[0];
+                string mapTitle = mapObject.title;
+                double difficultyRating = mapObject.difficultyrating;
+                string version = mapObject.Version;
+                string country = playerObject.country;
+                PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country);
+
+                PlayDataArray[i] = PlayData;
+            }
+
+
+            string TopPlayString = ""; //Work on formatting. Add mods and letter grade images. Country images to come later.
+            for (var j = 0; j < num; j++)
+            {
+                TopPlayString = TopPlayString + $"\n{j + 1}: ▸{PlayDataArray[j].mapID} **[{PlayDataArray[j].mapTitle}](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
+                    $"**☆{PlayDataArray[j].difficultyRating.ToString("F")} {PlayDataArray[j].version}** worth **{PlayDataArray[j].pp.ToString("F")}pp**.\n";
+            }
+
+
+            embed.WithTitle($"**Top {num} osu! standard plays for {player}:**");
+            embed.WithUrl($"https://www.osu.ppy.sh/u/{player}/");
+            embed.WithThumbnailUrl("https://a.ppy.sh/8191845_1537949786.jpeg");
+            embed.WithDescription($"osu! Stats for player **{player}**:\n" + TopPlayString);
+            embed.WithColor(Pink);
+            BE();
+        }
+
         [Command("createteamrole")] //osu
         [Alias("ctr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task CreateTeamRoles(string teamName, [Remainder]List<SocketGuildUser> users)
         {
-            var teamRole = await Context.Guild.CreateRoleAsync(teamName);
+            var participantRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "participant" || x.Name == "Participant");
+            var roleName = "Team: " + teamName;
+            var teamRole = await Context.Guild.CreateRoleAsync(roleName);
             foreach (var user in users)
             {
                 await user.AddRoleAsync(teamRole);
-                await ReplyAsync($"{user} has been added to {teamRole.Mention}.");
+                await user.AddRoleAsync(participantRole);
+                embed.WithDescription($"**{user}** has been added to {teamRole.Mention} and {participantRole.Mention}.");
+                embed.WithColor(Pink);
+            }
+        }
+
+        [Command("delteams")] //osu
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        [RequireOwner]
+        public async Task DeleteTeams()
+        {
+            var roles = Context.Guild.Roles;
+            foreach (IRole role in roles)
+            {
+                if (role.Name.Contains("Team: "))
+                {
+                    role.DeleteAsync();
+                    embed.WithTitle("Teams Deleted");
+                    embed.WithDescription("The following teams have been deleted: " +
+                        $"\n{role} ");
+                    embed.WithColor(Pink);
+                    BE();
+                }
+                else return;
             }
         }
 
@@ -368,6 +466,30 @@ namespace Discord_Bot.Modules
             embed.WithColor(Pink);
             BE();
         }
+
+        [Command("createrole")]
+        [Alias("cr")]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        public async Task CreateRole(string role)
+        {
+            await Context.Guild.CreateRoleAsync(role);
+            embed.WithTitle("Role Created");
+            embed.WithDescription($"{Context.User.Mention} role **{role}** has been created.");
+            embed.WithColor(Pink);
+            BE();
+        }
+
+        /*[Command("mute")]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        [RequireBotPermission(GuildPermission.MuteMembers)]
+        public async Task Mute(IGuildUser user, string time = "")
+        {
+            
+        }
+        */
 
         [Command("kick")] //admin
         [Alias("k")]

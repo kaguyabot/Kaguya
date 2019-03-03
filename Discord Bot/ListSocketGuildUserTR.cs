@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 
 namespace Discord_Bot
 {
-    //This Ideally would want to be in a seperate file somewhere in your setup.
-
     public class ListSocketGuildUserTR : TypeReader
     {
         public override async Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
@@ -38,8 +36,8 @@ namespace Discord_Bot
                 else
                     user = allGuildUsers
                         .FirstOrDefault(u =>
-                        u.Username.ToLower() == baseUser ||
-                        u.Nickname.ToLower() == baseUser)
+                        u.Username?.ToLower() == baseUser ||
+                        u.Nickname?.ToLower() == baseUser)
                         as SocketGuildUser;
 
                 if (user == null)
