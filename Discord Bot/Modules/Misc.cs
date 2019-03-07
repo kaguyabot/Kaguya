@@ -362,9 +362,9 @@ namespace Discord_Bot.Modules
 
             for (var i = 0; i < num; i++)
             {
-                var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonTop)[i];
-                string mapID = playerObject.beatmap_id.ToString();
-                double pp = playerObject.pp;
+                var playerTopObject = JsonConvert.DeserializeObject<dynamic>(jsonTop)[i];
+                string mapID = playerTopObject.beatmap_id.ToString();
+                double pp = playerTopObject.pp;
 
 
                 string jsonMap = "";
@@ -372,29 +372,67 @@ namespace Discord_Bot.Modules
                 {
                     jsonMap = client.DownloadString("https://osu.ppy.sh/api/get_beatmaps?k=4e6a621061b5e2b8c28afa7b98b3b3b5ac7bd6ed&b=" + mapID);
                 }
-
+                
                 var mapObject = JsonConvert.DeserializeObject<dynamic>(jsonMap)[0];
                 string mapTitle = mapObject.title;
                 double difficultyRating = mapObject.difficultyrating;
                 string version = mapObject.Version;
-                string country = playerObject.country;
-                PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country);
+                string country = playerTopObject.country;
+                double count300 = playerTopObject.count300;
+                double count100 = playerTopObject.count100;
+                double count50 = playerTopObject.count50;
+                double countMiss = playerTopObject.countmiss;
+                double accuracy = 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
+                string grade = playerTopObject.rank;
+                switch (grade)
+                {
+                    case "XH":
+                    grade = "https://s.ppy.sh/images/XH.png";
+                        break;
+                    case "X":
+                    grade = "https://s.ppy.sh/images/X.png";
+                        break;  
+                    case "SH":
+                    grade = "https://s.ppy.sh/images/SH.png";
+                        break;
+                    case "S":
+                    grade = "https://s.ppy.sh/images/S.png";
+                        break;
+                    case "A":
+                    grade = "https://s.ppy.sh/images/A.png";
+                        break;
+                    case "B":
+                    grade = "https://s.ppy.sh/images/B.png";
+                        break;
+                    case "C":
+                    grade = "https://s.ppy.sh/images/C.png";
+                        break;
+                    case "D":
+                    grade = "https://s.ppy.sh/images/D.png";
+                        break;
+                }
+                PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country, count300, count100, count50, countMiss, accuracy, grade);
 
                 PlayDataArray[i] = PlayData;
             }
 
+                string jsonPlayer = "";
+                using (WebClient client = new WebClient())
+                {
+                    jsonPlayer = client.DownloadString($"https://osu.ppy.sh/api/get_user?k=4e6a621061b5e2b8c28afa7b98b3b3b5ac7bd6ed&u={player}");
+                }
+
+            var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonPlayer)[0];
 
             string TopPlayString = ""; //Work on formatting. Add mods and letter grade images. Country images to come later.
             for (var j = 0; j < num; j++)
             {
                 TopPlayString = TopPlayString + $"\n{j + 1}: ▸{PlayDataArray[j].mapID} **[{PlayDataArray[j].mapTitle}](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
-                    $"**☆{PlayDataArray[j].difficultyRating.ToString("F")} {PlayDataArray[j].version}** worth **{PlayDataArray[j].pp.ToString("F")}pp**.\n";
+                    $"**☆{PlayDataArray[j].difficultyRating.ToString("F")}** **{PlayDataArray[j].accuracy.ToString("F")}%** worth **{PlayDataArray[j].pp.ToString("F")}pp**.\n";
             }
-
-
+            embed.WithAuthor($"{player}'s Top osu! Standard Plays");
             embed.WithTitle($"**Top {num} osu! standard plays for {player}:**");
             embed.WithUrl($"https://www.osu.ppy.sh/u/{player}/");
-            embed.WithThumbnailUrl("https://a.ppy.sh/8191845_1537949786.jpeg");
             embed.WithDescription($"osu! Stats for player **{player}**:\n" + TopPlayString);
             embed.WithColor(Pink);
             BE();

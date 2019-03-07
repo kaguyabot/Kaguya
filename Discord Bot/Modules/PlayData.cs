@@ -13,15 +13,27 @@ namespace Discord_Bot.Modules
         public double pp;
         public double difficultyRating;
         public string version;
+        public double count300;
+        public double count100;
+        public double count50;
+        public double countMiss;
+        public double accuracy;
+        public string grade;
         
 
-        public PlayData(string mapTitle, string mapID, double pp, double difficultyRating, string version, string country)
+        public PlayData(string mapTitle, string mapID, double pp, double difficultyRating, string version, string country, double count300, double count100, double count50, double countMiss, double accuracy, string grade)
         {
             this.mapTitle = mapTitle;
             this.mapID = mapID;
             this.pp = pp;
             this.difficultyRating = difficultyRating;
             this.version = version;
+            this.count300 = count300;
+            this.count100 = count100;
+            this.count50 = count50;
+            this.countMiss = countMiss;
+            this.accuracy = accuracy;
+            this.grade = grade;
         }
     }
 
