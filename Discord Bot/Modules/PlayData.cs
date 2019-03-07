@@ -19,9 +19,11 @@ namespace Discord_Bot.Modules
         public double countMiss;
         public double accuracy;
         public string grade;
+        public double playerMaxCombo;
+        public double mapMaxCombo;
         
 
-        public PlayData(string mapTitle, string mapID, double pp, double difficultyRating, string version, string country, double count300, double count100, double count50, double countMiss, double accuracy, string grade)
+        public PlayData(string mapTitle, string mapID, double pp, double difficultyRating, string version, string country, double count300, double count100, double count50, double countMiss, double accuracy, string grade, double playerMaxCombo, double mapMaxCombo)
         {
             this.mapTitle = mapTitle;
             this.mapID = mapID;
@@ -34,6 +36,8 @@ namespace Discord_Bot.Modules
             this.countMiss = countMiss;
             this.accuracy = accuracy;
             this.grade = grade;
+            this.playerMaxCombo = playerMaxCombo;
+            this.mapMaxCombo = mapMaxCombo;
         }
     }
 

@@ -383,35 +383,37 @@ namespace Discord_Bot.Modules
                 double count50 = playerTopObject.count50;
                 double countMiss = playerTopObject.countmiss;
                 double accuracy = 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
+                double playerMaxCombo = playerTopObject.maxcombo;
+                double mapMaxCombo = mapObject.max_combo;
                 string grade = playerTopObject.rank;
                 switch (grade)
                 {
                     case "XH":
-                    grade = "https://s.ppy.sh/images/XH.png";
+                    grade = "<:XH:553119188089176074>";
                         break;
                     case "X":
-                    grade = "https://s.ppy.sh/images/X.png";
+                    grade = "<:X_:553119217109565470>";
                         break;  
                     case "SH":
-                    grade = "https://s.ppy.sh/images/SH.png";
+                    grade = "<:SH:553119233463025691>";
                         break;
                     case "S":
-                    grade = "https://s.ppy.sh/images/S.png";
+                    grade = "<:S_:553119252329267240>";
                         break;
                     case "A":
-                    grade = "https://s.ppy.sh/images/A.png";
+                    grade = "<:A_:553119274256826406>";
                         break;
                     case "B":
-                    grade = "https://s.ppy.sh/images/B.png";
+                    grade = "<:B_:553119304925577228>";
                         break;
                     case "C":
-                    grade = "https://s.ppy.sh/images/C.png";
+                    grade = "<:C_:553119325565878272>";
                         break;
                     case "D":
-                    grade = "https://s.ppy.sh/images/D.png";
+                    grade = "<:D_:553119338035675138>";
                         break;
                 }
-                PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country, count300, count100, count50, countMiss, accuracy, grade);
+                PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country, count300, count100, count50, countMiss, accuracy, grade, playerMaxCombo, mapMaxCombo);
 
                 PlayDataArray[i] = PlayData;
             }
@@ -427,8 +429,9 @@ namespace Discord_Bot.Modules
             string TopPlayString = ""; //Work on formatting. Add mods and letter grade images. Country images to come later.
             for (var j = 0; j < num; j++)
             {
-                TopPlayString = TopPlayString + $"\n{j + 1}: ▸{PlayDataArray[j].mapID} **[{PlayDataArray[j].mapTitle}](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
-                    $"**☆{PlayDataArray[j].difficultyRating.ToString("F")}** **{PlayDataArray[j].accuracy.ToString("F")}%** worth **{PlayDataArray[j].pp.ToString("F")}pp**.\n";
+                TopPlayString = TopPlayString + $"\n{j + 1}: ▸ {PlayDataArray[j].grade} ▸ {PlayDataArray[j].mapID} ▸ **[{PlayDataArray[j].mapTitle}](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
+                    $"\n▸ **☆{PlayDataArray[j].difficultyRating.ToString("F")}** ▸ **{PlayDataArray[j].accuracy.ToString("F")}%** for **{PlayDataArray[j].pp.ToString("F")}pp** " +
+                    $"\n▸ [Combo: {PlayDataArray[j].playerMaxCombo}x / Max: {PlayDataArray[j].mapMaxCombo}]\n";
             }
             embed.WithAuthor($"{player}'s Top osu! Standard Plays");
             embed.WithTitle($"**Top {num} osu! standard plays for {player}:**");

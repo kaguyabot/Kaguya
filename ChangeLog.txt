@@ -3,7 +3,22 @@ Welcome to the StageBot ChangeLog. (Last updated: Version 0.10.0)
 
 Changelog:
 
+Version 0.10.2
+
+- Updated formatting of ChangeLot.txt
+- Added in letter grade display for all osu!Top plays
+- Updated formatting of the osu!Top display message.
+- Added in combo display for $osutop Misc.cs line 434: ([PlayerMaxCombo / MapMaxCombo])
+
+
+Version 0.10.1
+
+- Fixed bug where the improper profile picture would be displayed when using $osutop (Closes #1)
+- Added in accuracy and pp display in $osutop
+
+
 Version 0.10.0
+
 - Added createteamrole command (ctr). Allows creation of a role and automatic assigning of said role to all mentioned users in one simple command.
 - Added osutop command. Shows top <n> plays (up to 10) of a specific osu! player.
     (This command is really basic, better formatting will come in a later update.)
@@ -13,6 +28,7 @@ Version 0.10.0
 
 
 Version 0.9.1
+
 - Changed version numbering scheme
 - Removed changelog command.
 
