@@ -3,9 +3,21 @@ Welcome to the StageBot ChangeLog. (Last updated: Version 0.10.0)
 
 Changelog:
 
+Version 1.0.0
+- First major release
+- Adds fully functioning EXP system. Receive 7-10 exp every two minutes you send a message in chat!
+- Replaced invite URL in help command
+- Updated utility module to remove the "ChangeLog" command
+- Created $level command
+- Tweaked $h osutop command
+- Tweaked $h createteamrole command
+- Updated and fixed a bug in the $help command. Now instructs users on how to get to the command lists.
+- Timely command is now fully functional
+- "osuapikey" is now in config.json for self hosters. They can put their unique API key in for osu! related commands.
+
 Version 0.10.2
 
-- Updated formatting of ChangeLot.txt
+- Updated formatting of ChangeLog.txt
 - Added in letter grade display for all osu!Top plays
 - Updated formatting of the osu!Top display message.
 - Added in combo display for $osutop Misc.cs line 434: ([PlayerMaxCombo / MapMaxCombo])

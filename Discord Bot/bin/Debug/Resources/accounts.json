@@ -1,3 +1,18 @@
 [
-  
+  {
+    "ID": 146092837723832320,
+    "Points": 1000,
+    "EXP": 524,
+    "LastReceivedEXP": "2019-03-14T10:33:43.3086044-04:00",
+    "LastReceivedTimelyPoints": "2019-03-14T10:57:54.1463585-04:00",
+    "LevelNumber": 5
+  },
+  {
+    "ID": 243418132381696001,
+    "Points": 0,
+    "EXP": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LevelNumber": 0
+  }
 ]

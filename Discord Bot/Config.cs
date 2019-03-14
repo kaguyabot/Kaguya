@@ -38,5 +38,6 @@ namespace Discord_Bot
     {
         public string token { get; set; }
         public string cmdPrefix { get; set; }
+        public string osuapikey { get; set; }
     }
 }

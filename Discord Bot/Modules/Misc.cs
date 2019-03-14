@@ -63,6 +63,7 @@ namespace Discord_Bot.Modules
                         $"\n{cmdPrefix}masskick" +
                         $"\n{cmdPrefix}massban" +
                         $"\n{cmdPrefix}removeallroles [rar]" +
+                        $"\n{cmdPrefix}createrole [cr]" +
                         $"\n{cmdPrefix}deleterole [dr]" +
                         $"\n{cmdPrefix}clear [c] [purge]" +
                         $"\n" +
@@ -113,7 +114,6 @@ namespace Discord_Bot.Modules
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
                 $"\n{cmdPrefix}createvoicechannel [cvc]" +
                 $"\n{cmdPrefix}deletevoicechannel [dvc]" +
-                $"\n{cmdPrefix}changelog" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 $"\n```");
@@ -139,7 +139,8 @@ namespace Discord_Bot.Modules
                 embed.WithDescription("```css" +
                     "\n" +
                     $"\n{cmdPrefix}createteamrole [ctr]" +
-                    $"\n" +
+                    $"\n{cmdPrefix}delteams" +
+                    $"\n{cmdPrefix}osutop" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```");
                 embed.WithColor(Pink);
@@ -290,7 +291,7 @@ namespace Discord_Bot.Modules
                     embed.WithDescription($"{ Context.User.Mention} **Permissions Required: Manage Roles**" +
                         $"\n" +
                         $"\nDeletes a role from the server (and in the process, removes said role from everyone who had it)." +
-                        $"\nSyntax: `{cmdPrefix}deleterole/dr <role name>`");
+                        $"\nSyntax: `{cmdPrefix}deleterole <role name>`");
                     BE(); break;
                 case "createteamrole":
                 case "ctr":
@@ -301,13 +302,13 @@ namespace Discord_Bot.Modules
                         $"\nThis is very ideal for managing many groups of people (such as teams in a tournament, hence the name)." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}createteamrole <role name> <mentioned users>`" +
-                        $"\nExample: `{cmdPrefix}createteamrole Smelly Sushi @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
+                        $"\nExample: `{cmdPrefix}createteamrole \"Smelly Sushi\" @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "osutop":
                     embed.WithTitle($"Help: osu! Top | `{cmdPrefix}osutop`");
                     embed.WithDescription($"\n" +
-                        $"\n{Context.User.Mention} Displays the specified amount of top osu! plays for a given player." +
+                        $"\n{Context.User.Mention} Displays the specified amount of top osu! plays for a given player with other relevant information." +
                         $"\nThe number of requested plays to display may not be more than 10." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 8 \"Smelly sushi\"`");
@@ -339,8 +340,10 @@ namespace Discord_Bot.Modules
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
             embed.WithColor(Pink);
             BE();
-            Context.User.SendMessageAsync("Need help with a specific command? Type `{cmdPrefix}h <command name>` for more information on said command." +
-                $"\nAdd me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=8" +
+            Context.User.SendMessageAsync($"Need help with a specific command? Type `{cmdPrefix}mdls` to see a list of categories the commands are listed under." +
+                $"\nType `{cmdPrefix}<module name>` to see all commands listed under that module." +
+                $"\nType `{cmdPrefix}h <command name>` for more how to use the command and a detailed description of what it does." +
+                $"\nAdd me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847" +
                 $"\nWant to keep track of all the changes or feel like self hosting? Feel free to check out the StageBot Github page!: https://github.com/stageosu/StageBot" +
                 $"\nStill need help? Feel free to join the StageBot Development server and ask for help there!: https://discord.gg/yhcNC97");
         }
@@ -348,6 +351,8 @@ namespace Discord_Bot.Modules
         [Command("osutop")] //osu
         public async Task osuTop(int num, [Remainder]string player)
         {
+            string osuapikey = Config.bot.osuapikey;
+
             if (num > 10)
             {
                 embed.WithDescription($"{Context.User.Mention} You may not request more than 10 top plays.");
@@ -356,7 +361,7 @@ namespace Discord_Bot.Modules
             string jsonTop = "";
             using (WebClient client = new WebClient())
             {
-                jsonTop = client.DownloadString("https://osu.ppy.sh/api/get_user_best?k=4e6a621061b5e2b8c28afa7b98b3b3b5ac7bd6ed&u=" + player + "&limit=" + num);
+                jsonTop = client.DownloadString($"https://osu.ppy.sh/api/get_user_best?k={osuapikey}&u=" + player + "&limit=" + num);
             }
             PlayData[] PlayDataArray = new PlayData[num];
 
@@ -370,7 +375,7 @@ namespace Discord_Bot.Modules
                 string jsonMap = "";
                 using (WebClient client = new WebClient())
                 {
-                    jsonMap = client.DownloadString("https://osu.ppy.sh/api/get_beatmaps?k=4e6a621061b5e2b8c28afa7b98b3b3b5ac7bd6ed&b=" + mapID);
+                    jsonMap = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={osuapikey}&b=" + mapID);
                 }
                 
                 var mapObject = JsonConvert.DeserializeObject<dynamic>(jsonMap)[0];
@@ -421,7 +426,7 @@ namespace Discord_Bot.Modules
                 string jsonPlayer = "";
                 using (WebClient client = new WebClient())
                 {
-                    jsonPlayer = client.DownloadString($"https://osu.ppy.sh/api/get_user?k=4e6a621061b5e2b8c28afa7b98b3b3b5ac7bd6ed&u={player}");
+                    jsonPlayer = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u={player}");
                 }
 
             var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonPlayer)[0];
@@ -508,7 +513,7 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        [Command("createrole")]
+        [Command("createrole")] //admin
         [Alias("cr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -667,17 +672,34 @@ namespace Discord_Bot.Modules
         }
 
         [Command("timely")] //currency
-        public async Task DailyPoints()
+        public async Task DailyPoints(uint timeout = 24)
         {
             uint bonus = EditableCommands.bot.timelyPoints;
-            uint hours = EditableCommands.bot.timelyHours;
-            var account = UserAccounts.GetAccount(Context.User);
-            embed.WithTitle("Timely Points");
-            embed.WithDescription($"{Context.User.Mention} has received {bonus} points! Claim again in {hours}h.");
-            embed.WithColor(Pink);
-            account.Points += bonus;
+            var userAccount = UserAccounts.GetAccount(Context.User);
+            if(!CanReceiveTimelyPoints(userAccount, (int)timeout))
+            {
+                var difference = DateTime.Now - userAccount.LastReceivedTimelyPoints;
+                var formattedTime = $"{difference.Hours}h {difference.Minutes}m {difference.Seconds}s";
+                embed.WithTitle("Timely Points");
+                embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
+                    $" Please wait until `{timeout} hours` have passed to receive more timely points.");
+                embed.WithColor(Pink);
+                BE();
+                return;
+            }
+            userAccount.Points += bonus;
+            userAccount.LastReceivedTimelyPoints = DateTime.Now;
             UserAccounts.SaveAccounts();
+            embed.WithTitle("Timely Points");
+            embed.WithDescription($"{Context.User.Mention} has received {bonus} points! Claim again in {timeout}h.");
+            embed.WithColor(Pink);
             BE();
+        }
+
+        internal static bool CanReceiveTimelyPoints(UserAccount user, int timeout)
+        {
+            var difference = DateTime.Now - user.LastReceivedTimelyPoints;
+            return difference.Hours > timeout;
         }
 
         [Command("exp")] //exp
@@ -690,7 +712,17 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        [Command("points")]
+        [Command("level")] //exp
+        public async Task Level()
+        {
+            var account = UserAccounts.GetAccount(Context.User);
+            embed.WithTitle("Level");
+            embed.WithDescription($"{Context.User.Mention} you have {account.LevelNumber} levels.");
+            embed.WithColor(Pink);
+            BE();
+        }
+
+        [Command("points")] //currency
         public async Task Points([Remainder]string arg = "")
         {
             SocketUser target = null;

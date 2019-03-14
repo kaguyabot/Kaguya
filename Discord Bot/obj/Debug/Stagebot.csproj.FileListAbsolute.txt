@@ -12,7 +12,6 @@ C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\RedCell.Diagnostics.Update.dll
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Collections.Immutable.dll
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Interactive.Async.dll
