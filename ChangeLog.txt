@@ -1,7 +1,10 @@
-Welcome to the StageBot ChangeLog. (Last updated: Version 0.10.0)
+Welcome to the StageBot ChangeLog. (Last updated: Version 1.0.1)
 
 
 Changelog:
+
+Version 1.0.1
+- Fixed a bug with the EXP system. Resolves #2
 
 Version 1.0.0
 - First major release

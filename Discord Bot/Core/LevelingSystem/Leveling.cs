@@ -19,13 +19,16 @@ namespace Discord_Bot.Core.LevelingSystem
             Color Pink = new Color(252, 132, 255);
 
             var userAccount = UserAccounts.UserAccounts.GetAccount(user);
-            if (!CanReceiveExperience(userAccount, 120))
+            if (!CanReceiveExperience(userAccount, 2))
+            {
+                Console.WriteLine("EXP not given");
                 return;
-            userAccount.LastReceivedEXP = DateTime.Now;
+            }
             uint oldLevel = userAccount.LevelNumber;
             Random random = new Random();
             uint newExp = (uint)random.Next(7, 10);
             userAccount.EXP = userAccount.EXP + newExp;
+            userAccount.LastReceivedEXP = DateTime.Now;
             UserAccounts.UserAccounts.SaveAccounts();
             Console.WriteLine($"EXP Given: {newExp} - New EXP Amount: {userAccount.EXP}");
             uint newLevel = userAccount.LevelNumber;
@@ -45,7 +48,7 @@ namespace Discord_Bot.Core.LevelingSystem
         internal static bool CanReceiveExperience(UserAccount user, int timeout)
         {
             var difference = DateTime.Now - user.LastReceivedEXP;
-            return difference.Seconds > timeout;
+            return difference.Minutes > timeout;
         }
     }
 }
