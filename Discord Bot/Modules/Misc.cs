@@ -10,6 +10,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Discord_Bot.Core.UserAccounts;
 using System.Net;
+using System.Timers;
 
 #pragma warning disable
 
@@ -20,6 +21,8 @@ namespace Discord_Bot.Modules
         public EmbedBuilder embed = new EmbedBuilder();
 
         public Color Pink = new Color(252, 132, 255);
+
+        public Color Red = new Color(255, 0, 0);
 
         public string version = Utilities.GetAlert("VERSION");
 
@@ -33,6 +36,7 @@ namespace Discord_Bot.Modules
         }
 
         [Command("modules")]
+        [Alias("mdls")]
         public async Task ModulesList()
         {
             Context.Channel.SendMessageAsync
@@ -41,18 +45,19 @@ namespace Discord_Bot.Modules
                 $"\nType {cmdPrefix}cmds <module> for a list of commands in said module." +
                 $"\n" +
                 $"\nadministration" +
-                $"\nexp" +
                 $"\ncurrency" +
-                $"\nutility" +
+                $"\nexp" +
                 $"\nfun" +
                 $"\nosu" +
+                $"\nutility" +
                 "\n```");
         }
 
         [Command("cmds")]
+        [Alias("commands")]
         public async Task ModulesList([Remainder]string category)
         {
-            if (category == "administration".ToLower() || category == "admin".ToLower())
+            if (category.ToLower() == "administration" || category.ToLower() == "admin")
             {
                 embed.WithTitle("Module: Administration");
                 embed.WithDescription("```css" +
@@ -62,17 +67,20 @@ namespace Discord_Bot.Modules
                         $"\n{cmdPrefix}ban [b]" +
                         $"\n{cmdPrefix}masskick" +
                         $"\n{cmdPrefix}massban" +
+                        $"\n{cmdPrefix}massblacklist" +
+                        $"\n{cmdPrefix}unblacklist" +
                         $"\n{cmdPrefix}removeallroles [rar]" +
                         $"\n{cmdPrefix}createrole [cr]" +
                         $"\n{cmdPrefix}deleterole [dr]" +
                         $"\n{cmdPrefix}clear [c] [purge]" +
+                        $"\n{cmdPrefix}stagebotgtfo" +
                         $"\n" +
                         $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                         "\n```");
                 embed.WithColor(Pink);
                 BE();
             }
-            else if (category == "exp".ToLower())
+            else if (category.ToLower() == "exp")
             {
                 embed.WithTitle("Module: EXP");
                 embed.WithDescription
@@ -80,14 +88,15 @@ namespace Discord_Bot.Modules
                     "\nAll commands in category: Experience Points" +
                     "\n" +
                     $"\n{cmdPrefix}exp" +
-                    $"\n{cmdPrefix}expadd" +
+                    $"\n{cmdPrefix}expadd [addexp]" +
+                    $"\n{cmdPrefix}level" +
                     $"\n" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     "\n```");
                 embed.WithColor(Pink);
                 BE();
             }
-            else if (category == "currency".ToLower())
+            else if (category.ToLower() == "currency")
             {
                 embed.WithTitle("Module: Currency");
                 embed.WithDescription
@@ -96,13 +105,14 @@ namespace Discord_Bot.Modules
                 "\n" +
                 $"\n{cmdPrefix}points" +
                 $"\n{cmdPrefix}pointsadd" +
-                $"\n{cmdPrefix}timely" +
+                $"\n{cmdPrefix}timely [t]" +
+                $"\b{cmdPrefix}gamble [g]" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 $"\n```"
                 );
             }
-            else if (category == "utility".ToLower())
+            else if (category.ToLower() == "utility")
             {
                 embed.WithTitle("Module: Utility");
                 embed.WithDescription
@@ -110,6 +120,7 @@ namespace Discord_Bot.Modules
                 "\nAll commands in category: Utility" +
                 "\n" +
                 $"\n{cmdPrefix}help [h]" +
+                $"\n{cmdPrefix}helpdm [hdm]" +
                 $"\n{cmdPrefix}createtextchannel [ctc]" +
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
                 $"\n{cmdPrefix}createvoicechannel [cvc]" +
@@ -120,7 +131,7 @@ namespace Discord_Bot.Modules
                 embed.WithColor(Pink);
                 BE();
             }
-            else if (category == "fun".ToLower())
+            else if (category.ToLower() == "fun")
             {
                 embed.WithTitle("Module: Fun");
                 embed.WithDescription("```css" +
@@ -133,7 +144,7 @@ namespace Discord_Bot.Modules
                 embed.WithColor(Pink);
                 BE();
             }
-            else if (category == "osu".ToLower())
+            else if (category.ToLower() == "osu")
             {
                 embed.WithTitle("Module: osu!");
                 embed.WithDescription("```css" +
@@ -141,6 +152,8 @@ namespace Discord_Bot.Modules
                     $"\n{cmdPrefix}createteamrole [ctr]" +
                     $"\n{cmdPrefix}delteams" +
                     $"\n{cmdPrefix}osutop" +
+                    $"\n{cmdPrefix}recent [r]" +
+                    $"\n{cmdPrefix}osuset" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```");
                 embed.WithColor(Pink);
@@ -154,6 +167,18 @@ namespace Discord_Bot.Modules
         {
             switch (command.ToLower())
             {
+                case "help":
+                    embed.WithTitle($"Help: Help!! | `{cmdPrefix}h` / `{cmdPrefix}help`");
+                    embed.WithDescription($"Shows the command list. If typed with the name of a command (Ex: `{cmdPrefix}help <command>`), the response will instead contain helpful information on the specified " +
+                        $"command, including how to use it.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "helpdm":
+                case "hdm":
+                    embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`");
+                    embed.WithDescription($"{Context.User.Mention} Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the StageBot Github page!");
+                    embed.WithColor(Pink);
+                    BE(); break;
                 case "exp":
                     embed.WithTitle($"Help: EXP | `{cmdPrefix}exp`");
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}exp`." +
@@ -161,6 +186,7 @@ namespace Discord_Bot.Modules
                     embed.WithColor(Pink);
                     BE(); break;
                 case "expadd":
+                case "addexp":
                     embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
@@ -238,6 +264,7 @@ namespace Discord_Bot.Modules
                     embed.WithColor(Pink);
                     BE(); break;
                 case "timely":
+                case "t":
                     embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely");
                     embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim free points every certain amount hours." +
                         "\nThese points are added to your StageBot account." +
@@ -315,12 +342,61 @@ namespace Discord_Bot.Modules
                     embed.WithColor(Pink);
                     BE(); break;
                 case "delteams":
-                    embed.WithTitle("Help: Deleting Teams");
+                    embed.WithTitle($"Help: Deleting Teams | `{cmdPrefix}delteams`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: `Manage Roles`, `Administrator`, `Bot Owner`**" +
                         $"\n" +
                         $"\nDeletes all team roles. A team role is any role that has the word \"Team: \" inside of it (with the space)." +
-                        $"\nThis command will delete ALL team roles upon execution, making this command dangerous and irreversable." +
-                        $"\nSyntax: `{cmdPrefix}delteams`");
+                        $"\nThis command will delete ALL team roles upon execution, making this command dangerous and irreversable.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "recent":
+                case "r":
+                    embed.WithTitle($"Help: osu! Recent | `{cmdPrefix}r` / `{cmdPrefix}recent`");
+                    embed.WithDescription($"{Context.User.Mention} Displays the most recent osu! play for the given user. If there is no user specified," +
+                        $" the bot will use the osu! username that was specified to the command executor's StageBot account (through {cmdPrefix}osuset).\n" +
+                        $"As of right now, no response will be given for an invalid username.\n");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "osuset":
+                    string name = Context.User.Username;
+                    embed.WithTitle($"Help: osuset | `{cmdPrefix}osuset`");
+                    embed.WithDescription($"{Context.User.Mention} Adds an osu! username to your StageBot account! Setting your osu! username allows you to use all osu! related commands without any additional " +
+                        $"parameters. For example, instead of typing `{cmdPrefix}osutop {name}`, you can now just type `{cmdPrefix}osutop` to get your most recent osu! plays. Same thing for `{cmdPrefix}r` / `{cmdPrefix}recent`!");
+                    embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "massblacklist":
+                    embed.WithTitle($"Help: Mass Blacklist | `{cmdPrefix}massblacklist`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner, Administrator**" +
+                        $"\n" +
+                        $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use StageBot again. These users are permanently banned from the server this command is executed in." +
+                        $"These users will have all of their EXP and Points reset to zero, and will be permanently filtered from receiving EXP and executing StageBot commands." +
+                        $"\nSyntax: `{cmdPrefix}massblacklist @username#123` | `{cmdPrefix}massblacklist @username#123 @ToxicPlayer123#7777 @SuckySmellySushi#1234`");
+                    embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS. The only way to unblacklist someone is to edit your accounts.json file!!");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "unblacklist":
+                    embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}unblacklist <UserID>`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nUnblacklists the specified userID." +
+                        $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "gamble":
+                case "g":
+                    embed.WithTitle($"Help: Gambling | `{cmdPrefix}gamble` / `{cmdPrefix}g`");
+                    embed.WithDescription($"{Context.User.Mention} Allows you to roll the dice and gamble your points!" +
+                        $"\nA roll between `0-66` will result in a loss of your bet." +
+                        $"\nA roll between `67-78` will return your bet back to you with a multiplier of `1.25x`" +
+                        $"\nRolls between `79-89`, `90-95`, `96-99`, and `100` will yield multipliers of `1.75x`, `2.25x`, `3x`, and `5x` respectively." +
+                        $"\nThe maximum amount of points you can gamble at one time is set to `25,000`.");
+                    BE(); break;
+                case "stagebotgtfo":
+                    embed.WithTitle($"Help: StageBot, gtfo! | `{cmdPrefix}stagebotgtfo`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nAdministrator only command that forces StageBot to leave the current server.");
                     embed.WithColor(Pink);
                     BE(); break;
 
@@ -332,9 +408,26 @@ namespace Discord_Bot.Modules
             }
         }
 
-        [Command("help")] //utility, pinned
-        [Alias("h")]
+        [Command("helpt")] //utility, pinned
+        [Alias("ht")]
         public async Task Help()
+        {
+            embed.WithTitle("Commands List");
+            embed.WithDescription($"All StageBot commands separated by category. To use the command, have \nthe `{cmdPrefix}` symbol appended before the phrase. For more information on a specific command, " +
+                $"type `{cmdPrefix}h <command>`");
+            embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]` \n`clear [c] [purge]` \n`stagebotgtfo`", true);
+            embed.AddField("Currency", "`points` \n`pointsadd` \n`timely [t]` \n`gamble [g]`", true);
+            embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level`", true);
+            embed.AddField("Fun", "`echo` \n`pick`", true);
+            embed.AddField("osu!", "`createteamrole [ctr]` \n`delteams` \n`osutop` \n`recent [r]` \n`osuset`", true);
+            embed.AddField("Utility", "`help [h]` \n`helpdm [hdm]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]`", true);
+            embed.WithColor(Pink);
+            BE();
+        }
+
+        [Command("helpdm")] //utility, pinned
+        [Alias("hdm")]
+        public async Task HelpDM()
         {
             embed.WithTitle("Help");
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
@@ -348,9 +441,190 @@ namespace Discord_Bot.Modules
                 $"\nStill need help? Feel free to join the StageBot Development server and ask for help there!: https://discord.gg/yhcNC97");
         }
 
-        [Command("osutop")] //osu
-        public async Task osuTop(int num, [Remainder]string player)
+
+
+        [Command("Unblacklist")] //administration
+        [RequireOwner]
+        public async Task Unblacklist(SocketUser id)
         {
+            var userAccount = UserAccounts.GetAccount(id);
+            userAccount.Blacklisted = 0;
+            UserAccounts.SaveAccounts();
+
+            embed.WithTitle("User Unblacklisted");
+            embed.WithDescription($"User `{userAccount.Username}` with ID `{userAccount.ID}` has been Unblacklisted from StageBot functionality.");
+            embed.WithFooter("Please note that all Points and EXP are not able to be restored.");
+            embed.WithColor(Pink);
+            BE();
+        }
+
+        [Command("massblacklist")] //administration
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        [RequireOwner]
+        public async Task MassBlacklist(List<SocketGuildUser> users)
+        {
+            foreach (var user in users)
+            {
+                var serverID = Context.Guild.Id;
+                var serverName = Context.Guild.Name;
+                var userAccount = UserAccounts.GetAccount(user);
+                userAccount.EXP = 0;
+                userAccount.Points = 0;
+                userAccount.Blacklisted = 1;
+                UserAccounts.SaveAccounts();
+
+                await user.SendMessageAsync($"You have been permanently banned from `{serverName}` with ID `{serverID}`." +
+                    $"\nYour new StageBot EXP amount is `{userAccount.EXP}`. Your new StageBot currency amount is `{userAccount.Points}`." +
+                    $"\nUser `{userAccount.Username}` with ID `{userAccount.ID}` has been permanently blacklisted from all StageBot functions, and can no longer execute any of the StageBot commands." +
+                    $"\nIf you wish to appeal this blacklist, message `Stage#0001` on Discord.");
+               // await user.BanAsync();
+                await ReplyAsync($"**{user.Mention} has been permanently `banned` and `blacklisted`.**");
+            }
+        }
+
+        [Command("osuset")] //osu
+        public async Task osuSet([Remainder]string username)
+        {
+            var userAccount = UserAccounts.GetAccount(Context.User);
+            string oldUsername = userAccount.OsuUsername;
+            if (oldUsername == null)
+                oldUsername = "Null";
+            userAccount.OsuUsername = username;
+            UserAccounts.SaveAccounts();
+
+            embed.WithTitle("osu! Username Set");
+            embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed from `{oldUsername}` to `{username}`.**");
+            embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
+            embed.WithColor(Pink);
+            BE();
+        }
+
+        [Command("recent")] //osu
+        [Alias("r")]
+        public async Task osuRecent(string player = null, int mode = 0)
+        {
+            if(player == null || player == "")
+            {
+                player = UserAccounts.GetAccount(Context.User).OsuUsername;
+            }
+
+            string osuapikey = Config.bot.osuapikey;
+
+            string jsonRecent = "";
+            using (WebClient client = new WebClient())
+            {
+                jsonRecent = client.DownloadString($"https://osu.ppy.sh/api/get_user_recent?k={osuapikey}&u=" + player);
+            }
+            if (jsonRecent == "[]")
+            {
+                string NormalUserName = "";
+                using (WebClient client = new WebClient())
+                {
+                    NormalUserName = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u=" + player);
+                }
+
+                var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
+                embed.WithAuthor(author =>
+                {
+                    author
+                        .WithName("" + mapUserNameObject.username + " hasn't got any recent plays")
+                        .WithIconUrl("https://a.ppy.sh/" + mapUserNameObject.user_id);
+                });
+                embed.WithColor(Pink);
+                BE();
+            }
+            else
+            {
+                var playerRecentObject = JsonConvert.DeserializeObject<dynamic>(jsonRecent)[0];
+                string mapID = playerRecentObject.beatmap_id;
+
+                string mapRecent = "";
+                using (WebClient client = new WebClient())
+                {
+                    mapRecent = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={osuapikey}&b={mapID}");
+                }
+                var mapRecentObject = JsonConvert.DeserializeObject<dynamic>(mapRecent)[0];
+
+                string mapTitle = mapRecentObject.title;
+                string difficulty = mapRecentObject.version;
+                string score = playerRecentObject.score;
+                string maxCombo = playerRecentObject.maxcombo;
+                string artist = mapRecentObject.artist;
+                double count50 = playerRecentObject.count50;
+                double count100 = playerRecentObject.count100;
+                double count300 = playerRecentObject.count300;
+                double countMiss = playerRecentObject.countmiss;
+                string fullCombo = playerRecentObject.perfect;
+                if (fullCombo == "1")
+                    fullCombo = " **Full Combo!**"; else fullCombo = null;
+                string mods = playerRecentObject.enabled_mods;
+                mods = EnabledModsList(mods);
+                string maxPossibleCombo = mapRecentObject.max_combo;
+                mods = EnabledModsList(mods);
+                string date = playerRecentObject.date;
+                double starRating = mapRecentObject.difficultyrating;
+                double accuracy = 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
+                string grade = playerRecentObject.rank;
+                switch (grade)
+                {
+                    case "XH":
+                        grade = "<:XH:553119188089176074>"; break;
+                    case "X":
+                        grade = "<:X_:553119217109565470>"; break;
+                    case "SH":
+                        grade = "<:SH:553119233463025691>"; break;
+                    case "S":
+                        grade = "<:S_:553119252329267240>"; break;
+                    case "A":
+                        grade = "<:A_:553119274256826406>"; break;
+                    case "B":
+                        grade = "<:B_:553119304925577228>"; break;
+                    case "C":
+                        grade = "<:C_:553119325565878272>"; break;
+                    case "D":
+                        grade = "<:D_:553119338035675138>"; break;
+                    case "F":
+                        grade = "<:F_:557297028263051288>"; break;
+                }
+
+                string NormalUserName = "";
+                using (WebClient client = new WebClient())
+                {
+                    NormalUserName = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u=" + player);
+                }
+                var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
+
+                string playerRecentString = $"▸ {grade}{mods} ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by ***{artist}***\n" +
+                    $"▸ **☆{starRating.ToString("F")}** ▸ **{accuracy.ToString("F")}%**\n" +
+                    $"▸ [Combo: {maxCombo}x / Max: {maxPossibleCombo}] {fullCombo}\n" +
+                    $"▸ [{count300} / {count100} / {count50} / {countMiss}]";
+
+                var difference = DateTime.UtcNow - (DateTime)playerRecentObject.date;
+
+                string footer = $"{mapUserNameObject.username} preformed this play {difference.Days} days {difference.Hours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
+
+                embed.WithAuthor(author =>
+                {
+                    author
+                        .WithName($"Most Recent osu! Standard Play for " + mapUserNameObject.username)
+                        .WithIconUrl("https://a.ppy.sh/" + playerRecentObject.user_id);
+                });
+                embed.WithDescription($"{playerRecentString}");
+                embed.WithFooter(footer);
+                embed.WithColor(Pink);
+                BE();
+            }
+        }
+
+        [Command("osutop")] //osu
+        public async Task osuTop(string player = null, int num = 5)
+    {
+            if (player == null || player == "")
+            {
+                player = UserAccounts.GetAccount(Context.User).OsuUsername;
+            }
+
             string osuapikey = Config.bot.osuapikey;
 
             if (num > 10)
@@ -368,20 +642,18 @@ namespace Discord_Bot.Modules
             for (var i = 0; i < num; i++)
             {
                 var playerTopObject = JsonConvert.DeserializeObject<dynamic>(jsonTop)[i];
-                string mapID = playerTopObject.beatmap_id.ToString();
-                double pp = playerTopObject.pp;
-
-
                 string jsonMap = "";
+
+                string mapID = playerTopObject.beatmap_id.ToString();
                 using (WebClient client = new WebClient())
                 {
                     jsonMap = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={osuapikey}&b=" + mapID);
                 }
-                
                 var mapObject = JsonConvert.DeserializeObject<dynamic>(jsonMap)[0];
+                double pp = playerTopObject.pp;
                 string mapTitle = mapObject.title;
                 double difficultyRating = mapObject.difficultyrating;
-                string version = mapObject.Version;
+                string version = mapObject.version;
                 string country = playerTopObject.country;
                 double count300 = playerTopObject.count300;
                 double count100 = playerTopObject.count100;
@@ -394,36 +666,30 @@ namespace Discord_Bot.Modules
                 switch (grade)
                 {
                     case "XH":
-                    grade = "<:XH:553119188089176074>";
-                        break;
+                        grade = "<:XH:553119188089176074>"; break;
                     case "X":
-                    grade = "<:X_:553119217109565470>";
-                        break;  
+                        grade = "<:X_:553119217109565470>"; break;
                     case "SH":
-                    grade = "<:SH:553119233463025691>";
-                        break;
+                        grade = "<:SH:553119233463025691>"; break;
                     case "S":
-                    grade = "<:S_:553119252329267240>";
-                        break;
+                        grade = "<:S_:553119252329267240>"; break;
                     case "A":
-                    grade = "<:A_:553119274256826406>";
-                        break;
+                        grade = "<:A_:553119274256826406>"; break;
                     case "B":
-                    grade = "<:B_:553119304925577228>";
-                        break;
+                        grade = "<:B_:553119304925577228>"; break;
                     case "C":
-                    grade = "<:C_:553119325565878272>";
-                        break;
+                        grade = "<:C_:553119325565878272>"; break;
                     case "D":
-                    grade = "<:D_:553119338035675138>";
-                        break;
+                        grade = "<:D_:553119338035675138>"; break;
                 }
-                PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country, count300, count100, count50, countMiss, accuracy, grade, playerMaxCombo, mapMaxCombo);
 
+                string mods = playerTopObject.enabled_mods;
+                mods = EnabledModsList(mods);
+                PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country, count300, count100, count50, countMiss, accuracy, grade, playerMaxCombo, mapMaxCombo, mods);
                 PlayDataArray[i] = PlayData;
             }
 
-                string jsonPlayer = "";
+            string jsonPlayer = "";
                 using (WebClient client = new WebClient())
                 {
                     jsonPlayer = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u={player}");
@@ -431,10 +697,10 @@ namespace Discord_Bot.Modules
 
             var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonPlayer)[0];
 
-            string TopPlayString = ""; //Work on formatting. Add mods and letter grade images. Country images to come later.
+            string TopPlayString = ""; //Country images to come later.
             for (var j = 0; j < num; j++)
             {
-                TopPlayString = TopPlayString + $"\n{j + 1}: ▸ {PlayDataArray[j].grade} ▸ {PlayDataArray[j].mapID} ▸ **[{PlayDataArray[j].mapTitle}](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
+                TopPlayString = TopPlayString + $"\n{j + 1}: ▸ {PlayDataArray[j].grade}{PlayDataArray[j].mods} ▸ {PlayDataArray[j].mapID} ▸ **[{PlayDataArray[j].mapTitle} [{PlayDataArray[j].version}]](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
                     $"\n▸ **☆{PlayDataArray[j].difficultyRating.ToString("F")}** ▸ **{PlayDataArray[j].accuracy.ToString("F")}%** for **{PlayDataArray[j].pp.ToString("F")}pp** " +
                     $"\n▸ [Combo: {PlayDataArray[j].playerMaxCombo}x / Max: {PlayDataArray[j].mapMaxCombo}]\n";
             }
@@ -444,6 +710,246 @@ namespace Discord_Bot.Modules
             embed.WithDescription($"osu! Stats for player **{player}**:\n" + TopPlayString);
             embed.WithColor(Pink);
             BE();
+        }
+
+        public static string EnabledModsList(string mods)
+        {
+            switch (mods)
+            {
+                case "0":
+                    mods = ""; break;
+                case "1":
+                    mods = "**+NF**"; break;
+                case "2":
+                    mods = "**+EZ**"; break;
+                case "3":
+                    mods = "**+NFEZ**"; break;
+                case "8":
+                    mods = "**+HD**"; break;
+                case "16":
+                    mods = "**+HR**"; break;
+                case "24":
+                    mods = "**+HDHR**"; break;
+                case "25":
+                    mods = "**+HDHRNF**"; break;
+                case "27":
+                    mods = "**+HDHRNFEZ**"; break;
+                case "32":
+                    mods = "**+SD**"; break;
+                case "34":
+                    mods = "**+EZSD**"; break;
+                case "40":
+                    mods = "**+HDSD**"; break;
+                case "48":
+                    mods = "**+HRSD**"; break;
+                case "50":
+                    mods = "**+EZHRSD**"; break;
+                case "56":
+                    mods = "**+HDHRSD**"; break;
+                case "58":
+                    mods = "**+EZHDHRSD**"; break;
+                case "64":
+                    mods = "**+DT**"; break;
+                case "65":
+                    mods = "**+NFDT**"; break;
+                case "66":
+                    mods = "**+EZDT**"; break;
+                case "67":
+                    mods = "**+EZDTNF**"; break;
+                case "72":
+                    mods = "**+HDDT**"; break;
+                case "73":
+                    mods = "**+HDDTNF**"; break;
+                case "74":
+                    mods = "**+EZHDDT**"; break;
+                case "75":
+                    mods = "**+EZNFHDDT**"; break;
+                case "80":
+                    mods = "**+HRDT**"; break;
+                case "88":
+                    mods = "**+HDHRDT**"; break;
+                case "89":
+                    mods = "**+NFHDHRDT**"; break;
+                case "90":
+                    mods = "**+EZHDHRDT**"; break;
+                case "91":
+                    mods = "**+EZNFHDHRDT**"; break;
+                case "96":
+                    mods = "**+DTSD**"; break;
+                case "98":
+                    mods = "**+EZDTSD**"; break;
+                case "104":
+                    mods = "**+HDDTSD**"; break;
+                case "106":
+                    mods = "**+EZHDDTSD**"; break;
+                case "112":
+                    mods = "**+HRDTSD**"; break;
+                case "114":
+                    mods = "**+EZHRDTSD**"; break;
+                case "120":
+                    mods = "**+HDHRDTSD**"; break;
+                case "122":
+                    mods = "**+EZHDHRDTSD**"; break;
+                case "256":
+                    mods = "**+HT**"; break;
+                case "257":
+                    mods = "**+NFHT**"; break;
+                case "258":
+                    mods = "**+HTEZ**"; break;
+                case "259":
+                    mods = "**+NFEZHT**"; break;
+                case "264":
+                    mods = "**+HDHT**"; break;
+                case "265":
+                    mods = "**+NFHDHT**"; break;
+                case "267":
+                    mods = "**+NFEZHDHT**"; break;
+                case "272":
+                    mods = "**+HTHR**"; break;
+                case "273":
+                    mods = "**+NFHTHR**"; break;
+                case "275":
+                    mods = "**+EZNFHTHR**"; break;
+                case "280":
+                    mods = "**HDHRHT**"; break;
+                case "281":
+                    mods = "**+NFHDHRHT**"; break;
+                case "283":
+                    mods = "**+EZNFHDHRHT**"; break;
+                case "288":
+                    mods = "**+HTSD**"; break;
+                case "290":
+                    mods = "**+EZHTSD**"; break;
+                case "296":
+                    mods = "**+HDHTSD**"; break;
+                case "298":
+                    mods = "**+EZHDHTSD**"; break;
+                case "304":
+                    mods = "**+HRHTSD**"; break;
+                case "306":
+                    mods = "**+EZHRHTSD**"; break;
+                case "312":
+                    mods = "**+HDHRHTSD**"; break;
+                case "314":
+                    mods = "**+EZHDHRHTSD**"; break;
+                case "1024":
+                    mods = "**+FL**"; break;
+                case "1025":
+                    mods = "**+NFFL**"; break;
+                case "1026":
+                    mods = "**+EZFL**"; break;
+                case "1027":
+                    mods = "**+NFEZFL**"; break;
+                case "1032":
+                    mods = "**+HDFL**"; break;
+                case "1040":
+                    mods = "**+HRFL**"; break;
+                case "1048":
+                    mods = "**+HDHRFL**"; break;
+                case "1049":
+                    mods = "**+HDHRFLNF**"; break;
+                case "1051":
+                    mods = "**+HDHRFLNFEZ**"; break;
+                case "1056":
+                    mods = "**+FLSD**"; break;
+                case "1058":
+                    mods = "**+EZFLSD**"; break;
+                case "1064":
+                    mods = "**+HDFLSD**"; break;
+                case "1072":
+                    mods = "**+HRFLSD**"; break;
+                case "1074":
+                    mods = "**+EZHRFLSD**"; break;
+                case "1080":
+                    mods = "**+HDHRFLSD**"; break;
+                case "1082":
+                    mods = "**+EZHDHRFLSD**"; break;
+                case "1088":
+                    mods = "**+DTFL**"; break;
+                case "1089":
+                    mods = "**+NFDTFL**"; break;
+                case "1090":
+                    mods = "**+EZDTFL**"; break;
+                case "1091":
+                    mods = "**+EZDTNFFL**"; break;
+                case "1096":
+                    mods = "**+HDDTFL**"; break;
+                case "1097":
+                    mods = "**+HDDTNFFL**"; break;
+                case "1098":
+                    mods = "**+EZHDDTFL**"; break;
+                case "1099":
+                    mods = "**+EZNFHDDTFL**"; break;
+                case "1104":
+                    mods = "**+HRDTFL**"; break;
+                case "1112":
+                    mods = "**+HDHRDTFL**"; break;
+                case "1113":
+                    mods = "**+NFHDHRDTFL**"; break;
+                case "1114":
+                    mods = "**+EZHDHRDTFL**"; break;
+                case "1115":
+                    mods = "**+EZNFHDHRDTFL**"; break;
+                case "1120":
+                    mods = "**+DTFLSD**"; break;
+                case "1122":
+                    mods = "**+EZDTFLSD**"; break;
+                case "1130":
+                    mods = "**+HDDTFLSD**"; break;
+                case "1132":
+                    mods = "**+EZHDDTFLSD**"; break;
+                case "1138":
+                    mods = "**+HRDTFLSD**"; break;
+                case "1140":
+                    mods = "**+EZHRDTFLSD**"; break;
+                case "1144":
+                    mods = "**+HDHRDTFLSD**"; break;
+                case "1146":
+                    mods = "**+EZHDHRDTFLSD**"; break;
+                case "1280":
+                    mods = "**+HTFL**"; break;
+                case "1281":
+                    mods = "**+NFHTFL**"; break;
+                case "1282":
+                    mods = "**+HTEZFL**"; break;
+                case "1283":
+                    mods = "**+NFEZHTFL**"; break;
+                case "1288":
+                    mods = "**+HDHTFL**"; break;
+                case "1289":
+                    mods = "**+NFHDHTFL**"; break;
+                case "1291":
+                    mods = "**+NFEZHDHTFL**"; break;
+                case "1292":
+                    mods = "**+HTHRFL**"; break;
+                case "1293":
+                    mods = "**+NFHTHRFL**"; break;
+                case "1295":
+                    mods = "**+EZNFHTHRFL**"; break;
+                case "1300":
+                    mods = "**HDHRHTFL**"; break;
+                case "1301":
+                    mods = "**+NFHDHRHTFL**"; break;
+                case "1303":
+                    mods = "**+EZNFHDHRHTFL**"; break;
+                case "1312":
+                    mods = "**+HTFLSD**"; break;
+                case "1314":
+                    mods = "**+EZHTFLSD**"; break;
+                case "1320":
+                    mods = "**+HDHTFLSD**"; break;
+                case "1322":
+                    mods = "**+EZHDHTFLSD**"; break;
+                case "1328":
+                    mods = "**+HRHTFLSD**"; break;
+                case "1330":
+                    mods = "**+EZHRHTFLSD**"; break;
+                case "1336":
+                    mods = "**+HDHRHTFLSD**"; break;
+                case "1338":
+                    mods = "**+EZHDHRHTFLSD**"; break;
+            }
+            return mods;
         }
 
         [Command("createteamrole")] //osu
@@ -465,10 +971,8 @@ namespace Discord_Bot.Modules
         }
 
         [Command("delteams")] //osu
-        [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
-        [RequireBotPermission(GuildPermission.ManageRoles)]
         [RequireOwner]
         public async Task DeleteTeams()
         {
@@ -484,7 +988,6 @@ namespace Discord_Bot.Modules
                     embed.WithColor(Pink);
                     BE();
                 }
-                else return;
             }
         }
 
@@ -526,7 +1029,17 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        /*[Command("mute")]
+        [Command("stagebotgtfo")] //admin
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task leave()
+        {
+            embed.WithTitle("Leaving Server");
+            embed.WithDescription($"Administrator {Context.User.Mention} has directed me to leave. Goodbye!");
+            embed.WithColor(Red);
+            Context.Guild.LeaveAsync();
+        }
+
+        /*[Command("mute")] //admin
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -623,6 +1136,16 @@ namespace Discord_Bot.Modules
             await m.DeleteAsync();
         }
 
+       /* [Command("createtimedannouncement")]
+        [Alias("ctda")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task CreateTimedAnnouncement(string message, )
+        {
+            Console.WriteLine(message);
+        }
+        */
+
         [Command("createtextchannel")] //utility
         [Alias("ctc")]
         [RequireUserPermission(GuildPermission.ManageChannels)]
@@ -672,6 +1195,7 @@ namespace Discord_Bot.Modules
         }
 
         [Command("timely")] //currency
+        [Alias("t")]
         public async Task DailyPoints(uint timeout = 24)
         {
             uint bonus = EditableCommands.bot.timelyPoints;
@@ -699,7 +1223,7 @@ namespace Discord_Bot.Modules
         internal static bool CanReceiveTimelyPoints(UserAccount user, int timeout)
         {
             var difference = DateTime.Now - user.LastReceivedTimelyPoints;
-            return difference.Hours > timeout;
+            return difference.TotalHours > timeout;
         }
 
         [Command("exp")] //exp
@@ -722,6 +1246,172 @@ namespace Discord_Bot.Modules
             BE();
         }
 
+        [Command("gamble")] //currency
+        [Alias("g")]
+        public async Task GamblePoints(int points)
+        {
+            var user = Context.User;
+            var userAccount = UserAccounts.GetAccount((SocketGuildUser)Context.User);
+            if (points > userAccount.Points)
+            {
+                embed.WithTitle("Gambling: Insufficient Points!");
+                embed.WithDescription($"{user.Mention} you have an insufficient amount of points!" +
+                    $"\nThe maximum amount you may gamble is {userAccount.Points}.");
+                embed.WithColor(Red);
+                BE();
+                return;
+            }
+            if(points > 25000)
+            {
+                embed.WithTitle("Gambling: Too Many Points!");
+                embed.WithDescription($"**{user.Mention} you are attempting to gamble too many points!" +
+                    $"\nThe maximum amount you may gamble is `25,000` points.**");
+                embed.WithColor(Red);
+                BE();
+                return;
+            }
+
+            Random rand = new Random();
+            var roll = rand.Next(0, 100);
+
+
+            if (roll <= 66)
+            {
+                userAccount.Points = userAccount.Points - (uint)points;
+                userAccount.LifetimeGambleLosses++;
+                userAccount.LifetimeGambles++;
+
+                string[] sadEmotes = { "<:PepeHands:431853568669253632>", "<:FeelsBadMan:431647398071107584>", "<:FeelsWeirdMan:431148381449224192>" };
+                Random randEmote = new Random();
+                var num = randEmote.Next(0, 2);
+                Console.WriteLine(num);
+                embed.WithTitle($"Gambling: Loser! {sadEmotes[num]}");
+                embed.WithDescription($"**{user.Mention} rolled `{roll}` and lost their bet of `{points.ToString("N0")}`! Better luck next time!** <:SagiriBlush:498009810692734977>");
+                embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
+                    $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
+                embed.WithColor(Pink);
+                BE();
+                Console.WriteLine(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles);
+
+                UserAccounts.SaveAccounts();
+                return;
+            }
+            else if (67 <= roll && roll <= 78)
+            {
+                userAccount.LifetimeGambleWins++;
+                userAccount.LifetimeGambles++;
+
+                string[] happyEmotes1 = { "<:peepoHappy:479314678699524116>", "<:EZ:431149816127553547>", "<a:pats:432262215018741780>" };
+                Random randEmote = new Random();
+                var num = randEmote.Next(0, 2);
+
+                var multiplier = 1.25;
+
+                userAccount.Points += (uint)(points * multiplier);
+                embed.WithTitle($"Gambling: Winner! {happyEmotes1[num]}");
+                embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**");
+                embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
+                    $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
+                embed.WithColor(Pink);
+                BE();
+
+                UserAccounts.SaveAccounts();
+                return;
+            }
+            else if (79 <= roll && roll <= 89)
+            {
+                userAccount.LifetimeGambleWins++;
+                userAccount.LifetimeGambles++;
+
+                string[] happyEmotes2 = { "<:Pog:484960397946912768>", "<:PogChamp:433109653501640715>", "<:nepWink:432745215217106955>" };
+                Random randEmote = new Random();
+                var num = randEmote.Next(0, 2);
+
+                var multiplier = 1.75;
+
+                userAccount.Points += (uint)(points * multiplier);
+                embed.WithTitle($"Gambling Winner: High Roll! {happyEmotes2[num]}");
+                embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**");
+                embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
+                    $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
+                embed.WithColor(Pink);
+                BE();
+
+                UserAccounts.SaveAccounts();
+                return;
+            }
+            else if (90 <= roll && roll <= 95)
+            {
+                userAccount.LifetimeGambleWins++;
+                userAccount.LifetimeGambles++;
+                userAccount.LifetimeEliteRolls++;
+
+                string[] eliteEmotes = { "<:PogU:509194017368702987>", "<a:Banger:506288311829135386>" };
+                Random randEmote = new Random();
+                var num = randEmote.Next(0, 2);
+
+                var multiplier = 2.25;
+
+                userAccount.Points += (uint)(points * multiplier);
+                embed.WithTitle($"Gambling Winner: Elite Roll! {eliteEmotes[num]}");
+                embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**\n" +
+                    $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
+                embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
+                    $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
+                embed.WithColor(Pink);
+                BE();
+
+                UserAccounts.SaveAccounts();
+                return;
+            }
+            else if (96 <= roll && roll <= 99)
+            {
+                userAccount.LifetimeGambleWins++;
+                userAccount.LifetimeGambles++;
+                userAccount.LifetimeEliteRolls++;
+
+                string[] superEliteEmotes = { "<:YES:462371445864136732>", "<:smug:453259470815100941>", "<:Woww:442687161871892502>" };
+                Random randEmote = new Random();
+                var num = randEmote.Next(0, 2);
+
+                var multiplier = 3.00;
+
+                userAccount.Points += (uint)(points * multiplier);
+                embed.WithTitle($"Gambling Winner: Super Elite Roll! {superEliteEmotes[num]}");
+                embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**\n" +
+                    $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
+                embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
+                    $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
+                embed.WithColor(Pink);
+                BE();
+
+                UserAccounts.SaveAccounts();
+                return;
+            }
+            else if (roll == 100)
+            {
+                userAccount.LifetimeGambleWins++;
+                userAccount.LifetimeGambles++;
+                userAccount.LifetimeEliteRolls++;
+
+                string sirenEmote = "<a:siren:429784681316220939>";
+
+                var multiplier = 5.00;
+
+                userAccount.Points += (uint)(points * multiplier);
+                embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! {sirenEmote}");
+                embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**\n" +
+                    $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
+                embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
+                    $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
+                embed.WithColor(255, 223, 0);
+                BE();
+
+                UserAccounts.SaveAccounts();
+                return;
+            }
+        }
+
         [Command("points")] //currency
         public async Task Points([Remainder]string arg = "")
         {
@@ -736,9 +1426,9 @@ namespace Discord_Bot.Modules
         }
 
         [Command("pointsadd")] //currency
-        [RequireUserPermission(GuildPermission.Administrator)]
+        [Alias("addpoints")]
         [RequireOwner]
-        public async Task PointsAdd([Remainder]uint points)
+        public async Task PointsAdd(uint points, IGuildUser user = null)
         {
             if (!UserIsAdmin((SocketGuildUser)Context.User))
             {
@@ -748,13 +1438,33 @@ namespace Discord_Bot.Modules
                 await Context.Channel.SendMessageAsync(Context.User.Mention + ":x: You are not an administrator.");
                 return;
             }
-            var account = UserAccounts.GetAccount(Context.User);
-            account.Points += points;
-            UserAccounts.SaveAccounts();
-            embed.WithTitle("Adding Points");
-            embed.WithDescription($"{Context.User.Mention} has been awarded {points} points.");
-            embed.WithColor(Pink);
-            BE();
+            if(user == null)
+            {
+                var userAccount = UserAccounts.GetAccount(Context.User);
+                userAccount.Points += points;
+                UserAccounts.SaveAccounts();
+                embed.WithTitle("Adding Points");
+                embed.WithDescription($"{Context.User.Mention} has been awarded {points} points.");
+                embed.WithColor(Pink);
+                BE();
+            }
+            else if(user is IGuildUser)
+            {
+                var userAccount = UserAccounts.GetAccount((SocketUser)user);
+                userAccount.Points += points;
+                UserAccounts.SaveAccounts();
+                embed.WithTitle("Adding Points");
+                embed.WithDescription($"{Context.User.Mention} has been awarded {points} points.");
+                embed.WithColor(Pink);
+                BE();
+            }
+            else
+            {
+                embed.WithTitle("Adding Points");
+                embed.WithDescription($"{Context.User.Mention} Unable to add points to {user}! Make sure they exist and try again!");
+                embed.WithColor(Pink);
+                BE();
+            }
         }
 
         [Command("expadd")] //exp

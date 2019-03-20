@@ -9,8 +9,6 @@ using Discord_Bot.Core.UserAccounts;
 
 namespace Discord_Bot.Core.LevelingSystem
 {
-
-
     internal static class Leveling
     {
 
@@ -19,18 +17,15 @@ namespace Discord_Bot.Core.LevelingSystem
             Color Pink = new Color(252, 132, 255);
 
             var userAccount = UserAccounts.UserAccounts.GetAccount(user);
-            if (!CanReceiveExperience(userAccount, 2))
-            {
-                Console.WriteLine("EXP not given");
+            Random RNGTimeout = new Random();
+            if (!CanReceiveExperience(userAccount, RNGTimeout.Next(110, 130)))
                 return;
-            }
             uint oldLevel = userAccount.LevelNumber;
             Random random = new Random();
-            uint newExp = (uint)random.Next(7, 10);
+            uint newExp = (uint)random.Next(7, 11);
             userAccount.EXP = userAccount.EXP + newExp;
             userAccount.LastReceivedEXP = DateTime.Now;
             UserAccounts.UserAccounts.SaveAccounts();
-            Console.WriteLine($"EXP Given: {newExp} - New EXP Amount: {userAccount.EXP}");
             uint newLevel = userAccount.LevelNumber;
             if (oldLevel != userAccount.LevelNumber)
             {
@@ -40,7 +35,7 @@ namespace Discord_Bot.Core.LevelingSystem
                 embed.AddField("Level", newLevel);
                 embed.AddField("EXP", userAccount.EXP);
                 embed.WithColor(Pink);
-
+               
                 await channel.SendMessageAsync("", false, embed.Build());
             }
         }
@@ -48,7 +43,7 @@ namespace Discord_Bot.Core.LevelingSystem
         internal static bool CanReceiveExperience(UserAccount user, int timeout)
         {
             var difference = DateTime.Now - user.LastReceivedEXP;
-            return difference.Minutes > timeout;
+            return difference.TotalSeconds > timeout;
         }
     }
 }

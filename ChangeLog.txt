@@ -3,10 +3,35 @@ Welcome to the StageBot ChangeLog. (Last updated: Version 1.0.1)
 
 Changelog:
 
+Version 1.1.0
+
+- Added accuracy table to code
+- Added accuracy display to $osutop command
+- Fixed timely command, you can now receive points at the proper time.
+- Tuned exp to be given at a more precise time (once every 120 seconds of chatting)
+- Bumped up the max amount of exp you can receive from a single message (from 10 to 11)
+- osu! Beatmap difficulty names are now properly displayed in the $osutop command
+- $osutop now defaults to 5 maps when a number is not specified. "$osutop player" is now possible and defaults to 5 maps.
+- $mdls is now functional (was sent in help command but didn't actually work)
+- $cmds now has an alias of $commands.
+- $recent/$r is now implemented!
+- $delteams is now working again, closes #3
+- $osuset command Added
+- Logging of Usernames is now in place in accounts.json (name#discrim format)
+- $massblacklist command added
+- Updated modules to reflect new commands
+- $pointsadd can now add points to other users.
+- $gamble/$g functionality now available, gamble those points!!
+- Application will now properly restart after first time setup is completed.
+- $stagebotgtfo command added. Forces StageBot to leave the server this command was executed in.
+- $h / $help command changed to display the list of commands, separated by category.
+
 Version 1.0.1
+
 - Fixed a bug with the EXP system. Resolves #2
 
 Version 1.0.0
+
 - First major release
 - Adds fully functioning EXP system. Receive 7-10 exp every two minutes you send a message in chat!
 - Replaced invite URL in help command

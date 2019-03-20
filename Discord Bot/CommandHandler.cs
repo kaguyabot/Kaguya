@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using Discord_Bot.Core.LevelingSystem;
+using Discord_Bot.Core.UserAccounts;
 
 namespace Discord_Bot
 {
@@ -33,7 +34,17 @@ namespace Discord_Bot
             if (msg == null) return;
             var context = new SocketCommandContext(_client, msg);
             if (context.User.IsBot) return;
+            var userAccount = UserAccounts.GetAccount(context.User);
+            if (userAccount.Blacklisted == 1)
+            {
+                Console.WriteLine($"Blacklisted user {userAccount.Username} detected.");
+                return;
+            }
             Leveling.UserSentMessage((SocketGuildUser)context.User, (SocketTextChannel)context.Channel);
+            string oldUsername = userAccount.Username;
+            string newUsername = context.User.Username;
+            if(oldUsername + "#" + context.User.Discriminator != newUsername + "#" + context.User.Discriminator)
+                userAccount.Username = newUsername + "#" + context.User.Discriminator;
             int argPos = 0;
             if (msg.HasStringPrefix(Config.bot.cmdPrefix, ref argPos)
                 || msg.HasMentionPrefix(_client.CurrentUser, ref argPos))

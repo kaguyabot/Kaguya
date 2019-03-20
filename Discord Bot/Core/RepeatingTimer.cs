@@ -32,7 +32,7 @@ namespace Discord_Bot.Core
 
         private static async void OnTimerTicked(object sender, ElapsedEventArgs e)
         {
-            await channel.SendMessageAsync("Piss in a can");
+           
         }
     }
 }

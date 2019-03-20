@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Discord_Bot.Core;
 using System.IO;
 using Newtonsoft.Json;
+using System.Reflection;
+using System.Diagnostics;
 
 #pragma warning disable CS1998
 
@@ -42,9 +44,10 @@ namespace Discord_Bot
                 string json = JsonConvert.SerializeObject(bot, Formatting.Indented);
                 File.WriteAllText("Resources" + "/" + "config.json", json);
                 Console.WriteLine("Confirmed. Restarting in 5 seconds...(If app doesn't restart, close and open again.)");
+                var filePath = Assembly.GetExecutingAssembly().Location;
                 Thread.Sleep(5000);
+                Process.Start(filePath);
                 Environment.Exit(0);
-                System.Diagnostics.Process.Start(AppDomain.CurrentDomain.FriendlyName);
             }
             try
             {

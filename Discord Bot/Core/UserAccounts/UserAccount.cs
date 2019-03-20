@@ -8,6 +8,8 @@ namespace Discord_Bot.Core.UserAccounts
 {
     public class UserAccount
     {
+        public string Username { get; set; }
+
         public ulong ID { get; set; }
 
         public uint Points { get; set; }
@@ -25,5 +27,20 @@ namespace Discord_Bot.Core.UserAccounts
                 return (uint)Math.Sqrt(EXP / 20);
             }
         }
+        
+        public string OsuUsername { get; set; }
+
+        public int Blacklisted { get; set; }
+
+        public int TotalDailyGambleWinnings { get; set; }
+
+        public double LifetimeGambleWins { get; set; }
+
+        public double LifetimeGambleLosses { get; set; }
+
+        public double LifetimeGambles { get; set; }
+
+        public int LifetimeEliteRolls { get; set; }
+
     }
 }

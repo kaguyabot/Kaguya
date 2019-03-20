@@ -53,7 +53,11 @@ namespace Discord_Bot.Core.UserAccounts
             {
                 ID = id,
                 Points = 0,
-                EXP = 0
+                EXP = 0,
+                Blacklisted = 0,
+                LifetimeGambleWins = 0,
+                LifetimeGambleLosses = 0,
+                LifetimeEliteRolls = 0
             };
 
             accounts.Add(newAccount);
