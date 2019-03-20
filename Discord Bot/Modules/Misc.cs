@@ -560,8 +560,10 @@ namespace Discord_Bot.Modules
                     fullCombo = " **Full Combo!**"; else fullCombo = null;
                 string mods = playerRecentObject.enabled_mods;
                 string maxPossibleCombo = mapRecentObject.max_combo;
-                mods = (((AllMods)playerRecentObject.enabled_mods).ToString().Replace(",", ""));
+                var modnum = playerRecentObject.enabled_mods;
+                mods = ((AllMods)modnum).ToString().Replace(",", "");
                 mods = mods.Replace(" ", "");
+                mods = mods.Replace("NM", "");
                 string date = playerRecentObject.date;
                 double starRating = mapRecentObject.difficultyrating;
                 double accuracy = 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
@@ -595,7 +597,10 @@ namespace Discord_Bot.Modules
                 }
                 var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
 
-                string playerRecentString = $"▸ {grade}**+{mods}** ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by ***{artist}***\n" +
+                string plus = "+";
+                if (plus == "+" && mods == "")
+                    plus = "";
+                string playerRecentString = $"▸ **{grade}{plus}{mods}** ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by ***{artist}***\n" +
                     $"▸ **☆{starRating.ToString("F")}** ▸ **{accuracy.ToString("F")}%**\n" +
                     $"▸ [Combo: {maxCombo}x / Max: {maxPossibleCombo}] {fullCombo}\n" +
                     $"▸ [{count300} / {count100} / {count50} / {countMiss}]";
@@ -617,7 +622,7 @@ namespace Discord_Bot.Modules
             }
         }
 
-        [Command("osutop1")] //osu
+        [Command("osutop")] //osu
         public async Task osuTop(string player = null, int num = 5)
     {
             if (player == null || player == "")
@@ -714,7 +719,7 @@ namespace Discord_Bot.Modules
             }
             embed.WithAuthor($"{player}'s Top osu! Standard Plays");
             embed.WithTitle($"**Top {num} osu! standard plays for {player}:**");
-            embed.WithUrl($"https://www.osu.ppy.sh/u/{player}/");
+            embed.WithUrl($"https://osu.ppy.sh/u/{player}/");
             embed.WithDescription($"osu! Stats for player **{player}**:\n" + TopPlayString);
             embed.WithColor(Pink);
             BE();
