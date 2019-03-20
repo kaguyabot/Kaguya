@@ -501,7 +501,7 @@ namespace Discord_Bot.Modules
         }
 
         [Command("recent")] //osu
-        [Alias("r")]
+        [Alias("r1")]
         public async Task osuRecent(string player = null, int mode = 0)
         {
             if(player == null || player == "")
@@ -559,9 +559,9 @@ namespace Discord_Bot.Modules
                 if (fullCombo == "1")
                     fullCombo = " **Full Combo!**"; else fullCombo = null;
                 string mods = playerRecentObject.enabled_mods;
-                mods = EnabledModsList(mods);
                 string maxPossibleCombo = mapRecentObject.max_combo;
-                mods = EnabledModsList(mods);
+                mods = (((AllMods)playerRecentObject.enabled_mods).ToString().Replace(",", ""));
+                mods = mods.Replace(" ", "");
                 string date = playerRecentObject.date;
                 double starRating = mapRecentObject.difficultyrating;
                 double accuracy = 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
@@ -595,7 +595,7 @@ namespace Discord_Bot.Modules
                 }
                 var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
 
-                string playerRecentString = $"▸ {grade}{mods} ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by ***{artist}***\n" +
+                string playerRecentString = $"▸ {grade}**+{mods}** ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by ***{artist}***\n" +
                     $"▸ **☆{starRating.ToString("F")}** ▸ **{accuracy.ToString("F")}%**\n" +
                     $"▸ [Combo: {maxCombo}x / Max: {maxPossibleCombo}] {fullCombo}\n" +
                     $"▸ [{count300} / {count100} / {count50} / {countMiss}]";
@@ -617,7 +617,7 @@ namespace Discord_Bot.Modules
             }
         }
 
-        [Command("osutop")] //osu
+        [Command("osutop1")] //osu
         public async Task osuTop(string player = null, int num = 5)
     {
             if (player == null || player == "")
@@ -683,8 +683,12 @@ namespace Discord_Bot.Modules
                         grade = "<:D_:553119338035675138>"; break;
                 }
 
-                string mods = playerTopObject.enabled_mods;
-                mods = EnabledModsList(mods);
+                var modnum = playerTopObject.enabled_mods;
+                string mods = ((AllMods)modnum).ToString().Replace(",", "");
+                mods = mods.Replace(" ", "");
+                mods = mods.Replace("NM", "");
+                
+
                 PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country, count300, count100, count50, countMiss, accuracy, grade, playerMaxCombo, mapMaxCombo, mods);
                 PlayDataArray[i] = PlayData;
             }
@@ -700,7 +704,11 @@ namespace Discord_Bot.Modules
             string TopPlayString = ""; //Country images to come later.
             for (var j = 0; j < num; j++)
             {
-                TopPlayString = TopPlayString + $"\n{j + 1}: ▸ {PlayDataArray[j].grade}{PlayDataArray[j].mods} ▸ {PlayDataArray[j].mapID} ▸ **[{PlayDataArray[j].mapTitle} [{PlayDataArray[j].version}]](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
+                string plus = "+";
+              
+                if (plus == "+" && PlayDataArray[j].mods == "")
+                    plus = "";
+                TopPlayString = TopPlayString + $"\n{j + 1}: ▸ **{PlayDataArray[j].grade}{plus}{PlayDataArray[j].mods}** ▸ {PlayDataArray[j].mapID} ▸ **[{PlayDataArray[j].mapTitle} [{PlayDataArray[j].version}]](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
                     $"\n▸ **☆{PlayDataArray[j].difficultyRating.ToString("F")}** ▸ **{PlayDataArray[j].accuracy.ToString("F")}%** for **{PlayDataArray[j].pp.ToString("F")}pp** " +
                     $"\n▸ [Combo: {PlayDataArray[j].playerMaxCombo}x / Max: {PlayDataArray[j].mapMaxCombo}]\n";
             }
@@ -712,245 +720,27 @@ namespace Discord_Bot.Modules
             BE();
         }
 
-        public static string EnabledModsList(string mods)
+        [Flags]
+        public enum AllMods
         {
-            switch (mods)
-            {
-                case "0":
-                    mods = ""; break;
-                case "1":
-                    mods = "**+NF**"; break;
-                case "2":
-                    mods = "**+EZ**"; break;
-                case "3":
-                    mods = "**+NFEZ**"; break;
-                case "8":
-                    mods = "**+HD**"; break;
-                case "16":
-                    mods = "**+HR**"; break;
-                case "24":
-                    mods = "**+HDHR**"; break;
-                case "25":
-                    mods = "**+HDHRNF**"; break;
-                case "27":
-                    mods = "**+HDHRNFEZ**"; break;
-                case "32":
-                    mods = "**+SD**"; break;
-                case "34":
-                    mods = "**+EZSD**"; break;
-                case "40":
-                    mods = "**+HDSD**"; break;
-                case "48":
-                    mods = "**+HRSD**"; break;
-                case "50":
-                    mods = "**+EZHRSD**"; break;
-                case "56":
-                    mods = "**+HDHRSD**"; break;
-                case "58":
-                    mods = "**+EZHDHRSD**"; break;
-                case "64":
-                    mods = "**+DT**"; break;
-                case "65":
-                    mods = "**+NFDT**"; break;
-                case "66":
-                    mods = "**+EZDT**"; break;
-                case "67":
-                    mods = "**+EZDTNF**"; break;
-                case "72":
-                    mods = "**+HDDT**"; break;
-                case "73":
-                    mods = "**+HDDTNF**"; break;
-                case "74":
-                    mods = "**+EZHDDT**"; break;
-                case "75":
-                    mods = "**+EZNFHDDT**"; break;
-                case "80":
-                    mods = "**+HRDT**"; break;
-                case "88":
-                    mods = "**+HDHRDT**"; break;
-                case "89":
-                    mods = "**+NFHDHRDT**"; break;
-                case "90":
-                    mods = "**+EZHDHRDT**"; break;
-                case "91":
-                    mods = "**+EZNFHDHRDT**"; break;
-                case "96":
-                    mods = "**+DTSD**"; break;
-                case "98":
-                    mods = "**+EZDTSD**"; break;
-                case "104":
-                    mods = "**+HDDTSD**"; break;
-                case "106":
-                    mods = "**+EZHDDTSD**"; break;
-                case "112":
-                    mods = "**+HRDTSD**"; break;
-                case "114":
-                    mods = "**+EZHRDTSD**"; break;
-                case "120":
-                    mods = "**+HDHRDTSD**"; break;
-                case "122":
-                    mods = "**+EZHDHRDTSD**"; break;
-                case "256":
-                    mods = "**+HT**"; break;
-                case "257":
-                    mods = "**+NFHT**"; break;
-                case "258":
-                    mods = "**+HTEZ**"; break;
-                case "259":
-                    mods = "**+NFEZHT**"; break;
-                case "264":
-                    mods = "**+HDHT**"; break;
-                case "265":
-                    mods = "**+NFHDHT**"; break;
-                case "267":
-                    mods = "**+NFEZHDHT**"; break;
-                case "272":
-                    mods = "**+HTHR**"; break;
-                case "273":
-                    mods = "**+NFHTHR**"; break;
-                case "275":
-                    mods = "**+EZNFHTHR**"; break;
-                case "280":
-                    mods = "**HDHRHT**"; break;
-                case "281":
-                    mods = "**+NFHDHRHT**"; break;
-                case "283":
-                    mods = "**+EZNFHDHRHT**"; break;
-                case "288":
-                    mods = "**+HTSD**"; break;
-                case "290":
-                    mods = "**+EZHTSD**"; break;
-                case "296":
-                    mods = "**+HDHTSD**"; break;
-                case "298":
-                    mods = "**+EZHDHTSD**"; break;
-                case "304":
-                    mods = "**+HRHTSD**"; break;
-                case "306":
-                    mods = "**+EZHRHTSD**"; break;
-                case "312":
-                    mods = "**+HDHRHTSD**"; break;
-                case "314":
-                    mods = "**+EZHDHRHTSD**"; break;
-                case "1024":
-                    mods = "**+FL**"; break;
-                case "1025":
-                    mods = "**+NFFL**"; break;
-                case "1026":
-                    mods = "**+EZFL**"; break;
-                case "1027":
-                    mods = "**+NFEZFL**"; break;
-                case "1032":
-                    mods = "**+HDFL**"; break;
-                case "1040":
-                    mods = "**+HRFL**"; break;
-                case "1048":
-                    mods = "**+HDHRFL**"; break;
-                case "1049":
-                    mods = "**+HDHRFLNF**"; break;
-                case "1051":
-                    mods = "**+HDHRFLNFEZ**"; break;
-                case "1056":
-                    mods = "**+FLSD**"; break;
-                case "1058":
-                    mods = "**+EZFLSD**"; break;
-                case "1064":
-                    mods = "**+HDFLSD**"; break;
-                case "1072":
-                    mods = "**+HRFLSD**"; break;
-                case "1074":
-                    mods = "**+EZHRFLSD**"; break;
-                case "1080":
-                    mods = "**+HDHRFLSD**"; break;
-                case "1082":
-                    mods = "**+EZHDHRFLSD**"; break;
-                case "1088":
-                    mods = "**+DTFL**"; break;
-                case "1089":
-                    mods = "**+NFDTFL**"; break;
-                case "1090":
-                    mods = "**+EZDTFL**"; break;
-                case "1091":
-                    mods = "**+EZDTNFFL**"; break;
-                case "1096":
-                    mods = "**+HDDTFL**"; break;
-                case "1097":
-                    mods = "**+HDDTNFFL**"; break;
-                case "1098":
-                    mods = "**+EZHDDTFL**"; break;
-                case "1099":
-                    mods = "**+EZNFHDDTFL**"; break;
-                case "1104":
-                    mods = "**+HRDTFL**"; break;
-                case "1112":
-                    mods = "**+HDHRDTFL**"; break;
-                case "1113":
-                    mods = "**+NFHDHRDTFL**"; break;
-                case "1114":
-                    mods = "**+EZHDHRDTFL**"; break;
-                case "1115":
-                    mods = "**+EZNFHDHRDTFL**"; break;
-                case "1120":
-                    mods = "**+DTFLSD**"; break;
-                case "1122":
-                    mods = "**+EZDTFLSD**"; break;
-                case "1130":
-                    mods = "**+HDDTFLSD**"; break;
-                case "1132":
-                    mods = "**+EZHDDTFLSD**"; break;
-                case "1138":
-                    mods = "**+HRDTFLSD**"; break;
-                case "1140":
-                    mods = "**+EZHRDTFLSD**"; break;
-                case "1144":
-                    mods = "**+HDHRDTFLSD**"; break;
-                case "1146":
-                    mods = "**+EZHDHRDTFLSD**"; break;
-                case "1280":
-                    mods = "**+HTFL**"; break;
-                case "1281":
-                    mods = "**+NFHTFL**"; break;
-                case "1282":
-                    mods = "**+HTEZFL**"; break;
-                case "1283":
-                    mods = "**+NFEZHTFL**"; break;
-                case "1288":
-                    mods = "**+HDHTFL**"; break;
-                case "1289":
-                    mods = "**+NFHDHTFL**"; break;
-                case "1291":
-                    mods = "**+NFEZHDHTFL**"; break;
-                case "1292":
-                    mods = "**+HTHRFL**"; break;
-                case "1293":
-                    mods = "**+NFHTHRFL**"; break;
-                case "1295":
-                    mods = "**+EZNFHTHRFL**"; break;
-                case "1300":
-                    mods = "**HDHRHTFL**"; break;
-                case "1301":
-                    mods = "**+NFHDHRHTFL**"; break;
-                case "1303":
-                    mods = "**+EZNFHDHRHTFL**"; break;
-                case "1312":
-                    mods = "**+HTFLSD**"; break;
-                case "1314":
-                    mods = "**+EZHTFLSD**"; break;
-                case "1320":
-                    mods = "**+HDHTFLSD**"; break;
-                case "1322":
-                    mods = "**+EZHDHTFLSD**"; break;
-                case "1328":
-                    mods = "**+HRHTFLSD**"; break;
-                case "1330":
-                    mods = "**+EZHRHTFLSD**"; break;
-                case "1336":
-                    mods = "**+HDHRHTFLSD**"; break;
-                case "1338":
-                    mods = "**+EZHDHRHTFLSD**"; break;
-            }
-            return mods;
+            NM = 0,
+            NF = (1 << 0),
+            EZ = (1 << 1),
+            //TouchDevice = (1 << 2),
+            HD = (1 << 3),
+            HR = (1 << 4),
+            SD = (1 << 5),
+            DT = (1 << 6),
+            //Relax = (1 << 7),
+            HT = (1 << 8),
+            NC = (1 << 9), // Only set along with DoubleTime. i.e: NC only gives 576
+            FL = (1 << 10),
+            // Autoplay = (1 << 11),
+            SO = (1 << 12),
+            // Relax2 = (1 << 13),  // Autopilot
+            PF = (1 << 14),
         }
+
 
         [Command("createteamrole")] //osu
         [Alias("ctr")]
@@ -1284,14 +1074,12 @@ namespace Discord_Bot.Modules
                 string[] sadEmotes = { "<:PepeHands:431853568669253632>", "<:FeelsBadMan:431647398071107584>", "<:FeelsWeirdMan:431148381449224192>" };
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
-                Console.WriteLine(num);
                 embed.WithTitle($"Gambling: Loser! {sadEmotes[num]}");
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and lost their bet of `{points.ToString("N0")}`! Better luck next time!** <:SagiriBlush:498009810692734977>");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
                 embed.WithColor(Pink);
                 BE();
-                Console.WriteLine(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles);
 
                 UserAccounts.SaveAccounts();
                 return;

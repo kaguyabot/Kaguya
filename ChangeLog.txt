@@ -3,6 +3,10 @@ Welcome to the StageBot ChangeLog. (Last updated: Version 1.0.1)
 
 Changelog:
 
+Version 1.1.1
+- HEAVILY refined the code for the osu! mods list.
+
+
 Version 1.1.0
 
 - Added accuracy table to code
