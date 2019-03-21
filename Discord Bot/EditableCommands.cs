@@ -45,8 +45,6 @@ namespace Discord_Bot
             public string token { get; set; }
             public string cmdPrefix { get; set; }
             public string osuapikey { get; set; }
-            public uint timelyHours { get; set; }
-            public uint timelyPoints { get; set; }
         }
 
         public static void JsonInit()
@@ -60,7 +58,7 @@ namespace Discord_Bot
                     timelyHours = 24
                 };
                 File.WriteAllText(configFolder + "/" + commandFile, JsonConvert.SerializeObject(config, Formatting.Indented));
-                Console.WriteLine("Wrote it bro.");
+                Console.WriteLine("Wrote that shit bro.");
                 Console.WriteLine("Default values loaded: " +
                     "\nTimely Points: 500" +
                     "\nTimely Hours: 24");
