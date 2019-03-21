@@ -265,6 +265,8 @@
     <Compile Include="Core\LevelingSystem\Leveling.cs" />
     <Compile Include="Core\RepeatingTimer.cs" />
     <Compile Include="Core\DataStorage.cs" />
+    <Compile Include="Core\Server Files\Server.cs" />
+    <Compile Include="Core\Server Files\Servers.cs" />
     <Compile Include="Core\UserAccounts\UserAccount.cs" />
     <Compile Include="Core\UserAccounts\UserAccounts.cs" />
     <Compile Include="EditableCommands.cs" />
@@ -280,9 +282,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
-    <None Include="Resources\accounts.json" />
-    <None Include="Resources\commands.json" />
-    <None Include="Resources\config.json" />
     <None Include="SystemLang\alerts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

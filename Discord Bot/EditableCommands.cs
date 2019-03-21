@@ -13,7 +13,8 @@ namespace Discord_Bot
         private const string configFolder = "Resources";
         private const string configFile = "config.json";
         private const string commandFile = "commands.json";
-    
+        private const string serverFile = "servers.json";
+
         public static TimelyConfig bot;
 
         static EditableCommands()
@@ -45,7 +46,6 @@ namespace Discord_Bot
             public string cmdPrefix { get; set; }
             public string osuapikey { get; set; }
         }
-
 
         public static void JsonInit()
         {

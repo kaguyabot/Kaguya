@@ -3,9 +3,19 @@ Welcome to the StageBot ChangeLog. (Last updated: Version 1.0.1)
 
 Changelog:
 
+Version 1.2.0
+- Added database file for servers
+- Fixed improper naming of help command (used for debugging)
+- Added in $prefix, allowing servers to change the command prefix based on their preferences.
+- When setting a new osu username with spaces (l i k e t h i s), the spaces are automatically replaced with underscores,
+    allowing the user's osu stats to properly show.
+- $massblacklist actually bans the targets now 
+
+Version 1.1.2
+- Fixed a bug with NC mod not showing properly in $osutop
+
 Version 1.1.1
 - HEAVILY refined the code for the osu! mods list.
-
 
 Version 1.1.0
 

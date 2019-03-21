@@ -11,6 +11,7 @@ using Discord.WebSocket;
 using Discord_Bot.Core.UserAccounts;
 using System.Net;
 using System.Timers;
+using Discord_Bot.Core.Server_Files;
 
 #pragma warning disable
 
@@ -26,9 +27,9 @@ namespace Discord_Bot.Modules
 
         public string version = Utilities.GetAlert("VERSION");
 
-        public string cmdPrefix = Config.bot.cmdPrefix;
-
         public string botToken = Config.bot.token;
+
+      //  var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
         public async Task BE() //Method to build an embedded message.
         {
@@ -39,6 +40,9 @@ namespace Discord_Bot.Modules
         [Alias("mdls")]
         public async Task ModulesList()
         {
+            var server = Servers.GetServer(Context.Guild);
+            var cmdPrefix = server.commandPrefix;
+
             Context.Channel.SendMessageAsync
                 ("```css" +
                 $"\nStageBot Modules for {version}:" +
@@ -57,6 +61,8 @@ namespace Discord_Bot.Modules
         [Alias("commands")]
         public async Task ModulesList([Remainder]string category)
         {
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
             if (category.ToLower() == "administration" || category.ToLower() == "admin")
             {
                 embed.WithTitle("Module: Administration");
@@ -165,6 +171,8 @@ namespace Discord_Bot.Modules
         [Alias("help")]
         public async Task Help([Remainder]string command)
         {
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
             switch (command.ToLower())
             {
                 case "help":
@@ -408,10 +416,12 @@ namespace Discord_Bot.Modules
             }
         }
 
-        [Command("helpt")] //utility, pinned
-        [Alias("ht")]
+        [Command("help")] //utility, pinned
+        [Alias("h")]
         public async Task Help()
         {
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
             embed.WithTitle("Commands List");
             embed.WithDescription($"All StageBot commands separated by category. To use the command, have \nthe `{cmdPrefix}` symbol appended before the phrase. For more information on a specific command, " +
                 $"type `{cmdPrefix}h <command>`");
@@ -429,6 +439,8 @@ namespace Discord_Bot.Modules
         [Alias("hdm")]
         public async Task HelpDM()
         {
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
             embed.WithTitle("Help");
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
             embed.WithColor(Pink);
@@ -441,7 +453,32 @@ namespace Discord_Bot.Modules
                 $"\nStill need help? Feel free to join the StageBot Development server and ask for help there!: https://discord.gg/yhcNC97");
         }
 
+        [Command("prefix")] //utility
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task AlterPrefix(string prefix = "$")
+        {
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
+            var server = Servers.GetServer(Context.Guild);
+            var oldPrefix = server.commandPrefix;
+            server.commandPrefix = prefix;
+            Servers.SaveServers();
+
+            if(prefix.Length > 2)
+            {
+                embed.WithTitle("Change Command Prefix: Failure!");
+                embed.WithDescription("The chosen prefix is too long! Please select a combination of less than 3 characters/symbols ");
+                embed.WithFooter($"To reset the command prefix, type {cmdPrefix}prefix!");
+                embed.WithColor(Red);
+                BE(); return;
+            }
+
+            embed.WithTitle("Change Command Prefix: Success!");
+            embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");
+            embed.WithFooter($"If you ever forget the prefix, tag me and type \"prefix\"!");
+            embed.WithColor(Pink);
+            BE();
+        }
 
         [Command("Unblacklist")] //administration
         [RequireOwner]
@@ -478,7 +515,7 @@ namespace Discord_Bot.Modules
                     $"\nYour new StageBot EXP amount is `{userAccount.EXP}`. Your new StageBot currency amount is `{userAccount.Points}`." +
                     $"\nUser `{userAccount.Username}` with ID `{userAccount.ID}` has been permanently blacklisted from all StageBot functions, and can no longer execute any of the StageBot commands." +
                     $"\nIf you wish to appeal this blacklist, message `Stage#0001` on Discord.");
-               // await user.BanAsync();
+                await user.BanAsync();
                 await ReplyAsync($"**{user.Mention} has been permanently `banned` and `blacklisted`.**");
             }
         }
@@ -490,7 +527,7 @@ namespace Discord_Bot.Modules
             string oldUsername = userAccount.OsuUsername;
             if (oldUsername == null)
                 oldUsername = "Null";
-            userAccount.OsuUsername = username;
+            userAccount.OsuUsername = username.Replace(" ", "_");
             UserAccounts.SaveAccounts();
 
             embed.WithTitle("osu! Username Set");
@@ -501,7 +538,7 @@ namespace Discord_Bot.Modules
         }
 
         [Command("recent")] //osu
-        [Alias("r1")]
+        [Alias("r")]
         public async Task osuRecent(string player = null, int mode = 0)
         {
             if(player == null || player == "")
@@ -600,6 +637,7 @@ namespace Discord_Bot.Modules
                 string plus = "+";
                 if (plus == "+" && mods == "")
                     plus = "";
+                mods = mods.Replace("576", "NC");
                 string playerRecentString = $"▸ **{grade}{plus}{mods}** ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by ***{artist}***\n" +
                     $"▸ **☆{starRating.ToString("F")}** ▸ **{accuracy.ToString("F")}%**\n" +
                     $"▸ [Combo: {maxCombo}x / Max: {maxPossibleCombo}] {fullCombo}\n" +
@@ -692,7 +730,9 @@ namespace Discord_Bot.Modules
                 string mods = ((AllMods)modnum).ToString().Replace(",", "");
                 mods = mods.Replace(" ", "");
                 mods = mods.Replace("NM", "");
-                
+                mods = mods.Replace("576", "NC");
+                mods = mods.Replace("DTNC", "NC");
+
 
                 PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country, count300, count100, count50, countMiss, accuracy, grade, playerMaxCombo, mapMaxCombo, mods);
                 PlayDataArray[i] = PlayData;
@@ -710,7 +750,7 @@ namespace Discord_Bot.Modules
             for (var j = 0; j < num; j++)
             {
                 string plus = "+";
-              
+
                 if (plus == "+" && PlayDataArray[j].mods == "")
                     plus = "";
                 TopPlayString = TopPlayString + $"\n{j + 1}: ▸ **{PlayDataArray[j].grade}{plus}{PlayDataArray[j].mods}** ▸ {PlayDataArray[j].mapID} ▸ **[{PlayDataArray[j].mapTitle} [{PlayDataArray[j].version}]](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
@@ -841,7 +881,7 @@ namespace Discord_Bot.Modules
         [RequireBotPermission(GuildPermission.MuteMembers)]
         public async Task Mute(IGuildUser user, string time = "")
         {
-            
+
         }
         */
 
@@ -993,6 +1033,8 @@ namespace Discord_Bot.Modules
         [Alias("t")]
         public async Task DailyPoints(uint timeout = 24)
         {
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
             uint bonus = EditableCommands.bot.timelyPoints;
             var userAccount = UserAccounts.GetAccount(Context.User);
             if(!CanReceiveTimelyPoints(userAccount, (int)timeout))

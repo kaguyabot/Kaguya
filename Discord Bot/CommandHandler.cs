@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using Discord_Bot.Core.LevelingSystem;
 using Discord_Bot.Core.UserAccounts;
+using Discord_Bot.Core.Server_Files;
 
 namespace Discord_Bot
 {
@@ -40,21 +41,34 @@ namespace Discord_Bot
                 Console.WriteLine($"Blacklisted user {userAccount.Username} detected.");
                 return;
             }
+            var server = Servers.GetServer(context.Guild);
+            ServerMethod(context);
             Leveling.UserSentMessage((SocketGuildUser)context.User, (SocketTextChannel)context.Channel);
             string oldUsername = userAccount.Username;
             string newUsername = context.User.Username;
-            if(oldUsername + "#" + context.User.Discriminator != newUsername + "#" + context.User.Discriminator)
+            if (oldUsername + "#" + context.User.Discriminator != newUsername + "#" + context.User.Discriminator)
                 userAccount.Username = newUsername + "#" + context.User.Discriminator;
             int argPos = 0;
-            if (msg.HasStringPrefix(Config.bot.cmdPrefix, ref argPos)
+            if (msg.HasStringPrefix(Servers.GetServer(context.Guild).commandPrefix, ref argPos)
                 || msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
                 var result = await _service.ExecuteAsync(context, argPos, null);
-                if(!result.IsSuccess && result.Error != CommandError.UnknownCommand)
+                if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
                 {
                     Console.WriteLine(result.ErrorReason);
                 }
             }
+        }
+
+        private static void ServerMethod(SocketCommandContext context)
+        {
+            var server = Servers.GetServer(context.Guild);
+            server.ID = context.Guild.Id;
+            server.ServerName = context.Guild.Name;
+            Servers.SaveServers();
+            if (server.ID != null)
+                return;
+            else Servers.SaveServers();
         }
     }
 }
