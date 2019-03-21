@@ -25,11 +25,17 @@ namespace Discord_Bot.Modules
 
         public Color Red = new Color(255, 0, 0);
 
+        public BotConfig bot = new BotConfig();
+
+        private EditableCommands.TimelyConfig timelyConfig = new EditableCommands.TimelyConfig();
+
         public string version = Utilities.GetAlert("VERSION");
 
         public string botToken = Config.bot.token;
 
-      //  var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        internal EditableCommands.TimelyConfig TimelyConfig { get => timelyConfig; set => timelyConfig = value; }
+
+        //  var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
         public async Task BE() //Method to build an embedded message.
         {
@@ -407,7 +413,15 @@ namespace Discord_Bot.Modules
                         $"\nAdministrator only command that forces StageBot to leave the current server.");
                     embed.WithColor(Pink);
                     BE(); break;
-
+                case "prefix":
+                    embed.WithTitle($"Help: Prefix Alteration | `{cmdPrefix}prefix`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions required: Administrator**" +
+                        $"\n" +
+                        $"\nAllows a server administrator to change the bot's command prefix. Typically, this is one or two symbols `(!, $, %, >, etc.)`." +
+                        $"\nTo reset the command prefix, type {cmdPrefix}prefix, or tag me and type `prefix`! The bot will always display the last known command prefix " +
+                        $"and the new prefix when using this command.");
+                    embed.WithColor(Pink);
+                    BE(); break;
 
                 default:
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
@@ -475,7 +489,7 @@ namespace Discord_Bot.Modules
 
             embed.WithTitle("Change Command Prefix: Success!");
             embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");
-            embed.WithFooter($"If you ever forget the prefix, tag me and type \"prefix\"!");
+            embed.WithFooter($"If you ever forget the prefix, tag me and type \"`prefix`\"!");
             embed.WithColor(Pink);
             BE();
         }
@@ -531,7 +545,7 @@ namespace Discord_Bot.Modules
             UserAccounts.SaveAccounts();
 
             embed.WithTitle("osu! Username Set");
-            embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed from `{oldUsername}` to `{username}`.**");
+            embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed from `{oldUsername}` to `{userAccount.OsuUsername}`.**");
             embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
             embed.WithColor(Pink);
             BE();
@@ -732,7 +746,7 @@ namespace Discord_Bot.Modules
                 mods = mods.Replace("NM", "");
                 mods = mods.Replace("576", "NC");
                 mods = mods.Replace("DTNC", "NC");
-
+                
 
                 PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country, count300, count100, count50, countMiss, accuracy, grade, playerMaxCombo, mapMaxCombo, mods);
                 PlayDataArray[i] = PlayData;
@@ -745,22 +759,22 @@ namespace Discord_Bot.Modules
                 }
 
             var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonPlayer)[0];
-
+            string username = playerObject.username;
             string TopPlayString = ""; //Country images to come later.
             for (var j = 0; j < num; j++)
             {
                 string plus = "+";
-
+              
                 if (plus == "+" && PlayDataArray[j].mods == "")
                     plus = "";
                 TopPlayString = TopPlayString + $"\n{j + 1}: ▸ **{PlayDataArray[j].grade}{plus}{PlayDataArray[j].mods}** ▸ {PlayDataArray[j].mapID} ▸ **[{PlayDataArray[j].mapTitle} [{PlayDataArray[j].version}]](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
                     $"\n▸ **☆{PlayDataArray[j].difficultyRating.ToString("F")}** ▸ **{PlayDataArray[j].accuracy.ToString("F")}%** for **{PlayDataArray[j].pp.ToString("F")}pp** " +
                     $"\n▸ [Combo: {PlayDataArray[j].playerMaxCombo}x / Max: {PlayDataArray[j].mapMaxCombo}]\n";
             }
-            embed.WithAuthor($"{player}'s Top osu! Standard Plays");
-            embed.WithTitle($"**Top {num} osu! standard plays for {player}:**");
-            embed.WithUrl($"https://osu.ppy.sh/u/{player}/");
-            embed.WithDescription($"osu! Stats for player **{player}**:\n" + TopPlayString);
+            embed.WithAuthor($"{username}'s Top osu! Standard Plays");
+            embed.WithTitle($"**Top {num} osu! standard plays for {username}:**");
+            embed.WithUrl($"https://osu.ppy.sh/u/{player}");
+            embed.WithDescription($"osu! Stats for player **{username}**:\n" + TopPlayString);
             embed.WithColor(Pink);
             BE();
         }
@@ -812,30 +826,40 @@ namespace Discord_Bot.Modules
         public async Task DeleteTeams()
         {
             var roles = Context.Guild.Roles;
+            embed.WithTitle("Teams Deleted");
+            embed.WithDescription("The following teams have been deleted: ");
+            embed.WithColor(Pink);
             foreach (IRole role in roles)
             {
                 if (role.Name.Contains("Team: "))
                 {
                     role.DeleteAsync();
-                    embed.WithTitle("Teams Deleted");
-                    embed.WithDescription("The following teams have been deleted: " +
-                        $"\n{role} ");
-                    embed.WithColor(Pink);
-                    BE();
+                    embed.WithDescription(embed.Description.ToString() + $"\n`{role}`");
                 }
             }
+            BE();
         }
 
         [Command("removeallroles")] //admin
         [Alias("rar")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task RemoveAllRoles(IGuildUser user)
+        public async Task RemoveAllRoles(SocketGuildUser user)
         {
-            await RemoveAllRoles(user);
+            var roles = user.Roles;
+
+            foreach (IRole role in roles)
+            {
+                if (role != Context.Guild.EveryoneRole)
+                {
+                    await user.RemoveRoleAsync(role);
+                }
+            }
+
             embed.WithTitle("Remove All Roles");
             embed.WithDescription($"All roles have been removed from `{user}`.");
             embed.WithColor(Pink);
+            BE();
         }
 
         [Command("deleterole")] //admin
@@ -844,6 +868,8 @@ namespace Discord_Bot.Modules
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task DeleteRole(IRole role)
         {
+            role = Context.Guild.Roles.FirstOrDefault(x => x.Id == role.Id);
+
             await role.DeleteAsync();
             embed.WithTitle("Role Deleted");
             embed.WithDescription($"{Context.User.Mention} role **{role}** has been deleted.");
@@ -881,7 +907,7 @@ namespace Discord_Bot.Modules
         [RequireBotPermission(GuildPermission.MuteMembers)]
         public async Task Mute(IGuildUser user, string time = "")
         {
-
+            
         }
         */
 
@@ -961,7 +987,7 @@ namespace Discord_Bot.Modules
         [Alias("c", "purge")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
-        public async Task ClearMessages([Remainder]int amount)
+        public async Task ClearMessages(int amount = 25)
         {
             var messages = await Context.Channel.GetMessagesAsync(amount).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
@@ -1033,9 +1059,11 @@ namespace Discord_Bot.Modules
         [Alias("t")]
         public async Task DailyPoints(uint timeout = 24)
         {
+            timeout = timelyConfig.timelyHours;
+
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
-            uint bonus = EditableCommands.bot.timelyPoints;
+            uint bonus = timelyConfig.timelyPoints;
             var userAccount = UserAccounts.GetAccount(Context.User);
             if(!CanReceiveTimelyPoints(userAccount, (int)timeout))
             {
@@ -1068,7 +1096,7 @@ namespace Discord_Bot.Modules
         {
             var account = UserAccounts.GetAccount(Context.User);
             embed.WithTitle("Experience Points");
-            embed.WithDescription($"You have {account.EXP} EXP.");
+            embed.WithDescription($"{Context.User.Mention} has {account.EXP} EXP.");
             embed.WithColor(Pink);
             BE();
         }
@@ -1265,14 +1293,6 @@ namespace Discord_Bot.Modules
         [RequireOwner]
         public async Task PointsAdd(uint points, IGuildUser user = null)
         {
-            if (!UserIsAdmin((SocketGuildUser)Context.User))
-            {
-                embed.WithTitle("Adding Points");
-                embed.WithDescription("Required Permission Missing: `Administrator`.");
-                embed.WithColor(252, 132, 255);
-                await Context.Channel.SendMessageAsync(Context.User.Mention + ":x: You are not an administrator.");
-                return;
-            }
             if(user == null)
             {
                 var userAccount = UserAccounts.GetAccount(Context.User);
@@ -1303,18 +1323,10 @@ namespace Discord_Bot.Modules
         }
 
         [Command("expadd")] //exp
-        [RequireUserPermission(GuildPermission.Administrator)]
+        [Alias("addexp")]
         [RequireOwner]
         public async Task ExpAdd([Remainder]uint exp)
         {
-            if (!UserIsAdmin((SocketGuildUser)Context.User))
-            {
-                embed.WithTitle("Adding Experience Points");
-                embed.WithDescription("Required Permission Missing: `Administrator`.");
-                embed.WithColor(252, 132, 255);
-                await Context.Channel.SendMessageAsync(Context.User.Mention + ":x: You are not an administrator.");
-                return;
-            }
             var account = UserAccounts.GetAccount(Context.User);
             account.EXP += exp;
             UserAccounts.SaveAccounts();
@@ -1325,9 +1337,15 @@ namespace Discord_Bot.Modules
         }
 
         [Command("echo")] //fun
-        public async Task Echo([Remainder]string message)
+        public async Task Echo([Remainder]string message = "")
         {
-            var embed = new EmbedBuilder();
+            if(message == "")
+            {
+                embed.WithTitle("Echo");
+                embed.WithDescription($"**{Context.User.Mention} No message specified!**");
+                embed.WithColor(Red);
+                BE(); return;
+            }
             embed.WithTitle("Echo");
             embed.WithDescription(message);
             embed.WithColor(Pink);
@@ -1336,14 +1354,21 @@ namespace Discord_Bot.Modules
         }
 
         [Command("pick")] //fun
-        public async Task PickOne([Remainder]string message)
+        public async Task PickOne([Remainder]string message = "")
         {
+            if (message == "")
+            {
+                embed.WithTitle("Pick: Missing Options!");
+                embed.WithDescription($"**{Context.User.Mention} No options specified!**");
+                embed.WithColor(Red);
+                BE(); return;
+            }
+
             string[] options = message.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
             Random r = new Random();
             string selection = options[r.Next(0, options.Length)];
 
-            var embed = new EmbedBuilder();
             embed.WithTitle("Choice for " + Context.User.Username);
             embed.WithDescription(selection);
             embed.WithColor(Pink);
