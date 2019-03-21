@@ -3,6 +3,29 @@ Welcome to the StageBot ChangeLog. (Last updated: Version 1.0.1)
 
 Changelog:
 
+Version 1.3.0
+
+- $delteams modified to take up less space when deleting large amounts of teams. 
+    No longer embeds an individual message for each team deleted. (Credit to Ludeo)
+- Fixed a bug where the bot would crash when using $removeallroles. Closes #13
+- Fixed a bug where $osutop's title link would give 404 errors. Closes #10
+- Tweaked $osutop to now have the chosen user's proper name instead of the name specified when executing the command.
+    By this I mean the displayed username will have the same capitalization as what is shown on the official osu! website,
+    instead of the capitalization chosen when executing the command. If someone's $osuset name has different capitalization
+    than what is on the website, it won't matter anymore. Closes #8
+- Fixed a bug where deleterole wouldn't do anything if two roles have the same name. 
+    Bot now deletes the first role it finds with the specified name. Closes #14
+- $clear/$c/$purge updated to default to deleting 25 messages if no other number is specified. Closes #12
+- Tweaked $timely to pull from commands.json (in the case of timelyHours ever being edited, the bot will auto-update the timeout for timely)
+- Tweaked $exp
+- Bot owners no longer have to be an admin of the server they use $pointsadd in.
+- Same thing for $expadd ^
+- $expadd now has an alias of $addexp
+- $pick & $echo now give error responses if they are missing parameters.
+- Added help command for $prefix
+- Added $prefix into Utility module.
+
+
 Version 1.2.0
 - Added database file for servers
 - Fixed improper naming of help command (used for debugging)
