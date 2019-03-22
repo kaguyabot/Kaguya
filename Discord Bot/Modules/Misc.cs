@@ -116,13 +116,15 @@ namespace Discord_Bot.Modules
                 "\nAll commands in category: Currency" +
                 "\n" +
                 $"\n{cmdPrefix}points" +
-                $"\n{cmdPrefix}pointsadd" +
+                $"\n{cmdPrefix}pointsadd [addpoints]" +
                 $"\n{cmdPrefix}timely [t]" +
-                $"\b{cmdPrefix}gamble [g]" +
+                $"\n{cmdPrefix}gamble [g]" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 $"\n```"
                 );
+                embed.WithColor(Pink);
+                BE();
             }
             else if (category.ToLower() == "utility")
             {
@@ -137,6 +139,7 @@ namespace Discord_Bot.Modules
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
                 $"\n{cmdPrefix}createvoicechannel [cvc]" +
                 $"\n{cmdPrefix}deletevoicechannel [dvc]" +
+                $"\n{cmdPrefix}prefix" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 $"\n```");
@@ -147,11 +150,12 @@ namespace Discord_Bot.Modules
             {
                 embed.WithTitle("Module: Fun");
                 embed.WithDescription("```css" +
+                    "\nAll commands in category: Fun" +
                     "\n" +
                     $"\n{cmdPrefix}echo" +
                     $"\n{cmdPrefix}pick" +
-                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n" +
+                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```");
                 embed.WithColor(Pink);
                 BE();
@@ -160,12 +164,14 @@ namespace Discord_Bot.Modules
             {
                 embed.WithTitle("Module: osu!");
                 embed.WithDescription("```css" +
+                    "\nAll commands in category: osu!" +
                     "\n" +
                     $"\n{cmdPrefix}createteamrole [ctr]" +
                     $"\n{cmdPrefix}delteams" +
                     $"\n{cmdPrefix}osutop" +
                     $"\n{cmdPrefix}recent [r]" +
                     $"\n{cmdPrefix}osuset" +
+                    $"\n" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```");
                 embed.WithColor(Pink);
@@ -181,43 +187,59 @@ namespace Discord_Bot.Modules
 
             switch (command.ToLower())
             {
+                case "h":
                 case "help":
-                    embed.WithTitle($"Help: Help!! | `{cmdPrefix}h` / `{cmdPrefix}help`");
-                    embed.WithDescription($"Shows the command list. If typed with the name of a command (Ex: `{cmdPrefix}help <command>`), the response will instead contain helpful information on the specified " +
-                        $"command, including how to use it.");
+                    embed.WithTitle($"Help: Help!! | `{cmdPrefix}h`, `{cmdPrefix}help`");
+                    embed.WithDescription($"{Context.User.Mention} Shows the command list. If typed with the name of a command, the response will instead " +
+                        $"contain helpful information on the specified command, including how to use it." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}help <command>`" +
+                        $"\nExample: `{cmdPrefix}help help`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "helpdm":
                 case "hdm":
-                    embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`");
-                    embed.WithDescription($"{Context.User.Mention} Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the StageBot Github page!");
+                    embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`, `{cmdPrefix}hdm`");
+                    embed.WithDescription($"{Context.User.Mention} Sends a DM with helpful information, including a link to add the bot to your own server, " +
+                        $"and a link to the StageBot Github page!" +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}helpdm`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "exp":
                     embed.WithTitle($"Help: EXP | `{cmdPrefix}exp`");
-                    embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}exp`." +
-                        $"\nReturns the value of experience points a user has in their account.");
+                    embed.WithDescription($"\n{Context.User.Mention} Returns the value of experience points a user has in their account." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}exp`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "expadd":
                 case "addexp":
-                    embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd`");
+                    embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd`, `{cmdPrefix}addexp`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
-                        $"\n{Context.User.Mention} Syntax: `{cmdPrefix}expadd <number of experience points to add>`. The number of exp you are adding must be a positive whole number.");
+                        $"\n{Context.User.Mention} The number of exp you are adding must be a positive whole number." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}expadd <number of experience points to add>`" +
+                        $"\nExample: `{cmdPrefix}expadd 115`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "points":
                     embed.WithTitle($"Help: Points | `{cmdPrefix}points`");
-                    embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}points`." +
-                        $"\nReturns the value of points a user has in their account.");
+                    embed.WithDescription($"\n{Context.User.Mention} Returns the value of points a user has in their account." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}points`");
                     embed.WithColor(Pink);
                     BE(); break;
+                case "addpoints":
                 case "pointsadd":
-                    embed.WithTitle($"Help: Adding Points | `{cmdPrefix}pointsadd`");
+                    embed.WithTitle($"Help: Adding Points | `{cmdPrefix}pointsadd`, `{cmdPrefix}addpoints`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
-                        $"\n{Context.User.Mention} Syntax: `{cmdPrefix}pointsadd <number of points to add>`. The number of points you are adding must be a positive whole number.");
+                        $"\n{Context.User.Mention} The number of points you are adding must be a positive whole number." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}pointsadd <number of points to add>`" +
+                        $"\nExample: `{cmdPrefix}pointsadd 115`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "createtextchannel":
@@ -225,9 +247,10 @@ namespace Discord_Bot.Modules
                     embed.WithTitle($"Help: Creating Text Channels | `{cmdPrefix}createtextchannel`, `{cmdPrefix}ctc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
                         "\n" +
-                        $"\n{Context.User.Mention} Creates a text channel with the speficied name. " +
-                        $"\nSyntax: `{cmdPrefix}createtextchannel <channel name>`. " +
-                        $"\nThis name can have spaces. Example: `{cmdPrefix}createtextchannel testing 123`.");
+                        $"\n{Context.User.Mention} Creates a text channel with the specified name. This name can have spaces." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}createtextchannel <channel name>` " +
+                        $"\nExample: `{cmdPrefix}createtextchannel testing 123`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "deletetextchannel":
@@ -235,10 +258,11 @@ namespace Discord_Bot.Modules
                     embed.WithTitle($"Help: Deleting Text Channels | `{cmdPrefix}deletetextchannel`, `{cmdPrefix}dtc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
                         "\n" +
-                        $"\n{Context.User.Mention} Deletes a text channel with the speficied name. " +
-                        $"\nThis name can **not** have spaces. Type the text channel exactly as displayed; If the text channel contains a `-`, type that in." +
-                        $"\nSyntax: `{cmdPrefix}deletetextchannel <channel name>`." +
-                        $"Example: `{cmdPrefix}deletetextchannel super-long-name-with-lots-of-spaces`.");
+                        $"\n{Context.User.Mention} Deletes a text channel with the specified name.This name can **not** have spaces. Type the text " +
+                        $"channel exactly as displayed; If the text channel contains a `-`, type that in." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}deletetextchannel <channel name>`" +
+                        $"\nExample: `{cmdPrefix}deletetextchannel super-long-name-with-lots-of-spaces`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "createvoicechannel":
@@ -246,136 +270,173 @@ namespace Discord_Bot.Modules
                     embed.WithTitle($"Help: Creating Voice Channels | `{cmdPrefix}createvoicechannel`, `{cmdPrefix}cvc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
                         "\n" +
-                        $"\n{Context.User.Mention} Creates a voice channel with the speficied name. Syntax: `{cmdPrefix}createvoicechannel <channel name>`. " +
-                        $"\nThis name can have spaces." +
-                        $"\nSyntax: `{cmdPrefix}createvoicechannel <channel name>`." +
-                        $"\nExample: `{cmdPrefix}cvc testing 123`.");
+                        $"\n{Context.User.Mention} Creates a voice channel with the specified name. This name can have spaces." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}createvoicechannel <channel name>`" +
+                        $"\nExample: `{cmdPrefix}createvoicechannel testing 123`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "deletevoicechannel":
                 case "dvc":
-                    embed.WithTitle($"Help: Deleting Voice Channels | `{cmdPrefix}deletevoicechannel`, `{cmdPrefix}dvc");
+                    embed.WithTitle($"Help: Deleting Voice Channels | `{cmdPrefix}deletevoicechannel`, `{cmdPrefix}dvc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
                         "\n" +
-                        $"\n{Context.User.Mention} Deletes a voice channel with the speficied name. " +
-                        $"\nThis name can **not** have spaces. Type the text channel exactly as displayed; If the text channel contains a `-`, type that in." +
-                        $"\nSyntax: `{cmdPrefix}deletevoicechannel <channel name>`." +
-                        $"Example: `{cmdPrefix}deletevoicechannel super-long-name-with-lots-of-spaces`.");
+                        $"\n{Context.User.Mention} Deletes a voice channel with the specified name. This name can **not** have spaces. Type the text " +
+                        $"channel exactly as displayed; If the text channel contains a `-`, type that in." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}deletevoicechannel <channel name>`" +
+                        $"\nExample: `{cmdPrefix}deletevoicechannel super-long-name-with-lots-of-spaces`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "echo":
                     embed.WithTitle($"Help: Echoed Messages | `{cmdPrefix}echo`");
                     embed.WithDescription($"{Context.User.Mention} Makes the bot repeat anything you say!" +
-                        $"\nSyntax: `{cmdPrefix}echo <message>`.");
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}echo <message>`" +
+                        $"\nExample: `{cmdPrefix}echo Stagebot is cool`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "pick":
-                    embed.WithTitle($"Help: Pick | `{cmdPrefix}pick");
-                    embed.WithDescription($"{Context.User.Mention} Tells the bot to pick between any amount of options, randomly." +
+                    embed.WithTitle($"Help: Pick | `{cmdPrefix}pick`");
+                    embed.WithDescription($"{Context.User.Mention} Tells the bot to pick between any amount of options, always with totally random odds. " +
+                        $"You may have as many \"Options\" as you'd like!" +
+                        $"\n" +
                         $"\nSyntax: `{cmdPrefix}pick option1|option2|option3|option4`...etc." +
-                        $"\nYou may have as many \"Options\" as you'd like!" +
-                        $"\nThe bot will always pick with totally random odds.");
+                        $"\nExample: `{cmdPrefix}pick please|pick|something|of|this`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "timely":
                 case "t":
-                    embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely");
-                    embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim free points every certain amount hours." +
-                        "\nThese points are added to your StageBot account." +
-                        "\nIf you are in a server with a self-hosted version of StageBot, these values may be different." +
-                        $"\nSyntax: `{cmdPrefix}timely`.");
+                    embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely`, `{cmdPrefix}t`");
+                    embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim free points every certain amount of hours. " +
+                        $"These points are added to your StageBot account. If you are in a server with a self-hosted version of StageBot, these values may " +
+                        $"be different." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}timely`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "clear":
                 case "purge":
                 case "c":
                     embed.WithTitle($"Help: Clearing Messages | `{cmdPrefix}clear`, `{cmdPrefix}purge`, `{cmdPrefix}c`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Messages**" +
+                    embed.WithDescription($"**Permissions Required: Manage Messages**" +
                         $"\n" +
-                        $"\nDeletes a specified number of messages in a given channel." +
-                        $"\nSyntax: `{cmdPrefix}clear 25`" +
-                        $"\nSyntax: `{cmdPrefix}prune 25`" +
-                        $"\nThis number may not exceed `100`." +
-                        $"\nMessages older than two weeks will need to be deleted manually.");
+                        $"\n{Context.User.Mention} Deletes a specified number of messages in a given channel. This number may not exceed `100`. If you don't add a number, it will " +
+                        $"automatically deletes 25 messages. Messages older than two weeks will need to be deleted manually." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}clear <number of messages>`" +
+                        $"\nExample: `{cmdPrefix}clear 30`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "kick":
                 case "k":
                     embed.WithTitle($"Help: Kicking Users | `{cmdPrefix}kick`, `{cmdPrefix}k`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Kick Members**" +
+                    embed.WithDescription($"**Permissions Required: Kick Members**" +
                         $"\n" +
-                        $"\nKicks an individual member from the server." +
-                        $"\nSyntax: `{cmdPrefix}kick @User#0000`.");
+                        $"\n{Context.User.Mention} Kicks an individual member from the server." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}kick <user>`" +
+                        $"\nExample: `{cmdPrefix}kick @StageBot#2708`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "ban":
                 case "b":
                     embed.WithTitle($"Help: Banning Users | `{cmdPrefix}ban`, `{cmdPrefix}b`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
+                    embed.WithDescription($"**Permissions Required: Ban Members**" +
                         $"\n" +
-                        $"\nBans an individual member from the server." +
-                        $"\nSyntax: `{cmdPrefix}ban @User#0000`.");
+                        $"\n{Context.User.Mention} Bans an individual member from the server." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}ban <user>`" +
+                        $"\nExample: `{cmdPrefix}ban @StageBot#2708`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "removeallroles":
                 case "rar":
                     embed.WithTitle($"Help: Removing All Roles | `{cmdPrefix}removeallroles`, `{cmdPrefix}rar`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
-                        "\n" +
-                        "\nRemoves all roles from the specified user." +
-                        $"\nSyntax: `{cmdPrefix}removeallroles @User#0000`.");
+                    embed.WithDescription($"**Permissions Required: Manage Roles**" +
+                        $"\n" +
+                        $"\n{Context.User.Mention} Removes all roles from the specified user." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}removeallroles <user>`" +
+                        $"\nExample: `{cmdPrefix}removeallroles @StageBot#2708`");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "createrole":
+                case "cr":
+                    embed.WithTitle($"Help: Creating Roles | `{cmdPrefix}createrole`, `{cmdPrefix}cr`");
+                    embed.WithDescription($"**Permissions Required: Manage Roles**" +
+                        $"\n" +
+                        $"\n{Context.User.Mention} Creates a role with the specified name." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}createrole <role name>`" +
+                        $"\nExample: `{cmdPrefix}createrole Member`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "deleterole":
                 case "dr":
                     embed.WithTitle($"Help: Deleting Roles | `{cmdPrefix}deleterole`, `{cmdPrefix}dr`");
-                    embed.WithDescription($"{ Context.User.Mention} **Permissions Required: Manage Roles**" +
+                    embed.WithDescription($"**Permissions Required: Manage Roles**" +
                         $"\n" +
-                        $"\nDeletes a role from the server (and in the process, removes said role from everyone who had it)." +
-                        $"\nSyntax: `{cmdPrefix}deleterole <role name>`");
+                        $"\n{Context.User.Mention} Deletes a role from the server." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}deleterole <role name>`" +
+                        $"\nExample: `{cmdPrefix}deleterole Member`");
+                    embed.WithColor(Pink);
                     BE(); break;
                 case "createteamrole":
                 case "ctr":
                     embed.WithTitle($"Help: Create Team Roles | `{cmdPrefix}createteamrole`, `{cmdPrefix}ctr`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
+                    embed.WithDescription($"**Permissions Required: Manage Roles**" +
                         $"\n" +
-                        $"\nCreates a role, then applies it to all mentioned users." +
-                        $"\nThis is very ideal for managing many groups of people (such as teams in a tournament, hence the name)." +
+                        $"\n{Context.User.Mention} Creates a role, then applies it to all mentioned users. This is very ideal for managing many groups of " +
+                        $"people (such as teams in a tournament, hence the name). Any role created with this command will automatically have " +
+                        $"`Team: ` appended to the start of the role." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}createteamrole <role name> <mentioned users>`" +
-                        $"\nExample: `{cmdPrefix}createteamrole \"Smelly Sushi\" @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
+                        $"\nExample: `{cmdPrefix}createteamrole \"Smelly Sushi\" @user1#0000 @smellyfish#2100 @smellysushilover#9999`." +
+                        $"\nExample Output: Role `Team: Smelly Sushi` has been created and was applied to `<mentioned users>`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "osutop":
-                    embed.WithTitle($"Help: osu! Top | `{cmdPrefix}osutop`");
+                    embed.WithTitle($"Help: osutop | `{cmdPrefix}osutop`");
                     embed.WithDescription($"\n" +
                         $"\n{Context.User.Mention} Displays the specified amount of top osu! plays for a given player with other relevant information." +
-                        $"\nThe number of requested plays to display may not be more than 10." +
+                        $"The number of requested plays to display may not be more than `10`. If no amount is given, it automatically displays the top 5." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 8 \"Smelly sushi\"`");
+                        $"\nSyntax: `{cmdPrefix}osutop <amount of top plays> <username>`" +
+                        $"\nExample: `{cmdPrefix}osutop 8 \"Smelly sushi\"`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "delteams":
                     embed.WithTitle($"Help: Deleting Teams | `{cmdPrefix}delteams`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: `Manage Roles`, `Administrator`, `Bot Owner`**" +
+                    embed.WithDescription($"**Permissions Required: `Manage Roles`, `Administrator`, `Bot Owner`**" +
                         $"\n" +
-                        $"\nDeletes all team roles. A team role is any role that has the word \"Team: \" inside of it (with the space)." +
-                        $"\nThis command will delete ALL team roles upon execution, making this command dangerous and irreversable.");
+                        $"\n{Context.User.Mention} Deletes all team roles. A team role is any role that has the word \"Team: \" inside of it (with the space). " +
+                        $"This command will delete ALL team roles upon execution, making this command dangerous and irreversable." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}delteams`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "recent":
                 case "r":
-                    embed.WithTitle($"Help: osu! Recent | `{cmdPrefix}r` / `{cmdPrefix}recent`");
+                    embed.WithTitle($"Help: osu! Recent | `{cmdPrefix}r`, `{cmdPrefix}recent`");
                     embed.WithDescription($"{Context.User.Mention} Displays the most recent osu! play for the given user. If there is no user specified," +
                         $" the bot will use the osu! username that was specified to the command executor's StageBot account (through {cmdPrefix}osuset).\n" +
-                        $"As of right now, no response will be given for an invalid username.\n");
+                        $"As of right now, no response will be given for an invalid username." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}recent <username>`" +
+                        $"\nExample: `{cmdPrefix}recent Stage`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "osuset":
                     string name = Context.User.Username;
                     embed.WithTitle($"Help: osuset | `{cmdPrefix}osuset`");
-                    embed.WithDescription($"{Context.User.Mention} Adds an osu! username to your StageBot account! Setting your osu! username allows you to use all osu! related commands without any additional " +
-                        $"parameters. For example, instead of typing `{cmdPrefix}osutop {name}`, you can now just type `{cmdPrefix}osutop` to get your most recent osu! plays. Same thing for `{cmdPrefix}r` / `{cmdPrefix}recent`!");
+                    embed.WithDescription($"{Context.User.Mention} Adds an osu! username to your StageBot account! Setting your osu! username allows you to use " +
+                        $"all osu! related commands without any additional parameters. For example, instead of typing `{cmdPrefix}osutop {name}`, you can now " +
+                        $"just type `{cmdPrefix}osutop` to get your most recent osu! plays. Same thing for `{cmdPrefix}r` / `{cmdPrefix}recent`!" +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}osuset <username>`" +
+                        $"\nExample: `{cmdPrefix}osuset Stage`");
                     embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
                     embed.WithColor(Pink);
                     BE(); break;
@@ -383,46 +444,87 @@ namespace Discord_Bot.Modules
                     embed.WithTitle($"Help: Mass Blacklist | `{cmdPrefix}massblacklist`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner, Administrator**" +
                         $"\n" +
-                        $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use StageBot again. These users are permanently banned from the server this command is executed in." +
-                        $"These users will have all of their EXP and Points reset to zero, and will be permanently filtered from receiving EXP and executing StageBot commands." +
-                        $"\nSyntax: `{cmdPrefix}massblacklist @username#123` | `{cmdPrefix}massblacklist @username#123 @ToxicPlayer123#7777 @SuckySmellySushi#1234`");
-                    embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS. The only way to unblacklist someone is to edit your accounts.json file!!");
+                        $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use StageBot again. These users " +
+                        $"are permanently banned from the server this command is executed in. These users will have all of their EXP and Points reset to zero, " +
+                        $"and will be permanently filtered from receiving EXP and executing StageBot commands." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}massblacklist <username>`" +
+                        $"\nExample: `{cmdPrefix}massblacklist @username#123 @ToxicPlayer123#7777 @SuckySmellySushi#1234`");
+                    embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS.");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "unblacklist":
-                    embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}unblacklist <UserID>`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                    embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}unblacklist`");
+                    embed.WithDescription($"**Permissions Required: Bot Owner**" +
                         $"\n" +
-                        $"\nUnblacklists the specified userID." +
-                        $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json.");
+                        $"\n{Context.User.Mention} Unblacklists the specified userID." +
+                        $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}unblacklist <UserID>`" +
+                        $"\nExample: `{cmdPrefix}unblacklist <ID>`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "gamble":
                 case "g":
-                    embed.WithTitle($"Help: Gambling | `{cmdPrefix}gamble` / `{cmdPrefix}g`");
+                    embed.WithTitle($"Help: Gambling | `{cmdPrefix}gamble`, `{cmdPrefix}g`");
                     embed.WithDescription($"{Context.User.Mention} Allows you to roll the dice and gamble your points!" +
                         $"\nA roll between `0-66` will result in a loss of your bet." +
-                        $"\nA roll between `67-78` will return your bet back to you with a multiplier of `1.25x`" +
+                        $"\nA roll between `67-78` will return your bet back to you with a multiplier of `1.25x.`" +
                         $"\nRolls between `79-89`, `90-95`, `96-99`, and `100` will yield multipliers of `1.75x`, `2.25x`, `3x`, and `5x` respectively." +
-                        $"\nThe maximum amount of points you can gamble at one time is set to `25,000`.");
+                        $"\nThe maximum amount of points you can gamble at one time is set to `25,000`." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}gamble <points>`" +
+                        $"\nExample: `{cmdPrefix}gamble 1000`");
+                    embed.WithColor(Pink);
                     BE(); break;
                 case "stagebotgtfo":
                     embed.WithTitle($"Help: StageBot, gtfo! | `{cmdPrefix}stagebotgtfo`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                    embed.WithDescription($"**Permissions Required: Administrator**" +
                         $"\n" +
-                        $"\nAdministrator only command that forces StageBot to leave the current server.");
+                        $"\n{Context.User.Mention} Administrator only command that forces StageBot to leave the current server." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}stagebotgtfo`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "prefix":
                     embed.WithTitle($"Help: Prefix Alteration | `{cmdPrefix}prefix`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions required: Administrator**" +
+                    embed.WithDescription($"**Permissions required: Administrator**" +
                         $"\n" +
-                        $"\nAllows a server administrator to change the bot's command prefix. Typically, this is one or two symbols `(!, $, %, >, etc.)`." +
-                        $"\nTo reset the command prefix, type {cmdPrefix}prefix, or tag me and type `prefix`! The bot will always display the last known command prefix " +
-                        $"and the new prefix when using this command.");
+                        $"\n{Context.User.Mention} Allows a server administrator to change the bot's command prefix. Typically, this is one or two symbols " +
+                        $"`(!, $, %, >, etc.)`. To reset the command prefix, type {cmdPrefix}prefix, or tag me and type `prefix`! The bot will always display " +
+                        $"the last known command prefix and the new prefix when using this command. The custom prefix may not be more than two characters." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}prefix <prefix symbol>`" +
+                        $"\nExample: `{cmdPrefix}prefix >`");
                     embed.WithColor(Pink);
                     BE(); break;
-
+                case "level":
+                    embed.WithTitle($"Help: Level | `{cmdPrefix}level`");
+                    embed.WithDescription($"{Context.User.Mention} Displays your current level." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}level`");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "masskick":
+                    embed.WithTitle($"Help: Masskick | `{cmdPrefix}masskick`");
+                    embed.WithDescription($"**Permissions Required: Kick Members**"+
+                        $"\n" +
+                        $"\n{Context.User.Mention} Kicks the specified users from the server. You do not have to tag the users for which you wish to masskick." +
+                        $"You may create a list of names, @mentions, or user IDs." +
+                        $"\nSyntax: `{cmdPrefix}masskick <users>`" +
+                        $"\nExample: `{cmdPrefix}masskick @Stage#0001 @StageBot#2708`");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "massban":
+                    embed.WithTitle($"Help: Massban | `{cmdPrefix}massban`");
+                    embed.WithDescription($"**Permissions Required: Ban Members**" +
+                        $"\n" +
+                        $"\n{Context.User.Mention} Bans the specified users from the server. You do not have to tag the users for which you wish to massban. " +
+                        $"You may create a list of names, @mentions, or user IDs." +
+                        $"\nSyntax: `{cmdPrefix}massban <users>`" +
+                        $"\nExample: `{cmdPrefix}massban @Stage#0001 @StageBot#2708`");
+                    embed.WithColor(Pink);
+                    BE(); break;
                 default:
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
                     embed.WithColor(Pink);
@@ -440,11 +542,11 @@ namespace Discord_Bot.Modules
             embed.WithDescription($"All StageBot commands separated by category. To use the command, have \nthe `{cmdPrefix}` symbol appended before the phrase. For more information on a specific command, " +
                 $"type `{cmdPrefix}h <command>`");
             embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]` \n`clear [c] [purge]` \n`stagebotgtfo`", true);
-            embed.AddField("Currency", "`points` \n`pointsadd` \n`timely [t]` \n`gamble [g]`", true);
+            embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`gamble [g]`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level`", true);
             embed.AddField("Fun", "`echo` \n`pick`", true);
             embed.AddField("osu!", "`createteamrole [ctr]` \n`delteams` \n`osutop` \n`recent [r]` \n`osuset`", true);
-            embed.AddField("Utility", "`help [h]` \n`helpdm [hdm]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]`", true);
+            embed.AddField("Utility", "`help [h]` \n`helpdm [hdm]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix`", true);
             embed.WithColor(Pink);
             BE();
         }
