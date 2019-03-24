@@ -15,8 +15,6 @@ C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Newtonsoft.
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Collections.Immutable.dll
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Interactive.Async.dll
-C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\RedCell.Net.dll
-C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Ionic.Zip.Reduced.dll
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Commands.xml
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Core.xml
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net.Rest.xml
@@ -37,3 +35,9 @@ C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Stagebot.cs
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.exe
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.pdb
 C:\Users\Stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Stagebot.csprojAssemblyReference.cache
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.Compression.Portable.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.HtmlConverter.Portable.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.Pdf.Portable.dll
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.Compression.Portable.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.HtmlConverter.Portable.xml
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.Pdf.Portable.xml

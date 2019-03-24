@@ -1,7 +1,21 @@
-Welcome to the StageBot ChangeLog. (Last updated: Version 1.0.1)
+Welcome to the Kaguya ChangeLog.
 
 
 Changelog:
+
+Version 1.4.0
+
+- STAGEBOT HAS BEEN REBRANDED TO "Kaguya"!!!
+- Added $rep command. Give your favorite person a rep point up to once per day!
+- Added $scrapeserver command for bot owners. Generates accounts for every member of the server.
+- $massblacklist will now ban any IGuildUser in the entire server regardless of whether they have typed in chat. Closes #17.
+- Added in $profile command. Generates an image with a user's account information / statistics.
+- Fixed a bug with $prefix where you could set a prefix greater than two characters. Closes #18
+- Added in a bot response if a user types $recent or $osutop with no additional parameters, and has not set their osu name with $osuset.
+- $serverexplb / $explb created, displays the top 10 users in the server in order of EXP.
+- Same thing for the global leaderboard! ($globalexplb / $gexplb)
+- Added in an $author command
+- Added in $repauthor command
 
 Version 1.3.0
 
@@ -60,7 +74,7 @@ Version 1.1.0
 - $pointsadd can now add points to other users.
 - $gamble/$g functionality now available, gamble those points!!
 - Application will now properly restart after first time setup is completed.
-- $stagebotgtfo command added. Forces StageBot to leave the server this command was executed in.
+- $kaguyagtfo command added. Forces Kaguya to leave the server this command was executed in.
 - $h / $help command changed to display the list of commands, separated by category.
 
 Version 1.0.1

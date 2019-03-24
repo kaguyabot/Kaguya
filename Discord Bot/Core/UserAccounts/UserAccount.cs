@@ -12,13 +12,21 @@ namespace Discord_Bot.Core.UserAccounts
 
         public ulong ID { get; set; }
 
+        public List<string> IsInServers { get; set;  }
+
+        public List<ulong> IsInServerIDs { get; set;  }
+
         public uint Points { get; set; }
 
         public uint EXP { get; set; }
 
+        public int Rep { get; set; }
+
         public DateTime LastReceivedEXP { get; set; }
 
         public DateTime LastReceivedTimelyPoints { get; set; }
+
+        public DateTime LastGivenRep { get; set; }
 
         public uint LevelNumber
         {
@@ -42,5 +50,30 @@ namespace Discord_Bot.Core.UserAccounts
 
         public int LifetimeEliteRolls { get; set; }
 
+        public UserAccount(ulong id)
+        {
+            ID = id;
+            IsInServers = new List<string>();
+            IsInServerIDs = new List<ulong>();
+            Points = 0;
+            EXP = 0;
+            Rep = 0;
+            Blacklisted = 0;
+            LifetimeGambleWins = 0;
+            LifetimeGambleLosses = 0;
+            LifetimeEliteRolls = 0;
+        }
+
+        public void AddSName(string server)
+        {
+            IsInServers.Add(server);
+        }
+
+        public void AddSID(ulong serverID)
+        {
+            IsInServerIDs.Add(serverID);
+        }
+
     }
+
 }

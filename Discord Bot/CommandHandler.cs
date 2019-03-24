@@ -48,6 +48,24 @@ namespace Discord_Bot
             string newUsername = context.User.Username;
             if (oldUsername + "#" + context.User.Discriminator != newUsername + "#" + context.User.Discriminator)
                 userAccount.Username = newUsername + "#" + context.User.Discriminator;
+            List<ulong> oldIDs = userAccount.IsInServerIDs;
+            List<string> oldSNames = userAccount.IsInServers;
+            if (oldIDs.Contains(context.Guild.Id))
+            {
+                userAccount.IsInServerIDs = oldIDs;
+                UserAccounts.SaveAccounts();
+            }
+            else if (oldSNames.Contains(context.Guild.Name))
+            {
+                userAccount.IsInServers = oldSNames;
+                UserAccounts.SaveAccounts();
+            }
+            else
+            {
+                userAccount.IsInServerIDs.Add(context.Guild.Id);
+                userAccount.IsInServers.Add(context.Guild.Name);
+                UserAccounts.SaveAccounts();
+            }
             int argPos = 0;
             if (msg.HasStringPrefix(Servers.GetServer(context.Guild).commandPrefix, ref argPos)
                 || msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
