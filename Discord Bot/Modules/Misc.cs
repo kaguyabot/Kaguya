@@ -12,8 +12,6 @@ using Discord_Bot.Core.UserAccounts;
 using System.Net;
 using System.Timers;
 using Discord_Bot.Core.Server_Files;
-using Syncfusion.HtmlConverter;
-using System.Drawing;
 
 #pragma warning disable
 
@@ -34,10 +32,6 @@ namespace Discord_Bot.Modules
         public string version = Utilities.GetAlert("VERSION");
 
         public string botToken = Config.bot.token;
-
-        internal EditableCommands.TimelyConfig TimelyConfig { get => timelyConfig; set => timelyConfig = value; }
-
-        //  var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
         public async Task BE() //Method to build an embedded message.
         {
@@ -1167,11 +1161,12 @@ namespace Discord_Bot.Modules
         [Alias("t")]
         public async Task DailyPoints(uint timeout = 24)
         {
-            timeout = timelyConfig.timelyHours;
+            timeout = 24;
+
+            uint bonus = 500; //fixes bug for now but this needs to go back to timelyConfig.timelyPoints once I figure out what happened.
 
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
-            uint bonus = timelyConfig.timelyPoints;
             var userAccount = UserAccounts.GetAccount(Context.User);
             if(!CanReceiveTimelyPoints(userAccount, (int)timeout))
             {
@@ -1181,7 +1176,7 @@ namespace Discord_Bot.Modules
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
                     $" Please wait until `{timeout} hours` have passed to receive more timely points.");
                 embed.WithColor(Pink);
-                BE();
+                BE(); 
                 return;
             }
             userAccount.Points += bonus;

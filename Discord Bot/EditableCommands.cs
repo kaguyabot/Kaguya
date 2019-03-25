@@ -45,8 +45,6 @@ namespace Discord_Bot
             public string token { get; set; }
             public string cmdPrefix { get; set; }
             public string osuapikey { get; set; }
-            public uint timelyHours { get; set; }
-            public uint timelyPoints { get; set; }
         }
 
         public static void JsonInit()

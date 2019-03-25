@@ -1,0 +1,11 @@
+Self-Hosting How To:
+
+- Go to bin/release/resources/config.json and open it with a text editor.
+- Paste your Discord bot token inside of where it says token. Paste the token (and all other keys) INSIDE the quotes.
+    Get your bot's token from https://discordapp.com/developers/applications/ - If you want to self host you will have to 
+    have an existing bot application. Guides to create this can be found online.
+- cmdPrefix is what the bot will look for when deciding what is a command and what isn't. By default this is $, but you may
+    edit this to any symbol you want. It can even be multiple symbols/characters.
+- osuapitoken can be grabbed from https://osu.ppy.sh/p/api - this allows your users to execute osu! related commands.
+- Note that when self hosting, you should keep the bot on a webserver, or PC that will be on 24/7. If the PC that the bot is
+    on shuts down, so will the bot.

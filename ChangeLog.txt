@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.4.1
+- Implements a temporary fix for a bug that prevented $timely from working.
+
+
 Version 1.4.0
 
 - STAGEBOT HAS BEEN REBRANDED TO "Kaguya"!!!
