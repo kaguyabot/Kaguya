@@ -3,11 +3,13 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.4.2.1
+- Hotfix, files are now built/compiled properly. Definitely do not use any releases before this.
+
 Version 1.4.2
 - $timely now properly reads from commands.json. If commands.json is empty or doesn't exist, it will automatically be created as well.
 - Updated modules/commands lists to be current.
 - commands.json can now be edited almost exactly the same way as servers.json and accounts.json.
-
 
 
 Version 1.4.1
