@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NReco.ImageGenerator</name>
+    </assembly>
+    <members>
+        <member name="T:NReco.ImageGenerator.ImageFormat">
+            <summary>
+            Typical image formats supported by WkHtmlToImage
+            </summary>
+        </member>
+        <member name="F:NReco.ImageGenerator.ImageFormat.Jpeg">
+            <summary>
+            JPEG image format
+            </summary>
+        </member>
+        <member name="F:NReco.ImageGenerator.ImageFormat.Png">
+            <summary>
+            PNG image format
+            </summary>
+        </member>
+        <member name="F:NReco.ImageGenerator.ImageFormat.Bmp">
+            <summary>
+            BMP image format
+            </summary>
+        </member>
+        <member name="T:NReco.ImageGenerator.HtmlToImageConverter">
+            <summary>
+            Html to Image converter (wrapper for WkHtmlToImage command line tool)
+            </summary>
+        </member>
+        <member name="M:NReco.ImageGenerator.HtmlToImageConverter.#ctor">
+            <summary>
+            Create new instance of <see cref="T:NReco.ImageGenerator.HtmlToImageConverter"/>.
+            </summary>
+        </member>
+        <member name="M:NReco.ImageGenerator.HtmlToImageConverter.GenerateImage(System.String,System.String)">
+            <summary>
+            Generate image by specifed HTML content
+            </summary>
+            <param name="htmlContent">HTML content</param>
+            <param name="imageFormat">resulting image format (see <seealso cref="T:NReco.ImageGenerator.ImageFormat"/>)</param>
+            <returns>image bytes</returns>
+        </member>
+        <member name="M:NReco.ImageGenerator.HtmlToImageConverter.GenerateImage(System.String,System.String,System.IO.Stream)">
+            <summary>
+            Generate image by specfied HTML content and write output into output stream
+            </summary>
+            <param name="htmlContent">HTML document</param>
+            <param name="imageFormat">resulting image format (see <seealso cref="T:NReco.ImageGenerator.ImageFormat"/>)</param>
+            <param name="outputStream">output stream for resulting image</param>
+        </member>
+        <member name="M:NReco.ImageGenerator.HtmlToImageConverter.GenerateImageFromFile(System.String,System.String)">
+            <summary>
+            Generate image for specified HTML file path or URL
+            </summary>
+            <param name="htmlFilePath">path to HTML file or absolute URL</param>
+            <param name="imageFormat">resulting image format (see <seealso cref="T:NReco.ImageGenerator.ImageFormat"/>)</param>
+            <returns>image bytes</returns>
+        </member>
+        <member name="M:NReco.ImageGenerator.HtmlToImageConverter.GenerateImageFromFile(System.String,System.String,System.IO.Stream)">
+            <summary>
+            Generate image for specified HTML file or URL and write resulting image to output stream
+            </summary>
+            <param name="htmlFilePath">path to HTML file or absolute URL</param>
+            <param name="imageFormat">resulting image format (see <seealso cref="T:NReco.ImageGenerator.ImageFormat"/>)</param>
+            <param name="outputStream">output stream for resulting image</param>
+        </member>
+        <member name="M:NReco.ImageGenerator.HtmlToImageConverter.GenerateImageFromFile(System.String,System.String,System.String)">
+            <summary>
+            Generate image for specified HTML file or URL and write resulting image to output file
+            </summary>
+            <param name="htmlFilePath">path to HTML file or absolute URL</param>
+            <param name="imageFormat">resulting image format (see <seealso cref="T:NReco.ImageGenerator.ImageFormat"/>). If imageFormat=null format is suggested by output file extension.</param>
+            <param name="outputPdfFilePath">path to output image file</param>
+        </member>
+        <member name="P:NReco.ImageGenerator.HtmlToImageConverter.ToolPath">
+            <summary>
+            Get or set path where WkHtmlToImage tool is located
+            </summary>
+            <remarks>
+            By default this property initialized with application assemblies folder.
+            If WkHtmlToImage tool file is not present it is extracted automatically from DLL resources.
+            </remarks>
+        </member>
+        <member name="P:NReco.ImageGenerator.HtmlToImageConverter.WkHtmlToImageExeName">
+            <summary>
+            Get or set WkHtmlToImage tool executive file name ('wkhtmltoimage.exe' by default)
+            </summary>
+        </member>
+        <member name="P:NReco.ImageGenerator.HtmlToImageConverter.Zoom">
+            <summary>
+            Get or set zoom factor
+            </summary>
+        </member>
+        <member name="P:NReco.ImageGenerator.HtmlToImageConverter.Width">
+            <summary>
+            Get or set minimum image width
+            </summary>
+        </member>
+        <member name="P:NReco.ImageGenerator.HtmlToImageConverter.Height">
+            <summary>
+            Get or set minimum image height (default 0: in this case height is calculated automatically)
+            </summary>
+        </member>
+        <member name="P:NReco.ImageGenerator.HtmlToImageConverter.CustomArgs">
+            <summary>
+            Get or set custom WkHtmlToImage command line arguments
+            </summary>
+        </member>
+        <member name="P:NReco.ImageGenerator.HtmlToImageConverter.ProcessPriority">
+            <summary>
+            Get or set WkHtmlToImage process priority (Normal by default)
+            </summary>
+        </member>
+        <member name="P:NReco.ImageGenerator.HtmlToImageConverter.ExecutionTimeout">
+            <summary>
+            Get or set maximum execution time for running WkHtmlToImage process (null is by default = no timeout)
+            </summary>
+        </member>
+        <member name="E:NReco.ImageGenerator.HtmlToImageConverter.LogReceived">
+            <summary>
+            Occurs when log line is received from WkHtmlToImage process.
+            </summary>
+            <remarks>
+            Quiet mode should be disabled if you want to get wkhtmltopdf info/debug messages
+            </remarks>
+        </member>
+        <member name="T:NReco.ImageGenerator.WkHtmlToImageException">
+            <summary>
+            The exception that is thrown when WkHtmlToImage process returns non-zero error exit code
+            </summary>
+        </member>
+        <member name="P:NReco.ImageGenerator.WkHtmlToImageException.ErrorCode">
+            <summary>
+            Get WkHtmlToImage process error code
+            </summary>
+        </member>
+    </members>
+</doc>
