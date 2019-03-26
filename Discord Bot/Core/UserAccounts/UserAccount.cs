@@ -12,9 +12,9 @@ namespace Discord_Bot.Core.UserAccounts
 
         public ulong ID { get; set; }
 
-        public List<string> IsInServers { get; set;  }
+        public List<string> IsInServers { get; set; }
 
-        public List<ulong> IsInServerIDs { get; set;  }
+        public List<ulong> IsInServerIDs { get; set; }
 
         public uint Points { get; set; }
 

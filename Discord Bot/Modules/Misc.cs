@@ -12,6 +12,8 @@ using Discord_Bot.Core.UserAccounts;
 using System.Net;
 using System.Timers;
 using Discord_Bot.Core.Server_Files;
+using Discord_Bot.Core.Commands;
+//using static Discord_Bot.EditableCommands;
 
 #pragma warning disable
 
@@ -27,7 +29,7 @@ namespace Discord_Bot.Modules
 
         public BotConfig bot = new BotConfig();
 
-        private EditableCommands.TimelyConfig timelyConfig = new EditableCommands.TimelyConfig();
+        //public TimelyConfig timelyConfig = new TimelyConfig();
 
         public string version = Utilities.GetAlert("VERSION");
 
@@ -116,9 +118,10 @@ namespace Discord_Bot.Modules
                 "\nAll commands in category: Currency" +
                 "\n" +
                 $"\n{cmdPrefix}points" +
-                $"\n{cmdPrefix}pointsadd" +
+                $"\n{cmdPrefix}pointsadd [addpoints]" +
                 $"\n{cmdPrefix}timely [t]" +
-                $"\b{cmdPrefix}gamble [g]" +
+                $"\n{cmdPrefix}timelyreset" +
+                $"\n{cmdPrefix}gamble [g]" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 $"\n```"
@@ -407,7 +410,7 @@ namespace Discord_Bot.Modules
                         $"\nRolls between `79-89`, `90-95`, `96-99`, and `100` will yield multipliers of `1.75x`, `2.25x`, `3x`, and `5x` respectively." +
                         $"\nThe maximum amount of points you can gamble at one time is set to `25,000`.");
                     BE(); break;
-                case "Kaguyagtfo":
+                case "kaguyagtfo":
                     embed.WithTitle($"Help: Kaguya, gtfo! | `{cmdPrefix}kaguyagtfo`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
@@ -465,6 +468,15 @@ namespace Discord_Bot.Modules
                     embed.WithDescription($"{Context.User.Mention} Displays information about my creator!");
                     embed.WithColor(Pink);
                     BE(); break;
+                case "timelyreset":
+                    embed.WithTitle($"Help: Timely Reset | `{cmdPrefix}timelyreset`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nAllows a bot owner to reset the {cmdPrefix}timely cooldown for every user in the Kaguya database.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+
+
                 default:
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
                     embed.WithColor(Pink);
@@ -482,11 +494,11 @@ namespace Discord_Bot.Modules
             embed.WithDescription($"All Kaguya commands separated by category. To use the command, have \nthe `{cmdPrefix}` symbol appended before the phrase. For more information on a specific command, " +
                 $"type `{cmdPrefix}h <command>`");
             embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]` \n`clear [c] [purge]` \n`kaguyagtfo` \n`scrapeserver`", true);
-            embed.AddField("Currency", "`points` \n`pointsadd` \n`timely [t]` \n`gamble [g]`", true);
-            embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`profile`", true);
+            embed.AddField("Currency", "`points` \n`pointsadd` \n`timely [t]` \n`timelyreset` \n`gamble [g]`", true);
+            embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`profile` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
             embed.AddField("Fun", "`echo` \n`pick`", true);
             embed.AddField("osu!", "`createteamrole [ctr]` \n`delteams` \n`osutop` \n`recent [r]` \n`osuset`", true);
-            embed.AddField("Utility", "`help [h]` \n`helpdm [hdm]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix`", true);
+            embed.AddField("Utility", "`help [h]` \n`helpdm [hdm]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author`", true);
             embed.WithColor(Pink);
             BE();
         }
@@ -506,7 +518,7 @@ namespace Discord_Bot.Modules
                 $"\nType `{cmdPrefix}h <command name>` for more how to use the command and a detailed description of what it does." +
                 $"\nAdd me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847" +
                 $"\nWant to keep track of all the changes or feel like self hosting? Feel free to check out the Kaguya Github page!: https://github.com/stageosu/Kaguya" +
-                $"\nStill need help? Feel free to join the Kaguya Development server and ask for help there!: https://discord.gg/yhcNC97");
+                $"\nKaguya Support Server: https://discord.gg/yhcNC97");
         }
 
         [Command("prefix")] //utility
@@ -1157,13 +1169,30 @@ namespace Discord_Bot.Modules
             BE();
         }
 
+        [Command("timelyreset")]
+        [RequireOwner]
+        public async Task TimelyReset()
+        {
+            var commands = Commands.GetCommand();
+            var accounts = UserAccounts.GetAllAccounts();
+            foreach (var account in accounts)
+            {
+                var difference = DateTime.Now.AddHours(-24);
+                account.LastReceivedTimelyPoints = difference;
+            }
+            embed.WithTitle("Timely Reset");
+            embed.WithDescription($"**{Context.User.Mention} Timely points for `all users` have been reset!**");
+            embed.WithColor(Pink);
+        }
+
         [Command("timely")] //currency
         [Alias("t")]
-        public async Task DailyPoints(uint timeout = 24)
+        public async Task DailyPoints(uint timeout = 24, uint bonus = 500)
         {
-            timeout = 24;
-
-            uint bonus = 500; //fixes bug for now but this needs to go back to timelyConfig.timelyPoints once I figure out what happened.
+            var commands = Commands.GetCommand(); 
+            
+            timeout = commands.TimelyHours;
+            bonus = commands.TimelyPoints;
 
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 

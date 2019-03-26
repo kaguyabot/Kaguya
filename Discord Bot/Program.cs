@@ -28,9 +28,8 @@ namespace Discord_Bot
         {
             string name = Environment.UserName; // Greets user in console
             string message = Utilities.GetFormattedAlert("WELCOME_&NAME_&VERSION", name, version);
-            
             Console.WriteLine(message);
-            EditableCommands.JsonInit();
+          //  EditableCommands.JsonInit();
             if (Config.bot.token == "" || Config.bot.token == null && Config.bot.cmdPrefix == "" || Config.bot.cmdPrefix == null) //default values in config.json when first launched, first time setup essentially.
             {
                 Console.WriteLine("Bot token not found. Get your bot's token from the Discord Developer portal and paste it here: ");

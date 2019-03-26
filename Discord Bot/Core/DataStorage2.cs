@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord_Bot.Core.UserAccounts;
 using Discord_Bot.Core.Server_Files;
+using Discord_Bot.Core.Commands;
 using Newtonsoft.Json;
 using System.IO;
 
@@ -24,6 +25,12 @@ namespace Discord_Bot.Core
             File.WriteAllText(filePath, json);
         }
 
+        public static void SaveCommands(IEnumerable<Command> commands, string filePath)
+        {
+            string json = JsonConvert.SerializeObject(commands, Formatting.Indented);
+            File.WriteAllText(filePath, json);
+        }
+
         //Get all userAccounts
         public static IEnumerable<UserAccount> LoadUserAccounts(string filePath) // Add exception handling
         {
@@ -37,6 +44,24 @@ namespace Discord_Bot.Core
             if (!File.Exists(filepath)) return null;
             string json = File.ReadAllText(filepath);
             return JsonConvert.DeserializeObject<List<Server>>(json);
+        }
+
+        public static IEnumerable<Command> LoadCommands(string filepath) //Gets commands
+        {
+            string json;
+
+            if (!File.Exists(filepath))
+            {
+                Command command = new Command();
+                json = JsonConvert.SerializeObject(command, Formatting.Indented);
+                File.WriteAllText(filepath, json);
+                return JsonConvert.DeserializeObject<List<Command>>(json);
+            }
+            else
+            {
+                json = File.ReadAllText(filepath);
+                return JsonConvert.DeserializeObject<List<Command>>(json);
+            }
         }
 
         public static bool SaveExists(string filePath)

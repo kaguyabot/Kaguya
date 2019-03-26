@@ -1,4 +1,6 @@
-{
-  "timelyHours": 24,
-  "timelyPoints": 500
-}
+[
+  {
+    "TimelyHours": 24,
+    "TimelyPoints": 500
+  }
+]
