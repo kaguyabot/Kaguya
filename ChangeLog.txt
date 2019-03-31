@@ -3,6 +3,28 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.5
+
+- $filteradd [fa] added. Allows a server administrator to add words to a filter. If the word is typed in chat and is in the filter, the bot will automatically delete it.
+    This applies for phrases including spaces as well.
+- $filterremove [fr] added.
+- $filterview [fv] added.
+- $filterclear [clearfilter] added.
+- $clear with no parameters now defaults to deleting 10 messages instead of 25.
+- $setlogchannel added. Sets the specified channel to be where the bot logs information.
+- Updated $clear command so that it properly deletes the specified number of messages.
+- New database file for cached server messages (this is required for proper logging).
+- $awardeveryone / $awardall (new bot owner command).
+- Fixed a bug with `$cmds utility` that prevented it from working.
+- $g/$gamble has been renamed to $gr/$groll (all point gambling commands will start with g as of this patch.)
+- $masspointsdistribute command added. This allows any user to evenly distribute all of their Kaguya points to everyone in the server.
+    This, in turn, sets their own points to zero. What a generous act!
+- Kaguya now sends a helpful message to the server owner upon joining a new guild.
+- $massban now has a help command.
+- Heavily cleaned up Misc.cs (huge file where all commands are). Now, 7 new classes are in existence, one for each module (Utility, Help, Fun, EXP, Currency, osu, and Administration.)
+- $kaguyagtfo renamed to $kaguyaexit
+- Modules and commands lists are now up to date.
+
 Version 1.4.2.1
 - Hotfix, files are now built/compiled properly. Definitely do not use any releases before this.
 

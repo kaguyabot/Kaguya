@@ -14,7 +14,7 @@ namespace Discord_Bot.Core.Commands
 
         static Commands()
         {
-            if(DataStorage2.SaveExists(commandsFile))
+            if (DataStorage2.SaveExists(commandsFile))
             {
                 commands = DataStorage2.LoadCommands(commandsFile).ToList();
             }

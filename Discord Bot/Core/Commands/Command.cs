@@ -11,6 +11,7 @@ namespace Discord_Bot.Core.Commands
         public uint TimelyHours { get; set; }
 
         public uint TimelyPoints { get; set; }
+
     }
 
 }

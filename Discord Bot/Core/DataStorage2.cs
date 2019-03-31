@@ -31,6 +31,12 @@ namespace Discord_Bot.Core
             File.WriteAllText(filePath, json);
         }
 
+        public static void SaveServerLogging(IEnumerable<ServerMessageLog> logs, string filePath)
+        {
+            string json = JsonConvert.SerializeObject(logs, Formatting.Indented);
+            File.WriteAllText(filePath, json);
+        }
+
         //Get all userAccounts
         public static IEnumerable<UserAccount> LoadUserAccounts(string filePath) // Add exception handling
         {
@@ -62,6 +68,13 @@ namespace Discord_Bot.Core
                 json = File.ReadAllText(filepath);
                 return JsonConvert.DeserializeObject<List<Command>>(json);
             }
+        }
+
+        public static IEnumerable<ServerMessageLog> LoadServerMessageLogs(string filepath)
+        {
+            if (!File.Exists(filepath)) return null;
+            string json = File.ReadAllText(filepath);
+            return JsonConvert.DeserializeObject<List<ServerMessageLog>>(json);
         }
 
         public static bool SaveExists(string filePath)
