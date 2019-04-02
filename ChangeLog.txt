@@ -3,6 +3,15 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+//Version 1.6a
+//
+//- $groll now takes points away on use, then gives them back + multiplier if the roll was won.
+//
+Version 1.5.1
+
+- High priority fix for crashes.
+
+
 Version 1.5
 
 - $filteradd [fa] added. Allows a server administrator to add words to a filter. If the word is typed in chat and is in the filter, the bot will automatically delete it.
@@ -11,7 +20,8 @@ Version 1.5
 - $filterview [fv] added.
 - $filterclear [clearfilter] added.
 - $clear with no parameters now defaults to deleting 10 messages instead of 25.
-- $setlogchannel added. Sets the specified channel to be where the bot logs information.
+- $setlogchannel / $log added. Sets the specified channel to be where the bot logs information.
+- $resetlogchannel / $rlog added. Resets all log channels and disables logging (per log event -- $rlog all disables logging for the whole guild.)
 - Updated $clear command so that it properly deletes the specified number of messages.
 - New database file for cached server messages (this is required for proper logging).
 - $awardeveryone / $awardall (new bot owner command).

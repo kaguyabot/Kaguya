@@ -338,9 +338,10 @@ namespace Discord_Bot.Modules
             {
                 await user.AddRoleAsync(teamRole);
                 await user.AddRoleAsync(participantRole);
-                embed.WithDescription($"**{user}** has been added to {teamRole.Mention} and {participantRole.Mention}.");
-                embed.WithColor(Pink);
+                embed.AddField("Participant Added", $"**{user}** has been added to {teamRole.Mention} and {participantRole.Mention}.");
             }
+            embed.WithColor(Pink);
+            BE();
         }
 
         [Command("delteams")] //osu

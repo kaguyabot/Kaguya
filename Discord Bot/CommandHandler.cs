@@ -34,8 +34,8 @@ namespace Discord_Bot
             await _service.AddModulesAsync(
               Assembly.GetExecutingAssembly(),
               _services);
-            _client.JoinedGuild += JoinedNewGuild;
             _client.MessageReceived += HandleCommandAsync;
+            _client.JoinedGuild += JoinedNewGuild;
             _client.MessageReceived += MessageCache;
             _client.MessageDeleted += LoggingDeletedMessages;
             _client.MessageUpdated += LoggingEditedMessages;
@@ -54,12 +54,20 @@ namespace Discord_Bot
             if (msg == null) return;
             var context = new SocketCommandContext(_client, msg);
             if (context.User.IsBot) return;
+            IUser kaguya = _client.GetUser(538910393918160916);
+            foreach (SocketGuildChannel channel in context.Guild.Channels)
+            {
+                if(!channel.GetPermissionOverwrite(kaguya).HasValue)
+                await channel.AddPermissionOverwriteAsync(kaguya, OverwritePermissions.AllowAll(channel));
+            }
+            if (context.Guild.Id == 264445053596991498 || context.Guild.Id == 333949691962195969) return;
             var userAccount = UserAccounts.GetAccount(context.User);
             if (userAccount.Blacklisted == 1)
             {
                 Console.WriteLine($"Blacklisted user {userAccount.Username} detected.");
                 return;
             }
+            await _client.SetGameAsync("Support Server: yhcNC97");
             var server = Servers.GetServer(context.Guild);
             foreach(string phrase in server.FilteredWords)
             {
@@ -130,7 +138,10 @@ namespace Discord_Bot
                 $"in-depth customizable logging, leveling/currency systems, osu! related commands, and more! Before we continue please read the following statement from my creator as it contains very " +
                 $"helpful information on how to use me!" +
                 $"\n" +
-                $"\nGreetings, I recommend you check out the `{cmdPrefix}help` and `{cmdPrefix}helpdm` commands before continuing. If you have any troubles using Kaguya, resort to these commands!" +
+                $"\nGreetings, **The very first thing you should do as the server owner is move Kaguya's role to the highest position in your role list. Else, the bot may not work for your server!!** " +
+                $"Second, the first command `({cmdPrefix}exp)` for example, may be very slow, as Kaguya has to update all channel permissions to allow for her use in your server. Do not make any changes " +
+                $"to these permissions. " +
+                $"Next, I recommend you check out the `{cmdPrefix}help` and `{cmdPrefix}helpdm` commands before continuing. If you have any troubles using Kaguya, resort to these commands!" +
                 $"\nIn addition, Kaguya's default prefix is `$`. If you have another bot that uses `$`, don't worry as her prefix is fully customizable (up to two characters). In chat, tag Kaguya (`@Kaguya#2708`) " +
                 $"and type `prefix <new prefix>` to edit her prefix. This way, you won't accidentally change the prefix of another bot that also uses the `$` symbol. If you ever wish to reset your prefix " +
                 $"back to the default, tag Kaguya and type `prefix` with nothing else." +
@@ -138,7 +149,8 @@ namespace Discord_Bot
                 $"\n`@Kaguya#2708 prefix k!` (<-- Sets prefix to `k!`)" +
                 $"\n`@Kaguya#2708 prefix` (<-- Prefix has been reset from `<old prefix>` to `$`)" +
                 $"\n" +
-                $"\nFinally, if you wish to report a bug, please go to the Kaguya github page (found through `{cmdPrefix}helpdm`) and create an issue. Same thing for feature requests :)" +
+                $"\nFinally, if you wish to report a bug, please go to the Kaguya github page (found through `{cmdPrefix}helpdm`) and create an issue." +
+                $"\nYou may also let me know in Kaguya's dedicated support server: https://discord.gg/yhcNC97" +
                 $"\n" +
                 $"\nThank you, and enjoy!");
         }
@@ -300,16 +312,16 @@ namespace Discord_Bot
             }
         }
 
-        private async Task UserSaysFilteredPhrase(SocketMessage message) //note for stage: make sure this is the only place where a filtered phrase gets removed
+        private async Task UserSaysFilteredPhrase(SocketMessage message) 
         {
             var guild = (message.Channel as SocketGuildChannel).Guild;
             var server = Servers.GetServer(guild);
             var filteredPhrases = server.FilteredWords;
             foreach(string phrase in filteredPhrases)
             {
-                if (message.Content.Contains($"{phrase}"))
+                if (message.Content.ToLower().Contains($"{phrase}"))
                 {
-                    message.DeleteAsync();
+                    await message.DeleteAsync();
                     ulong loggingChannelID = server.LogWhenUserSaysFilteredPhrase;
                     if (loggingChannelID == 0) return;
                     ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(server.ID).GetChannel(loggingChannelID);

@@ -230,12 +230,13 @@ namespace Discord_Bot.Modules
                 return;
             }
 
+            userAccount.Points -= (uint)points; //Takes points away from user on successful bet.
+
             Random rand = new Random();
             var roll = rand.Next(0, 100);
 
             if (roll <= 66)
             {
-                userAccount.Points = userAccount.Points - (uint)points;
                 userAccount.LifetimeGambleLosses++;
                 userAccount.LifetimeGambles++;
 

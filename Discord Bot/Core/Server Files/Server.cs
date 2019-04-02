@@ -37,12 +37,17 @@ namespace Discord_Bot.Core.Server_Files
 
         public ulong LogWhenUserDisconnectsFromVoiceChannel { get; set; }
 
+        public List<string> JoinedUsers { get; set; }
+
+        public bool BlackJackInProgress { get; set; }
+
         public Server(ulong id)
         {
             ID = id;
             ServerName = "";
             commandPrefix = "$";
             FilteredWords = new List<string>();
+            JoinedUsers = new List<string>();
         }
     }
 }
