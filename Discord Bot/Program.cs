@@ -16,7 +16,7 @@ using System.Diagnostics;
 
 namespace Discord_Bot
 {
-    class Program
+    public class Program
     {
         DiscordSocketClient _client;
         CommandHandler _handler;
@@ -28,9 +28,8 @@ namespace Discord_Bot
         {
             string name = Environment.UserName; // Greets user in console
             string message = Utilities.GetFormattedAlert("WELCOME_&NAME_&VERSION", name, version);
-            
             Console.WriteLine(message);
-            EditableCommands.JsonInit();
+          //  EditableCommands.JsonInit();
             if (Config.bot.token == "" || Config.bot.token == null && Config.bot.cmdPrefix == "" || Config.bot.cmdPrefix == null) //default values in config.json when first launched, first time setup essentially.
             {
                 Console.WriteLine("Bot token not found. Get your bot's token from the Discord Developer portal and paste it here: ");
@@ -53,7 +52,9 @@ namespace Discord_Bot
             {
                 _client = new DiscordSocketClient(new DiscordSocketConfig
                 {
-                    LogLevel = LogSeverity.Verbose
+                    LogLevel = LogSeverity.Verbose,
+                    MessageCacheSize = 1000,
+                    AlwaysDownloadUsers = true
                 });
                 _client.Log += Log;
                 _client.Ready += RepeatingTimer.StartTimer;
@@ -66,7 +67,7 @@ namespace Discord_Bot
                     Console.WriteLine("Error: Could not successfully connect. Do you have a stable internet connection?");
                     Thread.Sleep(10000);
                     Console.WriteLine("Exiting...");
-                    Thread.Sleep(1500);
+                    await Task.Delay(1500);
                     Environment.Exit(0);
                 }
                 await _client.StartAsync();
@@ -74,6 +75,7 @@ namespace Discord_Bot
                 _handler = new CommandHandler();
                 await _handler.InitializeAsync(_client);
                 await Task.Delay(-1);
+                
             }
             catch(Discord.Net.HttpException)
             {
@@ -84,9 +86,10 @@ namespace Discord_Bot
             }
         }
 
-        private async Task Log(LogMessage msg)
+        private Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.Message);
+            return Task.CompletedTask;
         }
     }
 }

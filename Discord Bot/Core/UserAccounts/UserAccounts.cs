@@ -26,6 +26,11 @@ namespace Discord_Bot.Core.UserAccounts
             }
         }
 
+        public static List<UserAccount> GetAllAccounts()
+        {
+            return accounts;
+        }
+
         public static void SaveAccounts()
         {
             DataStorage2.SaveUserAccounts(accounts, accountsFile);
@@ -34,6 +39,11 @@ namespace Discord_Bot.Core.UserAccounts
         public static UserAccount GetAccount(SocketUser user)
         {
             return GetOrCreateAccount(user.Id);
+        }
+
+        public static UserAccount GetAuthor()
+        {
+            return GetOrCreateAccount(146092837723832320);
         }
 
         private static UserAccount GetOrCreateAccount(ulong id)
@@ -49,16 +59,7 @@ namespace Discord_Bot.Core.UserAccounts
 
         private static UserAccount CreateUserAccount(ulong id)
         {
-            var newAccount = new UserAccount()
-            {
-                ID = id,
-                Points = 0,
-                EXP = 0,
-                Blacklisted = 0,
-                LifetimeGambleWins = 0,
-                LifetimeGambleLosses = 0,
-                LifetimeEliteRolls = 0
-            };
+            var newAccount = new UserAccount(id);
 
             accounts.Add(newAccount);
             SaveAccounts();

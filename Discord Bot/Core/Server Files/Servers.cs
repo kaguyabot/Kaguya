@@ -26,11 +26,6 @@ namespace Discord_Bot.Core.Server_Files
             }
         }
 
-        public static void SaveServers()
-        {
-            DataStorage2.SaveServers(servers, serversFile);
-        }
-
         public static Server GetServer(SocketGuild guild)
         {
             return GetOrCreateServer(guild.Id);
@@ -49,15 +44,16 @@ namespace Discord_Bot.Core.Server_Files
 
         private static Server CreateServer(ulong id)
         {
-            var newServer = new Server()
-            {
-                ID = id,
-                commandPrefix = "$"
-            };
+            var newServer = new Server(id);
+
             servers.Add(newServer);
             SaveServers();
             return newServer;
         }
 
+        public static void SaveServers()
+        {
+            DataStorage2.SaveServers(servers, serversFile);
+        }
     }
 }
