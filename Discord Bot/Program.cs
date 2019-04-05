@@ -29,7 +29,6 @@ namespace Discord_Bot
             string name = Environment.UserName; // Greets user in console
             string message = Utilities.GetFormattedAlert("WELCOME_&NAME_&VERSION", name, version);
             Console.WriteLine(message);
-          //  EditableCommands.JsonInit();
             if (Config.bot.token == "" || Config.bot.token == null && Config.bot.cmdPrefix == "" || Config.bot.cmdPrefix == null) //default values in config.json when first launched, first time setup essentially.
             {
                 Console.WriteLine("Bot token not found. Get your bot's token from the Discord Developer portal and paste it here: ");
@@ -53,8 +52,7 @@ namespace Discord_Bot
                 _client = new DiscordSocketClient(new DiscordSocketConfig
                 {
                     LogLevel = LogSeverity.Verbose,
-                    MessageCacheSize = 1000,
-                    AlwaysDownloadUsers = true
+                    MessageCacheSize = 1000
                 });
                 _client.Log += Log;
                 _client.Ready += RepeatingTimer.StartTimer;
@@ -88,7 +86,9 @@ namespace Discord_Bot
 
         private Task Log(LogMessage msg)
         {
+            string filePath = "Resources/ConsoleLogFile.txt";
             Console.WriteLine(msg.Message);
+            File.AppendAllText(filePath, $"\n{msg.Message} \n   Log Time: {DateTime.Now}");
             return Task.CompletedTask;
         }
     }

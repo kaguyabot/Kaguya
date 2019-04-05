@@ -271,6 +271,7 @@
     <Compile Include="Core\Commands\Commands.cs" />
     <Compile Include="Core\DataStorage2.cs" />
     <Compile Include="Core\LevelingSystem\Leveling.cs" />
+    <Compile Include="Core\ReliabilityService.cs" />
     <Compile Include="Core\RepeatingTimer.cs" />
     <Compile Include="Core\DataStorage.cs" />
     <Compile Include="Core\Server Files\Server.cs" />

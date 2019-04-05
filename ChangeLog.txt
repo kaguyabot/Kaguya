@@ -3,10 +3,15 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
-//Version 1.6a
-//
-//- $groll now takes points away on use, then gives them back + multiplier if the roll was won.
-//
+Version 1.6
+
+- Kaguya got approved on Discordbots.org!! Give her an upvote here: https://discordbots.org/bot/538910393918160916
+- $groll now takes points away on use, then gives them back + multiplier if the roll was won.
+- $timelyreset now actually builds the embed. Same thing with $ctr
+- Leveling embed is now more compact, takes up less space in chat.
+- Added in ReliabilityService...if bot disconnects from websocket, it (should) reconnect on its own after 30 seconds.
+- All log messages are now saved to a file (incase the bot crashes).
+
 Version 1.5.1
 
 - High priority fix for crashes.

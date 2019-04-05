@@ -17,7 +17,7 @@ namespace Discord_Bot.Core.LevelingSystem
             Color Pink = new Color(252, 132, 255);
             try
             {
-                var userAccount = UserAccounts.UserAccounts.GetAccount(user);
+                UserAccount userAccount = UserAccounts.UserAccounts.GetAccount(user);
                 Random RNGTimeout = new Random();
                 if (!CanReceiveExperience(userAccount, RNGTimeout.Next(110, 130)))
                     return;
@@ -33,8 +33,8 @@ namespace Discord_Bot.Core.LevelingSystem
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.WithTitle("Level up!");
                     embed.WithDescription($"{user.Username} just leveled up!");
-                    embed.AddField("Level", newLevel);
-                    embed.AddField("EXP", userAccount.EXP);
+                    embed.AddField("Level", newLevel, true);
+                    embed.AddField("EXP", userAccount.EXP, true);
                     embed.WithColor(Pink);
 
                     await channel.SendMessageAsync("", false, embed.Build());
