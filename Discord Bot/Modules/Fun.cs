@@ -13,6 +13,7 @@ using System.Net;
 using System.Timers;
 using Discord_Bot.Core.Server_Files;
 using Discord_Bot.Core.Commands;
+using Discord.Addons.Interactive;
 
 #pragma warning disable
 
@@ -22,12 +23,13 @@ namespace Discord_Bot.Modules
     {
         public EmbedBuilder embed = new EmbedBuilder();
 
+        private InteractiveService _interactive;
+
+       // public InteractiveBase interactive = new InteractiveBase();
+
         Color Pink = new Color(252, 132, 255);
-
         Color Red = new Color(255, 0, 0);
-
         Color Gold = new Color(255, 223, 0);
-
         Color Violet = new Color(238, 130, 238);
 
         public BotConfig bot = new BotConfig();
@@ -81,11 +83,10 @@ namespace Discord_Bot.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
-        [Command("blackjack")]
+        [Command("blackjack1", RunMode = RunMode.Async)]
+        [RequireOwner]
         public async Task BlackJack(int points)
         {
-            if (Context.User.Id != 146092837723832320)
-                return;
             if(points < 100)
             {
                 embed.WithDescription($"**{Context.User.Mention} Your bet must be at least 100 points to play!**");
@@ -97,11 +98,11 @@ namespace Discord_Bot.Modules
             var server = Servers.GetServer(Context.Guild);
             string cmdPrefix = server.commandPrefix;
             //if (server.BlackJackInProgress == true) 
-           // {
-          //      embed.WithDescription($"**{Context.User.Mention} a game of blackjack is already in progress. You must wait before it is over to play!**");
-           //     embed.WithColor(Red);
-           //     await BE(); return;
-           // }
+            //{
+            //    embed.WithDescription($"**{Context.User.Mention} a game of blackjack is already in progress. You must wait before it is over to play!**");
+            //    embed.WithColor(Red);
+            //    await BE(); return;
+            //}
             server.JoinedUsers = new List<string>();
             server.BlackJackInProgress = true;
             var playerName = Context.User.Username;
@@ -126,10 +127,6 @@ namespace Discord_Bot.Modules
             "<:KH:562416297347121152>", "<:KD:562416296977760257>", "<:KS:562416297288138752>", "<:KC:562416297279750144>", //K's
             "<:QS:562416403093782529>", "<:QH:562416321917091851>", "<:QC:562418399209324563>", "<:QD:562416297200058378>"};//Q's
 
-            embed.WithDescription($"**Game of Blackjack Started!** To join in, type `{cmdPrefix}bjoin <points to bet>` to join in!");
-            embed.WithColor(Pink);
-            await BE();
-
             //await Task.Delay(10000); //10 second wait for other players to $bjoin.
 
             server.JoinedUsers.Add(playerName); //Adds all users who use $bjoin to a list.
@@ -149,6 +146,8 @@ namespace Discord_Bot.Modules
             int i4 = cards.ElementAt(3); //Player's hand second card
             int i5 = cards.ElementAt(4); //Dealer hit card #1
             int i6 = cards.ElementAt(5); //Dealer hit card #2
+            int i7 = cards.ElementAt(6); //Player's first hit card
+            int i8 = cards.ElementAt(7); //Player's second hit card
 
             //Below contains array indicies for playing cards.
 
@@ -158,62 +157,95 @@ namespace Discord_Bot.Modules
             string player1Hand2 = playingCards[i4]; //Player's second card
             string dealerHitCard1 = playingCards[i5]; //Called when dealer's hand is below 16, 3rd card in hand. After player's turn has ended.
             string dealerHitCard2 = playingCards[i6]; //Called when dealer's hand is still below 16, 4th card in hand.
+            string player1HitCard1 = playingCards[i7];
+            string player1HitCard2 = playingCards[i8];
 
-            DealerHandValues(ref i1, ref i2);
+            HandValues(ref i1, ref i2);
             int dealerHand = i1 + i2;
-            Player1HandValues(ref i3, ref i4);
+            HandValues(ref i3, ref i4);
             int playerHand = i3 + i4;
+            HitCardValue(ref i5);
+            int hitCard1 = i5;
+            HitCardValue(ref i6);
+            int hitCard2 = i6;
+            HitCardValue(ref i7);
+            int playerHitCard1 = i7;
+            HitCardValue(ref i8);
+            int playerHitCard2 = i8;
 
-            foreach (string player in server.JoinedUsers)
-            {
-                int playerHand1 = i3 + i4;
-
-                //Builds an embed for both of the dealer's card.
-                embed.WithDescription("");
-                embed.AddField("Dealer's Hand", $"{dealerHand1} {dealerHand2}", true);
-                await Player1(player1Hand1, player1Hand2, player, playerHand1); //Adds an inline field for the player's hand
-                embed.WithFooter($"Dealer's Hand: {dealerHand} | {player}'s hand: {playerHand}");
-                embed.WithColor(Pink);
-                await BE();
-                player.Split('#'); //Splits the name from <username>#<discriminator> to just <username>
-                int i = server.JoinedUsers.Count();
-            }
+            //Builds an embed for both of the dealer's cards.
+            embed.WithTitle("Game of Blackjack Started");
+            embed.AddField("Dealer's Hand", $"{dealerHand1} {dealerHand2}", true);
+            embed.AddField($"Your Hand", $"{player1Hand1} {player1Hand2}", true); //Adds an inline field for the player's hand
+            embed.WithFooter($"Dealer's Hand: {dealerHand} | Your Hand: {playerHand}");
+            embed.WithColor(Pink);
+            await BE();
 
             //Code for player hit/split/etc options here
 
-            if(dealerHand <= 15) //Draws another card (or takes a hit) when hand is less than 16.
+            embed.WithTitle("Player's Turn");
+            embed.WithDescription($"**{Context.User.Mention} Reply with [Hit/Stand/Split] based on what you would like to do!**");
+            embed.WithColor(Pink);
+            await BE();
+
+            _interactive = Global.Interactive;
+            var response = await _interactive.NextMessageAsync(Context);
+
+            Console.WriteLine("Response: " + response);
+
+            if (response == null)
+            {
+                Task.Delay(25000);
+            }
+            else if (response != null)
+            {
+                EmbedBuilder embed4 = new EmbedBuilder();
+                embed4.WithTitle("Player Hit");
+                embed4.AddField("Dealer's Hand", $"{dealerHand1} {dealerHand2}", true);
+                embed4.AddField("Player's Hand", $"{player1Hand1} {player1Hand2} {player1HitCard1}", true);
+
+                playerHand = playerHand + i7;
+
+                embed4.WithFooter($"Dealer's Hand: {dealerHand} | Player's Hand: {playerHand}");
+                await Context.Channel.SendMessageAsync("", false, embed4.Build());
+
+                server.JoinedUsers.Clear();
+                server.BlackJackInProgress = false;
+                return;
+            }
+
+
+            if(dealerHand < 16) //Draws another card (or takes a hit) when hand is less than 16.
             {
                 EmbedBuilder embed2 = new EmbedBuilder();
-                int newCard = cards.ElementAt(4);
-                dealerHand = dealerHand;
                 embed2.WithTitle("Dealer's Turn");
                 embed2.WithDescription("**Dealer's Hand Below 16: Hits**");
                 embed2.AddField("Dealer's New Hand", $"{dealerHand1} {dealerHand2} {dealerHitCard1}", true);
                 embed2.AddField("Your Hand", $"{player1Hand1} {player1Hand2}", true);
-                embed2.WithFooter($"Dealer's Hand: {dealerHand + HitCardValue(ref i5)} | Your Hand: {playerHand}");
-                Console.WriteLine("HitCard 1: " + HitCardValue(ref i5));
+                embed2.WithFooter($"Dealer's Hand: {dealerHand + i5} | Your Hand: {playerHand}");
+                Console.WriteLine("HitCard 1: " + i5);
                 embed2.WithColor(Pink);
                 await Context.Channel.SendMessageAsync("", false, embed2.Build());
 
+                int dealerHandB = dealerHand + i5;
+
                 Task.Delay(500);
-                if(dealerHand <= 15) //Second hit
+
+                if(dealerHand < 16) //Second hit if hand is *still* below 16, dealerHandB goes here after debugging.
                 {
-                    int dealerHandB = dealerHand + HitCardValue(ref i5);
                     EmbedBuilder embed3 = new EmbedBuilder();
-                    int newCard2 = cards.ElementAt(5);
                     embed3.WithTitle("Dealer's Turn");
                     embed3.WithDescription("**Dealer Below 16, Hitting Again**");
                     embed3.AddField("Dealer's New Hand", $"{dealerHand1} {dealerHand2} {dealerHitCard1} {dealerHitCard2}", true);
                     embed3.AddField("Your Hand", $"{player1Hand1} {player1Hand2}", true);
-                    Console.WriteLine("i6: " + i6);
-                    embed3.WithFooter($"Dealer's Hand: {dealerHandB + HitCardValue(ref i6)}");
-                    Console.WriteLine("HitCardValue: " + HitCardValue(ref i6));
+                    embed3.WithFooter($"Dealer's Hand: {dealerHandB + i6} | Your Hand: {playerHand}");
                     embed3.WithColor(Pink);
                     await Context.Channel.SendMessageAsync("", false, embed3.Build());
+
                 }
             }
 
-            if (dealerHand > 21) //This really only works for single player right now, need to focus on point rewarding for multiplayer as well.
+            if (dealerHand > 21) //When dealer hand is > 21, bust and award player
             {
                 embed.WithTitle("Dealer Bust!");
                 embed.WithDescription($"**Congratulations!** The dealer has busted! Payout:");
@@ -223,11 +255,15 @@ namespace Discord_Bot.Modules
                 }
                 embed.WithColor(Gold);
                 BE();
+                server.JoinedUsers.Clear();
+                server.BlackJackInProgress = false;
                 return;
             }
 
+            //last thing to execute
+
             server.JoinedUsers.Clear();
-            server.BlackJackInProgress = false; //last thing to execute
+            server.BlackJackInProgress = false; 
             return;
         }
 
@@ -237,55 +273,7 @@ namespace Discord_Bot.Modules
             await Task.Delay(300);
         }
 
-        private static void Player1HandValues(ref int i3, ref int i4)
-        {
-            if (0 <= i3 && i3 <= 3) //2
-                i3 = 2;
-            if (0 <= i4 && i4 <= 3)
-                i4 = 2;
-            if (4 <= i3 && i3 <= 7) //3
-                i3 = 3;
-            if (4 <= i4 && i4 <= 7)
-                i4 = 3;
-            if (8 <= i3 && i3 <= 11) //4
-                i3 = 4;
-            if (8 <= i4 && i4 <= 11)
-                i4 = 4;
-            if (12 <= i3 && i3 <= 15) //5
-                i3 = 5;
-            if (12 <= i4 && i4 <= 15)
-                i4 = 5;
-            if (16 <= i3 && i3 <= 19) //6
-                i3 = 6;
-            if (16 <= i4 && i4 <= 19)
-                i4 = 6;
-            if (20 <= i3 && i3 <= 23) //7
-                i3 = 7;
-            if (20 <= i4 && i4 <= 23)
-                i4 = 7;
-            if (24 <= i3 && i3 <= 27) //8
-                i3 = 8;
-            if (24 <= i4 && i4 <= 27)
-                i4 = 8;
-            if (28 <= i3 && i3 <= 31) //9
-                i3 = 9;
-            if (28 <= i4 && i4 <= 31)
-                i4 = 9;
-            if (32 <= i3 && i3 <= 35) //10
-                i3 = 10;
-            if (32 <= i4 && i4 <= 35)
-                i4 = 10;
-            if (36 <= i3 && i3 <= 39) //Ace
-                i3 = 11;
-            if (36 <= i4 && i4 <= 39)
-                i4 = 11;
-            if (40 <= i3 && i3 <= 51) //Face cards
-                i3 = 10;
-            if (40 <= i4 && i4 <= 51)
-                i4 = 10;
-        }
-
-        private int DealerHandValues(ref int i1, ref int i2)
+        private static void HandValues(ref int i1, ref int i2)
         {
             if (0 <= i1 && i1 <= 3) //2
                 i1 = 2;
@@ -331,10 +319,9 @@ namespace Discord_Bot.Modules
                 i1 = 10;
             if (40 <= i2 && i2 <= 51)
                 i2 = 10;
-            return i2;
         }
 
-        private int HitCardValue(ref int i1)
+        private static int HitCardValue(ref int i1)
         {
             if (0 <= i1 && i1 <= 3) //2
                 i1 = 2;

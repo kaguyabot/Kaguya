@@ -1,0 +1,2975 @@
+
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/4/2019 10:20:57 PM
+GET voice/regions: 238.64 ms 
+   Log Time: 4/4/2019 10:20:57 PM
+Connecting 
+   Log Time: 4/4/2019 10:20:57 PM
+GET gateway: 29.62 ms 
+   Log Time: 4/4/2019 10:20:57 PM
+Connected 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to Code Testing Server 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to Kaguya Support 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to UwU 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to mmatt 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to Boys And Girls 
+   Log Time: 4/4/2019 10:20:58 PM
+Connected to Discord Bot List 
+   Log Time: 4/4/2019 10:21:00 PM
+Ready 
+   Log Time: 4/4/2019 10:21:00 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 10:51:26 AM
+GET voice/regions: 268.95 ms 
+   Log Time: 4/5/2019 10:51:26 AM
+Connecting 
+   Log Time: 4/5/2019 10:51:26 AM
+GET gateway: 28.87 ms 
+   Log Time: 4/5/2019 10:51:26 AM
+Connected 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to UwU 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to mmatt 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 10:51:27 AM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 10:51:29 AM
+Ready 
+   Log Time: 4/5/2019 10:51:29 AM
+POST channels/407723395556311043/messages: 383.6 ms 
+   Log Time: 4/5/2019 10:51:30 AM
+POST channels/407723395556311043/messages: 644.16 ms 
+   Log Time: 4/5/2019 10:51:31 AM
+Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:51:32 AM
+Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:51:32 AM
+Preemptive Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:51:32 AM
+POST channels/407723395556311043/messages: 5324.92 ms 
+   Log Time: 4/5/2019 10:51:37 AM
+POST channels/407723395556311043/messages: 208.16 ms 
+   Log Time: 4/5/2019 10:51:48 AM
+POST channels/407723395556311043/messages: 146.29 ms 
+   Log Time: 4/5/2019 10:51:48 AM
+Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:51:48 AM
+Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:51:49 AM
+Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:51:49 AM
+Preemptive Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:51:49 AM
+A MessageReceived handler is blocking the gateway task. 
+   Log Time: 4/5/2019 10:51:51 AM
+POST channels/407723395556311043/messages: 5274.51 ms 
+   Log Time: 4/5/2019 10:51:54 AM
+POST channels/407723395556311043/messages: 169.09 ms 
+   Log Time: 4/5/2019 10:51:54 AM
+A MessageReceived handler has thrown an unhandled exception. 
+   Log Time: 4/5/2019 10:51:54 AM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 10:52:18 AM
+GET voice/regions: 292.01 ms 
+   Log Time: 4/5/2019 10:52:18 AM
+Connecting 
+   Log Time: 4/5/2019 10:52:18 AM
+GET gateway: 71.87 ms 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to mmatt 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to UwU 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 10:52:19 AM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 10:52:21 AM
+Ready 
+   Log Time: 4/5/2019 10:52:21 AM
+POST channels/407723395556311043/messages: 175.45 ms 
+   Log Time: 4/5/2019 10:52:21 AM
+Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:52:21 AM
+Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:52:22 AM
+Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:52:22 AM
+Preemptive Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 10:52:22 AM
+A MessageReceived handler is blocking the gateway task. 
+   Log Time: 4/5/2019 10:52:24 AM
+POST channels/407723395556311043/messages: 4918.11 ms 
+   Log Time: 4/5/2019 10:52:26 AM
+POST channels/407723395556311043/messages: 141.76 ms 
+   Log Time: 4/5/2019 10:52:26 AM
+POST channels/407723395556311043/messages: 427.09 ms 
+   Log Time: 4/5/2019 10:52:27 AM
+A MessageReceived handler has thrown an unhandled exception. 
+   Log Time: 4/5/2019 10:52:27 AM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 1:57:16 PM
+GET voice/regions: 244.46 ms 
+   Log Time: 4/5/2019 1:57:17 PM
+Connecting 
+   Log Time: 4/5/2019 1:57:17 PM
+GET gateway: 27.77 ms 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to UwU 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 1:57:17 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 1:57:20 PM
+Ready 
+   Log Time: 4/5/2019 1:57:20 PM
+POST channels/407723395556311043/messages: 300.12 ms 
+   Log Time: 4/5/2019 1:57:31 PM
+POST channels/407723395556311043/messages: 141.5 ms 
+   Log Time: 4/5/2019 1:57:32 PM
+POST channels/407723395556311043/messages: 495.17 ms 
+   Log Time: 4/5/2019 1:57:34 PM
+POST channels/407723395556311043/messages: 308.3 ms 
+   Log Time: 4/5/2019 1:57:34 PM
+Preemptive Rate limit triggered: channels/407723395556311043/messages 
+   Log Time: 4/5/2019 1:57:36 PM
+POST channels/407723395556311043/messages: 1458.15 ms 
+   Log Time: 4/5/2019 1:57:38 PM
+POST channels/407723395556311043/messages: 281.55 ms 
+   Log Time: 4/5/2019 1:57:38 PM
+POST channels/407723395556311043/messages: 401.34 ms 
+   Log Time: 4/5/2019 1:57:44 PM
+POST channels/407723395556311043/messages: 466.79 ms 
+   Log Time: 4/5/2019 1:57:45 PM
+POST channels/407723395556311043/messages: 789.1 ms 
+   Log Time: 4/5/2019 1:57:45 PM
+POST channels/407723395556311043/messages: 594.66 ms 
+   Log Time: 4/5/2019 1:57:46 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:01:33 PM
+GET voice/regions: 229.92 ms 
+   Log Time: 4/5/2019 2:01:34 PM
+Connecting 
+   Log Time: 4/5/2019 2:01:34 PM
+GET gateway: 27.41 ms 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:01:34 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:01:36 PM
+Ready 
+   Log Time: 4/5/2019 2:01:36 PM
+POST channels/461874064567435268/messages: 345.99 ms 
+   Log Time: 4/5/2019 2:01:42 PM
+POST channels/461874064567435268/messages: 330.71 ms 
+   Log Time: 4/5/2019 2:01:42 PM
+POST channels/461874064567435268/messages: 196.94 ms 
+   Log Time: 4/5/2019 2:01:43 PM
+POST channels/461874064567435268/messages: 234.13 ms 
+   Log Time: 4/5/2019 2:01:43 PM
+Rate limit triggered: channels/461874064567435268/messages/bulk-delete 
+   Log Time: 4/5/2019 2:01:48 PM
+Preemptive Rate limit triggered: channels/461874064567435268/messages/bulk-delete 
+   Log Time: 4/5/2019 2:01:48 PM
+A MessageReceived handler is blocking the gateway task. 
+   Log Time: 4/5/2019 2:01:51 PM
+POST channels/461874064567435268/messages/bulk-delete: 3204.4 ms 
+   Log Time: 4/5/2019 2:01:51 PM
+POST channels/461874064567435268/messages: 139.28 ms 
+   Log Time: 4/5/2019 2:01:51 PM
+DELETE channels/461874064567435268/messages/563785404571189268: 114.3 ms 
+   Log Time: 4/5/2019 2:01:56 PM
+A MessageReceived handler has thrown an unhandled exception. 
+   Log Time: 4/5/2019 2:01:56 PM
+POST channels/547689401589694468/messages: 250.88 ms 
+   Log Time: 4/5/2019 2:01:57 PM
+POST channels/547689401589694468/messages: 508.47 ms 
+   Log Time: 4/5/2019 2:01:57 PM
+POST channels/547689401589694468/messages: 446.79 ms 
+   Log Time: 4/5/2019 2:01:58 PM
+POST channels/547689401589694468/messages: 161.48 ms 
+   Log Time: 4/5/2019 2:01:58 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:03:43 PM
+GET voice/regions: 227.59 ms 
+   Log Time: 4/5/2019 2:03:43 PM
+Connecting 
+   Log Time: 4/5/2019 2:03:43 PM
+GET gateway: 33.16 ms 
+   Log Time: 4/5/2019 2:03:43 PM
+Connected 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:03:44 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:03:46 PM
+Ready 
+   Log Time: 4/5/2019 2:03:46 PM
+POST channels/547689401589694468/messages: 259.95 ms 
+   Log Time: 4/5/2019 2:03:46 PM
+POST channels/547689401589694468/messages: 219.79 ms 
+   Log Time: 4/5/2019 2:03:46 PM
+POST channels/547689401589694468/messages: 848.82 ms 
+   Log Time: 4/5/2019 2:03:47 PM
+POST channels/547689401589694468/messages: 471.11 ms 
+   Log Time: 4/5/2019 2:03:48 PM
+POST channels/547689401589694468/messages: 1204.1 ms 
+   Log Time: 4/5/2019 2:03:55 PM
+POST channels/547689401589694468/messages: 256.61 ms 
+   Log Time: 4/5/2019 2:03:55 PM
+POST channels/547689401589694468/messages: 167.45 ms 
+   Log Time: 4/5/2019 2:03:57 PM
+POST channels/547689401589694468/messages: 200.96 ms 
+   Log Time: 4/5/2019 2:03:57 PM
+POST channels/547689401589694468/messages: 179.88 ms 
+   Log Time: 4/5/2019 2:03:58 PM
+Preemptive Rate limit triggered: channels/547689401589694468/messages 
+   Log Time: 4/5/2019 2:03:58 PM
+POST channels/547689401589694468/messages: 2313.49 ms 
+   Log Time: 4/5/2019 2:04:00 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:05:25 PM
+GET voice/regions: 273.25 ms 
+   Log Time: 4/5/2019 2:05:25 PM
+Connecting 
+   Log Time: 4/5/2019 2:05:25 PM
+GET gateway: 32.82 ms 
+   Log Time: 4/5/2019 2:05:25 PM
+Connected 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:05:26 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:05:28 PM
+Ready 
+   Log Time: 4/5/2019 2:05:28 PM
+POST channels/547689401589694468/messages: 183.36 ms 
+   Log Time: 4/5/2019 2:05:28 PM
+POST channels/547689401589694468/messages: 629.69 ms 
+   Log Time: 4/5/2019 2:05:29 PM
+POST channels/547689401589694468/messages: 1484.21 ms 
+   Log Time: 4/5/2019 2:05:30 PM
+POST channels/547689401589694468/messages: 158.56 ms 
+   Log Time: 4/5/2019 2:05:30 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:05:49 PM
+GET voice/regions: 282.4 ms 
+   Log Time: 4/5/2019 2:05:49 PM
+Connecting 
+   Log Time: 4/5/2019 2:05:49 PM
+GET gateway: 27.31 ms 
+   Log Time: 4/5/2019 2:05:49 PM
+Connected 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:05:50 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:05:52 PM
+Ready 
+   Log Time: 4/5/2019 2:05:52 PM
+POST channels/547689401589694468/messages: 1058.43 ms 
+   Log Time: 4/5/2019 2:05:55 PM
+POST channels/547689401589694468/messages: 186.24 ms 
+   Log Time: 4/5/2019 2:05:55 PM
+POST channels/547689401589694468/messages: 198.59 ms 
+   Log Time: 4/5/2019 2:05:57 PM
+POST channels/547689401589694468/messages: 1781.52 ms 
+   Log Time: 4/5/2019 2:05:59 PM
+POST channels/547689401589694468/messages: 226.19 ms 
+   Log Time: 4/5/2019 2:05:59 PM
+Preemptive Rate limit triggered: channels/547689401589694468/messages 
+   Log Time: 4/5/2019 2:05:59 PM
+A MessageReceived handler is blocking the gateway task. 
+   Log Time: 4/5/2019 2:06:00 PM
+POST channels/547689401589694468/messages: 6379.64 ms 
+   Log Time: 4/5/2019 2:06:06 PM
+A MessageReceived handler has thrown an unhandled exception. 
+   Log Time: 4/5/2019 2:06:06 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:06:47 PM
+GET voice/regions: 252.6 ms 
+   Log Time: 4/5/2019 2:06:47 PM
+Connecting 
+   Log Time: 4/5/2019 2:06:47 PM
+GET gateway: 41.31 ms 
+   Log Time: 4/5/2019 2:06:47 PM
+Connected 
+   Log Time: 4/5/2019 2:06:47 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:06:47 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:06:47 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:06:47 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:06:47 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:06:47 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:06:47 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:06:47 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:06:48 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:06:48 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:06:48 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:06:48 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:06:48 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:06:48 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:06:48 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:06:49 PM
+Ready 
+   Log Time: 4/5/2019 2:06:49 PM
+POST channels/547689401589694468/messages: 947.86 ms 
+   Log Time: 4/5/2019 2:06:52 PM
+POST channels/547689401589694468/messages: 636.31 ms 
+   Log Time: 4/5/2019 2:06:53 PM
+POST channels/547689401589694468/messages: 1145.58 ms 
+   Log Time: 4/5/2019 2:06:56 PM
+POST channels/547689401589694468/messages: 699.65 ms 
+   Log Time: 4/5/2019 2:06:57 PM
+POST channels/547689401589694468/messages: 684.3 ms 
+   Log Time: 4/5/2019 2:06:58 PM
+Preemptive Rate limit triggered: channels/547689401589694468/messages 
+   Log Time: 4/5/2019 2:06:58 PM
+A MessageReceived handler is blocking the gateway task. 
+   Log Time: 4/5/2019 2:06:58 PM
+POST channels/547689401589694468/messages: 6522.76 ms 
+   Log Time: 4/5/2019 2:07:04 PM
+A MessageReceived handler has thrown an unhandled exception. 
+   Log Time: 4/5/2019 2:07:04 PM
+POST channels/547689401589694468/messages: 245.98 ms 
+   Log Time: 4/5/2019 2:07:26 PM
+POST channels/547689401589694468/messages: 264.94 ms 
+   Log Time: 4/5/2019 2:07:26 PM
+POST channels/547689401589694468/messages: 473.77 ms 
+   Log Time: 4/5/2019 2:07:31 PM
+POST channels/547689401589694468/messages: 168.51 ms 
+   Log Time: 4/5/2019 2:07:31 PM
+POST channels/547689401589694468/messages: 168.58 ms 
+   Log Time: 4/5/2019 2:07:31 PM
+Preemptive Rate limit triggered: channels/547689401589694468/messages 
+   Log Time: 4/5/2019 2:07:31 PM
+A MessageReceived handler is blocking the gateway task. 
+   Log Time: 4/5/2019 2:07:33 PM
+POST channels/547689401589694468/messages: 6081.58 ms 
+   Log Time: 4/5/2019 2:07:37 PM
+A MessageReceived handler has thrown an unhandled exception. 
+   Log Time: 4/5/2019 2:07:37 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:11:53 PM
+GET voice/regions: 250.63 ms 
+   Log Time: 4/5/2019 2:11:53 PM
+Connecting 
+   Log Time: 4/5/2019 2:11:53 PM
+GET gateway: 30.42 ms 
+   Log Time: 4/5/2019 2:11:53 PM
+Connected 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:11:54 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:11:56 PM
+Ready 
+   Log Time: 4/5/2019 2:11:56 PM
+POST channels/547689401589694468/messages: 293.5 ms 
+   Log Time: 4/5/2019 2:12:04 PM
+POST channels/547689401589694468/messages: 374.89 ms 
+   Log Time: 4/5/2019 2:12:04 PM
+POST channels/547689401589694468/messages: 171.84 ms 
+   Log Time: 4/5/2019 2:12:06 PM
+POST channels/547689401589694468/messages: 792.36 ms 
+   Log Time: 4/5/2019 2:12:07 PM
+POST channels/547689401589694468/messages: 216.83 ms 
+   Log Time: 4/5/2019 2:12:07 PM
+Preemptive Rate limit triggered: channels/547689401589694468/messages 
+   Log Time: 4/5/2019 2:12:07 PM
+A MessageReceived handler is blocking the gateway task. 
+   Log Time: 4/5/2019 2:12:09 PM
+POST channels/547689401589694468/messages: 2499.48 ms 
+   Log Time: 4/5/2019 2:12:10 PM
+A MessageReceived handler has thrown an unhandled exception. 
+   Log Time: 4/5/2019 2:12:10 PM
+POST channels/547689401589694468/messages: 223.69 ms 
+   Log Time: 4/5/2019 2:12:25 PM
+POST channels/547689401589694468/messages: 331.09 ms 
+   Log Time: 4/5/2019 2:12:25 PM
+POST channels/547689401589694468/messages: 142.54 ms 
+   Log Time: 4/5/2019 2:12:25 PM
+POST channels/547689401589694468/messages: 347.4 ms 
+   Log Time: 4/5/2019 2:12:26 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:28:39 PM
+GET voice/regions: 239.99 ms 
+   Log Time: 4/5/2019 2:28:39 PM
+Connecting 
+   Log Time: 4/5/2019 2:28:40 PM
+GET gateway: 40.27 ms 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:28:40 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:28:42 PM
+Ready 
+   Log Time: 4/5/2019 2:28:42 PM
+GET oauth2/applications/@me: 154.06 ms 
+   Log Time: 4/5/2019 2:28:42 PM
+POST channels/407723395556311043/messages: 186.51 ms 
+   Log Time: 4/5/2019 2:29:07 PM
+POST channels/407723395556311043/messages: 153.6 ms 
+   Log Time: 4/5/2019 2:29:07 PM
+POST channels/407723395556311043/messages: 215.9 ms 
+   Log Time: 4/5/2019 2:29:07 PM
+POST channels/434669631240929290/messages: 264.16 ms 
+   Log Time: 4/5/2019 2:29:19 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:30:53 PM
+GET voice/regions: 338.74 ms 
+   Log Time: 4/5/2019 2:30:53 PM
+Connecting 
+   Log Time: 4/5/2019 2:30:53 PM
+GET gateway: 33.09 ms 
+   Log Time: 4/5/2019 2:30:53 PM
+Connected 
+   Log Time: 4/5/2019 2:30:53 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:30:53 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:30:53 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:30:54 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:30:55 PM
+Ready 
+   Log Time: 4/5/2019 2:30:55 PM
+Preemptive Rate limit triggered: channels/434669631240929290/messages 
+   Log Time: 4/5/2019 2:30:56 PM
+POST channels/434669631240929290/messages: 224.49 ms 
+   Log Time: 4/5/2019 2:30:56 PM
+POST channels/434669631240929290/messages: 627.1 ms 
+   Log Time: 4/5/2019 2:30:56 PM
+GET oauth2/applications/@me: 119.14 ms 
+   Log Time: 4/5/2019 2:30:59 PM
+POST channels/407723395556311043/messages: 327.47 ms 
+   Log Time: 4/5/2019 2:30:59 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:32:01 PM
+GET voice/regions: 274.37 ms 
+   Log Time: 4/5/2019 2:32:02 PM
+Connecting 
+   Log Time: 4/5/2019 2:32:02 PM
+GET gateway: 35.49 ms 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:32:02 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:32:04 PM
+Ready 
+   Log Time: 4/5/2019 2:32:04 PM
+GET oauth2/applications/@me: 68.53 ms 
+   Log Time: 4/5/2019 2:32:07 PM
+POST channels/407723395556311043/messages: 150.48 ms 
+   Log Time: 4/5/2019 2:32:07 PM
+POST channels/407723395556311043/messages: 183.14 ms 
+   Log Time: 4/5/2019 2:32:08 PM
+POST channels/407723395556311043/messages: 171.79 ms 
+   Log Time: 4/5/2019 2:32:08 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:36:55 PM
+GET voice/regions: 244.68 ms 
+   Log Time: 4/5/2019 2:36:56 PM
+Connecting 
+   Log Time: 4/5/2019 2:36:56 PM
+GET gateway: 32.01 ms 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:36:56 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:36:58 PM
+Ready 
+   Log Time: 4/5/2019 2:36:58 PM
+GET oauth2/applications/@me: 89.84 ms 
+   Log Time: 4/5/2019 2:37:03 PM
+POST channels/407723395556311043/messages: 216.46 ms 
+   Log Time: 4/5/2019 2:37:03 PM
+POST channels/407723395556311043/messages: 339.93 ms 
+   Log Time: 4/5/2019 2:37:03 PM
+POST channels/407723395556311043/messages: 453.23 ms 
+   Log Time: 4/5/2019 2:37:04 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:38:01 PM
+GET voice/regions: 282.5 ms 
+   Log Time: 4/5/2019 2:38:01 PM
+Connecting 
+   Log Time: 4/5/2019 2:38:01 PM
+GET gateway: 24.64 ms 
+   Log Time: 4/5/2019 2:38:01 PM
+Connected 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:38:02 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:38:04 PM
+Ready 
+   Log Time: 4/5/2019 2:38:04 PM
+GET oauth2/applications/@me: 86.56 ms 
+   Log Time: 4/5/2019 2:38:07 PM
+POST channels/407723395556311043/messages: 153.67 ms 
+   Log Time: 4/5/2019 2:38:07 PM
+POST channels/407723395556311043/messages: 148.88 ms 
+   Log Time: 4/5/2019 2:38:08 PM
+POST channels/434669631240929290/messages: 232.4 ms 
+   Log Time: 4/5/2019 2:38:11 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:41:04 PM
+GET voice/regions: 266.79 ms 
+   Log Time: 4/5/2019 2:41:04 PM
+Connecting 
+   Log Time: 4/5/2019 2:41:04 PM
+GET gateway: 37.76 ms 
+   Log Time: 4/5/2019 2:41:04 PM
+Connected 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:41:05 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:41:07 PM
+Ready 
+   Log Time: 4/5/2019 2:41:07 PM
+GET oauth2/applications/@me: 67.36 ms 
+   Log Time: 4/5/2019 2:41:09 PM
+POST channels/407723395556311043/messages: 252.65 ms 
+   Log Time: 4/5/2019 2:41:09 PM
+POST channels/407723395556311043/messages: 213.86 ms 
+   Log Time: 4/5/2019 2:41:09 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:44:52 PM
+GET voice/regions: 324.74 ms 
+   Log Time: 4/5/2019 2:44:53 PM
+Connecting 
+   Log Time: 4/5/2019 2:44:53 PM
+GET gateway: 29.52 ms 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:44:53 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:44:55 PM
+Ready 
+   Log Time: 4/5/2019 2:44:55 PM
+GET oauth2/applications/@me: 71.76 ms 
+   Log Time: 4/5/2019 2:45:03 PM
+POST channels/407723395556311043/messages: 464.36 ms 
+   Log Time: 4/5/2019 2:45:03 PM
+POST channels/407723395556311043/messages: 323.14 ms 
+   Log Time: 4/5/2019 2:45:04 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:45:48 PM
+GET voice/regions: 255.91 ms 
+   Log Time: 4/5/2019 2:45:48 PM
+Connecting 
+   Log Time: 4/5/2019 2:45:48 PM
+GET gateway: 27.28 ms 
+   Log Time: 4/5/2019 2:45:48 PM
+Connected 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:45:49 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:45:51 PM
+Ready 
+   Log Time: 4/5/2019 2:45:51 PM
+GET oauth2/applications/@me: 125.66 ms 
+   Log Time: 4/5/2019 2:45:54 PM
+POST channels/407723395556311043/messages: 219.64 ms 
+   Log Time: 4/5/2019 2:45:55 PM
+POST channels/407723395556311043/messages: 299.84 ms 
+   Log Time: 4/5/2019 2:45:55 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:47:39 PM
+GET voice/regions: 246.76 ms 
+   Log Time: 4/5/2019 2:47:40 PM
+Connecting 
+   Log Time: 4/5/2019 2:47:40 PM
+GET gateway: 30.59 ms 
+   Log Time: 4/5/2019 2:47:40 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:48:24 PM
+GET voice/regions: 249.14 ms 
+   Log Time: 4/5/2019 2:48:24 PM
+Connecting 
+   Log Time: 4/5/2019 2:48:24 PM
+GET gateway: 24.39 ms 
+   Log Time: 4/5/2019 2:48:24 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:48:30 PM
+GET voice/regions: 267.56 ms 
+   Log Time: 4/5/2019 2:48:30 PM
+Connecting 
+   Log Time: 4/5/2019 2:48:30 PM
+GET gateway: 37.24 ms 
+   Log Time: 4/5/2019 2:48:30 PM
+Connected 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 2:48:31 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:48:32 PM
+Ready 
+   Log Time: 4/5/2019 2:48:33 PM
+GET oauth2/applications/@me: 145.31 ms 
+   Log Time: 4/5/2019 2:48:35 PM
+POST channels/407723395556311043/messages: 161 ms 
+   Log Time: 4/5/2019 2:48:35 PM
+POST channels/407723395556311043/messages: 244.33 ms 
+   Log Time: 4/5/2019 2:48:36 PM
+POST channels/407723395556311043/messages: 252.96 ms 
+   Log Time: 4/5/2019 2:48:44 PM
+POST channels/407723395556311043/messages: 308.53 ms 
+   Log Time: 4/5/2019 2:48:44 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:49:23 PM
+GET voice/regions: 246.27 ms 
+   Log Time: 4/5/2019 2:49:24 PM
+Connecting 
+   Log Time: 4/5/2019 2:49:24 PM
+GET gateway: 36.64 ms 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:49:24 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:49:26 PM
+Ready 
+   Log Time: 4/5/2019 2:49:26 PM
+GET oauth2/applications/@me: 86.63 ms 
+   Log Time: 4/5/2019 2:49:27 PM
+POST channels/407723395556311043/messages: 2519.72 ms 
+   Log Time: 4/5/2019 2:49:29 PM
+A MessageReceived handler is blocking the gateway task. 
+   Log Time: 4/5/2019 2:49:29 PM
+POST channels/407723395556311043/messages: 324.89 ms 
+   Log Time: 4/5/2019 2:49:30 PM
+A MessageReceived handler has thrown an unhandled exception. 
+   Log Time: 4/5/2019 2:49:30 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:50:57 PM
+GET voice/regions: 242.62 ms 
+   Log Time: 4/5/2019 2:50:57 PM
+Connecting 
+   Log Time: 4/5/2019 2:50:57 PM
+GET gateway: 41.1 ms 
+   Log Time: 4/5/2019 2:50:57 PM
+Connected 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:50:58 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:51:00 PM
+Ready 
+   Log Time: 4/5/2019 2:51:00 PM
+GET oauth2/applications/@me: 74.44 ms 
+   Log Time: 4/5/2019 2:51:03 PM
+POST channels/407723395556311043/messages: 999.42 ms 
+   Log Time: 4/5/2019 2:51:04 PM
+POST channels/407723395556311043/messages: 287.24 ms 
+   Log Time: 4/5/2019 2:51:05 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:52:43 PM
+GET voice/regions: 239.3 ms 
+   Log Time: 4/5/2019 2:52:44 PM
+Connecting 
+   Log Time: 4/5/2019 2:52:44 PM
+GET gateway: 32.33 ms 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:52:44 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:52:46 PM
+Ready 
+   Log Time: 4/5/2019 2:52:46 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:53:16 PM
+GET voice/regions: 268.56 ms 
+   Log Time: 4/5/2019 2:53:16 PM
+Connecting 
+   Log Time: 4/5/2019 2:53:16 PM
+GET gateway: 36.76 ms 
+   Log Time: 4/5/2019 2:53:16 PM
+Connected 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:53:17 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:53:19 PM
+Ready 
+   Log Time: 4/5/2019 2:53:19 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:54:17 PM
+GET voice/regions: 284.1 ms 
+   Log Time: 4/5/2019 2:54:17 PM
+Connecting 
+   Log Time: 4/5/2019 2:54:17 PM
+GET gateway: 29.74 ms 
+   Log Time: 4/5/2019 2:54:17 PM
+Connected 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to UwU 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 2:54:18 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 2:54:20 PM
+Ready 
+   Log Time: 4/5/2019 2:54:20 PM
+GET oauth2/applications/@me: 113.52 ms 
+   Log Time: 4/5/2019 2:54:21 PM
+POST channels/407723395556311043/messages: 213.81 ms 
+   Log Time: 4/5/2019 2:54:22 PM
+POST channels/407723395556311043/messages: 293.54 ms 
+   Log Time: 4/5/2019 2:54:22 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 2:58:44 PM
+GET voice/regions: 221.45 ms 
+   Log Time: 4/5/2019 2:58:44 PM
+Connecting 
+   Log Time: 4/5/2019 2:58:44 PM
+GET gateway: 40.79 ms 
+   Log Time: 4/5/2019 2:58:44 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:06:51 PM
+GET voice/regions: 243.54 ms 
+   Log Time: 4/5/2019 3:06:51 PM
+Connecting 
+   Log Time: 4/5/2019 3:06:51 PM
+GET gateway: 31.04 ms 
+   Log Time: 4/5/2019 3:06:51 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:09:11 PM
+GET voice/regions: 253.03 ms 
+   Log Time: 4/5/2019 3:09:12 PM
+Connecting 
+   Log Time: 4/5/2019 3:09:12 PM
+GET gateway: 31.96 ms 
+   Log Time: 4/5/2019 3:09:12 PM
+Connected 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:09:13 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:09:15 PM
+Ready 
+   Log Time: 4/5/2019 3:09:15 PM
+GET oauth2/applications/@me: 133.39 ms 
+   Log Time: 4/5/2019 3:09:17 PM
+POST channels/407723395556311043/messages: 215.77 ms 
+   Log Time: 4/5/2019 3:09:17 PM
+POST channels/407723395556311043/messages: 228.53 ms 
+   Log Time: 4/5/2019 3:09:17 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:12:32 PM
+GET voice/regions: 261.81 ms 
+   Log Time: 4/5/2019 3:12:32 PM
+Connecting 
+   Log Time: 4/5/2019 3:12:32 PM
+GET gateway: 21.52 ms 
+   Log Time: 4/5/2019 3:12:32 PM
+Connected 
+   Log Time: 4/5/2019 3:12:32 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:12:32 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:12:32 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:12:32 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:12:32 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:12:33 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:12:34 PM
+Ready 
+   Log Time: 4/5/2019 3:12:34 PM
+GET oauth2/applications/@me: 180.68 ms 
+   Log Time: 4/5/2019 3:12:37 PM
+POST channels/407723395556311043/messages: 755.09 ms 
+   Log Time: 4/5/2019 3:12:38 PM
+POST channels/407723395556311043/messages: 186.54 ms 
+   Log Time: 4/5/2019 3:12:38 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:28:57 PM
+GET voice/regions: 239.21 ms 
+   Log Time: 4/5/2019 3:28:57 PM
+Connecting 
+   Log Time: 4/5/2019 3:28:57 PM
+GET gateway: 26.67 ms 
+   Log Time: 4/5/2019 3:28:57 PM
+Connected 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:28:58 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:29:00 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:29:36 PM
+GET voice/regions: 280.93 ms 
+   Log Time: 4/5/2019 3:29:36 PM
+Connecting 
+   Log Time: 4/5/2019 3:29:36 PM
+GET gateway: 24.57 ms 
+   Log Time: 4/5/2019 3:29:36 PM
+Connected 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:29:37 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:29:37 PM
+Ready 
+   Log Time: 4/5/2019 3:29:39 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:29:40 PM
+GET oauth2/applications/@me: 181.77 ms 
+   Log Time: 4/5/2019 3:29:40 PM
+POST channels/407723395556311043/messages: 215.74 ms 
+   Log Time: 4/5/2019 3:29:41 PM
+POST channels/407723395556311043/messages: 223.43 ms 
+   Log Time: 4/5/2019 3:29:41 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:38:27 PM
+GET voice/regions: 255.81 ms 
+   Log Time: 4/5/2019 3:38:27 PM
+Connecting 
+   Log Time: 4/5/2019 3:38:27 PM
+GET gateway: 26.7 ms 
+   Log Time: 4/5/2019 3:38:27 PM
+Connected 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:38:28 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:38:30 PM
+Ready 
+   Log Time: 4/5/2019 3:38:30 PM
+GET oauth2/applications/@me: 70.05 ms 
+   Log Time: 4/5/2019 3:38:36 PM
+POST channels/407723395556311043/messages: 327.53 ms 
+   Log Time: 4/5/2019 3:38:36 PM
+POST channels/407723395556311043/messages: 149.64 ms 
+   Log Time: 4/5/2019 3:38:36 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:39:11 PM
+GET voice/regions: 250.79 ms 
+   Log Time: 4/5/2019 3:39:12 PM
+Connecting 
+   Log Time: 4/5/2019 3:39:12 PM
+GET gateway: 38.69 ms 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:39:12 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:39:14 PM
+Ready 
+   Log Time: 4/5/2019 3:39:15 PM
+GET oauth2/applications/@me: 102.71 ms 
+   Log Time: 4/5/2019 3:39:21 PM
+POST channels/407723395556311043/messages: 458.64 ms 
+   Log Time: 4/5/2019 3:39:22 PM
+POST channels/407723395556311043/messages: 333.23 ms 
+   Log Time: 4/5/2019 3:39:22 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:41:53 PM
+GET voice/regions: 268.55 ms 
+   Log Time: 4/5/2019 3:41:53 PM
+Connecting 
+   Log Time: 4/5/2019 3:41:53 PM
+GET gateway: 25.72 ms 
+   Log Time: 4/5/2019 3:41:53 PM
+Connected 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:41:54 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:41:56 PM
+Ready 
+   Log Time: 4/5/2019 3:41:56 PM
+GET oauth2/applications/@me: 122.8 ms 
+   Log Time: 4/5/2019 3:42:02 PM
+POST channels/407723395556311043/messages: 238.17 ms 
+   Log Time: 4/5/2019 3:42:02 PM
+POST channels/407723395556311043/messages: 336.19 ms 
+   Log Time: 4/5/2019 3:42:02 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:43:26 PM
+GET voice/regions: 258.69 ms 
+   Log Time: 4/5/2019 3:43:26 PM
+Connecting 
+   Log Time: 4/5/2019 3:43:26 PM
+GET gateway: 37.1 ms 
+   Log Time: 4/5/2019 3:43:26 PM
+Connected 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:43:27 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:43:29 PM
+Ready 
+   Log Time: 4/5/2019 3:43:29 PM
+GET oauth2/applications/@me: 89.91 ms 
+   Log Time: 4/5/2019 3:43:33 PM
+POST channels/407723395556311043/messages: 244.92 ms 
+   Log Time: 4/5/2019 3:43:34 PM
+POST channels/407723395556311043/messages: 201.29 ms 
+   Log Time: 4/5/2019 3:43:34 PM
+POST channels/407723395556311043/messages: 208.41 ms 
+   Log Time: 4/5/2019 3:43:43 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:44:49 PM
+GET voice/regions: 243.21 ms 
+   Log Time: 4/5/2019 3:44:50 PM
+Connecting 
+   Log Time: 4/5/2019 3:44:50 PM
+GET gateway: 29.46 ms 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:44:50 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:44:52 PM
+Ready 
+   Log Time: 4/5/2019 3:44:52 PM
+GET oauth2/applications/@me: 151.41 ms 
+   Log Time: 4/5/2019 3:44:59 PM
+POST channels/407723395556311043/messages: 236.02 ms 
+   Log Time: 4/5/2019 3:45:00 PM
+POST channels/407723395556311043/messages: 309.73 ms 
+   Log Time: 4/5/2019 3:45:00 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:45:33 PM
+GET voice/regions: 265.5 ms 
+   Log Time: 4/5/2019 3:45:33 PM
+Connecting 
+   Log Time: 4/5/2019 3:45:33 PM
+GET gateway: 49.56 ms 
+   Log Time: 4/5/2019 3:45:33 PM
+Connected 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to UwU 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 3:45:34 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 3:45:36 PM
+Ready 
+   Log Time: 4/5/2019 3:45:36 PM
+GET oauth2/applications/@me: 74.55 ms 
+   Log Time: 4/5/2019 3:45:37 PM
+POST channels/407723395556311043/messages: 251.68 ms 
+   Log Time: 4/5/2019 3:45:38 PM
+POST channels/407723395556311043/messages: 414.34 ms 
+   Log Time: 4/5/2019 3:45:38 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:47:57 PM
+GET voice/regions: 225.19 ms 
+   Log Time: 4/5/2019 3:47:57 PM
+Connecting 
+   Log Time: 4/5/2019 3:47:57 PM
+GET gateway: 37.19 ms 
+   Log Time: 4/5/2019 3:47:57 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:53:18 PM
+GET voice/regions: 305.14 ms 
+   Log Time: 4/5/2019 3:53:19 PM
+Connecting 
+   Log Time: 4/5/2019 3:53:19 PM
+GET gateway: 36.24 ms 
+   Log Time: 4/5/2019 3:53:19 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:53:30 PM
+GET voice/regions: 260.83 ms 
+   Log Time: 4/5/2019 3:53:30 PM
+Connecting 
+   Log Time: 4/5/2019 3:53:31 PM
+GET gateway: 32.52 ms 
+   Log Time: 4/5/2019 3:53:31 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 3:56:15 PM
+GET voice/regions: 229.72 ms 
+   Log Time: 4/5/2019 3:56:15 PM
+Connecting 
+   Log Time: 4/5/2019 3:56:15 PM
+GET gateway: 33.17 ms 
+   Log Time: 4/5/2019 3:56:15 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 4:04:14 PM
+GET voice/regions: 283.56 ms 
+   Log Time: 4/5/2019 4:04:14 PM
+Connecting 
+   Log Time: 4/5/2019 4:04:14 PM
+GET gateway: 20.13 ms 
+   Log Time: 4/5/2019 4:04:14 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 4:06:19 PM
+GET voice/regions: 276.27 ms 
+   Log Time: 4/5/2019 4:06:20 PM
+Connecting 
+   Log Time: 4/5/2019 4:06:20 PM
+GET gateway: 21.74 ms 
+   Log Time: 4/5/2019 4:06:20 PM
+Connected 
+   Log Time: 4/5/2019 4:06:20 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to UwU 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 4:06:21 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 4:06:22 PM
+Ready 
+   Log Time: 4/5/2019 4:06:23 PM
+GET oauth2/applications/@me: 73.29 ms 
+   Log Time: 4/5/2019 4:06:31 PM
+POST channels/407723395556311043/messages: 375.42 ms 
+   Log Time: 4/5/2019 4:06:40 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 4:12:12 PM
+GET voice/regions: 211.54 ms 
+   Log Time: 4/5/2019 4:12:12 PM
+Connecting 
+   Log Time: 4/5/2019 4:12:12 PM
+GET gateway: 20.39 ms 
+   Log Time: 4/5/2019 4:12:12 PM
+Connected 
+   Log Time: 4/5/2019 4:12:12 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 4:12:12 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 4:12:12 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 4:12:12 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 4:12:12 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 4:12:12 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 4:12:12 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 4:12:13 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 4:12:13 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 4:12:13 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 4:12:13 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 4:12:13 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 4:12:13 PM
+Connected to UwU 
+   Log Time: 4/5/2019 4:12:13 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 4:12:13 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 4:12:13 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 4:12:14 PM
+Ready 
+   Log Time: 4/5/2019 4:12:14 PM
+POST channels/407723395556311043/messages: 399.94 ms 
+   Log Time: 4/5/2019 4:12:17 PM
+GET oauth2/applications/@me: 186.13 ms 
+   Log Time: 4/5/2019 4:12:26 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 4:15:30 PM
+GET voice/regions: 239.81 ms 
+   Log Time: 4/5/2019 4:15:31 PM
+Connecting 
+   Log Time: 4/5/2019 4:15:31 PM
+GET gateway: 22.39 ms 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to UwU 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 4:15:31 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 4:15:33 PM
+Ready 
+   Log Time: 4/5/2019 4:15:33 PM
+GET oauth2/applications/@me: 121.65 ms 
+   Log Time: 4/5/2019 4:15:34 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 4:17:05 PM
+GET voice/regions: 257.25 ms 
+   Log Time: 4/5/2019 4:17:05 PM
+Connecting 
+   Log Time: 4/5/2019 4:17:05 PM
+GET gateway: 26.26 ms 
+   Log Time: 4/5/2019 4:17:05 PM
+Connected 
+   Log Time: 4/5/2019 4:17:05 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to UwU 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 4:17:06 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 4:17:07 PM
+Ready 
+   Log Time: 4/5/2019 4:17:07 PM
+GET oauth2/applications/@me: 73.32 ms 
+   Log Time: 4/5/2019 4:17:09 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 4:18:43 PM
+GET voice/regions: 237.26 ms 
+   Log Time: 4/5/2019 4:18:43 PM
+Connecting 
+   Log Time: 4/5/2019 4:18:43 PM
+GET gateway: 20.55 ms 
+   Log Time: 4/5/2019 4:18:43 PM
+Connected 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to UwU 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 4:18:44 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 4:18:46 PM
+Ready 
+   Log Time: 4/5/2019 4:18:46 PM
+GET oauth2/applications/@me: 63.96 ms 
+   Log Time: 4/5/2019 4:18:46 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 5:49:00 PM
+GET voice/regions: 293.87 ms 
+   Log Time: 4/5/2019 5:49:00 PM
+Connecting 
+   Log Time: 4/5/2019 5:49:00 PM
+GET gateway: 33.56 ms 
+   Log Time: 4/5/2019 5:49:00 PM
+Connected 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to UwU 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 5:49:01 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 5:49:02 PM
+Ready 
+   Log Time: 4/5/2019 5:49:03 PM
+GET oauth2/applications/@me: 140.63 ms 
+   Log Time: 4/5/2019 5:49:04 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 5:59:02 PM
+GET voice/regions: 258.07 ms 
+   Log Time: 4/5/2019 5:59:02 PM
+Connecting 
+   Log Time: 4/5/2019 5:59:02 PM
+GET gateway: 35.55 ms 
+   Log Time: 4/5/2019 5:59:02 PM
+Connected 
+   Log Time: 4/5/2019 5:59:02 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 5:59:02 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 5:59:02 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 5:59:02 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 5:59:02 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to UwU 
+   Log Time: 4/5/2019 5:59:03 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 5:59:04 PM
+Ready 
+   Log Time: 4/5/2019 5:59:04 PM
+GET oauth2/applications/@me: 131.1 ms 
+   Log Time: 4/5/2019 5:59:07 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:15:56 PM
+GET voice/regions: 257.23 ms 
+   Log Time: 4/5/2019 6:15:56 PM
+Connecting 
+   Log Time: 4/5/2019 6:15:56 PM
+GET gateway: 31.15 ms 
+   Log Time: 4/5/2019 6:15:56 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:16:54 PM
+GET voice/regions: 265.45 ms 
+   Log Time: 4/5/2019 6:16:54 PM
+Connecting 
+   Log Time: 4/5/2019 6:16:54 PM
+GET gateway: 42.56 ms 
+   Log Time: 4/5/2019 6:16:54 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:18:15 PM
+GET voice/regions: 270.87 ms 
+   Log Time: 4/5/2019 6:18:15 PM
+Connecting 
+   Log Time: 4/5/2019 6:18:15 PM
+GET gateway: 36.4 ms 
+   Log Time: 4/5/2019 6:18:15 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:19:10 PM
+GET voice/regions: 285.42 ms 
+   Log Time: 4/5/2019 6:19:11 PM
+Connecting 
+   Log Time: 4/5/2019 6:19:11 PM
+GET gateway: 46.27 ms 
+   Log Time: 4/5/2019 6:19:11 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:20:49 PM
+GET voice/regions: 260.63 ms 
+   Log Time: 4/5/2019 6:20:49 PM
+Connecting 
+   Log Time: 4/5/2019 6:20:49 PM
+GET gateway: 38.36 ms 
+   Log Time: 4/5/2019 6:20:49 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:21:29 PM
+GET voice/regions: 249.64 ms 
+   Log Time: 4/5/2019 6:21:29 PM
+Connecting 
+   Log Time: 4/5/2019 6:21:29 PM
+GET gateway: 45.28 ms 
+   Log Time: 4/5/2019 6:21:29 PM
+Connected 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to UwU 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 6:21:30 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 6:21:32 PM
+Ready 
+   Log Time: 4/5/2019 6:21:32 PM
+GET oauth2/applications/@me: 144.72 ms 
+   Log Time: 4/5/2019 6:21:39 PM
+POST channels/407723395556311043/messages: 1315.54 ms 
+   Log Time: 4/5/2019 6:21:41 PM
+POST channels/407723395556311043/messages: 531.18 ms 
+   Log Time: 4/5/2019 6:21:41 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:27:05 PM
+GET voice/regions: 249.23 ms 
+   Log Time: 4/5/2019 6:27:05 PM
+Connecting 
+   Log Time: 4/5/2019 6:27:05 PM
+GET gateway: 28.75 ms 
+   Log Time: 4/5/2019 6:27:05 PM
+Connected 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to UwU 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 6:27:06 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 6:27:08 PM
+Ready 
+   Log Time: 4/5/2019 6:27:08 PM
+GET oauth2/applications/@me: 175.8 ms 
+   Log Time: 4/5/2019 6:27:13 PM
+POST channels/407723395556311043/messages: 319.87 ms 
+   Log Time: 4/5/2019 6:27:14 PM
+POST channels/407723395556311043/messages: 574.75 ms 
+   Log Time: 4/5/2019 6:27:15 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:33:23 PM
+GET voice/regions: 262.42 ms 
+   Log Time: 4/5/2019 6:33:23 PM
+Connecting 
+   Log Time: 4/5/2019 6:33:23 PM
+GET gateway: 44.21 ms 
+   Log Time: 4/5/2019 6:33:23 PM
+Connected 
+   Log Time: 4/5/2019 6:33:23 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to UwU 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 6:33:24 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 6:33:25 PM
+Ready 
+   Log Time: 4/5/2019 6:33:25 PM
+GET oauth2/applications/@me: 96.63 ms 
+   Log Time: 4/5/2019 6:33:34 PM
+POST channels/407723395556311043/messages: 344.66 ms 
+   Log Time: 4/5/2019 6:33:34 PM
+POST channels/407723395556311043/messages: 421.24 ms 
+   Log Time: 4/5/2019 6:33:34 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:37:32 PM
+GET voice/regions: 292.95 ms 
+   Log Time: 4/5/2019 6:37:32 PM
+Connecting 
+   Log Time: 4/5/2019 6:37:32 PM
+GET gateway: 30.9 ms 
+   Log Time: 4/5/2019 6:37:32 PM
+Connected 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to UwU 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 6:37:33 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 6:37:34 PM
+Ready 
+   Log Time: 4/5/2019 6:37:35 PM
+GET oauth2/applications/@me: 143.85 ms 
+   Log Time: 4/5/2019 6:37:39 PM
+POST channels/407723395556311043/messages: 879.39 ms 
+   Log Time: 4/5/2019 6:37:40 PM
+POST channels/407723395556311043/messages: 861.66 ms 
+   Log Time: 4/5/2019 6:37:40 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:38:40 PM
+GET voice/regions: 238.88 ms 
+   Log Time: 4/5/2019 6:38:40 PM
+Connecting 
+   Log Time: 4/5/2019 6:38:40 PM
+GET gateway: 27.89 ms 
+   Log Time: 4/5/2019 6:38:40 PM
+Connected 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to UwU 
+   Log Time: 4/5/2019 6:38:41 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 6:38:42 PM
+Ready 
+   Log Time: 4/5/2019 6:38:43 PM
+GET oauth2/applications/@me: 325.9 ms 
+   Log Time: 4/5/2019 6:38:46 PM
+POST channels/407723395556311043/messages: 175.9 ms 
+   Log Time: 4/5/2019 6:38:46 PM
+POST channels/407723395556311043/messages: 260.21 ms 
+   Log Time: 4/5/2019 6:38:46 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 6:38:55 PM
+GET voice/regions: 246.05 ms 
+   Log Time: 4/5/2019 6:38:55 PM
+Connecting 
+   Log Time: 4/5/2019 6:38:55 PM
+GET gateway: 26.46 ms 
+   Log Time: 4/5/2019 6:38:55 PM
+Connected 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to UwU 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 6:38:56 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 6:38:57 PM
+GET oauth2/applications/@me: 66.72 ms 
+   Log Time: 4/5/2019 6:38:57 PM
+Ready 
+   Log Time: 4/5/2019 6:38:58 PM
+POST channels/407723395556311043/messages: 164.15 ms 
+   Log Time: 4/5/2019 6:38:58 PM
+POST channels/407723395556311043/messages: 294.6 ms 
+   Log Time: 4/5/2019 6:38:58 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 8:46:47 PM
+GET voice/regions: 288.3 ms 
+   Log Time: 4/5/2019 8:46:47 PM
+Connecting 
+   Log Time: 4/5/2019 8:46:47 PM
+GET gateway: 44.13 ms 
+   Log Time: 4/5/2019 8:46:47 PM
+Connected 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to UwU 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 8:46:48 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 8:46:49 PM
+Ready 
+   Log Time: 4/5/2019 8:46:50 PM
+GET oauth2/applications/@me: 90.13 ms 
+   Log Time: 4/5/2019 8:46:52 PM
+POST channels/407723395556311043/messages: 164 ms 
+   Log Time: 4/5/2019 8:46:53 PM
+POST channels/407723395556311043/messages: 251.19 ms 
+   Log Time: 4/5/2019 8:46:53 PM
+POST channels/407723395556311043/messages: 247.82 ms 
+   Log Time: 4/5/2019 8:47:00 PM
+POST channels/407723395556311043/messages: 136.86 ms 
+   Log Time: 4/5/2019 8:47:10 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/5/2019 8:48:22 PM
+GET voice/regions: 269.8 ms 
+   Log Time: 4/5/2019 8:48:22 PM
+Connecting 
+   Log Time: 4/5/2019 8:48:22 PM
+GET gateway: 32.1 ms 
+   Log Time: 4/5/2019 8:48:22 PM
+Connected 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to Code Testing Server 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to Kaguya Support 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to 🌙En Dindar Sunucu🌙 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to UwU 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to mmatt 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to Boys And Girls 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to BOTS HELL 
+   Log Time: 4/5/2019 8:48:23 PM
+Connected to Discord Bot List 
+   Log Time: 4/5/2019 8:48:25 PM
+Ready 
+   Log Time: 4/5/2019 8:48:25 PM
+GET oauth2/applications/@me: 140.33 ms 
+   Log Time: 4/5/2019 8:48:38 PM
+POST channels/407723395556311043/messages: 176.12 ms 
+   Log Time: 4/5/2019 8:48:39 PM
+POST channels/407723395556311043/messages: 169.8 ms 
+   Log Time: 4/5/2019 8:48:39 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/6/2019 2:02:49 PM
+GET voice/regions: 244.62 ms 
+   Log Time: 4/6/2019 2:02:49 PM
+Connecting 
+   Log Time: 4/6/2019 2:02:49 PM
+GET gateway: 31.24 ms 
+   Log Time: 4/6/2019 2:02:49 PM
+Connected 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Code Testing Server 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to German Reich 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Troy's Happy Havoc Hours 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to FoRt 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to astro boy's group 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to 2do lugar 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Kaguya Support 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to KEREM YAPAR 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to BOTS HELL 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to 🌙EDS🌙 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to UwU 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to MCPC空翔伺服器 俱樂部 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to mmatt 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Boys And Girls 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Nova 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Sweetness Dreams 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to ☆我們世界☆由我們守護☆ 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Staffing Colour Scheme 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Angel Dream 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to whats up gamers 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Fun With Bots 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Bot Spam 
+   Log Time: 4/6/2019 2:02:50 PM
+Connected to Discord Bot List 
+   Log Time: 4/6/2019 2:02:52 PM
+Ready 
+   Log Time: 4/6/2019 2:02:52 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/6/2019 2:03:54 PM
+GET voice/regions: 240.65 ms 
+   Log Time: 4/6/2019 2:03:54 PM
+Connecting 
+   Log Time: 4/6/2019 2:03:54 PM
+GET gateway: 30.07 ms 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Code Testing Server 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to German Reich 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Troy's Happy Havoc Hours 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to FoRt 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to astro boy's group 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to 2do lugar 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to KEREM YAPAR 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to 🌙EDS🌙 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to UwU 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to mmatt 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Kaguya Support 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to MCPC空翔伺服器 俱樂部 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Boys And Girls 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Nova 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to BOTS HELL 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Sweetness Dreams 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to ☆我們世界☆由我們守護☆ 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Staffing Colour Scheme 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Angel Dream 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Fun With Bots 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to whats up gamers 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Bot Spam 
+   Log Time: 4/6/2019 2:03:55 PM
+Connected to Discord Bot List 
+   Log Time: 4/6/2019 2:03:57 PM
+Ready 
+   Log Time: 4/6/2019 2:03:58 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/6/2019 2:04:00 PM
+GET voice/regions: 214.1 ms 
+   Log Time: 4/6/2019 2:04:00 PM
+Connecting 
+   Log Time: 4/6/2019 2:04:00 PM
+GET gateway: 33.13 ms 
+   Log Time: 4/6/2019 2:04:00 PM
+Connected 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Code Testing Server 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to German Reich 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Troy's Happy Havoc Hours 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to FoRt 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to 2do lugar 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to KEREM YAPAR 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Kaguya Support 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to astro boy's group 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to 🌙EDS🌙 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to UwU 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to BOTS HELL 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to MCPC空翔伺服器 俱樂部 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Nova 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to mmatt 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Boys And Girls 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to ☆我們世界☆由我們守護☆ 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Sweetness Dreams 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Staffing Colour Scheme 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Angel Dream 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Fun With Bots 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to whats up gamers 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Bot Spam 
+   Log Time: 4/6/2019 2:04:01 PM
+Connected to Discord Bot List 
+   Log Time: 4/6/2019 2:04:02 PM
+Ready 
+   Log Time: 4/6/2019 2:04:03 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/6/2019 2:04:05 PM
+GET voice/regions: 249.64 ms 
+   Log Time: 4/6/2019 2:04:06 PM
+Connecting 
+   Log Time: 4/6/2019 2:04:06 PM
+GET gateway: 32.62 ms 
+   Log Time: 4/6/2019 2:04:06 PM
+Connected 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Innocent christians pounded by big Franny 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Code Testing Server 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to _Nekokatzen Official Server 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to MEANNNNNNNNNNN 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to German Reich 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Stage's Sanctuary 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Troy's Happy Havoc Hours 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Spring Tranquility osu! Tournament 2019 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to FoRt 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Earth-Chan's ROAR World 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to twitch.tv/ludeoyt 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Shitposts and Click Circles 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to 2do lugar 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to astro boy's group 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to KEREM YAPAR 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Kaguya Support 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to BOTS HELL 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to 🌙EDS🌙 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to UwU 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to MCPC空翔伺服器 俱樂部 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Nova 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to ☆我們世界☆由我們守護☆ 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to mmatt 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Boys And Girls 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Sweetness Dreams 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Angel Dream 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to whats up gamers 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Staffing Colour Scheme 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Fun With Bots 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Bot Spam 
+   Log Time: 4/6/2019 2:04:07 PM
+Connected to Discord Bot List 
+   Log Time: 4/6/2019 2:04:09 PM
+Ready 
+   Log Time: 4/6/2019 2:04:09 PM
+Discord.Net v2.0.1 (API v6) 
+   Log Time: 4/6/2019 2:04:11 PM
+GET voice/regions: 268.14 ms 
+   Log Time: 4/6/2019 2:04:11 PM
+Connecting 
+   Log Time: 4/6/2019 2:04:11 PM
+GET gateway: 24.73 ms 
+   Log Time: 4/6/2019 2:04:12 PM
+Connected 
+   Log Time: 4/6/2019 2:04:12 PM

@@ -1,16 +1,12 @@
 ﻿using Discord.WebSocket;
 using Discord;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Discord_Bot.Core;
 using System.IO;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Diagnostics;
+using System.Timers;
 
 #pragma warning disable CS1998
 
@@ -18,11 +14,11 @@ namespace Discord_Bot
 {
     public class Program
     {
+        static void Main(string[] args)
+        => new Program().StartAsync().GetAwaiter().GetResult();
         DiscordSocketClient _client;
         CommandHandler _handler;
         public string version = Utilities.GetAlert("VERSION");
-        static void Main(string[] args)
-        => new Program().StartAsync().GetAwaiter().GetResult();
 
         public async Task StartAsync()
         {
@@ -36,14 +32,16 @@ namespace Discord_Bot
                 Console.Write("Command prefix not found. What would you like it to be?" +
                     "\n(This is typically one symbol, such as \"!, #, $, %, etc.\": ");
                 string prefix = Console.ReadLine();
-                BotConfig bot = new BotConfig();
-                bot.token = token;
-                bot.cmdPrefix = prefix;
+                BotConfig bot = new BotConfig
+                {
+                    token = token,
+                    cmdPrefix = prefix
+                };
                 string json = JsonConvert.SerializeObject(bot, Formatting.Indented);
                 File.WriteAllText("Resources" + "/" + "config.json", json);
                 Console.WriteLine("Confirmed. Restarting in 5 seconds...(If app doesn't restart, close and open again.)");
                 var filePath = Assembly.GetExecutingAssembly().Location;
-                Thread.Sleep(5000);
+                await Task.Delay(5000);
                 Process.Start(filePath);
                 Environment.Exit(0);
             }
@@ -55,7 +53,6 @@ namespace Discord_Bot
                     MessageCacheSize = 1000
                 });
                 _client.Log += Log;
-                _client.Ready += RepeatingTimer.StartTimer;
                 try
                 {
                     await _client.LoginAsync(TokenType.Bot, Config.bot.token);
@@ -63,12 +60,14 @@ namespace Discord_Bot
                 catch (System.Net.Http.HttpRequestException)
                 {
                     Console.WriteLine("Error: Could not successfully connect. Do you have a stable internet connection?");
-                    Thread.Sleep(10000);
+                    await Task.Delay(10000);
                     Console.WriteLine("Exiting...");
-                    await Task.Delay(1500);
+                    await Task.Delay(2000);
                     Environment.Exit(0);
+                    return;
                 }
                 await _client.StartAsync();
+                ResetTimer();
                 Global.Client = _client;
                 _handler = new CommandHandler();
                 await _handler.InitializeAsync(_client);
@@ -90,6 +89,20 @@ namespace Discord_Bot
             Console.WriteLine(msg.Message);
             File.AppendAllText(filePath, $"\n{msg.Message} \n   Log Time: {DateTime.Now}");
             return Task.CompletedTask;
+        }
+
+        private static void ResetTimer() //Causes application to restart every 6 hours.
+        {
+            Timer timer = new Timer();
+            timer.Interval = 21600000;
+            timer.Start();
+            timer.Elapsed += Timer_Elapsed;
+        }
+
+        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Process.Start("Discord Bot.exe");
+            Environment.Exit(0);
         }
     }
 }

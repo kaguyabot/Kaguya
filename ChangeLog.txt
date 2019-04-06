@@ -11,6 +11,9 @@ Version 1.6
 - Leveling embed is now more compact, takes up less space in chat.
 - Added in ReliabilityService...if bot disconnects from websocket, it (should) reconnect on its own after 30 seconds.
 - All log messages are now saved to a file (incase the bot crashes).
+- Removed some unnecessary packages
+- Timer added to restart application every 6 hours (to avoid disconnect issues).
+- Added .gitignore.
 
 Version 1.5.1
 
