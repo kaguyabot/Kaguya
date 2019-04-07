@@ -324,7 +324,6 @@ namespace Discord_Bot.Modules
             PF = (1 << 14),
         }
 
-
         [Command("createteamrole")] //osu
         [Alias("ctr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]

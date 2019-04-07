@@ -87,8 +87,8 @@ namespace Discord_Bot.Modules
                         $"\n{cmdPrefix}massblacklist" +
                         $"\n{cmdPrefix}masskick" +
                         $"\n{cmdPrefix}removeallroles [rar]" +
-                        $"\n{cmdPrefix}resetlogchannel" +
-                        $"\n{cmdPrefix}setlogchannel" +
+                        $"\n{cmdPrefix}resetlogchannel [rlog]" +
+                        $"\n{cmdPrefix}setlogchannel [log]" +
                         $"\n{cmdPrefix}scrapeserver" +
                         $"\n{cmdPrefix}unblacklist" +
                         $"\n" +
@@ -124,7 +124,7 @@ namespace Discord_Bot.Modules
                 ("```css" +
                 "\nAll commands in category: Currency" +
                 "\n" +
-                $"\n{cmdPrefix}awardeveryone" +
+                $"\n{cmdPrefix}awardeveryone [awardall]" +
                 $"\n{cmdPrefix}groll [gr]" +
                 $"\n{cmdPrefix}masspointsdistribute" +
                 $"\n{cmdPrefix}points" +
@@ -261,12 +261,18 @@ namespace Discord_Bot.Modules
         [Alias("dtc")]
         [RequireUserPermission(GuildPermission.ManageChannels)]
         [RequireBotPermission(GuildPermission.ManageChannels)]
-        public async Task GuildDeleteTextChannel([Remainder]string name)
+        public async Task GuildDeleteTextChannel(SocketGuildChannel channel)
         {
-            foreach (var Channel in Context.Guild.TextChannels) { if (Channel.Name == (name.ToLower())) { await Channel.DeleteAsync(); } }
-            embed.WithDescription($"{Context.User.Mention} has successfully deleted the text channel #{name}.");
-            embed.WithColor(Pink);
-            BE();
+            foreach (var Channel in Context.Guild.TextChannels)
+            {
+                if (Channel == channel)
+                {
+                    await channel.DeleteAsync();
+                    embed.WithDescription($"{Context.User.Mention} has successfully deleted the text channel {(channel.Name)}.");
+                    embed.WithColor(Pink);
+                    BE(); return;
+                }
+            }
         }
 
         [Command("createvoicechannel")] //utility
@@ -276,7 +282,7 @@ namespace Discord_Bot.Modules
         public async Task GuildCreateVoiceChannel([Remainder]string name)
         {
             var channel = await Context.Guild.CreateVoiceChannelAsync(name);
-            embed.WithDescription($"{Context.User.Mention} has successfully created the voicechannel #{name}.");
+            embed.WithDescription($"{Context.User.Mention} has successfully created the voice channel #{name}.");
             embed.WithColor(Pink);
             BE();
         }
@@ -287,10 +293,17 @@ namespace Discord_Bot.Modules
         [RequireBotPermission(GuildPermission.ManageChannels)]
         public async Task GuildDeleteVoiceChannel([Remainder]string name)
         {
-            foreach (var Channel in Context.Guild.VoiceChannels) { if (Channel.Name == (name.ToLower())) { await Channel.DeleteAsync(); } }
-            embed.WithDescription($"{Context.User.Mention} has successfully deleted the voice channel #{name}.");
-            embed.WithColor(Pink);
-            BE();
+            foreach(var VoiceChannel in Context.Guild.VoiceChannels)
+            {
+                if(VoiceChannel.Name == name)
+                {
+                    VoiceChannel.DeleteAsync();
+                    embed.WithTitle("Voice Channel Deleted");
+                    embed.WithDescription($"{Context.User.Mention} Successfully deleted the voice channel `{VoiceChannel.Name}`!");
+                    embed.WithColor(Pink);
+                    BE();
+                }
+            }
         }
 
         private bool UserIsAdmin(SocketGuildUser user)

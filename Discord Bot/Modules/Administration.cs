@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Discord_Bot.Core.UserAccounts;
-using System.Net;
-using System.Timers;
 using Discord_Bot.Core.Server_Files;
 using Discord_Bot.Core.Commands;
+using System.Text.RegularExpressions;
 
 #pragma warning disable
 
@@ -72,13 +68,13 @@ namespace Discord_Bot.Modules
 
             embed.WithTitle("Filtered word added");
             embed.WithDescription($"**{Context.User.Mention} Successfully removed specified word from the filter.**");
-            embed.WithFooter($"To view your current list of filtered words, type {cmdPrefix}viewfilter!");
+            embed.WithFooter($"To view your current list of filtered words, type {cmdPrefix}filterview!");
             embed.WithColor(Pink);
             BE();
         }
 
         [Command("filterview")] //administration
-        [Alias("fv")]
+        [Alias("fv", "viewfilter")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         public async Task FilterView()
         {
@@ -139,7 +135,10 @@ namespace Discord_Bot.Modules
             UserAccounts.SaveAccounts();
 
             embed.WithTitle("User Unblacklisted");
-            embed.WithDescription($"User `{userAccount.Username}` with ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
+            if(userAccount.Username != null)
+                embed.WithDescription($"User `{userAccount.Username}` with ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
+            else if(userAccount.Username == null || userAccount.Username == "")
+                embed.WithDescription($"ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
             embed.WithFooter("Please note that all Points and EXP are not able to be restored.");
             embed.WithColor(Pink);
             BE();
@@ -222,22 +221,45 @@ namespace Discord_Bot.Modules
         [Alias("dr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task DeleteRole(IRole role)
+        public async Task DeleteRole([Remainder]string targetRole)
         {
-            role = Context.Guild.Roles.FirstOrDefault(x => x.Id == role.Id);
-
-            await role.DeleteAsync();
-            embed.WithTitle("Role Deleted");
-            embed.WithDescription($"{Context.User.Mention} role **{role}** has been deleted.");
-            embed.WithColor(Pink);
-            BE();
+            var roles = Context.Guild.Roles.Where(r => r.Name == targetRole);
+            if (roles.Count() > 1)
+            {
+                embed.WithTitle("Role Deletion: Multiple Matching Roles");
+                embed.WithDescription($"I found `{roles.Count()}` matches for role `{targetRole}`.");
+                int i = 0;
+                foreach (var role in roles)
+                {
+                    embed.AddField("Role Deleted", $"`{role.Name}` with `{role.Permissions.ToList().Count()}` permissions has been deleted.");
+                    role.DeleteAsync();
+                }
+                embed.WithColor(Pink);
+                BE();
+            }
+            else if (roles.Count() == 0)
+            {
+                embed.WithTitle("Role Deletion: Error");
+                embed.WithDescription($"**{Context.User.Mention} I could not find the specified role!**");
+                embed.WithColor(Red);
+                BE();
+            }
+            else if (roles.Count() == 1)
+            {
+                var role = roles.First();
+                role.DeleteAsync();
+                embed.WithTitle("Role Deletion: Success");
+                embed.WithDescription($"**{Context.User.Mention} Successfully deleted role `{role.Name}`**");
+                embed.WithColor(Pink);
+                BE();
+            }
         }
 
         [Command("createrole")] //admin
         [Alias("cr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task CreateRole(string role)
+        public async Task CreateRole([Remainder]string role)
         {
             await Context.Guild.CreateRoleAsync(role);
             embed.WithTitle("Role Created");

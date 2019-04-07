@@ -72,7 +72,7 @@ namespace Discord_Bot
             var server = Servers.GetServer(context.Guild);
             foreach(string phrase in server.FilteredWords)
             {
-                if(phrase.Contains(msg.ToString()))
+                if(msg.Content.Contains(phrase))
                 {
                     UserSaysFilteredPhrase(msg);
                 }
@@ -239,7 +239,6 @@ namespace Discord_Bot
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(SkyBlue);
             await logChannel.SendMessageAsync("", false, embed.Build());
-
         }
 
         private async Task LoggingUserLeaves(SocketGuildUser user)

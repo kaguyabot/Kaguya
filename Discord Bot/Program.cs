@@ -85,9 +85,7 @@ namespace Discord_Bot
 
         private Task Log(LogMessage msg)
         {
-            string filePath = "Resources/ConsoleLogFile.txt";
             Console.WriteLine(msg.Message);
-            File.AppendAllText(filePath, $"\n{msg.Message} \n   Log Time: {DateTime.Now}");
             return Task.CompletedTask;
         }
 
