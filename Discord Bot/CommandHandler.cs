@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
-using Discord.WebSocket;
+using System.IO;
 using Discord_Bot.Core.LevelingSystem;
 using Discord_Bot.Core.UserAccounts;
 using Discord_Bot.Core.Server_Files;
@@ -46,6 +46,7 @@ namespace Discord_Bot
             _client.MessageReceived += LogChangesToLogSettings;
             _client.MessageReceived += UserSaysFilteredPhrase;
             _client.UserVoiceStateUpdated += UserConnectsToVoice;
+            _client.Disconnected += BotDisconnected;
         }
 
         private async Task HandleCommandAsync(SocketMessage s)
@@ -71,7 +72,7 @@ namespace Discord_Bot
             var server = Servers.GetServer(context.Guild);
             foreach(string phrase in server.FilteredWords)
             {
-                if(phrase.Contains(msg.ToString()))
+                if(msg.Content.Contains(phrase))
                 {
                     UserSaysFilteredPhrase(msg);
                 }
@@ -160,6 +161,7 @@ namespace Discord_Bot
             var msg = s as SocketUserMessage;
             if (msg == null) return;
             SocketCommandContext context = new SocketCommandContext(_client, msg);
+            if (context.Guild.Id == 264445053596991498 || context.Guild.Id == 333949691962195969) return;
             var currentLog = ServerMessageLogs.GetLog(context.Guild);
             currentLog.AddMessage(msg);
             ServerMessageLogs.SaveServerLogging();
@@ -237,7 +239,6 @@ namespace Discord_Bot
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(SkyBlue);
             await logChannel.SendMessageAsync("", false, embed.Build());
-
         }
 
         private async Task LoggingUserLeaves(SocketGuildUser user)
@@ -373,6 +374,11 @@ namespace Discord_Bot
                 embed.WithTimestamp(DateTime.Now);
                 await logVoiceConnect.SendMessageAsync("", false, embed.Build());
             }
+        }
+
+        private async Task BotDisconnected(Exception e)
+        {
+            Console.WriteLine("Bot Disconnected! Exception Message: " + e.Message);
         }
     }
 }

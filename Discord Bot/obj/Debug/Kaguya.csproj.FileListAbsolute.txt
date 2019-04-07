@@ -12,9 +12,6 @@ C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Net
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Newtonsoft.Json.dll
-C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.Compression.Portable.dll
-C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.HtmlConverter.Portable.dll
-C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.Pdf.Portable.dll
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Collections.Immutable.dll
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Diagnostics.DiagnosticSource.dll
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Interactive.Async.dll
@@ -27,9 +24,6 @@ C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.E
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Newtonsoft.Json.xml
-C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.Compression.Portable.xml
-C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.HtmlConverter.Portable.xml
-C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Syncfusion.Pdf.Portable.xml
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Collections.Immutable.xml
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Diagnostics.DiagnosticSource.xml
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Interactive.Async.xml
@@ -41,3 +35,4 @@ C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Kaguya.csproj.CopyComplete
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.exe
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.pdb
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Discord.Addons.Interactive.dll

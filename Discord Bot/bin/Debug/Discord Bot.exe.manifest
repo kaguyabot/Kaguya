@@ -42,14 +42,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="235008">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="224256">
       <assemblyIdentity name="Discord Bot" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Lh+nOYCQkDKYZYHR5S7xo7PXLUmGntsNQeJ23ugZ6MA=</dsig:DigestValue>
+        <dsig:DigestValue>pUHri/ywkkhINntHR41dzYdzIoIf4KXEraT3BPLCuDk=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord.Addons.Interactive.dll" size="27136">
+      <assemblyIdentity name="Discord.Addons.Interactive" version="1.0.1.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>8pdB1I0Q6fqeyKPbN52ynCjnaxqWiujfKqKkdeP6moM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -146,42 +158,6 @@
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
         <dsig:DigestValue>tmdJuB4UifzY11SyrTnr4NtoE0TjkqP0nckjVkO9vQY=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Syncfusion.Compression.Portable.dll" size="120320">
-      <assemblyIdentity name="Syncfusion.Compression.Portable" version="16.4200.0.52" publicKeyToken="3D67ED1F87D44C89" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Lbcwr/7yYgzsTFwAICple6yuLhoXSJGfOo09PtPj4I8=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Syncfusion.HtmlConverter.Portable.dll" size="32768">
-      <assemblyIdentity name="Syncfusion.HtmlConverter.Portable" version="16.4200.0.52" publicKeyToken="3D67ED1F87D44C89" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Xd5KLpx9Xau/asBpWDlgl0mrPqfTdLgD0qqVz/MGnB8=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Syncfusion.Pdf.Portable.dll" size="3589120">
-      <assemblyIdentity name="Syncfusion.Pdf.Portable" version="16.4200.0.52" publicKeyToken="3D67ED1F87D44C89" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>kyrj8JnQsZ/8LWtqfbf3pEhk5TK6Z/RWN7mCbxE9zPg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

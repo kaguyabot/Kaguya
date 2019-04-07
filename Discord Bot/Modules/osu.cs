@@ -324,7 +324,6 @@ namespace Discord_Bot.Modules
             PF = (1 << 14),
         }
 
-
         [Command("createteamrole")] //osu
         [Alias("ctr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
@@ -363,6 +362,33 @@ namespace Discord_Bot.Modules
                 }
             }
             BE();
+        }
+
+        [Command("sttreflog")] //Secret STT Only Cmd owo
+        [RequireUserPermission(GuildPermission.KickMembers)]
+        public async Task STTRefLog(string WinnerTeam, string LoserTeam, string WinnerTeamScore, string LoserTeamScore, string Team1BanMod1,
+            string Team1Ban1, string Team1BanMod2, string Team1Ban2, string Team2BanMod1, string Team2Ban1, string Team2BanMod2, string Team2Ban2, string MPLink)
+        {
+            if(Context.Guild.Id != 461347676148072448)
+            {
+                embed.WithDescription($"**{Context.User.Mention} I'm sorry, but this command can only be executed inside of the Spring Tranquility " +
+                    $"osu! Tournament server!**");
+                embed.WithColor(Red);
+                BE();
+            }
+            ISocketMessageChannel channel = (ISocketMessageChannel)Context.Guild.GetChannel(554453952125599745);
+           
+            embed.WithTitle($"STT2 Match Result: **{WinnerTeam}** Vs. {LoserTeam}");
+            embed.WithDescription($"**{WinnerTeam}** has defeated {LoserTeam}!" +
+                $"\n**Score:** **{WinnerTeamScore}** - {LoserTeamScore}" +
+                $"\n**Bans:**");
+            embed.AddField($"{WinnerTeam}", $"{Team1BanMod1}: {Team1Ban1}", false);
+            embed.AddField($"{WinnerTeam}", $"{Team1BanMod2}: {Team1Ban2}", false);
+            embed.AddField($"{LoserTeam}", $"{Team2BanMod1}: {Team2Ban1}", false);
+            embed.AddField($"{LoserTeam}", $"{Team2BanMod2}: {Team2Ban2}", false);
+            embed.WithUrl($"{MPLink}");
+            embed.WithColor(Pink);
+            await channel.SendMessageAsync("", false, embed.Build());
         }
 
         private bool UserIsAdmin(SocketGuildUser user)

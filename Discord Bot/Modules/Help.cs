@@ -47,6 +47,7 @@ namespace Discord_Bot.Modules
 
             switch (command.ToLower())
             {
+                case "h":
                 case "help":
                     embed.WithTitle($"Help: Help!! | `{cmdPrefix}h` / `{cmdPrefix}help`");
                     embed.WithDescription($"Shows the command list. If typed with the name of a command (Ex: `{cmdPrefix}help <command>`), the response will instead contain helpful information on the specified " +
@@ -67,7 +68,7 @@ namespace Discord_Bot.Modules
                     BE(); break;
                 case "expadd":
                 case "addexp":
-                    embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd`");
+                    embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd` / `{cmdPrefix}addexp");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
                         $"\n{Context.User.Mention} Syntax: `{cmdPrefix}expadd <number of experience points to add>`. The number of exp you are adding must be a positive whole number.");
@@ -80,10 +81,16 @@ namespace Discord_Bot.Modules
                     embed.WithColor(Pink);
                     BE(); break;
                 case "pointsadd":
+                case "addpoints":
                     embed.WithTitle($"Help: Adding Points | `{cmdPrefix}pointsadd`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
                         $"\n{Context.User.Mention} Syntax: `{cmdPrefix}pointsadd <number of points to add>`. The number of points you are adding must be a positive whole number.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "level":
+                    embed.WithTitle($"Help: Level | `{cmdPrefix}level`");
+                    embed.WithDescription($"{Context.User.Mention} Displays your current Kaguya level!");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "createtextchannel":
@@ -95,6 +102,13 @@ namespace Discord_Bot.Modules
                         $"\nSyntax: `{cmdPrefix}createtextchannel <channel name>`. " +
                         $"\nThis name can have spaces. Example: `{cmdPrefix}createtextchannel testing 123`.");
                     embed.WithColor(Pink);
+                    BE(); break;
+                case "commands":
+                case "cmds":
+                    embed.WithTitle($"Help: Commands | `{cmdPrefix}commands` / `{cmdPrefix}cmds`");
+                    embed.WithDescription($"{Context.User.Mention} Displays a list of commands for the specified module. Use {cmdPrefix}modules " +
+                        $"for the list of modules you may pick from. Modules are essentially command groups seperated by category." +
+                        $"\nSyntax: `{cmdPrefix}cmds <module>`, `{cmdPrefix}cmds administrator`");
                     BE(); break;
                 case "deletetextchannel":
                 case "dtc":
@@ -136,7 +150,7 @@ namespace Discord_Bot.Modules
                     embed.WithColor(Pink);
                     BE(); break;
                 case "pick":
-                    embed.WithTitle($"Help: Pick | `{cmdPrefix}pick");
+                    embed.WithTitle($"Help: Pick | `{cmdPrefix}pick`");
                     embed.WithDescription($"{Context.User.Mention} Tells the bot to pick between any amount of options, randomly." +
                         $"\nSyntax: `{cmdPrefix}pick option1|option2|option3|option4`...etc." +
                         $"\nYou may have as many \"Options\" as you'd like!" +
@@ -211,9 +225,10 @@ namespace Discord_Bot.Modules
                 case "deleterole":
                 case "dr":
                     embed.WithTitle($"Help: Deleting Roles | `{cmdPrefix}deleterole`, `{cmdPrefix}dr`");
-                    embed.WithDescription($"{ Context.User.Mention} **Permissions Required: Manage Roles**" +
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
                         $"\n" +
-                        $"\nDeletes a role from the server (and in the process, removes said role from everyone who had it)." +
+                        $"\nDeletes a role from the server (and in the process, removes said role from everyone who had it). " +
+                        $"If multiple matches of the same role are found, the bot will delete all occurrences of said role." +
                         $"\nSyntax: `{cmdPrefix}deleterole <role name>`");
                     BE(); break;
                 case "createteamrole":
@@ -279,8 +294,8 @@ namespace Discord_Bot.Modules
                         $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json.");
                     embed.WithColor(Pink);
                     BE(); break;
-                case "gamble":
-                case "g":
+                case "groll":
+                case "gr":
                     embed.WithTitle($"Help: Gambling | `{cmdPrefix}gamble` / `{cmdPrefix}g`");
                     embed.WithDescription($"{Context.User.Mention} Allows you to roll the dice and gamble your points!" +
                         $"\nA roll between `0-66` will result in a loss of your bet." +
@@ -467,12 +482,12 @@ namespace Discord_Bot.Modules
             embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]`" +
                 "\n`clear [c] [purge]` \n`kaguyaexit` \n`scrapeserver` \n`filteradd [fa]` \n`filterremove [fr]` \n`filterview [fv]` \n`filterclear [clearfilter]` \n`setlogchannel [log]` \n`resetlogchannel [rlog]`" +
                 "\n`logtypes [loglist]`", true);
-            embed.AddField("Currency", "`points` \n`pointsadd` \n`timely [t]` \n`timelyreset` \n`groll [gr]` \n`awardeveryone` \n`masspointsdistribute`", true);
+            embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`timelyreset` \n`groll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
             embed.AddField("Fun", "`echo` \n`pick`", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]`", true);
             embed.AddField("osu!", "`createteamrole [ctr]` \n`delteams` \n`osutop` \n`recent [r]` \n`osuset`", true);
-            embed.AddField("Utility", "`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
+            embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
             embed.WithColor(Pink);
             embed.WithFooter($"For more information, including a link to add this bot to your server and a link to the Kaguya Support Discord, type {cmdPrefix}hdm!");
             BE();

@@ -117,8 +117,9 @@ namespace Discord_Bot.Modules
                 account.LastReceivedTimelyPoints = difference;
             }
             embed.WithTitle("Timely Reset");
-            embed.WithDescription($"**{Context.User.Mention} Timely points for `all users` have been reset!**");
+            embed.WithDescription($"**{Context.User.Mention} Timely points for `{accounts.Count}` users have been reset!**");
             embed.WithColor(Pink);
+            BE();
         }
 
         [Command("timely")] //currency

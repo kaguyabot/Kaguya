@@ -3,10 +3,36 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
-//Version 1.6a
-//
-//- $groll now takes points away on use, then gives them back + multiplier if the roll was won.
-//
+Version 1.6.0 Stable
+
+- Kaguya got approved on Discordbots.org!! Give her an upvote here: https://discordbots.org/bot/538910393918160916
+- $groll now takes points away on use, then gives them back + multiplier if the roll was won.
+- $timelyreset now actually builds the embed. Same thing with $ctr
+- Leveling embed is now more compact, takes up less space in chat.
+- Added in ReliabilityService...if bot disconnects from websocket, it (should) reconnect on its own after 30 seconds.
+- All log messages are now saved to a file (incase the bot crashes).
+- Removed some unnecessary packages
+- Timer added to restart application every 6 hours (to avoid disconnect issues).
+- Added .gitignore.
+- Changed Message cache from 1000 to 250 (to hopefully help wtih crashes)
+- "viewfilter" is now an alias for "filterview"
+- "$createrole" and "$deleterole" no longer require quotation marks when creating a role that has a space in the name. (Ex: Smelly Sushi)
+- **Fixed a major bug with the word filter. If a message contains a filtered phrase, it will now be deleted properly. Resolves #23!**
+- Took out the ability for the bot to log messages to it's own file (commandmessagelogs.txt). This will likely eliminate (potential) crashes.
+    Kaguya would throw an unhandled exception if high rates of use were achieved.
+- Fixed a bug with "$deleterole" where if multiple roles of the same name were found, the bot would not do anything.
+    Now, Kaguya will delete all roles with the matched name.
+- Updated "$DeleteTextChannel" and "$DeleteVoiceChannel" commands to properly delete the channels.
+    Channels can now be mentioned (#<Channel>) or just the name of the channel will do.
+- Fixed a bug with "$DeleteTextChannel" -- Kaguya would respond with a confirmation message for a successfully 
+    deleted channel, even if the channel didn't exist in the first place.
+- Fixed a small bug with "$unblacklist" where if the userAccount.Username property was `null`, it would be formatted weird.
+    There are now two formats, one for if the username is null, and one for if the username isn't null (or empty).
+- Added in some missing aliases in the help commands
+- Fixed help command for "$groll" / "$gr"
+- Added just more general fine-tuning to the list of help commands. ($h <cmd>)
+- Commented out broken blackjack command, will uncomment it's finished.
+
 Version 1.5.1
 
 - High priority fix for crashes.
