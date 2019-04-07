@@ -50,7 +50,7 @@ namespace Discord_Bot
                 _client = new DiscordSocketClient(new DiscordSocketConfig
                 {
                     LogLevel = LogSeverity.Verbose,
-                    MessageCacheSize = 1000
+                    MessageCacheSize = 250
                 });
                 _client.Log += Log;
                 try

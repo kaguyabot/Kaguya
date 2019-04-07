@@ -14,6 +14,7 @@ Version 1.6
 - Removed some unnecessary packages
 - Timer added to restart application every 6 hours (to avoid disconnect issues).
 - Added .gitignore.
+- Changed Message cache from 1000 to 250 (to hopefully help wtih crashes)
 
 Version 1.5.1
 
