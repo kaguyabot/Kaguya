@@ -3,7 +3,7 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
-Version 1.6
+Version 1.6.0 Stable
 
 - Kaguya got approved on Discordbots.org!! Give her an upvote here: https://discordbots.org/bot/538910393918160916
 - $groll now takes points away on use, then gives them back + multiplier if the roll was won.
