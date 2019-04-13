@@ -210,7 +210,7 @@ namespace Discord_Bot
 
             foreach (string loggedMessage in currentLog.LastThousandMessages)
             {
-                if (loggedMessage.Contains(message.Id.ToString()) & !message.Author.IsBot)
+                if (loggedMessage.Contains(message.Id.ToString()) & !message.Author.IsBot && (!loggedMessage.Contains(message.Content)))
                 {
                     var text = loggedMessage.Split('℀');
                     EmbedBuilder embed = new EmbedBuilder();

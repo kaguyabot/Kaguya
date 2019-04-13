@@ -9,6 +9,7 @@ Version 1.6.1
 - Message cache size reduced to 100
 - Fixed a bug with $scrapeserver that would cause the bot to freeze. This method is much more efficient, closes #27
 - Created $scrapedatabase -- creates accounts for every member in every server that has less than 3500 members.
+- Fixed a bug with the updated messages logger that caused embedded links to trigger the message updated log event.
 
 Version 1.6.0 Stable
 

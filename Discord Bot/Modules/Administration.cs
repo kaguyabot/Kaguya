@@ -205,6 +205,8 @@ namespace Discord_Bot.Modules
             var _client = Global.Client;
             var servers = Servers.GetAllServers();
             int i = 1;
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
             foreach (var server in servers)
             {
                 var isolatedServer = Servers.GetServer(server.ID);
@@ -212,16 +214,12 @@ namespace Discord_Bot.Modules
                 var guild = _client.GetGuild(isolatedServerID);
                 if(guild.MemberCount > 3500) { continue; } //If the guild has more than 3500 members, don't create accounts for everyone.
                 var guildUsers = guild.Users;
-                Stopwatch stopWatch = new Stopwatch();
-
                 foreach(var user in guildUsers)
                 {
-                    stopWatch.Start();
                     if (user.IsBot) continue;
                     var userAccount = UserAccounts.GetAccount(user);
                     userAccount.Username = user.Username + "#" + user.Discriminator;
                     userAccount.ID = user.Id;
-                    stopWatch.Stop();
                     Console.WriteLine($"Created account for user #{i++}: {user.Username}#{user.Discriminator} in {stopWatch.ElapsedMilliseconds}ms.");
                 }
             }
