@@ -10,7 +10,7 @@ using System.Timers;
 
 #pragma warning disable CS1998
 
-namespace Discord_Bot
+namespace Kaguya
 {
     public class Program
     {

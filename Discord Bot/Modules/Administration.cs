@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord_Bot.Core.UserAccounts;
-using Discord_Bot.Core.Server_Files;
-using Discord_Bot.Core.Commands;
+using Kaguya.Core.UserAccounts;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.Commands;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 
 #pragma warning disable
 
-namespace Discord_Bot.Modules
+namespace Kaguya.Modules
 {
     public class Administration : ModuleBase<SocketCommandContext>
     {

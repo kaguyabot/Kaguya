@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Discord_Bot.Core.UserAccounts
+namespace Kaguya.Core.UserAccounts
 {
     public class UserAccount
     {

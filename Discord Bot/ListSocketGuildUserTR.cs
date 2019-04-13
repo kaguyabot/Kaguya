@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Discord_Bot
+namespace Kaguya
 {
     public class ListSocketGuildUserTR : TypeReader
     {

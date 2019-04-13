@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord_Bot.Core.UserAccounts;
+using Kaguya.Core.UserAccounts;
 using System.Net;
 using System.Timers;
-using Discord_Bot.Core.Server_Files;
-using Discord_Bot.Core.Commands;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.Commands;
 
 #pragma warning disable
 
-namespace Discord_Bot.Modules
+namespace Kaguya.Modules
 {
     public class Currency : ModuleBase<SocketCommandContext>
     {

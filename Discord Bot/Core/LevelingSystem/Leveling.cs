@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using Discord_Bot.Core.UserAccounts;
+using Kaguya.Core.UserAccounts;
 
-namespace Discord_Bot.Core.LevelingSystem
+namespace Kaguya.Core.LevelingSystem
 {
     internal static class Leveling
     {

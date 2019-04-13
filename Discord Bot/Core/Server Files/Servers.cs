@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 
-namespace Discord_Bot.Core.Server_Files
+namespace Kaguya.Core.Server_Files
 {
     public static class Servers
     {

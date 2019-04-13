@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Discord_Bot.Modules
+namespace Kaguya.Modules
 {
     public class PlayData
     {

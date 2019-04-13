@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 
-namespace Discord_Bot
+namespace Kaguya
 {
     class Utilities
     {

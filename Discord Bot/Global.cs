@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 
-namespace Discord_Bot
+namespace Kaguya
 {
     internal static class Global
     {

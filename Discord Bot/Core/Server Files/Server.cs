@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Discord_Bot.Core.Server_Files
+namespace Kaguya.Core.Server_Files
 {
     public class Server
     {

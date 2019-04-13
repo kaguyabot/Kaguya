@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
-using Discord_Bot.Core.LevelingSystem;
-using Discord_Bot.Core.UserAccounts;
-using Discord_Bot.Core.Server_Files;
+using Kaguya.Core.LevelingSystem;
+using Kaguya.Core.UserAccounts;
+using Kaguya.Core.Server_Files;
 using Discord;
 
 #pragma warning disable
 
-namespace Discord_Bot
+namespace Kaguya
 {
     class CommandHandler
     {
