@@ -24,7 +24,7 @@ namespace Discord_Bot
         Color Yellow = new Color(255, 255, 102);
         Color SkyBlue = new Color(63, 242, 255);
         Color Red = new Color(255, 0, 0);
-        Color Violet = new Color(238,130,238);
+        Color Violet = new Color(238, 130, 238);
 
         public async Task InitializeAsync(DiscordSocketClient client)
         {

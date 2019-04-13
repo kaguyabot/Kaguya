@@ -13,7 +13,6 @@ using System.Net;
 using System.Timers;
 using Discord_Bot.Core.Server_Files;
 using Discord_Bot.Core.Commands;
-using Discord.Addons.Interactive;
 
 #pragma warning disable
 
@@ -22,10 +21,6 @@ namespace Discord_Bot.Modules
     public class Fun : ModuleBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
-
-        private InteractiveService _interactive;
-
-       // public InteractiveBase interactive = new InteractiveBase();
 
         Color Pink = new Color(252, 132, 255);
         Color Red = new Color(255, 0, 0);

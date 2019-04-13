@@ -335,12 +335,21 @@ namespace Discord_Bot.Modules
                     BE(); break;
                 case "scrapeserver":
                     embed.WithTitle($"Help: Server Scraping | `{cmdPrefix}scrapeserver`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
                         $"\nOrders the bot to create user accounts for every individual in the server, even if they have never typed " +
                         $"in chat. This function is automatically called when using `{cmdPrefix}massblacklist` to ensure that " +
                         $"there is no question on whether they will be able to be banned/unbanned. Creating a user account allows for name " +
                         $"and ID logging, the latter is necessary if a bot owner wishes to unblacklist a user.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "scrapedatabase":
+                    embed.WithTitle($"Help: Database Scraping | `{cmdPrefix}scrapedatabase`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
+                        $"\n" +
+                        $"\nCreates an account for every user in every server that Kaguya is connected to. This command will not create accounts " +
+                        $"for other bots or users in servers with over `3,500` members. This command primarily exists for stability reasons (occasionally, if a " +
+                        $"user doesn't have an account, a bot function may not work for said user [such as with `$ctr`]).");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "rep":

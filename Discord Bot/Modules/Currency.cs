@@ -40,14 +40,13 @@ namespace Discord_Bot.Modules
         }
 
         [Command("points")] //currency
-        public async Task Points([Remainder]string arg = "")
+        public async Task Points(IGuildUser user = null)
         {
-            SocketUser target = null;
-            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
-            target = mentionedUser ?? Context.User;
-            var account = UserAccounts.GetAccount(target);
+            if (user == null)
+                user = Context.User as IGuildUser;
+            var account = UserAccounts.GetAccount(user as SocketUser);
             embed.WithTitle("Points");
-            embed.WithDescription($"{target.Mention} has {account.Points} points.");
+            embed.WithDescription($"{user.Mention} has {account.Points} points.");
             embed.WithColor(Pink);
             BE();
         }

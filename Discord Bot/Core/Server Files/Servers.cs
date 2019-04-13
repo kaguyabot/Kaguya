@@ -31,6 +31,16 @@ namespace Discord_Bot.Core.Server_Files
             return GetOrCreateServer(guild.Id);
         }
 
+        public static Server GetServer(ulong Id)
+        {
+            return GetOrCreateServer(Id);
+        }
+
+        public static List<Server> GetAllServers()
+        {
+            return servers;
+        }
+
         private static Server GetOrCreateServer(ulong id)
         {
             var result = from a in servers

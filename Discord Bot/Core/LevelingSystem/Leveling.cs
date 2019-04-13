@@ -31,11 +31,10 @@ namespace Discord_Bot.Core.LevelingSystem
                 if (oldLevel != userAccount.LevelNumber)
                 {
                     EmbedBuilder embed = new EmbedBuilder();
-                    embed.WithTitle("Level up!");
-                    embed.WithDescription($"{user.Username} just leveled up!");
-                    embed.AddField("Level", newLevel, true);
-                    embed.AddField("EXP", userAccount.EXP, true);
+                    embed.WithDescription($"**{user.Username} just leveled up!**" +
+                        $"\nLevel: {userAccount.LevelNumber.ToString("N0")} | EXP: {userAccount.EXP.ToString("N0")}");
                     embed.WithColor(Pink);
+                    
 
                     await channel.SendMessageAsync("", false, embed.Build());
                 }

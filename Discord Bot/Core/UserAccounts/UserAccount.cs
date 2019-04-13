@@ -32,7 +32,7 @@ namespace Discord_Bot.Core.UserAccounts
         {
             get
             {
-                return (uint)Math.Sqrt(EXP / 20);
+                return (uint)Math.Sqrt(EXP / 32);
             }
         }
         

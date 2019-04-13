@@ -39,6 +39,13 @@ namespace Discord_Bot.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
+        [Command("sttscheduleservice")]
+        [Alias("sttss")]
+        public async Task STTScheduler(List<SocketGuildUser> users)
+        {
+            
+        }
+
         [Command("osuset")] //osu
         public async Task osuSet([Remainder]string username)
         {

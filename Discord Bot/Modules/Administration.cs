@@ -9,6 +9,7 @@ using Discord_Bot.Core.UserAccounts;
 using Discord_Bot.Core.Server_Files;
 using Discord_Bot.Core.Commands;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 #pragma warning disable
 
@@ -177,22 +178,58 @@ namespace Discord_Bot.Modules
         [RequireOwner]
         public async Task ScrapeServer() //Scrapes the server and creates accounts for ALL users, even if they've never typed in chat.
         {
-            embed.WithDescription("Downloading users...");
-            await Context.Guild.DownloadUsersAsync();
-            embed.WithDescription("Users downloaded!");
+            embed.WithDescription($"Creating accounts for **`{Context.Guild.MemberCount}`** users...");
+            embed.WithColor(Red);
+            BE();
             var users = Context.Guild.Users;
+            int i = 1;
             foreach (var user in users)
             {
                 var userAccount = UserAccounts.GetAccount(user);
-                var uName = user.Username;
-                var uDiscrim = user.Discriminator;
-                var uID = userAccount.ID;
-                userAccount.Username = $"{uName}#{uDiscrim}";
+                userAccount.Username = user.Username + "#" + user.Discriminator;
+                userAccount.ID = user.Id;
+                UserAccounts.SaveAccounts();
             }
+            Console.WriteLine($"Created accounts for {Context.Guild.MemberCount} users.");
             embed.WithTitle("Admin Server Scraping");
             embed.WithDescription("Accounts obtained.");
             embed.WithColor(Red);
             BE();
+        }
+
+        [Command("scrapedatabase")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireOwner]
+        public async Task ScrapeDatabase() //Scrapes the entire bot database and creates accounts for every single member of every single guild the bot is in.
+        {
+            var _client = Global.Client;
+            var servers = Servers.GetAllServers();
+            int i = 1;
+            foreach (var server in servers)
+            {
+                var isolatedServer = Servers.GetServer(server.ID);
+                ulong isolatedServerID = isolatedServer.ID;
+                var guild = _client.GetGuild(isolatedServerID);
+                if(guild.MemberCount > 3500) { continue; } //If the guild has more than 3500 members, don't create accounts for everyone.
+                var guildUsers = guild.Users;
+                Stopwatch stopWatch = new Stopwatch();
+
+                foreach(var user in guildUsers)
+                {
+                    stopWatch.Start();
+                    if (user.IsBot) continue;
+                    var userAccount = UserAccounts.GetAccount(user);
+                    userAccount.Username = user.Username + "#" + user.Discriminator;
+                    userAccount.ID = user.Id;
+                    stopWatch.Stop();
+                    Console.WriteLine($"Created account for user #{i++}: {user.Username}#{user.Discriminator} in {stopWatch.ElapsedMilliseconds}ms.");
+                }
+            }
+            UserAccounts.SaveAccounts();
+            embed.WithDescription($"**{Context.User.Mention} Created accounts for `{UserAccounts.GetAllAccounts().Count}` users.**");
+            embed.WithColor(Red);
+            BE();
+
         }
 
         [Command("removeallroles")] //admin
