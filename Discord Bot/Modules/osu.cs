@@ -21,17 +21,11 @@ namespace Kaguya.Modules
     public class osu : ModuleBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
-
         public Color Pink = new Color(252, 132, 255);
-
         public Color Red = new Color(255, 0, 0);
-
         public Color Gold = new Color(255, 223, 0);
-
         public BotConfig bot = new BotConfig();
-
         public string version = Utilities.GetAlert("VERSION");
-
         public string botToken = Config.bot.token;
 
         public async Task BE() //Method to build and send an embedded message.
@@ -39,11 +33,84 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
-        [Command("sttscheduleservice")]
-        [Alias("sttss")]
-        public async Task STTScheduler(List<SocketGuildUser> users)
+        [Command("osu")]
+        public async Task osuProfile([Remainder]string player = null)
         {
-            
+            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string osuapikey = Config.bot.osuapikey;
+            string jsonProfile;
+
+            if (player == null)
+            {
+                player = UserAccounts.GetAccount(Context.User).OsuUsername;
+
+                if (player == null)
+                {
+                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
+                    embed.WithColor(Red);
+                    BE(); return;
+                }
+            }
+
+            player = player.Replace(' ', '_');
+
+            using (WebClient client = new WebClient())
+            {
+                jsonProfile = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u={player}"); //Downloads user data
+            }
+
+            var userProfileObject = JsonConvert.DeserializeObject<dynamic>(jsonProfile)[0];
+
+            string userID = userProfileObject.user_id;
+            string username = userProfileObject.username;
+            DateTime joinDate = userProfileObject.join_date; //May throw an error, idk
+            uint count300 = userProfileObject.count300;
+            uint count100 = userProfileObject.count100;
+            uint count50 = userProfileObject.count50;
+            int playcount = userProfileObject.playcount;
+            ulong rankedScore = userProfileObject.ranked_score;
+            int globalRank = userProfileObject.pp_rank; //Player's global rank
+            double pp = userProfileObject.pp_raw; //Will display zero pp for inactive users
+            double level = userProfileObject.level;
+            double accuracy = userProfileObject.accuracy; //Total overall accuracy
+            int countSS = userProfileObject.count_rank_ss; //Count SS's
+            int countSSH = userProfileObject.count_rank_ssh; //Count Silver SS's
+            int countS = userProfileObject.count_rank_s; //S's
+            int countSH = userProfileObject.count_rank_sh; //Silver S's
+            int countA = userProfileObject.count_rank_a;
+            string country = userProfileObject.country; //Player's Country
+            int totalSecondsPlayed = userProfileObject.total_seconds_played; //Playtime in seconds
+            int countryRank = userProfileObject.pp_country_rank;
+
+            //Emote codes for grading letters
+
+            string gradeSSH = "<:XH:553119188089176074>";
+            string gradeSS = "<:X_:553119217109565470>";
+            string gradeSH = "<:SH:553119233463025691>";
+            string gradeS = "<:S_:553119252329267240>";
+            string gradeA = "<:A_:553119274256826406>";
+
+            //Build rich embed and send to Discord
+
+            embed.WithAuthor(author =>
+            {
+                author
+                .IconUrl = $"https://osu.ppy.sh/images/flags/{country}.png";
+            });
+            embed.WithTitle($"osu! Profile For {username}");
+            embed.AddField($"Performance: {pp}pp  Global Rank: #{globalRank}   Country Rank: #{countryRank}",
+                $"\n▸ **Total Ranked Score:** `{rankedScore.ToString("N0")}` POINTS" +
+                $"\n▸ **Average Hit Accuracy: ** `{(accuracy / 100).ToString("P")}`" +
+                $"\n▸ **Play Time:** `{totalSecondsPlayed} Hours - That's over `{totalSecondsPlayed / 86400}` Days!" +
+                $"\n▸ **Total Play Count:** `{playcount.ToString("N0")}`" +
+                $"\n▸ **Current Level:** `{level.ToString("N0")}` ~ `{(int)((level - (int)level) * 100)}%` to level {(int)level++}!" +
+                $"\n▸ **Total Circles Clicked:** `{(count300 + count100 + count50).ToString("N0")}`" +
+                $"\n▸ {gradeSSH} ~ {countSSH} {gradeSS} ~ {countSS} {gradeSH} ~ {countSH} {gradeS} ~ {countS} {gradeA} ~ {countA}" +
+                $"\n▸ **Average play value:** `{(pp / 100).ToString("N0")}`pp");
+            embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
+            embed.WithFooter($"Stats accurate as of {DateTime.Now.ToShortDateString()}");
+            embed.WithColor(Pink);
+            BE();
         }
 
         [Command("osuset")] //osu
@@ -68,6 +135,7 @@ namespace Kaguya.Modules
         public async Task osuRecent(string player = null, int mode = 0)
         {
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string osuapikey = Config.bot.osuapikey;
 
             if (player == null || player == "")
             {
@@ -81,16 +149,23 @@ namespace Kaguya.Modules
                 }
             }
 
-            string osuapikey = Config.bot.osuapikey;
+            if(mode != 0)
+            {
+                embed.WithTitle("osu! Recent");
+                embed.WithDescription($"**{Context.User.Mention} I'm sorry, but I don't have support for modes other than osu! Standard yet :(**");
+                embed.WithColor(Red);
+                BE(); return;
+            }
 
-            string jsonRecent = "";
+            string jsonRecent;
+
             using (WebClient client = new WebClient())
             {
                 jsonRecent = client.DownloadString($"https://osu.ppy.sh/api/get_user_recent?k={osuapikey}&u=" + player);
             }
             if (jsonRecent == "[]")
             {
-                string NormalUserName = "";
+                string NormalUserName;
                 using (WebClient client = new WebClient())
                 {
                     NormalUserName = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u=" + player);

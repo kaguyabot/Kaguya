@@ -3,7 +3,7 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
-Version 1.6.1
+Version 1.7.0
 
 - Level formula modified so that it's a little harder to level up
 - Message cache size reduced to 100
@@ -12,9 +12,10 @@ Version 1.6.1
 - Fixed a bug with the updated messages logger that caused embedded links to trigger the message updated log event.
 - Added help command for $sttreflog
 - $groll has been renamed to $roll (but keeps the alias of "gr")
+- Command $osu added -- generates a profile for your osu! username with various statistics (also taps into osuset for added convenience).
 
 
-Version 1.6.0 Stable
+Version 1.6.0
 
 - Kaguya got approved on Discordbots.org!! Give her an upvote here: https://discordbots.org/bot/538910393918160916
 - $groll now takes points away on use, then gives them back + multiplier if the roll was won.

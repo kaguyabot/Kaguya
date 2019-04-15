@@ -125,7 +125,7 @@ namespace Kaguya.Modules
                 "\nAll commands in category: Currency" +
                 "\n" +
                 $"\n{cmdPrefix}awardeveryone [awardall]" +
-                $"\n{cmdPrefix}groll [gr]" +
+                $"\n{cmdPrefix}roll [gr]" +
                 $"\n{cmdPrefix}masspointsdistribute" +
                 $"\n{cmdPrefix}points" +
                 $"\n{cmdPrefix}pointsadd [addpoints]" +
