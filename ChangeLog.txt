@@ -13,7 +13,7 @@ Version 1.7.0
 - Added help command for $sttreflog
 - $groll has been renamed to $roll (but keeps the alias of "gr")
 - Command $osu added -- generates a profile for your osu! username with various statistics (also taps into osuset for added convenience).
-
+- Fixed a bug with $osutop -- now requires number, then name. If name is blank, it defaults to the $osuset username.
 
 Version 1.6.0
 

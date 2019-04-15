@@ -99,13 +99,13 @@ namespace Kaguya.Modules
             });
             embed.WithTitle($"osu! Profile For {username}");
             embed.AddField($"Performance: {pp}pp  Global Rank: #{globalRank}   Country Rank: #{countryRank}",
-                $"\n▸ **Total Ranked Score:** `{rankedScore.ToString("N0")}` POINTS" +
+                $"▸ **Total Ranked Score:** `{rankedScore.ToString("N0")}` points" +
                 $"\n▸ **Average Hit Accuracy: ** `{(accuracy / 100).ToString("P")}`" +
-                $"\n▸ **Play Time:** `{totalSecondsPlayed} Hours - That's over `{totalSecondsPlayed / 86400}` Days!" +
+                $"\n▸ **Play Time:** `{totalSecondsPlayed}` Hours - That's over `{totalSecondsPlayed / 86400}` Days!" +
                 $"\n▸ **Total Play Count:** `{playcount.ToString("N0")}`" +
                 $"\n▸ **Current Level:** `{level.ToString("N0")}` ~ `{(int)((level - (int)level) * 100)}%` to level {(int)level++}!" +
                 $"\n▸ **Total Circles Clicked:** `{(count300 + count100 + count50).ToString("N0")}`" +
-                $"\n▸ {gradeSSH} ~ {countSSH} {gradeSS} ~ {countSS} {gradeSH} ~ {countSH} {gradeS} ~ {countS} {gradeA} ~ {countA}" +
+                $"\n▸ {gradeSSH} ~ `{countSSH}` {gradeSS} ~ `{countSS}` {gradeSH} ~ `{countSH}` {gradeS} ~ `{countS}` {gradeA} ~ `{countA}`" +
                 $"\n▸ **Average play value:** `{(pp / 100).ToString("N0")}`pp");
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
             embed.WithFooter($"Stats accurate as of {DateTime.Now.ToShortDateString()}");
@@ -272,7 +272,7 @@ namespace Kaguya.Modules
         }
 
         [Command("osutop")] //osu
-        public async Task osuTop(string player = null, int num = 5)
+        public async Task osuTop(int num = 5, string player = null)
         {
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
@@ -287,6 +287,8 @@ namespace Kaguya.Modules
                     BE(); return;
                 }
             }
+
+            player.Replace(' ', '_');
 
             string osuapikey = Config.bot.osuapikey;
 
@@ -366,6 +368,7 @@ namespace Kaguya.Modules
 
             var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonPlayer)[0];
             string username = playerObject.username;
+            string playerID = playerObject.user_id;
             string TopPlayString = ""; //Country images to come later.
             for (var j = 0; j < num; j++)
             {
@@ -379,7 +382,7 @@ namespace Kaguya.Modules
             }
             embed.WithAuthor($"{username}'s Top osu! Standard Plays");
             embed.WithTitle($"**Top {num} osu! standard plays for {username}:**");
-            embed.WithUrl($"https://osu.ppy.sh/u/{player}");
+            embed.WithUrl($"https://osu.ppy.sh/u/{playerID}");
             embed.WithDescription($"osu! Stats for player **{username}**:\n" + TopPlayString);
             embed.WithColor(Pink);
             BE();
