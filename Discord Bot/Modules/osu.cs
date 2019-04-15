@@ -381,7 +381,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{Context.User.Mention} I'm sorry, but this command can only be executed inside of the Spring Tranquility " +
                     $"osu! Tournament server!**");
                 embed.WithColor(Red);
-                BE();
+                BE(); return;
             }
             ISocketMessageChannel channel = (ISocketMessageChannel)Context.Guild.GetChannel(554453952125599745);
            

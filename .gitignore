@@ -8,7 +8,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.json
 ConsoleLogFile.txt
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -73,7 +72,6 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
-*.json
 
 # Chutzpah Test files
 _Chutzpah*
@@ -264,12 +262,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-*.json
-Discord Bot/bin/Debug/Resources/servers.json
-Discord Bot/bin/Debug/Resources/servermessagelogs.json
-Discord Bot/bin/Debug/Resources/config.json
-Discord Bot/bin/Debug/Resources/accounts.json
-Discord Bot/bin/Debug/Resources/servers.json
-Discord Bot/bin/Debug/Resources/servermessagelogs.json
-Discord Bot/bin/Debug/Resources/config.json
-Discord Bot/bin/Debug/Resources/accounts.json
+

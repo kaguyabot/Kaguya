@@ -18,17 +18,11 @@ namespace Kaguya.Modules
     public class Administration : ModuleBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
-
         public Color Pink = new Color(252, 132, 255);
-
         public Color Red = new Color(255, 0, 0);
-
         public Color Gold = new Color(255, 223, 0);
-
         public BotConfig bot = new BotConfig();
-
         public string version = Utilities.GetAlert("VERSION");
-
         public string botToken = Config.bot.token;
 
         public async Task BE() //Method to build and send an embedded message.

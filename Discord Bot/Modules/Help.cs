@@ -243,6 +243,24 @@ namespace Kaguya.Modules
                         $"\nExample: `{cmdPrefix}createteamrole \"Smelly Sushi\" @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
                     embed.WithColor(Pink);
                     BE(); break;
+                case "sttreflog":
+                    embed.WithTitle($"Help: STT Ref Log | `{cmdPrefix}sttreflog`");
+                    embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
+                        $"\n" +
+                        $"\nGenerates an embedded message in the chennel \"Results\" in the \"Spring Tranquility osu! Tournament #2\" server. " +
+                        $"This is used by the tournament's referees to report match results. This command is exclusive to the STT2 server!" +
+                        $"\n" +
+                        $"\n**Syntax** (Everything in <> is a required parameter, quotes are REQUIRED!): " +
+                        $"\n" +
+                        $"\n`{cmdPrefix}sttreflog <\"winning team\"> <\"losing team\"> <\"winning team's score\"> " +
+                        $"\n<\"Team #1 Ban Mod #1\"> " +
+                        $"<\"Team #1 Ban #1\"> <\"Team #1 Ban Mod #2\"> " +
+                        $"\n<\"Team #1 Ban #2\"> <\"Team #2 Ban Mod #1\"> " +
+                        $"\n<\"Team #2 Ban #1\"> " +
+                        $"<\"Team #2 Ban Mod #2\"> " +
+                        $"\n<\"Team #2 Ban #2\"> <\"MP Link\">`");
+                    embed.WithColor(Pink);
+                    BE(); break;
                 case "osutop":
                     embed.WithTitle($"Help: osu! Top | `{cmdPrefix}osutop`");
                     embed.WithDescription($"\n" +
