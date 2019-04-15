@@ -205,7 +205,7 @@ namespace Kaguya.Modules
             }
         }
 
-        [Command("groll")] //currency
+        [Command("roll")] //currency
         [Alias("gr")]
         public async Task GamblePoints(int points)
         {

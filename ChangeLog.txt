@@ -11,6 +11,7 @@ Version 1.6.1
 - Created $scrapedatabase -- creates accounts for every member in every server that has less than 3500 members.
 - Fixed a bug with the updated messages logger that caused embedded links to trigger the message updated log event.
 - Added help command for $sttreflog
+- $groll has been renamed to $roll (but keeps the alias of "gr")
 
 Version 1.6.0 Stable
 

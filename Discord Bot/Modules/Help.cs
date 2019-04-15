@@ -312,7 +312,7 @@ namespace Kaguya.Modules
                         $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json.");
                     embed.WithColor(Pink);
                     BE(); break;
-                case "groll":
+                case "roll":
                 case "gr":
                     embed.WithTitle($"Help: Gambling | `{cmdPrefix}gamble` / `{cmdPrefix}g`");
                     embed.WithDescription($"{Context.User.Mention} Allows you to roll the dice and gamble your points!" +
@@ -509,11 +509,11 @@ namespace Kaguya.Modules
             embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]`" +
                 "\n`clear [c] [purge]` \n`kaguyaexit` \n`scrapeserver` \n`filteradd [fa]` \n`filterremove [fr]` \n`filterview [fv]` \n`filterclear [clearfilter]` \n`setlogchannel [log]` \n`resetlogchannel [rlog]`" +
                 "\n`logtypes [loglist]`", true);
-            embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`timelyreset` \n`groll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
+            embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
             embed.AddField("Fun", "`echo` \n`pick`", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]`", true);
-            embed.AddField("osu!", "`createteamrole [ctr]` \n`delteams` \n`osutop` \n`recent [r]` \n`osuset`", true);
+            embed.AddField("osu!", "`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
             embed.WithColor(Pink);
             embed.WithFooter($"For more information, including a link to add this bot to your server and a link to the Kaguya Support Discord, type {cmdPrefix}hdm!");
