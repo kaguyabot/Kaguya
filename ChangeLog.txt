@@ -13,6 +13,7 @@ Version 1.6.1
 - Added help command for $sttreflog
 - $groll has been renamed to $roll (but keeps the alias of "gr")
 
+
 Version 1.6.0 Stable
 
 - Kaguya got approved on Discordbots.org!! Give her an upvote here: https://discordbots.org/bot/538910393918160916
