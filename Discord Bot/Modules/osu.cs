@@ -94,21 +94,21 @@ namespace Kaguya.Modules
 
             embed.WithAuthor(author =>
             {
-                author
-                .IconUrl = $"https://osu.ppy.sh/images/flags/{country}.png";
+                author.Url = $"https://osu.ppy.sh/u/{userID}";
+                author.Name = $"osu! Profile For {username}";
             });
-            embed.WithTitle($"osu! Profile For {username}");
+            embed.WithTitle($"Statistics");
             embed.AddField($"Performance: {pp}pp  Global Rank: #{globalRank}   Country Rank: #{countryRank}",
                 $"▸ **Total Ranked Score:** `{rankedScore.ToString("N0")}` points" +
                 $"\n▸ **Average Hit Accuracy: ** `{(accuracy / 100).ToString("P")}`" +
-                $"\n▸ **Play Time:** `{totalSecondsPlayed}` Hours - That's over `{totalSecondsPlayed / 86400}` Days!" +
-                $"\n▸ **Total Play Count:** `{playcount.ToString("N0")}`" +
-                $"\n▸ **Current Level:** `{level.ToString("N0")}` ~ `{(int)((level - (int)level) * 100)}%` to level {(int)level++}!" +
+                $"\n▸ **Play Time:** `{totalSecondsPlayed / 3600}` Hours - That's over `{totalSecondsPlayed / 86400} Days`!" +
+                $"\n▸ **Total Play Count:** `{playcount.ToString("N0")}` plays" +
+                $"\n▸ **Current Level:** `{level.ToString("N0")}` ~ `{(int)((level - (int)level) * 100)}%` to level {(int)level + 1}!" +
                 $"\n▸ **Total Circles Clicked:** `{(count300 + count100 + count50).ToString("N0")}`" +
                 $"\n▸ {gradeSSH} ~ `{countSSH}` {gradeSS} ~ `{countSS}` {gradeSH} ~ `{countSH}` {gradeS} ~ `{countS}` {gradeA} ~ `{countA}`" +
                 $"\n▸ **Average play value:** `{(pp / 100).ToString("N0")}`pp");
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
-            embed.WithFooter($"Stats accurate as of {DateTime.Now.ToShortDateString()}");
+            embed.WithFooter($"Stats accurate as of {DateTime.Now}");
             embed.WithColor(Pink);
             BE();
         }

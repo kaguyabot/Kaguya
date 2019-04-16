@@ -198,6 +198,9 @@ namespace Kaguya.Modules
         {
             var _client = Global.Client;
             var servers = Servers.GetAllServers();
+            embed.WithDescription($"**{Context.User.Mention} Scraping...**");
+            embed.WithColor(Red);
+            await BE();
             int i = 1;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -220,8 +223,7 @@ namespace Kaguya.Modules
             UserAccounts.SaveAccounts();
             embed.WithDescription($"**{Context.User.Mention} Created accounts for `{UserAccounts.GetAllAccounts().Count}` users.**");
             embed.WithColor(Red);
-            BE();
-
+            await BE();
         }
 
         [Command("removeallroles")] //admin
