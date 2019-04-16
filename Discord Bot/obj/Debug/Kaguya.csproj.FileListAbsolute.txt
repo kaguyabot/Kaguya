@@ -27,7 +27,6 @@ C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\Newtonsoft.
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Collections.Immutable.xml
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Diagnostics.DiagnosticSource.xml
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\System.Interactive.Async.xml
-C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Kaguya.csprojAssemblyReference.cache
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Kaguya.csproj.CoreCompileInputs.cache
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.TrustInfo.xml
 C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Discord Bot.exe.manifest
