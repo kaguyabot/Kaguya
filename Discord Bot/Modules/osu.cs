@@ -13,6 +13,7 @@ using System.Net;
 using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
+using System.Text.RegularExpressions;
 
 #pragma warning disable
 
@@ -20,6 +21,7 @@ namespace Kaguya.Modules
 {
     public class osu : ModuleBase<SocketCommandContext>
     {
+        DiscordSocketClient _client;
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);
         public Color Red = new Color(255, 0, 0);
@@ -27,13 +29,14 @@ namespace Kaguya.Modules
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
         public string botToken = Config.bot.token;
+        public string osuapikey = Config.bot.osuapikey;
 
         public async Task BE() //Method to build and send an embedded message.
         {
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
-
-       /* [Command("osu")]
+        
+        [Command("osu")]
         public async Task osuProfile([Remainder]string player = null)
         {
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
@@ -82,6 +85,8 @@ namespace Kaguya.Modules
             int totalSecondsPlayed = userProfileObject.total_seconds_played; //Playtime in seconds
             int countryRank = userProfileObject.pp_country_rank;
 
+            var difference = DateTime.Now - joinDate;
+
             //Emote codes for grading letters
 
             string gradeSSH = "<:XH:553119188089176074>";
@@ -97,22 +102,24 @@ namespace Kaguya.Modules
                 author.Url = $"https://osu.ppy.sh/u/{userID}";
                 author.Name = $"osu! Profile For {username}";
             });
-            embed.WithTitle($"Statistics");
-            embed.AddField($"Performance: {pp}pp  Global Rank: #{globalRank}   Country Rank: #{countryRank}",
+            embed.AddField($"Performance: {pp}pp" +
+                $"\nGlobal Rank: #{globalRank.ToString("N0")}" +
+                $"\n{country} Rank: #{countryRank.ToString("N0")}",
                 $"▸ **Total Ranked Score:** `{rankedScore.ToString("N0")}` points" +
                 $"\n▸ **Average Hit Accuracy: ** `{(accuracy / 100).ToString("P")}`" +
                 $"\n▸ **Play Time:** `{totalSecondsPlayed / 3600}` Hours - That's over `{totalSecondsPlayed / 86400} Days`!" +
                 $"\n▸ **Total Play Count:** `{playcount.ToString("N0")}` plays" +
-                $"\n▸ **Current Level:** `{level.ToString("N0")}` ~ `{(int)((level - (int)level) * 100)}%` to level {(int)level + 1}!" +
+                $"\n▸ **Current Level:** `{level.ToString("N0")}` ~ `{(int)((level - (int)level) * 100)}% to level {(int)level + 1}`!" +
                 $"\n▸ **Total Circles Clicked:** `{(count300 + count100 + count50).ToString("N0")}`" +
                 $"\n▸ {gradeSSH} ~ `{countSSH}` {gradeSS} ~ `{countSS}` {gradeSH} ~ `{countSH}` {gradeS} ~ `{countS}` {gradeA} ~ `{countA}`" +
-                $"\n▸ **Average play value:** `{(pp / 100).ToString("N0")}`pp");
+                $"\n▸ **{username} joined `{difference.TotalDays.ToString("N0")} days, {difference.Hours} hours, and {difference.Seconds} seconds ago.`**" +
+                $"\n**`That's over {(difference.TotalDays / 31).ToString("N0")} months!`**");
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
             embed.WithFooter($"Stats accurate as of {DateTime.Now}");
             embed.WithColor(Pink);
             BE();
         }
-        */
+        
         [Command("osuset")] //osu
         public async Task osuSet([Remainder]string username)
         {

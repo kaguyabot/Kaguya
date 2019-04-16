@@ -176,6 +176,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Module: osu!");
                 embed.WithDescription("```css" +
                     "\n" +
+                    $"\n{cmdPrefix}osu" +
                     $"\n{cmdPrefix}createteamrole [ctr]" +
                     $"\n{cmdPrefix}delteams" +
                     $"\n{cmdPrefix}osuset" +

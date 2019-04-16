@@ -16,6 +16,9 @@ Version 1.7.0
 - Fixed a bug with $osutop -- now requires number, then name. If name is blank, it defaults to the $osuset username.
 - Tweaked $scrapedatabase
 - Added $toggleannouncements command. This will toggle the level up announcements in chat.
+- Automatic osu! beatmap link parsing functionality added!!
+- Tillerino API key can now be added into config.json
+- Level up announcements are now less intrusive
 
 Version 1.6.0
 

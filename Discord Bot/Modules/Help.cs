@@ -231,6 +231,14 @@ namespace Kaguya.Modules
                         $"If multiple matches of the same role are found, the bot will delete all occurrences of said role." +
                         $"\nSyntax: `{cmdPrefix}deleterole <role name>`");
                     BE(); break;
+                case "osu":
+                    embed.WithTitle($"Help: osu! | `{cmdPrefix}osu`");
+                    embed.WithDescription($"{Context.User.Mention} Presents lots of statistics from the given osu! profile name. If your `{cmdPrefix}osuset` username " +
+                        $"is set, you may use `{cmdPrefix}osu` by itself. Otherwise, you must specify a name afterward." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}osu`, `{cmdPrefix}osu <username>`");
+                    embed.WithColor(Pink);
+                    BE(); break;
                 case "createteamrole":
                 case "ctr":
                     embed.WithTitle($"Help: Create Team Roles | `{cmdPrefix}createteamrole`, `{cmdPrefix}ctr`");
@@ -513,7 +521,7 @@ namespace Kaguya.Modules
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
             embed.AddField("Fun", "`echo` \n`pick`", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]`", true);
-            embed.AddField("osu!", "`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
+            embed.AddField("osu!", "`osu` \n`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
             embed.WithColor(Pink);
             embed.WithFooter($"For more information, including a link to add this bot to your server and a link to the Kaguya Support Discord, type {cmdPrefix}hdm!");
