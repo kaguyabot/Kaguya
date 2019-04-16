@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Discord_Bot.Core.UserAccounts;
-using Discord_Bot.Core.Server_Files;
-using Discord_Bot.Core.Commands;
+using Kaguya.Core.UserAccounts;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.Commands;
 using Newtonsoft.Json;
 using System.IO;
 
-namespace Discord_Bot.Core
+namespace Kaguya.Core
 {
     public static class DataStorage2
     {

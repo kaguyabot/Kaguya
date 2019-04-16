@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Discord_Bot
+namespace Kaguya
 {
     class DataStorage
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Discord_Bot
+namespace Kaguya
 {
     class Config
     {
@@ -39,5 +39,7 @@ namespace Discord_Bot
         public string token { get; set; }
         public string cmdPrefix { get; set; }
         public string osuapikey { get; set; }
+        public string tillerinoapikey { get; set; }
+
     }
 }

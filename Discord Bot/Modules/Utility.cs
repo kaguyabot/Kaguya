@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord_Bot.Core.UserAccounts;
+using Kaguya.Core.UserAccounts;
 using System.Net;
 using System.Timers;
-using Discord_Bot.Core.Server_Files;
-using Discord_Bot.Core.Commands;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.Commands;
 
 #pragma warning disable
 
-namespace Discord_Bot.Modules
+namespace Kaguya.Modules
 {
     public class Utility : ModuleBase<SocketCommandContext>
     {
@@ -125,7 +125,7 @@ namespace Discord_Bot.Modules
                 "\nAll commands in category: Currency" +
                 "\n" +
                 $"\n{cmdPrefix}awardeveryone [awardall]" +
-                $"\n{cmdPrefix}groll [gr]" +
+                $"\n{cmdPrefix}roll [gr]" +
                 $"\n{cmdPrefix}masspointsdistribute" +
                 $"\n{cmdPrefix}points" +
                 $"\n{cmdPrefix}pointsadd [addpoints]" +
@@ -176,6 +176,7 @@ namespace Discord_Bot.Modules
                 embed.WithTitle("Module: osu!");
                 embed.WithDescription("```css" +
                     "\n" +
+                    $"\n{cmdPrefix}osu" +
                     $"\n{cmdPrefix}createteamrole [ctr]" +
                     $"\n{cmdPrefix}delteams" +
                     $"\n{cmdPrefix}osuset" +
@@ -199,6 +200,34 @@ namespace Discord_Bot.Modules
                     $"\n```");
                 embed.WithColor(Pink);
                 BE();
+            }
+        }
+
+        [Command("toggleannouncements")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task ToggleAnnouncements()
+        {
+            Server guild = Servers.GetServer(Context.Guild);
+            var cmdPrefix = guild.commandPrefix;
+            if (guild.MessageAnnouncements == true)
+            {
+                guild.MessageAnnouncements = false;
+
+                embed.WithTitle("Level Up Announcements");
+                embed.WithDescription($"**{Context.User.Mention} Level up announcements have been disabled.**");
+                embed.WithFooter($"To re-enable, use {cmdPrefix}toggleannouncements again.");
+                embed.WithColor(Red);
+                BE(); return;
+            }
+            else if(guild.MessageAnnouncements == false)
+            {
+                guild.MessageAnnouncements = true;
+
+                embed.WithTitle("Level Up Announcements");
+                embed.WithDescription($"**{Context.User.Mention} Level up announcements have been enabled.**");
+                embed.WithFooter($"To disable, use {cmdPrefix}toggleannouncements again.");
+                embed.WithColor(Red);
+                BE(); return;
             }
         }
 

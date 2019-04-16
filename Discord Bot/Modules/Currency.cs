@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord_Bot.Core.UserAccounts;
+using Kaguya.Core.UserAccounts;
 using System.Net;
 using System.Timers;
-using Discord_Bot.Core.Server_Files;
-using Discord_Bot.Core.Commands;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.Commands;
 
 #pragma warning disable
 
-namespace Discord_Bot.Modules
+namespace Kaguya.Modules
 {
     public class Currency : ModuleBase<SocketCommandContext>
     {
@@ -40,14 +40,13 @@ namespace Discord_Bot.Modules
         }
 
         [Command("points")] //currency
-        public async Task Points([Remainder]string arg = "")
+        public async Task Points(IGuildUser user = null)
         {
-            SocketUser target = null;
-            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
-            target = mentionedUser ?? Context.User;
-            var account = UserAccounts.GetAccount(target);
+            if (user == null)
+                user = Context.User as IGuildUser;
+            var account = UserAccounts.GetAccount(user as SocketUser);
             embed.WithTitle("Points");
-            embed.WithDescription($"{target.Mention} has {account.Points} points.");
+            embed.WithDescription($"{user.Mention} has {account.Points} points.");
             embed.WithColor(Pink);
             BE();
         }
@@ -206,7 +205,7 @@ namespace Discord_Bot.Modules
             }
         }
 
-        [Command("groll")] //currency
+        [Command("roll")] //currency
         [Alias("gr")]
         public async Task GamblePoints(int points)
         {

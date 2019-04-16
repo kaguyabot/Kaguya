@@ -8,24 +8,19 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord_Bot.Core.UserAccounts;
+using Kaguya.Core.UserAccounts;
 using System.Net;
 using System.Timers;
-using Discord_Bot.Core.Server_Files;
-using Discord_Bot.Core.Commands;
-using Discord.Addons.Interactive;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.Commands;
 
 #pragma warning disable
 
-namespace Discord_Bot.Modules
+namespace Kaguya.Modules
 {
     public class Fun : ModuleBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
-
-        private InteractiveService _interactive;
-
-       // public InteractiveBase interactive = new InteractiveBase();
 
         Color Pink = new Color(252, 132, 255);
         Color Red = new Color(255, 0, 0);

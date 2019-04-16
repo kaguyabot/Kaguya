@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using Discord_Bot.Core.UserAccounts;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.UserAccounts;
 
-namespace Discord_Bot.Core.LevelingSystem
+namespace Kaguya.Core.LevelingSystem
 {
     internal static class Leveling
     {
@@ -28,18 +29,16 @@ namespace Discord_Bot.Core.LevelingSystem
                 userAccount.LastReceivedEXP = DateTime.Now;
                 UserAccounts.UserAccounts.SaveAccounts();
                 uint newLevel = userAccount.LevelNumber;
-                if (oldLevel != userAccount.LevelNumber)
+                Server guild = Servers.GetServer(channel.Guild);
+                if (oldLevel != userAccount.LevelNumber && guild.MessageAnnouncements == true)
                 {
                     EmbedBuilder embed = new EmbedBuilder();
-                    embed.WithTitle("Level up!");
-                    embed.WithDescription($"{user.Username} just leveled up!");
-                    embed.AddField("Level", newLevel, true);
-                    embed.AddField("EXP", userAccount.EXP, true);
+                    embed.WithDescription($"**{user.Username} just leveled up!**" +
+                        $"\nLevel: {userAccount.LevelNumber.ToString("N0")} | EXP: {userAccount.EXP.ToString("N0")}");
                     embed.WithColor(Pink);
-
                     await channel.SendMessageAsync("", false, embed.Build());
                 }
-                
+                else return;
             }
             catch (Discord.Net.HttpException)
             {

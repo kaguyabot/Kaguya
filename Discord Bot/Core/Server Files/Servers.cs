@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 
-namespace Discord_Bot.Core.Server_Files
+namespace Kaguya.Core.Server_Files
 {
     public static class Servers
     {
@@ -29,6 +29,16 @@ namespace Discord_Bot.Core.Server_Files
         public static Server GetServer(SocketGuild guild)
         {
             return GetOrCreateServer(guild.Id);
+        }
+
+        public static Server GetServer(ulong Id)
+        {
+            return GetOrCreateServer(Id);
+        }
+
+        public static List<Server> GetAllServers()
+        {
+            return servers;
         }
 
         private static Server GetOrCreateServer(ulong id)

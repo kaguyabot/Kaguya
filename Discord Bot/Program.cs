@@ -10,7 +10,7 @@ using System.Timers;
 
 #pragma warning disable CS1998
 
-namespace Discord_Bot
+namespace Kaguya
 {
     public class Program
     {
@@ -50,7 +50,7 @@ namespace Discord_Bot
                 _client = new DiscordSocketClient(new DiscordSocketConfig
                 {
                     LogLevel = LogSeverity.Verbose,
-                    MessageCacheSize = 250
+                    MessageCacheSize = 100
                 });
                 _client.Log += Log;
                 try

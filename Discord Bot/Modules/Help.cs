@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Discord_Bot.Core.UserAccounts;
+using Kaguya.Core.UserAccounts;
 using System.Net;
 using System.Timers;
-using Discord_Bot.Core.Server_Files;
-using Discord_Bot.Core.Commands;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.Commands;
 
 #pragma warning disable
 
-namespace Discord_Bot.Modules
+namespace Kaguya.Modules
 {
     public class Help : ModuleBase<SocketCommandContext>
     {
@@ -231,6 +231,14 @@ namespace Discord_Bot.Modules
                         $"If multiple matches of the same role are found, the bot will delete all occurrences of said role." +
                         $"\nSyntax: `{cmdPrefix}deleterole <role name>`");
                     BE(); break;
+                case "osu":
+                    embed.WithTitle($"Help: osu! | `{cmdPrefix}osu`");
+                    embed.WithDescription($"{Context.User.Mention} Presents lots of statistics from the given osu! profile name. If your `{cmdPrefix}osuset` username " +
+                        $"is set, you may use `{cmdPrefix}osu` by itself. Otherwise, you must specify a name afterward." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}osu`, `{cmdPrefix}osu <username>`");
+                    embed.WithColor(Pink);
+                    BE(); break;
                 case "createteamrole":
                 case "ctr":
                     embed.WithTitle($"Help: Create Team Roles | `{cmdPrefix}createteamrole`, `{cmdPrefix}ctr`");
@@ -241,6 +249,24 @@ namespace Discord_Bot.Modules
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}createteamrole <role name> <mentioned users>`" +
                         $"\nExample: `{cmdPrefix}createteamrole \"Smelly Sushi\" @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "sttreflog":
+                    embed.WithTitle($"Help: STT Ref Log | `{cmdPrefix}sttreflog`");
+                    embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
+                        $"\n" +
+                        $"\nGenerates an embedded message in the chennel \"Results\" in the \"Spring Tranquility osu! Tournament #2\" server. " +
+                        $"This is used by the tournament's referees to report match results. This command is exclusive to the STT2 server!" +
+                        $"\n" +
+                        $"\n**Syntax** (Everything in <> is a required parameter, quotes are REQUIRED!): " +
+                        $"\n" +
+                        $"\n`{cmdPrefix}sttreflog <\"winning team\"> <\"losing team\"> <\"winning team's score\"> " +
+                        $"\n<\"Team #1 Ban Mod #1\"> " +
+                        $"<\"Team #1 Ban #1\"> <\"Team #1 Ban Mod #2\"> " +
+                        $"\n<\"Team #1 Ban #2\"> <\"Team #2 Ban Mod #1\"> " +
+                        $"\n<\"Team #2 Ban #1\"> " +
+                        $"<\"Team #2 Ban Mod #2\"> " +
+                        $"\n<\"Team #2 Ban #2\"> <\"MP Link\">`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "osutop":
@@ -294,7 +320,7 @@ namespace Discord_Bot.Modules
                         $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json.");
                     embed.WithColor(Pink);
                     BE(); break;
-                case "groll":
+                case "roll":
                 case "gr":
                     embed.WithTitle($"Help: Gambling | `{cmdPrefix}gamble` / `{cmdPrefix}g`");
                     embed.WithDescription($"{Context.User.Mention} Allows you to roll the dice and gamble your points!" +
@@ -335,12 +361,21 @@ namespace Discord_Bot.Modules
                     BE(); break;
                 case "scrapeserver":
                     embed.WithTitle($"Help: Server Scraping | `{cmdPrefix}scrapeserver`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
                         $"\nOrders the bot to create user accounts for every individual in the server, even if they have never typed " +
                         $"in chat. This function is automatically called when using `{cmdPrefix}massblacklist` to ensure that " +
                         $"there is no question on whether they will be able to be banned/unbanned. Creating a user account allows for name " +
                         $"and ID logging, the latter is necessary if a bot owner wishes to unblacklist a user.");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "scrapedatabase":
+                    embed.WithTitle($"Help: Database Scraping | `{cmdPrefix}scrapedatabase`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
+                        $"\n" +
+                        $"\nCreates an account for every user in every server that Kaguya is connected to. This command will not create accounts " +
+                        $"for other bots or users in servers with over `3,500` members. This command primarily exists for stability reasons (occasionally, if a " +
+                        $"user doesn't have an account, a bot function may not work for said user [such as with `$ctr`]).");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "rep":
@@ -482,11 +517,11 @@ namespace Discord_Bot.Modules
             embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]`" +
                 "\n`clear [c] [purge]` \n`kaguyaexit` \n`scrapeserver` \n`filteradd [fa]` \n`filterremove [fr]` \n`filterview [fv]` \n`filterclear [clearfilter]` \n`setlogchannel [log]` \n`resetlogchannel [rlog]`" +
                 "\n`logtypes [loglist]`", true);
-            embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`timelyreset` \n`groll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
+            embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
             embed.AddField("Fun", "`echo` \n`pick`", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]`", true);
-            embed.AddField("osu!", "`createteamrole [ctr]` \n`delteams` \n`osutop` \n`recent [r]` \n`osuset`", true);
+            embed.AddField("osu!", "`osu` \n`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
             embed.WithColor(Pink);
             embed.WithFooter($"For more information, including a link to add this bot to your server and a link to the Kaguya Support Discord, type {cmdPrefix}hdm!");

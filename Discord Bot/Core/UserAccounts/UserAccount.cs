@@ -4,50 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Discord_Bot.Core.UserAccounts
+namespace Kaguya.Core.UserAccounts
 {
     public class UserAccount
     {
         public string Username { get; set; }
-
         public ulong ID { get; set; }
-
         public List<string> IsInServers { get; set; }
-
         public List<ulong> IsInServerIDs { get; set; }
-
         public uint Points { get; set; }
-
         public uint EXP { get; set; }
-
         public int Rep { get; set; }
-
         public DateTime LastReceivedEXP { get; set; }
-
         public DateTime LastReceivedTimelyPoints { get; set; }
-
         public DateTime LastGivenRep { get; set; }
 
         public uint LevelNumber
         {
             get
             {
-                return (uint)Math.Sqrt(EXP / 20);
+                return (uint)Math.Sqrt(EXP / 32);
             }
         }
         
         public string OsuUsername { get; set; }
-
         public int Blacklisted { get; set; }
-
         public int TotalDailyGambleWinnings { get; set; }
-
         public double LifetimeGambleWins { get; set; }
-
         public double LifetimeGambleLosses { get; set; }
-
         public double LifetimeGambles { get; set; }
-
         public int LifetimeEliteRolls { get; set; }
 
         public UserAccount(ulong id)

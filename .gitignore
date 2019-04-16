@@ -8,7 +8,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.json
 ConsoleLogFile.txt
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -263,3 +262,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
