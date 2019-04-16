@@ -202,6 +202,34 @@ namespace Kaguya.Modules
             }
         }
 
+        [Command("toggleannouncements")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task ToggleAnnouncements()
+        {
+            Server guild = Servers.GetServer(Context.Guild);
+            var cmdPrefix = guild.commandPrefix;
+            if (guild.MessageAnnouncements == true)
+            {
+                guild.MessageAnnouncements = false;
+
+                embed.WithTitle("Level Up Announcements");
+                embed.WithDescription($"**{Context.User.Mention} Level up announcements have been disabled.**");
+                embed.WithFooter($"To re-enable, use {cmdPrefix}toggleannouncements again.");
+                embed.WithColor(Red);
+                BE(); return;
+            }
+            else if(guild.MessageAnnouncements == false)
+            {
+                guild.MessageAnnouncements = true;
+
+                embed.WithTitle("Level Up Announcements");
+                embed.WithDescription($"**{Context.User.Mention} Level up announcements have been enabled.**");
+                embed.WithFooter($"To disable, use {cmdPrefix}toggleannouncements again.");
+                embed.WithColor(Red);
+                BE(); return;
+            }
+        }
+
         [Command("prefix")] //utility
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task AlterPrefix(string prefix = "$")

@@ -15,6 +15,7 @@ Version 1.7.0
 - Command $osu added -- generates a profile for your osu! username with various statistics (also taps into osuset for added convenience).
 - Fixed a bug with $osutop -- now requires number, then name. If name is blank, it defaults to the $osuset username.
 - Tweaked $scrapedatabase
+- Added $toggleannouncements command. This will toggle the level up announcements in chat.
 
 Version 1.6.0
 

@@ -33,7 +33,7 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
-        [Command("osu")]
+       /* [Command("osu")]
         public async Task osuProfile([Remainder]string player = null)
         {
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
@@ -112,7 +112,7 @@ namespace Kaguya.Modules
             embed.WithColor(Pink);
             BE();
         }
-
+        */
         [Command("osuset")] //osu
         public async Task osuSet([Remainder]string username)
         {
