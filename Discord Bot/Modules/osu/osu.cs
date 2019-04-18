@@ -139,7 +139,7 @@ namespace Kaguya.Modules
 
         [Command("recent")] //osu
         [Alias("r")]
-        public async Task osuRecent(string player = null, int mode = 0)
+        public async Task osuRecent(string player = null, string modifier = null)
         {
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             string osuapikey = Config.bot.osuapikey;
@@ -154,14 +154,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Red);
                     BE(); return;
                 }
-            }
-
-            if(mode != 0)
-            {
-                embed.WithTitle("osu! Recent");
-                embed.WithDescription($"**{Context.User.Mention} I'm sorry, but I don't have support for modes other than osu! Standard yet :(**");
-                embed.WithColor(Red);
-                BE(); return;
             }
 
             string jsonRecent;
@@ -214,7 +206,7 @@ namespace Kaguya.Modules
                     fullCombo = " **Full Combo!**";
                 else fullCombo = null;
                 string mods = playerRecentObject.enabled_mods;
-                string maxPossibleCombo = mapRecentObject.max_combo;
+                int maxPossibleCombo = mapRecentObject.max_combo;
                 var modnum = playerRecentObject.enabled_mods;
                 mods = ((AllMods)modnum).ToString().Replace(",", "");
                 mods = mods.Replace(" ", "");
@@ -256,25 +248,37 @@ namespace Kaguya.Modules
                 if (plus == "+" && mods == "")
                     plus = "";
                 mods = mods.Replace("576", "NC");
-                string playerRecentString = $"▸ **{grade}{plus}{mods}** ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by ***{artist}***\n" +
-                    $"▸ **☆{starRating.ToString("F")}** ▸ **{accuracy.ToString("F")}%**\n" +
-                    $"▸ [Combo: {maxCombo}x / Max: {maxPossibleCombo}] {fullCombo}\n" +
-                    $"▸ [{count300} / {count100} / {count50} / {countMiss}]";
 
-                var difference = DateTime.UtcNow - (DateTime)playerRecentObject.date;
+                string playerRecentString;
 
-                string footer = $"{mapUserNameObject.username} preformed this play {difference.Days} days {difference.Hours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
-
-                embed.WithAuthor(author =>
+                if (modifier == null || modifier == "")
                 {
-                    author
-                        .WithName($"Most Recent osu! Standard Play for " + mapUserNameObject.username)
-                        .WithIconUrl("https://a.ppy.sh/" + playerRecentObject.user_id);
-                });
-                embed.WithDescription($"{playerRecentString}");
-                embed.WithFooter(footer);
-                embed.WithColor(Pink);
-                BE();
+                    playerRecentString = $"▸ **{grade}{plus}{mods}** ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by **{artist}**\n" +
+                        $"▸ **☆{starRating.ToString("F")}** ▸ **{accuracy.ToString("F")}%**\n" +
+                        $"▸ [Combo: {maxCombo}x / Max: {maxPossibleCombo}] {fullCombo}\n" +
+                        $"▸ [{count300} / {count100} / {count50} / {countMiss}]\n" +
+                        $"▸ **Map Completion:** `{((count300 + count100 + count50 + countMiss) / maxPossibleCombo).ToString("N2")}%`";
+
+
+
+
+                    var difference = DateTime.UtcNow - (DateTime)playerRecentObject.date;
+
+                    string footer = $"{mapUserNameObject.username} performed this play {difference.Days} days {difference.Hours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
+
+                    embed.WithAuthor(author =>
+                    {
+                        author
+                            .WithName($"Most Recent osu! Standard Play for " + mapUserNameObject.username)
+                            .WithIconUrl("https://a.ppy.sh/" + playerRecentObject.user_id);
+                    });
+                    embed.WithDescription($"{playerRecentString}");
+                    embed.WithFooter(footer);
+                    embed.WithColor(Pink);
+                    BE();
+                }
+
+                //Add in various modifier if statements here (-b for recent best)
             }
         }
 

@@ -72,3 +72,5 @@ C:\Users\stage\source\repos\Kaguya\Discord Bot\obj\Debug\Discord Bot.TrustInfo.x
 C:\Users\stage\source\repos\Kaguya\Discord Bot\obj\Debug\Discord Bot.exe.manifest
 C:\Users\stage\source\repos\Kaguya\Discord Bot\obj\Debug\Discord Bot.application
 C:\Users\stage\source\repos\Kaguya\Discord Bot\obj\Debug\Kaguya.csproj.CopyComplete
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\obj\Debug\Kaguya.csprojAssemblyReference.cache
+C:\Users\stage\Desktop\C# Projects\Discord Bot\Discord Bot\bin\Debug\OppaiSharp.dll
