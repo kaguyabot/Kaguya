@@ -18,6 +18,7 @@ namespace Kaguya.Core.UserAccounts
         public DateTime LastReceivedEXP { get; set; }
         public DateTime LastReceivedTimelyPoints { get; set; }
         public DateTime LastGivenRep { get; set; }
+        public DateTime LastReceivedWeeklyPoints { get; set; }
 
         public uint LevelNumber
         {

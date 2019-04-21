@@ -3,6 +3,26 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.7.2
+
+- Fixed a typo in Help.cs
+- Removed days counter from $recent
+- Massive improvements to $recent - Adding in new formatting, "FC %", and "PP for FC with same acc"
+- Tweaked $hdm to remove line about self hosting
+- pp in $osu now rounds to two decimals
+- $timely rolls can now have a 14% chance of being a "critical" hit, awarding 3.50x the normal bonus.
+- $roll bets now have a 4% chance of being a "critical hit", awarding 3.50x the multiplier of the winning roll.
+    - The highest possible award is a bet of 25,000 multiplied by 17.5x, if you roll a perfect 100 AND crit.
+        The odds of this are 1/2,500, or 0.04% (This would award 437,500 points)
+- $roll bets also have a 4% chance of being a critical loss, resulting in an additional 25% lost points.
+- New $weekly command added - get 5000 points every week! This command also has an 8% chance of being a critical.
+- Updated help command for $timely
+- Updated help command for "roll" ("gr")
+- Fixed other stuff in help cmds
+- Got rid of some useless code
+- $8ball command added for fun
+
+
 Version 1.7.1
 
 - Added in star rating for the osu! beatmap link parser.
@@ -11,6 +31,7 @@ Version 1.7.1
     as well as the Max combo amount for that difficulty.
 - Heavily refactored code in CommandHandler.cs
 - Added in passrate to beatmap link parser
+- Fixed a big oopsie woopsie uwu (File structure)
 
 Version 1.7.0
 
