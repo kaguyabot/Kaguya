@@ -78,6 +78,21 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
+        [Command("8ball")]
+        public async Task EightBall([Remainder]string question)
+        {
+            string filePath = "Resources/8ball.txt";
+            string[] responses = File.ReadAllLines(filePath);
+            Random rand = new Random();
+
+            var num = rand.Next(14);
+
+            embed.WithTitle("Magic 8Ball");
+            embed.WithDescription($"**{Context.User.Mention} {responses[num]}**");
+            embed.WithColor(Pink);
+            BE();
+        }
+
         //[Command("blackjack1", RunMode = RunMode.Async)]
         //[RequireOwner]
         //public async Task BlackJack(int points)

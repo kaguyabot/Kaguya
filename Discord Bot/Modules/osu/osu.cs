@@ -14,6 +14,7 @@ using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
 using System.Text.RegularExpressions;
+using OppaiSharp;
 
 #pragma warning disable
 
@@ -102,7 +103,7 @@ namespace Kaguya.Modules
                 author.Url = $"https://osu.ppy.sh/u/{userID}";
                 author.Name = $"osu! Profile For {username}";
             });
-            embed.AddField($"Performance: {pp}pp" +
+            embed.AddField($"Performance: {pp.ToString("N2")}pp" +
                 $"\nGlobal Rank: #{globalRank.ToString("N0")}" +
                 $"\n{country} Rank: #{countryRank.ToString("N0")}",
                 $"▸ **Total Ranked Score:** `{rankedScore.ToString("N0")}` points" +
@@ -139,7 +140,7 @@ namespace Kaguya.Modules
 
         [Command("recent")] //osu
         [Alias("r")]
-        public async Task osuRecent(string player = null, int mode = 0)
+        public async Task osuRecent(string player = null)
         {
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             string osuapikey = Config.bot.osuapikey;
@@ -154,14 +155,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Red);
                     BE(); return;
                 }
-            }
-
-            if (mode != 0)
-            {
-                embed.WithTitle("osu! Recent");
-                embed.WithDescription($"**{Context.User.Mention} I'm sorry, but I don't have support for modes other than osu! Standard yet :(**");
-                embed.WithColor(Red);
-                BE(); return;
             }
 
             string jsonRecent;
@@ -203,7 +196,7 @@ namespace Kaguya.Modules
                 string mapTitle = mapRecentObject.title;
                 string difficulty = mapRecentObject.version;
                 string score = playerRecentObject.score;
-                string maxCombo = playerRecentObject.maxcombo;
+                double maxCombo = playerRecentObject.maxcombo;
                 string artist = mapRecentObject.artist;
                 double count50 = playerRecentObject.count50;
                 double count100 = playerRecentObject.count100;
@@ -214,7 +207,7 @@ namespace Kaguya.Modules
                     fullCombo = " **Full Combo!**";
                 else fullCombo = null;
                 string mods = playerRecentObject.enabled_mods;
-                string maxPossibleCombo = mapRecentObject.max_combo;
+                double maxPossibleCombo = mapRecentObject.max_combo;
                 var modnum = playerRecentObject.enabled_mods;
                 mods = ((AllMods)modnum).ToString().Replace(",", "");
                 mods = mods.Replace(" ", "");
@@ -252,18 +245,63 @@ namespace Kaguya.Modules
                 }
                 var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
 
+                //PPv2
+
+                byte[] data = new WebClient().DownloadData($"https://osu.ppy.sh/osu/{mapID}");
+                var stream = new MemoryStream(data, false);
+                var reader = new StreamReader(stream);
+                var enabledMods = Mods.NoMod;
+                switch (mods)
+                {
+                    case "":
+                        enabledMods = Mods.NoMod; break;
+                    case "HD":
+                        enabledMods = Mods.Hidden; break;
+                    case "HR":
+                        enabledMods = Mods.Hardrock; break;
+                    case "DT":
+                    case "NC":
+                        enabledMods = Mods.DoubleTime; break;
+                    case "FL":
+                        enabledMods = Mods.Flashlight; break;
+                    case "HDDT":
+                    case "HDNC":
+                        enabledMods = (int)Mods.DoubleTime + Mods.Hidden; break;
+                    case "HDHR":
+                        enabledMods = (int)Mods.Hidden + Mods.Hardrock; break;
+                    case "HDFL":
+                        enabledMods = (int)Mods.Hidden + Mods.Flashlight; break;
+                    case "EZ":
+                        enabledMods = Mods.Easy; break;
+                    case "HDHRDT":
+                    case "HDHRNC":
+                        enabledMods = (int)Mods.Hidden + (int)Mods.Hardrock + Mods.DoubleTime; break;
+                    default:
+                        enabledMods = Mods.NoMod; break;
+                }
+
+                var beatmap = Beatmap.Read(reader);
+
+                var diff = new DiffCalc().Calc(beatmap, mods: enabledMods);
+
+                var fullComboPP = new PPv2(new PPv2Parameters(beatmap, diff, accuracy: (accuracy / 100), mods: enabledMods));
+
+                //PPv2 End
+
                 string plus = "+";
                 if (plus == "+" && mods == "")
                     plus = "";
                 mods = mods.Replace("576", "NC");
-                string playerRecentString = $"▸ **{grade}{plus}{mods}** ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by ***{artist}***\n" +
+                string playerRecentString = $"▸ **{grade}{plus}{mods}** ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by **{artist}**\n" +
                     $"▸ **☆{starRating.ToString("F")}** ▸ **{accuracy.ToString("F")}%**\n" +
-                    $"▸ [Combo: {maxCombo}x / Max: {maxPossibleCombo}] {fullCombo}\n" +
-                    $"▸ [{count300} / {count100} / {count50} / {countMiss}]";
+                    $"▸ **Combo:** `{maxCombo.ToString("N0")}x / {maxPossibleCombo.ToString("N0")}x`\n" +
+                    $"▸ [300 / 100 / 50 / X]: `[{count300} / {count100} / {count50} / {countMiss}]`\n" +
+                    $"▸ **Full Combo Percentage:** `{((maxCombo / maxPossibleCombo) * 100).ToString("N2")}%`\n" +
+                    $"▸ **PP for FC**: `{fullComboPP.Total.ToString("N0")}pp`";
 
                 var difference = DateTime.UtcNow - (DateTime)playerRecentObject.date;
 
-                string footer = $"{mapUserNameObject.username} preformed this play {difference.Days} days {difference.Hours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
+                string footer = $"{mapUserNameObject.username} preformed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
 
                 embed.WithAuthor(author =>
                 {
