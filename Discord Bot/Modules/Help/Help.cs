@@ -157,13 +157,28 @@ namespace Kaguya.Modules
                         $"\nThe bot will always pick with totally random odds.");
                     embed.WithColor(Pink);
                     BE(); break;
+                case "8ball":
+                    embed.WithTitle($"Help: Magic 8Ball | `{cmdPrefix}8ball`");
+                    embed.WithDescription($"{Context.User.Mention} Ask Kaguya a question and she will use her divine powers to answer you extremely accurately!" +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}8ball <question>`");
+                    embed.WithColor(Pink);
+                    BE(); break;
                 case "timely":
                 case "t":
-                    embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely");
-                    embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim free points every certain amount hours." +
-                        "\nThese points are added to your Kaguya account." +
-                        "\nIf you are in a server with a self-hosted version of Kaguya, these values may be different." +
-                        $"\nSyntax: `{cmdPrefix}timely`.");
+                    embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely`");
+                    embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim 500 free points every 24 hours." +
+                        "\nThese points are added to your Kaguya account. The timely command has a 14% chance of landing a critical hit, " +
+                        "multiplying your reward by `3.50x`." +
+                        $"\nSyntax: `{cmdPrefix}timely`");
+                    embed.WithColor(Pink);
+                    BE(); break;
+                case "weekly":
+                    embed.WithTitle($"Help: Weekly Points | `{cmdPrefix}weekly`");
+                    embed.WithDescription($"{Context.User.Mention} The weekly command allows any user to claim 5,000 points every week." +
+                        "\nThese points are automatically added to your Kaguya account. The weekly command has an 8% chance to land a critical hit, multiplying " +
+                        "your reward by `3.50x`." +
+                        $"\nSyntax: `{cmdPrefix}weekly`");
                     embed.WithColor(Pink);
                     BE(); break;
                 case "clear":
@@ -322,14 +337,21 @@ namespace Kaguya.Modules
                     BE(); break;
                 case "roll":
                 case "gr":
-                    embed.WithTitle($"Help: Gambling | `{cmdPrefix}gamble` / `{cmdPrefix}g`");
+                    embed.WithTitle($"Help: Betting | `{cmdPrefix}roll` / `{cmdPrefix}gr`");
                     embed.WithDescription($"{Context.User.Mention} Allows you to roll the dice and gamble your points!" +
-                        $"\nA roll between `0-66` will result in a loss of your bet." +
-                        $"\nA roll between `67-78` will return your bet back to you with a multiplier of `1.25x`" +
+                        $"\n" +
+                        $"\nA roll between `0-66` will result in a loss of your bet. " +
+                        $"A roll between `67-78` will return your bet back to you with a multiplier of `1.25x`" +
                         $"\nRolls between `79-89`, `90-95`, `96-99`, and `100` will yield multipliers of `1.75x`, `2.25x`, `3x`, and `5x` respectively." +
-                        $"\nThe maximum amount of points you can gamble at one time is set to `25,000`.");
+                        $"\n" +
+                        $"\nThe maximum amount of points you can gamble at one time is set to `25,000`." +
+                        $"\n" +
+                        $"\nIn addition, all rolls have a `4%` chance of landing a critical hit, multiplying the `multiplier` of the roll by `3.50x`. " +
+                        $"The best possible roll is a `critical 100`, multiplying your bet by `17.5x` (The odds of this are `1 / 2,500` or `0.04%`.)" +
+                        $"\nRolls also have a 4% chance of being a `critical loss`, resulting in `25%` additional lost points. (The odds of this are `66 / 2,500` or `2.64%`.)");
+                    embed.WithColor(Pink);
                     BE(); break;
-                case "kaguyagtfo":
+                case "kaguyaexit":
                     embed.WithTitle($"Help: Kaguya, gtfo! | `{cmdPrefix}kaguyagtfo`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
@@ -517,7 +539,7 @@ namespace Kaguya.Modules
             embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]`" +
                 "\n`clear [c] [purge]` \n`kaguyaexit` \n`scrapeserver` \n`filteradd [fa]` \n`filterremove [fr]` \n`filterview [fv]` \n`filterclear [clearfilter]` \n`setlogchannel [log]` \n`resetlogchannel [rlog]`" +
                 "\n`logtypes [loglist]`", true);
-            embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
+            embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`weekly` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
             embed.AddField("Fun", "`echo` \n`pick`", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]`", true);
@@ -542,7 +564,7 @@ namespace Kaguya.Modules
                 $"\nType `{cmdPrefix}commands <module name>` to see all commands listed under that module." +
                 $"\nType `{cmdPrefix}h <command name>` for more how to use the command and a detailed description of what it does." +
                 $"\nAdd me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847" +
-                $"\nWant to keep track of all the changes or feel like self hosting? Feel free to check out the Kaguya Github page!: https://github.com/stageosu/Kaguya" +
+                $"\nWant to keep track of all the changes? Feel free to check out the Kaguya Github page!: https://github.com/stageosu/Kaguya" +
                 $"\nKaguya Support Server: https://discord.gg/yhcNC97");
         }
     }

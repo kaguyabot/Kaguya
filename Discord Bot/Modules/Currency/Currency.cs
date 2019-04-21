@@ -145,7 +145,7 @@ namespace Kaguya.Modules
                 BE();
                 return;
             }
-            bool critical = rand.Next(100) < 6.25;
+            bool critical = rand.Next(100) < 14;
             if(critical) { bonus = bonus * 3.50; }
             userAccount.Points += (uint)bonus;
             userAccount.LastReceivedTimelyPoints = DateTime.Now;
@@ -154,15 +154,9 @@ namespace Kaguya.Modules
             if (critical)
                 embed.WithDescription($"{Context.User.Mention} it's a critical hit! {Context.User.Username} has received `{bonus}` points! Claim again in {timeout}h.");
             else
-                embed.WithDescription($"{Context.User.Mention} has received `{bonus}` points! Claim again in {timeout}h.");
+                embed.WithDescription($"{Context.User.Mention} has received `{bonus.ToString("N0")}` points! Claim again in {timeout}h.");
             embed.WithColor(Pink);
             BE();
-        }
-
-        internal static bool CanReceiveTimelyPoints(UserAccount user, int timeout)
-        {
-            var difference = DateTime.Now - user.LastReceivedTimelyPoints;
-            return difference.TotalHours > timeout;
         }
 
         [Command("masspointsdistribute")] //currency
@@ -230,7 +224,9 @@ namespace Kaguya.Modules
             userAccount.Points -= (uint)points; //Takes points away from user on successful bet.
 
             Random rand = new Random();
-            var roll = rand.Next(0, 100);
+            Random crit = new Random();
+            var roll = rand.Next(100);
+            bool critical = crit.Next(100) < 4;
 
             if (roll <= 66)
             {
@@ -240,7 +236,13 @@ namespace Kaguya.Modules
                 string[] sadEmotes = { "<:PepeHands:431853568669253632>", "<:FeelsBadMan:431647398071107584>", "<:FeelsWeirdMan:431148381449224192>" };
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
-                embed.WithTitle($"Gambling: Loser! {sadEmotes[num]}");
+                if (critical)
+                {
+                    embed.WithTitle($"Gambling: Loser! It's a critical loss!! {sadEmotes[num]}");
+                    userAccount.Points -= ((uint)points / 4);
+                }
+                else
+                    embed.WithTitle($"Gambling: Loser! {sadEmotes[num]}");
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and lost their bet of `{points.ToString("N0")}`! Better luck next time!** <:SagiriBlush:498009810692734977>");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
@@ -260,9 +262,13 @@ namespace Kaguya.Modules
                 var num = randEmote.Next(0, 2);
 
                 var multiplier = 1.25;
-
+                if(critical) { multiplier = multiplier * 3.50; }
                 userAccount.Points += (uint)(points * multiplier);
-                embed.WithTitle($"Gambling: Winner! {happyEmotes1[num]}");
+
+                if(critical)
+                    embed.WithTitle($"Gambling: Winner! It's a critical hit!! {happyEmotes1[num]}");
+                else
+                    embed.WithTitle($"Gambling: Winner! {happyEmotes1[num]}");
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
@@ -282,9 +288,13 @@ namespace Kaguya.Modules
                 var num = randEmote.Next(0, 2);
 
                 var multiplier = 1.75;
+                if (critical) { multiplier = multiplier * 3.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
-                embed.WithTitle($"Gambling Winner: High Roll! {happyEmotes2[num]}");
+                if(critical)
+                    embed.WithTitle($"Gambling Winner: High Roll! It's a critical hit!! {happyEmotes2[num]}");
+                else
+                    embed.WithTitle($"Gambling Winner: High Roll! {happyEmotes2[num]}");
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
@@ -305,9 +315,13 @@ namespace Kaguya.Modules
                 var num = randEmote.Next(0, 2);
 
                 var multiplier = 2.25;
+                if (critical) { multiplier = multiplier * 3.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
-                embed.WithTitle($"Gambling Winner: Elite Roll! {eliteEmotes[num]}");
+                if(critical)
+                    embed.WithTitle($"Gambling Winner: Elite Roll! It's a critical hit!! {eliteEmotes[num]}");
+                else
+                    embed.WithTitle($"Gambling Winner: Elite Roll! {eliteEmotes[num]}");
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**\n" +
                     $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
@@ -329,9 +343,13 @@ namespace Kaguya.Modules
                 var num = randEmote.Next(0, 2);
 
                 var multiplier = 3.00;
+                if (critical) { multiplier = multiplier * 3.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
-                embed.WithTitle($"Gambling Winner: Super Elite Roll! {superEliteEmotes[num]}");
+                if(critical)
+                    embed.WithTitle($"Gambling Winner: Super Elite Roll! It's a critical hit!!! {superEliteEmotes[num]}");
+                else
+                    embed.WithTitle($"Gambling Winner: Super Elite Roll! {superEliteEmotes[num]}");
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**\n" +
                     $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
@@ -344,6 +362,7 @@ namespace Kaguya.Modules
             }
             else if (roll == 100)
             {
+
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
@@ -351,9 +370,10 @@ namespace Kaguya.Modules
                 string sirenEmote = "<a:siren:429784681316220939>";
 
                 var multiplier = 5.00;
+                if (critical) { multiplier = multiplier * 3.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
-                embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! {sirenEmote}");
+                embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! It's a super critical hit!! {sirenEmote}");
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**\n" +
                     $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
@@ -364,6 +384,54 @@ namespace Kaguya.Modules
                 UserAccounts.SaveAccounts();
                 return;
             }
+        }
+
+        [Command("weekly")]
+        public async Task WeeklyPoints(int timeout = 168, uint bonus = 5000)
+        {
+            UserAccount userAccount = UserAccounts.GetAccount(Context.User);
+            Random crit = new Random();
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var multiplier = 3.50;
+            bool critical = crit.Next(100) < 8; //8% chance of weekly being a critical roll
+
+            if(!CanReceiveWeeklyPoints(userAccount, timeout))
+            {
+                var difference = DateTime.Now - userAccount.LastReceivedWeeklyPoints;
+                var formattedTime = $"{difference.Days}d {difference.Hours}h {difference.Minutes}m {difference.Seconds}s";
+                embed.WithTitle("Timely Points");
+                embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}weekly`!" +
+                    $" Please wait until `7 days` have passed to receive your weekly bonus.");
+                embed.WithColor(Pink);
+                BE();
+                return;
+            }
+
+            userAccount.LastReceivedWeeklyPoints = DateTime.Now;
+
+            if(critical)
+            {
+                bonus = (uint)(bonus * multiplier);
+                embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points! It's a critical hit!!**");
+            }
+            else
+                embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points!**");
+            embed.WithColor(Pink);
+            BE();
+
+            UserAccounts.SaveAccounts();
+        }
+
+        internal static bool CanReceiveTimelyPoints(UserAccount user, int timeout)
+        {
+            var difference = DateTime.Now - user.LastReceivedTimelyPoints;
+            return difference.TotalHours > timeout;
+        }
+
+        internal static bool CanReceiveWeeklyPoints(UserAccount user, int timeout)
+        {
+            var difference = DateTime.Now - user.LastReceivedWeeklyPoints;
+            return difference.TotalHours > timeout;
         }
 
         private bool UserIsAdmin(SocketGuildUser user)

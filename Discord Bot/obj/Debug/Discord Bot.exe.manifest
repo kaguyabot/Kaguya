@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="247808">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="243712">
       <assemblyIdentity name="Discord Bot" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>+X8QjgmTwtcKJMbA09o5d5fSKP6iGn55Aljps3CadeI=</dsig:DigestValue>
+        <dsig:DigestValue>W7/A9xcQ6zkZaRnrLwInzf4EEHGwqSZ6rJQoxl4J1PI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -209,22 +209,22 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Discord Bot.exe.config" size="1044">
+  <file name="Discord Bot.exe.config" size="1023">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>zu/BoeOaqV6cOXy5lYsEioXGn3CZ+q7LmiOxs0rwGJs=</dsig:DigestValue>
+      <dsig:DigestValue>cGuyKiOK7ZG5f3L2pprBhJPN4XR6l+rAIvrno3jHNdo=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="SystemLang\ReadMe.txt" size="545">
+  <file name="SystemLang\ReadMe.txt" size="526">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>hdoAPrOveL9yhBP0wLhBg2vPUUGujGnaf1hEe8aiK/A=</dsig:DigestValue>
+      <dsig:DigestValue>gW6/vvhKNbM0FHpVGF3NLqBZGnDJ0UZw6CthjfktQeE=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
