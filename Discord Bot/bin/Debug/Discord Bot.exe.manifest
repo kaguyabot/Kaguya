@@ -49,7 +49,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>jjd9JW1HomyLaexbN2JCMcNcm5GWOfT75vTnqPnuvYg=</dsig:DigestValue>
+        <dsig:DigestValue>woTp+TIWILvNOYSK7jAhv+P1OKkMrZMFxZ25K151kcE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -209,22 +209,22 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Discord Bot.exe.config" size="1023">
+  <file name="Discord Bot.exe.config" size="1044">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>cGuyKiOK7ZG5f3L2pprBhJPN4XR6l+rAIvrno3jHNdo=</dsig:DigestValue>
+      <dsig:DigestValue>zu/BoeOaqV6cOXy5lYsEioXGn3CZ+q7LmiOxs0rwGJs=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="SystemLang\ReadMe.txt" size="526">
+  <file name="SystemLang\ReadMe.txt" size="545">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>gW6/vvhKNbM0FHpVGF3NLqBZGnDJ0UZw6CthjfktQeE=</dsig:DigestValue>
+      <dsig:DigestValue>hdoAPrOveL9yhBP0wLhBg2vPUUGujGnaf1hEe8aiK/A=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

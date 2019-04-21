@@ -1,3 +1,27 @@
 [
-  
+  {
+    "Username": "Stage#0001",
+    "ID": 146092837723832320,
+    "IsInServers": [
+      "Spring Tranquility osu! Tournament 2019"
+    ],
+    "IsInServerIDs": [
+      461347676148072448
+    ],
+    "Points": 0,
+    "EXP": 9,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-21T18:58:34.7673861+00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  }
 ]
