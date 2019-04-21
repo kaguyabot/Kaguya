@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.7.2.1
+
+- Fixed a bug with $weekly
+- Added in $weeklyreset
+
 Version 1.7.2
 
 - Fixed a typo in Help.cs

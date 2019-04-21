@@ -386,6 +386,22 @@ namespace Kaguya.Modules
             }
         }
 
+        [Command("weeklyreset")]
+        [RequireOwner]
+        public async Task WeeklyReset()
+        {
+            var accounts = UserAccounts.GetAllAccounts();
+            foreach (var account in accounts)
+            {
+                var difference = DateTime.Now.AddHours(-168);
+                account.LastReceivedWeeklyPoints = difference;
+            }
+            embed.WithTitle("Weekly Reset");
+            embed.WithDescription($"**{Context.User.Mention} Timely points for `{accounts.Count}` users have been reset!**");
+            embed.WithColor(Pink);
+            BE();
+        }
+
         [Command("weekly")]
         public async Task WeeklyPoints(int timeout = 168, uint bonus = 5000)
         {
@@ -395,7 +411,7 @@ namespace Kaguya.Modules
             var multiplier = 3.50;
             bool critical = crit.Next(100) < 8; //8% chance of weekly being a critical roll
 
-            if(!CanReceiveWeeklyPoints(userAccount, timeout))
+            if (!CanReceiveWeeklyPoints(userAccount, timeout))
             {
                 var difference = DateTime.Now - userAccount.LastReceivedWeeklyPoints;
                 var formattedTime = $"{difference.Days}d {difference.Hours}h {difference.Minutes}m {difference.Seconds}s";
@@ -406,20 +422,22 @@ namespace Kaguya.Modules
                 BE();
                 return;
             }
-
-            userAccount.LastReceivedWeeklyPoints = DateTime.Now;
-
-            if(critical)
-            {
-                bonus = (uint)(bonus * multiplier);
-                embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points! It's a critical hit!!**");
-            }
             else
-                embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points!**");
-            embed.WithColor(Pink);
-            BE();
+            {
+                userAccount.LastReceivedWeeklyPoints = DateTime.Now;
 
-            UserAccounts.SaveAccounts();
+                if (critical)
+                {
+                    bonus = (uint)(bonus * multiplier);
+                    embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points! It's a critical hit!!**");
+                }
+                else
+                    embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points!**");
+                embed.WithColor(Pink);
+                BE();
+                userAccount.Points += bonus;
+                UserAccounts.SaveAccounts();
+            }
         }
 
         internal static bool CanReceiveTimelyPoints(UserAccount user, int timeout)
