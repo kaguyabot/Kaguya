@@ -123,43 +123,40 @@ namespace Kaguya.Modules
 
         [Command("timely")] //currency
         [Alias("t")]
-        public async Task DailyPoints(uint timeout = 24, uint bonus = 500)
+        public async Task DailyPoints(uint timeout = 24, double bonus = 500)
         {
-            try
+            Command command = Commands.GetCommand();
+
+            timeout = command.TimelyHours;
+            bonus = command.TimelyPoints;
+            Random rand = new Random();
+
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
+            var userAccount = UserAccounts.GetAccount(Context.User);
+            if (!CanReceiveTimelyPoints(userAccount, (int)timeout))
             {
-                Command command = Commands.GetCommand();
-
-                timeout = command.TimelyHours;
-                bonus = command.TimelyPoints;
-
-                var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-
-                var userAccount = UserAccounts.GetAccount(Context.User);
-                if (!CanReceiveTimelyPoints(userAccount, (int)timeout))
-                {
-                    var difference = DateTime.Now - userAccount.LastReceivedTimelyPoints;
-                    var formattedTime = $"{difference.Hours}h {difference.Minutes}m {difference.Seconds}s";
-                    embed.WithTitle("Timely Points");
-                    embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
-                        $" Please wait until `{timeout} hours` have passed to receive more timely points.");
-                    embed.WithColor(Pink);
-                    BE();
-                    return;
-                }
-                userAccount.Points += bonus;
-                userAccount.LastReceivedTimelyPoints = DateTime.Now;
-                UserAccounts.SaveAccounts();
+                var difference = DateTime.Now - userAccount.LastReceivedTimelyPoints;
+                var formattedTime = $"{difference.Hours}h {difference.Minutes}m {difference.Seconds}s";
                 embed.WithTitle("Timely Points");
-                embed.WithDescription($"{Context.User.Mention} has received {bonus} points! Claim again in {timeout}h.");
+                embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
+                    $" Please wait until `{timeout} hours` have passed to receive more timely points.");
                 embed.WithColor(Pink);
                 BE();
+                return;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception " + e.InnerException);
-                Console.WriteLine("Message " + e.Message);
-                Console.WriteLine("Stack Trace " + e.StackTrace);
-            }
+            bool critical = rand.Next(100) < 6.25;
+            if(critical) { bonus = bonus * 3.50; }
+            userAccount.Points += (uint)bonus;
+            userAccount.LastReceivedTimelyPoints = DateTime.Now;
+            UserAccounts.SaveAccounts();
+            embed.WithTitle("Timely Points");
+            if (critical)
+                embed.WithDescription($"{Context.User.Mention} it's a critical hit! {Context.User.Username} has received `{bonus}` points! Claim again in {timeout}h.");
+            else
+                embed.WithDescription($"{Context.User.Mention} has received `{bonus}` points! Claim again in {timeout}h.");
+            embed.WithColor(Pink);
+            BE();
         }
 
         internal static bool CanReceiveTimelyPoints(UserAccount user, int timeout)

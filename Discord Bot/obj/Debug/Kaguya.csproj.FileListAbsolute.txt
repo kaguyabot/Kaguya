@@ -111,3 +111,4 @@ C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Kaguya.csproj.CopyC
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Discord Bot.exe
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Discord Bot.pdb
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Discord.Addons.Interactive.dll
+C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\OppaiSharp.dll

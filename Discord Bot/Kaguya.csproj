@@ -116,6 +116,9 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="OppaiSharp, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OppaiSharp.3.2.0\lib\net461\OppaiSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net463\System.AppContext.dll</HintPath>
@@ -259,8 +262,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandHandler.cs" />
+    <Compile Include="Core\Command Handler\CommandHandler.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Core\Command Handler\KaguyaLogMethods.cs" />
     <Compile Include="Core\Commands\Command.cs" />
     <Compile Include="Core\Commands\Commands.cs" />
     <Compile Include="Core\DataStorage2.cs" />
@@ -275,13 +279,14 @@
     <Compile Include="Global.cs" />
     <Compile Include="ListSocketGuildUserTR.cs" />
     <Compile Include="Core\PlayData.cs" />
-    <Compile Include="Modules\Help.cs" />
-    <Compile Include="Modules\osu.cs" />
-    <Compile Include="Modules\Fun.cs" />
-    <Compile Include="Modules\EXP.cs" />
-    <Compile Include="Modules\Currency.cs" />
-    <Compile Include="Modules\Administration.cs" />
-    <Compile Include="Modules\Utility.cs" />
+    <Compile Include="Modules\Administration\Administration.cs" />
+    <Compile Include="Modules\Currency\Currency.cs" />
+    <Compile Include="Modules\EXP\EXP.cs" />
+    <Compile Include="Modules\Fun\Fun.cs" />
+    <Compile Include="Modules\Help\Help.cs" />
+    <Compile Include="Modules\osu\BeatmapLinkParser.cs" />
+    <Compile Include="Modules\osu\osu.cs" />
+    <Compile Include="Modules\Utility\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />
