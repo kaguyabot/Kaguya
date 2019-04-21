@@ -36,27 +36,50 @@ namespace Kaguya
         public string tillerinoapikey = Config.bot.tillerinoapikey;
         public async Task InitializeAsync(DiscordSocketClient client)
         {
-            _client = client;
-            _service = new CommandService();
-            _service.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTR());
-            await _service.AddModulesAsync(
-              Assembly.GetExecutingAssembly(),
-              _services);
-            _client.Ready += logger.OnReady;
-            _client.MessageReceived += HandleCommandAsync;
-            _client.MessageReceived += logger.osuLinkParser;
-            _client.JoinedGuild += logger.JoinedNewGuild;
-            _client.MessageReceived += logger.MessageCache;
-            _client.MessageDeleted += logger.LoggingDeletedMessages;
-            _client.MessageUpdated += logger.LoggingEditedMessages;
-            _client.UserJoined += logger.LoggingUserJoins;
-            _client.UserLeft += logger.LoggingUserLeaves;
-            _client.UserBanned += logger.LoggingUserBanned;
-            _client.UserUnbanned += logger.LoggingUserUnbanned;
-            _client.MessageReceived += logger.LogChangesToLogSettings;
-            _client.MessageReceived += logger.UserSaysFilteredPhrase;
-            _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
-            _client.Disconnected += logger.BotDisconnected;
+            try
+            {
+                _client = client;
+                _service = new CommandService();
+                _service.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTR());
+                await _service.AddModulesAsync(
+                  Assembly.GetExecutingAssembly(),
+                  _services);
+                _client.Ready += logger.OnReady;
+                _client.MessageReceived += HandleCommandAsync;
+                _client.MessageReceived += logger.osuLinkParser;
+                _client.JoinedGuild += logger.JoinedNewGuild;
+                _client.MessageReceived += logger.MessageCache;
+                _client.MessageDeleted += logger.LoggingDeletedMessages;
+                _client.MessageUpdated += logger.LoggingEditedMessages;
+                _client.UserJoined += logger.LoggingUserJoins;
+                _client.UserLeft += logger.LoggingUserLeaves;
+                _client.UserBanned += logger.LoggingUserBanned;
+                _client.UserUnbanned += logger.LoggingUserUnbanned;
+                _client.MessageReceived += logger.LogChangesToLogSettings;
+                _client.MessageReceived += logger.UserSaysFilteredPhrase;
+                _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
+                _client.Disconnected += logger.BotDisconnected;
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (Exception exSub in ex.LoaderExceptions)
+                {
+                    sb.AppendLine(exSub.Message);
+                    FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
+                    if (exFileNotFound != null)
+                    {
+                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                        {
+                            sb.AppendLine("Fusion Log:");
+                            sb.AppendLine(exFileNotFound.FusionLog);
+                        }
+                    }
+                    sb.AppendLine();
+                }
+                string errorMessage = sb.ToString();
+                Console.WriteLine(errorMessage);
+            }
         }
 
         private async Task HandleCommandAsync(SocketMessage s)
