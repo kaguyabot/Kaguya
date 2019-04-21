@@ -211,6 +211,14 @@ namespace Kaguya.Modules
                 BE();
                 return;
             }
+            if (points < 1)
+            {
+                embed.WithTitle("Gambling: Too Few Points!");
+                embed.WithDescription($"{user.Mention} You may not gamble less than one point!");
+                embed.WithColor(Red);
+                BE();
+                return;
+            }
             if (points > 25000)
             {
                 embed.WithTitle("Gambling: Too Many Points!");
@@ -399,7 +407,7 @@ namespace Kaguya.Modules
             {
                 var difference = DateTime.Now - userAccount.LastReceivedWeeklyPoints;
                 var formattedTime = $"{difference.Days}d {difference.Hours}h {difference.Minutes}m {difference.Seconds}s";
-                embed.WithTitle("Timely Points");
+                embed.WithTitle("Weekly Points");
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}weekly`!" +
                     $" Please wait until `7 days` have passed to receive your weekly bonus.");
                 embed.WithColor(Pink);
