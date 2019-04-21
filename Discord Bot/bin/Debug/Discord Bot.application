@@ -14,14 +14,14 @@
     <framework targetVersion="4.7.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="Discord Bot.exe.manifest" size="13871">
+    <dependentAssembly dependencyType="install" codebase="Discord Bot.exe.manifest" size="13233">
       <assemblyIdentity name="Discord Bot.exe" version="0.0.0.5" publicKeyToken="0000000000000000" language="en" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>FCerslLnu30HxAf1qa9z/wRviyfEPgdqD2+1bHeGO1w=</dsig:DigestValue>
+        <dsig:DigestValue>yaaHRYXANou5gGSc1WbA/GremhztQcGadiE69Sth30I=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

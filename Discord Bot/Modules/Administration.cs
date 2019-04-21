@@ -202,6 +202,8 @@ namespace Kaguya.Modules
             embed.WithColor(Red);
             await BE();
             int i = 1;
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
             foreach (var server in servers)
             {
                 var isolatedServer = Servers.GetServer(server.ID);
@@ -215,8 +217,7 @@ namespace Kaguya.Modules
                     var userAccount = UserAccounts.GetAccount(user);
                     userAccount.Username = user.Username + "#" + user.Discriminator;
                     userAccount.ID = user.Id;
-
-                    Console.WriteLine($"Created account for user #{i++}: {user.Username}#{user.Discriminator}");
+                    Console.WriteLine($"Created account for user #{i++}: {user.Username}#{user.Discriminator} in {stopWatch.ElapsedMilliseconds}ms.");
                 }
             }
             UserAccounts.SaveAccounts();

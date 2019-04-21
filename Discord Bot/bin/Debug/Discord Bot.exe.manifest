@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="246272">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="243200">
       <assemblyIdentity name="Discord Bot" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>QxxxQwmF3IBJs7aFb2S1ZGE4kp9qbwjetJ5lnoGE8Kk=</dsig:DigestValue>
+        <dsig:DigestValue>zOZSkFZbIDFcasulUwYTVu1Tzsntt8HCbYyhzt2jn8g=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -162,18 +162,6 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="OppaiSharp.dll" size="30208">
-      <assemblyIdentity name="OppaiSharp" version="3.2.0.0" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>+Rz8ARjZACYtOsjZnDlrFBYwZIBuYPNROHAcldYYtP4=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Collections.Immutable.dll" size="302216">
       <assemblyIdentity name="System.Collections.Immutable" version="1.2.3.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -209,22 +197,22 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Discord Bot.exe.config" size="1044">
+  <file name="Discord Bot.exe.config" size="1023">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>zu/BoeOaqV6cOXy5lYsEioXGn3CZ+q7LmiOxs0rwGJs=</dsig:DigestValue>
+      <dsig:DigestValue>cGuyKiOK7ZG5f3L2pprBhJPN4XR6l+rAIvrno3jHNdo=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="SystemLang\ReadMe.txt" size="545">
+  <file name="SystemLang\ReadMe.txt" size="526">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>hdoAPrOveL9yhBP0wLhBg2vPUUGujGnaf1hEe8aiK/A=</dsig:DigestValue>
+      <dsig:DigestValue>gW6/vvhKNbM0FHpVGF3NLqBZGnDJ0UZw6CthjfktQeE=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

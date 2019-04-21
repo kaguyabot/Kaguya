@@ -3,17 +3,6 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
-Version 1.7.1
-
-- Added in star rating for the osu! beatmap link parser.
-- CS, AR, OD, and HP values in the osu! link parser are now floats instead of fixed two decimals.
-- Automatic osu! link parsing now has three download buttons (standard beatmap, no vid, and bloodcat mirror),
-    as well as the Max combo amount for that difficulty.
-- Heavily refactored code in CommandHandler.cs
-- Added in passrate to beatmap link parser
-- Improved $recent vastly.
-
-
 Version 1.7.0
 
 - Level formula modified so that it's a little harder to level up
