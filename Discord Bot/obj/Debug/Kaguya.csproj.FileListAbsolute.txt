@@ -24,7 +24,6 @@ C:\Users\Administrator\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Discord.Net
 C:\Users\Administrator\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Discord.Net.WebSocket.xml
 C:\Users\Administrator\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.xml
 C:\Users\Administrator\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
-C:\Users\Administrator\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\Administrator\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Administrator\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\System.Collections.Immutable.xml
 C:\Users\Administrator\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\System.Diagnostics.DiagnosticSource.xml
