@@ -562,7 +562,7 @@ namespace Kaguya.Modules
             BE();
             Context.User.SendMessageAsync($"Need help with a specific command? Type `{cmdPrefix}mdls` to see a list of categories the commands are listed under." +
                 $"\nType `{cmdPrefix}commands <module name>` to see all commands listed under that module." +
-                $"\nType `{cmdPrefix}h <command name>` for more how to use the command and a detailed description of what it does." +
+                $"\nType `{cmdPrefix}h <command name>` for more information on how to use the command and a detailed description of what it does." +
                 $"\nAdd me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847" +
                 $"\nWant to keep track of all the changes? Feel free to check out the Kaguya Github page!: https://github.com/stageosu/Kaguya" +
                 $"\nKaguya Support Server: https://discord.gg/yhcNC97");

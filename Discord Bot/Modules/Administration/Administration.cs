@@ -30,6 +30,37 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
+        //[Command("mute")]
+        //[Alias("m")]
+        //[RequireUserPermission(GuildPermission.ManageMessages)]
+        //[RequireUserPermission(GuildPermission.MuteMembers)]
+        //[RequireBotPermission(GuildPermission.ManageMessages)]
+        //[RequireBotPermission(GuildPermission.MuteMembers)]
+        //public async Task MuteMembers(string timeout, [Remainder]List<SocketGuildUser> users)
+        //{
+        //    var server = Servers.GetServer(Context.Guild);
+
+        //    if (timeout.Contains('s'))
+        //    {
+        //        var seconds = timeout.Split('s').First();
+        //    }
+        //    if (timeout.Contains('m'))
+        //    {
+        //        var minutes = timeout.Split('m').First();
+        //    }
+        //    if (timeout.Contains('h'))
+        //    {
+        //        var hours = timeout.Split('h').First();
+        //    }
+
+
+        //    //foreach(SocketGuildUser user in users)
+        //    //{
+        //    //    server.MutedMembers.Add($"{user.Username}#{user.Discriminator} {timeout}");
+        //    //}
+        //}
+
+
         [Command("filteradd")] //administration
         [Alias("fa")]
         [RequireUserPermission(GuildPermission.Administrator)]
@@ -207,16 +238,19 @@ namespace Kaguya.Modules
                 var isolatedServer = Servers.GetServer(server.ID);
                 ulong isolatedServerID = isolatedServer.ID;
                 var guild = _client.GetGuild(isolatedServerID);
-                if(guild.MemberCount > 3500) { continue; } //If the guild has more than 3500 members, don't create accounts for everyone.
-                var guildUsers = guild.Users;
-                foreach(var user in guildUsers)
+                if (guild != null)
                 {
-                    if (user.IsBot) continue;
-                    var userAccount = UserAccounts.GetAccount(user);
-                    userAccount.Username = user.Username + "#" + user.Discriminator;
-                    userAccount.ID = user.Id;
+                    if (guild.MemberCount > 3500) { continue; } //If the guild has more than 3500 members, don't create accounts for everyone.
+                    var guildUsers = guild.Users;
+                    foreach (var user in guildUsers)
+                    {
+                        if (user.IsBot) continue;
+                        var userAccount = UserAccounts.GetAccount(user);
+                        userAccount.Username = user.Username + "#" + user.Discriminator;
+                        userAccount.ID = user.Id;
 
-                    Console.WriteLine($"Created account for user #{i++}: {user.Username}#{user.Discriminator}");
+                        Console.WriteLine($"Created account for user #{i++}: {user.Username}#{user.Discriminator}");
+                    }
                 }
             }
             UserAccounts.SaveAccounts();
