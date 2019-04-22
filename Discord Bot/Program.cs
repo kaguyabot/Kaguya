@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Timers;
 using System.Text;
+using Discord_Bot.Core.CommandHandler;
+using Discord_Bot.Core;
 
 #pragma warning disable CS1998
 
@@ -20,6 +22,8 @@ namespace Kaguya
         DiscordSocketClient _client;
         CommandHandler _handler;
         public string version = Utilities.GetAlert("VERSION");
+        KaguyaLogMethods logMethods = new KaguyaLogMethods();
+        Logger logger = new Logger();
 
         public async Task StartAsync()
         {
@@ -42,7 +46,7 @@ namespace Kaguya
                     };
                     string json = JsonConvert.SerializeObject(bot, Formatting.Indented);
                     File.WriteAllText("Resources" + "/" + "config.json", json);
-                    Console.WriteLine("Confirmed. Restarting in 5 seconds...(If app doesn't restart, close and open again.)");
+                    Console.WriteLine("Confirmed. Restarting in 5 seconds...");
                     var filePath = Assembly.GetExecutingAssembly().Location;
                     await Task.Delay(5000);
                     Process.Start(filePath);
@@ -55,7 +59,6 @@ namespace Kaguya
                         LogLevel = LogSeverity.Verbose,
                         MessageCacheSize = 100
                     });
-                    _client.Log += Log;
                     try
                     {
                         await _client.LoginAsync(TokenType.Bot, Config.bot.token);
@@ -70,12 +73,10 @@ namespace Kaguya
                         return;
                     }
                     await _client.StartAsync();
-                    ResetTimer();
                     Global.Client = _client;
                     _handler = new CommandHandler();
                     await _handler.InitializeAsync(_client);
                     await Task.Delay(-1);
-
                 }
                 catch (Discord.Net.HttpException)
                 {
@@ -105,20 +106,6 @@ namespace Kaguya
                 string errorMessage = sb.ToString();
                 Console.WriteLine(errorMessage);
             }
-        }
-
-        private Task Log(LogMessage msg)
-        {
-            Console.WriteLine(msg.Message);
-            return Task.CompletedTask;
-        }
-
-        private static void ResetTimer() //Causes application to restart every 6 hours.
-        {
-            Timer timer = new Timer();
-            timer.Interval = 21600000;
-            timer.Start();
-            timer.Elapsed += Timer_Elapsed;
         }
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)

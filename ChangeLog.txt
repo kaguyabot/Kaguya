@@ -7,6 +7,12 @@ Version 1.7.3
 
 - Fixed a bug where the bot would be handling TONS of exceptions (because I set something up wrong), drastically reducing performance.
     This *should* heavily improve bot stability!
+- Fixed a bug where $scrapedatabase would crash the bot.
+- Fixed a grammatical error with Kaguya's HelpDM message.
+- Removed restart timer
+- Massive addition: Full fledged custom logging for all commands.
+- General code refinement
+- Lots and lots of error responses added in. This is to help users understand why a command may not have worked.
 
 Version 1.7.2
 

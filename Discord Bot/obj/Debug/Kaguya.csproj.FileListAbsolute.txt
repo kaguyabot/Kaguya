@@ -63,12 +63,10 @@ C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Discord.Net.Webhook
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Discord.Net.WebSocket.xml
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.xml
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
-C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Newtonsoft.Json.xml
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\System.Collections.Immutable.xml
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\System.Diagnostics.DiagnosticSource.xml
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\System.Interactive.Async.xml
-C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Kaguya.csprojAssemblyReference.cache
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Kaguya.csproj.CoreCompileInputs.cache
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Discord Bot.TrustInfo.xml
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Discord Bot.exe.manifest

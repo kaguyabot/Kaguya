@@ -24,6 +24,9 @@ namespace Discord_Bot.Core.CommandHandler
 
         public async Task OnReady()
         {
+            Console.WriteLine("Ace Pilot Kaguya cleared for takeoff." +
+                "\nBegin Logging\n");
+            Console.WriteLine("--------------------------------------------");
             await _client.SetGameAsync("Support Server: yhcNC97");
         }
 

@@ -13,6 +13,8 @@ using System.Net;
 using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
+using Discord_Bot.Core;
+using System.Diagnostics;
 
 #pragma warning disable
 
@@ -21,17 +23,15 @@ namespace Kaguya.Modules
     public class Fun : ModuleBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
-
         Color Pink = new Color(252, 132, 255);
         Color Red = new Color(255, 0, 0);
         Color Gold = new Color(255, 223, 0);
         Color Violet = new Color(238, 130, 238);
-
         public BotConfig bot = new BotConfig();
-
         public string version = Utilities.GetAlert("VERSION");
-
         public string botToken = Config.bot.token;
+        Logger logger = new Logger();
+        Stopwatch stopWatch = new Stopwatch();
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -41,6 +41,7 @@ namespace Kaguya.Modules
         [Command("echo")] //fun
         public async Task Echo([Remainder]string message = "")
         {
+            stopWatch.Start();
             if (message == "")
             {
                 embed.WithTitle("Echo");
@@ -52,18 +53,21 @@ namespace Kaguya.Modules
             embed.WithDescription(message);
             embed.WithColor(Pink);
 
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+            BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
         [Command("pick")] //fun
         public async Task PickOne([Remainder]string message = "")
         {
+            stopWatch.Start();
             if (message == "")
             {
                 embed.WithTitle("Pick: Missing Options!");
                 embed.WithDescription($"**{Context.User.Mention} No options specified!**");
                 embed.WithColor(Red);
-                BE(); return;
+                BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User did not specify any options to pick from."); return;
             }
 
             string[] options = message.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
@@ -75,12 +79,14 @@ namespace Kaguya.Modules
             embed.WithDescription(selection);
             embed.WithColor(Pink);
 
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+            BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
         [Command("8ball")]
         public async Task EightBall([Remainder]string question)
         {
+            stopWatch.Start();
             string filePath = "Resources/8ball.txt";
             string[] responses = File.ReadAllLines(filePath);
             Random rand = new Random();
@@ -90,7 +96,9 @@ namespace Kaguya.Modules
             embed.WithTitle("Magic 8Ball");
             embed.WithDescription($"**{Context.User.Mention} {responses[num]}**");
             embed.WithColor(Pink);
-            BE();
+            BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            
         }
 
         //[Command("blackjack1", RunMode = RunMode.Async)]

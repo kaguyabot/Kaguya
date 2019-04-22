@@ -15,6 +15,8 @@ using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
 using System.Text.RegularExpressions;
 using OppaiSharp;
+using Discord_Bot.Core;
+using System.Diagnostics;
 
 #pragma warning disable
 
@@ -31,6 +33,8 @@ namespace Kaguya.Modules
         public string version = Utilities.GetAlert("VERSION");
         public string botToken = Config.bot.token;
         public string osuapikey = Config.bot.osuapikey;
+        Logger logger = new Logger();
+        Stopwatch stopWatch = new Stopwatch();
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -40,6 +44,7 @@ namespace Kaguya.Modules
         [Command("osu")]
         public async Task osuProfile([Remainder]string player = null)
         {
+            stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             string osuapikey = Config.bot.osuapikey;
             string jsonProfile;
@@ -52,7 +57,8 @@ namespace Kaguya.Modules
                 {
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
                     embed.WithColor(Red);
-                    BE(); return;
+                    BE(); stopWatch.Stop();
+                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "No osu! username specified."); return;
                 }
             }
 
@@ -61,6 +67,14 @@ namespace Kaguya.Modules
             using (WebClient client = new WebClient())
             {
                 jsonProfile = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u={player}"); //Downloads user data
+            }
+
+            if(jsonProfile == "[]")
+            {
+                embed.WithDescription($"**I couldn't download information for the specified user!**");
+                embed.WithFooter($"If this persists, please contact Stage#0001. Error code: OAPI_RETURN_NULL");
+                BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API Returned Null"); return;
             }
 
             var userProfileObject = JsonConvert.DeserializeObject<dynamic>(jsonProfile)[0];
@@ -118,30 +132,55 @@ namespace Kaguya.Modules
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
             embed.WithFooter($"Stats accurate as of {DateTime.Now}");
             embed.WithColor(Pink);
-            BE();
+            BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+
         }
 
         [Command("osuset")] //osu
         public async Task osuSet([Remainder]string username)
         {
+            stopWatch.Start();
             var userAccount = UserAccounts.GetAccount(Context.User);
             string oldUsername = userAccount.OsuUsername;
             if (oldUsername == null)
                 oldUsername = "Null";
-            userAccount.OsuUsername = username.Replace(" ", "_");
+            username = username.Replace(" ", "_");
+            userAccount.OsuUsername = username;
+
+            string jsonProfile;
+
+            using (WebClient client = new WebClient())
+            {
+                jsonProfile = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u={username}"); //Downloads user data
+            }
+
+            if(jsonProfile == "[]")
+            {
+                userAccount.OsuUsername = oldUsername;
+                embed.WithDescription($"{Context.User.Mention} **ERROR: This username does not match a valid osu! username!**");
+                embed.WithFooter($"I have kept your osu! username as {oldUsername}. If you believe this is a mistake, contact Stage#0001.");
+                embed.WithColor(Red);
+                BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); return;
+            }
+
             UserAccounts.SaveAccounts();
 
             embed.WithTitle("osu! Username Set");
             embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed from `{oldUsername}` to `{userAccount.OsuUsername}`.**");
             embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
             embed.WithColor(Pink);
-            BE();
+            BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            
         }
 
         [Command("recent")] //osu
         [Alias("r")]
         public async Task osuRecent(string player = null)
         {
+            stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             string osuapikey = Config.bot.osuapikey;
 
@@ -243,6 +282,15 @@ namespace Kaguya.Modules
                 {
                     NormalUserName = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u=" + player);
                 }
+
+                if(NormalUserName == "[]")
+                {
+                    embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
+                    embed.WithColor(Red);
+                    BE(); stopWatch.Stop();
+                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); return;
+                }
+
                 var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
 
                 //PPv2
@@ -312,14 +360,25 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{playerRecentString}");
                 embed.WithFooter(footer);
                 embed.WithColor(Pink);
-                BE();
+                BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                
             }
         }
 
         [Command("osutop")] //osu
-        public async Task osuTop(int num = 5, string player = null)
+        public async Task osuTop(int num = 5, [Remainder]string player = null)
         {
+            stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
+            if(num.ToString().Count() > 2)
+            {
+                embed.WithDescription($"{Context.User.Mention} **ERROR: Failed to parse number! Numbers must be between 1 and 10!** ");
+                embed.WithColor(Red);
+                BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to parse Int32");
+            }
 
             if (player == null || player == "")
             {
@@ -329,7 +388,8 @@ namespace Kaguya.Modules
                     embed.WithTitle($"osu! Top {num}");
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
                     embed.WithColor(Red);
-                    BE(); return;
+                    BE(); stopWatch.Stop();
+                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to acquire username."); return;
                 }
             }
 
@@ -340,6 +400,9 @@ namespace Kaguya.Modules
             if (num > 10)
             {
                 embed.WithDescription($"{Context.User.Mention} You may not request more than 10 top plays.");
+                embed.WithColor(Red);
+                stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to request more than 10 top plays.");
                 return;
             }
             string jsonTop = "";
@@ -359,6 +422,7 @@ namespace Kaguya.Modules
                 {
                     jsonMap = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={osuapikey}&b=" + mapID);
                 }
+
                 var mapObject = JsonConvert.DeserializeObject<dynamic>(jsonMap)[0];
                 double pp = playerTopObject.pp;
                 string mapTitle = mapObject.title;
@@ -411,6 +475,14 @@ namespace Kaguya.Modules
                 jsonPlayer = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u={player}");
             }
 
+            if(jsonPlayer == "[]")
+            {
+                embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
+                embed.WithColor(Red);
+                BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); return;
+            }
+
             var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonPlayer)[0];
             string username = playerObject.username;
             string playerID = playerObject.user_id;
@@ -430,7 +502,8 @@ namespace Kaguya.Modules
             embed.WithUrl($"https://osu.ppy.sh/u/{playerID}");
             embed.WithDescription($"osu! Stats for player **{username}**:\n" + TopPlayString);
             embed.WithColor(Pink);
-            BE();
+            BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
         [Flags]
@@ -460,6 +533,7 @@ namespace Kaguya.Modules
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task CreateTeamRoles(string teamName, [Remainder]List<SocketGuildUser> users)
         {
+            stopWatch.Start();
             var participantRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "participant" || x.Name == "Participant");
             var roleName = "Team: " + teamName;
             var teamRole = await Context.Guild.CreateRoleAsync(roleName);
@@ -470,7 +544,9 @@ namespace Kaguya.Modules
                 embed.AddField("Participant Added", $"**{user}** has been added to {teamRole.Mention} and {participantRole.Mention}.");
             }
             embed.WithColor(Pink);
-            BE();
+            BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            
         }
 
         [Command("delteams")] //osu
@@ -479,6 +555,7 @@ namespace Kaguya.Modules
         [RequireOwner]
         public async Task DeleteTeams()
         {
+            stopWatch.Start();
             var roles = Context.Guild.Roles;
             embed.WithTitle("Teams Deleted");
             embed.WithDescription("The following teams have been deleted: ");
@@ -491,7 +568,9 @@ namespace Kaguya.Modules
                     embed.WithDescription(embed.Description.ToString() + $"\n`{role}`");
                 }
             }
-            BE();
+            BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "Teams deleted.");
+            
         }
 
         [Command("sttreflog")] //Secret STT Only Cmd owo
@@ -499,6 +578,7 @@ namespace Kaguya.Modules
         public async Task STTRefLog(string WinnerTeam, string LoserTeam, string WinnerTeamScore, string LoserTeamScore, string Team1BanMod1,
             string Team1Ban1, string Team1BanMod2, string Team1Ban2, string Team2BanMod1, string Team2Ban1, string Team2BanMod2, string Team2Ban2, string MPLink)
         {
+            stopWatch.Start();
             if (Context.Guild.Id != 461347676148072448)
             {
                 embed.WithDescription($"**{Context.User.Mention} I'm sorry, but this command can only be executed inside of the Spring Tranquility " +
@@ -518,7 +598,9 @@ namespace Kaguya.Modules
             embed.AddField($"{LoserTeam}", $"{Team2BanMod2}: {Team2Ban2}", false);
             embed.WithUrl($"{MPLink}");
             embed.WithColor(Pink);
-            await channel.SendMessageAsync("", false, embed.Build());
+            BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "STT referee log triggered.");
+            
         }
 
         private bool UserIsAdmin(SocketGuildUser user)
