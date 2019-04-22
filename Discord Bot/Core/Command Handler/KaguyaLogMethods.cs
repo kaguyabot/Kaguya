@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Kaguya.Core.Server_Files;
 using Discord;
 using Discord_Bot.Modules.osu;
+using Kaguya;
 
 #pragma warning disable
 
@@ -13,7 +14,7 @@ namespace Discord_Bot.Core.CommandHandler
 {
     public class KaguyaLogMethods
     {
-        DiscordSocketClient _client = new DiscordSocketClient();
+        DiscordSocketClient _client = Global.Client;
         public IServiceProvider _services;
         Color Yellow = new Color(255, 255, 102);
         Color SkyBlue = new Color(63, 242, 255);
@@ -23,6 +24,9 @@ namespace Discord_Bot.Core.CommandHandler
 
         public async Task OnReady()
         {
+            Console.WriteLine("Ace Pilot Kaguya cleared for takeoff." +
+                "\nBegin Logging\n");
+            Console.WriteLine("--------------------------------------------");
             await _client.SetGameAsync("Support Server: yhcNC97");
         }
 
@@ -148,7 +152,7 @@ namespace Discord_Bot.Core.CommandHandler
             var currentLog = ServerMessageLogs.GetLog((SocketGuild)server);
             ulong loggingChannelID = currentServer.LogMessageEdits;
             if (loggingChannelID == 0) return;
-            ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
+            ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetTextChannel(loggingChannelID);
             await cache.GetOrDownloadAsync();
             var msg = cache;
 
