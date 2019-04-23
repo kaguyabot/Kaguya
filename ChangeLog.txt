@@ -15,6 +15,7 @@ Version 1.7.4
 - Fixed various unhandled runtime exceptions \:D/ for stability!
 - Added timer for "Game" name rotation (rotates through statuses every 10 minutes)
 
+
 Version 1.7.3
 
 - Fixed a bug where the bot would be handling TONS of exceptions (because I set something up wrong), drastically reducing performance.
