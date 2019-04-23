@@ -2,5 +2,6 @@
   "token": "",
   "cmdPrefix": "",
   "osuapikey": "",
-  "tillerinoapikey": ""
+  "tillerinoapikey": "",
+  "botUserID": ""
 }
