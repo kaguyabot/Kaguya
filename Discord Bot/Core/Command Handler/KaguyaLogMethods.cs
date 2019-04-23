@@ -355,8 +355,7 @@ namespace Kaguya.Core.CommandHandler
 
         public Task GameTimer()
         {
-            Timer timer = new Timer(5000);
-            // timer.Start();
+            Timer timer = new Timer(600000);
             timer.Elapsed += Game_Timer_Elapsed;
             timer.AutoReset = true;
             timer.Enabled = true;
