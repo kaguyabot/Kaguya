@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 using System.Net;
 using Newtonsoft.Json;
 using Kaguya.Modules;
-using Discord_Bot.Core.CommandHandler;
+using Kaguya.Core.CommandHandler;
 
 #pragma warning disable
 
@@ -23,15 +23,16 @@ namespace Kaguya
 {
     class CommandHandler
     {
+
         DiscordSocketClient _client;
         CommandService _service;
-        private IServiceProvider _services;
-        Color Yellow = new Color(255, 255, 102);
-        Color SkyBlue = new Color(63, 242, 255);
-        Color Red = new Color(255, 0, 0);
-        Color Violet = new Color(238, 130, 238);
-        Color Pink = new Color(252, 132, 255);
-        KaguyaLogMethods logger = new KaguyaLogMethods();
+        private IServiceProvider _services; 
+        readonly Color Yellow = new Color(255, 255, 102);
+        readonly Color SkyBlue = new Color(63, 242, 255);
+        readonly Color Red = new Color(255, 0, 0);
+        readonly Color Violet = new Color(238, 130, 238);
+        readonly Color Pink = new Color(252, 132, 255);
+        readonly KaguyaLogMethods logger = new KaguyaLogMethods();
         public string osuapikey = Config.bot.osuapikey;
         public string tillerinoapikey = Config.bot.tillerinoapikey;
         public async Task InitializeAsync(DiscordSocketClient client)
@@ -45,9 +46,11 @@ namespace Kaguya
                   Assembly.GetExecutingAssembly(),
                   _services);
                 _client.Ready += logger.OnReady;
+                _client.Ready += logger.GameTimer;
                 _client.MessageReceived += HandleCommandAsync;
                 _client.MessageReceived += logger.osuLinkParser;
                 _client.JoinedGuild += logger.JoinedNewGuild;
+                _client.LeftGuild += logger.LeftGuild;
                 _client.MessageReceived += logger.MessageCache;
                 _client.MessageDeleted += logger.LoggingDeletedMessages;
                 _client.MessageUpdated += logger.LoggingEditedMessages;
@@ -58,7 +61,8 @@ namespace Kaguya
                 _client.MessageReceived += logger.LogChangesToLogSettings;
                 _client.MessageReceived += logger.UserSaysFilteredPhrase;
                 _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
-                _client.Disconnected += logger.BotDisconnected;
+                _client.Disconnected += logger.ClientDisconnected;
+                
             }
             catch (ReflectionTypeLoadException ex)
             {
@@ -88,13 +92,16 @@ namespace Kaguya
             if (msg == null) return;
             var context = new SocketCommandContext(_client, msg);
             if (context.User.IsBot) return;
-            IUser kaguya = _client.GetUser(538910393918160916);
-            foreach (SocketGuildChannel channel in context.Guild.Channels)
+            var kID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
+            SocketUser kaguya = _client.GetUser(ID);
+            if (kaguya != null)
             {
-                if(!channel.GetPermissionOverwrite(kaguya).HasValue)
-                await channel.AddPermissionOverwriteAsync(kaguya, OverwritePermissions.AllowAll(channel));
+                foreach (SocketGuildChannel channel in context.Guild.Channels)
+                {
+                    if (!channel.GetPermissionOverwrite(kaguya as IUser).HasValue)
+                        await channel.AddPermissionOverwriteAsync(kaguya, OverwritePermissions.AllowAll(channel));
+                }
             }
-            if (context.Guild.Id == 264445053596991498 || context.Guild.Id == 333949691962195969) return;
             var userAccount = UserAccounts.GetAccount(context.User);
             if (userAccount.Blacklisted == 1)
             {
@@ -107,7 +114,7 @@ namespace Kaguya
             {
                 if(msg.Content.Contains(phrase))
                 {
-                    logger.UserSaysFilteredPhrase(msg);
+                    await logger.UserSaysFilteredPhrase(msg);
                 }
             }
             logger.ServerLogMethod(context);

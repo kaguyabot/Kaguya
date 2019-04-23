@@ -13,10 +13,10 @@ using System.Net;
 using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
-using Discord_Bot.Core;
+using Kaguya.Core;
 using System.Diagnostics;
 
-#pragma warning disable
+
 
 namespace Kaguya.Modules
 {
@@ -29,8 +29,8 @@ namespace Kaguya.Modules
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
         public string botToken = Config.bot.token;
-        Logger logger = new Logger();
-        Stopwatch stopWatch = new Stopwatch();
+        readonly Logger logger = new Logger();
+        readonly Stopwatch stopWatch = new Stopwatch();
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -47,7 +47,7 @@ namespace Kaguya.Modules
             embed.WithTitle("Points");
             embed.WithDescription($"{user.Mention} has {account.Points} points.");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -65,7 +65,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Adding Points");
                 embed.WithDescription($"{Context.User.Mention} has been awarded {points} points.");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else if (user is IGuildUser)
@@ -76,7 +76,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Adding Points");
                 embed.WithDescription($"{Context.User.Mention} has been awarded {points} points.");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else
@@ -84,7 +84,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Adding Points");
                 embed.WithDescription($"{Context.User.Mention} Unable to add points to {user}! Make sure they exist and try again!");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User does not exist!");
             }
         }
@@ -106,7 +106,7 @@ namespace Kaguya.Modules
             embed.WithTitle("Points Awarded");
             embed.WithDescription($"{Context.User.Mention} has awarded `{bonus.ToString("N0")}` points to `{i.ToString("N0")}` users!");
             embed.WithColor(Gold);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -115,7 +115,6 @@ namespace Kaguya.Modules
         public async Task TimelyReset()
         {
             stopWatch.Start();
-            var commands = Commands.GetCommand();
             var accounts = UserAccounts.GetAllAccounts();
             foreach (var account in accounts)
             {
@@ -125,7 +124,7 @@ namespace Kaguya.Modules
             embed.WithTitle("Timely Reset");
             embed.WithDescription($"**{Context.User.Mention} Timely points for `{accounts.Count}` users have been reset!**");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -151,12 +150,12 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
                     $" Please wait until `{timeout} hours` have passed to receive more timely points.");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User needs to wait before receiving more timely points.");
                 return;
             }
             bool critical = rand.Next(100) < 14;
-            if(critical) { bonus = bonus * 3.50; }
+            if(critical) { bonus *= 3.50; }
             userAccount.Points += (uint)bonus;
             userAccount.LastReceivedTimelyPoints = DateTime.Now;
             UserAccounts.SaveAccounts();
@@ -166,7 +165,7 @@ namespace Kaguya.Modules
             else
                 embed.WithDescription($"{Context.User.Mention} has received `{bonus.ToString("N0")}` points! Claim again in {timeout}h.");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -184,14 +183,14 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **You do not have enough points! You need at least `{memberCount - userPoints}` more points to execute this command!**");
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User does not have enough points to execute this command."); return;
             }
             if (memberCount < 25)
             {
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **You do not have enough members in this server! 25 non-bot members must be present in the server for this command to work.**");
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Guild does not have at least 25 non-bot members."); return;
             }
             else
@@ -199,14 +198,14 @@ namespace Kaguya.Modules
                 foreach (var member in members)
                 {
                     UserAccount memberAccount = UserAccounts.GetAccount(member);
-                    memberAccount.Points = memberAccount.Points + distributedPoints;
+                    memberAccount.Points += distributedPoints;
                     userAccount.Points = 0;
                 }
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **Has decided to redistribute their points balance to everyone in the server!**");
                 embed.WithFooter($"{memberCount} members have been awarded {distributedPoints} points thanks to {Context.User.Username}. How generous!");
                 embed.WithColor(Gold);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
             }
         }
@@ -224,7 +223,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{user.Mention} you have an insufficient amount of points!" +
                     $"\nThe maximum amount you may gamble is {userAccount.Points}.");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User has insufficient points balance.");
                 return;
             }
@@ -233,7 +232,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Gambling: Too Few Points!");
                 embed.WithDescription($"{user.Mention} You may not gamble less than one point!");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to gamble less than one point.");
                 return;
             }
@@ -243,7 +242,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{user.Mention} you are attempting to gamble too many points!" +
                     $"\nThe maximum amount you may gamble is `25,000` points.**");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to gamble more than 25,000 points.");
                 return;
             }
@@ -253,7 +252,7 @@ namespace Kaguya.Modules
             Random rand = new Random();
             Random crit = new Random();
             var roll = rand.Next(100);
-            bool critical = crit.Next(100) < 4;
+            bool critical = crit.Next(100) < 8;
 
             if (roll <= 66)
             {
@@ -263,18 +262,12 @@ namespace Kaguya.Modules
                 string[] sadEmotes = { "<:PepeHands:431853568669253632>", "<:FeelsBadMan:431647398071107584>", "<:FeelsWeirdMan:431148381449224192>" };
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
-                if (critical)
-                {
-                    embed.WithTitle($"Gambling: Loser! It's a critical loss!! {sadEmotes[num]}");
-                    userAccount.Points -= ((uint)points / 4);
-                }
-                else
-                    embed.WithTitle($"Gambling: Loser! {sadEmotes[num]}");
+                embed.WithTitle($"Gambling: Loser! {sadEmotes[num]}");
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and lost their bet of `{points.ToString("N0")}`! Better luck next time!** <:SagiriBlush:498009810692734977>");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
                 embed.WithColor(Pink);
-                BE();
+                await BE();
 
                 UserAccounts.SaveAccounts(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -290,7 +283,7 @@ namespace Kaguya.Modules
                 var num = randEmote.Next(0, 2);
 
                 var multiplier = 1.25;
-                if(critical) { multiplier = multiplier * 3.50; }
+                if(critical) { multiplier *= 3.50; }
                 userAccount.Points += (uint)(points * multiplier);
 
                 if(critical)
@@ -301,7 +294,7 @@ namespace Kaguya.Modules
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
                 embed.WithColor(Pink);
-                BE();
+                await BE();
 
                 UserAccounts.SaveAccounts(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -317,7 +310,7 @@ namespace Kaguya.Modules
                 var num = randEmote.Next(0, 2);
 
                 var multiplier = 1.75;
-                if (critical) { multiplier = multiplier * 3.50; }
+                if (critical) { multiplier *= 3.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
                 if(critical)
@@ -328,7 +321,7 @@ namespace Kaguya.Modules
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
                 embed.WithColor(Pink);
-                BE();
+                await BE();
 
                 UserAccounts.SaveAccounts(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -345,7 +338,7 @@ namespace Kaguya.Modules
                 var num = randEmote.Next(0, 2);
 
                 var multiplier = 2.25;
-                if (critical) { multiplier = multiplier * 3.50; }
+                if (critical) { multiplier *= 3.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
                 if(critical)
@@ -357,7 +350,7 @@ namespace Kaguya.Modules
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
                 embed.WithColor(Pink);
-                BE();
+                await BE();
 
                 UserAccounts.SaveAccounts(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -374,7 +367,7 @@ namespace Kaguya.Modules
                 var num = randEmote.Next(0, 2);
 
                 var multiplier = 3.00;
-                if (critical) { multiplier = multiplier * 3.50; }
+                if (critical) { multiplier *= 3.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
                 if(critical)
@@ -386,7 +379,7 @@ namespace Kaguya.Modules
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
                 embed.WithColor(Pink);
-                BE();
+                await BE();
 
                 UserAccounts.SaveAccounts(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -402,7 +395,7 @@ namespace Kaguya.Modules
                 string sirenEmote = "<a:siren:429784681316220939>";
 
                 var multiplier = 5.00;
-                if (critical) { multiplier = multiplier * 3.50; }
+                if (critical) { multiplier *= 3.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
                 embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! It's a super critical hit!! {sirenEmote}");
@@ -411,7 +404,7 @@ namespace Kaguya.Modules
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
                 embed.WithColor(Gold); 
-                BE();
+                await BE();
 
                 UserAccounts.SaveAccounts(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -437,7 +430,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}weekly`!" +
                     $" Please wait until `7 days` have passed to receive your weekly bonus.");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User has not waited for the weekly bonus timer to reset.");
                 return;
             }
@@ -452,7 +445,7 @@ namespace Kaguya.Modules
             else
                 embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points!**");
             embed.WithColor(Pink);
-            BE();
+            await BE();
 
             UserAccounts.SaveAccounts();
             stopWatch.Stop();
@@ -471,16 +464,5 @@ namespace Kaguya.Modules
             return difference.TotalHours > timeout;
         }
 
-        private bool UserIsAdmin(SocketGuildUser user)
-        {
-            string targetRoleName = "Administrator";
-            var result = from r in user.Guild.Roles
-                         where r.Name == targetRoleName
-                         select r.Id;
-            ulong roleID = result.FirstOrDefault();
-            if (roleID == 0) return false;
-            var targetRole = user.Guild.GetRole(roleID);
-            return user.Roles.Contains(targetRole);
-        }
     }
 }

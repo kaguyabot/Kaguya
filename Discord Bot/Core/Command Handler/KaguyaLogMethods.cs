@@ -5,30 +5,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Core.Server_Files;
 using Discord;
-using Discord_Bot.Modules.osu;
-using Kaguya;
+using Kaguya.Modules.osu;
+using System.Diagnostics;
+using System.Timers;
 
-#pragma warning disable
-
-namespace Discord_Bot.Core.CommandHandler
+namespace Kaguya.Core.CommandHandler
 {
     public class KaguyaLogMethods
     {
-        DiscordSocketClient _client = Global.Client;
-        public IServiceProvider _services;
-        Color Yellow = new Color(255, 255, 102);
-        Color SkyBlue = new Color(63, 242, 255);
-        Color Red = new Color(255, 0, 0);
-        Color Violet = new Color(238, 130, 238);
-        Color Pink = new Color(252, 132, 255);
+        readonly DiscordSocketClient _client = Global.Client;
+        readonly public IServiceProvider _services;
+        readonly Color Yellow = new Color(255, 255, 102);
+        readonly Color SkyBlue = new Color(63, 242, 255);
+        readonly Color Red = new Color(255, 0, 0);
+        readonly Color Violet = new Color(238, 130, 238);
+        readonly Logger logger = new Logger();
+        readonly Stopwatch stopWatch = new Stopwatch();
 
         public async Task OnReady()
         {
-            Console.WriteLine("Ace Pilot Kaguya cleared for takeoff." +
+            Console.WriteLine($"Ace Pilot Kaguya cleared for takeoff. Servicing {_client.Guilds.Count()} guilds" +
+                $" and {UserAccounts.UserAccounts.GetAllAccounts().Count().ToString("N0")} members." +
                 "\nBegin Logging\n");
             Console.WriteLine("--------------------------------------------");
             await _client.SetGameAsync("Support Server: yhcNC97");
         }
+
+        #pragma warning disable IDE1006 //Disable warnings for naming styles
 
         public async Task osuLinkParser(SocketMessage s)
         {
@@ -36,15 +39,18 @@ namespace Discord_Bot.Core.CommandHandler
             {
                 BeatmapLinkParser parser = new BeatmapLinkParser();
                 EmbedBuilder embed = new EmbedBuilder();
-                var msg = s as SocketUserMessage;
-                var context = new SocketCommandContext(_client, msg);
-                if (s.Content.Contains("https://osu.ppy.sh/beatmapsets/"))
+                if (s is SocketUserMessage msg)
                 {
-                    parser.LinkParserMethod(s, embed, context);
-                }
-                else if (s.Content.Contains("https://osu.ppy.sh/b/"))
-                {
-                    parser.LinkParserMethod(s, embed, context);
+                    var context = new SocketCommandContext(_client, msg);
+                    if (s.Content.Contains("https://osu.ppy.sh/beatmapsets/"))
+                    {
+                        await parser.LinkParserMethod(s, embed, context);
+                    }
+                    else if (s.Content.Contains("https://osu.ppy.sh/b/"))
+                    {
+                        await parser.LinkParserMethod(s, embed, context);
+                    }
+                    else { return; }
                 }
                 else { return; }
             }
@@ -71,7 +77,8 @@ namespace Discord_Bot.Core.CommandHandler
             var cmdPrefix = Servers.GetServer(guild).commandPrefix;
             var owner = guild.Owner;
             var channels = guild.Channels;
-            IUser kaguya = _client.GetUser(538910393918160916);
+            var kID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
+            IUser kaguya = _client.GetUser(ID);
             await owner.GetOrCreateDMChannelAsync();
             await owner.SendMessageAsync($"Hey there, {owner.Username}, I am Kaguya! I will serve as your server's all-in-one Discord Bot solution complete with powerful administrative commands, " +
                 $"in-depth customizable logging, leveling/currency systems, osu! related commands, and more! Before we continue please read the following statement from my creator as it contains very " +
@@ -92,27 +99,44 @@ namespace Discord_Bot.Core.CommandHandler
                 $"\nYou may also let me know in Kaguya's dedicated support server: https://discord.gg/yhcNC97" +
                 $"\n" +
                 $"\nThank you, and enjoy!");
+
             foreach (var channel in channels)
             {
                 if (!channel.GetPermissionOverwrite(kaguya).HasValue)
-                    channel.AddPermissionOverwriteAsync(kaguya, OverwritePermissions.InheritAll);
+                {
+                    await channel.AddPermissionOverwriteAsync(kaguya, OverwritePermissions.InheritAll);
+                    logger.ConsoleGuildAdvisory(guild, channel, "Updated channel permissions");
+                }
             }
 
             var server = Servers.GetServer(guild);
             server.ID = guild.Id;
             server.ServerName = guild.Name;
             Servers.SaveServers();
+            logger.ConsoleGuildConnectionAdvisory(guild, "Joined new guild");
         }
 
-        public async Task MessageCache(SocketMessage s) //Called whenever a message is sent in a guild. Adds the message to a list.
+        public Task LeftGuild(SocketGuild guild)
         {
-            var msg = s as SocketUserMessage;
-            if (msg == null) return;
-            SocketCommandContext context = new SocketCommandContext(_client, msg);
-            if (context.Guild.Id == 264445053596991498 || context.Guild.Id == 333949691962195969) return;
-            var currentLog = ServerMessageLogs.GetLog(context.Guild);
-            currentLog.AddMessage(msg);
-            ServerMessageLogs.SaveServerLogging();
+            logger.ConsoleGuildConnectionAdvisory(guild, "Disconnected from guild.");
+            return Task.CompletedTask;
+        }
+
+        public Task MessageCache(SocketMessage s) //Called whenever a message is sent in a guild. Adds the message to a list.
+        {
+            if (s != null)
+            {
+                var msg = s as SocketUserMessage;
+                if (msg != null && msg.Channel.GetType().ToString() == "Discord.WebSocket.SocketTextChannel") //Checks to make sure that the message is actually from a guild channel (NOT a DM).
+                {
+                    SocketCommandContext context = new SocketCommandContext(_client, msg);
+                    var currentLog = ServerMessageLogs.GetLog(_client.GetGuild(context.Guild.Id));
+                    currentLog.AddMessage(msg);
+                    ServerMessageLogs.SaveServerLogging();
+                    return Task.CompletedTask;
+                }
+            }
+            return Task.CompletedTask;
         }
 
         public async Task LoggingDeletedMessages(Cacheable<IMessage, ulong> cache, ISocketMessageChannel channel) //Called whenever a message is deleted
@@ -176,7 +200,6 @@ namespace Discord_Bot.Core.CommandHandler
         {
             IGuild server = (user as IGuildUser).Guild;
             Server currentServer = Servers.GetServer((SocketGuild)server);
-            var currentLog = ServerMessageLogs.GetLog((SocketGuild)server);
             ulong loggingChannelID = currentServer.LogWhenUserJoins;
             if (loggingChannelID == 0) return;
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
@@ -187,13 +210,13 @@ namespace Discord_Bot.Core.CommandHandler
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(SkyBlue);
             await logChannel.SendMessageAsync("", false, embed.Build());
+            logger.ConsoleGuildConnectionAdvisory(user.Guild, "User joined guild");
         }
 
         public async Task LoggingUserLeaves(SocketGuildUser user)
         {
             IGuild server = (user as IGuildUser).Guild;
             Server currentServer = Servers.GetServer((SocketGuild)server);
-            var currentLog = ServerMessageLogs.GetLog((SocketGuild)server);
             ulong loggingChannelID = currentServer.LogWhenUserLeaves;
             if (loggingChannelID == 0) return;
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
@@ -209,7 +232,6 @@ namespace Discord_Bot.Core.CommandHandler
         public async Task LoggingUserBanned(SocketUser user, SocketGuild server)
         {
             Server currentServer = Servers.GetServer(server);
-            var currentLog = ServerMessageLogs.GetLog(server);
             ulong loggingChannelID = currentServer.LogWhenUserIsBanned;
             if (loggingChannelID == 0) return;
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
@@ -225,7 +247,6 @@ namespace Discord_Bot.Core.CommandHandler
         public async Task LoggingUserUnbanned(SocketUser user, SocketGuild server)
         {
             Server currentServer = Servers.GetServer(server);
-            var currentLog = ServerMessageLogs.GetLog(server);
             ulong loggingChannelID = currentServer.LogWhenUserIsUnbanned;
             if (loggingChannelID == 0) return;
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
@@ -245,7 +266,6 @@ namespace Discord_Bot.Core.CommandHandler
             var user = (message as SocketUserMessage).Author;
             var author = (user as SocketGuildUser).GuildPermissions;
             Server currentServer = Servers.GetServer(server);
-            var currentLog = ServerMessageLogs.GetLog(server);
             if (author.Administrator && message.Content.Contains("$setlogchannel") || author.Administrator && message.Content.Contains("$log"))
             {
                 ulong loggingChannelID = currentServer.LogChangesToLogSettings;
@@ -263,27 +283,30 @@ namespace Discord_Bot.Core.CommandHandler
 
         public async Task UserSaysFilteredPhrase(SocketMessage message)
         {
-            var guild = (message.Channel as SocketGuildChannel).Guild;
-            var server = Servers.GetServer(guild);
-            var filteredPhrases = server.FilteredWords;
-            foreach (string phrase in filteredPhrases)
+            if (message != null && message.Channel.GetType().ToString() == "Discord.WebSocket.SocketTextChannel")
             {
-                if (message.Content.ToLower().Contains($"{phrase}"))
+                var guild = (message.Channel as SocketGuildChannel).Guild;
+                var server = Servers.GetServer(guild);
+                var filteredPhrases = server.FilteredWords;
+                foreach (string phrase in filteredPhrases)
                 {
-                    await message.DeleteAsync();
-                    ulong loggingChannelID = server.LogWhenUserSaysFilteredPhrase;
-                    if (loggingChannelID == 0) return;
-                    ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(server.ID).GetChannel(loggingChannelID);
-                    EmbedBuilder embed = new EmbedBuilder();
-                    embed.WithTitle("Filtered Phrase Detected");
-                    embed.WithDescription($"**Author:** `{message.Author}`" +
-                        $"\n**UserID:** `{message.Author.Id}`" +
-                        $"\n**Message:** `{message.Content}`" +
-                        $"\n**MessageID:** `{message.Id}`");
-                    embed.WithThumbnailUrl("https://i.imgur.com/npzKmyY.png");
-                    embed.WithColor(Red);
-                    embed.WithTimestamp(DateTime.Now);
-                    await logChannel.SendMessageAsync("", false, embed.Build());
+                    if (message.Content.ToLower().Contains($"{phrase}"))
+                    {
+                        await message.DeleteAsync();
+                        ulong loggingChannelID = server.LogWhenUserSaysFilteredPhrase;
+                        if (loggingChannelID == 0) return;
+                        ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(server.ID).GetChannel(loggingChannelID);
+                        EmbedBuilder embed = new EmbedBuilder();
+                        embed.WithTitle("Filtered Phrase Detected");
+                        embed.WithDescription($"**Author:** `{message.Author}`" +
+                            $"\n**UserID:** `{message.Author.Id}`" +
+                            $"\n**Message:** `{message.Content}`" +
+                            $"\n**MessageID:** `{message.Id}`");
+                        embed.WithThumbnailUrl("https://i.imgur.com/npzKmyY.png");
+                        embed.WithColor(Red);
+                        embed.WithTimestamp(DateTime.Now);
+                        await logChannel.SendMessageAsync("", false, embed.Build());
+                    }
                 }
             }
         }
@@ -324,9 +347,36 @@ namespace Discord_Bot.Core.CommandHandler
             }
         }
 
-        public async Task BotDisconnected(Exception e)
+        public Task ClientDisconnected(Exception e)
         {
-            Console.WriteLine("Bot Disconnected! Exception Message: " + e.Message);
+            logger.ConsoleCriticalAdvisory(e, "CLIENT IS IN DISCONNECTED STATE!!");
+            return Task.CompletedTask;
+        }
+
+        public Task GameTimer()
+        {
+            Timer timer = new Timer(5000);
+            // timer.Start();
+            timer.Elapsed += Game_Timer_Elapsed;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            return Task.CompletedTask;
+        }
+
+        int displayIndex = 0;
+
+        private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            string[] games = { "Support Server: yhcNC97", "$help | @Kaguya#2708 help",
+            $"Currently servicing {_client.Guilds.Count()} guilds", $"Currently servicing {UserAccounts.UserAccounts.GetAllAccounts().Count().ToString("N0")} members" };
+            displayIndex++;
+            if (displayIndex >= games.Length)
+            {
+                displayIndex = 0;
+            }
+
+            _client.SetGameAsync(games[displayIndex]);
+            logger.ConsoleStatusAdvisory($"Game updated to \"{games[displayIndex]}\"");
         }
     }
 }

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{241766C6-5F98-45BF-A2B2-E0AE28572B8D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Discord_Bot</RootNamespace>
+    <RootNamespace>Kaguya</RootNamespace>
     <AssemblyName>Discord Bot</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -278,6 +278,7 @@
     <Compile Include="Core\UserAccounts\UserAccount.cs" />
     <Compile Include="Core\UserAccounts\UserAccounts.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ListSocketGuildUserTR.cs" />
     <Compile Include="Core\PlayData.cs" />
     <Compile Include="Modules\Administration\Administration.cs" />
@@ -318,22 +319,22 @@
   <ItemGroup>
     <PublishFile Include="RedCell.Diagnostics.Update">
       <Visible>False</Visible>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="RedCell.Net">
       <Visible>False</Visible>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>

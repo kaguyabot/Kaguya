@@ -13,10 +13,10 @@ using System.Net;
 using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
-using Discord_Bot.Core;
+using Kaguya.Core;
 using System.Diagnostics;
 
-#pragma warning disable
+
 
 namespace Kaguya.Modules
 {
@@ -49,7 +49,7 @@ namespace Kaguya.Modules
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -76,7 +76,7 @@ namespace Kaguya.Modules
                 embed.AddField($"#{i++} {user.Username}", $"Level: {user.LevelNumber} - EXP: {user.EXP}");
             }
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -95,7 +95,7 @@ namespace Kaguya.Modules
                 embed.AddField($"#{i++} {user.Username}", $"Level: {user.LevelNumber} - EXP: {user.EXP}");
             }
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -116,7 +116,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.TotalMinutes)}m {(int)(60 - difference.Seconds)}s " +
                     $"before you can give rep again!**");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
             }
             else
@@ -129,7 +129,7 @@ namespace Kaguya.Modules
                 embed.WithDescription("**Successfully gave +1 rep to my creator** uwu.");
                 embed.WithFooter("Thank you for showing your support <3");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
             }
         }
@@ -147,7 +147,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.Minutes)}m {(int)(60 - difference.Seconds)} " +
                     $"before you can give rep again!**");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
             }
             if (userAccount == targetAccount)
@@ -155,7 +155,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} You may not rep yourself!**");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to rep themselves."); return;
             }
             else
@@ -166,7 +166,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} Successfully gave rep to {user.Mention}!**");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
         }
@@ -179,7 +179,7 @@ namespace Kaguya.Modules
             embed.WithTitle("Experience Points");
             embed.WithDescription($"{Context.User.Mention} has {account.EXP} EXP.");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -191,7 +191,7 @@ namespace Kaguya.Modules
             embed.WithTitle("Level");
             embed.WithDescription($"{Context.User.Mention} you have {account.LevelNumber} levels.");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 

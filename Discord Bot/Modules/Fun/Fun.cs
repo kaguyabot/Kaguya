@@ -13,10 +13,10 @@ using System.Net;
 using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
-using Discord_Bot.Core;
+using Kaguya.Core;
 using System.Diagnostics;
 
-#pragma warning disable
+
 
 namespace Kaguya.Modules
 {
@@ -47,13 +47,13 @@ namespace Kaguya.Modules
                 embed.WithTitle("Echo");
                 embed.WithDescription($"**{Context.User.Mention} No message specified!**");
                 embed.WithColor(Red);
-                BE(); return;
+                await BE(); return;
             }
             embed.WithTitle("Echo");
             embed.WithDescription(message);
             embed.WithColor(Pink);
 
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -66,7 +66,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Pick: Missing Options!");
                 embed.WithDescription($"**{Context.User.Mention} No options specified!**");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User did not specify any options to pick from."); return;
             }
 
@@ -79,7 +79,7 @@ namespace Kaguya.Modules
             embed.WithDescription(selection);
             embed.WithColor(Pink);
 
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -96,7 +96,7 @@ namespace Kaguya.Modules
             embed.WithTitle("Magic 8Ball");
             embed.WithDescription($"**{Context.User.Mention} {responses[num]}**");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             
         }
@@ -272,7 +272,7 @@ namespace Kaguya.Modules
         //            embed.AddField($"{player}", $"{points}", true); //{points} will probably need to be changed for multiplayer (save points bet in list for recall?)
         //        }
         //        embed.WithColor(Gold);
-        //        BE();
+        //        await BE();
         //        server.JoinedUsers.Clear();
         //        server.BlackJackInProgress = false;
         //        return;
@@ -385,19 +385,19 @@ namespace Kaguya.Modules
         //    {
         //        embed.WithDescription($"**{Context.User.Mention} The maximum number of players are currently playing! Please wait for their game to finish!**");
         //        embed.WithColor(Red);
-        //        BE();
+        //        await BE();
         //    }
         //    else if (server.BlackJackInProgress == false)
         //    {
         //        embed.WithDescription($"**{Context.User.Mention} A game of blackjack is not currently in progress. Start one with `{cmdPrefix}gblackjack`!**");
         //        embed.WithColor(Red);
-        //        BE();
+        //        await BE();
         //    }
         //    else if (server.JoinedUsers.Contains(Context.User.Username))
         //    {
         //        embed.WithDescription($"**{Context.User.Mention} You have already joined this game of blackjack!**");
         //        embed.WithColor(Red);
-        //        BE();
+        //        await BE();
         //    }
         //    var playerName = Context.User.Username;
         //    var userAccount = UserAccounts.GetAccount(Context.User);
@@ -407,7 +407,7 @@ namespace Kaguya.Modules
 
         //    embed.WithDescription($"**{Context.User.Mention} has joined the blackjack game with a bet of {points}!**");
         //    embed.WithColor(Gold);
-        //    BE();
+        //    await BE();
         //}
 
 
