@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Kaguya
 {
-    class Config
+    public class Config
     {
         private const string configFolder = "Resources";
         private const string configFile = "config.json";
@@ -40,6 +40,6 @@ namespace Kaguya
         public string cmdPrefix { get; set; }
         public string osuapikey { get; set; }
         public string tillerinoapikey { get; set; }
-
+        public string botUserID { get; set; }
     }
 }

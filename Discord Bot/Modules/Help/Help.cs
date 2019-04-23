@@ -13,10 +13,10 @@ using System.Net;
 using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
-using Discord_Bot.Core;
+using Kaguya.Core;
 using System.Diagnostics;
 
-#pragma warning disable
+
 
 namespace Kaguya.Modules
 {
@@ -29,8 +29,8 @@ namespace Kaguya.Modules
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
         public string botToken = Config.bot.token;
-        Logger logger = new Logger();
-        Stopwatch stopWatch = new Stopwatch();
+        readonly Logger logger = new Logger();
+        readonly Stopwatch stopWatch = new Stopwatch();
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -54,7 +54,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"Shows the command list. If typed with the name of a command (Ex: `{cmdPrefix}help <command>`), the response will instead contain helpful information on the specified " +
                         $"command, including how to use it.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "helpdm":
                 case "hdm":
 
@@ -62,7 +62,7 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`");
                     embed.WithDescription($"{Context.User.Mention} Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "exp":
 
                     stopWatch.Start();
@@ -70,7 +70,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}exp`." +
                         $"\nReturns the value of experience points a user has in their account.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "expadd":
                 case "addexp":
 
@@ -80,7 +80,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\n{Context.User.Mention} Syntax: `{cmdPrefix}expadd <number of experience points to add>`. The number of exp you are adding must be a positive whole number.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "points":
 
                     stopWatch.Start();
@@ -88,7 +88,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}points`." +
                         $"\nReturns the value of points a user has in their account.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "pointsadd":
                 case "addpoints":
 
@@ -98,14 +98,14 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\n{Context.User.Mention} Syntax: `{cmdPrefix}pointsadd <number of points to add>`. The number of points you are adding must be a positive whole number.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "level":
 
                     stopWatch.Start();
                     embed.WithTitle($"Help: Level | `{cmdPrefix}level`");
                     embed.WithDescription($"{Context.User.Mention} Displays your current Kaguya level!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "createtextchannel":
                 case "ctc":
 
@@ -117,7 +117,7 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}createtextchannel <channel name>`. " +
                         $"\nThis name can have spaces. Example: `{cmdPrefix}createtextchannel testing 123`.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "commands":
                 case "cmds":
 
@@ -126,7 +126,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Displays a list of commands for the specified module. Use {cmdPrefix}modules " +
                         $"for the list of modules you may pick from. Modules are essentially command groups seperated by category." +
                         $"\nSyntax: `{cmdPrefix}cmds <module>`, `{cmdPrefix}cmds administrator`");
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "deletetextchannel":
                 case "dtc":
 
@@ -139,7 +139,7 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}deletetextchannel <channel name>`." +
                         $"Example: `{cmdPrefix}deletetextchannel super-long-name-with-lots-of-spaces`.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "createvoicechannel":
                 case "cvc":
 
@@ -152,7 +152,7 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}createvoicechannel <channel name>`." +
                         $"\nExample: `{cmdPrefix}cvc testing 123`.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "deletevoicechannel":
                 case "dvc":
 
@@ -165,7 +165,7 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}deletevoicechannel <channel name>`." +
                         $"Example: `{cmdPrefix}deletevoicechannel super-long-name-with-lots-of-spaces`.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "echo":
 
                     stopWatch.Start();
@@ -173,7 +173,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Makes the bot repeat anything you say!" +
                         $"\nSyntax: `{cmdPrefix}echo <message>`.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "pick":
 
                     stopWatch.Start();
@@ -183,7 +183,7 @@ namespace Kaguya.Modules
                         $"\nYou may have as many \"Options\" as you'd like!" +
                         $"\nThe bot will always pick with totally random odds.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "8ball":
 
                     stopWatch.Start();
@@ -192,7 +192,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}8ball <question>`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "timely":
                 case "t":
 
@@ -203,7 +203,7 @@ namespace Kaguya.Modules
                         "multiplying your reward by `3.50x`." +
                         $"\nSyntax: `{cmdPrefix}timely`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "weekly":
 
                     stopWatch.Start();
@@ -213,7 +213,7 @@ namespace Kaguya.Modules
                         "your reward by `3.50x`." +
                         $"\nSyntax: `{cmdPrefix}weekly`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "clear":
                 case "purge":
                 case "c":
@@ -228,7 +228,7 @@ namespace Kaguya.Modules
                         $"\nThis number may not exceed `100`." +
                         $"\nMessages older than two weeks will need to be deleted manually.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "kick":
                 case "k":
 
@@ -239,7 +239,7 @@ namespace Kaguya.Modules
                         $"\nKicks an individual member from the server." +
                         $"\nSyntax: `{cmdPrefix}kick @User#0000`.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "ban":
                 case "b":
 
@@ -250,7 +250,7 @@ namespace Kaguya.Modules
                         $"\nBans an individual member from the server." +
                         $"\nSyntax: `{cmdPrefix}ban @User#0000`.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "massban":
 
                     stopWatch.Start();
@@ -260,7 +260,7 @@ namespace Kaguya.Modules
                         $"\nTakes a list of mentioned users and permanently bans them simultaneously." +
                         $"\nSyntax: `{cmdPrefix}massban @mentioneduser#0001 @otheruser#0002 @smellysushi#2623 [...]`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "masskick":
 
                     stopWatch.Start();
@@ -270,7 +270,7 @@ namespace Kaguya.Modules
                         $"\nTakes a list of mentioned users and kicks them simultaneously." +
                         $"\nSyntax: `{cmdPrefix}masskick @bullyHunter#0001 @stinkysushi#0002 @smellysushi#2623 [...]`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "removeallroles":
                 case "rar":
 
@@ -281,7 +281,7 @@ namespace Kaguya.Modules
                         "\nRemoves all roles from the specified user." +
                         $"\nSyntax: `{cmdPrefix}removeallroles @User#0000`.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "deleterole":
                 case "dr":
 
@@ -292,7 +292,7 @@ namespace Kaguya.Modules
                         $"\nDeletes a role from the server (and in the process, removes said role from everyone who had it). " +
                         $"If multiple matches of the same role are found, the bot will delete all occurrences of said role." +
                         $"\nSyntax: `{cmdPrefix}deleterole <role name>`");
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "osu":
 
                     stopWatch.Start();
@@ -302,7 +302,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}osu`, `{cmdPrefix}osu <username>`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "createteamrole":
                 case "ctr":
 
@@ -316,7 +316,7 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}createteamrole <role name> <mentioned users>`" +
                         $"\nExample: `{cmdPrefix}createteamrole \"Smelly Sushi\" @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "sttreflog":
 
                     stopWatch.Start();
@@ -336,7 +336,7 @@ namespace Kaguya.Modules
                         $"<\"Team #2 Ban Mod #2\"> " +
                         $"\n<\"Team #2 Ban #2\"> <\"MP Link\">`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "osutop":
 
                     stopWatch.Start();
@@ -347,7 +347,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 8 \"Smelly sushi\"`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "delteams":
 
                     stopWatch.Start();
@@ -357,7 +357,7 @@ namespace Kaguya.Modules
                         $"\nDeletes all team roles. A team role is any role that has the word \"Team: \" inside of it (with the space)." +
                         $"\nThis command will delete ALL team roles upon execution, making this command dangerous and irreversable.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "recent":
                 case "r":
 
@@ -367,7 +367,7 @@ namespace Kaguya.Modules
                         $" the bot will use the osu! username that was specified to the command executor's Kaguya account (through {cmdPrefix}osuset).\n" +
                         $"As of right now, no response will be given for an invalid username.\n");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "osuset":
                     string name = Context.User.Username;
 
@@ -377,7 +377,7 @@ namespace Kaguya.Modules
                         $"parameters. For example, instead of typing `{cmdPrefix}osutop {name}`, you can now just type `{cmdPrefix}osutop` to get your most recent osu! plays. Same thing for `{cmdPrefix}r` / `{cmdPrefix}recent`!");
                     embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "massblacklist":
 
                     stopWatch.Start();
@@ -389,7 +389,7 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}massblacklist @username#123` | `{cmdPrefix}massblacklist @username#123 @ToxicPlayer123#7777 @SuckySmellySushi#1234`");
                     embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS. The only way to unblacklist someone is to edit your accounts.json file!!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "unblacklist":
 
                     stopWatch.Start();
@@ -399,7 +399,7 @@ namespace Kaguya.Modules
                         $"\nUnblacklists the specified userID." +
                         $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "roll":
                 case "gr":
 
@@ -417,7 +417,7 @@ namespace Kaguya.Modules
                         $"The best possible roll is a `critical 100`, multiplying your bet by `17.5x` (The odds of this are `1 / 2,500` or `0.04%`.)" +
                         $"\nRolls also have a 4% chance of being a `critical loss`, resulting in `25%` additional lost points. (The odds of this are `66 / 2,500` or `2.64%`.)");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "kaguyaexit":
 
                     stopWatch.Start();
@@ -426,7 +426,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nAdministrator only command that forces Kaguya to leave the current server.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "prefix":
 
                     stopWatch.Start();
@@ -437,7 +437,7 @@ namespace Kaguya.Modules
                         $"\nTo reset the command prefix, type {cmdPrefix}prefix, or tag me and type `prefix`! The bot will always display the last known command prefix " +
                         $"and the new prefix when using this command.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "serverexplb":
                 case "explb":
 
@@ -446,7 +446,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Displays the 10 top EXP holders in the server. This command " +
                         $"also displays their level.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "globalexplb":
                 case "gexplb":
 
@@ -455,7 +455,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Displays the 10 top EXP holders in the entire Kaguya database! This command " +
                         $"also displays their level.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "scrapeserver":
 
                     stopWatch.Start();
@@ -467,7 +467,7 @@ namespace Kaguya.Modules
                         $"there is no question on whether they will be able to be banned/unbanned. Creating a user account allows for name " +
                         $"and ID logging, the latter is necessary if a bot owner wishes to unblacklist a user.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "scrapedatabase":
 
                     stopWatch.Start();
@@ -478,7 +478,7 @@ namespace Kaguya.Modules
                         $"for other bots or users in servers with over `3,500` members. This command primarily exists for stability reasons (occasionally, if a " +
                         $"user doesn't have an account, a bot function may not work for said user [such as with `$ctr`]).");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "rep":
 
                     stopWatch.Start();
@@ -486,7 +486,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Allows any user in the server to add one reputation point to another member." +
                         $"\nThis can be done once every 24 hours, and can not be used on yourself. This rep will show on your Kaguya profile!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "rep author":
                 case "repauthor":
 
@@ -495,14 +495,14 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Gives my creator your daily +rep point!");
                     embed.WithFooter($"We appreciate your generosity uwu | To give rep to another user, use $rep!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "author":
 
                     stopWatch.Start();
                     embed.WithTitle($"Help: Author | `{cmdPrefix}author`");
                     embed.WithDescription($"{Context.User.Mention} Displays information about my creator!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "timelyreset":
 
                     stopWatch.Start();
@@ -511,7 +511,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nAllows a bot owner to reset the {cmdPrefix}timely cooldown for every user in the Kaguya database.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "filteradd":
                 case "fa":
 
@@ -523,7 +523,7 @@ namespace Kaguya.Modules
                         $"\nSpaces may be used when adding a phrase to the filter. The filter is not case sensitive." +
                         $"\nExamples: `{cmdPrefix}fa Smelly Sushi`, `{cmdPrefix}fa frogs`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "filterremove":
                 case "fr":
 
@@ -535,7 +535,7 @@ namespace Kaguya.Modules
                         $"\nSpaces may be used when removing a phrase from the filter. The filter is not case sensitive." +
                         $"\nExamples: `{cmdPrefix}fr Smelly Sashimi`, `{cmdPrefix}fr caterpillars`");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "filterview":
                 case "fv":
 
@@ -545,7 +545,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nAllows viewing of all filtered words and phrases in the server. Ideally this would be used in a private \"Moderator\" channel.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "filterclear":
                 case "clearfilter":
 
@@ -558,7 +558,7 @@ namespace Kaguya.Modules
                         $"\nExamples: `{cmdPrefix}filterclear`, `{cmdPrefix}clearfilter`");
                     embed.WithFooter("This action is dangerous and irreversible!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "setlogchannel":
                 case "log":
 
@@ -574,7 +574,7 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}setlogchannel <logtype> <#logging-channel>`");
                     embed.WithFooter("To see all available log types, and to see what channel the log types are being sent to, use $logtypes");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "resetlogchannel":
                 case "rlog":
 
@@ -588,7 +588,7 @@ namespace Kaguya.Modules
                         $"\nExample: `{cmdPrefix}resetlogchannel all` would disable all logging in the server.");
                     embed.WithFooter("To see all available log types, and to see what channel the log types are being sent to, use $logtypes");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "logtypes":
                 case "loglist":
 
@@ -601,7 +601,7 @@ namespace Kaguya.Modules
                         $"show any channels after it.");
                     embed.WithFooter("Note to Server Admins: This command will put out the log list in the chat channel you call this command from.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "awardeveryone":
                 case "awardall":
 
@@ -612,7 +612,7 @@ namespace Kaguya.Modules
                         $"\nAllows a bot owner to award a specified number of points to **all** users in their Kaguya database." +
                         $"\nThis can be a negative number, however it can not send a user's points below zero.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "masspointsdistribute":
 
                     stopWatch.Start();
@@ -622,14 +622,14 @@ namespace Kaguya.Modules
                         $"have at least one point for every member in the server, the command will not be executed.");
                     embed.WithFooter("What a generous act!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
 
 
                 default:
                     stopWatch.Start();
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User requested a help command for a command that doesn't exist."); break;
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User requested a help command for a command that doesn't exist."); break;
             }
         }
 
@@ -648,13 +648,13 @@ namespace Kaguya.Modules
                 "\n`logtypes [loglist]`", true);
             embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`weekly` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
-            embed.AddField("Fun", "`echo` \n`pick`", true);
+            embed.AddField("Fun", "`echo` \n`pick` \n`8ball`", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]`", true);
             embed.AddField("osu!", "`osu` \n`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
             embed.WithColor(Pink);
             embed.WithFooter($"For more information, including a link to add this bot to your server and a link to the Kaguya Support Discord, type {cmdPrefix}hdm!");
-            BE();  stopWatch.Stop();
+            await BE();  stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -668,8 +668,8 @@ namespace Kaguya.Modules
             embed.WithTitle("Help");
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
             embed.WithColor(Pink);
-            BE();
-            Context.User.SendMessageAsync($"Need help with a specific command? Type `{cmdPrefix}mdls` to see a list of categories the commands are listed under." +
+            await BE();
+            await Context.User.SendMessageAsync($"Need help with a specific command? Type `{cmdPrefix}mdls` to see a list of categories the commands are listed under." +
                 $"\nType `{cmdPrefix}commands <module name>` to see all commands listed under that module." +
                 $"\nType `{cmdPrefix}h <command name>` for more information on how to use the command and a detailed description of what it does." +
                 $"\nAdd me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847" +

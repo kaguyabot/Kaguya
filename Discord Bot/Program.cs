@@ -8,10 +8,9 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Timers;
 using System.Text;
-using Discord_Bot.Core.CommandHandler;
-using Discord_Bot.Core;
+using Kaguya.Core.CommandHandler;
+using Kaguya.Core;
 
-#pragma warning disable CS1998
 
 namespace Kaguya
 {

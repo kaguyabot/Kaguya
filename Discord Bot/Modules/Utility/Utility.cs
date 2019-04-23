@@ -13,10 +13,8 @@ using System.Net;
 using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
-using Discord_Bot.Core;
+using Kaguya.Core;
 using System.Diagnostics;
-
-#pragma warning disable
 
 namespace Kaguya.Modules
 {
@@ -56,7 +54,7 @@ namespace Kaguya.Modules
                 $"\nosu" +
                 $"\nUtility");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -96,7 +94,7 @@ namespace Kaguya.Modules
                         $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                         "\n```");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else if (category.ToLower() == "exp")
@@ -117,7 +115,7 @@ namespace Kaguya.Modules
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     "\n```");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else if (category.ToLower() == "currency")
@@ -139,7 +137,7 @@ namespace Kaguya.Modules
                 $"\n```"
                 );
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else if (category.ToLower() == "utility")
@@ -160,7 +158,7 @@ namespace Kaguya.Modules
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 $"\n```");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else if (category.ToLower() == "fun")
@@ -174,7 +172,7 @@ namespace Kaguya.Modules
                     $"\n" +
                     $"\n```");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else if (category.ToLower() == "osu")
@@ -192,7 +190,7 @@ namespace Kaguya.Modules
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else if (category.ToLower() == "help")
@@ -206,7 +204,7 @@ namespace Kaguya.Modules
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```");
                 embed.WithColor(Pink);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
         }
@@ -226,7 +224,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{Context.User.Mention} Level up announcements have been disabled.**");
                 embed.WithFooter($"To re-enable, use {cmdPrefix}toggleannouncements again.");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
             }
             else if(guild.MessageAnnouncements == false)
@@ -237,7 +235,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{Context.User.Mention} Level up announcements have been enabled.**");
                 embed.WithFooter($"To disable, use {cmdPrefix}toggleannouncements again.");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
             }
         }
@@ -258,7 +256,7 @@ namespace Kaguya.Modules
                 embed.WithDescription("The chosen prefix is too long! Please select a combination of less than 3 characters/symbols ");
                 embed.WithFooter($"To reset the command prefix, type {cmdPrefix}prefix!");
                 embed.WithColor(Red);
-                BE(); stopWatch.Stop();
+                await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Invalid prefix."); return;
             }
 
@@ -269,7 +267,7 @@ namespace Kaguya.Modules
             embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");
             embed.WithFooter($"If you ever forget the prefix, tag me and type \"`prefix`\"!");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
         
@@ -286,7 +284,7 @@ namespace Kaguya.Modules
             embed.WithFooter($"{author.Username} is level {author.LevelNumber} with {author.EXP} EXP and has +{author.Rep} rep!" +
                 $"\nTo +rep Stage, type `{cmdPrefix}rep author`!");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -300,7 +298,7 @@ namespace Kaguya.Modules
             var channel = await Context.Guild.CreateTextChannelAsync(name);
             embed.WithDescription($"{Context.User.Mention} has successfully created the channel #{name}.");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -318,7 +316,7 @@ namespace Kaguya.Modules
                     await channel.DeleteAsync();
                     embed.WithDescription($"{Context.User.Mention} has successfully deleted the text channel {(channel.Name)}.");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop();
+                    await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
                 }
             }
@@ -334,7 +332,7 @@ namespace Kaguya.Modules
             var channel = await Context.Guild.CreateVoiceChannelAsync(name);
             embed.WithDescription($"{Context.User.Mention} has successfully created the voice channel #{name}.");
             embed.WithColor(Pink);
-            BE(); stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -349,11 +347,11 @@ namespace Kaguya.Modules
             {
                 if(VoiceChannel.Name == name)
                 {
-                    VoiceChannel.DeleteAsync();
+                    await VoiceChannel.DeleteAsync();
                     embed.WithTitle("Voice Channel Deleted");
                     embed.WithDescription($"{Context.User.Mention} Successfully deleted the voice channel `{VoiceChannel.Name}`!");
                     embed.WithColor(Pink);
-                    BE(); stopWatch.Stop();
+                    await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 }
             }

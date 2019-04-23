@@ -1,27 +1,30 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya;
+using Kaguya.Core.CommandHandler;
 using Newtonsoft.Json;
+using OppaiSharp;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using OppaiSharp;
-using System.IO;
+using System.Diagnostics;
+using Kaguya.Core;
 
-namespace Discord_Bot.Modules.osu
+namespace Kaguya.Modules.osu
 {
     public class BeatmapLinkParser
     {
-        Color Pink = new Color(252, 132, 255);
+        readonly Color Pink = new Color(252, 132, 255);
         public string osuapikey = Config.bot.osuapikey;
         public string tillerinoapikey = Config.bot.tillerinoapikey;
+        Logger logger = new Logger();
+        readonly Stopwatch stopWatch = new Stopwatch();
 
-        public void LinkParserMethod(SocketMessage s, EmbedBuilder embed, SocketCommandContext context)
+        public async Task LinkParserMethod(SocketMessage s, EmbedBuilder embed, SocketCommandContext context)
         {
+            stopWatch.Start();
             string link = $"{s}";
             string mapID = link.Split('/').Last(); //Gets the map's ID from the link.
             if (mapID.Contains('?'))
@@ -145,7 +148,9 @@ namespace Discord_Bot.Modules.osu
                     $"\n**99% FC:** `{unranked99.Total.ToString("N0")}pp` **100% FC (SS):** `{unranked100.Total.ToString("N0")}pp`");
                 embed.WithFooter($"Status: {status} | 💙 Amount: {favoriteCount}");
                 embed.WithColor(Pink);
-                context.Channel.SendMessageAsync("", false, embed.Build());
+                await context.Channel.SendMessageAsync("", false, embed.Build());
+                stopWatch.Stop();
+                logger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
                 return;
             }
             double passRate = (playCount / passCount);
@@ -179,7 +184,9 @@ namespace Discord_Bot.Modules.osu
                 $"\n**99% FC:** `{(int)value99}pp` **100% FC (SS):** `{(int)value100}pp`");
             embed.WithFooter($"Status: {status} | 💙 Amount: {favoriteCount} | Pass Rate: {passRate.ToString("N2")}%");
             embed.WithColor(Pink);
-            context.Channel.SendMessageAsync("", false, embed.Build());
+            await context.Channel.SendMessageAsync("", false, embed.Build());
+            stopWatch.Stop();
+            logger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
             return;
         }
     }

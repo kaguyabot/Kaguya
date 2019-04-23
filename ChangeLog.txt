@@ -3,6 +3,18 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.7.4
+
+- Awaited over 200 things that...weren't awaited. Should improve stability! :P
+- Cleaned up a lot more code.
+- Further developed console logging
+- Removed critical losses
+- Critical hits now have an 8% chance to occur with winning rolls.
+- Fixed a major bug where the bot would crash upon joining a new server. Closes #33
+- Updated logger to also show when bot is connected to a new guild/disconencted from a guild.
+- Fixed various unhandled runtime exceptions \:D/ for stability!
+- Added timer for "Game" name rotation (rotates through statuses every 10 minutes)
+
 Version 1.7.3
 
 - Fixed a bug where the bot would be handling TONS of exceptions (because I set something up wrong), drastically reducing performance.
