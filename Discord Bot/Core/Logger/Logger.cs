@@ -43,7 +43,7 @@ namespace Kaguya.Core
         /// <summary>Console logging event for unsuccessfully executed command without a timespan.</summary>
         public void ConsoleCommandLog(SocketCommandContext context, CommandError error, string errorMsg)
         {
-            if (error.Equals(CommandError.Unsuccessful))
+            if (error.Equals(CommandError.UnknownCommand))
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 string cmd = context.Message.Content.Split(' ').First();
