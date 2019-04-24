@@ -136,6 +136,7 @@ namespace Kaguya.Core.CommandHandler
                 var msg = s as SocketUserMessage;
 
                 Config.bot.LastSeenMessage = DateTime.Now;
+                Console.WriteLine($"Cached message {msg} in channel #{msg.Channel.Name} by {msg.Author.Username}#{msg.Author.Discriminator}");
 
                 if (msg != null && msg.Channel.GetType().ToString() == "Discord.WebSocket.SocketTextChannel") //Checks to make sure that the message is actually from a guild channel (NOT a DM).
                 {
