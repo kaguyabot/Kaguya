@@ -265,12 +265,17 @@ namespace Kaguya.Modules
                 {
                     if (guild.MemberCount > 3500) { continue; } //If the guild has more than 3500 members, don't create accounts for everyone.
                     var guildUsers = guild.Users;
-                    foreach (var user in guildUsers)
+                    foreach (var user in guildUsers) //Creates account for the user, logging name, ID, and what servers they share with Kaguya.
                     {
                         if (user.IsBot) continue;
                         var userAccount = UserAccounts.GetAccount(user);
                         userAccount.Username = user.Username + "#" + user.Discriminator;
                         userAccount.ID = user.Id;
+
+                        if(!userAccount.IsInServerIDs.Contains(guild.Id))
+                            userAccount.IsInServerIDs.Add(guild.Id);
+                        if (!userAccount.IsInServers.Contains(guild.Name))
+                            userAccount.IsInServers.Add(guild.Name);
                     }
                 }
             }
@@ -436,7 +441,8 @@ namespace Kaguya.Modules
                 await ReplyAsync($"**{user} has been permanently banned by {Context.User.Mention}.**");
             }
             stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "Users massbanned.");
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            logger.ConsoleGuildAdvisory("Users massbanned.");
         }
 
         [Command("masskick")] //administration
@@ -451,7 +457,8 @@ namespace Kaguya.Modules
                 await ReplyAsync($"**{user} has been kicked by {Context.User.Mention}.**");
             }
             stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "Users masskicked.");
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            logger.ConsoleGuildAdvisory("Users masskicked.");
         }
 
         [Command("clear")] //administration
@@ -463,7 +470,7 @@ namespace Kaguya.Modules
             stopWatch.Start();
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
-            const int delay = 5000;
+            const int delay = 3000;
             var m = await ReplyAsync($"Clearing of messages completed. This message will be deleted in {delay / 1000} seconds.");
             await Task.Delay(delay);
             await m.DeleteAsync();

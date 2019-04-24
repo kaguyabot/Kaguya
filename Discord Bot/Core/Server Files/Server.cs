@@ -15,7 +15,6 @@ namespace Kaguya.Core.Server_Files
         public bool MessageAnnouncements { get; set; }
         public List<string> MutedMembers { get; set; }
         public List<string> FilteredWords { get; set; }
-        public bool IsBlacklisted { get; set; }
         public ulong LogDeletedMessages { get; set; }
         public ulong LogMessageEdits { get; set; }
         public ulong LogWhenUserJoins { get; set; }
@@ -27,6 +26,7 @@ namespace Kaguya.Core.Server_Files
         public ulong LogWhenUserConnectsToVoiceChannel { get; set; }
         public ulong LogWhenUserDisconnectsFromVoiceChannel { get; set; }
         public List<string> JoinedUsers { get; set; }
+        public bool IsBlacklisted { get; set; }
         public bool BlackJackInProgress { get; set; }
         public Server(ulong id)
         {

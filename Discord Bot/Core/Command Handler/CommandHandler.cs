@@ -53,6 +53,7 @@ namespace Kaguya
                 _client.Ready += timers.CheckChannelPermissions;
                 _client.Ready += timers.ServerInformationUpdate;
                 _client.Ready += timers.GameTimer;
+                _client.Ready += timers.VerifyMessageReceived;
                 _client.Connected += logger.ClientConnected;
                 _client.MessageReceived += HandleCommandAsync;
                 _client.MessageReceived += logger.osuLinkParser;
@@ -69,7 +70,6 @@ namespace Kaguya
                 _client.MessageReceived += logger.UserSaysFilteredPhrase;
                 _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
                 _client.Disconnected += logger.ClientDisconnected;
-                
             }
             catch (ReflectionTypeLoadException ex)
             {
@@ -141,6 +141,7 @@ namespace Kaguya
             }
 
             int argPos = 0;
+
             EmbedBuilder embed = new EmbedBuilder();
             if (msg.HasStringPrefix(Servers.GetServer(context.Guild).commandPrefix, ref argPos)
                 || msg.HasMentionPrefix(_client.CurrentUser, ref argPos))

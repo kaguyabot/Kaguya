@@ -133,10 +133,19 @@ namespace Kaguya.Core
                 $"\nTime: [{DateTime.Now}]");
         }
 
+        /// <summary>Console logging event for when Kaguya changes a text channel's permissions.</summary>
+        public void ConsoleGuildAdvisory(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nINFORMATION:" +
+                $"\nMESSAGE: [\"{message}\"]" +
+                $"\nTime: [{DateTime.Now}]");
+        }
+
         /// <summary>Console logging event for advisories that affect guild users, such as when a user is banned from a guild.</summary>
         public void ConsoleGuildAdvisory(SocketGuild guild, SocketGuildUser user, string message)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine($"\nINFORMATION:" +
                 $"\nMESSAGE: [\"{message}\"]" +
                 $"\nGuild: [{guild.Name} | {guild.Id}]" +
@@ -147,7 +156,7 @@ namespace Kaguya.Core
         /// <summary>Console logging event for advisories that affect guild users, such as when a user is banned from a guild.</summary>
         public void ConsoleTimerElapsed(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"\nTIMER ELAPSED:" +
                 $"\nMESSAGE: [{message}]" +
                 $"\nTime: [{DateTime.Now}]");

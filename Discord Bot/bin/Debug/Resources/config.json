@@ -3,5 +3,6 @@
   "cmdPrefix": "",
   "osuapikey": "",
   "tillerinoapikey": "",
-  "botUserID": ""
+  "botUserID": "",
+  "LastSeenMessage": "0001-01-01T00:00:00"
 }
