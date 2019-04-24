@@ -36,6 +36,13 @@ namespace Kaguya.Core.Server_Files
             return GetOrCreateServer(Id);
         }
 
+        public static Server RemoveServer(ulong ID)
+        {
+            var server = Servers.GetServer(ID);
+            servers.Remove(server);
+            return server;
+        }
+
         public static List<Server> GetAllServers()
         {
             return servers;

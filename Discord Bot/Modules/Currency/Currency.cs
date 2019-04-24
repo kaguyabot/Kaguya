@@ -282,8 +282,8 @@ namespace Kaguya.Modules
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
 
-                var multiplier = 1.25;
-                if(critical) { multiplier *= 3.50; }
+                var multiplier = 2.0;
+                if(critical) { multiplier *= 2.50; }
                 userAccount.Points += (uint)(points * multiplier);
 
                 if(critical)
@@ -309,8 +309,8 @@ namespace Kaguya.Modules
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
 
-                var multiplier = 1.75;
-                if (critical) { multiplier *= 3.50; }
+                var multiplier = 2.50;
+                if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
                 if(critical)
@@ -337,8 +337,8 @@ namespace Kaguya.Modules
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
 
-                var multiplier = 2.25;
-                if (critical) { multiplier *= 3.50; }
+                var multiplier = 3.75;
+                if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
                 if(critical)
@@ -366,8 +366,8 @@ namespace Kaguya.Modules
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
 
-                var multiplier = 3.00;
-                if (critical) { multiplier *= 3.50; }
+                var multiplier = 5.50;
+                if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
                 if(critical)
@@ -394,8 +394,8 @@ namespace Kaguya.Modules
 
                 string sirenEmote = "<a:siren:429784681316220939>";
 
-                var multiplier = 5.00;
-                if (critical) { multiplier *= 3.50; }
+                var multiplier = 8.50;
+                if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
                 embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! It's a super critical hit!! {sirenEmote}");

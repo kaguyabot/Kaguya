@@ -31,11 +31,23 @@ namespace Kaguya.Core.Server_Files
             return GetOrCreateLog(guild.Id);
         }
 
+        public static ServerMessageLog GetLog(ulong ID)
+        {
+            return GetOrCreateLog(ID);
+        }
+
+        public static ServerMessageLog RemoveLog(ulong ID)
+        {
+            var server = ServerMessageLogs.GetLog(ID);
+            serverMessageLogs.Remove(server);
+            return server;
+        }
+
         private static ServerMessageLog GetOrCreateLog(ulong id)
         {
             var result = from a in serverMessageLogs
-                         where a.ID == id
-                         select a;
+                            where a.ID == id
+                            select a;
 
             var serverMessageLog = result.FirstOrDefault();
             if (serverMessageLog == null) serverMessageLog = CreateLog(id);

@@ -28,7 +28,7 @@ namespace Kaguya.Core
         {
             if (error.Equals(CommandError.Unsuccessful))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Magenta;
                 string cmd = context.Message.Content.Split(' ').First();
                 Console.WriteLine($"\nUSER COMMAND ERROR:" +
                     $"\nERROR MESSAGE: [\"{errorMsg}\"]" +
@@ -36,6 +36,23 @@ namespace Kaguya.Core
                     $"\nGuild: [{context.Guild.Name} | {context.Guild.Id}] " +
                     $"Channel: [#{context.Channel.Name} | {context.Channel.Id}]" +
                     $"\nTime: [{DateTime.Now}] | Executed After: [{timeSpan.ToString("N0")} milliseconds]" +
+                    $"\nMessage: [{context.Message.Content}]");
+            }
+        }
+
+        /// <summary>Console logging event for unsuccessfully executed command without a timespan.</summary>
+        public void ConsoleCommandLog(SocketCommandContext context, CommandError error, string errorMsg)
+        {
+            if (error.Equals(CommandError.Unsuccessful))
+            {
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                string cmd = context.Message.Content.Split(' ').First();
+                Console.WriteLine($"\nUSER COMMAND ERROR:" +
+                    $"\nERROR MESSAGE: [\"{errorMsg}\"]" +
+                    $"\nUser: [{context.User.Username}#{context.User.Discriminator}] Command: [{cmd}]" +
+                    $"\nGuild: [{context.Guild.Name} | {context.Guild.Id}] " +
+                    $"Channel: [#{context.Channel.Name} | {context.Channel.Id}]" +
+                    $"\nTime: [{DateTime.Now}]" +
                     $"\nMessage: [{context.Message.Content}]");
             }
         }
@@ -54,6 +71,19 @@ namespace Kaguya.Core
                 $"\nMessage: [{context.Message.Content}]");
         }
 
+        /// <summary>Console logging event for when a user says a filtered phrase in a guild.</summary>
+        public void ConsoleCommandLog(SocketCommandContext context)
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            string cmd = context.Message.Content.Split(' ').First();
+            Console.WriteLine($"\nNotice: [Filtered Phrase Detected]" +
+                $"\nUser: [{context.User.Username}#{context.User.Discriminator}]" +
+                $"\nGuild: [{context.Guild.Name} | {context.Guild.Id}] " +
+                $"Channel: [#{context.Channel.Name} | {context.Channel.Id}]" +
+                $"\nTime: [{DateTime.Now}]" +
+                $"\nMessage: [\"{context.Message.Content}\"]");
+        }
+
         /// <summary>Console logging event for general status advisory messages/updates, such as when the _client.SetGameAsync() task is executed.</summary>
         public void ConsoleStatusAdvisory(string message)
         {
@@ -63,20 +93,29 @@ namespace Kaguya.Core
                 $"\nTime: [{DateTime.Now}]");
         }
 
-        /// <summary>Console logging event for critical errors.</summary>
+        /// <summary>Console logging event for critical errors when an exception is thrown.</summary>
         public void ConsoleCriticalAdvisory(Exception e, string message)
         {
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine($"\nCRITICAL ERROR:" +
                 $"\nERROR MESSAGE: [\"{message}\"]" +
                 $"\nEXCEPTION: [\"{e.Message}\"]" +
                 $"\nTime: [{DateTime.Now}]");
         }
 
+        /// <summary>Console logging event for critical errors when an exception is not thrown.</summary>
+        public void ConsoleCriticalAdvisory(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine($"\nCRITICAL ERROR:" +
+                $"\nERROR MESSAGE: [\"{message}\"]" +
+                $"\nTime: [{DateTime.Now}]");
+        }
+
         /// <summary>Console logging event for guild connection advisories, such as joining a new guild or disconnecting from a guild.</summary>
         public void ConsoleGuildConnectionAdvisory(SocketGuild guild, string message)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"\nINFORMATION:" +
                 $"\nMESSAGE: [\"{message}\"]" +
                 $"\nGuild: [{guild.Name} | {guild.Id}] " +
@@ -102,6 +141,15 @@ namespace Kaguya.Core
                 $"\nMESSAGE: [\"{message}\"]" +
                 $"\nGuild: [{guild.Name} | {guild.Id}]" +
                 $"\nUser: [{user.Username}#{user.Discriminator} | {user.Id}]" +
+                $"\nTime: [{DateTime.Now}]");
+        }
+
+        /// <summary>Console logging event for advisories that affect guild users, such as when a user is banned from a guild.</summary>
+        public void ConsoleTimerElapsed(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nTIMER ELAPSED:" +
+                $"\nMESSAGE: [{message}]" +
                 $"\nTime: [{DateTime.Now}]");
         }
     }
