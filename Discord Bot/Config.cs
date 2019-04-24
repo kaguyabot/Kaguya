@@ -41,5 +41,6 @@ namespace Kaguya
         public string osuapikey { get; set; }
         public string tillerinoapikey { get; set; }
         public string botUserID { get; set; }
+        public DateTime LastSeenMessage { get; set; } 
     }
 }

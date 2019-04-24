@@ -134,6 +134,9 @@ namespace Kaguya.Core.CommandHandler
             if (s != null)
             {
                 var msg = s as SocketUserMessage;
+
+                Config.bot.LastSeenMessage = DateTime.Now;
+
                 if (msg != null && msg.Channel.GetType().ToString() == "Discord.WebSocket.SocketTextChannel") //Checks to make sure that the message is actually from a guild channel (NOT a DM).
                 {
                     SocketCommandContext context = new SocketCommandContext(_client, msg);

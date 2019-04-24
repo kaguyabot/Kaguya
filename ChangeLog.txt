@@ -3,6 +3,13 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.8.0
+
+- Servers that do not allow Kaguya the proper ability to view text channels will be automatically blacklisted (necessary for stability).
+- Kaguya now does not flood the logs with channel permission overwrite updates.
+- If Kaguya doesn't see a message for one minute, the bot will restart.
+
+
 Version 1.7.6
 
 - Removed footer from $osuset (because it already checks to see if your username is valid).
