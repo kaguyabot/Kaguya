@@ -8,6 +8,7 @@ using Discord;
 using Kaguya.Modules.osu;
 using System.Diagnostics;
 using System.Timers;
+using Kaguya.Core.Command_Handler;
 
 namespace Kaguya.Core.CommandHandler
 {
@@ -21,14 +22,15 @@ namespace Kaguya.Core.CommandHandler
         readonly Color Violet = new Color(238, 130, 238);
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
+        readonly Timers timer = new Timers();
 
         public async Task OnReady()
         {
-            Console.WriteLine($"Ace Pilot Kaguya cleared for takeoff. Servicing {_client.Guilds.Count()} guilds" +
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"\nAce Pilot Kaguya cleared for takeoff. Servicing {_client.Guilds.Count()} guilds" +
                 $" and {UserAccounts.UserAccounts.GetAllAccounts().Count().ToString("N0")} members." +
                 "\nBegin Logging\n");
             Console.WriteLine("--------------------------------------------");
-            await _client.SetGameAsync("Support Server: yhcNC97");
         }
 
         #pragma warning disable IDE1006 //Disable warnings for naming styles
@@ -56,19 +58,11 @@ namespace Kaguya.Core.CommandHandler
             }
         }
 
-        public void ServerMethod(SocketCommandContext context)
+        public void ServerLogMethod(SocketCommandContext context)
         {
             var server = Servers.GetServer(context.Guild);
             server.ID = context.Guild.Id;
             server.ServerName = context.Guild.Name;
-            Servers.SaveServers();
-        }
-
-        public void ServerLogMethod(SocketCommandContext context)
-        {
-            var serverLog = ServerMessageLogs.GetLog(context.Guild);
-            serverLog.ID = context.Guild.Id;
-            serverLog.ServerName = context.Guild.Name;
             ServerMessageLogs.SaveServerLogging();
         }
 
@@ -100,16 +94,29 @@ namespace Kaguya.Core.CommandHandler
                 $"\n" +
                 $"\nThank you, and enjoy!");
 
-            foreach (var channel in channels)
+            var server = Servers.GetServer(guild);
+
+            foreach (SocketTextChannel channel in guild.TextChannels)
             {
-                if (!channel.GetPermissionOverwrite(kaguya).HasValue)
+                if (!channel.GetPermissionOverwrite(kaguya as SocketGuildUser).HasValue && server.IsBlacklisted == false)
                 {
-                    await channel.AddPermissionOverwriteAsync(kaguya, OverwritePermissions.InheritAll);
-                    logger.ConsoleGuildAdvisory(guild, channel, "Updated channel permissions");
+                    try
+                    {
+                        await channel.AddPermissionOverwriteAsync(kaguya, OverwritePermissions.AllowAll(channel));
+                        logger.ConsoleGuildAdvisory(guild, channel, $"Kaguya has been granted permissions for channel #{channel.Name}");
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.ConsoleStatusAdvisory($"Could not overwrite permissions for #{channel.Name} in guild \"{channel.Guild.Name}\"");
+                        logger.ConsoleCriticalAdvisory(exception, $"Guild {guild.Name} has been blacklisted.");
+
+                        await guild.Owner.SendMessageAsync($"**This server has been blacklisted because I was unable to alter text channel permissions." +
+                            $"\nPlease contact Stage#0001 in my support server (https://discord.gg/yhcNC97) to be unblacklisted!**");
+                        server.IsBlacklisted = true;
+                    }
                 }
             }
 
-            var server = Servers.GetServer(guild);
             server.ID = guild.Id;
             server.ServerName = guild.Name;
             Servers.SaveServers();
@@ -130,10 +137,20 @@ namespace Kaguya.Core.CommandHandler
                 if (msg != null && msg.Channel.GetType().ToString() == "Discord.WebSocket.SocketTextChannel") //Checks to make sure that the message is actually from a guild channel (NOT a DM).
                 {
                     SocketCommandContext context = new SocketCommandContext(_client, msg);
-                    var currentLog = ServerMessageLogs.GetLog(_client.GetGuild(context.Guild.Id));
-                    currentLog.AddMessage(msg);
-                    ServerMessageLogs.SaveServerLogging();
-                    return Task.CompletedTask;
+                    var guild = context.Guild;
+                    if (guild != null)
+                    {
+                        ServerMessageLog currentLog = ServerMessageLogs.GetLog(context.Guild);
+                        currentLog.AddMessage(msg);
+                        ServerMessageLogs.SaveServerLogging();
+                        return Task.CompletedTask;
+                    }
+                    else
+                    {
+                        logger.ConsoleCriticalAdvisory($"Failed to cache message for {context.Guild.Name} with ID: {context.Guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 139!");
+                        ServerMessageLogs.RemoveLog(context.Guild.Id);
+                        return Task.CompletedTask;
+                    }
                 }
             }
             return Task.CompletedTask;
@@ -349,33 +366,14 @@ namespace Kaguya.Core.CommandHandler
 
         public Task ClientDisconnected(Exception e)
         {
-            logger.ConsoleCriticalAdvisory(e, "CLIENT IS IN DISCONNECTED STATE!!");
+            logger.ConsoleCriticalAdvisory(e, "KAGUYA IS IN DISCONNECTED STATE!!");
             return Task.CompletedTask;
         }
 
-        public Task GameTimer()
+        public Task ClientConnected()
         {
-            Timer timer = new Timer(600000);
-            timer.Elapsed += Game_Timer_Elapsed;
-            timer.AutoReset = true;
-            timer.Enabled = true;
+            logger.ConsoleStatusAdvisory("Client connected.");
             return Task.CompletedTask;
-        }
-
-        int displayIndex = 0;
-
-        private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            string[] games = { "Support Server: yhcNC97", "$help | @Kaguya#2708 help",
-            $"Currently servicing {_client.Guilds.Count()} guilds", $"Currently servicing {UserAccounts.UserAccounts.GetAllAccounts().Count().ToString("N0")} members" };
-            displayIndex++;
-            if (displayIndex >= games.Length)
-            {
-                displayIndex = 0;
-            }
-
-            _client.SetGameAsync(games[displayIndex]);
-            logger.ConsoleStatusAdvisory($"Game updated to \"{games[displayIndex]}\"");
         }
     }
 }

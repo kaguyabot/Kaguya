@@ -15,6 +15,7 @@ namespace Kaguya.Core.Server_Files
         public bool MessageAnnouncements { get; set; }
         public List<string> MutedMembers { get; set; }
         public List<string> FilteredWords { get; set; }
+        public bool IsBlacklisted { get; set; }
         public ulong LogDeletedMessages { get; set; }
         public ulong LogMessageEdits { get; set; }
         public ulong LogWhenUserJoins { get; set; }
@@ -35,6 +36,7 @@ namespace Kaguya.Core.Server_Files
             MessageAnnouncements = true;
             MutedMembers = new List<string>();
             FilteredWords = new List<string>();
+            IsBlacklisted = false;
             JoinedUsers = new List<string>();
         }
     }

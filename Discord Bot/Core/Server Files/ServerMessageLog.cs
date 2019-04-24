@@ -10,11 +10,8 @@ namespace Kaguya.Core.Server_Files
     public class ServerMessageLog
     {
         public ulong ID { get; set; }
-
         public string ServerName { get; set; }
-
         public List<string> LastThousandMessages { get; set; }
-
         public ServerMessageLog(ulong id)
         {
             ID = id;

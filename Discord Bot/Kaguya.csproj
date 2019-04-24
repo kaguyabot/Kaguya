@@ -48,6 +48,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,6 +58,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>68A7B6C7C20CD110219AE40144EE8ADBFD515262</ManifestCertificateThumbprint>
@@ -265,6 +267,7 @@
     <Compile Include="Core\Command Handler\CommandHandler.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Core\Command Handler\KaguyaLogMethods.cs" />
+    <Compile Include="Core\Command Handler\Timers.cs" />
     <Compile Include="Core\Commands\Command.cs" />
     <Compile Include="Core\Commands\Commands.cs" />
     <Compile Include="Core\Data Storage\DataStorage2.cs" />
@@ -287,7 +290,8 @@
     <Compile Include="Modules\Fun\Fun.cs" />
     <Compile Include="Modules\Help\Help.cs" />
     <Compile Include="Modules\osu\BeatmapLinkParser.cs" />
-    <Compile Include="Modules\osu\osu.cs" />
+    <Compile Include="Modules\osu\osuGeneral.cs" />
+    <Compile Include="Modules\osu\osuGroup.cs" />
     <Compile Include="Modules\Utility\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

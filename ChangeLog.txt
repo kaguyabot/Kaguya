@@ -3,6 +3,19 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.7.5
+
+- Roll multipliers have been raised, they were previously unfair.
+- Critical hit multipliers have been reduced to 2.5 the multiplier of the winning roll (was 3.5);
+- Refactored a bit of code (stability)
+- Massive stability improvements. Timers are now used for various events that would be triggered by other means (such as users sending messages)
+- Massive amounts of unhandled exceptions...handled!
+- If a server is set up in a way that prevents kaguya from configuring her text channel permissions, the server owner will be DM'd and the server itself will be blacklisted.
+- Added server blacklisted boolean to Servers database file.
+- Kaguya's played game will now rotate between 3 helpful messages, one every 10 minutes!
+- If a guild returns null in the database (Kaguya is kicked from it), the information/list for that guild will be deleted (log settings, etc).
+- Kaguya will now write error messages in chat if the command attempting to be executed does not exist (or if it's missing required parameters).
+
 Version 1.7.4
 
 - Awaited over 200 things that...weren't awaited. Should improve stability! :P
