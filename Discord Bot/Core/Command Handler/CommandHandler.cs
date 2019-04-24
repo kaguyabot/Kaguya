@@ -171,7 +171,23 @@ namespace Kaguya
                     await context.Channel.SendMessageAsync("", false, embed.Build());
                     consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Failed to parse given value specified in command.");
                 }
-                else if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
+                else if (!result.IsSuccess && result.Error == CommandError.UnmetPrecondition)
+                {
+                    embed.WithDescription($"**Error: You do not have the permissions required to execute this command!**");
+                    embed.WithFooter($"Review {cmdPrefix}h <command> for the proper usage!");
+                    embed.WithColor(Red);
+                    await context.Channel.SendMessageAsync("", false, embed.Build());
+                    consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "User does not have permissions required to execute command.");
+                }
+                else if (!result.IsSuccess && result.Error == CommandError.MultipleMatches)
+                {
+                    embed.WithDescription($"**Error: I found multiple matches for the task you were trying to execute!**");
+                    embed.WithFooter($"Review {cmdPrefix}h <command> for the proper usage! I can only do one thing at a time!");
+                    embed.WithColor(Red);
+                    await context.Channel.SendMessageAsync("", false, embed.Build());
+                    consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Multiple matches found.");
+                }
+                else
                 {
                     embed.WithDescription($"**Error: I failed to execute this command!**");
                     embed.WithFooter($"Review {cmdPrefix}h <command> for the proper usage! If the issue persists, contact Stage#0001 in the support server!");

@@ -31,7 +31,7 @@ namespace Kaguya.Core.Command_Handler
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             string[] games = { "Support Server: yhcNC97", "$help | @Kaguya#2708 help",
-            $"Currently servicing {_client.Guilds.Count()} guilds", $"Currently servicing {UserAccounts.UserAccounts.GetAllAccounts().Count().ToString("N0")} members" };
+            $"Servicing {_client.Guilds.Count()} guilds", $"Serving {UserAccounts.UserAccounts.GetAllAccounts().Count().ToString("N0")} users" };
             displayIndex++;
             if (displayIndex >= games.Length)
             {

@@ -49,6 +49,12 @@ namespace Kaguya.Modules.osu
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to parse Int32");
             }
+            if(num < 1 || num > 10)
+            {
+                embed.WithDescription($"{Context.User.Mention} **ERROR: Number for top plays must be between 1 and 10!** ");
+                embed.WithColor(Red);
+                await BE(); return;
+            }
 
             if (player == null || player == "")
             {
