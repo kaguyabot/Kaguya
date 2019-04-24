@@ -187,14 +187,6 @@ namespace Kaguya
                     await context.Channel.SendMessageAsync("", false, embed.Build());
                     consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Multiple matches found.");
                 }
-                else
-                {
-                    embed.WithDescription($"**Error: I failed to execute this command!**");
-                    embed.WithFooter($"Review {cmdPrefix}h <command> for the proper usage! If the issue persists, contact Stage#0001 in the support server!");
-                    embed.WithColor(Red);
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
-                    consoleLogger.ConsoleCommandLog(context, CommandError.Unsuccessful, "Command was unsuccessfully executed.");
-                }
             }
 
         }
