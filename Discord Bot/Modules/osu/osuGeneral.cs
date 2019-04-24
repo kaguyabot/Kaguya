@@ -167,7 +167,6 @@ namespace Kaguya.Modules
 
             embed.WithTitle("osu! Username Set");
             embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed from `{oldUsername}` to `{userAccount.OsuUsername}`.**");
-            embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
             embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -335,7 +334,7 @@ namespace Kaguya.Modules
                 string plus = "+";
 
                 var objectsEncountered = (count300 + count100 + count50 + countMiss);
-                var mapCompletion = (((int)beatmap.Objects.Count() / (int)objectsEncountered) * 100).ToString("N2");
+                var mapCompletion = ((objectsEncountered / beatmap.Objects.Count()) * 100).ToString("N2");
 
                 if (plus == "+" && mods == "")
                     plus = "";
@@ -350,7 +349,7 @@ namespace Kaguya.Modules
 
                 var difference = DateTime.UtcNow - (DateTime)playerRecentObject.date;
 
-                string footer = $"{mapUserNameObject.username} preformed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
+                string footer = $"{mapUserNameObject.username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
 
                 embed.WithAuthor(author =>
                 {

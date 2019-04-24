@@ -3,6 +3,14 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.7.6
+
+- Removed footer from $osuset (because it already checks to see if your username is valid).
+- Added in more specific command error responses
+- Fixed a bug where the bot would not error if the requested osutop plays was not between 1 and 10. 
+- Tweaked "Playing" text to be smaller.
+- Fixed a bug with $recent that would display the wrong map completion %.
+
 Version 1.7.5
 
 - Roll multipliers have been raised, they were previously unfair.
