@@ -215,9 +215,9 @@ namespace Kaguya.Modules
                     $"\nIf you wish to appeal this blacklist, message `Stage#0001` on Discord.");
                 await user.BanAsync();
                 await ReplyAsync($"**{user.Mention} has been permanently `banned` and `blacklisted`.**");
+                logger.ConsoleGuildAdvisory(Context.Guild, user, stopWatch.ElapsedMilliseconds, $"User {user.Username}#{user.Discriminator} has been blacklisted.");
             }
             stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "Users have been mass blacklisted.");
         }
 
         [Command("scrapeserver")] //administration
@@ -459,6 +459,62 @@ namespace Kaguya.Modules
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             logger.ConsoleGuildAdvisory("Users masskicked.");
+        }
+
+        [Command("shadowban")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.ManageChannels)]
+        public async Task ShadowBan(IGuildUser user) //Shadowbans a user from a server.
+        {
+            stopWatch.Start();
+
+            embed.WithDescription($"Shadowbanning `{user.Nickname}` [{user.Username}#{user.Discriminator}]...");
+            embed.WithColor(Red);
+            await BE();
+
+            var channels = Context.Guild.Channels;
+            int i = 0;
+
+            foreach(var channel in channels)
+            {
+                i++;
+                await channel.AddPermissionOverwriteAsync(user, OverwritePermissions.DenyAll(channel));
+            }
+
+            embed.WithDescription($"**{Context.User.Mention} User `{user.Username}#{user.Discriminator}` has been shadowbanned from " +
+                $"{Context.Guild.Name} [{i} channels]**");
+            embed.WithColor(Red);
+            await BE();
+            stopWatch.Stop();
+            logger.ConsoleGuildAdvisory(Context.Guild, user as SocketGuildUser, stopWatch.ElapsedMilliseconds, "User shadowbanned.");
+        }
+
+        [Command("unshadowban")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.ManageChannels)]
+        public async Task UnShadowBan(IGuildUser user) //Un-Shadowbans a user from a server.
+        {
+            stopWatch.Start();
+
+            embed.WithDescription($"Un-Shadow Banning `{user.Nickname}` [{user.Username}#{user.Discriminator}]...");
+            embed.WithColor(Red);
+            await BE();
+
+            var channels = Context.Guild.Channels;
+            int i = 0;
+
+            foreach (var channel in channels)
+            {
+                i++;
+                await channel.AddPermissionOverwriteAsync(user, OverwritePermissions.InheritAll);
+            }
+
+            embed.WithDescription($"**{Context.User.Mention} User `{user.Username}#{user.Discriminator}` has been un-shadowbanned from " +
+                $"{Context.Guild.Name} [{i} channels]**");
+            embed.WithColor(Red);
+            await BE();
+            stopWatch.Stop();
+            logger.ConsoleGuildAdvisory(Context.Guild, user as SocketGuildUser, stopWatch.ElapsedMilliseconds, "User un-shadowbanned.");
         }
 
         [Command("clear")] //administration

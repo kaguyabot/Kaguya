@@ -40,11 +40,37 @@ namespace Kaguya.Modules
         [Command("expadd")] //exp
         [Alias("addexp")]
         [RequireOwner]
-        public async Task ExpAdd([Remainder]uint exp)
+        public async Task ExpAdd(int exp)
         {
             stopWatch.Start();
             var account = UserAccounts.GetAccount(Context.User);
-            account.EXP += exp;
+
+            if (exp > 0)
+                account.EXP += (uint)exp;
+            else if (exp < 0)
+                account.EXP -= (uint)exp;
+
+            UserAccounts.SaveAccounts();
+            embed.WithTitle("Adding Experience Points");
+            embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
+            embed.WithColor(Pink);
+            await BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("expadd")] //exp
+        [Alias("addexp")]
+        [RequireOwner]
+        public async Task ExpAdd(int exp, IGuildUser user)
+        {
+            stopWatch.Start();
+            var account = UserAccounts.GetAccount(user as SocketUser);
+
+            if (exp > 0)
+                account.EXP += (uint)exp;
+            else if (exp < 0)
+                account.EXP -= (uint)exp;
+
             UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");

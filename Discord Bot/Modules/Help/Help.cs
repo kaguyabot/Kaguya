@@ -1,22 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
-using Kaguya.Core.UserAccounts;
-using System.Net;
-using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
 using Kaguya.Core;
 using System.Diagnostics;
-
-
 
 namespace Kaguya.Modules
 {
@@ -48,7 +36,6 @@ namespace Kaguya.Modules
             {
                 case "h":
                 case "help":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Help!! | `{cmdPrefix}h` / `{cmdPrefix}help`");
                     embed.WithDescription($"Shows the command list. If typed with the name of a command (Ex: `{cmdPrefix}help <command>`), the response will instead contain helpful information on the specified " +
@@ -57,14 +44,12 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "helpdm":
                 case "hdm":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`");
                     embed.WithDescription($"{Context.User.Mention} Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "exp":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: EXP | `{cmdPrefix}exp`");
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}exp`." +
@@ -73,7 +58,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "expadd":
                 case "addexp":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd` / `{cmdPrefix}addexp");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
@@ -82,7 +66,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "points":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Points | `{cmdPrefix}points`");
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}points`." +
@@ -91,7 +74,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "pointsadd":
                 case "addpoints":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Adding Points | `{cmdPrefix}pointsadd`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
@@ -100,7 +82,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "level":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Level | `{cmdPrefix}level`");
                     embed.WithDescription($"{Context.User.Mention} Displays your current Kaguya level!");
@@ -108,7 +89,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "createtextchannel":
                 case "ctc":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Creating Text Channels | `{cmdPrefix}createtextchannel`, `{cmdPrefix}ctc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
@@ -120,7 +100,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "commands":
                 case "cmds":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Commands | `{cmdPrefix}commands` / `{cmdPrefix}cmds`");
                     embed.WithDescription($"{Context.User.Mention} Displays a list of commands for the specified module. Use {cmdPrefix}modules " +
@@ -129,7 +108,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "deletetextchannel":
                 case "dtc":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Deleting Text Channels | `{cmdPrefix}deletetextchannel`, `{cmdPrefix}dtc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
@@ -142,7 +120,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "createvoicechannel":
                 case "cvc":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Creating Voice Channels | `{cmdPrefix}createvoicechannel`, `{cmdPrefix}cvc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
@@ -155,7 +132,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "deletevoicechannel":
                 case "dvc":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Deleting Voice Channels | `{cmdPrefix}deletevoicechannel`, `{cmdPrefix}dvc");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
@@ -167,7 +143,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "echo":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Echoed Messages | `{cmdPrefix}echo`");
                     embed.WithDescription($"{Context.User.Mention} Makes the bot repeat anything you say!" +
@@ -185,7 +160,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "8ball":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Magic 8Ball | `{cmdPrefix}8ball`");
                     embed.WithDescription($"{Context.User.Mention} Ask Kaguya a question and she will use her divine powers to answer you extremely accurately!" +
@@ -195,7 +169,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "timely":
                 case "t":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely`");
                     embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim 500 free points every 24 hours." +
@@ -205,7 +178,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "weekly":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Weekly Points | `{cmdPrefix}weekly`");
                     embed.WithDescription($"{Context.User.Mention} The weekly command allows any user to claim 5,000 points every week." +
@@ -217,7 +189,6 @@ namespace Kaguya.Modules
                 case "clear":
                 case "purge":
                 case "c":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Clearing Messages | `{cmdPrefix}clear`, `{cmdPrefix}purge`, `{cmdPrefix}c`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Messages**" +
@@ -231,7 +202,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "kick":
                 case "k":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Kicking Users | `{cmdPrefix}kick`, `{cmdPrefix}k`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Kick Members**" +
@@ -242,7 +212,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "ban":
                 case "b":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Banning Users | `{cmdPrefix}ban`, `{cmdPrefix}b`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
@@ -252,7 +221,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "massban":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Mass Banning of Users | `{cmdPrefix}massban`");
                     embed.WithDescription($"**{Context.User.Mention} Permissions Required: Administrator**" +
@@ -262,7 +230,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "masskick":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Mass Kicking of Users | `{cmdPrefix}masskick`");
                     embed.WithDescription($"**{Context.User.Mention} Permissions Required: Administrator**" +
@@ -273,7 +240,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "removeallroles":
                 case "rar":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Removing All Roles | `{cmdPrefix}removeallroles`, `{cmdPrefix}rar`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
@@ -284,7 +250,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "deleterole":
                 case "dr":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Deleting Roles | `{cmdPrefix}deleterole`, `{cmdPrefix}dr`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
@@ -294,7 +259,6 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}deleterole <role name>`");
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "osu":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: osu! | `{cmdPrefix}osu`");
                     embed.WithDescription($"{Context.User.Mention} Presents lots of statistics from the given osu! profile name. If your `{cmdPrefix}osuset` username " +
@@ -305,7 +269,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "createteamrole":
                 case "ctr":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Create Team Roles | `{cmdPrefix}createteamrole`, `{cmdPrefix}ctr`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
@@ -318,7 +281,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "sttreflog":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: STT Ref Log | `{cmdPrefix}sttreflog`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
@@ -338,7 +300,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "osutop":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: osu! Top | `{cmdPrefix}osutop`");
                     embed.WithDescription($"\n" +
@@ -349,7 +310,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "delteams":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Deleting Teams | `{cmdPrefix}delteams`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: `Manage Roles`, `Administrator`, `Bot Owner`**" +
@@ -360,7 +320,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "recent":
                 case "r":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: osu! Recent | `{cmdPrefix}r` / `{cmdPrefix}recent`");
                     embed.WithDescription($"{Context.User.Mention} Displays the most recent osu! play for the given user. If there is no user specified," +
@@ -370,7 +329,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "osuset":
                     string name = Context.User.Username;
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: osuset | `{cmdPrefix}osuset`");
                     embed.WithDescription($"{Context.User.Mention} Adds an osu! username to your Kaguya account! Setting your osu! username allows you to use all osu! related commands without any additional " +
@@ -379,7 +337,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "massblacklist":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Mass Blacklist | `{cmdPrefix}massblacklist`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner, Administrator**" +
@@ -391,7 +348,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "unblacklist":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}unblacklist <UserID>`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
@@ -402,7 +358,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "roll":
                 case "gr":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Betting | `{cmdPrefix}roll` / `{cmdPrefix}gr`");
                     embed.WithDescription($"{Context.User.Mention} Allows you to roll the dice and gamble your points!" +
@@ -419,7 +374,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "kaguyaexit":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Kaguya, gtfo! | `{cmdPrefix}kaguyagtfo`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -428,7 +382,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "prefix":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Prefix Alteration | `{cmdPrefix}prefix`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions required: Administrator**" +
@@ -440,7 +393,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "serverexplb":
                 case "explb":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Server EXP Leaderboard | `{cmdPrefix}serverexplb` / `{cmdPrefix}explb`");
                     embed.WithDescription($"{Context.User.Mention} Displays the 10 top EXP holders in the server. This command " +
@@ -449,7 +401,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "globalexplb":
                 case "gexplb":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Global EXP Leaderboard | `{cmdPrefix}globalexplb` / `{cmdPrefix}gexplb`");
                     embed.WithDescription($"{Context.User.Mention} Displays the 10 top EXP holders in the entire Kaguya database! This command " +
@@ -457,7 +408,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "scrapeserver":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Server Scraping | `{cmdPrefix}scrapeserver`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
@@ -469,7 +419,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "scrapedatabase":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Database Scraping | `{cmdPrefix}scrapedatabase`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
@@ -480,7 +429,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "rep":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Rep | `{cmdPrefix}rep`");
                     embed.WithDescription($"{Context.User.Mention} Allows any user in the server to add one reputation point to another member." +
@@ -489,7 +437,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "rep author":
                 case "repauthor":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: +Rep Author | `{cmdPrefix}repauthor` / `{cmdPrefix}rep author`");
                     embed.WithDescription($"{Context.User.Mention} Gives my creator your daily +rep point!");
@@ -497,14 +444,12 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "author":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Author | `{cmdPrefix}author`");
                     embed.WithDescription($"{Context.User.Mention} Displays information about my creator!");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "timelyreset":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Timely Reset | `{cmdPrefix}timelyreset`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
@@ -514,7 +459,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "filteradd":
                 case "fa":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Filter Adding | `{cmdPrefix}filteradd` / `{cmdPrefix}fa`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -526,7 +470,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "filterremove":
                 case "fr":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Filter Removing | `{cmdPrefix}filterremove` / `{cmdPrefix}fr`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -538,7 +481,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "filterview":
                 case "fv":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Viewing Filtered Words | `{cmdPrefix}filterview` / `{cmdPrefix}fv`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Messages**" +
@@ -548,7 +490,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "filterclear":
                 case "clearfilter":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Filter Clearing | `{cmdPrefix}filterclear` / `{cmdPrefix}clearfilter`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -561,7 +502,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "setlogchannel":
                 case "log":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Set Logging Channel | `{cmdPrefix}setlogchannel` / `{cmdPrefix}log`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -577,7 +517,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "resetlogchannel":
                 case "rlog":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Resetting Logging Channels | `{cmdPrefix}resetlogchannel`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -591,7 +530,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "logtypes":
                 case "loglist":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Log Types | `{cmdPrefix}logtypes`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -604,7 +542,6 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "awardeveryone":
                 case "awardall":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Awarding Points | `{cmdPrefix}awardeveryone` / `{cmdPrefix}awardall`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
@@ -614,7 +551,6 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "masspointsdistribute":
-
                     stopWatch.Start();
                     embed.WithTitle($"Help: Mass Distributing Points | `{cmdPrefix}masspointsdistribute`");
                     embed.WithDescription($"{Context.User.Mention} Allows any user to mass redistribute all of their Kaguya Points evenly to the rest of the server. " +
@@ -623,8 +559,6 @@ namespace Kaguya.Modules
                     embed.WithFooter("What a generous act!");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-
-
                 default:
                     stopWatch.Start();
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");

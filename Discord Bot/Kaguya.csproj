@@ -292,6 +292,7 @@
     <Compile Include="Modules\osu\BeatmapLinkParser.cs" />
     <Compile Include="Modules\osu\osuGeneral.cs" />
     <Compile Include="Modules\osu\osuGroup.cs" />
+    <Compile Include="Modules\Patreon\Patreon.cs" />
     <Compile Include="Modules\Utility\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
