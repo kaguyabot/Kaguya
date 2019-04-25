@@ -5,7 +5,7 @@ Changelog:
 
 Version 1.8.0
 
-- Servers that do not allow Kaguya the proper ability to view text channels will be automatically blacklisted (necessary for stability).
+- Servers that do not allow Kaguya the proper ability to view/write in text channels will be automatically blacklisted (necessary for stability).
 - Kaguya now does not flood the logs with channel permission overwrite updates.
 - If Kaguya doesn't see a message for one minute, the bot will restart.
 - Patreon stuff? owo
@@ -14,6 +14,10 @@ Version 1.8.0
 - Fixed a bug with $toggleannouncements - the "re-enabled" message was written as disabled.
 - $expadd can now take away exp as well.
 - $expadd can now target users.
+- Hentai update - a large list of hentai commands have been added.
+    - $n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif>
+- Fixed some console logging stuff.
+
 
 Version 1.7.6
 

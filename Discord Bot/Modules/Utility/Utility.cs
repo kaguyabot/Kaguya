@@ -51,6 +51,7 @@ namespace Kaguya.Modules
                 $"\nEXP" +
                 $"\nFun" +
                 $"\nHelp" +
+                $"\nNSFW" +
                 $"\nosu" +
                 $"\nUtility");
             embed.WithColor(Pink);
@@ -205,6 +206,36 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}helpdm [hdm]" +
                     $"\n" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                    $"\n```");
+                embed.WithColor(Pink);
+                await BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            }
+            else if (category.ToLower() == "nsfw")
+            {
+                embed.WithTitle("Module: NSFW");
+                embed.WithDescription("```css" +
+                    "\n" +
+                    "\nNote: ALL NSFW images are 2D!" +
+                    "\n" +
+                    $"\n{cmdPrefix}n lewd" +
+                    $"\n{cmdPrefix}n boobs" +
+                    $"\n{cmdPrefix}n anal" +
+                    $"\n{cmdPrefix}n bdsm" +
+                    $"\n{cmdPrefix}n bj" +
+                    $"\n{cmdPrefix}n classic" +
+                    $"\n{cmdPrefix}n cum" +
+                    $"\n{cmdPrefix}n feet" +
+                    $"\n{cmdPrefix}n eroyuri" +
+                    $"\n{cmdPrefix}n pussy" +
+                    $"\n{cmdPrefix}n solo" +
+                    $"\n{cmdPrefix}n hentai" +
+                    $"\n{cmdPrefix}n avatar" +
+                    $"\n{cmdPrefix}n trap" +
+                    $"\n{cmdPrefix}n yuri" +
+                    $"\n{cmdPrefix}n gif" +
+                    $"\n" +
+                    $"\nType \"{cmdPrefix}h n\" for more information. Must be used in an NSFW channel." +
                     $"\n```");
                 embed.WithColor(Pink);
                 await BE(); stopWatch.Stop();
