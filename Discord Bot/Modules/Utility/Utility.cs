@@ -89,7 +89,9 @@ namespace Kaguya.Modules
                         $"\n{cmdPrefix}resetlogchannel [rlog]" +
                         $"\n{cmdPrefix}setlogchannel [log]" +
                         $"\n{cmdPrefix}scrapeserver" +
+                        $"\n{cmdPrefix}shadowban" +
                         $"\n{cmdPrefix}unblacklist" +
+                        $"\n{cmdPrefix}unshadowban" +
                         $"\n" +
                         $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                         "\n```");
@@ -168,6 +170,7 @@ namespace Kaguya.Modules
                     "\n" +
                     $"\n{cmdPrefix}echo" +
                     $"\n{cmdPrefix}pick" +
+                    $"\n{cmdPrefix}8ball" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n" +
                     $"\n```");
@@ -209,11 +212,10 @@ namespace Kaguya.Modules
             }
         }
 
-        [Command("toggleannouncements")]
+        [Command("toggleannouncements1")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ToggleAnnouncements()
         {
-            stopWatch.Start();
             Server guild = Servers.GetServer(Context.Guild);
             var cmdPrefix = guild.commandPrefix;
             if (guild.MessageAnnouncements == true)
@@ -224,8 +226,8 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{Context.User.Mention} Level up announcements have been disabled.**");
                 embed.WithFooter($"To re-enable, use {cmdPrefix}toggleannouncements again.");
                 embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
+                await BE();
+                logger.ConsoleGuildAdvisory(Context.Guild, "Level up announcements disabled.");
             }
             else if(guild.MessageAnnouncements == false)
             {
@@ -236,7 +238,7 @@ namespace Kaguya.Modules
                 embed.WithFooter($"To disable, use {cmdPrefix}toggleannouncements again.");
                 embed.WithColor(Red);
                 await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
+                logger.ConsoleGuildAdvisory(Context.Guild, "Level up announcements enabled."); return;
             }
         }
 

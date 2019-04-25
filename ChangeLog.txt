@@ -8,7 +8,12 @@ Version 1.8.0
 - Servers that do not allow Kaguya the proper ability to view text channels will be automatically blacklisted (necessary for stability).
 - Kaguya now does not flood the logs with channel permission overwrite updates.
 - If Kaguya doesn't see a message for one minute, the bot will restart.
-
+- Patreon stuff? owo
+- Shadowban command added. Denys a user all channel permissions in the server this command was used in.
+- Unshadowban command added.
+- Fixed a bug with $toggleannouncements - the "re-enabled" message was written as disabled.
+- $expadd can now take away exp as well.
+- $expadd can now target users.
 
 Version 1.7.6
 

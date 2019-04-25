@@ -20,7 +20,8 @@ namespace Kaguya.Core.LevelingSystem
             {
                 UserAccount userAccount = UserAccounts.UserAccounts.GetAccount(user);
                 Random RNGTimeout = new Random();
-                if (!CanReceiveExperience(userAccount, RNGTimeout.Next(110, 130)))
+                Logger logger = new Logger();
+                if (!CanReceiveExperience(userAccount, RNGTimeout.Next(0)))
                     return;
                 uint oldLevel = userAccount.LevelNumber;
                 Random random = new Random();
@@ -33,10 +34,11 @@ namespace Kaguya.Core.LevelingSystem
                 if (oldLevel != userAccount.LevelNumber && guild.MessageAnnouncements == true)
                 {
                     EmbedBuilder embed = new EmbedBuilder();
-                    embed.WithDescription($"**{user.Username} just leveled up!**" +
+                    embed.WithDescription($"**{user.Nickname} [{user.Username}#{user.Discriminator}] just leveled up!**" +
                         $"\nLevel: {userAccount.LevelNumber.ToString("N0")} | EXP: {userAccount.EXP.ToString("N0")}");
                     embed.WithColor(Pink);
                     await channel.SendMessageAsync("", false, embed.Build());
+                    logger.ConsoleGuildAdvisory(channel.Guild, $"User {user.Username}#{user.Discriminator} leveled up to level {userAccount.LevelNumber}.");
                 }
                 else return;
             }

@@ -40,6 +40,8 @@ namespace Kaguya
         public string cmdPrefix { get; set; }
         public string osuapikey { get; set; }
         public string tillerinoapikey { get; set; }
+        public string patreonaccesstoken { get; set; }
+        public string patreonclientid { get; set; }
         public string botUserID { get; set; }
         public DateTime LastSeenMessage { get; set; } 
     }
