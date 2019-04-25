@@ -74,3 +74,5 @@ C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Kaguya.csproj.CopyC
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Discord Bot.exe
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Discord Bot.pdb
 C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\obj\Debug\Kaguya.csprojAssemblyReference.cache
+C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\BotListAPI.dll
+C:\Users\stage\Documents\GitHub\Kaguya\Discord Bot\bin\Debug\Nekos-Sharp.dll

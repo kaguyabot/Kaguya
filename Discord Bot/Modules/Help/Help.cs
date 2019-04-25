@@ -210,6 +210,26 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}kick @User#0000`.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "shadowban":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Shadowbanning Users | `{cmdPrefix}shadowban`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
+                        $"\n" +
+                        $"\nShadowbans an individual member from the server, blocking all access to all channels. All permissions " +
+                        $"for this user, in every channel, will be denied. Their roles will remain, however." +
+                        $"\nSyntax: `{cmdPrefix}shadowban @User#0000`.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "unshadowban":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Un-Shadowbanning Users | `{cmdPrefix}unshadowban`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
+                        $"\n" +
+                        $"\nUn-Shadowbans an individual member from the server, reinstating all access to all channels. All permissions " +
+                        $"for this user, in every channel, will be set to default (the user is neither allowed or denied any explicit permissions)." +
+                        $"\nSyntax: `{cmdPrefix}unshadowban @User#0000`.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "ban":
                 case "b":
                     stopWatch.Start();
@@ -559,6 +579,14 @@ namespace Kaguya.Modules
                     embed.WithFooter("What a generous act!");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "n":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: NSFW | `{cmdPrefix} n`");
+                    embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}n` command will post a 2D image (no real people) in an NSFW channel with the specified tag." +
+                        $"\nWhen using the `{cmdPrefix}n` command, append a tag to the end like so: `{cmdPrefix}n <tag>`." +
+                        $"\nNSFW Command List: `$n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif>` (Select one).");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 default:
                     stopWatch.Start();
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
@@ -586,6 +614,7 @@ namespace Kaguya.Modules
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]`", true);
             embed.AddField("osu!", "`osu` \n`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
+            embed.AddField("NSFW", $"`View with {cmdPrefix}cmds nsfw`", true);
             embed.WithColor(Pink);
             embed.WithFooter($"For more information, including a link to add this bot to your server and a link to the Kaguya Support Discord, type {cmdPrefix}hdm!");
             await BE();  stopWatch.Stop();

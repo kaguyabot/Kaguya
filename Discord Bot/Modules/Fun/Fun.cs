@@ -16,8 +16,6 @@ using Kaguya.Core.Commands;
 using Kaguya.Core;
 using System.Diagnostics;
 
-
-
 namespace Kaguya.Modules
 {
     public class Fun : ModuleBase<SocketCommandContext>

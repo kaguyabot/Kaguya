@@ -9,6 +9,7 @@ using Kaguya.Modules.osu;
 using System.Diagnostics;
 using System.Timers;
 using Kaguya.Core.Command_Handler;
+using BotListAPI;
 
 namespace Kaguya.Core.CommandHandler
 {

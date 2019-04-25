@@ -462,8 +462,8 @@ namespace Kaguya.Modules
         }
 
         [Command("shadowban")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        [RequireBotPermission(GuildPermission.ManageChannels)]
+        [RequireUserPermission(GuildPermission.BanMembers)]
+        [RequireBotPermission(GuildPermission.BanMembers)]
         public async Task ShadowBan(IGuildUser user) //Shadowbans a user from a server.
         {
             stopWatch.Start();
