@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="325632">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="326144">
       <assemblyIdentity name="Discord Bot" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>al5/XgsQdR4EJIF4q/eh6iaZiFdS0NH2b7qhjFrUuCo=</dsig:DigestValue>
+        <dsig:DigestValue>Fscp8Iv0VFKdXUx0StTcXC8AtOn2xkwSgwRckrSmbXc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

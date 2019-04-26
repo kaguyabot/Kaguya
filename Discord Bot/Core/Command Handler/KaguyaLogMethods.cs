@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using Discord.Commands;
 using System;
+using System.Net.Http;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Core.Server_Files;
@@ -11,6 +12,7 @@ using System.Timers;
 using Kaguya.Core.Command_Handler;
 using DiscordBotsList.Api;
 using DiscordBotsList.Api.Objects;
+using System.Collections.Generic;
 
 namespace Kaguya.Core.CommandHandler
 {
@@ -26,15 +28,25 @@ namespace Kaguya.Core.CommandHandler
         readonly Stopwatch stopWatch = new Stopwatch();
         readonly Timers timer = new Timers();
 
+        private static readonly HttpClient client = new HttpClient();
+
         public async Task OnReady()
         {
             var botID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
             var mutualGuilds = _client.GetUser(ID).MutualGuilds;
 
-            AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.token);
-            var dblBot = dblAPI.GetBotAsync(ID); //Kaguya bot through DBL API.
-            IDblSelfBot me = await dblAPI.GetMeAsync();
-            await me.UpdateStatsAsync(mutualGuilds.Count());
+            var serverCountValue = new Dictionary<string, string>
+            {
+                {"server_count", $"{mutualGuilds.Count()}"}
+            };
+
+            Console.WriteLine("Pushing guild count to DBL API...");
+
+            var content = new FormUrlEncodedContent(serverCountValue);
+            var response = await client.PostAsync($"https://discordbots.org/api/bots/{Config.bot.botUserID}/stats", content);
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine("Discord Bot List API Response:" + responseString);
 
             int i = 0;
             foreach(var guild in mutualGuilds)
