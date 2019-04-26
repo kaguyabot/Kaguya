@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="323584">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Discord Bot.exe" size="325632">
       <assemblyIdentity name="Discord Bot" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>QdEApWPQ27mGOnFg2YfnxJ8nMbajZXzCQNbi5hhyZhM=</dsig:DigestValue>
+        <dsig:DigestValue>al5/XgsQdR4EJIF4q/eh6iaZiFdS0NH2b7qhjFrUuCo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -138,6 +138,18 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DiscordBotsList.Api.dll" size="32768">
+      <assemblyIdentity name="DiscordBotsList.Api" version="1.3.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>0FlXExBNOqk3ntilJNPBT16Cm7RCtKH/Nu4dHCG2ILg=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Extensions.DependencyInjection.dll" size="71032">
       <assemblyIdentity name="Microsoft.Extensions.DependencyInjection" version="3.0.0.0" publicKeyToken="ADB9793829DDAE60" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -158,6 +170,18 @@
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
         <dsig:DigestValue>O97xwzxLPiLFKgyg7VY2csW52D13XiAuU1bpt1ep2YI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Miki.Net.Http.dll" size="22528">
+      <assemblyIdentity name="Miki.Net.Http" version="1.5.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>AS3ZaDn1Rlcklj4p17iXfWFAPOdPsuyLY6OkiiyRAkI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

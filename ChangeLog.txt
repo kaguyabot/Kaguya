@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.8.1
+
+- Kaguya will now automatically remove cached messages after two weeks.
+- Kaguya's guild count and member count are now accurate.
+
 Version 1.8.0
 
 - Servers that do not allow Kaguya the proper ability to view/write in text channels will be automatically blacklisted (necessary for stability).

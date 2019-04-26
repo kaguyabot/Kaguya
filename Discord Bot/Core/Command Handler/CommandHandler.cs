@@ -54,6 +54,7 @@ namespace Kaguya
                 _client.Ready += timers.ServerInformationUpdate;
                 _client.Ready += timers.GameTimer;
                 _client.Ready += timers.VerifyMessageReceived;
+                _client.Ready += timers.ServerMessageLogCheck;
                 _client.Connected += logger.ClientConnected;
                 _client.MessageReceived += HandleCommandAsync;
                 _client.MessageReceived += logger.osuLinkParser;
