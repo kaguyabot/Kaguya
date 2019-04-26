@@ -9,7 +9,8 @@ using Kaguya.Modules.osu;
 using System.Diagnostics;
 using System.Timers;
 using Kaguya.Core.Command_Handler;
-using BotListAPI;
+using DiscordBotsList.Api;
+using DiscordBotsList.Api.Objects;
 
 namespace Kaguya.Core.CommandHandler
 {
@@ -27,9 +28,27 @@ namespace Kaguya.Core.CommandHandler
 
         public async Task OnReady()
         {
+            var botID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
+            var mutualGuilds = _client.GetUser(ID).MutualGuilds;
+
+            AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.token);
+            var dblBot = dblAPI.GetBotAsync(ID); //Kaguya bot through DBL API.
+            IDblSelfBot me = await dblAPI.GetMeAsync();
+            await me.UpdateStatsAsync(mutualGuilds.Count());
+
+            int i = 0;
+            foreach(var guild in mutualGuilds)
+            {
+                for (int j = 0; j <= guild.MemberCount; j++)
+                {
+                    i++;
+                }
+
+            }
+
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"\nAce Pilot Kaguya cleared for takeoff. Servicing {_client.Guilds.Count()} guilds" +
-                $" and {UserAccounts.UserAccounts.GetAllAccounts().Count().ToString("N0")} members." +
+            Console.WriteLine($"\nAce Pilot Kaguya cleared for takeoff. Servicing {mutualGuilds.Count()} guilds" +
+                $" and {i.ToString("N0")} members." +
                 "\nBegin Logging\n");
             Console.WriteLine("--------------------------------------------");
         }

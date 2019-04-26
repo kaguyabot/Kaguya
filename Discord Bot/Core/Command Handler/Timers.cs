@@ -32,8 +32,21 @@ namespace Kaguya.Core.Command_Handler
 
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            var botID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
+            var mutualGuilds = _client.GetUser(ID).MutualGuilds;
+
+            int i = 0;
+            foreach (var guild in mutualGuilds)
+            {
+                for (int j = 0; j <= guild.MemberCount; j++)
+                {
+                    i++;
+                }
+
+            }
+
             string[] games = { "Support Server: yhcNC97", "$help | @Kaguya#2708 help",
-            $"Servicing {_client.Guilds.Count()} guilds", $"Serving {UserAccounts.UserAccounts.GetAllAccounts().Count().ToString("N0")} users" };
+            $"Servicing {mutualGuilds.Count()} guilds", $"Serving {i.ToString("N0")} users" };
             displayIndex++;
             if (displayIndex >= games.Length)
             {
@@ -189,6 +202,50 @@ namespace Kaguya.Core.Command_Handler
                 Process.Start(filePath);
                 Environment.Exit(0);
             }
+        }
+
+        public Task ServerMessageLogCheck()
+        {
+            Timer timer = new Timer(1200000); //Every 20 minutes, if a ServerMessageLog entry contains a time greater than two weeks, delete the entry.
+            timer.Elapsed += Server_Message_Log_Check;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            return Task.CompletedTask;
+        }
+
+        private void Server_Message_Log_Check(object sender, ElapsedEventArgs e)
+        {
+            var guilds = ServerMessageLogs.GetAllLogs();
+
+            int i = 0;
+            int i2 = 0;
+
+            foreach(var guild in guilds)
+            {
+                i2++;
+
+                if (guild.ID > 0)
+                {
+                    ServerMessageLog srvrLog = ServerMessageLogs.GetLog(guild.ID);
+                    var twoWeeks = DateTime.Now - TimeSpan.FromDays(14);
+
+
+                    for (int j = srvrLog.LastThousandMessages.Count() - 1; j >= 0; j--) //Reverse for loop to remove items from list
+                    {
+                        var line = srvrLog.LastThousandMessages.ElementAt(j);
+
+                        if (line.Contains(twoWeeks.ToShortDateString()))
+                        {
+                            srvrLog.LastThousandMessages.Remove(line);
+                            i++;
+                        }
+                    }
+                }
+            }
+
+            ServerMessageLogs.SaveServerLogging();
+            logger.ConsoleTimerElapsed($"Removed {i} lines across {i2} server message logs.");
+
         }
     }
 }

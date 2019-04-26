@@ -26,6 +26,11 @@ namespace Kaguya.Core.Server_Files
             }
         }
 
+        public static List<ServerMessageLog> GetAllLogs()
+        {
+            return serverMessageLogs;
+        }
+
         public static ServerMessageLog GetLog(SocketGuild guild)
         {
             return GetOrCreateLog(guild.Id);
