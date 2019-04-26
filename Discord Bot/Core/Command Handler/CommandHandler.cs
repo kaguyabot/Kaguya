@@ -188,7 +188,7 @@ namespace Kaguya
                     await context.Channel.SendMessageAsync("", false, embed.Build());
                     consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Multiple matches found.");
                 }
-                else
+                else if (!result.IsSuccess && result.ErrorReason != null)
                 {
                     embed.WithDescription($"**Error: I failed to execute this command for an unknown reason.**");
                     embed.WithFooter($"Error reason: {result.ErrorReason}");
