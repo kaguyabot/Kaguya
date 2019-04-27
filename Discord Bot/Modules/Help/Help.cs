@@ -701,7 +701,7 @@ namespace Kaguya.Modules
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
             var lastUpvoted = userAccount.LastUpvotedKaguya;
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
-            var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.dblapikey}/check?={Context.User.Id}");
+            var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.botUserID}/check?={Context.User.Id}");
 
             if(dblResponse.Contains("1"))
             {
