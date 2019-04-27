@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.8.3
+
+- Users can now use the $vote and $voteclaim commands to earn rewards for upvoting Kaguya on discordbots.org
+
+
 Version 1.8.2.1
 
 - $bug added \:D/ - Use this to report bugs!!

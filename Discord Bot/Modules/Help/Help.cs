@@ -7,6 +7,8 @@ using Kaguya.Core;
 using System.Diagnostics;
 using Discord.WebSocket;
 using System;
+using Kaguya.Core.UserAccounts;
+using System.Net.Http;
 
 namespace Kaguya.Modules
 {
@@ -677,6 +679,53 @@ namespace Kaguya.Modules
             embed.WithColor(Red);
             await BE(); stopWatch.Stop(); //Sends response to user.
             logger.ConsoleBugLog(Context, stopWatch.ElapsedMilliseconds, $"{report}");
+        }
+
+        [Command("vote")]
+        public async Task Vote()
+        {
+            stopWatch.Start();
+            embed.WithTitle("Discord Bot List Voting");
+            embed.WithDescription($"Show Kaguya some love and give her an upvote! https://discordbots.org/bot/538910393918160916" +
+                $"\nUsers that upvote receive a `2x` critical hit percentage for the next `12 hours` and `500` Kaguya points! Users may vote every 12 hours!");
+            embed.WithFooter($"Thanks for showing your support! Use {Servers.GetServer(Context.Guild).commandPrefix}voteclaim to claim your reward!");
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("voteclaim")]
+        public async Task VoteClaim()
+        {
+            stopWatch.Start();
+            HttpClient client = new HttpClient();
+
+            UserAccount userAccount = UserAccounts.GetAccount(Context.User);
+            var lastUpvoted = userAccount.LastUpvotedKaguya;
+            var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
+            var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.dblapikey}/check?={Context.User.Id}");
+
+            if(dblResponse.Contains("1"))
+            {
+                if (difference.TotalHours < 12)
+                {
+                    embed.WithDescription($"**{Context.User.Mention} You've already upvoted me and claimed your reward! Please wait `{difference.Hours}h and {difference.Minutes}m` to upvote again!**");
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                }
+                else if (difference.TotalHours > 12)
+                {
+                    lastUpvoted = DateTime.Now;
+                    userAccount.Points += 500;
+
+                    embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points` and `2x critical hit rate` have been applied.");
+                    embed.WithFooter("Thanks so much for your support!!");
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                }
+            }
+            else if(dblResponse.Contains("0"))
+            {
+                embed.WithDescription($"**{Context.User.Mention} you have not upvoted me! Please do so with the vote command!**");
+                embed.WithColor(Red);
+                await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            }
         }
     }
 }

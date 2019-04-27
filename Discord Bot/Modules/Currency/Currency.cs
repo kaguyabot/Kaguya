@@ -134,17 +134,19 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             Command command = Commands.GetCommand();
+            var userAccount = UserAccounts.GetAccount(Context.User);
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
             timeout = command.TimelyHours;
             bonus = command.TimelyPoints;
             Random rand = new Random();
+            bool critical = rand.Next(100) < 14; ;
+            var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
 
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
-            var userAccount = UserAccounts.GetAccount(Context.User);
             if (!CanReceiveTimelyPoints(userAccount, (int)timeout))
             {
-                var difference = DateTime.Now - userAccount.LastReceivedTimelyPoints;
+                var differenceTimely = DateTime.Now - userAccount.LastReceivedTimelyPoints;
                 var formattedTime = $"{difference.Hours}h {difference.Minutes}m {difference.Seconds}s";
                 embed.WithTitle("Timely Points");
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
@@ -154,7 +156,8 @@ namespace Kaguya.Modules
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User needs to wait before receiving more timely points.");
                 return;
             }
-            bool critical = rand.Next(100) < 14;
+            if (difference.TotalHours < 12) //Difference of now compared to when user last upvoted Kaguya on DBL.
+                critical = rand.Next(100) < 28;
             if(critical) { bonus *= 3.50; }
             userAccount.Points += (uint)bonus;
             userAccount.LastReceivedTimelyPoints = DateTime.Now;
@@ -253,6 +256,11 @@ namespace Kaguya.Modules
             Random crit = new Random();
             var roll = rand.Next(100);
             bool critical = crit.Next(100) < 8;
+
+            var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
+
+            if (difference.TotalHours < 12)
+                critical = crit.Next(100) < 16;
 
             if (roll <= 66)
             {
@@ -417,15 +425,19 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
+            var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
             Random crit = new Random();
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             var multiplier = 3.50;
             bool critical = crit.Next(100) < 8; //8% chance of weekly being a critical roll
 
+            if (difference.TotalHours < 12)
+                critical = crit.Next(100) < 16; //16% if they've upvoted Kaguya within the last 12 hours.
+
             if(!CanReceiveWeeklyPoints(userAccount, timeout))
             {
-                var difference = DateTime.Now - userAccount.LastReceivedWeeklyPoints;
-                var formattedTime = $"{difference.Days}d {difference.Hours}h {difference.Minutes}m {difference.Seconds}s";
+                var weeklyDifference = DateTime.Now - userAccount.LastReceivedWeeklyPoints;
+                var formattedTime = $"{weeklyDifference.Days}d {weeklyDifference.Hours}h {weeklyDifference.Minutes}m {weeklyDifference.Seconds}s";
                 embed.WithTitle("Weekly Points");
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}weekly`!" +
                     $" Please wait until `7 days` have passed to receive your weekly bonus.");

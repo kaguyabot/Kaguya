@@ -242,10 +242,9 @@ namespace Kaguya.Core.Command_Handler
                     }
                 }
             }
-
             ServerMessageLogs.SaveServerLogging();
             logger.ConsoleTimerElapsed($"Removed {i} lines across {i2} server message logs.");
-
         }
+
     }
 }
