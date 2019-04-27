@@ -1,3 +1,4196 @@
 [
-  
+  {
+    "Username": "Stage#0001",
+    "ID": 146092837723832320,
+    "IsInServers": [
+      "Stage's Sanctuary",
+      "Spring Tranquility osu! Tournament 2019",
+      "Kaguya Support"
+    ],
+    "IsInServerIDs": [
+      407648193392803851,
+      461347676148072448,
+      546880579057221644
+    ],
+    "Points": 0,
+    "EXP": 5687756,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-27T16:33:51.6426124-04:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 421,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "yotogi#8760",
+    "ID": 252298912243646464,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Ralsei#0586",
+    "ID": 371483132332867585,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Vivio#2387",
+    "ID": 186447152149561344,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Cascade#6914",
+    "ID": 99476715369136128,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "RawrTroy#6646",
+    "ID": 207638351908569088,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "afrosss#5720",
+    "ID": 278168766016389120,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "NaCl-ier#3272",
+    "ID": 361216746796875779,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "JayKay#7760",
+    "ID": 392432303915270145,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "ᶜᵒᵈʸ#1058",
+    "ID": 280140284451618817,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Joshua |  왜 보고 싶을까요? 🌸🌹#7432",
+    "ID": 199952324951670785,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "The Most Powerful Man#1737",
+    "ID": 491107226279215104,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "bigjohnny#5199",
+    "ID": 351427817684074506,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Fluxˢᵃᵐᵃ#7570",
+    "ID": 436195478791782401,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "fantizzz#7637",
+    "ID": 396005857059405844,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "CyreX#3121",
+    "ID": 397430223722905610,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "jason 2.0#3266",
+    "ID": 185681117205102593,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "level 100 discord mafia boss#9734",
+    "ID": 504481070297645056,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "EvanxLucario 🐐#6833",
+    "ID": 481482827385274378,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Kelly❤💯#6431",
+    "ID": 424544570169098261,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "ShadowofChernobyl#0720",
+    "ID": 160919080482635776,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 24,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-25T19:01:09.5703826-04:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "boek#2934",
+    "ID": 213821570978807808,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Faith (property)#6227",
+    "ID": 500352127076532236,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "eunjae07#1735",
+    "ID": 420024725402681344,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "&🎵#5403",
+    "ID": 437582887475347476,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "TurretedCat21#2087",
+    "ID": 433444808686567435,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "GreyFox#0102",
+    "ID": 512406716613132293,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Castrate Mel#7916",
+    "ID": 444554086361202688,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "n̕e̢̕͜͡͝ŕ҉d̵̶͢#6969",
+    "ID": 396076720144252928,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Sky#2069",
+    "ID": 301467751225229315,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Kaoura#1497",
+    "ID": 83030577711677440,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Kuru~FluffyFoxyMilf#8415",
+    "ID": 290054332706193408,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Rxven#0354",
+    "ID": 150741859449176065,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Meh#5790",
+    "ID": 446013770054107158,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "joofi#9192",
+    "ID": 186332742089179136,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "SilverPoison#7235",
+    "ID": 424467243183898635,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "subscribe to pewdiepie#2087",
+    "ID": 295249008794796033,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Lux#6969",
+    "ID": 205106572056199169,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "(っ◔◡◔)っ _ Blockerza_#0486",
+    "ID": 336571001611485197,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Sway#1029",
+    "ID": 239456664011538432,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Ivena#5757",
+    "ID": 228231312316694528,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "DeMiiKun#5768",
+    "ID": 204641898126639104,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Riconi#4596",
+    "ID": 451404059782676503,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Spottycat#3697",
+    "ID": 196579226294550529,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "RisingDawnMc#3575",
+    "ID": 122873281740013568,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Mino#3017",
+    "ID": 200643296664485888,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "BOSSMAN8922#4466",
+    "ID": 186328134960807937,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "coconutislove#0187",
+    "ID": 386988994346483732,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Vendy13#6749",
+    "ID": 146464849226891264,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Pi-#1337",
+    "ID": 212085384073445376,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Küsanagi#8509",
+    "ID": 129374382173847552,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Taking the L#7284",
+    "ID": 129400906017013761,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "✰『Megalith』✰#8045",
+    "ID": 344897582956544000,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 26,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-26T16:13:51.4823529-04:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Marblelemons#4172",
+    "ID": 150039751888601088,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "WildJuaN#4990",
+    "ID": 185453606923665408,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Slonlk#9972",
+    "ID": 219965785420857344,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "SnowyUmby#3277",
+    "ID": 253249873435033600,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Ludeo#8554",
+    "ID": 311861142114926593,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Owem#9999",
+    "ID": 102208128543633408,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Kiuiko#0284",
+    "ID": 159529252058824705,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "7Odyssey#6857",
+    "ID": 258860022338027521,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Smug#3886",
+    "ID": 266891468310839299,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Anri17#8268",
+    "ID": 139087329225736193,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "cursed_𝕥𝕤𝕦 ツ#7236",
+    "ID": 481652190562222080,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "zomspat#2470",
+    "ID": 194304585706373120,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Tufted#8454",
+    "ID": 397874133305786380,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "MonoTheVillager#2715",
+    "ID": 266064001891303434,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Narrator#0001",
+    "ID": 136259149934624769,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Rizer#8734",
+    "ID": 117477502632329220,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Sakaindy#7868",
+    "ID": 242299697610489856,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Reizii_#4104",
+    "ID": 368186339503636502,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "-=Floatgoat=-#3286",
+    "ID": 90287170983567360,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "trevrasher#9032",
+    "ID": 93137613367574528,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "bahy#0739",
+    "ID": 204300335827779585,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Gia#7635",
+    "ID": 350262069112602624,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Ryy#7298",
+    "ID": 392629412371234816,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "℣™#0001",
+    "ID": 346735586062761985,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "lobo#2732",
+    "ID": 361252037490376714,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "WasNaru#4553",
+    "ID": 300434810487439362,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "OuchaNoah#2206",
+    "ID": 331496642857402368,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Crave#7377",
+    "ID": 153292400356229120,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 8,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-25T19:01:03.737092-04:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "RacoonGod#6091",
+    "ID": 500712786406539275,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "meg#0632",
+    "ID": 441758341358682131,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "AtlasLevel#8930",
+    "ID": 211940872567259136,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "iOgsandwich#3363",
+    "ID": 498619300337418272,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Dkap#1328",
+    "ID": 271782116004462592,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "GradeRez#1159",
+    "ID": 179010062373617664,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "jaylene#7645",
+    "ID": 459118713409503242,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "vevo#1286",
+    "ID": 273954365713285121,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Fantasia#0001",
+    "ID": 273956905397911553,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Appo#0043",
+    "ID": 202188063470911488,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "King Club#7908",
+    "ID": 408075006677876747,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "ThisIsSoSadCanIHaveMyMainBack#4955",
+    "ID": 544277811808960522,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "fsckthesystem#0001",
+    "ID": 141618032068919296,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Garonen#6115",
+    "ID": 169733670146408448,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Salty#1461",
+    "ID": 350676620404588544,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Key As Penguin Soldier#4371",
+    "ID": 395978567793770496,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "BananaMan#0001",
+    "ID": 181056491346722826,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "homosapien#3472",
+    "ID": 223580399438135306,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "LunarAtom(RO)#7318",
+    "ID": 256513192207843328,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Buddy#6221",
+    "ID": 170341397226979329,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "ダレット(Dalleto)#2631",
+    "ID": 249991056664428544,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "jasperolalia#0381",
+    "ID": 229074427541848067,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "MMud#8202",
+    "ID": 132921507981557760,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "bruh#6969",
+    "ID": 289909293803896833,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Hyakauya#6201",
+    "ID": 244484013241139200,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Alf is Alf#7157",
+    "ID": 240353003322867723,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "emilow12#9815",
+    "ID": 144414688673792000,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "steven623623#1025",
+    "ID": 213010176440008704,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Fabeon#0001",
+    "ID": 224653963020992512,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Neon Is A Bot#5911",
+    "ID": 308762298879836161,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Leyoko#2689",
+    "ID": 147846399877185536,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "mmatt#0001",
+    "ID": 308000668181069824,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "mari ( ´･ω･` っ)3 ﾐﾐ#2511",
+    "ID": 377239393011892226,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Riukiteru#3499",
+    "ID": 372772823221010435,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Jonahqwerty14#5682",
+    "ID": 384535615267405824,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "ACRN Dreamz#1039",
+    "ID": 541409853701226498,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "KenshinHimura-#6793",
+    "ID": 151121869859323904,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "𝓹𝓮𝓭𝓻𝓸#0853",
+    "ID": 305752136677851157,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Mustard#6648",
+    "ID": 198942818054438912,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Big Nigr#3867",
+    "ID": 179661545108668416,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Rightfullegos#7572",
+    "ID": 269277551153643540,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "nateninja711#2676",
+    "ID": 425794131009339412,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "senzuuuuuuuuuuuuu#2432",
+    "ID": 284109058842034177,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "biscuithime#7717",
+    "ID": 260876652433637376,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Kenjietrash#5448",
+    "ID": 160957890721480706,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "๖̶̶̶ζ͜͡Akrus#2041",
+    "ID": 309079482281754625,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Itswilliamheine#1880",
+    "ID": 430895346667749378,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "izu#0404",
+    "ID": 393446518826467328,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Grefer#3823",
+    "ID": 425525774120910858,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "ENEMY AC-130 ABOVE#1473",
+    "ID": 230412833769259009,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "\\╲⎝⧹BeagleStudios⧸⎠╱/#2089",
+    "ID": 252193934036566017,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Chengers#4055",
+    "ID": 344638202377797632,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "ballerrees#3680",
+    "ID": 140339522939387904,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "neo, l’œuf#1131",
+    "ID": 167990799957491712,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "daykeyboard#2721",
+    "ID": 145396750499184641,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Flameboi900#9650",
+    "ID": 142430694600212480,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "[FAM]LilBoyette#7158",
+    "ID": 356254760887910400,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Fetus Fajitas#6777",
+    "ID": 124147227567456257,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 10,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-25T19:17:53.8136813-04:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Joker Squad#6101",
+    "ID": 287352139737464833,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "midorijeon#7687",
+    "ID": 204738291268845568,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Crimson_fox#6448",
+    "ID": 128951086374584320,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Alboy💦👑💦#2705",
+    "ID": 181097816771395584,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 7,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-24T18:21:32.6928919-04:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "󠇰󠇰#7334",
+    "ID": 165582847099273216,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "BossGamer#9753",
+    "ID": 194644035837755392,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Disco#8626",
+    "ID": 459066544413212692,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "crushsquid#2030",
+    "ID": 128220618930782209,
+    "IsInServers": [
+      "Stage's Sanctuary",
+      "Kaguya Support",
+      "Spring Tranquility osu! Tournament 2019"
+    ],
+    "IsInServerIDs": [
+      407648193392803851,
+      546880579057221644,
+      461347676148072448
+    ],
+    "Points": 0,
+    "EXP": 18,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-26T15:48:04.6068686-04:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "-Ｍｅｉｚｕｌｉ#1978",
+    "ID": 303030148473683978,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "XTC ツ#7598",
+    "ID": 191690809576259584,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "AkameREK#0965",
+    "ID": 444862861991346187,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "🐺🎮Majorgamer Ashley🐺🎮#9406",
+    "ID": 315986186738991105,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Dobbdahl#1939",
+    "ID": 164806987308072961,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "StretchMyJerky#0219",
+    "ID": 106038498984783872,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Joanna#2024",
+    "ID": 267370176796688386,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Prinna#3722",
+    "ID": 407273413313429519,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Jigs#5242",
+    "ID": 399355005431185408,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Aoi Borger#7973",
+    "ID": 172435349337931776,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "❄ Noc ❄#6969",
+    "ID": 92274279126679552,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Yuki#5851",
+    "ID": 148169633961213952,
+    "IsInServers": [
+      "Stage's Sanctuary"
+    ],
+    "IsInServerIDs": [
+      407648193392803851
+    ],
+    "Points": 0,
+    "EXP": 0,
+    "Rep": 0,
+    "LastReceivedEXP": "0001-01-01T00:00:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Lefafel#4084",
+    "ID": 138269276757819392,
+    "IsInServers": [
+      "Spring Tranquility osu! Tournament 2019"
+    ],
+    "IsInServerIDs": [
+      461347676148072448
+    ],
+    "Points": 0,
+    "EXP": 7,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-24T17:27:19.2784076-04:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  },
+  {
+    "Username": "Kobato Hasegawa#0717",
+    "ID": 324640969846816768,
+    "IsInServers": [
+      "Spring Tranquility osu! Tournament 2019"
+    ],
+    "IsInServerIDs": [
+      461347676148072448
+    ],
+    "Points": 0,
+    "EXP": 8,
+    "Rep": 0,
+    "LastReceivedEXP": "2019-04-25T19:50:20.8601637-04:00",
+    "LastReceivedTimelyPoints": "0001-01-01T00:00:00",
+    "LastGivenRep": "0001-01-01T00:00:00",
+    "LastReceivedWeeklyPoints": "0001-01-01T00:00:00",
+    "LastUpvotedKaguya": "0001-01-01T00:00:00",
+    "LevelNumber": 0,
+    "OsuUsername": null,
+    "Blacklisted": 0,
+    "TotalDailyGambleWinnings": 0,
+    "LifetimeGambleWins": 0.0,
+    "LifetimeGambleLosses": 0.0,
+    "LifetimeGambles": 0.0,
+    "LifetimeEliteRolls": 0
+  }
 ]
