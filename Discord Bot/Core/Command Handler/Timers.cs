@@ -206,7 +206,7 @@ namespace Kaguya.Core.Command_Handler
 
         public Task ServerMessageLogCheck()
         {
-            Timer timer = new Timer(1200000); //Every 20 minutes, if a ServerMessageLog entry contains a time greater than two weeks, delete the entry.
+            Timer timer = new Timer(86400000); //Every 24 hours, if a ServerMessageLog entry contains a time greater than two weeks, delete the entry.
             timer.Elapsed += Server_Message_Log_Check;
             timer.AutoReset = true;
             timer.Enabled = true;

@@ -3,6 +3,12 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.8.2
+
+- $n may now be used by itself for a random 2D NSFW image.
+- $n bomb command added - "Bombs" the channel with 5 different NSFW images.
+- Now, only the last 500 messages are logged in a guild (for $log).
+
 Version 1.8.1
 
 - Kaguya will now automatically remove cached messages after two weeks.

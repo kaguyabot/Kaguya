@@ -234,6 +234,7 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}n trap" +
                     $"\n{cmdPrefix}n yuri" +
                     $"\n{cmdPrefix}n gif" +
+                    $"\n{cmdPrefix}n bomb" +
                     $"\n" +
                     $"\nType \"{cmdPrefix}h n\" for more information. Must be used in an NSFW channel." +
                     $"\n```");

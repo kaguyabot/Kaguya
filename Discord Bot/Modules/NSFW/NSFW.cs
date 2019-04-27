@@ -24,6 +24,38 @@ namespace Kaguya.Modules.NSFW
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
+        [Command()]
+        [RequireNsfw]
+        public async Task NFSWRandom()
+        {
+            stopWatch.Start();
+            var lewd = await nekoClient.Nsfw_v3.Hentai();
+
+            embed.WithAuthor("NSFW: Hentai", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
+            embed.WithImageUrl(lewd.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("bomb")]
+        [RequireNsfw]
+        public async Task NSFWBomb()
+        {
+            stopWatch.Start();
+
+            for (int i = 0; i < 5; i++)
+            {
+                var lewd = await nekoClient.Nsfw_v3.Hentai();
+                embed.WithAuthor("NSFW: Hentai Bomb", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
+                embed.WithImageUrl(lewd.ImageUrl);
+                embed.WithColor(Violet);
+                await BE();
+            }
+            stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "Hentai Bomb Executed.");
+        }
+
         [Command("lewd")]
         [RequireNsfw]
         public async Task LewdNeko()

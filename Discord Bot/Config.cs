@@ -43,6 +43,7 @@ namespace Kaguya
         public string patreonaccesstoken { get; set; }
         public string patreonclientid { get; set; }
         public string botUserID { get; set; }
+        public string dblapikey { get; set; }
         public DateTime LastSeenMessage { get; set; } 
     }
 }
