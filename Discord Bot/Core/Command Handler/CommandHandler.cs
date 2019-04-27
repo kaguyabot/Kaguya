@@ -129,19 +129,6 @@ namespace Kaguya
             if (oldUsername + "#" + context.User.Discriminator != newUsername + "#" + context.User.Discriminator)
                 userAccount.Username = newUsername + "#" + context.User.Discriminator;
 
-            List<ulong> oldIDs = userAccount.IsInServerIDs;
-            List<string> oldSNames = userAccount.IsInServers;
-
-            if(!(oldIDs.Contains(context.Guild.Id)))
-            {
-                userAccount.IsInServerIDs.Add(context.Guild.Id);
-                UserAccounts.SaveAccounts();
-            }
-            if(!(oldSNames.Contains(context.Guild.Name)))
-            {
-                userAccount.IsInServers.Add(context.Guild.Name);
-                UserAccounts.SaveAccounts();
-            }
 
             int argPos = 0;
 
