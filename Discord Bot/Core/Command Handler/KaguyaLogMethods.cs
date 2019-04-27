@@ -169,22 +169,25 @@ namespace Kaguya.Core.CommandHandler
 
                 Config.bot.LastSeenMessage = DateTime.Now;
 
-                if (msg != null || msg.Content != "" && msg.Channel.GetType().ToString() == "Discord.WebSocket.SocketTextChannel") //Checks to make sure that the message is actually from a guild channel (NOT a DM).
+                if (msg != null)
                 {
-                    SocketCommandContext context = new SocketCommandContext(_client, msg);
-                    var guild = context.Guild;
-                    if (guild != null)
+                    if (msg.Channel is SocketTextChannel)
                     {
-                        ServerMessageLog currentLog = ServerMessageLogs.GetLog(context.Guild);
-                        currentLog.AddMessage(msg);
-                        ServerMessageLogs.SaveServerLogging();
-                        return Task.CompletedTask;
-                    }
-                    else
-                    {
-                        logger.ConsoleCriticalAdvisory($"Failed to cache message for {context.Guild.Name} with ID: {context.Guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 139!");
-                        ServerMessageLogs.RemoveLog(context.Guild.Id);
-                        return Task.CompletedTask;
+                        SocketCommandContext context = new SocketCommandContext(_client, msg);
+                        var guild = context.Guild;
+                        if (guild != null)
+                        {
+                            ServerMessageLog currentLog = ServerMessageLogs.GetLog(context.Guild);
+                            currentLog.AddMessage(msg);
+                            ServerMessageLogs.SaveServerLogging();
+                            return Task.CompletedTask;
+                        }
+                        else
+                        {
+                            logger.ConsoleCriticalAdvisory($"Failed to cache message for {context.Guild.Name} with ID: {context.Guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 139!");
+                            ServerMessageLogs.RemoveLog(context.Guild.Id);
+                            return Task.CompletedTask;
+                        }
                     }
                 }
             }
