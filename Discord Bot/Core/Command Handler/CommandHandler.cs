@@ -49,13 +49,15 @@ namespace Kaguya
                 await _service.AddModulesAsync(
                   Assembly.GetExecutingAssembly(),
                   _services);
+                _client.Connected += logger.ClientConnected;
+
                 _client.Ready += logger.OnReady;
                 _client.Ready += timers.CheckChannelPermissions;
                 _client.Ready += timers.ServerInformationUpdate;
                 _client.Ready += timers.GameTimer;
                 _client.Ready += timers.VerifyMessageReceived;
                 _client.Ready += timers.ServerMessageLogCheck;
-                _client.Connected += logger.ClientConnected;
+
                 _client.MessageReceived += HandleCommandAsync;
                 _client.MessageReceived += logger.osuLinkParser;
                 _client.JoinedGuild += logger.JoinedNewGuild;

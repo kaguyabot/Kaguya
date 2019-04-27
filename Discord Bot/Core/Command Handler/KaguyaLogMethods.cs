@@ -35,18 +35,18 @@ namespace Kaguya.Core.CommandHandler
             var botID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
             var mutualGuilds = _client.GetUser(ID).MutualGuilds;
 
+            AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.dblapikey);
+
+            Console.WriteLine("\nRetrieving bot from DBL API...");
+            IDblSelfBot me = await dblAPI.GetMeAsync();
+            Console.WriteLine("Pushing stats to DBL API...");
+            await me.UpdateStatsAsync(mutualGuilds.Count());
+            Console.WriteLine("Success.");
+
             var serverCountValue = new Dictionary<string, string>
             {
-                {"server_count", $"{mutualGuilds.Count()}"}
+                { "server_count", $"{mutualGuilds.Count()}" }
             };
-
-            Console.WriteLine("Pushing guild count to DBL API...");
-
-            var content = new FormUrlEncodedContent(serverCountValue);
-            var response = await client.PostAsync($"https://discordbots.org/api/bots/{Config.bot.botUserID}/stats", content);
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            Console.WriteLine("Discord Bot List API Response:" + responseString);
 
             int i = 0;
             foreach(var guild in mutualGuilds)
@@ -169,7 +169,7 @@ namespace Kaguya.Core.CommandHandler
 
                 Config.bot.LastSeenMessage = DateTime.Now;
 
-                if (msg != null && msg.Channel.GetType().ToString() == "Discord.WebSocket.SocketTextChannel") //Checks to make sure that the message is actually from a guild channel (NOT a DM).
+                if (msg != null || msg.Content != "" && msg.Channel.GetType().ToString() == "Discord.WebSocket.SocketTextChannel") //Checks to make sure that the message is actually from a guild channel (NOT a DM).
                 {
                     SocketCommandContext context = new SocketCommandContext(_client, msg);
                     var guild = context.Guild;
