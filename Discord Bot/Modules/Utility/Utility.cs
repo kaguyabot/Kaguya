@@ -204,6 +204,7 @@ namespace Kaguya.Modules
                     "\n" +
                     $"\n{cmdPrefix}help [h]" +
                     $"\n{cmdPrefix}helpdm [hdm]" +
+                    $"\n{cmdPrefix}bug" +
                     $"\n" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```");

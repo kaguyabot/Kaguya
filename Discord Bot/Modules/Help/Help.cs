@@ -5,6 +5,8 @@ using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
 using Kaguya.Core;
 using System.Diagnostics;
+using Discord.WebSocket;
+using System;
 
 namespace Kaguya.Modules
 {
@@ -17,6 +19,7 @@ namespace Kaguya.Modules
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
         public string botToken = Config.bot.token;
+        readonly DiscordSocketClient _client = Global.Client;
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
 
@@ -47,6 +50,16 @@ namespace Kaguya.Modules
                     stopWatch.Start();
                     embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`");
                     embed.WithDescription($"{Context.User.Mention} Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "bug":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Bug Report | `{cmdPrefix}bug`");
+                    embed.WithDescription($"{Context.User.Mention} Allows you to report a bug directly to the support server's `#bugs` channel so that my creator can take a look at what's wrong (and hopefully fix it)! " +
+                        $"Please use this feature whenever you feel something is wrong with Kaguya, but don't overdo it! Messages that are spammy, violate the Discord TOS, or are abusive/deragotory in nature will " +
+                        $"result in a `permanent blacklist` from all of Kaguya. A bug report that leads to something getting fixed will result in `+2000 Kaguya points` added to your account on the next patch as a thank you!" +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}bug <message>`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "exp":
@@ -640,6 +653,30 @@ namespace Kaguya.Modules
                 $"\nKaguya Support Server: https://discord.gg/yhcNC97");
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("bug")]
+        public async Task BugReport([Remainder]string report)
+        {
+            stopWatch.Start();
+
+            var bugChannel = _client.GetChannel(547448889620299826); //Kaguya support server #bugs channel.
+
+            embed.WithTitle($"Bug Report");
+            embed.WithDescription($"Report from user `{Context.User.Username}#{Context.User.Discriminator}` with ID: `{Context.User.Id}`" +
+                $"\n" +
+                $"\nMessage: `\"{report}\"`");
+            embed.WithColor(Red);
+            embed.WithTimestamp(DateTime.Now);
+
+            await (bugChannel as ISocketMessageChannel).SendMessageAsync($"", false, embed.Build()); //Sends first embed to bug report channel.
+
+            embed.WithTitle($"Bug Report");
+            embed.WithDescription($"**{Context.User.Mention} `Your bug report has been sent.`**");
+            embed.WithFooter("Thank you for using this feature. Abuse will result in a permanent blacklist from Kaguya.");
+            embed.WithColor(Red);
+            await BE(); stopWatch.Stop(); //Sends response to user.
+            logger.ConsoleBugLog(Context, stopWatch.ElapsedMilliseconds, $"{report}");
         }
     }
 }
