@@ -594,7 +594,7 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "n":
                     stopWatch.Start();
-                    embed.WithTitle($"Help: NSFW | `{cmdPrefix} n`");
+                    embed.WithTitle($"Help: NSFW | `{cmdPrefix}n`");
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}n` command will post a 2D image (no real people) in an NSFW channel with the specified tag." +
                         $"\nWhen using the `{cmdPrefix}n` command, append a tag to the end like so: `{cmdPrefix}n <tag>`." +
                         $"\nNSFW Command List: `$n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif, bomb>` (Select one).");
