@@ -40,6 +40,18 @@ namespace Kaguya.Core
             }
         }
 
+        /// <summary>Console logging event for a bug report.</summary>
+        public void ConsoleBugLog(SocketCommandContext context, long timeSpan, string bugReport)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine($"\nUSER BUG REPORT:" +
+                $"\nUser: [{context.User.Username}#{context.User.Discriminator}]" +
+                $"\nGuild: [{context.Guild.Name} | {context.Guild.Id}] " +
+                $"Channel: [#{context.Channel.Name} | {context.Channel.Id}]" +
+                $"\nTime: [{DateTime.Now}] | Executed After: [{timeSpan.ToString("N0")} milliseconds]" +
+                $"\nReported Bug: [\"{bugReport}]\"");
+        }
+
         /// <summary>Console logging event for unsuccessfully executed command without a timespan.</summary>
         public void ConsoleCommandLog(SocketCommandContext context, CommandError error, string errorMsg)
         {

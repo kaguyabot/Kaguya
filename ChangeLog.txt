@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.8.2.1
+
+- $bug added \:D/ - Use this to report bugs!!
+
 Version 1.8.2
 
 - $n may now be used by itself for a random 2D NSFW image.
