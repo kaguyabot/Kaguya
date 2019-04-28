@@ -89,6 +89,25 @@ namespace Kaguya.Modules
             }
         }
 
+        [Command("bugaward")]
+        [RequireOwner]
+        public async Task BugAward(IUser user)
+        {
+            stopWatch.Start();
+            var userAccount = UserAccounts.GetAccount(user as SocketUser);
+            userAccount.Points += 2000;
+            UserAccounts.SaveAccounts();
+
+            await user.GetOrCreateDMChannelAsync();
+            await user.SendMessageAsync($"Hello, you reported a bug that led to a fix! As a reward, `2,000 Kaguya Points` have been added to your account. Thank you for your contribution, and " +
+                $"if you notice anymore bugs, don't hesitate to keep using the bug reporter!" +
+                $"\n" +
+                $"\n-Stage.");
+
+            embed.WithDescription($"{Context.User.Mention} The user has been rewarded and was sent a DM.");
+            stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
         [Command("awardeveryone")] //currency
         [Alias("awardall")]
         [RequireOwner]
@@ -449,16 +468,19 @@ namespace Kaguya.Modules
 
             userAccount.LastReceivedWeeklyPoints = DateTime.Now;
 
-            if(critical)
+            if (critical)
             {
                 bonus = (uint)(bonus * multiplier);
                 embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points! It's a critical hit!!**");
             }
             else
+            {
                 embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points!**");
+            }
             embed.WithColor(Pink);
             await BE();
 
+            userAccount.Points += bonus;
             UserAccounts.SaveAccounts();
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);

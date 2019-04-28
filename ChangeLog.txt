@@ -3,6 +3,17 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.8.4
+
+- toggleannouncements was "toggleannouncements1" in the code...?? That has been fixed.
+- Fixed a major bug with $weekly (it basically didn't work).
+- Removed unnecessary new instance of Context inside of the MessageCache (could slightly improve stability/performance)
+- Kaguya will no longer cache messages from bots! Closes #39
+- Updated help command for $pointsadd
+- Command prefix size has been increased from a maximum of 2 characters to a maximum of 3.
+- $vote and $voteclaim are now embedded with pink (as they should be)
+- $restart command added (owner only).
+
 Version 1.8.3
 
 - Users can now use the $vote and $voteclaim commands to earn rewards for upvoting Kaguya on discordbots.org
