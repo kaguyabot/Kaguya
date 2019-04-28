@@ -21,7 +21,7 @@ namespace Kaguya.Core.LevelingSystem
                 UserAccount userAccount = UserAccounts.UserAccounts.GetAccount(user);
                 Random RNGTimeout = new Random();
                 Logger logger = new Logger();
-                if (!CanReceiveExperience(userAccount, RNGTimeout.Next(0)))
+                if (!CanReceiveExperience(userAccount, RNGTimeout.Next(110, 130)))
                     return;
                 uint oldLevel = userAccount.LevelNumber;
                 Random random = new Random();
