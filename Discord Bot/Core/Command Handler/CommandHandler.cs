@@ -141,7 +141,7 @@ namespace Kaguya
                 if(!result.IsSuccess && result.Error == CommandError.UnknownCommand)
                 {
                     embed.WithDescription($"**Error: The command `{context.Message.Content}` does not exist!**");
-                    embed.WithFooter($"Use {cmdPrefix}h for the full commands list! Tag me with a new symbol to edit my prefix!");
+                    embed.WithFooter($"Use {cmdPrefix}h for the full commands list! Tag me with \"prefix <symbol>\" to edit my prefix!");
                     embed.WithColor(Red);
                     await context.Channel.SendMessageAsync("", false, embed.Build());
                     consoleLogger.ConsoleCommandLog(context, CommandError.UnknownCommand, $"The command {context.Message.Content} does not exist!");

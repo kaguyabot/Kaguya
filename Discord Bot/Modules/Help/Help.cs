@@ -9,6 +9,7 @@ using Discord.WebSocket;
 using System;
 using Kaguya.Core.UserAccounts;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Kaguya.Modules
 {
@@ -62,6 +63,34 @@ namespace Kaguya.Modules
                         $"result in a `permanent blacklist` from all of Kaguya. A bug report that leads to something getting fixed will result in `+2000 Kaguya points` added to your account on the next patch as a thank you!" +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}bug <message>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "vote":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Voting | `{cmdPrefix}vote`");
+                    embed.WithDescription($"{Context.User.Mention} I will reply with a link to my discordbots.org page. If you wish to support me and want more people to have the ability to use me, " +
+                        $"give me an upvote! My creator and I greatly appreciate it uwu. After voting, use `{cmdPrefix}voteclaim` to get some rewards for your support!");
+                    embed.WithFooter($"Use {cmdPrefix}h voteclaim to find out what the rewards for upvoting are!");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "voteclaim":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Claiming Voting Rewards | `{cmdPrefix}voteclaim`");
+                    embed.WithDescription($"{Context.User.Mention} Use this command after voting (see `{cmdPrefix}h vote`) to have some rewards applied to your Kaguya account!" +
+                        $"\nRewards: `2x critical hit chance for 12 hours` and `500 Kaguya Points`! You may ask \"well, what's a critical?\" I have a help command for that! Use `{cmdPrefix}h critical` to find out more!");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "critical":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Critical Hits");
+                    embed.WithDescription($"{Context.User.Mention} No matter what currency related command you use (roll, timely, weekly, etc.), there is a chance that reward can be a \"critical\"." +
+                        $"\nThe critical factor will greatly multiply your point rewards." +
+                        $"\n" +
+                        $"\nCritical Rewards:" +
+                        $"\n" +
+                        $"\nRolls: `8% chance that the multiplier of your bet is multiplied by 2.5x`" +
+                        $"\nTimely: `14% chance that the value of your reward is multiplied by 3.5x`" +
+                        $"\nWeekly: `8% chance that the value of your reward will be multiplied by 3.5x`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "exp":
@@ -626,13 +655,13 @@ namespace Kaguya.Modules
             embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`weekly` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
             embed.AddField("Fun", "`echo` \n`pick` \n`8ball`", true);
-            embed.AddField("Help", "`help [h]` \n`helpdm [hdm]`", true);
+            embed.AddField("Help", "`help [h]` \n`helpdm [hdm]` \n`bug`", true);
             embed.AddField("osu!", "`osu` \n`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
             embed.AddField("NSFW", $"`View with {cmdPrefix}cmds nsfw`", true);
             embed.WithColor(Pink);
             embed.WithFooter($"For more information, including a link to add this bot to your server and a link to the Kaguya Support Discord, type {cmdPrefix}hdm!");
-            await BE();  stopWatch.Stop();
+            await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -701,18 +730,22 @@ namespace Kaguya.Modules
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
             var lastUpvoted = userAccount.LastUpvotedKaguya;
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
-            var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.botUserID}/check?={Context.User.Id}");
 
-            if(dblResponse.Contains("1"))
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"{Config.bot.dblapikey}");
+            var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.botUserID}/check?userId={Context.User.Id}");
+
+            if (dblResponse.Contains("{\"voted\":1}"))
             {
                 if (difference.TotalHours < 12)
                 {
-                    embed.WithDescription($"**{Context.User.Mention} You've already upvoted me and claimed your reward! Please wait `{difference.Hours}h and {difference.Minutes}m` to upvote again!**");
-                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                    embed.WithDescription($"**{Context.User.Mention} You've already upvoted me and claimed your reward!" +
+                        $"\nTime remaining: `{11 - (int)difference.TotalHours} hours {60 - difference.Minutes} minutes and {60 - difference.Seconds} seconds`**");
+                    embed.WithColor(Red);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
                 }
                 else if (difference.TotalHours > 12)
                 {
-                    lastUpvoted = DateTime.Now;
+                    userAccount.LastUpvotedKaguya = DateTime.Now;
                     userAccount.Points += 500;
 
                     embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points` and `2x critical hit rate` have been applied.");
@@ -720,7 +753,7 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 }
             }
-            else if(dblResponse.Contains("0"))
+            else if(dblResponse.Contains("{\"voted\":0}"))
             {
                 embed.WithDescription($"**{Context.User.Mention} you have not upvoted me! Please do so with the vote command!**");
                 embed.WithColor(Red);

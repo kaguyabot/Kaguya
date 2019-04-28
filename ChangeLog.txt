@@ -6,7 +6,8 @@ Changelog:
 Version 1.8.3
 
 - Users can now use the $vote and $voteclaim commands to earn rewards for upvoting Kaguya on discordbots.org
-
+- Command error footer has been altered, it was misleading.
+- Added in help commands for $vote, $voteclaim, and added a new help command for critical hits ($h critical).
 
 Version 1.8.2.1
 
