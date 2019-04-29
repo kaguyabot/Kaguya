@@ -15,6 +15,7 @@ using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
 using Kaguya.Core;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Kaguya.Modules
 {
@@ -247,7 +248,7 @@ namespace Kaguya.Modules
             }
         }
 
-        [Command("toggleannouncements1")]
+        [Command("toggleannouncements")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ToggleAnnouncements()
         {
@@ -287,10 +288,10 @@ namespace Kaguya.Modules
             var server = Servers.GetServer(Context.Guild);
             var oldPrefix = server.commandPrefix;
 
-            if(prefix.Length > 2)
+            if(prefix.Length > 3)
             {
                 embed.WithTitle("Change Command Prefix: Failure!");
-                embed.WithDescription("The chosen prefix is too long! Please select a combination of less than 3 characters/symbols ");
+                embed.WithDescription("The chosen prefix is too long! Please select a combination of less than 4 characters/symbols ");
                 embed.WithFooter($"To reset the command prefix, type {cmdPrefix}prefix!");
                 embed.WithColor(Red);
                 await BE(); stopWatch.Stop();
@@ -392,6 +393,34 @@ namespace Kaguya.Modules
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 }
             }
+        }
+
+        [Command("restart")]
+        [RequireOwner]
+        public async Task Restart()
+        {
+            embed.WithDescription($"**{Context.User.Mention} Attempting to restart...**");
+            embed.WithColor(Red);
+            await BE(); logger.ConsoleCriticalAdvisory("Attempting to restart...");
+
+            var filePath = Assembly.GetExecutingAssembly().Location;
+            Process.Start(filePath); logger.ConsoleCriticalAdvisory("Process started!!");
+
+            embed.WithDescription($"**{Context.User.Mention} Process started successfully. Exiting...**");
+            embed.WithColor(Red);
+            await BE();
+
+            Environment.Exit(0);
+        }
+
+        [Command("kill")]
+        [RequireOwner]
+        public async Task Kill()
+        {
+            embed.WithDescription($"**{Context.User.Mention} Exiting...**");
+            embed.WithColor(Red);
+            await BE(); logger.ConsoleCriticalAdvisory("Exiting!!");
+            Environment.Exit(0);
         }
 
         private bool UserIsAdmin(SocketGuildUser user)

@@ -1,10 +1,10 @@
 {
   
-  "token": "",
-  "cmdPrefix": "",
-  "osuapikey": "",
-  "tillerinoapikey": "",
-  "botUserID": "",
-  "dblapikey": "",
-  "LastSeenMessage": ""
+  "token": "MzY3NDAzODg2ODQxMDM2ODIw.XMCSyQ.p82jhGPP0HeyRw5N-tSkGvXHmIg",
+  "cmdPrefix": "$",
+  "osuapikey": "35cbb86be7b0ea6a13603292f0cd35c48a01030c",
+  "tillerinoapikey": "fd64f2c4c9e835fc674a6985696cab60",
+  "botUserID": "367403886841036820",
+  "dblapikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzODkxMDM5MzkxODE2MDkxNiIsImJvdCI6dHJ1ZSwiaWF0IjoxNTU2NDIyMzMxfQ.z9srpzrNwYeEe-K56GY6Tnk6jHiRRHl7zO5a_fHHDsw",
+  "LastSeenMessage": "0001-01-01T00:00:00"
 }

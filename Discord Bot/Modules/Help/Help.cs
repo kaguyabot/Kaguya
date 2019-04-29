@@ -119,10 +119,10 @@ namespace Kaguya.Modules
                 case "pointsadd":
                 case "addpoints":
                     stopWatch.Start();
-                    embed.WithTitle($"Help: Adding Points | `{cmdPrefix}pointsadd`");
+                    embed.WithTitle($"Help: Adding Points | `{cmdPrefix}pointsadd`, `{cmdPrefix}addpoints`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n" +
-                        $"\n{Context.User.Mention} Syntax: `{cmdPrefix}pointsadd <number of points to add>`. The number of points you are adding must be a positive whole number.");
+                        $"\n{Context.User.Mention} Syntax: `{cmdPrefix}pointsadd <number of points to add> <user>`. The number of points you are adding must be a positive whole number.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "level":
@@ -492,6 +492,14 @@ namespace Kaguya.Modules
                         $"user doesn't have an account, a bot function may not work for said user [such as with `$ctr`]).");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "bugaward":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Bug Rewards | `{cmdPrefix}bugaward`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nDM's the target and adds 2,000 Kaguya Points to their account. This is the reward for a `$bug` report that directly led to a patch/fix.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "rep":
                     stopWatch.Start();
                     embed.WithTitle($"Help: Rep | `{cmdPrefix}rep`");
@@ -718,6 +726,7 @@ namespace Kaguya.Modules
             embed.WithDescription($"Show Kaguya some love and give her an upvote! https://discordbots.org/bot/538910393918160916" +
                 $"\nUsers that upvote receive a `2x` critical hit percentage for the next `12 hours` and `500` Kaguya points! Users may vote every 12 hours!");
             embed.WithFooter($"Thanks for showing your support! Use {Servers.GetServer(Context.Guild).commandPrefix}voteclaim to claim your reward!");
+            embed.WithColor(Pink);
             await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -750,6 +759,7 @@ namespace Kaguya.Modules
 
                     embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points` and `2x critical hit rate` have been applied.");
                     embed.WithFooter("Thanks so much for your support!!");
+                    embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 }
             }

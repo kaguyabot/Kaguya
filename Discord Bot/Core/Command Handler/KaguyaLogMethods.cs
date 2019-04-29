@@ -169,23 +169,22 @@ namespace Kaguya.Core.CommandHandler
 
                 Config.bot.LastSeenMessage = DateTime.Now;
 
-                if (msg != null)
+                if (msg != null && !msg.Author.IsBot)
                 {
                     if (msg.Channel is SocketTextChannel)
                     {
-                        SocketCommandContext context = new SocketCommandContext(_client, msg);
-                        var guild = context.Guild;
+                        var guild = (msg.Author as SocketGuildUser).Guild;
                         if (guild != null)
                         {
-                            ServerMessageLog currentLog = ServerMessageLogs.GetLog(context.Guild);
+                            ServerMessageLog currentLog = ServerMessageLogs.GetLog(guild);
                             currentLog.AddMessage(msg);
                             ServerMessageLogs.SaveServerLogging();
                             return Task.CompletedTask;
                         }
                         else
                         {
-                            logger.ConsoleCriticalAdvisory($"Failed to cache message for {context.Guild.Name} with ID: {context.Guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 139!");
-                            ServerMessageLogs.RemoveLog(context.Guild.Id);
+                            logger.ConsoleCriticalAdvisory($"Failed to cache message for {guild.Name} with ID: {guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 139!");
+                            ServerMessageLogs.RemoveLog(guild.Id);
                             return Task.CompletedTask;
                         }
                     }
