@@ -413,6 +413,16 @@ namespace Kaguya.Modules
             Environment.Exit(0);
         }
 
+        [Command("kill")]
+        [RequireOwner]
+        public async Task Kill()
+        {
+            embed.WithDescription($"**{Context.User.Mention} Exiting...**");
+            embed.WithColor(Red);
+            await BE(); logger.ConsoleCriticalAdvisory("Exiting!!");
+            Environment.Exit(0);
+        }
+
         private bool UserIsAdmin(SocketGuildUser user)
         {
             string targetRoleName = "Administrator";

@@ -13,6 +13,7 @@ Version 1.8.4
 - Command prefix size has been increased from a maximum of 2 characters to a maximum of 3.
 - $vote and $voteclaim are now embedded with pink (as they should be)
 - $restart command added (owner only).
+- $kill command added (owner only). Orders the application to exit immediately.
 
 Version 1.8.3
 
