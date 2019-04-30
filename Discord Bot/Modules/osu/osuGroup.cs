@@ -26,8 +26,8 @@ namespace Kaguya.Modules.osu
         readonly Color Red = new Color(255, 0, 0);
         readonly Color Gold = new Color(255, 223, 0);
         readonly string version = Utilities.GetAlert("VERSION");
-        readonly string botToken = Config.bot.token;
-        readonly string osuapikey = Config.bot.osuapikey;
+        readonly string botToken = Config.bot.Token;
+        readonly string osuapikey = Config.bot.OsuApiKey;
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
 
@@ -71,7 +71,7 @@ namespace Kaguya.Modules.osu
 
             player.Replace(' ', '_');
 
-            string osuapikey = Config.bot.osuapikey;
+            string osuapikey = Config.bot.OsuApiKey;
 
             if (num > 10)
             {

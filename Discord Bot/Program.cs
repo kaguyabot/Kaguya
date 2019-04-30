@@ -31,7 +31,7 @@ namespace Kaguya
                 string name = Environment.UserName; // Greets user in console
                 string message = Utilities.GetFormattedAlert("WELCOME_&NAME_&VERSION", name, version);
                 Console.WriteLine(message);
-                if (Config.bot.token == "" || Config.bot.token == null && Config.bot.cmdPrefix == "" || Config.bot.cmdPrefix == null) //default values in config.json when first launched, first time setup essentially.
+                if (Config.bot.Token == "" || Config.bot.Token == null && Config.bot.CmdPrefix == "" || Config.bot.CmdPrefix == null) //default values in config.json when first launched, first time setup essentially.
                 {
                     Console.WriteLine("Bot token not found. Get your bot's token from the Discord Developer portal and paste it here: ");
                     string token = Console.ReadLine();
@@ -40,8 +40,8 @@ namespace Kaguya
                     string prefix = Console.ReadLine();
                     BotConfig bot = new BotConfig
                     {
-                        token = token,
-                        cmdPrefix = prefix
+                        Token = token,
+                        CmdPrefix = prefix
                     };
                     string json = JsonConvert.SerializeObject(bot, Formatting.Indented);
                     File.WriteAllText("Resources" + "/" + "config.json", json);
@@ -60,7 +60,7 @@ namespace Kaguya
                     });
                     try
                     {
-                        await _client.LoginAsync(TokenType.Bot, Config.bot.token);
+                        await _client.LoginAsync(TokenType.Bot, Config.bot.Token);
                     }
                     catch (System.Net.Http.HttpRequestException)
                     {
