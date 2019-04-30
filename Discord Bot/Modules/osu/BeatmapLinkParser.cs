@@ -17,8 +17,8 @@ namespace Kaguya.Modules.osu
     public class BeatmapLinkParser
     {
         readonly Color Pink = new Color(252, 132, 255);
-        public string osuapikey = Config.bot.osuapikey;
-        public string tillerinoapikey = Config.bot.tillerinoapikey;
+        public string osuapikey = Config.bot.OsuApiKey;
+        public string tillerinoapikey = Config.bot.TillerinoApiKey;
         Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
 

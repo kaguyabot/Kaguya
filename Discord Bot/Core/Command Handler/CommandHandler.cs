@@ -2,7 +2,6 @@
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
@@ -11,10 +10,6 @@ using Kaguya.Core.LevelingSystem;
 using Kaguya.Core.UserAccounts;
 using Kaguya.Core.Server_Files;
 using Discord;
-using System.Text.RegularExpressions;
-using System.Net;
-using Newtonsoft.Json;
-using Kaguya.Modules;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
@@ -28,7 +23,7 @@ namespace Kaguya
 
         DiscordSocketClient _client;
         CommandService _service;
-        private IServiceProvider _services; 
+        private IServiceProvider _services;
         readonly Color Yellow = new Color(255, 255, 102);
         readonly Color SkyBlue = new Color(63, 242, 255);
         readonly Color Red = new Color(255, 0, 0);
@@ -37,8 +32,9 @@ namespace Kaguya
         readonly KaguyaLogMethods logger = new KaguyaLogMethods();
         readonly Timers timers = new Timers();
         readonly Logger consoleLogger = new Logger();
-        public string osuapikey = Config.bot.osuapikey;
-        public string tillerinoapikey = Config.bot.tillerinoapikey;
+
+        public string osuApiKey = Config.bot.OsuApiKey;
+        public string tillerinoApiKey = Config.bot.TillerinoApiKey;
         public async Task InitializeAsync(DiscordSocketClient client)
         {
             try
@@ -95,7 +91,7 @@ namespace Kaguya
                 Console.WriteLine(errorMessage);
                 return;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 consoleLogger.ConsoleCriticalAdvisory(e, "InitializeAsync method threw an exception. CommandHandler.cs lines (42, 92).");
                 return;
@@ -105,89 +101,92 @@ namespace Kaguya
         private async Task HandleCommandAsync(SocketMessage s)
         {
             var msg = s as SocketUserMessage;
-            if (msg == null) return;
+            var user = msg.Author as SocketGuildUser;
+            if (msg is null || user is null || user.IsBot) return;
+
+            var guild = Servers.GetServer(user.Guild);
+            var userAccount = UserAccounts.GetAccount(user);
+
+            if (userAccount.Blacklisted == 1) { return; }
+            if (guild.IsBlacklisted) { return; }
+
+
             var context = new SocketCommandContext(_client, msg);
-            var guild = Servers.GetServer(context.Guild);
-            if (context.User.IsBot) return;
-            var userAccount = UserAccounts.GetAccount(context.User);
-            if (userAccount.Blacklisted == 1)
-            { return; }
-            if(guild.IsBlacklisted)
-            { return; }
-            var server = Servers.GetServer(context.Guild);
-            foreach(string phrase in server.FilteredWords)
+
+            foreach (string phrase in guild.FilteredWords)
             {
-                if(msg.Content.Contains(phrase))
+                if (msg.Content.Contains(phrase))
                 {
                     await logger.UserSaysFilteredPhrase(msg);
                     consoleLogger.ConsoleCommandLog(context);
                 }
             }
-            Leveling.UserSentMessage((SocketGuildUser)context.User, (SocketTextChannel)context.Channel);
+
+            Leveling.UserSentMessage(user, msg.Channel as SocketTextChannel);
+
             string oldUsername = userAccount.Username;
             string newUsername = context.User.Username;
-            if (oldUsername + "#" + context.User.Discriminator != newUsername + "#" + context.User.Discriminator)
-                userAccount.Username = newUsername + "#" + context.User.Discriminator;
+
+            if ($"{oldUsername}#{user.Discriminator}" != $"{newUsername}#{user.Discriminator}")
+                userAccount.Username = $"{newUsername}#{user.Discriminator}";
 
 
             int argPos = 0;
 
-            EmbedBuilder embed = new EmbedBuilder();
-            if (msg.HasStringPrefix(Servers.GetServer(context.Guild).commandPrefix, ref argPos)
-                || msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
+            if (!msg.HasStringPrefix(guild.commandPrefix, ref argPos)
+                && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos)) { return; }
+
+            var embed = new EmbedBuilder();
+            var result = await _service.ExecuteAsync(context, argPos, null);
+
+            if (!result.IsSuccess)
             {
-                var cmdPrefix = server.commandPrefix;
-                var result = await _service.ExecuteAsync(context, argPos, null);
-                if(!result.IsSuccess && result.Error == CommandError.UnknownCommand)
+                switch (result.Error)
                 {
-                    embed.WithDescription($"**Error: The command `{context.Message.Content}` does not exist!**");
-                    embed.WithFooter($"Use {cmdPrefix}h for the full commands list! Tag me with \"prefix <symbol>\" to edit my prefix!");
-                    embed.WithColor(Red);
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
-                    consoleLogger.ConsoleCommandLog(context, CommandError.UnknownCommand, $"The command {context.Message.Content} does not exist!");
-                }
-                else if(!result.IsSuccess && result.Error == CommandError.BadArgCount)
-                {
-                    embed.WithDescription($"**Error: I need a different set of information than what you've given me!**");
-                    embed.WithFooter($"Bad argument count! Use {cmdPrefix}h <command> to see the proper syntax!");
-                    embed.WithColor(Red);
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
-                    consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "User attempted to use invalid parameters for a command.");
-                }
-                else if (!result.IsSuccess && result.Error == CommandError.ParseFailed)
-                {
-                    embed.WithDescription($"**Error: I failed to parse a specified value!**");
-                    embed.WithFooter($"You may be using text instead of a number. Review {cmdPrefix}h <command> for the proper usage!");
-                    embed.WithColor(Red);
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
-                    consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Failed to parse given value specified in command.");
-                }
-                else if (!result.IsSuccess && result.Error == CommandError.UnmetPrecondition)
-                {
-                    embed.WithDescription($"**Error: {result.ErrorReason}**");
-                    embed.WithFooter($"Review $h <command> for the proper usage!");
-                    embed.WithColor(Red);
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
-                    consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, $"{result.ErrorReason}");
-                }
-                else if (!result.IsSuccess && result.Error == CommandError.MultipleMatches)
-                {
-                    embed.WithDescription($"**Error: I found multiple matches for the task you were trying to execute!**");
-                    embed.WithFooter($"Review {cmdPrefix}h <command> for the proper usage! I can only do one thing at a time!");
-                    embed.WithColor(Red);
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
-                    consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Multiple matches found.");
-                }
-                else if (!result.IsSuccess && result.ErrorReason != null)
-                {
-                    embed.WithDescription($"**Error: I failed to execute this command for an unknown reason.**");
-                    embed.WithFooter($"Error reason: {result.ErrorReason}");
-                    embed.WithColor(Red);
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
-                    consoleLogger.ConsoleCommandLog(context, CommandError.Unsuccessful, $"{result.ErrorReason}");
+                    case CommandError.UnknownCommand:
+                        embed.WithDescription($"**Error: The command `{context.Message.Content}` does not exist!**");
+                        embed.WithFooter($"Use {guild.commandPrefix}h for the full commands list! Tag me with \"prefix <symbol>\" to edit my prefix!");
+                        embed.WithColor(Red);
+                        await context.Channel.SendMessageAsync(embed: embed.Build());
+                        consoleLogger.ConsoleCommandLog(context, CommandError.UnknownCommand, $"The command {context.Message.Content} does not exist!");
+                        break;
+                    case CommandError.BadArgCount:
+                        embed.WithDescription("**Error: I need a different set of information than what you've given me!**");
+                        embed.WithFooter($"Bad argument count! Use {guild.commandPrefix}h <command> to see the proper syntax!");
+                        embed.WithColor(Red);
+                        await context.Channel.SendMessageAsync(embed: embed.Build());
+                        consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "User attempted to use invalid parameters for a command.");
+                        break;
+                    case CommandError.ParseFailed:
+                        embed.WithDescription("**Error: I failed to parse a specified value!**");
+                        embed.WithFooter($"You may be using text instead of a number. Review {guild.commandPrefix}h <command> for the proper usage!");
+                        embed.WithColor(Red);
+                        await context.Channel.SendMessageAsync(embed: embed.Build());
+                        consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Failed to parse given value specified in command.");
+                        break;
+                    case CommandError.UnmetPrecondition:
+                        embed.WithDescription($"**Error: {result.ErrorReason}**");
+                        embed.WithFooter("Review $h <command> for the proper usage!");
+                        embed.WithColor(Red);
+                        await context.Channel.SendMessageAsync(embed: embed.Build());
+                        consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, $"{result.ErrorReason}");
+                        break;
+                    case CommandError.MultipleMatches:
+                        embed.WithDescription("**Error: I found multiple matches for the task you were trying to execute!**");
+                        embed.WithFooter($"Review {guild.commandPrefix}h <command> for the proper usage! I can only do one thing at a time!");
+                        embed.WithColor(Red);
+                        await context.Channel.SendMessageAsync(embed: embed.Build());
+                        consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Multiple matches found.");
+                        break;
+                    default:
+                        embed.WithDescription("**Error: I failed to execute this command for an unknown reason.**");
+                        embed.WithFooter($"Error reason: {result.ErrorReason}");
+                        embed.WithColor(Red);
+                        await context.Channel.SendMessageAsync(embed: embed.Build());
+                        consoleLogger.ConsoleCommandLog(context, CommandError.Unsuccessful, $"{result.ErrorReason}");
+                        break;
                 }
             }
-
         }
     }
 }

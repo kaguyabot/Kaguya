@@ -27,7 +27,7 @@ namespace Kaguya.Modules
         public Color Gold = new Color(255, 223, 0);
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
-        public string botToken = Config.bot.token;
+        public string botToken = Config.bot.Token;
         Logger logger = new Logger();
         Stopwatch stopWatch = new Stopwatch();
 

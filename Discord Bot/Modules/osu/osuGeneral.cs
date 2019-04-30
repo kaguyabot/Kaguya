@@ -28,8 +28,8 @@ namespace Kaguya.Modules
         readonly Color Gold = new Color(255, 223, 0);
         readonly BotConfig bot = new BotConfig();
         readonly string version = Utilities.GetAlert("VERSION");
-        readonly string botToken = Config.bot.token;
-        readonly string osuapikey = Config.bot.osuapikey;
+        readonly string botToken = Config.bot.Token;
+        readonly string osuapikey = Config.bot.OsuApiKey;
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
 
@@ -43,7 +43,7 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            string osuapikey = Config.bot.osuapikey;
+            string osuapikey = Config.bot.OsuApiKey;
             string jsonProfile;
 
             if (player == null)
@@ -179,7 +179,7 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            string osuapikey = Config.bot.osuapikey;
+            string osuapikey = Config.bot.OsuApiKey;
 
             if (player == null || player == "")
             {
