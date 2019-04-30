@@ -2,3 +2,4 @@
 *.json
 .vs*
 Discord Bot/bin*
+Discord Bot/obj*
