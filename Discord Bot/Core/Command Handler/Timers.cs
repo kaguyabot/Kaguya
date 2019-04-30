@@ -32,7 +32,7 @@ namespace Kaguya.Core.Command_Handler
 
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var botID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
+            var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = _client.GetUser(ID).MutualGuilds;
 
             int i = 0;
@@ -68,7 +68,7 @@ namespace Kaguya.Core.Command_Handler
 
         private void Check_Channel_Permissions_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var kID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
+            var kID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             SocketUser kaguya = _client.GetUser(ID);
             if (kaguya != null)
             {

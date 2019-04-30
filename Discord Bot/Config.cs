@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Kaguya
@@ -36,14 +32,14 @@ namespace Kaguya
 
     public struct BotConfig
     {
-        public string token { get; set; }
-        public string cmdPrefix { get; set; }
-        public string osuapikey { get; set; }
-        public string tillerinoapikey { get; set; }
-        public string patreonaccesstoken { get; set; }
-        public string patreonclientid { get; set; }
-        public string botUserID { get; set; }
-        public string dblapikey { get; set; }
+        public string Token { get; set; }
+        public string CmdPrefix { get; set; }
+        public string OsuApiKey { get; set; }
+        public string TillerinoApiKey { get; set; }
+        public string PatreonAccessToken { get; set; }
+        public string PatreonClientId { get; set; }
+        public string BotUserID { get; set; }
+        public string DblApiKey { get; set; }
         public DateTime LastSeenMessage { get; set; } 
     }
 }

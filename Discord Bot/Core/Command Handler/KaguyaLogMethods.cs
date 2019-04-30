@@ -32,10 +32,10 @@ namespace Kaguya.Core.CommandHandler
 
         public async Task OnReady()
         {
-            var botID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
+            var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = _client.GetUser(ID).MutualGuilds;
 
-            AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.dblapikey);
+            AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
 
             Console.WriteLine("\nRetrieving bot from DBL API...");
             IDblSelfBot me = await dblAPI.GetMeAsync();
@@ -103,7 +103,7 @@ namespace Kaguya.Core.CommandHandler
             var cmdPrefix = Servers.GetServer(guild).commandPrefix;
             var owner = guild.Owner;
             var channels = guild.Channels;
-            var kID = ulong.TryParse(Config.bot.botUserID, out ulong ID);
+            var kID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             IUser kaguya = _client.GetUser(ID);
             await owner.GetOrCreateDMChannelAsync();
             await owner.SendMessageAsync($"Hey there, {owner.Username}, I am Kaguya! I will serve as your server's all-in-one Discord Bot solution complete with powerful administrative commands, " +

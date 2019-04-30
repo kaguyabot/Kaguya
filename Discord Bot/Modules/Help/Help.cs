@@ -21,7 +21,7 @@ namespace Kaguya.Modules
         public Color Gold = new Color(255, 223, 0);
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
-        public string botToken = Config.bot.token;
+        public string botToken = Config.bot.Token;
         readonly DiscordSocketClient _client = Global.Client;
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
@@ -740,8 +740,8 @@ namespace Kaguya.Modules
             var lastUpvoted = userAccount.LastUpvotedKaguya;
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"{Config.bot.dblapikey}");
-            var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.botUserID}/check?userId={Context.User.Id}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"{Config.bot.DblApiKey}");
+            var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.BotUserID}/check?userId={Context.User.Id}");
 
             if (dblResponse.Contains("{\"voted\":1}"))
             {
