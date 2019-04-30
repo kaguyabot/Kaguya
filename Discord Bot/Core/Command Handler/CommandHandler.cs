@@ -134,7 +134,7 @@ namespace Kaguya
             int argPos = 0;
 
             if (!msg.HasStringPrefix(guild.commandPrefix, ref argPos)
-                || !msg.HasMentionPrefix(_client.CurrentUser, ref argPos)) { return; }
+                && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos)) { return; }
 
             var embed = new EmbedBuilder();
             var result = await _service.ExecuteAsync(context, argPos, null);
