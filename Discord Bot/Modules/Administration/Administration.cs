@@ -86,31 +86,37 @@ namespace Kaguya.Modules
 
                 //Convert all times into seconds
 
-                min = min * 60;
-                hour = hour * 3600;
-                day = day * 86400;
-                week = week * 604800;
+                //min = min * 60;
+                //hour = hour * 3600;
+                //day = day * 86400;
+                //week = week * 604800;
 
-                sec += min + hour + day + week; //Total mute time in seconds
-
-                TimeSpan timeSpan = new TimeSpan(day + (week * 7), min, sec);
+                TimeSpan timeSpan = new TimeSpan(day + (week / 7), hour, min, sec);
 
                 if (!roles.Contains(muteRole))
                 {
                     await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
                     logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                    var rolesUpdated = Context.Guild.Roles;
+                    muteRole = rolesUpdated.FirstOrDefault(x => x.Name == "kaguya-mute");
                 }
 
-                foreach(var channel in channels)
+                foreach (var channel in channels)
                 {
-                    var permissionOverwrite = new OverwritePermissions(PermValue.Inherit, PermValue.Inherit, PermValue.Deny, PermValue.Inherit, PermValue.Deny);
-                    await channel.AddPermissionOverwriteAsync(muteRole, permissionOverwrite); //Denys ability to add reactions and send messages.
+
+                    if (!channel.GetPermissionOverwrite(muteRole).HasValue)
+                    {
+                        Console.WriteLine("Overwriting Permission for Mute Command...");
+                        var permissionOverwrite = new OverwritePermissions(PermValue.Inherit, PermValue.Inherit, PermValue.Deny, PermValue.Inherit, PermValue.Deny);
+                        await channel.AddPermissionOverwriteAsync(muteRole, permissionOverwrite); //Denies ability to add reactions and send messages.
+                    }
                 }
 
                 foreach (SocketGuildUser user in users)
                 {
                     try
                     {
+                        await user.AddRoleAsync(muteRole);
                         server.MutedMembers.Add(user.Id.ToString(), timeSpan.Duration().ToString());
                         Servers.SaveServers();
 

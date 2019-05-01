@@ -108,6 +108,7 @@ namespace Kaguya.Core.CommandHandler
         public async Task JoinedNewGuild(SocketGuild guild)
         {
             logger.ConsoleGuildConnectionAdvisory(guild, "Joined new guild");
+
             var cmdPrefix = Servers.GetServer(guild).commandPrefix;
             var owner = guild.Owner;
             var channels = guild.Channels;
@@ -153,6 +154,7 @@ namespace Kaguya.Core.CommandHandler
                         await guild.Owner.SendMessageAsync($"**This server has been blacklisted because I was unable to alter text channel permissions." +
                             $"\nPlease contact Stage#0001 in my support server (https://discord.gg/yhcNC97) to be unblacklisted!**");
                         server.IsBlacklisted = true;
+                        break;
                     }
                 }
             }
