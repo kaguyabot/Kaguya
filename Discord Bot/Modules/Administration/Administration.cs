@@ -22,6 +22,7 @@ namespace Kaguya.Modules
         public Color Pink = new Color(252, 132, 255);
         public Color Red = new Color(255, 0, 0);
         public Color Gold = new Color(255, 223, 0);
+        public Color Violet = new Color(127, 0, 255);
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
         public string botToken = Config.bot.Token;
@@ -33,42 +34,112 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
-        //[Command("mute")]
-        //[Alias("m")]
-        //[RequireUserPermission(GuildPermission.ManageMessages)]
-        //[RequireUserPermission(GuildPermission.MuteMembers)]
-        //[RequireBotPermission(GuildPermission.ManageMessages)]
-        //[RequireBotPermission(GuildPermission.MuteMembers)]
-        //public async Task MuteMembers(string timeout, [Remainder]List<SocketGuildUser> users)
-        //{
-        //    Stopwatch.Start();
-        //    var server = Servers.GetServer(Context.Guild);
+        [Command("mute")]
+        [Alias("m")]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
+        [RequireBotPermission(GuildPermission.ManageMessages)]
+        [RequireBotPermission(GuildPermission.MuteMembers)]
+        public async Task MuteMembers(string timeout, [Remainder]List<SocketGuildUser> users)
+        {
+            stopWatch.Start();
+            var server = Servers.GetServer(Context.Guild);
+            var cmdPrefix = server.commandPrefix;
+            var roles = Context.Guild.Roles;
+            var channels = Context.Guild.Channels;
 
-        //    if (timeout.Contains('s'))
-        //    {
-        //        var seconds = timeout.Split('s').First();
-        //    }
-        //    if (timeout.Contains('m'))
-        //    {
-        //        var minutes = timeout.Split('m').First();
-        //    }
-        //    if (timeout.Contains('h'))
-        //    {
-        //        var hours = timeout.Split('h').First();
-        //    }
+            var result = from a in roles
+                         where a.Name == "kaguya-mute"
+                         select a;
+
+            var muteRole = roles.FirstOrDefault(x => x.Name == "kaguya-mute");
 
 
-        //    foreach (SocketGuildUser user in users)
-        //    {
-        //        server.MutedMembers.Add($"{user.Username}#{user.Discriminator} {timeout}");
-        //    }
+            var regex = new Regex("/([0-9])*s|([0-9])*m|([0-9])*h|([0-9])*d|([0-9])*w/g");
 
+            if (regex.IsMatch(timeout))
+            {
+                Regex[] regexs = {
+                new Regex("(([0-9])*s)"),
+                new Regex("(([0-9])*m)"),
+                new Regex("(([0-9])*h)"),
+                new Regex("(([0-9])*d)"),
+                new Regex("(([0-9])*w)") };
 
+                var s = regexs[0].Match(timeout).Value;
+                var m = regexs[1].Match(timeout).Value;
+                var h = regexs[2].Match(timeout).Value;
+                var d = regexs[3].Match(timeout).Value;
+                var w = regexs[4].Match(timeout).Value;
 
-        //    Stopwatch.Stop();
-        //    logger.ConsoleCommandLog(ContextBoundObject, Stopwatch.ElapsedMilliseconds);
-        //}
+                var seconds = s.Split('s').First();
+                var minutes = m.Split('m').First();
+                var hours = h.Split('h').First();
+                var days = d.Split('d').First();
+                var weeks = w.Split('w').First();
 
+                int.TryParse(seconds, out int sec);
+                int.TryParse(minutes, out int min);
+                int.TryParse(hours, out int hour);
+                int.TryParse(days, out int day);
+                int.TryParse(weeks, out int week);
+
+                //Convert all times into seconds
+
+                min = min * 60;
+                hour = hour * 3600;
+                day = day * 86400;
+                week = week * 604800;
+
+                sec += min + hour + day + week; //Total mute time in seconds
+
+                TimeSpan timeSpan = new TimeSpan(day + (week * 7), min, sec);
+
+                if (!roles.Contains(muteRole))
+                {
+                    await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
+                    logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                }
+
+                foreach(var channel in channels)
+                {
+                    var permissionOverwrite = new OverwritePermissions(PermValue.Inherit, PermValue.Inherit, PermValue.Deny, PermValue.Inherit, PermValue.Deny);
+                    await channel.AddPermissionOverwriteAsync(muteRole, permissionOverwrite); //Denys ability to add reactions and send messages.
+                }
+
+                foreach (SocketGuildUser user in users)
+                {
+                    try
+                    {
+                        server.MutedMembers.Add(user.Id.ToString(), timeSpan.Duration().ToString());
+                        Servers.SaveServers();
+
+                        embed.WithDescription($"{Context.User.Mention} User `{user.Username}#{user.Discriminator}` " +
+                            $"with ID `{user.Id}` has been muted for `{timeout}`");
+                        embed.WithColor(Violet);
+                        await BE();
+
+                        stopWatch.Stop();
+                        logger.ConsoleGuildAdvisory(Context.Guild, user, stopWatch.ElapsedMilliseconds, $"Member has been muted.");
+                    }
+                    catch(System.ArgumentException e)
+                    {
+                        embed.WithDescription($"**{Context.User.Mention} This user is already muted!**");
+                        embed.WithColor(Red);
+                        logger.ConsoleCriticalAdvisory(e, "Exception handled: User is already muted!");
+                        await BE();
+                    }
+                }
+            }
+            else
+            {
+                embed.WithDescription($"**{Context.User.Mention} You did not give me a proper time!**");
+                embed.WithFooter($"See {cmdPrefix}h mute for proper usage!");
+                embed.WithColor(Red);
+                await BE();
+                logger.ConsoleCommandLog(Context, CommandError.UnmetPrecondition, "Invalid mute time specification.");
+            }
+        }
 
         [Command("filteradd")] //administration
         [Alias("fa")]
@@ -318,7 +389,7 @@ namespace Kaguya.Modules
         public async Task DeleteRole([Remainder]string targetRole)
         {
             stopWatch.Start();
-            var roles = Context.Guild.Roles.Where(r => r.Name == targetRole);
+            var roles = Context.Guild.Roles.Where(r => r.Name.ToLower() == targetRole.ToLower());
             if (roles.Count() > 1)
             {
                 embed.WithTitle("Role Deletion: Multiple Matching Roles");
@@ -373,6 +444,7 @@ namespace Kaguya.Modules
             embed.WithDescription($"Administrator {Context.User.Mention} has directed me to leave. Goodbye!");
             embed.WithColor(Red);
             await Context.Guild.LeaveAsync();
+            logger.ConsoleGuildAdvisory(Context.Guild, "KaguyaExit command executed.");
         }
 
         [Command("kick")] //admin
@@ -382,23 +454,42 @@ namespace Kaguya.Modules
         public async Task Kick(IGuildUser user, string reason = "No reason provided.")
         {
             stopWatch.Start();
-            if (reason != "No reason provided.")
+
+            var sOwner = Context.Guild.Owner;
+
+            if (user.Id != sOwner.Id)
             {
-                await user.KickAsync(reason);
-                embed.WithTitle($"User Kicked");
-                embed.WithDescription($"`{Context.User.Username}#{Context.User.Discriminator}` has kicked `{user}` with reason: \"{reason}\"");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                if (reason != "No reason provided.")
+                {
+                    await user.KickAsync(reason);
+                    embed.WithTitle($"User Kicked");
+                    embed.WithDescription($"`{Context.User.Username}#{Context.User.Discriminator}` has kicked `{user}` with reason: \"{reason}\"");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop();
+                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                }
+                else
+                {
+                    await user.KickAsync(reason);
+                    embed.WithTitle($"User Kicked");
+                    embed.WithDescription($"`{Context.User.Mention}` has kicked `{user}` without a specified reason.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop();
+                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                }
             }
-            else
+
+            else if (user.Id == Context.User.Id)
             {
-                await user.KickAsync(reason);
-                embed.WithTitle($"User Kicked");
-                embed.WithDescription($"`{Context.User.Mention}` has kicked `{user}` without a specified reason.");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                embed.WithDescription($"**{Context.User.Mention} You may not ban yourself!**");
+                embed.WithColor(Red);
+                await BE();
+            }
+            else if (user.Id == sOwner.Id)
+            {
+                embed.WithDescription($"**{Context.User.Mention} I cannot ban the server owner!**");
+                embed.WithColor(Red);
+                await BE();
             }
         }
 
@@ -409,23 +500,41 @@ namespace Kaguya.Modules
         public async Task Ban(IGuildUser user, string reason = "No reason provided.")
         {
             stopWatch.Start();
-            if (reason != "No reason provided.")
+
+            var sOwnerID = Context.Guild.Owner.Id;
+
+            if (user.Id != sOwnerID)
             {
-                await user.BanAsync(0, reason);
-                embed.WithTitle($"User Banned");
-                embed.WithDescription($"{Context.User.Mention} has banned `{user}` with reason: \"{reason}\"");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                if (reason != "No reason provided.")
+                {
+                    await user.BanAsync(0, reason);
+                    embed.WithTitle($"User Banned");
+                    embed.WithDescription($"{Context.User.Mention} has banned `{user}` with reason: \"{reason}\"");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop();
+                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                }
+                else
+                {
+                    await user.BanAsync(0, reason);
+                    embed.WithTitle($"User Banned");
+                    embed.WithDescription($"{Context.User.Mention} has banned `{user}` without a specified reason.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop();
+                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                }
             }
-            else
+            else if(user.Id == Context.User.Id)
             {
-                await user.BanAsync(0, reason);
-                embed.WithTitle($"User Banned");
-                embed.WithDescription($"{Context.User.Mention} has banned `{user}` without a specified reason.");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                embed.WithDescription($"**{Context.User.Mention} You may not ban yourself!**");
+                embed.WithColor(Red);
+                await BE();
+            }
+            else if (user.Id == sOwnerID)
+            {
+                embed.WithDescription($"**{Context.User.Mention} I cannot ban the server owner!**");
+                embed.WithColor(Red);
+                await BE();
             }
         }
 
@@ -435,8 +544,23 @@ namespace Kaguya.Modules
         public async Task MassBan([Remainder]List<SocketGuildUser> users)
         {
             stopWatch.Start();
+
+            var sOwner = Context.Guild.Owner;
+
             foreach (var user in users)
             {
+                if(user.Id == Context.User.Id)
+                {
+                    await ReplyAsync($"**{Context.User.Mention} You may not ban yourself!**");
+                    continue;
+                }
+
+                if (user.Id == sOwner.Id)
+                {
+                    await ReplyAsync($"**{Context.User.Mention} You may not ban the server owner!**");
+                    continue;
+                }
+
                 await user.BanAsync();
                 await ReplyAsync($"**{user} has been permanently banned by {Context.User.Mention}.**");
             }
@@ -451,8 +575,23 @@ namespace Kaguya.Modules
         public async Task MassKick([Remainder]List<SocketGuildUser> users)
         {
             stopWatch.Start();
+
+            var sOwner = Context.Guild.Owner;
+
             foreach (var user in users)
             {
+                if (user.Id == Context.User.Id)
+                {
+                    await ReplyAsync($"**{Context.User.Mention} You may not ban yourself!**");
+                    continue;
+                }
+
+                if (user.Id == sOwner.Id)
+                {
+                    await ReplyAsync($"**{Context.User.Mention} You may not ban the server owner!**");
+                    continue;
+                }
+
                 await user.BanAsync();
                 await ReplyAsync($"**{user} has been kicked by {Context.User.Mention}.**");
             }
@@ -486,6 +625,7 @@ namespace Kaguya.Modules
             embed.WithColor(Red);
             await BE();
             stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             logger.ConsoleGuildAdvisory(Context.Guild, user as SocketGuildUser, stopWatch.ElapsedMilliseconds, "User shadowbanned.");
         }
 
@@ -514,6 +654,7 @@ namespace Kaguya.Modules
             embed.WithColor(Red);
             await BE();
             stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             logger.ConsoleGuildAdvisory(Context.Guild, user as SocketGuildUser, stopWatch.ElapsedMilliseconds, "User un-shadowbanned.");
         }
 

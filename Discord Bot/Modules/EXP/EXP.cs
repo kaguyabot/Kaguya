@@ -197,6 +197,17 @@ namespace Kaguya.Modules
             }
         }
 
+        [Command("rep")]
+        public async Task Rep()
+        {
+            var user = Context.User;
+            var userAccount = UserAccounts.GetAccount(user);
+
+            embed.WithDescription($"{user.Mention} You have `{userAccount.Rep}` rep!");
+            embed.WithColor(Pink);
+            await BE();
+        }
+
         [Command("exp")] //exp
         public async Task EXPCommand()
         {

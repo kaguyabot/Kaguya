@@ -13,7 +13,7 @@ namespace Kaguya.Core.Server_Files
         public string ServerName { get; set; }
         public string commandPrefix { get; set; }
         public bool MessageAnnouncements { get; set; }
-        public List<string> MutedMembers { get; set; }
+        public Dictionary<string, string> MutedMembers { get; set; }
         public List<string> FilteredWords { get; set; }
         public ulong LogDeletedMessages { get; set; }
         public ulong LogMessageEdits { get; set; }
@@ -34,7 +34,7 @@ namespace Kaguya.Core.Server_Files
             ServerName = "";
             commandPrefix = "$";
             MessageAnnouncements = true;
-            MutedMembers = new List<string>();
+            MutedMembers = new Dictionary<string, string>();
             FilteredWords = new List<string>();
             IsBlacklisted = false;
             JoinedUsers = new List<string>();

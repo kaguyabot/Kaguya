@@ -105,6 +105,7 @@ namespace Kaguya.Modules
                 $"\n-Stage.");
 
             embed.WithDescription($"{Context.User.Mention} The user has been rewarded and was sent a DM.");
+            await BE();
             stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 

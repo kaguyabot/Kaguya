@@ -3,6 +3,22 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.9.0
+
+- $bugaward now properly displays a message in chat.
+- There was an issue where the bot was logging an indefinite amount of messages for servers (it stopped at 75k in one server...)
+    This has been fixed, and the bot will only log up to 500 messages for each server (I will delete the message cache so everyone will start fresh).
+    This will also fix all issues with message logging.
+- Added in checks for $ban and $massban - a user may not attempt to ban themselves or the server owner (same with the kick commands).
+- Added console log message for $kaguyaexit command.
+- Added in console command exception handling if it fails to retrieve information from the DBL API.
+- $dr (DeleteRole) will now delete roles even if your capitalization doesn't match the role's capitalization.
+
+Version 1.8.5
+
+- Updated link with $vote to directly take you to the bot's vote page.
+- Added $rep command (with no parameters, you can now view your own rep).
+
 Version 1.8.4
 
 - toggleannouncements was "toggleannouncements1" in the code...?? That has been fixed.

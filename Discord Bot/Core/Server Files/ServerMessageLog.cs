@@ -22,7 +22,7 @@ namespace Kaguya.Core.Server_Files
         public void AddMessage(SocketUserMessage msg)
         {
             LastThousandMessages.Add($"#{LastThousandMessages.Count} ℀ Author: {msg.Author} ℀ Channel: #{msg.Channel} ℀ Message: {msg.Content} ℀ MsgID: {msg.Id} ℀ Time: {DateTime.Now}");
-            if(LastThousandMessages.Count == 500)
+            if(LastThousandMessages.Count >= 500)
             {
                 LastThousandMessages.RemoveAt(0);
             }

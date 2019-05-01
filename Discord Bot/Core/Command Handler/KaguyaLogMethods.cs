@@ -38,10 +38,17 @@ namespace Kaguya.Core.CommandHandler
             AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
 
             Console.WriteLine("\nRetrieving bot from DBL API...");
-            IDblSelfBot me = await dblAPI.GetMeAsync();
-            Console.WriteLine("Pushing stats to DBL API...");
-            await me.UpdateStatsAsync(mutualGuilds.Count());
-            Console.WriteLine("Success.");
+            try
+            {
+                IDblSelfBot me = await dblAPI.GetMeAsync();
+                Console.WriteLine("Pushing stats to DBL API...");
+                await me.UpdateStatsAsync(mutualGuilds.Count());
+                Console.WriteLine("Success.");
+            }
+            catch(Exception e)
+            {
+                logger.ConsoleCriticalAdvisory($"Failed to retrieve DBLAPI information: {e.Message}");
+            }
 
             var serverCountValue = new Dictionary<string, string>
             {
@@ -100,6 +107,7 @@ namespace Kaguya.Core.CommandHandler
 
         public async Task JoinedNewGuild(SocketGuild guild)
         {
+            logger.ConsoleGuildConnectionAdvisory(guild, "Joined new guild");
             var cmdPrefix = Servers.GetServer(guild).commandPrefix;
             var owner = guild.Owner;
             var channels = guild.Channels;
@@ -152,7 +160,6 @@ namespace Kaguya.Core.CommandHandler
             server.ID = guild.Id;
             server.ServerName = guild.Name;
             Servers.SaveServers();
-            logger.ConsoleGuildConnectionAdvisory(guild, "Joined new guild");
         }
 
         public Task LeftGuild(SocketGuild guild)
