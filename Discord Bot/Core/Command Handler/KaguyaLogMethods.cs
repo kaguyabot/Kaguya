@@ -328,8 +328,9 @@ namespace Kaguya.Core.CommandHandler
             var server = (message.Channel as SocketGuildChannel).Guild;
             var user = (message as SocketUserMessage).Author;
             var author = (user as SocketGuildUser).GuildPermissions;
+            var content = message.Content.Split(' ');
             Server currentServer = Servers.GetServer(server);
-            if (author.Administrator && message.Content.StartsWith("$setlogchannel") || author.Administrator && message.Content.StartsWith("$log") && !message.Content.EndsWith("list") || !message.Content.EndsWith("types"))
+            if (author.Administrator && content.Contains("$setlogchannel") || author.Administrator && content.Contains("$log"))
             {
                 ulong loggingChannelID = currentServer.LogChangesToLogSettings;
                 if (loggingChannelID == 0) return;
