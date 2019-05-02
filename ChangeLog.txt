@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.9.2
+
+- The "owner greet DM" for lack of better word has been tweaked.
+- Clear will delete each message individually, reducing the change of the deleted message staying cached on the discord user's screen.
+
 Version 1.9.1 (Bug fixes)
 
 - Mute command added to $h command.

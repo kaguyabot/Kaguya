@@ -123,7 +123,7 @@ namespace Kaguya.Core.CommandHandler
                 $"Second, the first command `({cmdPrefix}exp)` for example, may be very slow, as Kaguya has to update all channel permissions to allow for her use in your server. Do not make any changes " +
                 $"to these permissions. " +
                 $"Next, I recommend you check out the `{cmdPrefix}help` and `{cmdPrefix}helpdm` commands before continuing. If you have any troubles using Kaguya, resort to these commands!" +
-                $"\nIn addition, Kaguya's default prefix is `$`. If you have another bot that uses `$`, don't worry as her prefix is fully customizable (up to two characters). In chat, tag Kaguya (`@Kaguya#2708`) " +
+                $"\nIn addition, Kaguya's default prefix is `$`. If you have another bot that uses `$`, don't worry as her prefix is fully customizable (up to three characters). In chat, tag Kaguya (`@Kaguya#2708`) " +
                 $"and type `prefix <new prefix>` to edit her prefix. This way, you won't accidentally change the prefix of another bot that also uses the `$` symbol. If you ever wish to reset your prefix " +
                 $"back to the default, tag Kaguya and type `prefix` with nothing else." +
                 $"\nExamples of how to edit and reset the prefix: " +
@@ -329,7 +329,7 @@ namespace Kaguya.Core.CommandHandler
             var user = (message as SocketUserMessage).Author;
             var author = (user as SocketGuildUser).GuildPermissions;
             Server currentServer = Servers.GetServer(server);
-            if (author.Administrator && message.Content.Contains("$setlogchannel") || author.Administrator && message.Content.Contains("$log"))
+            if (author.Administrator && message.Content.StartsWith("$setlogchannel") || author.Administrator && message.Content.StartsWith("$log") && !message.Content.EndsWith("list") || !message.Content.EndsWith("types"))
             {
                 ulong loggingChannelID = currentServer.LogChangesToLogSettings;
                 if (loggingChannelID == 0) return;
