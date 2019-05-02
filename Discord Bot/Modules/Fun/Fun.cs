@@ -15,6 +15,7 @@ using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
 using Kaguya.Core;
 using System.Diagnostics;
+using NekosSharp;
 
 namespace Kaguya.Modules
 {
@@ -30,6 +31,8 @@ namespace Kaguya.Modules
         public string botToken = Config.bot.Token;
         Logger logger = new Logger();
         Stopwatch stopWatch = new Stopwatch();
+        readonly NekoClient nekoClient = new NekoClient("Kaguya");
+
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -40,12 +43,22 @@ namespace Kaguya.Modules
         public async Task Echo([Remainder]string message = "")
         {
             stopWatch.Start();
+
+            var filteredWords = Servers.GetServer(Context.Guild).FilteredWords;
+
             if (message == "")
             {
                 embed.WithTitle("Echo");
                 embed.WithDescription($"**{Context.User.Mention} No message specified!**");
                 embed.WithColor(Red);
-                await BE(); return;
+                await BE(); logger.ConsoleCommandLog(Context); return;
+            }
+            if (message.Contains(filteredWords.FirstOrDefault(x => x.Contains(filteredWords.ToString()))))
+            {
+                embed.WithTitle("Echo");
+                embed.WithDescription($"**{Context.User.Mention} Message was a filtered word!**");
+                embed.WithColor(Red);
+                await BE(); logger.ConsoleCommandLog(Context); return;
             }
             embed.WithTitle("Echo");
             embed.WithDescription(message);
@@ -97,6 +110,17 @@ namespace Kaguya.Modules
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             
+        }
+
+        [Command("slap")]
+        public async Task Slap(IGuildUser user)
+        {
+            stopWatch.Start();
+            var slapper = await nekoClient.Action_v3.SlapGif();
+            embed.WithTitle($"{Context.User.Username} slaped {user.Username}!");
+            embed.WithImageUrl(slapper.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
         //[Command("blackjack1", RunMode = RunMode.Async)]

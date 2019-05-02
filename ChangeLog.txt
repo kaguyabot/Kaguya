@@ -13,7 +13,13 @@ Version 1.9.0
 - Added console log message for $kaguyaexit command.
 - Added in console command exception handling if it fails to retrieve information from the DBL API.
 - $dr (DeleteRole) will now delete roles even if your capitalization doesn't match the role's capitalization.
-
+- Fixed a bug with $masskick where it would ban the users instead of kick them.
+- $masskick and $massban now reply with embeds instead of normal replies (looks prettier).
+- Wording of some command responses has been updated.
+- Resources folder (user accounts, servers, message logs, etc.) will be saved to the desktop every 15 minutes. No manual backups ever needed again :D
+- Patched a loophole that allowed echoed messages with filtered phrases in them to pass through and be sent. Now, the bot will delete both the message and the echoed message immediately.
+- Added the $mute command! This is a very, very powerful mute command. Use $h mute for more information!
+- Fixed a bug with $addpoints ~ the user would be mentioned not the target.
 
 Version 1.8.5
 

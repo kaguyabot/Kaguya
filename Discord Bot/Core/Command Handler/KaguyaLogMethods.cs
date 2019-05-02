@@ -37,6 +37,7 @@ namespace Kaguya.Core.CommandHandler
 
             AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
 
+
             Console.WriteLine("\nRetrieving bot from DBL API...");
             try
             {
@@ -45,7 +46,7 @@ namespace Kaguya.Core.CommandHandler
                 await me.UpdateStatsAsync(mutualGuilds.Count());
                 Console.WriteLine("Success.");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.ConsoleCriticalAdvisory($"Failed to retrieve DBLAPI information: {e.Message}");
             }
@@ -56,13 +57,12 @@ namespace Kaguya.Core.CommandHandler
             };
 
             int i = 0;
-            foreach(var guild in mutualGuilds)
+            foreach (var guild in mutualGuilds)
             {
                 for (int j = 0; j <= guild.MemberCount; j++)
                 {
                     i++;
                 }
-
             }
 
             Console.ForegroundColor = ConsoleColor.White;

@@ -63,7 +63,7 @@ namespace Kaguya.Modules
                 userAccount.Points += points;
                 UserAccounts.SaveAccounts();
                 embed.WithTitle("Adding Points");
-                embed.WithDescription($"{Context.User.Mention} has been awarded {points} points.");
+                embed.WithDescription($"{user.Mention} has been awarded {points} points.");
                 embed.WithColor(Pink);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -74,7 +74,7 @@ namespace Kaguya.Modules
                 userAccount.Points += points;
                 UserAccounts.SaveAccounts();
                 embed.WithTitle("Adding Points");
-                embed.WithDescription($"{Context.User.Mention} has been awarded {points} points.");
+                embed.WithDescription($"{user.Mention} has been awarded {points} points.");
                 embed.WithColor(Pink);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);

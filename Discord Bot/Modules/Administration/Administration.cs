@@ -11,8 +11,10 @@ using Kaguya.Core.Commands;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using Kaguya.Core;
+using Kaguya.Core.Command_Handler;
+using System.Timers;
 
-
+#pragma warning disable CS0472
 
 namespace Kaguya.Modules
 {
@@ -28,6 +30,8 @@ namespace Kaguya.Modules
         public string botToken = Config.bot.Token;
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
+        readonly DiscordSocketClient _client = Global.Client;
+        
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -36,119 +40,228 @@ namespace Kaguya.Modules
 
         [Command("mute")]
         [Alias("m")]
-        [RequireUserPermission(GuildPermission.ManageMessages)]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        [RequireBotPermission(GuildPermission.ManageMessages)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.MuteMembers)]
         public async Task MuteMembers(string timeout, [Remainder]List<SocketGuildUser> users)
         {
             stopWatch.Start();
+
             var server = Servers.GetServer(Context.Guild);
             var cmdPrefix = server.commandPrefix;
             var roles = Context.Guild.Roles;
             var channels = Context.Guild.Channels;
 
-            var result = from a in roles
-                         where a.Name == "kaguya-mute"
-                         select a;
-
             var muteRole = roles.FirstOrDefault(x => x.Name == "kaguya-mute");
 
-
-            var regex = new Regex("/([0-9])*s|([0-9])*m|([0-9])*h|([0-9])*d|([0-9])*w/g");
-
-            if (regex.IsMatch(timeout))
+            if (!roles.Contains(muteRole))
             {
-                Regex[] regexs = {
-                new Regex("(([0-9])*s)"),
-                new Regex("(([0-9])*m)"),
-                new Regex("(([0-9])*h)"),
-                new Regex("(([0-9])*d)"),
-                new Regex("(([0-9])*w)") };
+                await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
+                logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
 
-                var s = regexs[0].Match(timeout).Value;
-                var m = regexs[1].Match(timeout).Value;
-                var h = regexs[2].Match(timeout).Value;
-                var d = regexs[3].Match(timeout).Value;
-                var w = regexs[4].Match(timeout).Value;
+                embed.WithDescription($"**{Context.User.Mention} I needed to create the mute role for first time setup! Please retry this command.**");
+                embed.WithColor(Violet);
+                await BE(); return;
 
-                var seconds = s.Split('s').First();
-                var minutes = m.Split('m').First();
-                var hours = h.Split('h').First();
-                var days = d.Split('d').First();
-                var weeks = w.Split('w').First();
+            }
 
-                int.TryParse(seconds, out int sec);
-                int.TryParse(minutes, out int min);
-                int.TryParse(hours, out int hour);
-                int.TryParse(days, out int day);
-                int.TryParse(weeks, out int week);
+            var regex = new Regex("/([0-9])*s|([0-9])*m|([0-9])*h|([0-9])*d/g");
 
-                //Convert all times into seconds
+            Regex[] regexs = {
+            new Regex("(([0-9])*s)"),
+            new Regex("(([0-9])*m)"),
+            new Regex("(([0-9])*h)"),
+            new Regex("(([0-9])*d)") };
 
-                //min = min * 60;
-                //hour = hour * 3600;
-                //day = day * 86400;
-                //week = week * 604800;
+            var s = regexs[0].Match(timeout).Value;
+            var m = regexs[1].Match(timeout).Value;
+            var h = regexs[2].Match(timeout).Value;
+            var d = regexs[3].Match(timeout).Value;
 
-                TimeSpan timeSpan = new TimeSpan(day + (week / 7), hour, min, sec);
+            var seconds = s.Split('s').First();
+            var minutes = m.Split('m').First();
+            var hours = h.Split('h').First();
+            var days = d.Split('d').First();
 
-                if (!roles.Contains(muteRole))
+            int.TryParse(seconds, out int sec);
+            int.TryParse(minutes, out int min);
+            int.TryParse(hours, out int hour);
+            int.TryParse(days, out int day);
+
+            TimeSpan timeSpan = new TimeSpan(day, hour, min, sec);
+
+            int i = 0;
+
+            if(!(Context.Channel as SocketGuildChannel).GetPermissionOverwrite(muteRole).HasValue)
+            {
+                embed.WithDescription($"{Context.User.Mention} Performing first time setup. Please wait...");
+                embed.WithColor(Violet);
+                await BE();
+            }
+
+            foreach (var channel in channels)
+            {
+                if (!channel.GetPermissionOverwrite(muteRole).HasValue)
                 {
-                    await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
-                    logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
-                    var rolesUpdated = Context.Guild.Roles;
-                    muteRole = rolesUpdated.FirstOrDefault(x => x.Name == "kaguya-mute");
-                }
-
-                foreach (var channel in channels)
-                {
-
-                    if (!channel.GetPermissionOverwrite(muteRole).HasValue)
-                    {
-                        Console.WriteLine("Overwriting Permission for Mute Command...");
-                        var permissionOverwrite = new OverwritePermissions(PermValue.Inherit, PermValue.Inherit, PermValue.Deny, PermValue.Inherit, PermValue.Deny);
-                        await channel.AddPermissionOverwriteAsync(muteRole, permissionOverwrite); //Denies ability to add reactions and send messages.
-                    }
-                }
-
-                foreach (SocketGuildUser user in users)
-                {
-                    try
-                    {
-                        await user.AddRoleAsync(muteRole);
-                        server.MutedMembers.Add(user.Id.ToString(), timeSpan.Duration().ToString());
-                        Servers.SaveServers();
-
-                        embed.WithDescription($"{Context.User.Mention} User `{user.Username}#{user.Discriminator}` " +
-                            $"with ID `{user.Id}` has been muted for `{timeout}`");
-                        embed.WithColor(Violet);
-                        await BE();
-
-                        stopWatch.Stop();
-                        logger.ConsoleGuildAdvisory(Context.Guild, user, stopWatch.ElapsedMilliseconds, $"Member has been muted.");
-                    }
-                    catch(System.ArgumentException e)
-                    {
-                        embed.WithDescription($"**{Context.User.Mention} This user is already muted!**");
-                        embed.WithColor(Red);
-                        logger.ConsoleCriticalAdvisory(e, "Exception handled: User is already muted!");
-                        await BE();
-                    }
+                    i++;
+                    var permissionOverwrite = new OverwritePermissions(PermValue.Inherit, PermValue.Inherit, PermValue.Deny, PermValue.Inherit, PermValue.Deny);
+                    await channel.AddPermissionOverwriteAsync(muteRole, permissionOverwrite); //Denies ability to add reactions and send messages.
                 }
             }
-            else
+            if(i > 0)
+                logger.ConsoleGuildAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
+
+            foreach (var user in users)
             {
-                embed.WithDescription($"**{Context.User.Mention} You did not give me a proper time!**");
-                embed.WithFooter($"See {cmdPrefix}h mute for proper usage!");
-                embed.WithColor(Red);
-                await BE();
-                logger.ConsoleCommandLog(Context, CommandError.UnmetPrecondition, "Invalid mute time specification.");
+                MuteRetry:
+                try
+                {
+                    var s1 = " seconds";
+                    var m1 = " minutes";
+                    var h1 = " hours";
+                    var d1 = " days";
+
+                    if (sec < 1)
+                        s1 = null;
+                    if (min < 1)
+                        m1 = null;
+                    if (hour < 1)
+                        h1 = null;
+                    if (day < 1)
+                        d1 = null;
+
+                    if (sec == 1)
+                        s1 = " second";
+                    if (min == 1)
+                        m1 = " minute";
+                    if (hour == 1)
+                        h1 = " hour";
+                    if (day == 1)
+                        d1 = " day";
+
+                    server.MutedMembers.Add(user.Id.ToString(), timeSpan.Duration().ToString());
+                    Servers.SaveServers();
+                    timeSpanDuration = timeSpan.Duration();
+                    await user.AddRoleAsync(muteRole);
+
+                    //Unmute Timer Start
+
+                    Timer timer = new Timer(timeSpan.TotalMilliseconds);
+                    timer.Enabled = true;
+                    timer.AutoReset = false;
+                    timer.Elapsed += UnMute_User_Async_Elapsed;
+
+                    //Unmute Timer End
+
+                    embed.WithDescription($"{Context.User.Mention} User `{user.Username}#{user.Discriminator}` " +
+                        $"has been muted for `{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1}`");
+                    embed.WithColor(Violet);
+                    await BE();
+                    stopWatch.Stop();
+                    logger.ConsoleGuildAdvisory(Context.Guild, $"User muted for {timeout}.");
+                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                }
+                catch (System.ArgumentException)
+                {
+                    server.MutedMembers.Remove($"{Context.User.Id}");
+                    goto MuteRetry;
+                }
             }
         }
 
+        private TimeSpan timeSpanDuration { get; set; }
+
+        private void UnMute_User_Async_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var mutedMembers = Servers.GetServer(Context.Guild).MutedMembers;
+            var muteRole = _client.GetGuild(Context.Guild.Id).Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
+
+            foreach (var member in mutedMembers.ToList())
+            {
+                if (member.Value.Contains(timeSpanDuration.ToString()))
+                {
+                    var result = ulong.TryParse(member.Key, out ulong ID);
+                    var user = _client.GetGuild(Context.Guild.Id).GetUser(ID);
+
+                    user.RemoveRoleAsync(muteRole); //Removes mute role from user.
+                    mutedMembers.Remove(ID.ToString()); //Removes muted member from the dictionary.
+                    Servers.SaveServers();
+
+                    logger.ConsoleTimerElapsed($"User [{user.Username}#{user.Discriminator} | {user.Id}] has been unmuted.");
+                }
+                else
+                {
+                    logger.ConsoleGuildAdvisory("I failed to execute the unmute timer.");
+                }
+            }
+
+        }
+
+        [Command("mute")]
+        [Alias("m")]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        [RequireBotPermission(GuildPermission.MuteMembers)]
+        public async Task MuteMembers([Remainder]List<SocketGuildUser> users)
+        {
+            stopWatch.Start();
+
+            var server = Servers.GetServer(Context.Guild);
+            var cmdPrefix = server.commandPrefix;
+            var roles = Context.Guild.Roles;
+            var channels = Context.Guild.Channels;
+
+            var muteRole = roles.FirstOrDefault(x => x.Name == "kaguya-mute");
+
+            if (!roles.Contains(muteRole))
+            {
+                await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
+                embed.WithDescription($"**{Context.User.Mention} I didn't find my mute role, so I created it. Please try again!**");
+                embed.WithColor(Red);
+                await BE();
+                logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                return;
+            }
+
+            foreach(var user in users)
+            {
+                await user.AddRoleAsync(muteRole);
+                logger.ConsoleGuildAdvisory(Context.Guild, "User muted.");
+            }
+        }
+
+        [Command("unmute")]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        [RequireBotPermission(GuildPermission.MuteMembers)]
+        public async Task UnMute([Remainder]List<SocketGuildUser> users)
+        {
+            stopWatch.Start();
+            var roles = Context.Guild.Roles;
+            var muteRole = roles.FirstOrDefault(x => x.Name == "kaguya-mute");
+            var mutedMembers = Servers.GetServer(Context.Guild).MutedMembers;
+
+            int i = 0;
+
+            foreach(var user in users)
+            {
+                await user.RemoveRoleAsync(muteRole);
+                mutedMembers.Remove(user.Id.ToString());
+                Servers.SaveServers();
+                i++; logger.ConsoleGuildAdvisory(Context.Guild, "User unmuted.");
+            }
+
+            embed.WithDescription($"{Context.User.Mention} Unmuted `{i}` user(s).");
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop();
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
         [Command("filteradd")] //administration
-        [Alias("fa")]
+        [Alias("fa1")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task FilterAdd([Remainder]string phrase) //Adds a word to the server word/phrase filter
@@ -550,25 +663,30 @@ namespace Kaguya.Modules
         public async Task MassBan([Remainder]List<SocketGuildUser> users)
         {
             stopWatch.Start();
-
             var sOwner = Context.Guild.Owner;
 
             foreach (var user in users)
             {
                 if(user.Id == Context.User.Id)
                 {
-                    await ReplyAsync($"**{Context.User.Mention} You may not ban yourself!**");
+                    embed.WithDescription($"**{Context.User.Mention} You may not ban yourself!**");
+                    embed.WithColor(Red);
+                    await BE();
                     continue;
                 }
 
                 if (user.Id == sOwner.Id)
                 {
-                    await ReplyAsync($"**{Context.User.Mention} You may not ban the server owner!**");
+                    embed.WithDescription($"**{Context.User.Mention} You may not ban the server owner!**");
+                    embed.WithColor(Red);
+                    await BE();
                     continue;
                 }
 
                 await user.BanAsync();
-                await ReplyAsync($"**{user} has been permanently banned by {Context.User.Mention}.**");
+                embed.WithDescription($"**{user} has been permanently banned by {Context.User.Mention}.**");
+                embed.WithColor(Violet);
+                await BE();
             }
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -598,12 +716,14 @@ namespace Kaguya.Modules
                     continue;
                 }
 
-                await user.BanAsync();
-                await ReplyAsync($"**{user} has been kicked by {Context.User.Mention}.**");
+                await user.KickAsync();
+                embed.WithDescription($"**{user} has been kicked by {Context.User.Mention}.**");
+                embed.WithColor(Pink);
+                await BE();
             }
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            logger.ConsoleGuildAdvisory("Users masskicked.");
+            logger.ConsoleGuildAdvisory(Context.Guild, "Users masskicked.");
         }
 
         [Command("shadowban")]
@@ -613,7 +733,7 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
 
-            embed.WithDescription($"Shadowbanning `{user.Nickname}` [{user.Username}#{user.Discriminator}]...");
+            embed.WithDescription($"Shadowbanning `[{user.Username}#{user.Discriminator}]`...");
             embed.WithColor(Red);
             await BE();
 
@@ -627,7 +747,7 @@ namespace Kaguya.Modules
             }
 
             embed.WithDescription($"**{Context.User.Mention} User `{user.Username}#{user.Discriminator}` has been shadowbanned from " +
-                $"{Context.Guild.Name} [{i} channels]**");
+                $"`{Context.Guild.Name} [{i} channels]`**");
             embed.WithColor(Red);
             await BE();
             stopWatch.Stop();
@@ -642,7 +762,7 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
 
-            embed.WithDescription($"Un-Shadow Banning `{user.Nickname}` [{user.Username}#{user.Discriminator}]...");
+            embed.WithDescription($"Un-Shadow Banning `[{user.Username}#{user.Discriminator}]`...");
             embed.WithColor(Red);
             await BE();
 
@@ -652,11 +772,11 @@ namespace Kaguya.Modules
             foreach (var channel in channels)
             {
                 i++;
-                await channel.AddPermissionOverwriteAsync(user, OverwritePermissions.InheritAll);
+                await channel.RemovePermissionOverwriteAsync(user);
             }
 
             embed.WithDescription($"**{Context.User.Mention} User `{user.Username}#{user.Discriminator}` has been un-shadowbanned from " +
-                $"{Context.Guild.Name} [{i} channels]**");
+                $"`{Context.Guild.Name} [{i} channels]`**");
             embed.WithColor(Red);
             await BE();
             stopWatch.Stop();

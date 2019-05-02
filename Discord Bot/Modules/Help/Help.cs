@@ -211,6 +211,14 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}8ball <question>`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "slap":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Slapping! | `{cmdPrefix}slap`");
+                    embed.WithDescription($"{Context.User.Mention} Slap someone! An emotionally-accurate gif will be displayed in chat to show your victim how you really feel." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}slap <ID> / {cmdPrefix}slap <Nickname> / {cmdPrefix}slap <User#0000>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "timely":
                 case "t":
                     stopWatch.Start();
@@ -252,6 +260,22 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nKicks an individual member from the server." +
                         $"\nSyntax: `{cmdPrefix}kick @User#0000`.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "mute":
+                case "m":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Muting Users | `{cmdPrefix}mute`, `{cmdPrefix}m`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Mute Members, Manage Roles**" +
+                        $"\n" +
+                        $"\nMutes an individual user or a list of users from the server. This command may also have a time associated with it " +
+                        $"so that you may \"mass mute\" members for a length of time, or indefinitely. This time may go as far as thousands of days. " +
+                        $"Examples of time formats: `12s10m1h3d` for 3 days, 1 hour, 10 minutes, and one second. `1m30s`, `24h`, `15m23s18h` are all valid time formats, " +
+                        $"they can be in any order! Muting a user will apply the `kaguya-mute` role to them. The mute command will create this role automatically on first time use. " +
+                        $"The `kaguya-mute` role will deny the \"Add Reactions\" and \"Send Messages\" permissions to any users that have the role." +
+                        $"\n" +
+                        $"\nSyntax `<Required parameter>, [Optional parameter]`: " +
+                        $"\n`{cmdPrefix}mute [time {{<Num>s<Num>m<Num>h<Num>d}}] <list of users {{IDs, Username, or Mention}}>`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "shadowban":
@@ -408,7 +432,7 @@ namespace Kaguya.Modules
                         $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use Kaguya again. These users are permanently banned from the server this command is executed in." +
                         $"These users will have all of their EXP and Points reset to zero, and will be permanently filtered from receiving EXP and executing Kaguya commands." +
                         $"\nSyntax: `{cmdPrefix}massblacklist @username#123` | `{cmdPrefix}massblacklist @username#123 @ToxicPlayer123#7777 @SuckySmellySushi#1234`");
-                    embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS. The only way to unblacklist someone is to edit your accounts.json file!!");
+                    embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "unblacklist":
@@ -662,7 +686,7 @@ namespace Kaguya.Modules
                 "\n`logtypes [loglist]`", true);
             embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`weekly` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
-            embed.AddField("Fun", "`echo` \n`pick` \n`8ball`", true);
+            embed.AddField("Fun", "`echo` \n`pick` \n`8ball` \n`slap`", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]` \n`bug`", true);
             embed.AddField("osu!", "`osu` \n`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);

@@ -175,6 +175,7 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}echo" +
                     $"\n{cmdPrefix}pick" +
                     $"\n{cmdPrefix}8ball" +
+                    $"\n{cmdPrefix}slap" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n" +
                     $"\n```");

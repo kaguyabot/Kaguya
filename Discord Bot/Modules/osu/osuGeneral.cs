@@ -407,7 +407,6 @@ namespace Kaguya.Modules
             embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            
         }
 
         [Command("delteams")] //osu

@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Timers;
 using System.Collections.Generic;
 using System.Reflection;
+using System.IO;
 
 namespace Kaguya.Core.Command_Handler
 {
@@ -245,5 +246,44 @@ namespace Kaguya.Core.Command_Handler
             ServerMessageLogs.SaveServerLogging();
             logger.ConsoleTimerElapsed($"Removed {i} lines across {i2} server message logs.");
         }
+
+        public Task ResourcesBackup()
+        {
+            Timer timer = new Timer(900000); //Every 15 minutes, backup the resources folder.
+            timer.Elapsed += Resources_Backup_Elapsed;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            return Task.CompletedTask;
+        }
+
+        private void Resources_Backup_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string executingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            copyDirectory(@$"{executingDirectory}/Resources", $"{desktop}/Resources Backup");
+
+            logger.ConsoleTimerElapsed($"Backed up Resources files.");
+        }
+
+        public static void copyDirectory(string Src, string Dst)
+        {
+            String[] Files;
+
+            if (Dst[Dst.Length - 1] != Path.DirectorySeparatorChar)
+                Dst += Path.DirectorySeparatorChar;
+            if (!Directory.Exists(Dst)) Directory.CreateDirectory(Dst);
+            Files = Directory.GetFileSystemEntries(Src);
+            foreach (string Element in Files)
+            {
+                // Sub directories
+                if (Directory.Exists(Element))
+                    copyDirectory(Element, Dst + Path.GetFileName(Element));
+                // Files in directory
+                else
+                    File.Copy(Element, Dst + Path.GetFileName(Element), true);
+            }
+        }
+
+        
     }
 }
