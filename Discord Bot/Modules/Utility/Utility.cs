@@ -87,6 +87,7 @@ namespace Kaguya.Modules
                         $"\n{cmdPrefix}massban" +
                         $"\n{cmdPrefix}massblacklist" +
                         $"\n{cmdPrefix}masskick" +
+                        $"\n{cmdPrefix}mute [m]" +
                         $"\n{cmdPrefix}removeallroles [rar]" +
                         $"\n{cmdPrefix}resetlogchannel [rlog]" +
                         $"\n{cmdPrefix}setlogchannel [log]" +
@@ -136,6 +137,7 @@ namespace Kaguya.Modules
                 $"\n{cmdPrefix}pointsadd [addpoints]" +
                 $"\n{cmdPrefix}timely [t]" +
                 $"\n{cmdPrefix}timelyreset" +
+                $"\n{cmdPrefix}weekly" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 $"\n```"
@@ -153,13 +155,12 @@ namespace Kaguya.Modules
                 "\n" +
                 $"\n{cmdPrefix}author" +
                 $"\n{cmdPrefix}commands [cmds]" +
+                $"\n{cmdPrefix}modules [mdls]" +
                 $"\n{cmdPrefix}createtextchannel [ctc]" +
                 $"\n{cmdPrefix}createvoicechannel [cvc]" +
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
                 $"\n{cmdPrefix}deletevoicechannel [dvc]" +
                 $"\n{cmdPrefix}prefix" +
-                $"\n{cmdPrefix}vote" +
-                $"\n{cmdPrefix}voteclaim" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 $"\n```");
@@ -171,6 +172,7 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Module: Fun");
                 embed.WithDescription("```css" +
+                    "\nAll commands in category: Fun" +
                     "\n" +
                     $"\n{cmdPrefix}echo" +
                     $"\n{cmdPrefix}pick" +
@@ -187,6 +189,7 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Module: osu!");
                 embed.WithDescription("```css" +
+                    "\nAll commands in category: osu!" +
                     "\n" +
                     $"\n{cmdPrefix}osu" +
                     $"\n{cmdPrefix}createteamrole [ctr]" +
@@ -205,10 +208,13 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Module: Help");
                 embed.WithDescription("```css" +
+                    "\nAll commands in category: Help" +
                     "\n" +
                     $"\n{cmdPrefix}help [h]" +
                     $"\n{cmdPrefix}helpdm [hdm]" +
                     $"\n{cmdPrefix}bug" +
+                    $"\n{cmdPrefix}vote" +
+                    $"\n{cmdPrefix}voteclaim" +
                     $"\n" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```");
@@ -220,7 +226,7 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Module: NSFW");
                 embed.WithDescription("```css" +
-                    "\n" +
+                    "\nAll commands in category: NSFW" +
                     "\nNote: ALL NSFW images are 2D!" +
                     "\n" +
                     $"\n{cmdPrefix}n lewd" +
@@ -335,7 +341,8 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             var channel = await Context.Guild.CreateTextChannelAsync(name);
-            embed.WithDescription($"{Context.User.Mention} has successfully created the channel #{name}.");
+            embed.WithTitle("Text Channel Created");
+            embed.WithDescription($"{Context.User.Mention} has successfully created the text channel `#{name}`.");
             embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -353,6 +360,7 @@ namespace Kaguya.Modules
                 if (Channel == channel)
                 {
                     await channel.DeleteAsync();
+                    embed.WithTitle("Text Channel Deleted");
                     embed.WithDescription($"{Context.User.Mention} has successfully deleted the text channel {(channel.Name)}.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
@@ -369,6 +377,7 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             var channel = await Context.Guild.CreateVoiceChannelAsync(name);
+            embed.WithTitle("Voice Channel Created");
             embed.WithDescription($"{Context.User.Mention} has successfully created the voice channel #{name}.");
             embed.WithColor(Pink);
             await BE(); stopWatch.Stop();

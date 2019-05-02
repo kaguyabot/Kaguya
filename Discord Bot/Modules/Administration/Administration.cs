@@ -485,20 +485,43 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             var roles = user.Roles;
+            int i = 0;
 
             foreach (IRole role in roles)
             {
                 if (role != Context.Guild.EveryoneRole)
                 {
-                    await user.RemoveRoleAsync(role);
+                    try
+                    {
+                        i++;
+                        await user.RemoveRoleAsync(role);
+                    }
+                    catch(Discord.Net.HttpException)
+                    {
+                        i--;
+                        embed.WithDescription($"{Context.User.Mention} I failed to remove {role.Mention} from `{user}`. This most likely occurred because this role is higher than yours in the hierarchy, " +
+                            $"or this role is automatically managed by an integration (bot specific roles).");
+                        embed.WithColor(Red);
+                        await BE();
+                    }
                 }
             }
 
-            embed.WithTitle("Remove All Roles");
-            embed.WithDescription($"All roles have been removed from `{user}`.");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            if (i > 0)
+            {
+                embed.WithTitle("Remove All Roles");
+                embed.WithDescription($"`{i}` roles have been removed from `{user}`.");
+                embed.WithColor(Pink);
+                await BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            }
+            else
+            {
+                embed.WithDescription($"Failed to remove roles from `{user}`.");
+                embed.WithColor(Red);
+                await BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to remove roles from user.");
+            }
         }
 
         [Command("deleterole")] //admin
@@ -562,6 +585,7 @@ namespace Kaguya.Modules
             embed.WithTitle("Leaving Server");
             embed.WithDescription($"Administrator {Context.User.Mention} has directed me to leave. Goodbye!");
             embed.WithColor(Red);
+            await BE();
             await Context.Guild.LeaveAsync();
             logger.ConsoleGuildAdvisory(Context.Guild, "KaguyaExit command executed.");
         }

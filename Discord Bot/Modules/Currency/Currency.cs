@@ -116,7 +116,7 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             var userAccounts = UserAccounts.GetAllAccounts();
-            int i = 1;
+            int i = 0;
             foreach (UserAccount account in userAccounts)
             {
                 i++;
@@ -161,12 +161,10 @@ namespace Kaguya.Modules
             bonus = command.TimelyPoints;
             Random rand = new Random();
             bool critical = rand.Next(100) < 14; ;
-            var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
-
+            var difference = DateTime.Now - userAccount.LastReceivedTimelyPoints;
 
             if (!CanReceiveTimelyPoints(userAccount, (int)timeout))
             {
-                var differenceTimely = DateTime.Now - userAccount.LastReceivedTimelyPoints;
                 var formattedTime = $"{difference.Hours}h {difference.Minutes}m {difference.Seconds}s";
                 embed.WithTitle("Timely Points");
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
@@ -206,6 +204,7 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **You do not have enough points! You need at least `{memberCount - userPoints}` more points to execute this command!**");
+                embed.WithColor(Red);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User does not have enough points to execute this command."); return;
             }
@@ -213,6 +212,7 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **You do not have enough members in this server! 25 non-bot members must be present in the server for this command to work.**");
+                embed.WithColor(Red);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Guild does not have at least 25 non-bot members."); return;
             }

@@ -97,7 +97,8 @@ namespace Kaguya.Modules
                     stopWatch.Start();
                     embed.WithTitle($"Help: EXP | `{cmdPrefix}exp`");
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}exp`." +
-                        $"\nReturns the value of experience points a user has in their account.");
+                        $"\nReturns the value of experience points the user has in their account." +
+                        $"\nSyntax: `{cmdPrefix}exp`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "expadd":
@@ -105,8 +106,8 @@ namespace Kaguya.Modules
                     stopWatch.Start();
                     embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd` / `{cmdPrefix}addexp");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
-                        $"\n" +
-                        $"\n{Context.User.Mention} Syntax: `{cmdPrefix}expadd <number of experience points to add>`. The number of exp you are adding must be a positive whole number.");
+                        $"\n{Context.User.Mention} Adds EXP points to the specified user. The number of exp you are adding must be a positive whole number." +
+                        $"\nSyntax: `{cmdPrefix}expadd <number of experience points to add> <User {{ID, Name, Mention}}>`.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "points":
@@ -121,8 +122,8 @@ namespace Kaguya.Modules
                     stopWatch.Start();
                     embed.WithTitle($"Help: Adding Points | `{cmdPrefix}pointsadd`, `{cmdPrefix}addpoints`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
-                        $"\n" +
-                        $"\n{Context.User.Mention} Syntax: `{cmdPrefix}pointsadd <number of points to add> <user>`. The number of points you are adding must be a positive whole number.");
+                        $"\n{Context.User.Mention} Adds points to the specified user's kaguya account. The number of points you are adding must be a positive whole number." +
+                        $"\nSyntax: `{cmdPrefix}pointsadd <number of points to add> <User {{ID, Name, Mention}}>`.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "level":
@@ -149,6 +150,16 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Displays a list of commands for the specified module. Use {cmdPrefix}modules " +
                         $"for the list of modules you may pick from. Modules are essentially command groups seperated by category." +
                         $"\nSyntax: `{cmdPrefix}cmds <module>`, `{cmdPrefix}cmds administrator`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "modules":
+                case "mdls":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Modules | `{cmdPrefix}modules` / `{cmdPrefix}mdls`");
+                    embed.WithDescription($"{Context.User.Mention} Displays a list of modules that contain commands. Use `{cmdPrefix}cmds <module>` " +
+                        $"to see the commands list for that module." +
+                        $"\nSyntax: `{cmdPrefix}modules`, `{cmdPrefix}mdls`");
+                    embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "deletetextchannel":
                 case "dtc":
@@ -168,10 +179,9 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Creating Voice Channels | `{cmdPrefix}createvoicechannel`, `{cmdPrefix}cvc`");
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
                         "\n" +
-                        $"\n{Context.User.Mention} Creates a voice channel with the speficied name. Syntax: `{cmdPrefix}createvoicechannel <channel name>`. " +
+                        $"\n{Context.User.Mention} Creates a voice channel with the speficied name." +
                         $"\nThis name can have spaces." +
-                        $"\nSyntax: `{cmdPrefix}createvoicechannel <channel name>`." +
-                        $"\nExample: `{cmdPrefix}cvc testing 123`.");
+                        $"\nSyntax: `{cmdPrefix}createvoicechannel <channel name>`.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "deletevoicechannel":
@@ -181,9 +191,17 @@ namespace Kaguya.Modules
                     embed.WithDescription("**Permissions Required: Manage Channels**" +
                         "\n" +
                         $"\n{Context.User.Mention} Deletes a voice channel with the speficied name. " +
-                        $"\nThis name can **not** have spaces. Type the text channel exactly as displayed; If the text channel contains a `-`, type that in." +
+                        $"\nThis name can have spaces. Replace the `-` symbols with spaces." +
                         $"\nSyntax: `{cmdPrefix}deletevoicechannel <channel name>`." +
-                        $"Example: `{cmdPrefix}deletevoicechannel super-long-name-with-lots-of-spaces`.");
+                        $"Example: `{cmdPrefix}deletevoicechannel super long name with lots of spaces`.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "createrole":
+                case "cr":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Creating Roles | `{cmdPrefix}createrole`, `{cmdPrefix}cr`");
+                    embed.WithDescription($"{Context.User.Mention} Creates a role with the specified name. The role will have no special permissions or colors." +
+                        $"\nSyntax: `{cmdPrefix}createrole <name>`, `{cmdPrefix}cr <name>`.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "echo":
@@ -245,11 +263,8 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Clearing Messages | `{cmdPrefix}clear`, `{cmdPrefix}purge`, `{cmdPrefix}c`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Messages**" +
                         $"\n" +
-                        $"\nDeletes a specified number of messages in a given channel." +
-                        $"\nSyntax: `{cmdPrefix}clear 25`" +
-                        $"\nSyntax: `{cmdPrefix}prune 25`" +
-                        $"\nThis number may not exceed `100`." +
-                        $"\nMessages older than two weeks will need to be deleted manually.");
+                        $"\nDeletes a specified number of messages in a given channel. This number may not exceed `100`. Messages older than two weeks will need to be deleted manually." +
+                        $"\nSyntax: `{cmdPrefix}clear <num>`, `{cmdPrefix}purge <num>`, {cmdPrefix}c <num>");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "kick":
@@ -345,6 +360,7 @@ namespace Kaguya.Modules
                         $"\nDeletes a role from the server (and in the process, removes said role from everyone who had it). " +
                         $"If multiple matches of the same role are found, the bot will delete all occurrences of said role." +
                         $"\nSyntax: `{cmdPrefix}deleterole <role name>`");
+                    embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "osu":
                     stopWatch.Start();
@@ -472,7 +488,7 @@ namespace Kaguya.Modules
                 case "prefix":
                     stopWatch.Start();
                     embed.WithTitle($"Help: Prefix Alteration | `{cmdPrefix}prefix`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions required: Administrator**" +
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
                         $"\nAllows a server administrator to change the bot's command prefix. Typically, this is one or two symbols `(!, $, %, >, etc.)`." +
                         $"\nTo reset the command prefix, type {cmdPrefix}prefix, or tag me and type `prefix`! The bot will always display the last known command prefix " +
@@ -681,7 +697,7 @@ namespace Kaguya.Modules
             embed.WithTitle("Commands List");
             embed.WithDescription($"All Kaguya commands separated by category. To use the command, have \nthe `{cmdPrefix}` symbol appended before the phrase. For more information on a specific command, " +
                 $"type `{cmdPrefix}h <command>`");
-            embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]`" +
+            embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` `\nmute` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]` \n`shadowban` \n`unshadowban`" +
                 "\n`clear [c] [purge]` \n`kaguyaexit` \n`scrapeserver` \n`filteradd [fa]` \n`filterremove [fr]` \n`filterview [fv]` \n`filterclear [clearfilter]` \n`setlogchannel [log]` \n`resetlogchannel [rlog]`" +
                 "\n`logtypes [loglist]`", true);
             embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`weekly` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
@@ -711,8 +727,8 @@ namespace Kaguya.Modules
             await Context.User.SendMessageAsync($"Need help with a specific command? Type `{cmdPrefix}mdls` to see a list of categories the commands are listed under." +
                 $"\nType `{cmdPrefix}commands <module name>` to see all commands listed under that module." +
                 $"\nType `{cmdPrefix}h <command name>` for more information on how to use the command and a detailed description of what it does." +
-                $"\nAdd me to your server with this link!: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847" +
-                $"\nWant to keep track of all the changes? Feel free to check out the Kaguya Github page!: https://github.com/stageosu/Kaguya" +
+                $"\nAdd me to your server with this link!: <https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847>" +
+                $"\nWant to keep track of all the changes? Feel free to check out the Kaguya Github page!: <https://github.com/stageosu/Kaguya>" +
                 $"\nKaguya Support Server: https://discord.gg/yhcNC97");
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);

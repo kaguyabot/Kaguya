@@ -61,7 +61,7 @@ namespace Kaguya.Modules
         [Command("expadd")] //exp
         [Alias("addexp")]
         [RequireOwner]
-        public async Task ExpAdd(int exp, IGuildUser user)
+        public async Task ExpAdd(int exp, [Remainder]IGuildUser user)
         {
             stopWatch.Start();
             var account = UserAccounts.GetAccount(user as SocketUser);
@@ -209,12 +209,15 @@ namespace Kaguya.Modules
         }
 
         [Command("exp")] //exp
-        public async Task EXPCommand()
+        public async Task EXPCommand(IGuildUser user = null)
         {
+            if(user is null)
+                user = Context.User as IGuildUser;
+
             stopWatch.Start();
-            var account = UserAccounts.GetAccount(Context.User);
+            var account = UserAccounts.GetAccount(user as SocketUser);
             embed.WithTitle("Experience Points");
-            embed.WithDescription($"{Context.User.Mention} has {account.EXP} EXP.");
+            embed.WithDescription($"{Context.User.Mention} `{user}` has `{account.EXP.ToString("N0")}` EXP.");
             embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);

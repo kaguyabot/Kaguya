@@ -3,6 +3,29 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.9.1 (Bug fixes)
+
+- Mute command added to $h command.
+- Added help commands for modules, mdls, createrole, and cr
+- Commands help command is now pink, as it should be.
+- kaguyaexit command will now send a response in chat.
+- Updated quite a few help commands to be more consistent with the others.
+- Fixed a bug with $timely where it would display the wrong remaining time to receive more points.
+- $rar will now display the number of roles removed from the user.
+- If a role cannot be removed with $rar, Kaguya will now display what happened in chat. The execution of the command will still 
+    occur, and all possibly removable roles will be removed.
+- $awardeveryone user count is now accurate (was off by one.)
+- $masspointsdistribute error embeds are now red (was grey).
+- Tweaked formatting of $exp response.
+- $exp may now also check the EXP of other users ($exp <user>)
+- Links sent in $hdm no longer embed.
+- $createtextchannel, $createvoicechannel, $deletetextchannel now all have "Titles" with their embeds (to match $deletevoicechannel)
+- $createvoicechannel had two syntax's in the help command, I removed the duplicate.
+- shadowban and unshadowban have been added in the help command.
+- $slap has been implemented.
+- $weekly added to $cmds currency
+
+
 Version 1.9.0
 
 - $bugaward now properly displays a message in chat.
