@@ -232,9 +232,49 @@ namespace Kaguya.Modules
                 case "slap":
                     stopWatch.Start();
                     embed.WithTitle($"Help: Slapping! | `{cmdPrefix}slap`");
-                    embed.WithDescription($"{Context.User.Mention} Slap someone! An emotionally-accurate gif will be displayed in chat to show your victim how you really feel." +
+                    embed.WithDescription($"{Context.User.Mention} Slap someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}slap <ID> / {cmdPrefix}slap <Nickname> / {cmdPrefix}slap <User#0000>`");
+                        $"\nSyntax: `{cmdPrefix}slap <word>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "hug":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Hugging! | `{cmdPrefix}hug`");
+                    embed.WithDescription($"{Context.User.Mention} hug someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}hug <word>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "kiss":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Kissing! | `{cmdPrefix}kiss`");
+                    embed.WithDescription($"{Context.User.Mention} Hug someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}kiss <word>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "pat":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Patting! | `{cmdPrefix}pat`");
+                    embed.WithDescription($"{Context.User.Mention} pat someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}pat <word>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "poke":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Poking! | `{cmdPrefix}poke`");
+                    embed.WithDescription($"{Context.User.Mention} Poke someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}poke <word>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "tickle":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Tickling! | `{cmdPrefix}tickle`");
+                    embed.WithDescription($"{Context.User.Mention} Tickle someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}tickle <word>`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "timely":
@@ -702,7 +742,7 @@ namespace Kaguya.Modules
                 "\n`logtypes [loglist]`", true);
             embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`weekly` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
-            embed.AddField("Fun", "`echo` \n`pick` \n`8ball` \n`slap`", true);
+            embed.AddField("Fun", "`echo` \n`pick` \n`8ball` \n`slap` \n`hug` \n`kiss` \n`tickle` \n`poke` \n`pat`", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]` \n`bug`", true);
             embed.AddField("osu!", "`osu` \n`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);

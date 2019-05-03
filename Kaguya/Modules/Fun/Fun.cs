@@ -113,12 +113,67 @@ namespace Kaguya.Modules
         }
 
         [Command("slap")]
-        public async Task Slap(IGuildUser user)
+        public async Task Slap(string target)
         {
             stopWatch.Start();
-            var slapper = await nekoClient.Action_v3.SlapGif();
-            embed.WithTitle($"{Context.User.Username} slaped {user.Username}!");
-            embed.WithImageUrl(slapper.ImageUrl);
+            var gif = await nekoClient.Action_v3.SlapGif();
+            embed.WithTitle($"{Context.User.Username} slaped {target}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("hug")]
+        public async Task Hug(string target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.HugGif();
+            embed.WithTitle($"{Context.User.Username} hugged {target}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("kiss")]
+        public async Task Kiss(string target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.KissGif();
+            embed.WithTitle($"{Context.User.Username} kissed {target}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("pat")]
+        public async Task Pat(string target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.PatGif();
+            embed.WithTitle($"{Context.User.Username} patted {target}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("poke")]
+        public async Task Poke(string target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.PokeGif();
+            embed.WithTitle($"{Context.User.Username} poked {target}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("tickle")]
+        public async Task Tickle(string target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.TickleGif();
+            embed.WithTitle($"{Context.User.Username} tickled {target}!");
+            embed.WithImageUrl(gif.ImageUrl);
             embed.WithColor(Violet);
             await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -424,7 +479,7 @@ namespace Kaguya.Modules
         //    var playerName = Context.User.Username;
         //    var userAccount = UserAccounts.GetAccount(Context.User);
         //    uint uPoints = userAccount.Points;
-            
+
         //    server.JoinedUsers.Add(Context.User.Username);
 
         //    embed.WithDescription($"**{Context.User.Mention} has joined the blackjack game with a bet of {points}!**");

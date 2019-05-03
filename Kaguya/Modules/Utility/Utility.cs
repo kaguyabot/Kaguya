@@ -178,6 +178,11 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}pick" +
                     $"\n{cmdPrefix}8ball" +
                     $"\n{cmdPrefix}slap" +
+                    $"\n{cmdPrefix}hug" +
+                    $"\n{cmdPrefix}kiss" +
+                    $"\n{cmdPrefix}tickle" +
+                    $"\n{cmdPrefix}pat" +
+                    $"\n{cmdPrefix}poke" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n" +
                     $"\n```");

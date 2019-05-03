@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.9.3
+
+- $slap (and all similar commands) no longer require a user, it can be any text!
+- $hug, kiss, tickle, poke, and pat commands have been added :)
+
 Version 1.9.2
 
 - The "owner greet DM" for lack of better word has been tweaked.
