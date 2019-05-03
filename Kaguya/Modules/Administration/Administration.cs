@@ -225,7 +225,28 @@ namespace Kaguya.Modules
                 return;
             }
 
-            foreach(var user in users)
+            int i = 0;
+
+            if (!(Context.Channel as SocketGuildChannel).GetPermissionOverwrite(muteRole).HasValue)
+            {
+                embed.WithDescription($"{Context.User.Mention} Performing first time setup. Please wait...");
+                embed.WithColor(Violet);
+                await BE();
+            }
+
+            foreach (var channel in channels)
+            {
+                if (!channel.GetPermissionOverwrite(muteRole).HasValue)
+                {
+                    i++;
+                    var permissionOverwrite = new OverwritePermissions(PermValue.Inherit, PermValue.Inherit, PermValue.Deny, PermValue.Inherit, PermValue.Deny);
+                    await channel.AddPermissionOverwriteAsync(muteRole, permissionOverwrite); //Denies ability to add reactions and send messages.
+                }
+            }
+            if (i > 0)
+                logger.ConsoleGuildAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
+
+            foreach (var user in users)
             {
                 await user.AddRoleAsync(muteRole);
                 embed.WithDescription($"{Context.User.Mention} User `{user}` has been muted.");
@@ -233,6 +254,8 @@ namespace Kaguya.Modules
                 await BE();
                 logger.ConsoleGuildAdvisory(Context.Guild, "User muted.");
             }
+
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
         [Command("unmute")]
