@@ -166,7 +166,10 @@ namespace Kaguya.Core.CommandHandler
 
         public Task LeftGuild(SocketGuild guild)
         {
+            ServerMessageLogs.RemoveLog(guild.Id);
+            
             logger.ConsoleGuildConnectionAdvisory(guild, "Disconnected from guild.");
+
             return Task.CompletedTask;
         }
 
@@ -216,7 +219,7 @@ namespace Kaguya.Core.CommandHandler
 
             foreach (string loggedMessage in currentLog.LastThousandMessages)
             {
-                if (loggedMessage.Contains(msg.Id.ToString()) && !loggedMessage.Contains("Kaguya#2708"))
+                if (loggedMessage.Contains(msg.Id.ToString()))
                 {
                     var text = loggedMessage.Split('℀');
                     EmbedBuilder embed = new EmbedBuilder();

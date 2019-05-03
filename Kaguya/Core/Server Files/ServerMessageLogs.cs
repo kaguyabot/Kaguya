@@ -41,6 +41,11 @@ namespace Kaguya.Core.Server_Files
             return GetOrCreateLog(ID);
         }
 
+        public static ServerMessageLog DeleteLog(SocketGuild guild)
+        {
+            return DeleteLog(guild.Id);
+        }
+
         public static ServerMessageLog RemoveLog(ulong ID)
         {
             var server = ServerMessageLogs.GetLog(ID);
@@ -66,6 +71,13 @@ namespace Kaguya.Core.Server_Files
             serverMessageLogs.Add(newLog);
             SaveServerLogging();
             return newLog;
+        }
+
+        private static ServerMessageLog DeleteLog(ulong id)
+        {
+            var log = GetLog(id);
+            serverMessageLogs.Remove(log);
+            return log;
         }
 
         public static void SaveServerLogging()

@@ -7,6 +7,8 @@ Version 1.9.2
 
 - The "owner greet DM" for lack of better word has been tweaked.
 - Clear will delete each message individually, reducing the change of the deleted message staying cached on the discord user's screen.
+- When Kaguya leaves the server, the server's message log will now be deleted.
+- Kaguya's folder structure has been renamed, same with the .exe
 
 Version 1.9.1 (Bug fixes)
 

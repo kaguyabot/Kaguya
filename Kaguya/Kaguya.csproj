@@ -7,7 +7,7 @@
     <ProjectGuid>{241766C6-5F98-45BF-A2B2-E0AE28572B8D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Kaguya</RootNamespace>
-    <AssemblyName>Discord Bot</AssemblyName>
+    <AssemblyName>Kaguya</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
