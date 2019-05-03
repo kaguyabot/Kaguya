@@ -228,6 +228,9 @@ namespace Kaguya.Modules
             foreach(var user in users)
             {
                 await user.AddRoleAsync(muteRole);
+                embed.WithDescription($"{Context.User.Mention} User `{user}` has been muted.");
+                embed.WithColor(Violet);
+                await BE();
                 logger.ConsoleGuildAdvisory(Context.Guild, "User muted.");
             }
         }
