@@ -1,5 +1,5 @@
 
 *.json
 .vs*
-Discord Bot/bin*
-Discord Bot/obj*
+Kaguya/bin*
+Kaguya/obj*
