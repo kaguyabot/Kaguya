@@ -178,6 +178,61 @@ namespace Kaguya.Modules
             await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
+        [Command("baka")]
+        public async Task Baka()
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Image_v3.BakaGif();
+            embed.WithTitle($"Baka!!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("nekoavatar")]
+        public async Task NekoAvatar()
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Image_v3.NekoAvatar();
+            embed.WithTitle($"Neko Avatar for {Context.User.Username}");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("smug")]
+        public async Task Smug()
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Image_v3.SmugGif();
+            embed.WithTitle($"Smug（￣＾￣）");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("waifu")]
+        public async Task Waifu()
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Image_v3.Waifu();
+            embed.WithTitle($"Waifu (ﾉ≧ڡ≦)");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("wallpaper")]
+        public async Task Wallpaper()
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Image_v3.Wallpaper();
+            embed.WithTitle($"Wallpaper for {Context.User.Username}");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
         //[Command("blackjack1", RunMode = RunMode.Async)]
         //[RequireOwner]
         //public async Task BlackJack(int points)

@@ -842,10 +842,7 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
-            foreach(var message in messages)
-            {
-                await message.DeleteAsync();
-            }
+            await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
             const int delay = 3000;
             var m = await ReplyAsync($"Clearing of messages completed. This message will be deleted in {delay / 1000} seconds.");
             await Task.Delay(delay);

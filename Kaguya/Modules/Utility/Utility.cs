@@ -183,6 +183,11 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}tickle" +
                     $"\n{cmdPrefix}pat" +
                     $"\n{cmdPrefix}poke" +
+                    $"\n{cmdPrefix}baka" +
+                    $"\n{cmdPrefix}nekoavatar" +
+                    $"\n{cmdPrefix}smug" +
+                    $"\n{cmdPrefix}waifu" +
+                    $"\n{cmdPrefix}wallpaper" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n" +
                     $"\n```");

@@ -277,6 +277,46 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}tickle <word>`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "baka":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Baka | `{cmdPrefix}baka`");
+                    embed.WithDescription($"{Context.User.Mention} Someone said something stupid? Show them how much of a baka they are with the baka command! An emotionally-accurate gif will be posted in chat." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}baka`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "nekoavatar":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Neko Avatar | `{cmdPrefix}nekoavatar`");
+                    embed.WithDescription($"{Context.User.Mention} Generates a Neko Avatar for you!" +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}nekoavatar`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "smug":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Smug | `{cmdPrefix}smug`");
+                    embed.WithDescription($"{Context.User.Mention} Posts a \"smug\" gif in chat." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}smug`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "waifu":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Waifu! | `{cmdPrefix}waifu`");
+                    embed.WithDescription($"{Context.User.Mention} Posts an image of a waifu in chat." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}waifu`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "wallpaper":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Wallpaper! | `{cmdPrefix}wallpaper`");
+                    embed.WithDescription($"{Context.User.Mention} An anime wallpaper will be posted in chat!" +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}wallpaper`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "timely":
                 case "t":
                     stopWatch.Start();
@@ -742,9 +782,9 @@ namespace Kaguya.Modules
                 "\n`logtypes [loglist]`", true);
             embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`weekly` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
             embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
-            embed.AddField("Fun", "`echo` \n`pick` \n`8ball` \n`slap` \n`hug` \n`kiss` \n`tickle` \n`poke` \n`pat`", true);
+            embed.AddField("Fun", "`echo` \n`pick` \n`8ball` \n`slap` \n`hug` \n`kiss` \n`tickle` \n`poke` \n`pat` \n`baka` \n`nekoavatar` \n`smug` \n`waifu` \n`wallpaper` ", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]` \n`bug`", true);
-            embed.AddField("osu!", "`osu` \n`createteamrole [ctr]` \n`delteams` \n`sttrefhelper` \n`osutop` \n`recent [r]` \n`osuset`", true);
+            embed.AddField("osu!", "`osu` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
             embed.AddField("NSFW", $"`View with {cmdPrefix}cmds nsfw`", true);
             embed.WithColor(Pink);

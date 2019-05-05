@@ -122,7 +122,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Miki.Net.Http, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Miki.Net.Http.2.0.0\lib\netstandard1.6\Miki.Net.Http.dll</HintPath>
+      <HintPath>..\packages\Miki.Net.Http.2.1.0\lib\netstandard1.6\Miki.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="Nekos-Sharp, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Nekos-Sharp.3.3.0\lib\netstandard2.0\Nekos-Sharp.dll</HintPath>

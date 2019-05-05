@@ -44,7 +44,7 @@ namespace Kaguya.Core.LevelingSystem
             }
             catch (Discord.Net.HttpException)
             {
-                Console.WriteLine("Failed to embed message (Leveling.cs). Possibly attempted to send leveling message to " +
+                Console.WriteLine($"Failed to embed message (Leveling.cs) Guild: {channel.Guild.Name} Channel: {channel.Name}. Possibly attempted to send leveling message to " +
                     "a channel that the bot cannot access.");
             }
             catch (Exception e)
