@@ -287,7 +287,7 @@ namespace Kaguya.Modules
         }
 
         [Command("filteradd")] //administration
-        [Alias("fa1")]
+        [Alias("fa")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task FilterAdd([Remainder]string phrase) //Adds a word to the server word/phrase filter
