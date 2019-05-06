@@ -5,6 +5,8 @@ using Kaguya;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
+using Victoria;
+using Victoria.Entities;
 
 namespace Kaguya.Core
 {
@@ -194,5 +196,23 @@ namespace Kaguya.Core
                 $"\nMESSAGE: [{message}]" +
                 $"\nTime: [{DateTime.Now}]");
         }
+
+        /// <summary>Console logging event for music.</summary>
+        public void ConsoleMusicLog(LogMessage msg)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nMusic Service:" +
+                $"\nMessage: [\"{msg.Message}\"]");
+        }
+
+        /// <summary>Console logging event for music.</summary>
+        public void ConsoleMusicLog(string msg)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nMusic Service:" +
+                $"\n" +
+                $"\nMessage: [\"{msg}\"]");
+        }
+
     }
 }

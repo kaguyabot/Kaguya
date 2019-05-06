@@ -13,6 +13,9 @@ using Discord;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
+using Victoria;
+using Victoria.Entities;
+using Kaguya.Core.Command_Handler.LogMethods;
 
 #pragma warning disable
 
@@ -23,6 +26,7 @@ namespace Kaguya
 
         DiscordSocketClient _client;
         CommandService _service;
+        LavaSocketClient _lavaSocketClient;
         private IServiceProvider _services;
         readonly Color Yellow = new Color(255, 255, 102);
         readonly Color SkyBlue = new Color(63, 242, 255);
@@ -30,16 +34,18 @@ namespace Kaguya
         readonly Color Violet = new Color(238, 130, 238);
         readonly Color Pink = new Color(252, 132, 255);
         readonly KaguyaLogMethods logger = new KaguyaLogMethods();
+        readonly MusicLogMethods musicLogger = new MusicLogMethods();
         readonly Timers timers = new Timers();
         readonly Logger consoleLogger = new Logger();
-
         public string osuApiKey = Config.bot.OsuApiKey;
         public string tillerinoApiKey = Config.bot.TillerinoApiKey;
+
         public async Task InitializeAsync(DiscordSocketClient client)
         {
             try
             {
                 _client = client;
+                _lavaSocketClient = Global.lavaSocketClient;
                 _service = new CommandService();
                 _service.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTR());
                 await _service.AddModulesAsync(
@@ -54,6 +60,10 @@ namespace Kaguya
                 _client.Ready += timers.VerifyMessageReceived;
                 _client.Ready += timers.ServerMessageLogCheck;
                 _client.Ready += timers.ResourcesBackup;
+
+                _lavaSocketClient.Log += musicLogger.MusicLogger;
+                _lavaSocketClient.OnTrackFinished += musicLogger.OnTrackFinished;
+                _lavaSocketClient.OnTrackException += musicLogger.OnTrackException;
 
                 _client.MessageReceived += HandleCommandAsync;
                 _client.MessageReceived += logger.osuLinkParser;
@@ -94,7 +104,7 @@ namespace Kaguya
             }
             catch (Exception e)
             {
-                consoleLogger.ConsoleCriticalAdvisory(e, "InitializeAsync method threw an exception. CommandHandler.cs lines (42, 92).");
+                consoleLogger.ConsoleCriticalAdvisory(e, "InitializeAsync method threw an exception. CommandHandler.cs.");
                 return;
             }
         }
@@ -188,6 +198,12 @@ namespace Kaguya
                         break;
                 }
             }
+        }
+
+        private Task MusicLogger(LogMessage msg)
+        {
+            consoleLogger.ConsoleMusicLog(msg);
+            return Task.CompletedTask;
         }
     }
 }

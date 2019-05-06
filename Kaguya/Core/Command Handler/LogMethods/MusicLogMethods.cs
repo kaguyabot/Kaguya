@@ -1,0 +1,71 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using Victoria;
+using Victoria.Entities;
+using Kaguya.Core;
+using System.Diagnostics;
+
+namespace Kaguya.Core.Command_Handler.LogMethods
+{
+    public class MusicLogMethods
+    {
+        readonly DiscordSocketClient _client = Global.Client;
+        readonly public IServiceProvider _services;
+        readonly Logger logger = new Logger();
+        readonly Stopwatch stopWatch = new Stopwatch();
+        readonly EmbedBuilder embed = new EmbedBuilder();
+        readonly Color Pink = new Color(252, 132, 255);
+
+        public Task MusicLogger(LogMessage msg)
+        {
+            logger.ConsoleMusicLog(msg);
+            return Task.CompletedTask;
+        }
+
+        public Task OnTrackException(LavaPlayer lavaPlayer, LavaTrack lavaTrack, string errorMsg)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Music Service Exception:" +
+                $"\n" +
+                $"\n[Guild: {lavaPlayer.VoiceChannel.Guild.Name} | {lavaPlayer.VoiceChannel.GuildId}]" +
+                $"\n[Error: \"{errorMsg}\" for {lavaTrack.Title}]");
+            return Task.CompletedTask;
+        }
+
+        public async Task OnTrackFinished(LavaPlayer player, LavaTrack track, TrackEndReason reason)
+        {
+            if (!reason.ShouldPlayNext())
+                return;
+
+            if (!player.Queue.TryDequeue(out var item) || !(item is LavaTrack nextTrack))
+            {
+                await player.TextChannel?.SendMessageAsync($"There are no more songs left in queue.");
+                return;
+            }
+
+            await player.PlayAsync(nextTrack);
+
+            embed.WithDescription($"**Finished Playing: `{track.Title}`\nNow Playing: `{nextTrack.Title}`**");
+            embed.WithColor(Pink);
+            await player.TextChannel.SendMessageAsync("", false, embed.Build());
+            await player.TextChannel.SendMessageAsync(player.ToString());
+        }
+
+        private Task OnTrackStuck(LavaPlayer player, LavaTrack track, long threshold)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Music Service Stuck:" +
+                $"\n" +
+                $"\n[Guild: {player.VoiceChannel.Guild.Name} | {player.VoiceChannel.GuildId}]" +
+                $"\n[Track: {track.Title} stuck after {threshold}ms]");
+            return Task.CompletedTask;
+        }
+    }
+}
