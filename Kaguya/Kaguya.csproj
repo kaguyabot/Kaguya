@@ -122,7 +122,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Miki.Net.Http, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Miki.Net.Http.2.1.0\lib\netstandard1.6\Miki.Net.Http.dll</HintPath>
+      <HintPath>..\packages\Miki.Net.Http.2.0.0\lib\netstandard1.6\Miki.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="Nekos-Sharp, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Nekos-Sharp.3.3.0\lib\netstandard2.0\Nekos-Sharp.dll</HintPath>
@@ -224,6 +224,9 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0-preview.18571.3\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Extensions, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.Extensions.4.3.1\lib\net462\System.Runtime.Extensions.dll</HintPath>
       <Private>True</Private>
@@ -264,6 +267,9 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.0-preview.18571.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -274,11 +280,16 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Victoria, Version=4.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Victoria.4.0.9\lib\netstandard2.0\Victoria.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Command Handler\CommandHandler.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Core\Command Handler\KaguyaLogMethods.cs" />
+    <Compile Include="Core\Command Handler\EmbedHandler.cs" />
+    <Compile Include="Core\Command Handler\LogMethods\KaguyaLogMethods.cs" />
+    <Compile Include="Core\Command Handler\LogMethods\MusicLogMethods.cs" />
     <Compile Include="Core\Command Handler\Timers.cs" />
     <Compile Include="Core\Commands\Command.cs" />
     <Compile Include="Core\Commands\Commands.cs" />
@@ -301,6 +312,9 @@
     <Compile Include="Modules\EXP\EXP.cs" />
     <Compile Include="Modules\Fun\Fun.cs" />
     <Compile Include="Modules\Help\Help.cs" />
+    <Compile Include="Modules\Music\AudioOptions.cs" />
+    <Compile Include="Modules\Music\Music.cs" />
+    <Compile Include="Modules\Music\MusicService.cs" />
     <Compile Include="Modules\NSFW\NSFW.cs" />
     <Compile Include="Modules\osu\BeatmapLinkParser.cs" />
     <Compile Include="Modules\osu\osuGeneral.cs" />

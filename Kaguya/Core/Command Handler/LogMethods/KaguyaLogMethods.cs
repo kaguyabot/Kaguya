@@ -13,12 +13,16 @@ using Kaguya.Core.Command_Handler;
 using DiscordBotsList.Api;
 using DiscordBotsList.Api.Objects;
 using System.Collections.Generic;
+using Victoria;
+using Victoria.Entities;
+using System.IO;
 
 namespace Kaguya.Core.CommandHandler
 {
     public class KaguyaLogMethods
     {
         readonly DiscordSocketClient _client = Global.Client;
+        readonly LavaSocketClient _lavaSocketClient = Global.lavaSocketClient;
         readonly public IServiceProvider _services;
         readonly Color Yellow = new Color(255, 255, 102);
         readonly Color SkyBlue = new Color(63, 242, 255);
@@ -26,7 +30,6 @@ namespace Kaguya.Core.CommandHandler
         readonly Color Violet = new Color(238, 130, 238);
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
-        readonly Timers timer = new Timers();
 
         private static readonly HttpClient client = new HttpClient();
 
@@ -66,9 +69,12 @@ namespace Kaguya.Core.CommandHandler
             }
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"\nAce Pilot Kaguya cleared for takeoff. Servicing {mutualGuilds.Count()} guilds" +
-                $" and {i.ToString("N0")} members." +
-                "\nBegin Logging\n");
+
+            await _lavaSocketClient.StartAsync(_client);
+            Console.WriteLine("\nKaguya Music Service Started.");
+
+            Console.WriteLine($"\nAce Pilot Kaguya cleared for takeoff. Servicing {mutualGuilds.Count()} guilds and {i.ToString("N0")} members.");
+            Console.WriteLine("\nBegin Logging.\n");
             Console.WriteLine("--------------------------------------------");
         }
 

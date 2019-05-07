@@ -195,6 +195,27 @@ namespace Kaguya.Modules
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
+            else if (category.ToLower() == "music")
+            {
+                embed.WithTitle("Module: osu!");
+                embed.WithDescription("```css" +
+                    "\nAll commands in category: osu!" +
+                    "\n" +
+                    $"\n{cmdPrefix}p join" +
+                    $"\n{cmdPrefix}p play" +
+                    $"\n{cmdPrefix}p pause" +
+                    $"\n{cmdPrefix}p resume" +
+                    $"\n{cmdPrefix}p leave" +
+                    $"\n{cmdPrefix}p queue" +
+                    $"\n{cmdPrefix}p skip" +
+                    $"\n{cmdPrefix}p volume" +
+                    $"\n" +
+                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                    $"\n```");
+                embed.WithColor(Pink);
+                await BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            }
             else if (category.ToLower() == "osu")
             {
                 embed.WithTitle("Module: osu!");

@@ -759,6 +759,20 @@ namespace Kaguya.Modules
                         $"\nNSFW Command List: `$n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif, bomb>` (Select one).");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "p":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Music Commands | `{cmdPrefix}p <modifier>`");
+                    embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}p`command group is for all Kaguya Music commands. They are described in detail below:" +
+                        $"\n" +
+                        $"\n**Play/Pause:** Plays or pauses the music player. `{cmdPrefix}p play <song name>`, `{cmdPrefix}p pause`" +
+                        $"\n**Join:** Makes Kaguya join the voice channel you are currently in. `{cmdPrefix}p join`" +
+                        $"\n**Leave:** Makes Kaguya leave the voice channel she is currently in. `{cmdPrefix}p leave`" +
+                        $"\n**Queue:** Displays Kaguya's playlist. Add more songs to the queue with the play command. `{cmdPrefix}p queue`" +
+                        $"\n**Resume:** If Kaguya's music player is paused, she will resume playing music. `{cmdPrefix}p resume`" +
+                        $"\n**Skip:** Skips the current song. `{cmdPrefix}p skip`" +
+                        $"\n**Volume:** Sets the volume to a value between 0-150. `{cmdPrefix}p volume <0-150>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 default:
                     stopWatch.Start();
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
@@ -787,6 +801,7 @@ namespace Kaguya.Modules
             embed.AddField("osu!", "`osu` \n`osutop` \n`recent [r]` \n`osuset`", true);
             embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
             embed.AddField("NSFW", $"`View with {cmdPrefix}cmds nsfw`", true);
+            embed.AddField("Music", $"`View with {cmdPrefix}cmds music`", true);
             embed.WithColor(Pink);
             embed.WithFooter($"For more information, including a link to add this bot to your server and a link to the Kaguya Support Discord, type {cmdPrefix}hdm!");
             await BE(); stopWatch.Stop();
