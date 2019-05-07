@@ -199,7 +199,7 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Module: osu!");
                 embed.WithDescription("```css" +
-                    "\nAll commands in category: osu!" +
+                    "\nAll commands in category: Music!" +
                     "\n" +
                     $"\n{cmdPrefix}p join" +
                     $"\n{cmdPrefix}p play" +
