@@ -15,6 +15,7 @@ using DiscordBotsList.Api.Objects;
 using System.Collections.Generic;
 using Victoria;
 using Victoria.Entities;
+using System.IO;
 
 namespace Kaguya.Core.CommandHandler
 {
@@ -70,11 +71,9 @@ namespace Kaguya.Core.CommandHandler
             Console.ForegroundColor = ConsoleColor.White;
 
             await _lavaSocketClient.StartAsync(_client);
-
-            Console.WriteLine($"\nAce Pilot Kaguya cleared for takeoff. Servicing {mutualGuilds.Count()} guilds and {i.ToString("N0")} members.");
-
             Console.WriteLine("\nKaguya Music Service Started.");
 
+            Console.WriteLine($"\nAce Pilot Kaguya cleared for takeoff. Servicing {mutualGuilds.Count()} guilds and {i.ToString("N0")} members.");
             Console.WriteLine("\nBegin Logging.\n");
             Console.WriteLine("--------------------------------------------");
         }

@@ -5,7 +5,20 @@ Changelog:
 
 Version 1.10
 
--  
+- Music service added (LET'S GOOOO)
+    - Enjoy Kaguya's high quality music in your server starting today! Check out all of her new music commands below
+- "Music" module added!
+    - "p" command group added:
+    - $p play: Search YouTube for your favorite song and Kaguya will play your result!
+    - $p join: Joins your voice channel!
+    - $p pause
+    - $p resume
+    - $p leave: Leaves current voice channel.
+    - $p queue
+    - $p skip
+    - $p volume
+- NOTE: THE MUSIC FEATURE MIGHT BE A LITTLE BUGGY! PLEASE REPORT BUGS WITH $bug !!
+- Kaguya will now properly update the server count on discordbots.org
 
 
 

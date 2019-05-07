@@ -18,7 +18,7 @@ using System.Diagnostics;
 
 namespace Kaguya.Modules.Music
 {
-    [Group("m")]
+    [Group("p")]
     public class Music : ModuleBase<SocketCommandContext>
     {
         private readonly MusicService musicService = new MusicService();
@@ -38,5 +38,21 @@ namespace Kaguya.Modules.Music
         [Command("queue")]
         public async Task MusicQueue()
             => await ReplyAsync("", false, await musicService.ListAsync(Context.Guild.Id));
+
+        [Command("skip")]
+        public async Task SkipTrack()
+            => await ReplyAsync("", false, await musicService.SkipTrackAsync(Context.Guild.Id));
+
+        [Command("volume")]
+        public async Task Volume(int volume)
+            => await ReplyAsync("", false, await musicService.VolumeAsync(Context.Guild.Id, volume));
+
+        [Command("Pause")]
+        public async Task Pause()
+           => await ReplyAsync("", false, await musicService.Pause(Context.Guild.Id));
+
+        [Command("Resume")]
+        public async Task Resume()
+            => await ReplyAsync("", false, await musicService.Pause(Context.Guild.Id));
     }
 }

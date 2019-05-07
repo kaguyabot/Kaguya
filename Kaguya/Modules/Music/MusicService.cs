@@ -158,5 +158,84 @@ namespace Kaguya.Modules.Music
 
         }
 
+        public async Task<Embed> SkipTrackAsync(ulong guildId)
+        {
+            var cmdPrefix = Servers.GetServer(guildId).commandPrefix;
+
+            try
+            {
+                var player = _lavaSocketClient.GetPlayer(guildId);
+                /* Check if the player exists */
+                if (player == null)
+                    return await EmbedHandler.CreateErrorEmbed("Music, List", $"Could not aquire player.\nAre you using the bot right now? check{cmdPrefix}Help for info on how to use the bot.");
+                /* Check The queue, if it is less than one (meaning we only have the current song available to skip) it wont allow the user to skip.
+                     User is expected to use the Stop command if they're only wanting to skip the current song. */
+                if (player.Queue.Count < 1)
+                {
+                    return await EmbedHandler.CreateErrorEmbed("Music, SkipTrack", $"Unable To skip a track as there is only One or No songs currently playing." +
+                        $"\n\nDid you mean {cmdPrefix}Stop?");
+                }
+                else
+                {
+                    try
+                    {
+                        /* Save the current song for use after we skip it. */
+                        var currentTrack = player.CurrentTrack;
+                        /* Skip the current song. */
+                        await player.SkipAsync();
+                        logger.ConsoleMusicLog($"Bot skipped: {currentTrack.Title}");
+                        return await EmbedHandler.CreateBasicEmbed("Music Skip", $"Successfully Skipped {currentTrack.Title}");
+                    }
+                    catch (Exception ex)
+                    {
+                        return await EmbedHandler.CreateErrorEmbed("Music, Skip", ex.ToString());
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return await EmbedHandler.CreateErrorEmbed("Music Skip", ex.ToString());
+            }
+        }
+
+        public async Task<Embed> VolumeAsync(ulong guildId, int volume)
+        {
+            if (volume >= 150 || volume <= 0)
+            {
+                return await EmbedHandler.CreateErrorEmbed($"Music Volume", $"Volume must be between 0 and 150.");
+            }
+            try
+            {
+                var player = _lavaSocketClient.GetPlayer(guildId);
+                await player.SetVolumeAsync(volume);
+                logger.ConsoleMusicLog($"Bot Volume set to: {volume}.");
+                return await EmbedHandler.CreateBasicEmbed($"🔊 Music Volume", $"Volume has been set to {volume}.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return await EmbedHandler.CreateErrorEmbed("Music Volume", "Error: " + ex.Message + "\nPlease contact Stage in the support server if this is a major issue.");
+            }
+        }
+
+        public async Task<Embed> Pause(ulong guildId)
+        {
+            try
+            {
+                var player = _lavaSocketClient.GetPlayer(guildId);
+                if (player.IsPaused)
+                {
+                    await player.PauseAsync();
+                    return await EmbedHandler.CreateMusicEmbed("▶️ Music", $"**Resumed:** Now Playing {player.CurrentTrack.Title}");
+                }
+
+                await player.PauseAsync();
+                return await EmbedHandler.CreateMusicEmbed("⏸️ Music", $"**Paused:** {player.CurrentTrack.Title}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return await EmbedHandler.CreateErrorEmbed("Music Play/Pause", ex.Message);
+            }
+        }
     }
 }
