@@ -197,7 +197,7 @@ namespace Kaguya.Modules
             }
             else if (category.ToLower() == "music")
             {
-                embed.WithTitle("Module: osu!");
+                embed.WithTitle("Module: Music!");
                 embed.WithDescription("```css" +
                     "\nAll commands in category: Music!" +
                     "\n" +
