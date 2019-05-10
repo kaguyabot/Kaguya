@@ -67,24 +67,6 @@ namespace Kaguya.Core.CommandHandler
             }
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Updating names of servers in the logs...");
-            var msgLogs = ServerMessageLogs.GetAllLogs();
-            int k = 0; //Number of guilds the bot has updated in the log.
-            int l = 0; //Number of guilds the bot has removed from the log.
-            foreach (var msgLog in msgLogs)
-            {
-                var guild = _client.GetGuild(msgLog.ID);
-                if (mutualGuilds.Contains(guild)) //Checks to make sure the bot is connected to the guild it wants to update the log for.
-                {
-                    msgLog.ServerName = guild.Name; k++;
-                }
-                else if (!mutualGuilds.Contains(guild)) //If the bot isn't connected to the server it has attempted to update the log for, remove it from the list.
-                {
-                    msgLogs.Remove(msgLog); l++;
-                }
-            }
-
-            Console.WriteLine($"Server Message Logs have been verified: {k} successfully verified. {l} successfully removed.");
 
             await _lavaSocketClient.StartAsync(_client);
             Console.ForegroundColor = ConsoleColor.White;

@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.10.2
+
+- Removed the server message log verifications because it was super buggy.
+
 Version 1.10.1
 
 - Removed (secret) sttreflog command (it is no longer needed).

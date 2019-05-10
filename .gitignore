@@ -1,5 +1,5 @@
 
-*.json
+Kaguya/bin/Debug/Resources
 .vs*
 Kaguya/bin*
 Kaguya/obj*
