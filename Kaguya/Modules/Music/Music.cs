@@ -1,24 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Core.UserAccounts;
-using System.Net;
-using System.Timers;
-using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
-using Kaguya.Core;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Kaguya.Modules.Music
 {
-    [Group("p")]
+    [Group("m")]
     public class Music : ModuleBase<SocketCommandContext>
     {
         private readonly MusicService musicService = new MusicService();

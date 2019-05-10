@@ -1,21 +1,21 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
 using Discord.Commands;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using System.IO;
-using Kaguya.Core.LevelingSystem;
-using Kaguya.Core.UserAccounts;
-using Kaguya.Core.Server_Files;
-using Discord;
-using Kaguya.Core.CommandHandler;
+using Discord.WebSocket;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
-using Victoria;
-using Victoria.Entities;
 using Kaguya.Core.Command_Handler.LogMethods;
+using Kaguya.Core.CommandHandler;
+using Kaguya.Core.LevelingSystem;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.UserAccounts;
+using Kaguya.Modules;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using Victoria;
 
 #pragma warning disable
 
@@ -104,7 +104,7 @@ namespace Kaguya
             }
             catch (Exception e)
             {
-                consoleLogger.ConsoleCriticalAdvisory(e, "InitializeAsync method threw an exception. CommandHandler.cs.");
+                consoleLogger.ConsoleCriticalAdvisory(e, "InitializeAsync method threw an exception. CommandHandler.cs line 105.");
                 return;
             }
         }
@@ -138,9 +138,8 @@ namespace Kaguya
             string oldUsername = userAccount.Username;
             string newUsername = context.User.Username;
 
-            if ($"{oldUsername}#{user.Discriminator}" != $"{newUsername}#{user.Discriminator}")
+            if ($"{oldUsername}" != $"{newUsername}#{user.Discriminator}")
                 userAccount.Username = $"{newUsername}#{user.Discriminator}";
-
 
             int argPos = 0;
 
@@ -162,8 +161,9 @@ namespace Kaguya
                         consoleLogger.ConsoleCommandLog(context, CommandError.UnknownCommand, $"The command {context.Message.Content} does not exist!");
                         break;
                     case CommandError.BadArgCount:
+                        var cmdPrefix = Servers.GetServer(context.Guild).commandPrefix;
                         embed.WithDescription("**Error: I need a different set of information than what you've given me!**");
-                        embed.WithFooter($"Bad argument count! Use {guild.commandPrefix}h <command> to see the proper syntax!");
+                        embed.WithFooter($"Use {cmdPrefix}h <command> to see the proper usage.");
                         embed.WithColor(Red);
                         await context.Channel.SendMessageAsync(embed: embed.Build());
                         consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "User attempted to use invalid parameters for a command.");

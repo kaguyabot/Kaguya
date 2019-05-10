@@ -13,6 +13,7 @@ using System.Diagnostics;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
 using System.Timers;
+using Kaguya.Core.CommandHandler;
 
 #pragma warning disable CS0472
 
@@ -35,11 +36,10 @@ namespace Kaguya.Modules
 
         public async Task BE() //Method to build and send an embedded message.
         {
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
         [Command("mute")]
-        [Alias("m")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -840,6 +840,18 @@ namespace Kaguya.Modules
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task ClearMessages(int amount = 10)
         {
+            if(!(amount > 0))
+            {
+                await EmbedHandler.CreateErrorEmbed("Clearing Messages", "The number of messages to be deleted must be greater than zero!");
+                return;
+            }
+
+            if(!(amount <= 100))
+            {
+                await EmbedHandler.CreateErrorEmbed("Clearing Messages", "The number of messages to be deleted must not be more than 100!");
+                return;
+            }
+
             stopWatch.Start();
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);

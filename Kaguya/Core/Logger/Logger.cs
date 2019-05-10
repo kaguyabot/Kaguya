@@ -1,12 +1,8 @@
 ﻿using Discord;
-using Discord.WebSocket;
 using Discord.Commands;
-using Kaguya;
+using Discord.WebSocket;
 using System;
-using System.Threading.Tasks;
 using System.Linq;
-using Victoria;
-using Victoria.Entities;
 
 namespace Kaguya.Core
 {
@@ -89,7 +85,6 @@ namespace Kaguya.Core
         public void ConsoleCommandLog(SocketCommandContext context)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            string cmd = context.Message.Content.Split(' ').First();
             Console.WriteLine($"\nNotice: [Filtered Phrase Detected]" +
                 $"\nUser: [{context.User.Username}#{context.User.Discriminator}]" +
                 $"\nGuild: [{context.Guild.Name} | {context.Guild.Id}] " +
@@ -114,6 +109,7 @@ namespace Kaguya.Core
             Console.WriteLine($"\nCRITICAL ERROR:" +
                 $"\nERROR MESSAGE: [\"{message}\"]" +
                 $"\nEXCEPTION: [\"{e.Message}\"]" +
+                $"\nStack Trace: [\"{e.StackTrace}\"]" +
                 $"\nTime: [{DateTime.Now}]");
         }
 

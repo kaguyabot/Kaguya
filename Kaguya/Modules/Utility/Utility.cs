@@ -33,7 +33,7 @@ namespace Kaguya.Modules
 
         public async Task BE() //Method to build and send an embedded message.
         {
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
         [Command("modules")] //utility
@@ -201,14 +201,14 @@ namespace Kaguya.Modules
                 embed.WithDescription("```css" +
                     "\nAll commands in category: Music!" +
                     "\n" +
-                    $"\n{cmdPrefix}p join" +
-                    $"\n{cmdPrefix}p play" +
-                    $"\n{cmdPrefix}p pause" +
-                    $"\n{cmdPrefix}p resume" +
-                    $"\n{cmdPrefix}p leave" +
-                    $"\n{cmdPrefix}p queue" +
-                    $"\n{cmdPrefix}p skip" +
-                    $"\n{cmdPrefix}p volume" +
+                    $"\n{cmdPrefix}m join" +
+                    $"\n{cmdPrefix}m play" +
+                    $"\n{cmdPrefix}m pause" +
+                    $"\n{cmdPrefix}m resume" +
+                    $"\n{cmdPrefix}m leave" +
+                    $"\n{cmdPrefix}m queue" +
+                    $"\n{cmdPrefix}m skip" +
+                    $"\n{cmdPrefix}m volume" +
                     $"\n" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```");

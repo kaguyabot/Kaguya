@@ -16,10 +16,8 @@ namespace Kaguya.Core.Command_Handler.LogMethods
 {
     public class MusicLogMethods
     {
-        readonly DiscordSocketClient _client = Global.Client;
         readonly public IServiceProvider _services;
         readonly Logger logger = new Logger();
-        readonly Stopwatch stopWatch = new Stopwatch();
         readonly EmbedBuilder embed = new EmbedBuilder();
         readonly Color Pink = new Color(252, 132, 255);
 

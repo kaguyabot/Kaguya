@@ -28,7 +28,7 @@ namespace Kaguya.Modules
 
         public async Task BE() //Method to build and send an embedded message.
         {
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
         [Command("h")] //The BIG fish, Help
@@ -358,9 +358,8 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "mute":
-                case "m":
                     stopWatch.Start();
-                    embed.WithTitle($"Help: Muting Users | `{cmdPrefix}mute`, `{cmdPrefix}m`");
+                    embed.WithTitle($"Help: Muting Users | `{cmdPrefix}mute`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Mute Members, Manage Roles**" +
                         $"\n" +
                         $"\nMutes an individual user or a list of users from the server. This command may also have a time associated with it " +
@@ -462,25 +461,6 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}createteamrole <role name> <mentioned users>`" +
                         $"\nExample: `{cmdPrefix}createteamrole \"Smelly Sushi\" @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "sttreflog":
-                    stopWatch.Start();
-                    embed.WithTitle($"Help: STT Ref Log | `{cmdPrefix}sttreflog`");
-                    embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
-                        $"\n" +
-                        $"\nGenerates an embedded message in the chennel \"Results\" in the \"Spring Tranquility osu! Tournament #2\" server. " +
-                        $"This is used by the tournament's referees to report match results. This command is exclusive to the STT2 server!" +
-                        $"\n" +
-                        $"\n**Syntax** (Everything in <> is a required parameter, quotes are REQUIRED!): " +
-                        $"\n" +
-                        $"\n`{cmdPrefix}sttreflog <\"winning team\"> <\"losing team\"> <\"winning team's score\"> " +
-                        $"\n<\"Team #1 Ban Mod #1\"> " +
-                        $"<\"Team #1 Ban #1\"> <\"Team #1 Ban Mod #2\"> " +
-                        $"\n<\"Team #1 Ban #2\"> <\"Team #2 Ban Mod #1\"> " +
-                        $"\n<\"Team #2 Ban #1\"> " +
-                        $"<\"Team #2 Ban Mod #2\"> " +
-                        $"\n<\"Team #2 Ban #2\"> <\"MP Link\">`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "osutop":
@@ -759,18 +739,18 @@ namespace Kaguya.Modules
                         $"\nNSFW Command List: `$n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif, bomb>` (Select one).");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "p":
+                case "m":
                     stopWatch.Start();
-                    embed.WithTitle($"Help: Music Commands | `{cmdPrefix}p <modifier>`");
+                    embed.WithTitle($"Help: Music Commands | `{cmdPrefix}m <modifier>`");
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}p`command group is for all Kaguya Music commands. They are described in detail below:" +
                         $"\n" +
-                        $"\n**Play/Pause:** Plays or pauses the music player. `{cmdPrefix}p play <song name>`, `{cmdPrefix}p pause`" +
-                        $"\n**Join:** Makes Kaguya join the voice channel you are currently in. `{cmdPrefix}p join`" +
-                        $"\n**Leave:** Makes Kaguya leave the voice channel she is currently in. `{cmdPrefix}p leave`" +
-                        $"\n**Queue:** Displays Kaguya's playlist. Add more songs to the queue with the play command. `{cmdPrefix}p queue`" +
-                        $"\n**Resume:** If Kaguya's music player is paused, she will resume playing music. `{cmdPrefix}p resume`" +
-                        $"\n**Skip:** Skips the current song. `{cmdPrefix}p skip`" +
-                        $"\n**Volume:** Sets the volume to a value between 0-150. `{cmdPrefix}p volume <0-150>`");
+                        $"\n**Play/Pause:** Plays or pauses the music player. `{cmdPrefix}m play <song name>`, `{cmdPrefix}m pause`" +
+                        $"\n**Join:** Makes Kaguya join the voice channel you are currently in. `{cmdPrefix}m join`" +
+                        $"\n**Leave:** Makes Kaguya leave the voice channel she is currently in. `{cmdPrefix}m leave`" +
+                        $"\n**Queue:** Displays Kaguya's playlist. Add more songs to the queue with the play command. `{cmdPrefix}m queue`" +
+                        $"\n**Resume:** If Kaguya's music player is paused, she will resume playing music. `{cmdPrefix}m resume`" +
+                        $"\n**Skip:** Skips the current song. `{cmdPrefix}m skip`" +
+                        $"\n**Volume:** Sets the volume to a value between 0-150. `{cmdPrefix}m volume <0-150>`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 default:
@@ -872,7 +852,6 @@ namespace Kaguya.Modules
             HttpClient client = new HttpClient();
 
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
-            var lastUpvoted = userAccount.LastUpvotedKaguya;
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"{Config.bot.DblApiKey}");

@@ -3,6 +3,33 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.10.1
+
+- Removed (secret) sttreflog command (it is no longer needed).
+- Music commands prefix is now "m" (was "p"). Mute no longer has an alias of "m".
+- $m skip responses edited.
+- Modified EmbedHandler ~ Can now have a footer as an optional parameter, allowing much easier addition of footers.
+    - Saves code space too this way ^_^
+- Automatic Bug Report feature added. If an exception is thrown in code, sometimes an automatic bug report will be created if it is important. This allows
+    me to fix things without a user having to report the bug.
+- If an unknown exception is thrown with the leveling system, it will now be sent in chat and an automatic bug report will be created.
+- Cleaned up some code regarding embed message sending.
+- ConsoleCriticalAdvisories will now also display the stack trace of the exception that occurred.
+- Some error messages that did not appear with a title now will. (18 errors!)
+- Attempted to fix a bug where the music player will throw an error if it can't load a query that isn't there. (null request)
+- If a song fails to load, Kaguya will now throw an error in chat.
+- Fixed a bug with $m resume where it would actually attempt to keep pausing even if it was paused instead of resume.
+- Added in-code documentation for EmbedHandler (function summaries, etc.)
+- Removed a lot of unnecessary "usings" from several different classes.
+- Fixed a bug where the $m queue would display the "Up Next" song in the queue as #2 and #3.
+- Fixed a small bug with $m skip where if there was only one song in the queue it wouldn't skip it. Now, it stops and only throws an error if there are no songs in the queue at all.
+- Fixed a bug where, on every sent message, the bot was CONSTANTLY overwriting a user's username in the UserAccounts file. Should significantly improve performance.
+- Level-ups now will occur slightly more frequently. The xp:level curve was (and may still be) too harsh. All levels will automatically be updated.
+- On startup, Kaguya will now verify all server message logs. If she's not connected to a guild that has a log, she will now delete that log. In addition,
+    she will now update the server names of all servers in the log.
+- Cleaned up a lot of code and removed ~10 unused variables.
+- Removed RedCell diagnostic thing in properties because I removed it a long time ago and it kept a really annoying warning hanging around.
+
 Version 1.10
 
 - Music service added (LET'S GOOOO)

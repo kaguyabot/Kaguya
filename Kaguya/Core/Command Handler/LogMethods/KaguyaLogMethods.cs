@@ -31,11 +31,9 @@ namespace Kaguya.Core.CommandHandler
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
 
-        private static readonly HttpClient client = new HttpClient();
-
         public async Task OnReady()
         {
-            var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
+            _ = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = _client.GetUser(ID).MutualGuilds;
 
             AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
@@ -54,7 +52,7 @@ namespace Kaguya.Core.CommandHandler
                 logger.ConsoleCriticalAdvisory($"Failed to retrieve DBLAPI information: {e.Message}");
             }
 
-            var serverCountValue = new Dictionary<string, string>
+            _ = new Dictionary<string, string>
             {
                 { "server_count", $"{mutualGuilds.Count()}" }
             };
@@ -69,8 +67,27 @@ namespace Kaguya.Core.CommandHandler
             }
 
             Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Updating names of servers in the logs...");
+            var msgLogs = ServerMessageLogs.GetAllLogs();
+            int k = 0; //Number of guilds the bot has updated in the log.
+            int l = 0; //Number of guilds the bot has removed from the log.
+            foreach (var msgLog in msgLogs)
+            {
+                var guild = _client.GetGuild(msgLog.ID);
+                if (mutualGuilds.Contains(guild)) //Checks to make sure the bot is connected to the guild it wants to update the log for.
+                {
+                    msgLog.ServerName = guild.Name; k++;
+                }
+                else if (!mutualGuilds.Contains(guild)) //If the bot isn't connected to the server it has attempted to update the log for, remove it from the list.
+                {
+                    msgLogs.Remove(msgLog); l++;
+                }
+            }
+
+            Console.WriteLine($"Server Message Logs have been verified: {k} successfully verified. {l} successfully removed.");
 
             await _lavaSocketClient.StartAsync(_client);
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\nKaguya Music Service Started.");
 
             Console.WriteLine($"\nAce Pilot Kaguya cleared for takeoff. Servicing {mutualGuilds.Count()} guilds and {i.ToString("N0")} members.");
@@ -183,11 +200,9 @@ namespace Kaguya.Core.CommandHandler
         {
             if (s != null)
             {
-                var msg = s as SocketUserMessage;
-
                 Config.bot.LastSeenMessage = DateTime.Now;
 
-                if (msg != null && !msg.Author.IsBot)
+                if (s is SocketUserMessage msg && !msg.Author.IsBot)
                 {
                     if (msg.Channel is SocketTextChannel)
                     {
@@ -201,8 +216,9 @@ namespace Kaguya.Core.CommandHandler
                         }
                         else
                         {
-                            logger.ConsoleCriticalAdvisory($"Failed to cache message for {guild.Name} with ID: {guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 139!");
+                            logger.ConsoleCriticalAdvisory($"Failed to cache message for {guild.Name} with ID: {guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 195!");
                             ServerMessageLogs.RemoveLog(guild.Id);
+                            ServerMessageLogs.SaveServerLogging();
                             return Task.CompletedTask;
                         }
                     }

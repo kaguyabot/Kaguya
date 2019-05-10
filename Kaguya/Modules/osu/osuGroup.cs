@@ -33,7 +33,7 @@ namespace Kaguya.Modules.osu
 
         public async Task BE() //Method to build and send an embedded message.
         {
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
         [Command()]

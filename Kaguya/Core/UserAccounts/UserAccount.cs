@@ -24,7 +24,7 @@ namespace Kaguya.Core.UserAccounts
         {
             get
             {
-                return (uint)Math.Sqrt(EXP / 32);
+                return (uint)Math.Sqrt(EXP / 27);
             }
         }
         

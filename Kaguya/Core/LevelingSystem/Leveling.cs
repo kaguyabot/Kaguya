@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.WebSocket;
+using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
+using System;
 
 namespace Kaguya.Core.LevelingSystem
 {
@@ -26,7 +23,7 @@ namespace Kaguya.Core.LevelingSystem
                 uint oldLevel = userAccount.LevelNumber;
                 Random random = new Random();
                 uint newExp = (uint)random.Next(7, 11);
-                userAccount.EXP = userAccount.EXP + newExp;
+                userAccount.EXP += newExp;
                 userAccount.LastReceivedEXP = DateTime.Now;
                 UserAccounts.UserAccounts.SaveAccounts();
                 uint newLevel = userAccount.LevelNumber;
@@ -50,6 +47,10 @@ namespace Kaguya.Core.LevelingSystem
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                await EmbedHandler.CreateErrorEmbed("Leveling Exception", "Exception thrown when processing a leveling command." + //Sends response to user
+                    $"\nException: `{e.Message}` \n`Leveling.cs Line 51`", "This has been automatically reported as a bug and will be fixed as soon as possible.");
+                await EmbedHandler.CreateAutomaticBugReport("Leveling Exception: Leveling.cs Line 51", "Exception thrown when processing a leveling command." + //Sends bug to Kaguya Support Server.
+                    $"\nException Message: {e.Message}");
             }
         }
 
