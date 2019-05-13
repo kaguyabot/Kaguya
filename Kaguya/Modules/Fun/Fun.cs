@@ -39,7 +39,7 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("echo")] //fun
+        [Command("echo1")] //fun
         public async Task Echo([Remainder]string message = "")
         {
             stopWatch.Start();
@@ -48,19 +48,11 @@ namespace Kaguya.Modules
 
             if (message == "")
             {
-                embed.WithTitle("Echo");
                 embed.WithDescription($"**{Context.User.Mention} No message specified!**");
                 embed.WithColor(Red);
                 await BE(); logger.ConsoleCommandLog(Context); return;
             }
-            if (message.Contains(filteredWords.FirstOrDefault(x => x.Contains(filteredWords.ToString()))))
-            {
-                embed.WithTitle("Echo");
-                embed.WithDescription($"**{Context.User.Mention} Message was a filtered word!**");
-                embed.WithColor(Red);
-                await BE(); logger.ConsoleCommandLog(Context); return;
-            }
-            embed.WithTitle("Echo");
+
             embed.WithDescription(message);
             embed.WithColor(Pink);
 

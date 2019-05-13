@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.11.1
+
+- Fixed a bug where $echo wasn't working.
+- $echo no longer has a title in the embed.
+
 Version 1.11
 
 - $n command has been given a new dedicated source of lewds. 110 new drawings (however featuring similar characters) have been added!
