@@ -10,10 +10,11 @@ using System;
 using Kaguya.Core.UserAccounts;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Discord.Addons.Interactive;
 
 namespace Kaguya.Modules
 {
-    public class Help : ModuleBase<SocketCommandContext>
+    public class Help : InteractiveBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);
@@ -52,7 +53,15 @@ namespace Kaguya.Modules
                 case "hdm":
                     stopWatch.Start();
                     embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`");
-                    embed.WithDescription($"{Context.User.Mention} Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
+                    embed.WithDescription($"{Context.User.Mention} Permissions Required: **Administrator**" +
+                        $"\n" +
+                        $"\nSends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "toggleannouncements":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Toggle Announcements | `{cmdPrefix}toggleannouncements`");
+                    embed.WithDescription($"{Context.User.Mention} Toggles the server's preference for in-chat level announcements.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "bug":
@@ -141,24 +150,6 @@ namespace Kaguya.Modules
                         $"\n{Context.User.Mention} Creates a text channel with the speficied name. " +
                         $"\nSyntax: `{cmdPrefix}createtextchannel <channel name>`. " +
                         $"\nThis name can have spaces. Example: `{cmdPrefix}createtextchannel testing 123`.");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "commands":
-                case "cmds":
-                    stopWatch.Start();
-                    embed.WithTitle($"Help: Commands | `{cmdPrefix}commands` / `{cmdPrefix}cmds`");
-                    embed.WithDescription($"{Context.User.Mention} Displays a list of commands for the specified module. Use {cmdPrefix}modules " +
-                        $"for the list of modules you may pick from. Modules are essentially command groups seperated by category." +
-                        $"\nSyntax: `{cmdPrefix}cmds <module>`, `{cmdPrefix}cmds administrator`");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "modules":
-                case "mdls":
-                    stopWatch.Start();
-                    embed.WithTitle($"Help: Modules | `{cmdPrefix}modules` / `{cmdPrefix}mdls`");
-                    embed.WithDescription($"{Context.User.Mention} Displays a list of modules that contain commands. Use `{cmdPrefix}cmds <module>` " +
-                        $"to see the commands list for that module." +
-                        $"\nSyntax: `{cmdPrefix}modules`, `{cmdPrefix}mdls`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "deletetextchannel":
@@ -480,6 +471,17 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 8 \"Smelly sushi\"`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "osutop -n":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: osu! Top Extension: -n | `{cmdPrefix}osutop -n`");
+                    embed.WithDescription($"{Context.User.Mention} Displays the specified top play for a given player. If the player variable is left blank, " +
+                        $"I will use the username specified when you used `{cmdPrefix}osuset`. The number for the play you want to search for must be between 1 and 100, " +
+                        $"because there are only 100 top plays on someone's profile." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}osutop -n <num> [player]`" +
+                        $"\nExamples: `{cmdPrefix}osutop -n 75`, `{cmdPrefix}osutop -n 90 nathan on osu`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "delteams":
                     stopWatch.Start();
                     embed.WithTitle($"Help: Deleting Teams | `{cmdPrefix}delteams`");
@@ -775,23 +777,251 @@ namespace Kaguya.Modules
             stopWatch.Start();
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
-            embed.WithTitle("Commands List");
-            embed.WithDescription($"All Kaguya commands separated by category. To use the command, have \nthe `{cmdPrefix}` symbol appended before the phrase. For more information on a specific command, " +
-                $"type `{cmdPrefix}h <command>`");
-            embed.AddField("Administration", "`kick [k]` \n`ban [b]` \n`masskick` \n`massban` \n`massblacklist` `\nmute` \n`unblacklist` \n`removeallroles [rar]` \n`createrole [cr]` \n`deleterole [dr]` \n`shadowban` \n`unshadowban`" +
-                "\n`clear [c] [purge]` \n`kaguyaexit` \n`scrapeserver` \n`filteradd [fa]` \n`filterremove [fr]` \n`filterview [fv]` \n`filterclear [clearfilter]` \n`setlogchannel [log]` \n`resetlogchannel [rlog]`" +
-                "\n`logtypes [loglist]`", true);
-            embed.AddField("Currency", "`points` \n`pointsadd [addpoints]` \n`timely [t]` \n`weekly` \n`timelyreset` \n`roll [gr]` \n`awardeveryone [awardall]` \n`masspointsdistribute`", true);
-            embed.AddField("EXP", "`exp` \n`expadd [addexp]` \n`level` \n`rep` \n`repauthor [rep author]` \n`serverexplb [explb]` \n`globalexplb [gexplb]`", true);
-            embed.AddField("Fun", "`echo` \n`pick` \n`8ball` \n`slap` \n`hug` \n`kiss` \n`tickle` \n`poke` \n`pat` \n`baka` \n`nekoavatar` \n`smug` \n`waifu` \n`wallpaper` ", true);
-            embed.AddField("Help", "`help [h]` \n`helpdm [hdm]` \n`bug`", true);
-            embed.AddField("osu!", "`osu` \n`osutop` \n`recent [r]` \n`osuset`", true);
-            embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]` \n`inrole`", true);
-            embed.AddField("NSFW", $"`View with {cmdPrefix}cmds nsfw`", true);
-            embed.AddField("Music", $"`View with {cmdPrefix}cmds music`", true);
-            embed.WithColor(Pink);
-            embed.WithFooter($"For more information, including a link to add this bot to your server and a link to the Kaguya Support Discord, type {cmdPrefix}hdm!");
-            await BE(); stopWatch.Stop();
+            PaginatedMessage message = new PaginatedMessage();
+
+            string administration = "```css" +
+                        "\nAll commands in category: Administration" +
+                        "\n" +
+                        $"\n{cmdPrefix}ban [b]" +
+                        $"\n{cmdPrefix}clear [c] [purge]" +
+                        $"\n{cmdPrefix}createrole [cr]" +
+                        $"\n{cmdPrefix}deleterole [dr]" +
+                        $"\n{cmdPrefix}filteradd [fa]" +
+                        $"\n{cmdPrefix}filterclear [clearfilter]" +
+                        $"\n{cmdPrefix}filterremove [fr]" +
+                        $"\n{cmdPrefix}filterview [fv]" +
+                        $"\n{cmdPrefix}kaguyaexit" +
+                        $"\n{cmdPrefix}kick [k]" +
+                        $"\n{cmdPrefix}logtypes [loglist]" +
+                        $"\n{cmdPrefix}massban" +
+                        $"\n{cmdPrefix}massblacklist" +
+                        $"\n{cmdPrefix}masskick" +
+                        $"\n{cmdPrefix}mute [m]" +
+                        $"\n{cmdPrefix}removeallroles [rar]" +
+                        $"\n{cmdPrefix}resetlogchannel [rlog]" +
+                        $"\n{cmdPrefix}setlogchannel [log]" +
+                        $"\n{cmdPrefix}scrapeserver" +
+                        $"\n{cmdPrefix}shadowban" +
+                        $"\n{cmdPrefix}unblacklist" +
+                        $"\n{cmdPrefix}unshadowban" +
+                        $"\n" +
+                        $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                        "\n```";
+            string exp = "```css" +
+                    "\nAll commands in category: Experience Points" +
+                    "\n" +
+                    $"\n{cmdPrefix}exp" +
+                    $"\n{cmdPrefix}expadd [addexp]" +
+                    $"\n{cmdPrefix}level" +
+                    $"\n{cmdPrefix}globalexplb [gexplb]" +
+                    $"\n{cmdPrefix}rep" +
+                    $"\n{cmdPrefix}repauthor [rep author]" +
+                    $"\n{cmdPrefix}serverexplb [explb]" +
+                    $"\n" +
+                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                    "\n```";
+            string currency = "```css" +
+                "\nAll commands in category: Currency" +
+                "\n" +
+                $"\n{cmdPrefix}awardeveryone [awardall]" +
+                $"\n{cmdPrefix}roll [gr]" +
+                $"\n{cmdPrefix}masspointsdistribute" +
+                $"\n{cmdPrefix}points" +
+                $"\n{cmdPrefix}pointsadd [addpoints]" +
+                $"\n{cmdPrefix}timely [t]" +
+                $"\n{cmdPrefix}timelyreset" +
+                $"\n{cmdPrefix}weekly" +
+                $"\n" +
+                $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                $"\n```";
+
+            string utility = "```css" +
+                "\nAll commands in category: Utility" +
+                "\n" +
+                $"\n{cmdPrefix}author" +
+                $"\n{cmdPrefix}commands [cmds]" +
+                $"\n{cmdPrefix}modules [mdls]" +
+                $"\n{cmdPrefix}createtextchannel [ctc]" +
+                $"\n{cmdPrefix}createvoicechannel [cvc]" +
+                $"\n{cmdPrefix}deletetextchannel [dtc]" +
+                $"\n{cmdPrefix}deletevoicechannel [dvc]" +
+                $"\n{cmdPrefix}prefix" +
+                $"\n{cmdPrefix}inrole" +
+                $"\n{cmdPrefix}toggleannouncements" +
+                $"\n" +
+                $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                $"\n```";
+
+            string fun = "```css" +
+                    "\nAll commands in category: Fun" +
+                    "\n" +
+                    $"\n{cmdPrefix}echo" +
+                    $"\n{cmdPrefix}pick" +
+                    $"\n{cmdPrefix}8ball" +
+                    $"\n{cmdPrefix}slap" +
+                    $"\n{cmdPrefix}hug" +
+                    $"\n{cmdPrefix}kiss" +
+                    $"\n{cmdPrefix}tickle" +
+                    $"\n{cmdPrefix}pat" +
+                    $"\n{cmdPrefix}poke" +
+                    $"\n{cmdPrefix}baka" +
+                    $"\n{cmdPrefix}nekoavatar" +
+                    $"\n{cmdPrefix}smug" +
+                    $"\n{cmdPrefix}waifu" +
+                    $"\n{cmdPrefix}wallpaper" +
+                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                    $"\n" +
+                    $"\n```";
+
+            string music = "```css" +
+                    "\nAll commands in category: Music!" +
+                    "\n" +
+                    $"\n{cmdPrefix}m join" +
+                    $"\n{cmdPrefix}m play" +
+                    $"\n{cmdPrefix}m pause" +
+                    $"\n{cmdPrefix}m resume" +
+                    $"\n{cmdPrefix}m leave" +
+                    $"\n{cmdPrefix}m queue" +
+                    $"\n{cmdPrefix}m skip" +
+                    $"\n{cmdPrefix}m volume" +
+                    $"\n" +
+                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                    $"\n```";
+
+            string osu = "```css" +
+                    "\nAll commands in category: osu!" +
+                    "\n" +
+                    $"\n{cmdPrefix}osu" +
+                    $"\n{cmdPrefix}createteamrole [ctr]" +
+                    $"\n{cmdPrefix}delteams" +
+                    $"\n{cmdPrefix}osuset" +
+                    $"\n{cmdPrefix}osutop" +
+                    $"\n{cmdPrefix}osutop -n" +
+                    $"\n{cmdPrefix}recent [r]" +
+                    $"\n" +
+                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                    $"\n```";
+
+            string help = "```css" +
+                    "\nAll commands in category: Help" +
+                    "\n" +
+                    $"\n{cmdPrefix}help [h]" +
+                    $"\n{cmdPrefix}helpdm [hdm]" +
+                    $"\n{cmdPrefix}bug" +
+                    $"\n{cmdPrefix}vote" +
+                    $"\n{cmdPrefix}voteclaim" +
+                    $"\n" +
+                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                    $"\n```";
+
+            string nsfw = "```css" +
+                    "\nAll commands in category: NSFW" +
+                    "\nNote: ALL NSFW images are 2D!" +
+                    "\n" +
+                    $"\n{cmdPrefix}n lewd" +
+                    $"\n{cmdPrefix}n boobs" +
+                    $"\n{cmdPrefix}n anal" +
+                    $"\n{cmdPrefix}n bdsm" +
+                    $"\n{cmdPrefix}n bj" +
+                    $"\n{cmdPrefix}n classic" +
+                    $"\n{cmdPrefix}n cum" +
+                    $"\n{cmdPrefix}n feet" +
+                    $"\n{cmdPrefix}n eroyuri" +
+                    $"\n{cmdPrefix}n pussy" +
+                    $"\n{cmdPrefix}n solo" +
+                    $"\n{cmdPrefix}n hentai" +
+                    $"\n{cmdPrefix}n avatar" +
+                    $"\n{cmdPrefix}n trap" +
+                    $"\n{cmdPrefix}n yuri" +
+                    $"\n{cmdPrefix}n gif" +
+                    $"\n{cmdPrefix}n bomb" +
+                    $"\n" +
+                    $"\nType \"{cmdPrefix}h n\" for more information. Must be used in an NSFW channel." +
+                    $"\n```";
+
+            var pages = new[]
+            {
+                new PaginatedMessage.Page
+                {
+                    Title = "Commands List Page 1: Administration",
+                    Description = administration,
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Commands List Page 2: Currency",
+                    Description = currency,
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Commands List Page 3: EXP",
+                    Description = exp,
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Commands List Page 4: Fun",
+                    Description = fun,
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Commands List Page 5: Help",
+                    Description = help,
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Commands List Page 6: Music",
+                    Description = music,
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Commands List Page 7: NSFW",
+                    Description = nsfw,
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Commands List Page 8: osu!",
+                    Description = osu,
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Commands List Page 9: Utility",
+                    Description = utility,
+                },
+            };
+
+            var trashcanEmote = new Emoji("🚮");
+
+            var options = new PaginatedAppearanceOptions
+            {
+                JumpDisplayOptions = JumpDisplayOptions.Always,
+                Stop = trashcanEmote
+            };
+
+
+            var pager = new PaginatedMessage
+            {
+                Pages = pages,
+                Color = Pink,
+                Options = options
+            };
+
+            await PagedReplyAsync(pager, new ReactionList
+            {
+                First = true,
+                Last = true,
+                Backward = true,
+                Forward = true,
+                Trash = true
+            });
+
+            stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
@@ -806,12 +1036,11 @@ namespace Kaguya.Modules
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
             embed.WithColor(Pink);
             await BE();
-            await Context.User.SendMessageAsync($"Need help with a specific command? Type `{cmdPrefix}mdls` to see a list of categories the commands are listed under." +
-                $"\nType `{cmdPrefix}commands <module name>` to see all commands listed under that module." +
+            await Context.User.SendMessageAsync($"Need the commands list? Type `{cmdPrefix}h` to see a scrollable list of categories with all of their commands." +
                 $"\nType `{cmdPrefix}h <command name>` for more information on how to use the command and a detailed description of what it does." +
                 $"\nAdd me to your server with this link!: <https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847>" +
-                $"\nWant to keep track of all the changes? Feel free to check out the Kaguya Github page!: <https://github.com/stageosu/Kaguya>" +
-                $"\nKaguya Support Server: https://discord.gg/yhcNC97");
+                $"\nWant to keep track of all the changes? Feel free to check out the Kaguya GitHub page!: <https://github.com/stageosu/Kaguya>" +
+                $"\nKaguya Support Server: https://discord.gg/yhcNC97 (This is also a good place to see what's coming soon and get notified when new updates come out :D)");
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -891,5 +1120,6 @@ namespace Kaguya.Modules
                 await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
         }
+
     }
 }

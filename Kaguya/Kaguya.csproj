@@ -280,8 +280,8 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Victoria, Version=4.0.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Victoria.4.0.9\lib\netstandard2.0\Victoria.dll</HintPath>
+    <Reference Include="Victoria, Version=4.0.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Victoria.4.0.10\lib\netstandard2.0\Victoria.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

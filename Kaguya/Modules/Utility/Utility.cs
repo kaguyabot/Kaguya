@@ -35,257 +35,6 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("modules")] //utility
-        [Alias("mdls")]
-        public async Task ModulesList()
-        {
-            stopWatch.Start();
-            var server = Servers.GetServer(Context.Guild);
-            var cmdPrefix = server.commandPrefix;
-            embed.WithTitle("All Kaguya Modules");
-            embed.WithDescription($"For all commands in a module, use `{cmdPrefix}commands <ModuleName>`. " +
-                $"\nExample: `{cmdPrefix}cmds admin`" +
-                $"\n" +
-                $"\nAdministration" +
-                $"\nCurrency" +
-                $"\nEXP" +
-                $"\nFun" +
-                $"\nHelp" +
-                $"\nNSFW" +
-                $"\nosu" +
-                $"\nUtility");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-        }
-
-        [Command("cmds")] //utility
-        [Alias("commands")]
-        public async Task ModulesList([Remainder]string category)
-        {
-            stopWatch.Start();
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-
-            if (category.ToLower() == "administration" || category.ToLower() == "admin")
-            {
-                embed.WithTitle("Module: Administration");
-                embed.WithDescription("```css" +
-                        "\nAll commands in category: Administration" +
-                        "\n" +
-                        $"\n{cmdPrefix}ban [b]" +
-                        $"\n{cmdPrefix}clear [c] [purge]" +
-                        $"\n{cmdPrefix}createrole [cr]" +
-                        $"\n{cmdPrefix}deleterole [dr]" +
-                        $"\n{cmdPrefix}filteradd [fa]" +
-                        $"\n{cmdPrefix}filterclear [clearfilter]" +
-                        $"\n{cmdPrefix}filterremove [fr]" +
-                        $"\n{cmdPrefix}filterview [fv]" +
-                        $"\n{cmdPrefix}kaguyaexit" +
-                        $"\n{cmdPrefix}kick [k]" +
-                        $"\n{cmdPrefix}logtypes [loglist]" +
-                        $"\n{cmdPrefix}massban" +
-                        $"\n{cmdPrefix}massblacklist" +
-                        $"\n{cmdPrefix}masskick" +
-                        $"\n{cmdPrefix}mute [m]" +
-                        $"\n{cmdPrefix}removeallroles [rar]" +
-                        $"\n{cmdPrefix}resetlogchannel [rlog]" +
-                        $"\n{cmdPrefix}setlogchannel [log]" +
-                        $"\n{cmdPrefix}scrapeserver" +
-                        $"\n{cmdPrefix}shadowban" +
-                        $"\n{cmdPrefix}unblacklist" +
-                        $"\n{cmdPrefix}unshadowban" +
-                        $"\n" +
-                        $"\nType {cmdPrefix}h <command> for more information on a specific command." +
-                        "\n```");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-            else if (category.ToLower() == "exp")
-            {
-                embed.WithTitle("Module: EXP");
-                embed.WithDescription
-                    ("```css" +
-                    "\nAll commands in category: Experience Points" +
-                    "\n" +
-                    $"\n{cmdPrefix}exp" +
-                    $"\n{cmdPrefix}expadd [addexp]" +
-                    $"\n{cmdPrefix}level" +
-                    $"\n{cmdPrefix}globalexplb [gexplb]" +
-                    $"\n{cmdPrefix}rep" +
-                    $"\n{cmdPrefix}repauthor [rep author]" +
-                    $"\n{cmdPrefix}serverexplb [explb]" +
-                    $"\n" +
-                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
-                    "\n```");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-            else if (category.ToLower() == "currency")
-            {
-                embed.WithTitle("Module: Currency");
-                embed.WithDescription
-                ("```css" +
-                "\nAll commands in category: Currency" +
-                "\n" +
-                $"\n{cmdPrefix}awardeveryone [awardall]" +
-                $"\n{cmdPrefix}roll [gr]" +
-                $"\n{cmdPrefix}masspointsdistribute" +
-                $"\n{cmdPrefix}points" +
-                $"\n{cmdPrefix}pointsadd [addpoints]" +
-                $"\n{cmdPrefix}timely [t]" +
-                $"\n{cmdPrefix}timelyreset" +
-                $"\n{cmdPrefix}weekly" +
-                $"\n" +
-                $"\nType {cmdPrefix}h <command> for more information on a specific command." +
-                $"\n```"
-                );
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-            else if (category.ToLower() == "utility")
-            {
-                embed.WithTitle("Module: Utility");
-                embed.WithDescription
-                ("```css" +
-                "\nAll commands in category: Utility" +
-                "\n" +
-                $"\n{cmdPrefix}author" +
-                $"\n{cmdPrefix}commands [cmds]" +
-                $"\n{cmdPrefix}modules [mdls]" +
-                $"\n{cmdPrefix}createtextchannel [ctc]" +
-                $"\n{cmdPrefix}createvoicechannel [cvc]" +
-                $"\n{cmdPrefix}deletetextchannel [dtc]" +
-                $"\n{cmdPrefix}deletevoicechannel [dvc]" +
-                $"\n{cmdPrefix}prefix" +
-                $"\n{cmdPrefix}inrole" +
-                $"\n" +
-                $"\nType {cmdPrefix}h <command> for more information on a specific command." +
-                $"\n```");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-            else if (category.ToLower() == "fun")
-            {
-                embed.WithTitle("Module: Fun");
-                embed.WithDescription("```css" +
-                    "\nAll commands in category: Fun" +
-                    "\n" +
-                    $"\n{cmdPrefix}echo" +
-                    $"\n{cmdPrefix}pick" +
-                    $"\n{cmdPrefix}8ball" +
-                    $"\n{cmdPrefix}slap" +
-                    $"\n{cmdPrefix}hug" +
-                    $"\n{cmdPrefix}kiss" +
-                    $"\n{cmdPrefix}tickle" +
-                    $"\n{cmdPrefix}pat" +
-                    $"\n{cmdPrefix}poke" +
-                    $"\n{cmdPrefix}baka" +
-                    $"\n{cmdPrefix}nekoavatar" +
-                    $"\n{cmdPrefix}smug" +
-                    $"\n{cmdPrefix}waifu" +
-                    $"\n{cmdPrefix}wallpaper" +
-                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
-                    $"\n" +
-                    $"\n```");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-            else if (category.ToLower() == "music")
-            {
-                embed.WithTitle("Module: Music!");
-                embed.WithDescription("```css" +
-                    "\nAll commands in category: Music!" +
-                    "\n" +
-                    $"\n{cmdPrefix}m join" +
-                    $"\n{cmdPrefix}m play" +
-                    $"\n{cmdPrefix}m pause" +
-                    $"\n{cmdPrefix}m resume" +
-                    $"\n{cmdPrefix}m leave" +
-                    $"\n{cmdPrefix}m queue" +
-                    $"\n{cmdPrefix}m skip" +
-                    $"\n{cmdPrefix}m volume" +
-                    $"\n" +
-                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
-                    $"\n```");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-            else if (category.ToLower() == "osu")
-            {
-                embed.WithTitle("Module: osu!");
-                embed.WithDescription("```css" +
-                    "\nAll commands in category: osu!" +
-                    "\n" +
-                    $"\n{cmdPrefix}osu" +
-                    $"\n{cmdPrefix}createteamrole [ctr]" +
-                    $"\n{cmdPrefix}delteams" +
-                    $"\n{cmdPrefix}osuset" +
-                    $"\n{cmdPrefix}osutop" +
-                    $"\n{cmdPrefix}recent [r]" +
-                    $"\n" +
-                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
-                    $"\n```");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-            else if (category.ToLower() == "help")
-            {
-                embed.WithTitle("Module: Help");
-                embed.WithDescription("```css" +
-                    "\nAll commands in category: Help" +
-                    "\n" +
-                    $"\n{cmdPrefix}help [h]" +
-                    $"\n{cmdPrefix}helpdm [hdm]" +
-                    $"\n{cmdPrefix}bug" +
-                    $"\n{cmdPrefix}vote" +
-                    $"\n{cmdPrefix}voteclaim" +
-                    $"\n" +
-                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
-                    $"\n```");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-            else if (category.ToLower() == "nsfw")
-            {
-                embed.WithTitle("Module: NSFW");
-                embed.WithDescription("```css" +
-                    "\nAll commands in category: NSFW" +
-                    "\nNote: ALL NSFW images are 2D!" +
-                    "\n" +
-                    $"\n{cmdPrefix}n lewd" +
-                    $"\n{cmdPrefix}n boobs" +
-                    $"\n{cmdPrefix}n anal" +
-                    $"\n{cmdPrefix}n bdsm" +
-                    $"\n{cmdPrefix}n bj" +
-                    $"\n{cmdPrefix}n classic" +
-                    $"\n{cmdPrefix}n cum" +
-                    $"\n{cmdPrefix}n feet" +
-                    $"\n{cmdPrefix}n eroyuri" +
-                    $"\n{cmdPrefix}n pussy" +
-                    $"\n{cmdPrefix}n solo" +
-                    $"\n{cmdPrefix}n hentai" +
-                    $"\n{cmdPrefix}n avatar" +
-                    $"\n{cmdPrefix}n trap" +
-                    $"\n{cmdPrefix}n yuri" +
-                    $"\n{cmdPrefix}n gif" +
-                    $"\n{cmdPrefix}n bomb" +
-                    $"\n" +
-                    $"\nType \"{cmdPrefix}h n\" for more information. Must be used in an NSFW channel." +
-                    $"\n```");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-        }
-
         [Command("toggleannouncements")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ToggleAnnouncements()
@@ -463,49 +212,49 @@ namespace Kaguya.Modules
 
                 var pages = new[]
                 {
-                new PaginatedMessage.Page
-                {
-                    Title = $"Inrole: Page 1 - Found {i} users with role {role.Name}",
-                    Description = String.Join("\n", output.Take(10))
-                },
+                    new PaginatedMessage.Page
+                    {
+                        Title = $"Inrole: Page 1 - Found {i} users with role {role.Name}",
+                        Description = String.Join("\n", output.Take(10))
+                    },
 
-                new PaginatedMessage.Page
-                {
-                    Title = "Inrole: Page 2",
-                    Description = String.Join("\n", output.Skip(10).Take(10))
-                },
+                    new PaginatedMessage.Page
+                    {
+                        Title = "Inrole: Page 2",
+                        Description = String.Join("\n", output.Skip(10).Take(10))
+                    },
 
-                new PaginatedMessage.Page
-                {
-                    Title = "Inrole: Page 3",
-                    Description = String.Join("\n", output.Skip(20).Take(10))
-                },
+                    new PaginatedMessage.Page
+                    {
+                        Title = "Inrole: Page 3",
+                        Description = String.Join("\n", output.Skip(20).Take(10))
+                    },
 
-                new PaginatedMessage.Page
-                {
-                    Title = "Inrole: Page 4",
-                    Description = String.Join("\n", output.Skip(30).Take(10))
-                },
+                    new PaginatedMessage.Page
+                    {
+                        Title = "Inrole: Page 4",
+                        Description = String.Join("\n", output.Skip(30).Take(10))
+                    },
 
-                new PaginatedMessage.Page
-                {
-                    Title = "Inrole: Page 5",
-                    Description = String.Join("\n", output.Skip(40).Take(10))
-                },
+                    new PaginatedMessage.Page
+                    {
+                        Title = "Inrole: Page 5",
+                        Description = String.Join("\n", output.Skip(40).Take(10))
+                    },
 
-                new PaginatedMessage.Page
-                {
-                    Title = "Inrole: Page 6",
-                    Description = String.Join("\n", output.Skip(50).Take(10))
-                },
+                    new PaginatedMessage.Page
+                    {
+                        Title = "Inrole: Page 6",
+                        Description = String.Join("\n", output.Skip(50).Take(10))
+                    },
 
-                new PaginatedMessage.Page
-                {
-                    Title = "Inrole: Page 7",
-                    Description = String.Join("\n", output.Skip(60).Take(10))
-                },
+                    new PaginatedMessage.Page
+                    {
+                        Title = "Inrole: Page 7",
+                        Description = String.Join("\n", output.Skip(60).Take(10))
+                    },
 
-            };
+                };
 
                 var pager = new PaginatedMessage
                 {

@@ -252,6 +252,9 @@ namespace Kaguya.Modules
                 double starRating = mapRecentObject.difficultyrating;
                 double accuracy = 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
                 string grade = playerRecentObject.rank;
+
+                //Emote codes for grade icons
+
                 switch (grade)
                 {
                     case "XH":

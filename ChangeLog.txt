@@ -3,6 +3,15 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Verison 1.12
+
+- $osutop -n extension added. You can use this command to target a specific top play and see stats on it. Ex: "$osutop -n 65"
+- Added $toggleannouncements to the utility module
+- Added a help command for $toggleannouncements
+- Fixed a small formatting issue with $h (mute wasn't separated)
+- $help has been completely re-written. You can now scroll through the command list with emojis (reactions) and the format is different. Try it out!
+- $commands and $modules have been removed as they have basically been merged into the $h command.
+
 Version 1.11.1
 
 - Fixed a bug where $echo wasn't working.
