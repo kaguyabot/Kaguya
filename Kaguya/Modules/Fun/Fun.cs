@@ -39,7 +39,7 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("echo1")] //fun
+        [Command("echo")] //fun
         public async Task Echo([Remainder]string message = "")
         {
             stopWatch.Start();
