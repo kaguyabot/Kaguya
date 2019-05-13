@@ -19,7 +19,7 @@ using static Kaguya.Modules.osuStandard;
 namespace Kaguya.Modules.osu
 {
     [Group("osutop")]
-    public class osuGroup : ModuleBase<SocketCommandContext>
+    public class osuTop : ModuleBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         readonly Color Pink = new Color(252, 132, 255);
@@ -37,7 +37,7 @@ namespace Kaguya.Modules.osu
         }
 
         [Command()]
-        public async Task osuTop(int num = 5, [Remainder]string player = null)
+        public async Task TopOsuPlays(int num = 5, [Remainder]string player = null)
         {
             stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
@@ -100,11 +100,52 @@ namespace Kaguya.Modules.osu
                 }
 
                 var mapObject = JsonConvert.DeserializeObject<dynamic>(jsonMap)[0];
+
+                //Create StreamReader for OppaiSharp beatmap parser
+
+                byte[] data = new WebClient().DownloadData($"https://osu.ppy.sh/osu/{mapID}");
+                var stream = new MemoryStream(data, false);
+                var reader = new StreamReader(stream);
+
+                //Read the beatmap
+                var beatmap = Beatmap.Read(reader);
+
+                //Gets the map's enabled mods and turns it into a string (referencing from Kaguya.Modules.osuStandard.AllMods).
+                //modnum here is directly from the osu!API.
+
+                var modnum = playerTopObject.enabled_mods;
+                string mods = ((AllMods)modnum).ToString().Replace(",", "");
+                mods = mods.Replace(" ", "");
+                mods = mods.Replace("NM", "");
+                mods = mods.Replace("576", "NC");
+                mods = mods.Replace("DTNC", "NC");
+
+                var enabledMods = Mods.NoMod; //Default enabled mod.
+
+                /*If any of the possibly enabled mods (excluding sudden death/perfect) are enabled, 
+                add it to the enum enabledMods that we use to calculate the map's star rating.*/
+
+                if (mods.Contains("EZ"))
+                    enabledMods |= Mods.Easy;
+                if (mods.Contains("HD"))
+                    enabledMods |= Mods.Hidden;
+                if (mods.Contains("HR"))
+                    enabledMods |= Mods.Hardrock;
+                if (mods.Contains("FL"))
+                    enabledMods |= Mods.Flashlight;
+                if (mods.Contains("DT") || mods.Contains("NC"))
+                    enabledMods |= Mods.DoubleTime;
+                if (mods.Contains("NF"))
+                    enabledMods |= Mods.NoFail;
+                if (mods.Contains("HT"))
+                    enabledMods |= Mods.HalfTime;
+
+                //API Data on the player we're getting the top plays for.
+
                 double pp = playerTopObject.pp;
                 string mapTitle = mapObject.title;
-                double difficultyRating = mapObject.difficultyrating;
+                DiffCalc difficultyRating = new DiffCalc().Calc(beatmap, enabledMods);
                 string version = mapObject.version;
-                string country = playerTopObject.country;
                 double count300 = playerTopObject.count300;
                 double count100 = playerTopObject.count100;
                 double count50 = playerTopObject.count50;
@@ -116,6 +157,8 @@ namespace Kaguya.Modules.osu
                 DateTime date = playerTopObject.date;
                 switch (grade)
                 {
+                    //Switching grade earned on map and turning it into an emoji to be sent into Discord. This helps make the embed look pretty.
+
                     case "XH":
                         grade = "<:XH:553119188089176074>"; break;
                     case "X":
@@ -134,23 +177,19 @@ namespace Kaguya.Modules.osu
                         grade = "<:D_:553119338035675138>"; break;
                 }
 
-                var modnum = playerTopObject.enabled_mods;
-                string mods = ((AllMods)modnum).ToString().Replace(",", "");
-                mods = mods.Replace(" ", "");
-                mods = mods.Replace("NM", "");
-                mods = mods.Replace("576", "NC");
-                mods = mods.Replace("DTNC", "NC");
-
-
-                PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, country, count300, count100, count50, countMiss, accuracy, grade, playerMaxCombo, mapMaxCombo, mods, date);
+                PlayData PlayData = new PlayData(mapTitle, mapID, pp, difficultyRating, version, count300, count100, count50, countMiss, accuracy, grade, playerMaxCombo, mapMaxCombo, mods, date);
                 PlayDataArray[i] = PlayData;
             }
+
+            //Download user's information from the osu! API.
 
             string jsonPlayer = "";
             using (WebClient client = new WebClient())
             {
                 jsonPlayer = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u={player}");
             }
+
+            //If the API doesn't return anything, send a response in chat letting the user know what happened.
 
             if (jsonPlayer == "[]")
             {
@@ -163,18 +202,29 @@ namespace Kaguya.Modules.osu
             var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonPlayer)[0];
             string username = playerObject.username;
             string playerID = playerObject.user_id;
+            string playerCountry = playerObject.country;
             string TopPlayString = ""; //Country images to come later.
             for (var j = 0; j < num; j++)
             {
-                string plus = "+";
+                string plus = "+"; //This is in its own variable so that in the case of there not being any mods, we can null it out (helps with embed formatting).
+                char[] splitter = { 's' };
+                double.TryParse(PlayDataArray[j].difficultyRating.ToString().Split(splitter)[0], out double starRating); //Give us a starRating variable that we can then format into a number with two decimals.
 
                 if (plus == "+" && PlayDataArray[j].mods == "")
                     plus = "";
                 TopPlayString = TopPlayString + $"\n{j + 1}: ▸ **{PlayDataArray[j].grade}{plus}{PlayDataArray[j].mods}** ▸ {PlayDataArray[j].mapID} ▸ **[{PlayDataArray[j].mapTitle} [{PlayDataArray[j].version}]](https://osu.ppy.sh/b/{PlayDataArray[j].mapID})** " +
-                    $"\n▸ **☆{PlayDataArray[j].difficultyRating.ToString("F")}** ▸ **{PlayDataArray[j].accuracy.ToString("F")}%** for **{PlayDataArray[j].pp.ToString("F")}pp** " +
+                    $"\n▸ **☆{starRating.ToString("N2")}** ▸ **{PlayDataArray[j].accuracy.ToString("F")}%** for **{PlayDataArray[j].pp.ToString("F")}pp** " +
                     $"\n▸ [Combo: {PlayDataArray[j].playerMaxCombo}x / Max: {PlayDataArray[j].mapMaxCombo}]\n";
             }
-            embed.WithAuthor($"{username}'s Top osu! Standard Plays");
+
+            //Code to build embedded message that is then sent into chat.
+
+            embed.WithAuthor(author =>
+            {
+                author.Name = $"{username}'s Top {num} osu! Standard Plays";
+                author.IconUrl = $"https://osu.ppy.sh/images/flags/{playerCountry}.png";
+            });
+
             embed.WithTitle($"**Top {num} osu! standard plays for {username}:**");
             embed.WithUrl($"https://osu.ppy.sh/u/{playerID}");
             embed.WithDescription($"osu! Stats for player **{username}**:\n" + TopPlayString);

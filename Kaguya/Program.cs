@@ -11,18 +11,20 @@ using System.Text;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Core;
 using Victoria;
+using Microsoft.Extensions.DependencyInjection;
+using Discord.Addons.Interactive;
+using Discord.Commands;
 
 namespace Kaguya
 {
     public class Program
     {
         static void Main(string[] args)
-        => new Program().StartAsync().GetAwaiter().GetResult();
+            => new Program().StartAsync().GetAwaiter().GetResult();
+
         DiscordSocketClient _client;
         CommandHandler _handler;
         public string version = Utilities.GetAlert("VERSION");
-        KaguyaLogMethods logMethods = new KaguyaLogMethods();
-        Logger logger = new Logger();
 
         public async Task StartAsync()
         {
@@ -55,7 +57,6 @@ namespace Kaguya
                 {
                     _client = new DiscordSocketClient(new DiscordSocketConfig
                     {
-                        LogLevel = LogSeverity.Verbose,
                         MessageCacheSize = 100
                     });
                     try
@@ -73,8 +74,16 @@ namespace Kaguya
                     }
                     await _client.StartAsync();
                     Global.Client = _client;
-                    _handler = new CommandHandler();
-                    await _handler.InitializeAsync(_client);
+
+                    var serviceProvider = new ServiceCollection()
+                        .AddSingleton(_client)
+                        .AddSingleton(new InteractiveService(_client))
+                        .AddSingleton(new CommandService(
+                        new CommandServiceConfig { CaseSensitiveCommands = false, ThrowOnError = false })).BuildServiceProvider();
+
+                    _handler = new CommandHandler(serviceProvider);
+                    await _handler.InitializeAsync();
+
                     await Task.Delay(-1);
                 }
                 catch (Discord.Net.HttpException)

@@ -204,6 +204,13 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}createrole <name>`, `{cmdPrefix}cr <name>`.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "inrole":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Inrole | `{cmdPrefix}inrole`");
+                    embed.WithDescription($"{Context.User.Mention} Shows a list of up to 70 members with the role specified (in alphabetical order)." +
+                        $"\nSyntax: `{cmdPrefix}inrole <roleName>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "echo":
                     stopWatch.Start();
                     embed.WithTitle($"Help: Echoed Messages | `{cmdPrefix}echo`");
@@ -597,7 +604,7 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Bug Rewards | `{cmdPrefix}bugaward`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
-                        $"\nDM's the target and adds 2,000 Kaguya Points to their account. This is the reward for a `$bug` report that directly led to a patch/fix.");
+                        $"\nDMs the target and adds 2,000 Kaguya Points to their account. This is the reward for a `$bug` report that directly led to a patch/fix.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "rep":
@@ -779,7 +786,7 @@ namespace Kaguya.Modules
             embed.AddField("Fun", "`echo` \n`pick` \n`8ball` \n`slap` \n`hug` \n`kiss` \n`tickle` \n`poke` \n`pat` \n`baka` \n`nekoavatar` \n`smug` \n`waifu` \n`wallpaper` ", true);
             embed.AddField("Help", "`help [h]` \n`helpdm [hdm]` \n`bug`", true);
             embed.AddField("osu!", "`osu` \n`osutop` \n`recent [r]` \n`osuset`", true);
-            embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]`", true);
+            embed.AddField("Utility", "`modules [mdls]` \n`createtextchannel [ctc]` \n`deletetextchannel [dtc]` \n`createvoicechannel [cvc]` \n`deletevoicechannel [dvc]` \n`prefix` \n`author` \n`commands [cmds]` \n`inrole`", true);
             embed.AddField("NSFW", $"`View with {cmdPrefix}cmds nsfw`", true);
             embed.AddField("Music", $"`View with {cmdPrefix}cmds music`", true);
             embed.WithColor(Pink);

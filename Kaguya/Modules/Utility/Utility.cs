@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Core.UserAccounts;
-using System.Net;
-using System.Timers;
-using Kaguya.Core.Server_Files;
-using Kaguya.Core.Commands;
 using Kaguya.Core;
+using Kaguya.Core.Command_Handler.EmbedHandlers;
+using Kaguya.Core.CommandHandler;
+using Kaguya.Core.Commands;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.UserAccounts;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Kaguya.Modules
 {
-    public class Utility : ModuleBase<SocketCommandContext>
+    public class Utility : InteractiveBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);
@@ -28,6 +26,7 @@ namespace Kaguya.Modules
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
         public string botToken = Config.bot.Token;
+        public InteractiveService _interactive = new InteractiveService(Global.Client);
         Logger logger = new Logger();
         Stopwatch stopWatch = new Stopwatch();
 
@@ -161,6 +160,7 @@ namespace Kaguya.Modules
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
                 $"\n{cmdPrefix}deletevoicechannel [dvc]" +
                 $"\n{cmdPrefix}prefix" +
+                $"\n{cmdPrefix}inrole" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 $"\n```");
@@ -433,6 +433,107 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 }
+            }
+        }
+
+        [Command("inrole")]
+        public async Task InRole(string roleName)
+        {
+            stopWatch.Start();
+
+            try
+            {
+                var guild = Context.Guild;
+                var users = Context.Guild.Users;
+                var roles = Context.Guild.Roles;
+                var role = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
+
+                List<string> nameList = new List<string>();
+
+                foreach (var user in users)
+                {
+                    if (user.Roles.Contains(role as SocketRole))
+                    {
+                        nameList.Add($"{user.Username}#{user.Discriminator}");
+                    }
+                }
+                string[] output = nameList.ToArray();
+                Array.Sort(output);
+                int i = nameList.Count();
+
+                var pages = new[]
+                {
+                new PaginatedMessage.Page
+                {
+                    Title = $"Inrole: Page 1 - Found {i} users with role {role.Name}",
+                    Description = String.Join("\n", output.Take(10))
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Inrole: Page 2",
+                    Description = String.Join("\n", output.Skip(10).Take(10))
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Inrole: Page 3",
+                    Description = String.Join("\n", output.Skip(20).Take(10))
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Inrole: Page 4",
+                    Description = String.Join("\n", output.Skip(30).Take(10))
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Inrole: Page 5",
+                    Description = String.Join("\n", output.Skip(40).Take(10))
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Inrole: Page 6",
+                    Description = String.Join("\n", output.Skip(50).Take(10))
+                },
+
+                new PaginatedMessage.Page
+                {
+                    Title = "Inrole: Page 7",
+                    Description = String.Join("\n", output.Skip(60).Take(10))
+                },
+
+            };
+
+                var pager = new PaginatedMessage
+                {
+                    Pages = pages,
+                    Color = Pink,
+                };
+
+                await PagedReplyAsync(pager, new ReactionList
+                {
+                    Backward = true,
+                    Forward = true,
+                });
+            }
+            catch(NullReferenceException)
+            {
+                stopWatch.Stop();
+                await GlobalCommandResponses.CreateCommandError(
+                    Context, stopWatch.ElapsedMilliseconds, 
+                    CommandError.ObjectNotFound, 
+                    "The role specified does not exist.", 
+                    "Error: Inrole", $"{Context.User.Mention} **The role specified could not be found.**");
+                return;
+            }
+            catch(Exception e)
+            {
+                await GlobalCommandResponses.CreateAutomaticBugReport(
+                    "Inrole: Unknown Exception",
+                    $"Exception at Utility.cs line 532. Exception: {e.Message}");
             }
         }
 

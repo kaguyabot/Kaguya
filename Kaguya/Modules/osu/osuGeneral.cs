@@ -125,7 +125,7 @@ namespace Kaguya.Modules
                 $"\n▸ **Current Level:** `{level.ToString("N0")}` ~ `{(int)((level - (int)level) * 100)}% to level {(int)level + 1}`!" +
                 $"\n▸ **Total Circles Clicked:** `{(count300 + count100 + count50).ToString("N0")}`" +
                 $"\n▸ {gradeSSH} ~ `{countSSH}` {gradeSS} ~ `{countSS}` {gradeSH} ~ `{countSH}` {gradeS} ~ `{countS}` {gradeA} ~ `{countA}`" +
-                $"\n▸ **{username} joined `{difference.TotalDays.ToString("N0")} days, {difference.Hours} hours, and {difference.Seconds} seconds ago.`**" +
+                $"\n▸ **{username} joined `{difference.TotalDays.ToString("N0")} days, {difference.Hours} hours, {difference.Minutes} minutes, and {difference.Seconds} seconds ago.`**" +
                 $"\n**`That's over {(difference.TotalDays / 31).ToString("N0")} months!`**");
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
             embed.WithFooter($"Stats accurate as of {DateTime.Now}");
@@ -296,34 +296,21 @@ namespace Kaguya.Modules
                 var stream = new MemoryStream(data, false);
                 var reader = new StreamReader(stream);
                 var enabledMods = Mods.NoMod;
-                switch (mods)
-                {
-                    case "":
-                        enabledMods = Mods.NoMod; break;
-                    case "HD":
-                        enabledMods = Mods.Hidden; break;
-                    case "HR":
-                        enabledMods = Mods.Hardrock; break;
-                    case "DT":
-                    case "NC":
-                        enabledMods = Mods.DoubleTime; break;
-                    case "FL":
-                        enabledMods = Mods.Flashlight; break;
-                    case "HDDT":
-                    case "HDNC":
-                        enabledMods = (int)Mods.DoubleTime + Mods.Hidden; break;
-                    case "HDHR":
-                        enabledMods = (int)Mods.Hidden + Mods.Hardrock; break;
-                    case "HDFL":
-                        enabledMods = (int)Mods.Hidden + Mods.Flashlight; break;
-                    case "EZ":
-                        enabledMods = Mods.Easy; break;
-                    case "HDHRDT":
-                    case "HDHRNC":
-                        enabledMods = (int)Mods.Hidden + (int)Mods.Hardrock + Mods.DoubleTime; break;
-                    default:
-                        enabledMods = Mods.NoMod; break;
-                }
+
+                if (mods.Contains("EZ"))
+                    enabledMods |= Mods.Easy;
+                if (mods.Contains("HD"))
+                    enabledMods |= Mods.Hidden;
+                if (mods.Contains("HR"))
+                    enabledMods |= Mods.Hardrock;
+                if (mods.Contains("FL"))
+                    enabledMods |= Mods.Flashlight;
+                if (mods.Contains("DT") || mods.Contains("NC"))
+                    enabledMods |= Mods.DoubleTime;
+                if (mods.Contains("NF"))
+                    enabledMods |= Mods.NoFail;
+                if (mods.Contains("HT"))
+                    enabledMods |= Mods.HalfTime;
 
                 var beatmap = Beatmap.Read(reader);
                 var diff = new DiffCalc().Calc(beatmap, mods: enabledMods);
@@ -362,7 +349,6 @@ namespace Kaguya.Modules
                 embed.WithColor(Pink);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-                
             }
         }
 

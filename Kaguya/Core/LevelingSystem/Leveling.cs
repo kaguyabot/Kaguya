@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
@@ -47,9 +48,9 @@ namespace Kaguya.Core.LevelingSystem
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                await EmbedHandler.CreateErrorEmbed("Leveling Exception", "Exception thrown when processing a leveling command." + //Sends response to user
+                await StaticMusicEmbedHandler.CreateErrorEmbed("Leveling Exception", "Exception thrown when processing a leveling command." + //Sends response to user
                     $"\nException: `{e.Message}` \n`Leveling.cs Line 51`", "This has been automatically reported as a bug and will be fixed as soon as possible.");
-                await EmbedHandler.CreateAutomaticBugReport("Leveling Exception: Leveling.cs Line 51", "Exception thrown when processing a leveling command." + //Sends bug to Kaguya Support Server.
+                await GlobalCommandResponses.CreateAutomaticBugReport("Leveling Exception: Leveling.cs Line 51", "Exception thrown when processing a leveling command." + //Sends bug to Kaguya Support Server.
                     $"\nException Message: {e.Message}");
             }
         }

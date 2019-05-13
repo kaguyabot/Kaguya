@@ -89,8 +89,8 @@
     <Reference Include="BotListAPI, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\BotListAPI.3.4.0\lib\netstandard2.0\BotListAPI.dll</HintPath>
     </Reference>
-    <Reference Include="Discord.Addons.Interactive, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Discord.Addons.Interactive.1.0.1\lib\netstandard1.1\Discord.Addons.Interactive.dll</HintPath>
+    <Reference Include="Discord.Addons.Interactive, Version=2.0.3.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Discord.Addons.PassiveInteractive.2.0.4\lib\netstandard2.0\Discord.Addons.Interactive.dll</HintPath>
     </Reference>
     <Reference Include="Discord.Net.Commands, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Discord.Net.Commands.2.0.1\lib\net46\Discord.Net.Commands.dll</HintPath>
@@ -287,10 +287,11 @@
   <ItemGroup>
     <Compile Include="Core\Command Handler\CommandHandler.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Core\Command Handler\EmbedHandler.cs" />
+    <Compile Include="Core\Command Handler\EmbedHandlers\GlobalCommandResponses.cs" />
+    <Compile Include="Core\Command Handler\EmbedHandlers\StaticMusicEmbeds.cs" />
     <Compile Include="Core\Command Handler\LogMethods\KaguyaLogMethods.cs" />
     <Compile Include="Core\Command Handler\LogMethods\MusicLogMethods.cs" />
-    <Compile Include="Core\Command Handler\Timers.cs" />
+    <Compile Include="Core\Command Handler\Timers\Timers.cs" />
     <Compile Include="Core\Commands\Command.cs" />
     <Compile Include="Core\Commands\Commands.cs" />
     <Compile Include="Core\Data Storage\DataStorage2.cs" />
@@ -318,7 +319,7 @@
     <Compile Include="Modules\NSFW\NSFW.cs" />
     <Compile Include="Modules\osu\BeatmapLinkParser.cs" />
     <Compile Include="Modules\osu\osuGeneral.cs" />
-    <Compile Include="Modules\osu\osuGroup.cs" />
+    <Compile Include="Modules\osu\osuTop.cs" />
     <Compile Include="Modules\Patreon\Patreon.cs" />
     <Compile Include="Modules\Utility\Utility.cs" />
     <Compile Include="Program.cs" />

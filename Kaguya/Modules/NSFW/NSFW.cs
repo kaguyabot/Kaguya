@@ -4,6 +4,7 @@ using Discord.Commands;
 using Kaguya.Core;
 using System.Diagnostics;
 using NekosSharp;
+using System;
 
 namespace Kaguya.Modules.NSFW
 {
@@ -11,9 +12,6 @@ namespace Kaguya.Modules.NSFW
     public class NSFW : ModuleBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
-        Color Pink = new Color(252, 132, 255);
-        Color Red = new Color(255, 0, 0);
-        Color Gold = new Color(255, 223, 0);
         Color Violet = new Color(238, 130, 238);
         Logger logger = new Logger();
         Stopwatch stopWatch = new Stopwatch();
@@ -29,10 +27,11 @@ namespace Kaguya.Modules.NSFW
         public async Task NFSWRandom()
         {
             stopWatch.Start();
-            var lewd = await nekoClient.Nsfw_v3.Hentai();
-
-            embed.WithAuthor("NSFW: Hentai", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
-            embed.WithImageUrl(lewd.ImageUrl);
+            Random rand = new Random();
+            var lewdNum = rand.Next(7, 117);
+            var lewd = $"https://i.nhentai.net/galleries/1238853/{lewdNum}.png";
+            embed.WithAuthor("NSFW: Hentai", $"{Context.User.GetAvatarUrl()}", $"{lewd}");
+            embed.WithImageUrl(lewd);
             embed.WithColor(Violet);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);

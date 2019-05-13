@@ -87,26 +87,19 @@ namespace Kaguya.Modules.osu
                 switch (status)
                 {
                     case "-2":
-                        status = "Graveyard";
-                        break;
+                        status = "Graveyard"; break;
                     case "-1":
-                        status = "Work in Progress";
-                        break;
+                        status = "Work in Progress"; break;
                     case "0":
-                        status = "Pending";
-                        break;
+                        status = "Pending"; break;
                     case "1":
-                        status = $"Ranked on {approvedDate.ToShortDateString()}";
-                        break;
+                        status = $"Ranked on {approvedDate.ToShortDateString()}"; break;
                     case "2":
-                        status = $"Approved on {approvedDate.ToShortDateString()}";
-                        break;
+                        status = $"Approved on {approvedDate.ToShortDateString()}"; break;
                     case "3":
-                        status = $"Qualified on {approvedDate.ToShortDateString()}";
-                        break;
+                        status = $"Qualified on {approvedDate.ToShortDateString()}"; break;
                     case "4":
-                        status = $"Loved 💙 on {approvedDate.ToShortDateString()}";
-                        break;
+                        status = $"Loved 💙 on {approvedDate.ToShortDateString()}"; break;
                 }
             }
 
@@ -153,6 +146,7 @@ namespace Kaguya.Modules.osu
                 logger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
                 return;
             }
+
             double passRate = (playCount / passCount);
 
             //Tillerino API Data: Performance Point values for full combos on the map with the given accuracy.

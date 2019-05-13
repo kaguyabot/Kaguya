@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OppaiSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Kaguya.Modules
         public string mapTitle;
         public string mapID;
         public double pp;
-        public double difficultyRating;
+        public DiffCalc difficultyRating;
         public string version;
         public double count300;
         public double count100;
@@ -24,7 +25,7 @@ namespace Kaguya.Modules
         public string mods;
         public DateTime date;
 
-        public PlayData(string mapTitle, string mapID, double pp, double difficultyRating, string version, string country, double count300, double count100, double count50, double countMiss, double accuracy, string grade, double playerMaxCombo, double mapMaxCombo, string mods, DateTime date)
+        public PlayData(string mapTitle, string mapID, double pp, DiffCalc difficultyRating, string version, double count300, double count100, double count50, double countMiss, double accuracy, string grade, double playerMaxCombo, double mapMaxCombo, string mods, DateTime date)
         {
             this.mapTitle = mapTitle;
             this.mapID = mapID;

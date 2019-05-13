@@ -3,6 +3,23 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.11
+
+- $n command has been given a new dedicated source of lewds. 110 new drawings (however featuring similar characters) have been added!
+    - This is exclusive for $n on its own, and does not affect any tags or $n bomb.
+- Fixed a bug where it was impossible to get a "100" roll with $gr
+- Fixed a small typo with $h bugaward
+- $osutop will now show accurate star ratings for songs that are modded (Double Time, HR, EZ, etc.).
+- $osutop will now show the player's country flag in the top left.
+- $osu will now show how many minutes it's been since you've signed up (in addition to hours, days, and seconds).
+- Cleaned up some code in osuGeneral.cs
+- $gr multipliers have been slightly reduced.
+- critical multiplier for a 100 roll has been set to 5.00 * 6.00 (30x)
+- New $inrole command created. This command allows you to type the name of a role and get a list of users who are in that role. Currently, this is limited to 70 members.
+    - New feature: Paginated lists! Starting with $inrole, you can now use reactions to scroll through certain command lists.
+        - I plan to add this in with help commands soon!
+
+
 Version 1.10.2
 
 - Removed the server message log verifications because it was super buggy.

@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
@@ -9,6 +10,7 @@ using Kaguya.Core.LevelingSystem;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using Kaguya.Modules;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,7 +27,7 @@ namespace Kaguya
     {
 
         DiscordSocketClient _client;
-        CommandService _service;
+        CommandService _commands;
         LavaSocketClient _lavaSocketClient;
         private IServiceProvider _services;
         readonly Color Yellow = new Color(255, 255, 102);
@@ -40,19 +42,25 @@ namespace Kaguya
         public string osuApiKey = Config.bot.OsuApiKey;
         public string tillerinoApiKey = Config.bot.TillerinoApiKey;
 
-        public async Task InitializeAsync(DiscordSocketClient client)
+        public CommandHandler(IServiceProvider provider)
+        {
+            this._services = provider;
+            _client = this._services.GetService<DiscordSocketClient>();
+            _commands = new CommandService();
+        }
+
+        public async Task InitializeAsync()
         {
             try
             {
-                _client = client;
+                _client = Global.Client;
                 _lavaSocketClient = Global.lavaSocketClient;
-                _service = new CommandService();
-                _service.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTR());
-                await _service.AddModulesAsync(
-                  Assembly.GetExecutingAssembly(),
-                  _services);
-                _client.Connected += logger.ClientConnected;
 
+                _commands = new CommandService();
+                _commands.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTR());
+                await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+
+                _client.Connected += logger.ClientConnected;
                 _client.Ready += logger.OnReady;
                 _client.Ready += timers.CheckChannelPermissions;
                 _client.Ready += timers.ServerInformationUpdate;
@@ -147,7 +155,7 @@ namespace Kaguya
                 && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos)) { return; }
 
             var embed = new EmbedBuilder();
-            var result = await _service.ExecuteAsync(context, argPos, null);
+            var result = await _commands.ExecuteAsync(context, argPos, _services);
 
             if (!result.IsSuccess)
             {

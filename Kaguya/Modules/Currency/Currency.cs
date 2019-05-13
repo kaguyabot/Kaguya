@@ -272,7 +272,7 @@ namespace Kaguya.Modules
 
             Random rand = new Random();
             Random crit = new Random();
-            var roll = rand.Next(100);
+            var roll = rand.Next(101);
             bool critical = crit.Next(100) < 8;
 
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
@@ -308,7 +308,7 @@ namespace Kaguya.Modules
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
 
-                var multiplier = 2.0;
+                var multiplier = 1.70;
                 if(critical) { multiplier *= 2.50; }
                 userAccount.Points += (uint)(points * multiplier);
 
@@ -363,7 +363,7 @@ namespace Kaguya.Modules
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
 
-                var multiplier = 3.75;
+                var multiplier = 3.00;
                 if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
@@ -392,7 +392,7 @@ namespace Kaguya.Modules
                 Random randEmote = new Random();
                 var num = randEmote.Next(0, 2);
 
-                var multiplier = 5.50;
+                var multiplier = 4.25;
                 if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
@@ -413,15 +413,14 @@ namespace Kaguya.Modules
             }
             else if (roll == 100)
             {
-
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
 
                 string sirenEmote = "<a:siren:429784681316220939>";
 
-                var multiplier = 8.50;
-                if (critical) { multiplier *= 2.50; }
+                var multiplier = 6.00;
+                if (critical) { multiplier *= 5.00; }
 
                 userAccount.Points += (uint)(points * multiplier);
                 embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! It's a super critical hit!! {sirenEmote}");

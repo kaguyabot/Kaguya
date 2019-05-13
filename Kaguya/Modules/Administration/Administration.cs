@@ -842,13 +842,13 @@ namespace Kaguya.Modules
         {
             if(!(amount > 0))
             {
-                await EmbedHandler.CreateErrorEmbed("Clearing Messages", "The number of messages to be deleted must be greater than zero!");
+                await StaticMusicEmbedHandler.CreateErrorEmbed("Clearing Messages", "The number of messages to be deleted must be greater than zero!");
                 return;
             }
 
             if(!(amount <= 100))
             {
-                await EmbedHandler.CreateErrorEmbed("Clearing Messages", "The number of messages to be deleted must not be more than 100!");
+                await StaticMusicEmbedHandler.CreateErrorEmbed("Clearing Messages", "The number of messages to be deleted must not be more than 100!");
                 return;
             }
 
