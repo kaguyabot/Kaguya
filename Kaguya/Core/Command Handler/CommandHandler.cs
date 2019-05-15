@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
@@ -9,7 +8,6 @@ using Kaguya.Core.CommandHandler;
 using Kaguya.Core.LevelingSystem;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
-using Kaguya.Modules;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -151,8 +149,8 @@ namespace Kaguya
 
             int argPos = 0;
 
-            if (!msg.HasStringPrefix(guild.commandPrefix, ref argPos)
-                && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos)) { return; }
+            if (!msg.HasStringPrefix(guild.commandPrefix, ref argPos) && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
+                return;
 
             var embed = new EmbedBuilder();
             var result = await _commands.ExecuteAsync(context, argPos, _services);

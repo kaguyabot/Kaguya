@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.12.1
+
+- Removed $cmds and $mdls from help command (this was causing a LOT of confusion srryy!!!!)
+
 Verison 1.12
 
 - $osutop -n extension added. You can use this command to target a specific top play and see stats on it. Ex: "$osutop -n 65"

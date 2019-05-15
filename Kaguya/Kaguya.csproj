@@ -309,6 +309,7 @@
     <Compile Include="ListSocketGuildUserTR.cs" />
     <Compile Include="Core\PlayData.cs" />
     <Compile Include="Modules\Administration\Administration.cs" />
+    <Compile Include="Modules\Administration\AutoModerator.cs" />
     <Compile Include="Modules\Currency\Currency.cs" />
     <Compile Include="Modules\EXP\EXP.cs" />
     <Compile Include="Modules\Fun\Fun.cs" />

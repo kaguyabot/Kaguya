@@ -839,8 +839,6 @@ namespace Kaguya.Modules
                 "\nAll commands in category: Utility" +
                 "\n" +
                 $"\n{cmdPrefix}author" +
-                $"\n{cmdPrefix}commands [cmds]" +
-                $"\n{cmdPrefix}modules [mdls]" +
                 $"\n{cmdPrefix}createtextchannel [ctc]" +
                 $"\n{cmdPrefix}createvoicechannel [cvc]" +
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +

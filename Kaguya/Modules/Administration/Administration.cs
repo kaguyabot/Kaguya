@@ -14,12 +14,13 @@ using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
 using System.Timers;
 using Kaguya.Core.CommandHandler;
+using Kaguya.Core.Command_Handler.EmbedHandlers;
 
 #pragma warning disable CS0472
 
 namespace Kaguya.Modules
 {
-    public class Administration : ModuleBase<SocketCommandContext>
+    public class AdministrationCommands : ModuleBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);
@@ -840,27 +841,37 @@ namespace Kaguya.Modules
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task ClearMessages(int amount = 10)
         {
+            stopWatch.Start();
+
             if(!(amount > 0))
             {
-                await StaticMusicEmbedHandler.CreateErrorEmbed("Clearing Messages", "The number of messages to be deleted must be greater than zero!");
+                await GlobalCommandResponses.CreateCommandError(Context,
+                    stopWatch.ElapsedMilliseconds,
+                    CommandError.Unsuccessful, 
+                    "User tried to clear less than one message.",
+                    "Clearing Messages", 
+                    "The number of messages to be deleted must be greater than zero!");
                 return;
             }
 
             if(!(amount <= 100))
             {
-                await StaticMusicEmbedHandler.CreateErrorEmbed("Clearing Messages", "The number of messages to be deleted must not be more than 100!");
+                await GlobalCommandResponses.CreateCommandError(Context,
+                    stopWatch.ElapsedMilliseconds,
+                    CommandError.Unsuccessful,
+                    "User tried to clear more than 100 messages.",
+                    "Clearing Messages",
+                    "The number of messages to be deleted must not be more than 100!");
                 return;
             }
 
-            stopWatch.Start();
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
-            const int delay = 3000;
-            var m = await ReplyAsync($"Clearing of messages completed. This message will be deleted in {delay / 1000} seconds.");
-            await Task.Delay(delay);
+            var m = await ReplyAsync($"Clearing of messages completed. This message will be deleted in 3 seconds.");
+            await Task.Delay(3000);
             await m.DeleteAsync();
-            stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            stopWatch.Stop();
         }
 
         [Command("setlogchannel")] //administration
