@@ -99,7 +99,9 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nRolls: `8% chance that the multiplier of your bet is multiplied by 2.5x`" +
                         $"\nTimely: `14% chance that the value of your reward is multiplied by 3.5x`" +
-                        $"\nWeekly: `8% chance that the value of your reward will be multiplied by 3.5x`");
+                        $"\nWeekly: `8% chance that the value of your reward will be multiplied by 3.5x`" +
+                        $"\n" +
+                        $"\nIf you have successfully used `{cmdPrefix}voteclaim` within the last 12 hours, these percentages are doubled.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "exp":
@@ -122,8 +124,10 @@ namespace Kaguya.Modules
                 case "points":
                     stopWatch.Start();
                     embed.WithTitle($"Help: Points | `{cmdPrefix}points`");
-                    embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}points`." +
-                        $"\nReturns the value of points a user has in their account.");
+                    embed.WithDescription($"Help: Kaguya Points Balance | `{cmdPrefix}points`" +
+                        $"\nReturns the value of points a user has in their account." +
+                        $"\nSyntax: `{cmdPrefix}points {{This returns the amount of points you have in your account}}`" +
+                        $"\nSyntax: `{cmdPrefix}points <user> {{This returns the amount of points someone else has in their account.}}`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "pointsadd":

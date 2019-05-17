@@ -244,7 +244,7 @@ namespace Kaguya.Core.CommandHandler
             string channelName = channel.Name;
             Server currentServer = Servers.GetServer((SocketGuild)server);
             var currentLog = ServerMessageLogs.GetLog((SocketGuild)server);
-            ulong loggingChannelID = currentServer.LogMessageEdits;
+            ulong loggingChannelID = currentServer.LogUpdatedMessages;
             if (loggingChannelID == 0) return;
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetTextChannel(loggingChannelID);
             await cache.GetOrDownloadAsync();

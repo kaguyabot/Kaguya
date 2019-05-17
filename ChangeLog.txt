@@ -3,6 +3,13 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.13
+
+- Removed a 3 second delay I had with $clear that was there for no reason...clearing of messages should happen a lot faster now.
+- "MessageEdits" logtype has been renamed to "UpdatedMessages"
+- Made a minor update to the $h critical command.
+- For all "Emotion" related commands, if you mention a user it will now display their username instead of <@USERID>
+
 Version 1.12.1
 
 - Removed $cmds and $mdls from help command (this was causing a LOT of confusion srryy!!!!)

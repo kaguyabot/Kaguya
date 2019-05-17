@@ -319,7 +319,7 @@
     <Compile Include="Modules\Music\MusicService.cs" />
     <Compile Include="Modules\NSFW\NSFW.cs" />
     <Compile Include="Modules\osu\BeatmapLinkParser.cs" />
-    <Compile Include="Modules\osu\osuGeneral.cs" />
+    <Compile Include="Modules\osu\osu.cs" />
     <Compile Include="Modules\osu\osuTop.cs" />
     <Compile Include="Modules\Patreon\Patreon.cs" />
     <Compile Include="Modules\Utility\Utility.cs" />

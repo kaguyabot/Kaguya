@@ -115,12 +115,34 @@ namespace Kaguya.Modules
             await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
+        [Command("slap")]
+        public async Task Slap(IGuildUser target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.SlapGif();
+            embed.WithTitle($"{Context.User.Username} slaped {target.Username}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
         [Command("hug")]
         public async Task Hug(string target)
         {
             stopWatch.Start();
             var gif = await nekoClient.Action_v3.HugGif();
             embed.WithTitle($"{Context.User.Username} hugged {target}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("hug")]
+        public async Task Hug(IGuildUser target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.HugGif();
+            embed.WithTitle($"{Context.User.Username} hugged {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
             embed.WithColor(Violet);
             await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -137,12 +159,34 @@ namespace Kaguya.Modules
             await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
+        [Command("kiss")]
+        public async Task Kiss(IGuildUser target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.KissGif();
+            embed.WithTitle($"{Context.User.Username} kissed {target.Username}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
         [Command("pat")]
         public async Task Pat(string target)
         {
             stopWatch.Start();
             var gif = await nekoClient.Action_v3.PatGif();
             embed.WithTitle($"{Context.User.Username} patted {target}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("pat")]
+        public async Task Pat(IGuildUser target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.PatGif();
+            embed.WithTitle($"{Context.User.Username} patted {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
             embed.WithColor(Violet);
             await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -159,12 +203,34 @@ namespace Kaguya.Modules
             await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
+        [Command("poke")]
+        public async Task Poke(IGuildUser target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.PokeGif();
+            embed.WithTitle($"{Context.User.Username} poked {target.Username}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
         [Command("tickle")]
         public async Task Tickle(string target)
         {
             stopWatch.Start();
             var gif = await nekoClient.Action_v3.TickleGif();
             embed.WithTitle($"{Context.User.Username} tickled {target}!");
+            embed.WithImageUrl(gif.ImageUrl);
+            embed.WithColor(Violet);
+            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("tickle")]
+        public async Task Tickle(IGuildUser target)
+        {
+            stopWatch.Start();
+            var gif = await nekoClient.Action_v3.TickleGif();
+            embed.WithTitle($"{Context.User.Username} tickled {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
             embed.WithColor(Violet);
             await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);

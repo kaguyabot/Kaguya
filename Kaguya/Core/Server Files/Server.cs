@@ -16,7 +16,7 @@ namespace Kaguya.Core.Server_Files
         public Dictionary<string, string> MutedMembers { get; set; }
         public List<string> FilteredWords { get; set; }
         public ulong LogDeletedMessages { get; set; }
-        public ulong LogMessageEdits { get; set; }
+        public ulong LogUpdatedMessages { get; set; }
         public ulong LogWhenUserJoins { get; set; }
         public ulong LogWhenUserLeaves { get; set; }
         public ulong LogWhenUserIsBanned { get; set; }

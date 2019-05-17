@@ -868,7 +868,6 @@ namespace Kaguya.Modules
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
             var m = await ReplyAsync($"Clearing of messages completed. This message will be deleted in 3 seconds.");
-            await Task.Delay(3000);
             await m.DeleteAsync();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             stopWatch.Stop();
@@ -894,8 +893,8 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "messageedits":
-                    server.LogMessageEdits = logChannelID;
+                case "updatedmessages":
+                    server.LogUpdatedMessages = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Edited Messages` will be sent in channel {channel.Name}");
@@ -968,7 +967,7 @@ namespace Kaguya.Modules
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "all":
                     server.LogDeletedMessages = logChannelID;
-                    server.LogMessageEdits = logChannelID;
+                    server.LogUpdatedMessages = logChannelID;
                     server.LogWhenUserJoins = logChannelID;
                     server.LogWhenUserLeaves = logChannelID;
                     server.LogWhenUserIsBanned = logChannelID;
@@ -1011,11 +1010,11 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "messageedits":
-                    server.LogMessageEdits = 0;
+                case "updatedmessages":
+                    server.LogUpdatedMessages = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
-                    embed.WithDescription($"{Context.User.Mention} Log messages for `Edited Messages` have been disabled");
+                    embed.WithDescription($"{Context.User.Mention} Log messages for `Updated Messages` have been disabled");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
@@ -1085,7 +1084,7 @@ namespace Kaguya.Modules
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "all":
                     server.LogDeletedMessages = 0;
-                    server.LogMessageEdits = 0;
+                    server.LogUpdatedMessages = 0;
                     server.LogWhenUserJoins = 0;
                     server.LogWhenUserLeaves = 0;
                     server.LogWhenUserIsBanned = 0;
@@ -1118,14 +1117,14 @@ namespace Kaguya.Modules
             stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             var server = Servers.GetServer(Context.Guild);
-            ulong[] logChannels = { server.LogDeletedMessages, server.LogMessageEdits, server.LogWhenUserJoins, server.LogWhenUserLeaves,
+            ulong[] logChannels = { server.LogDeletedMessages, server.LogUpdatedMessages, server.LogWhenUserJoins, server.LogWhenUserLeaves,
             server.LogWhenUserIsBanned, server.LogWhenUserIsUnbanned, server.LogChangesToLogSettings, server.LogWhenUserSaysFilteredPhrase,
             server.LogWhenUserConnectsToVoiceChannel, server.LogWhenUserDisconnectsFromVoiceChannel };
             embed.WithTitle("List of Log Events");
             embed.WithDescription($"List of all types of logging you can subscribe to. Use these with {cmdPrefix}log to enable logging!" +
                 "\n" +
                 $"\n**DeletedMessages** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[0])}`**" +
-                $"\n**MessageEdits** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[1])}`**" +
+                $"\n**UpdatedMessages** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[1])}`**" +
                 $"\n**UserJoins** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[2])}`**" +
                 $"\n**UserLeaves** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[3])}`**" +
                 $"\n**UserIsBanned** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[4])}`**" +
