@@ -10,7 +10,9 @@ Version 1.14
 - Title of "$rlog" embeds now says "Log channel reset" instead of "log channel set"
 - "Currently Playing" game will now rotate every 5 minutes instead of 10.
 - Updated the help command for "filteradd" to show how Kaguya's wildcard filter works.
-
+- Help command for $roll is now up to date.
+- Help command for $kaguyaexit is now up to date.
+- Fixed a bug where if you got a non-critical 100 roll it would say you've won a critical anyway.
 
 Version 1.13.1
 

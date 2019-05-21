@@ -7,7 +7,6 @@ using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.Commands;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
-using Kaguya.Modules.Administration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,7 +32,6 @@ namespace Kaguya.Modules
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
         readonly DiscordSocketClient _client = Global.Client;
-
 
         public async Task BE() //Method to build and send an embedded message.
         {

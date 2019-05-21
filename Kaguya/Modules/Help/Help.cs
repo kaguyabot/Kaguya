@@ -544,19 +544,18 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Allows you to roll the dice and gamble your points!" +
                         $"\n" +
                         $"\nA roll between `0-66` will result in a loss of your bet. " +
-                        $"A roll between `67-78` will return your bet back to you with a multiplier of `1.25x`" +
-                        $"\nRolls between `79-89`, `90-95`, `96-99`, and `100` will yield multipliers of `1.75x`, `2.25x`, `3x`, and `5x` respectively." +
+                        $"A roll between `67-78` will return your bet back to you with a multiplier of `1.7x`" +
+                        $"\nRolls between `79-89`, `90-95`, `96-99`, and `100` will yield multipliers of `2.5x`, `3x`, `4.25x`, and `6x` respectively." +
                         $"\n" +
                         $"\nThe maximum amount of points you can gamble at one time is set to `25,000`." +
                         $"\n" +
-                        $"\nIn addition, all rolls have a `4%` chance of landing a critical hit, multiplying the `multiplier` of the roll by `3.50x`. " +
-                        $"The best possible roll is a `critical 100`, multiplying your bet by `17.5x` (The odds of this are `1 / 2,500` or `0.04%`.)" +
-                        $"\nRolls also have a 4% chance of being a `critical loss`, resulting in `25%` additional lost points. (The odds of this are `66 / 2,500` or `2.64%`.)");
+                        $"\nIn addition, all rolls have an `8%` chance of landing a critical hit, multiplying the `multiplier` of the roll by `2.50x` (except for a 100 roll). " +
+                        $"The best possible roll is a `critical 100`, multiplying your bet by `30x` (The odds of this are `1 / 1,250` or `0.08%`.)");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "kaguyaexit":
                     stopWatch.Start();
-                    embed.WithTitle($"Help: Kaguya, gtfo! | `{cmdPrefix}kaguyagtfo`");
+                    embed.WithTitle($"Help: Kaguya Exit! | `{cmdPrefix}kaguyaexit`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
                         $"\nAdministrator only command that forces Kaguya to leave the current server.");

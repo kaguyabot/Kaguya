@@ -420,10 +420,15 @@ namespace Kaguya.Modules
                 string sirenEmote = "<a:siren:429784681316220939>";
 
                 var multiplier = 6.00;
-                if (critical) { multiplier *= 5.00; }
+                if (critical)
+                {
+                    multiplier *= 5.00;
+                    embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! It's a super critical hit!! {sirenEmote}");
+                }
+                else
+                    embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! {sirenEmote}");
 
                 userAccount.Points += (uint)(points * multiplier);
-                embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! It's a super critical hit!! {sirenEmote}");
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**\n" +
                     $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
