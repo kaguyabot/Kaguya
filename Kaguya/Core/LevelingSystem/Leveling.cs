@@ -35,7 +35,13 @@ namespace Kaguya.Core.LevelingSystem
                     embed.WithDescription($"**{user.Nickname} [{user.Username}#{user.Discriminator}] just leveled up!**" +
                         $"\nLevel: {userAccount.LevelNumber.ToString("N0")} | EXP: {userAccount.EXP.ToString("N0")}");
                     embed.WithColor(Pink);
+                    if(guild.LogLevelUpAnnouncements == 0)
                     await channel.SendMessageAsync("", false, embed.Build());
+                    else if(guild.LogLevelUpAnnouncements != 0) //If the server has a specified channel for level up announcements, send it there instead of in the chat the user leveled up in.
+                    {
+                        var textChannel = Global.Client.GetChannel(guild.LogLevelUpAnnouncements);
+                        await (textChannel as ITextChannel).SendMessageAsync("", false, embed.Build());
+                    }
                     logger.ConsoleGuildAdvisory(channel.Guild, $"User {user.Username}#{user.Discriminator} leveled up to level {userAccount.LevelNumber}.");
                 }
                 else return;

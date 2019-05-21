@@ -3,6 +3,21 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.14
+
+- New logtype: "LevelAnnouncements". Server admins may now specify a specific channel to send level up announcements in!
+    - Note: The logtype "LevelAnnouncements" will only work if level up announcements are enabled for your server. Check with $toggleannouncements!
+- Title of "$rlog" embeds now says "Log channel reset" instead of "log channel set"
+- "Currently Playing" game will now rotate every 5 minutes instead of 10.
+- Updated the help command for "filteradd" to show how Kaguya's wildcard filter works.
+
+
+Version 1.13.1
+
+- $ban now has the ability to take in more than one word as the "ban reason" ($b <USER> <this can be a long reason now>)
+- Updated the help command for $toggleannouncements
+- Updated the "On new server join 
+
 Version 1.13
 
 - Removed a 3 second delay I had with $clear that was there for no reason...clearing of messages should happen a lot faster now.

@@ -61,7 +61,11 @@ namespace Kaguya.Modules
                 case "toggleannouncements":
                     stopWatch.Start();
                     embed.WithTitle($"Help: Toggle Announcements | `{cmdPrefix}toggleannouncements`");
-                    embed.WithDescription($"{Context.User.Mention} Toggles the server's preference for in-chat level announcements.");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nToggles the server's preference for in-chat level announcements." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}toggleannouncements`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "bug":
@@ -650,6 +654,9 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nAllows a server administrator to add a word or phrase to the list of filtered words for the server." +
                         $"\nSpaces may be used when adding a phrase to the filter. The filter is not case sensitive." +
+                        $"\n" +
+                        $"\nNote: **Kaguya's filter is also a wildcard filter, which means any message that contains what's filtered will be deleted. " +
+                        $"Example: if you filter \"`https://www.twitch.tv/\", this will delete all twitch links.**" +
                         $"\nExamples: `{cmdPrefix}fa Smelly Sushi`, `{cmdPrefix}fa frogs`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;

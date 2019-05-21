@@ -1,4 +1,6 @@
 ﻿using Discord;
+using Discord.WebSocket;
+using Kaguya.Modules.Administration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,8 @@ namespace Kaguya.Core.Server_Files
         public string commandPrefix { get; set; }
         public bool MessageAnnouncements { get; set; }
         public Dictionary<string, string> MutedMembers { get; set; }
+        public Dictionary<string, int> WarnActions { get; set; }
+        public Dictionary<List<SocketGuildUser>, int> WarnedMembers { get; set; }
         public List<string> FilteredWords { get; set; }
         public ulong LogDeletedMessages { get; set; }
         public ulong LogUpdatedMessages { get; set; }
@@ -25,6 +29,7 @@ namespace Kaguya.Core.Server_Files
         public ulong LogWhenUserSaysFilteredPhrase { get; set; }
         public ulong LogWhenUserConnectsToVoiceChannel { get; set; }
         public ulong LogWhenUserDisconnectsFromVoiceChannel { get; set; }
+        public ulong LogLevelUpAnnouncements { get; set; }
         public List<string> JoinedUsers { get; set; }
         public bool IsBlacklisted { get; set; }
         public bool BlackJackInProgress { get; set; }
@@ -35,6 +40,8 @@ namespace Kaguya.Core.Server_Files
             commandPrefix = "$";
             MessageAnnouncements = true;
             MutedMembers = new Dictionary<string, string>();
+            WarnedMembers = new Dictionary<List<SocketGuildUser>, int>();
+            WarnActions = new Dictionary<string, int>();
             FilteredWords = new List<string>();
             IsBlacklisted = false;
             JoinedUsers = new List<string>();

@@ -22,7 +22,7 @@ namespace Kaguya.Core.Command_Handler
 
         public Task GameTimer()
         {
-            Timer timer = new Timer(600000); //10 minutes
+            Timer timer = new Timer(300000); //5 minutes
             timer.Elapsed += Game_Timer_Elapsed;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -43,7 +43,6 @@ namespace Kaguya.Core.Command_Handler
                 {
                     i++;
                 }
-
             }
 
             string[] games = { "Support Server: yhcNC97", "$help | @Kaguya#2708 help",

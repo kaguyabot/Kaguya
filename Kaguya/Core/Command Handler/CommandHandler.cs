@@ -23,7 +23,6 @@ namespace Kaguya
 {
     class CommandHandler
     {
-
         DiscordSocketClient _client;
         CommandService _commands;
         LavaSocketClient _lavaSocketClient;

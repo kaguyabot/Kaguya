@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Core.UserAccounts;
-using Kaguya.Core.Server_Files;
-using Kaguya.Core.Commands;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
 using Kaguya.Core;
-using Kaguya.Core.Command_Handler;
-using System.Timers;
-using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
+using Kaguya.Core.Commands;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.UserAccounts;
+using Kaguya.Modules.Administration;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Timers;
 
 #pragma warning disable CS0472
 
 namespace Kaguya.Modules
 {
-    public class AdministrationCommands : ModuleBase<SocketCommandContext>
+    public class AdministrationCommands : InteractiveBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);
@@ -33,11 +33,113 @@ namespace Kaguya.Modules
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
         readonly DiscordSocketClient _client = Global.Client;
-        
+
 
         public async Task BE() //Method to build and send an embedded message.
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
+        }
+
+        [Command("warn")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task WarnMembers([Remainder]List<SocketGuildUser> users)
+        {
+            stopWatch.Start();
+            var server = Servers.GetServer(Context.Guild);
+            var warnActions = server.WarnActions;
+            var warnedMembers = server.WarnedMembers;
+            var warningPunishments = warnActions.Keys.ToList();
+            warnedMembers.TryGetValue(users, out int userWarnings); //Gets the user's total warnings
+            
+            userWarnings++;
+
+            if(warnActions.Values.Contains(userWarnings)) //If a user has the same amount of warnings as a warnaction, do stuff.
+            {
+
+                foreach(var user in users)
+                {
+                    int i = 0;
+                    embed.WithDescription($"{Context.User.Mention} **User `{users.ElementAt(i)}` has been warned.**");
+                    embed.WithFooter($"User now has {userWarnings} warning(s).");
+                    await ReplyAsync(embed: embed.Build());
+                    i++;
+                }
+
+                string warnAction = warningPunishments.FirstOrDefault().ToString();
+                switch (warnAction)
+                {
+                    case "mute":
+                        await MuteMembers(users); break;
+                    case "kick":
+                        await MassKick(users); break;
+                    case "shadowban":
+                        await ShadowBan(users.FirstOrDefault() as IGuildUser); break;
+                    case "ban":
+                        await MassBan(users); break;
+                }
+            }
+
+            Servers.SaveServers();
+        }
+
+        [Command("warnset")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task WarnSettings(int warnNum, [Remainder]string warnAction)
+        {
+            stopWatch.Start();
+            var server = Servers.GetServer(Context.Guild);
+
+            string warning = "warning"; //Simply here for grammar.
+            switch(warnNum)
+            {
+                case 1: warning = "warning"; break;
+                default: warning = "warnings"; break;
+            }
+
+            switch(warnAction.ToLower()) //Ensures that the user is specifying a valid warning action.
+            {
+                case "mute":
+                case "kick":
+                case "shadowban":
+                case "ban": break;
+                default:
+                    await GlobalCommandResponses.CreateCommandError(Context,
+                        stopWatch.ElapsedMilliseconds,
+                        CommandError.Unsuccessful,
+                        "User attempted to set an invalid warning action.",
+                        "Warn Settings",
+                        $"{Context.User.Mention} Please specify a valid warning action!",
+                        $"Use the \"warnoptions\" command to view your options!");
+                    return;
+            }
+
+            if (server.WarnActions.ContainsKey(warnAction.ToLower())) //If the dictionary already contains the warn action, delete (and replace) it.
+            {
+                server.WarnActions.Remove(warnAction.ToLower());
+            }
+
+            server.WarnActions.Add(warnAction.ToLower(), warnNum);
+            Servers.SaveServers();
+
+            await GlobalCommandResponses.CreateCommandResponse(Context,
+                stopWatch.ElapsedMilliseconds,
+                "Warn Settings Changed",
+                $"I now have `{warnAction.ToLower()}s` set to occur on `{warnNum}` {warning}.");
+        }
+
+        [Command("warnoptions")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task WarnOptions()
+        {
+            stopWatch.Start();
+            await GlobalCommandResponses.CreateCommandResponse(Context,
+                stopWatch.ElapsedMilliseconds,
+                "Warn Options",
+                $"{Context.User.Mention} The following warning options are available:" +
+                $"\n" +
+                $"\n```Mute, Kick, Shadowban, Ban```");
         }
 
         [Command("mute")]
@@ -667,7 +769,7 @@ namespace Kaguya.Modules
         [Alias("b")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
-        public async Task Ban(IGuildUser user, string reason = "No reason provided.")
+        public async Task Ban(IGuildUser user, [Remainder]string reason = "No reason provided.")
         {
             stopWatch.Start();
 
@@ -965,6 +1067,14 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "levelannouncements":
+                    server.LogLevelUpAnnouncements = logChannelID;
+                    Servers.SaveServers();
+                    await GlobalCommandResponses.CreateCommandResponse(Context,
+                        stopWatch.ElapsedMilliseconds,
+                        "Log Channel Set",
+                        $"{Context.User.Mention} All log messages for `level announcements` will be sent in channel {channel.Name}");
+                    break;
                 case "all":
                     server.LogDeletedMessages = logChannelID;
                     server.LogUpdatedMessages = logChannelID;
@@ -976,6 +1086,7 @@ namespace Kaguya.Modules
                     server.LogWhenUserSaysFilteredPhrase = logChannelID;
                     server.LogWhenUserConnectsToVoiceChannel = logChannelID;
                     server.LogWhenUserDisconnectsFromVoiceChannel = logChannelID;
+                    server.LogLevelUpAnnouncements = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages will be sent in channel {channel.Name}");
@@ -1082,6 +1193,14 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "levelannouncements":
+                    server.LogLevelUpAnnouncements = 0;
+                    Servers.SaveServers();
+                    await GlobalCommandResponses.CreateCommandResponse(Context,
+                        stopWatch.ElapsedMilliseconds,
+                        "Log Channel Set",
+                        $"{Context.User.Mention} Log messages for `level announcements` have been disabled.");
+                    break;
                 case "all":
                     server.LogDeletedMessages = 0;
                     server.LogUpdatedMessages = 0;
@@ -1093,8 +1212,9 @@ namespace Kaguya.Modules
                     server.LogWhenUserSaysFilteredPhrase = 0;
                     server.LogWhenUserConnectsToVoiceChannel = 0;
                     server.LogWhenUserDisconnectsFromVoiceChannel = 0;
+                    server.LogLevelUpAnnouncements = 0;
                     Servers.SaveServers();
-                    embed.WithTitle("Log Channel Set");
+                    embed.WithTitle("Log Channel Reset");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `everything` have been disabled");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
@@ -1119,7 +1239,7 @@ namespace Kaguya.Modules
             var server = Servers.GetServer(Context.Guild);
             ulong[] logChannels = { server.LogDeletedMessages, server.LogUpdatedMessages, server.LogWhenUserJoins, server.LogWhenUserLeaves,
             server.LogWhenUserIsBanned, server.LogWhenUserIsUnbanned, server.LogChangesToLogSettings, server.LogWhenUserSaysFilteredPhrase,
-            server.LogWhenUserConnectsToVoiceChannel, server.LogWhenUserDisconnectsFromVoiceChannel };
+            server.LogWhenUserConnectsToVoiceChannel, server.LogWhenUserDisconnectsFromVoiceChannel, server.LogLevelUpAnnouncements };
             embed.WithTitle("List of Log Events");
             embed.WithDescription($"List of all types of logging you can subscribe to. Use these with {cmdPrefix}log to enable logging!" +
                 "\n" +
@@ -1133,6 +1253,7 @@ namespace Kaguya.Modules
                 $"\n**FilteredPhrases** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[7])}`**" +
                 $"\n**UserConnectsToVoice** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[8])}`**" +
                 $"\n**UserDisconnectsFromVoice** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[9])}`**" +
+                $"\n**LevelAnnouncements** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[10])}`**" +
                 "\n**All**");
             embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
