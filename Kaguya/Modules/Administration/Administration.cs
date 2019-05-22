@@ -48,37 +48,44 @@ namespace Kaguya.Modules
             var warnActions = server.WarnActions;
             var warnedMembers = server.WarnedMembers;
             var warningPunishments = warnActions.Keys.ToList();
-            warnedMembers.TryGetValue(users, out int userWarnings); //Gets the user's total warnings
-            
-            userWarnings++;
 
-            if(warnActions.Values.Contains(userWarnings)) //If a user has the same amount of warnings as a warnaction, do stuff.
+            foreach (var user in users)
             {
-
-                foreach(var user in users)
+                var userID = user.Id;
+                int i = 0;
+                warnedMembers.TryGetValue(userID, out int userWarnings); //Gets the user's total warnings
+                userWarnings++; //Increments the user's warnings by 1.
+                
+                if (warnedMembers.ContainsKey(userID)) //If it exists in the dictionary, remove and replace it.
                 {
-                    int i = 0;
-                    embed.WithDescription($"{Context.User.Mention} **User `{users.ElementAt(i)}` has been warned.**");
-                    embed.WithFooter($"User now has {userWarnings} warning(s).");
-                    await ReplyAsync(embed: embed.Build());
-                    i++;
+                    warnedMembers.Remove(userID);
                 }
 
-                string warnAction = warningPunishments.FirstOrDefault().ToString();
-                switch (warnAction)
+                warnedMembers.Add(userID, userWarnings);
+                embed.WithDescription($"{Context.User.Mention} **User `{users.ElementAt(i)}` has been warned.**");
+                embed.WithFooter($"User now has {userWarnings} warning(s).");
+                embed.WithColor(Violet);
+                await ReplyAsync(embed: embed.Build());
+                i++;
+
+                if (warnActions.Values.Contains(userWarnings)) //If a user has the same amount of warnings (or more) as a warnaction, do stuff.
                 {
-                    case "mute":
-                        await MuteMembers(users); break;
-                    case "kick":
-                        await MassKick(users); break;
-                    case "shadowban":
-                        await ShadowBan(users.FirstOrDefault() as IGuildUser); break;
-                    case "ban":
-                        await MassBan(users); break;
+
+                    string warnAction = warnActions //Continue working here
+                    switch (warnAction)
+                    {
+                        case "mute":
+                            await MuteMembers(users); break;
+                        case "kick":
+                            await MassKick(users); break;
+                        case "shadowban":
+                            await ShadowBan(users.FirstOrDefault() as IGuildUser); break;
+                        case "ban":
+                            await MassBan(users); break;
+                    }
                 }
+                Servers.SaveServers();
             }
-
-            Servers.SaveServers();
         }
 
         [Command("warnset")]
@@ -243,14 +250,16 @@ namespace Kaguya.Modules
 
                     server.MutedMembers.Add(user.Id.ToString(), timeSpan.Duration().ToString());
                     Servers.SaveServers();
-                    timeSpanDuration = timeSpan.Duration();
+                    TimeSpanDuration = timeSpan.Duration();
                     await user.AddRoleAsync(muteRole);
 
                     //Unmute Timer Start
 
-                    Timer timer = new Timer(timeSpan.TotalMilliseconds);
-                    timer.Enabled = true;
-                    timer.AutoReset = false;
+                    Timer timer = new Timer(timeSpan.TotalMilliseconds)
+                    {
+                        Enabled = true,
+                        AutoReset = false
+                    };
                     timer.Elapsed += UnMute_User_Async_Elapsed;
 
                     //Unmute Timer End
@@ -271,7 +280,7 @@ namespace Kaguya.Modules
             }
         }
 
-        private TimeSpan timeSpanDuration { get; set; }
+        private TimeSpan TimeSpanDuration { get; set; }
 
         private void UnMute_User_Async_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -280,7 +289,7 @@ namespace Kaguya.Modules
 
             foreach (var member in mutedMembers.ToList())
             {
-                if (member.Value.Contains(timeSpanDuration.ToString()))
+                if (member.Value.Contains(TimeSpanDuration.ToString()))
                 {
                     var result = ulong.TryParse(member.Key, out ulong ID);
                     var user = _client.GetGuild(Context.Guild.Id).GetUser(ID);
@@ -777,7 +786,7 @@ namespace Kaguya.Modules
             {
                 if (reason != "No reason provided.")
                 {
-                    await user.BanAsync(0, reason);
+                    await user.BanAsync(reason: reason);
                     embed.WithTitle($"User Banned");
                     embed.WithDescription($"{Context.User.Mention} has banned `{user}` with reason: \"{reason}\"");
                     embed.WithColor(Pink);

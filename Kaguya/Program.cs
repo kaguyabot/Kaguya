@@ -1,19 +1,15 @@
-﻿using Discord.WebSocket;
-using Discord;
-using System;
-using System.Threading.Tasks;
-using System.IO;
-using Newtonsoft.Json;
-using System.Reflection;
-using System.Diagnostics;
-using System.Timers;
-using System.Text;
-using Kaguya.Core.CommandHandler;
-using Kaguya.Core;
-using Victoria;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
+using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Kaguya
 {
@@ -94,7 +90,7 @@ namespace Kaguya
                     Environment.Exit(0);
                 }
             }
-            catch (ReflectionTypeLoadException ex)
+            catch (ReflectionTypeLoadException ex) //Finds missing packages and tells us what they are in the console
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (Exception exSub in ex.LoaderExceptions)
@@ -114,12 +110,6 @@ namespace Kaguya
                 string errorMessage = sb.ToString();
                 Console.WriteLine(errorMessage);
             }
-        }
-
-        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Process.Start("Discord Bot.exe");
-            Environment.Exit(0);
         }
     }
 }

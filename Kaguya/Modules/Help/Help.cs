@@ -32,7 +32,7 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("h")] //The BIG fish, Help
+        [Command("h")] //The BIG fish
         [Alias("help")]
         public async Task HelpCommand([Remainder]string command)
         {

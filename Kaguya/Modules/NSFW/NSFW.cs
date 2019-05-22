@@ -1,14 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿#region NSFW commands...Proceed with caution!!
+#endregion
+
 using Discord;
 using Discord.Commands;
 using Kaguya.Core;
-using System.Diagnostics;
 using NekosSharp;
 using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Kaguya.Modules.NSFW
 {
-    [Group("n")]
+    [Group("n")] //NSFW Commands...Proceed with caution!
     public class NSFW : ModuleBase<SocketCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();

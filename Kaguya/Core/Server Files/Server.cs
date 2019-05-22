@@ -17,7 +17,7 @@ namespace Kaguya.Core.Server_Files
         public bool MessageAnnouncements { get; set; }
         public Dictionary<string, string> MutedMembers { get; set; }
         public Dictionary<string, int> WarnActions { get; set; }
-        public Dictionary<List<SocketGuildUser>, int> WarnedMembers { get; set; }
+        public Dictionary<ulong, int> WarnedMembers { get; set; }
         public List<string> FilteredWords { get; set; }
         public ulong LogDeletedMessages { get; set; }
         public ulong LogUpdatedMessages { get; set; }
@@ -40,7 +40,7 @@ namespace Kaguya.Core.Server_Files
             commandPrefix = "$";
             MessageAnnouncements = true;
             MutedMembers = new Dictionary<string, string>();
-            WarnedMembers = new Dictionary<List<SocketGuildUser>, int>();
+            WarnedMembers = new Dictionary<ulong, int>();
             WarnActions = new Dictionary<string, int>();
             FilteredWords = new List<string>();
             IsBlacklisted = false;
