@@ -63,6 +63,8 @@ namespace Kaguya.Modules.Music
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"I wasn't able to find anything for {query}.");
                 if (search.LoadType == LoadType.LoadFailed && query != null)
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"I failed to load {query}.");
+                if (player.CurrentTrack.Length.TotalSeconds > 600)
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"This song is longer than 10 minutes, therefore it cannot be played!");
                 
                 //Get the first track from the search results.
                 //TODO: Add a 1-5 list for the user to pick from. (Like Fredboat)
@@ -116,7 +118,7 @@ namespace Kaguya.Modules.Music
         /// </summary>
         /// <param name="guildId">ID of the guild this command was executed in.</param>
         /// <returns></returns>
-        public async Task<Embed> ListAsync(ulong guildId) 
+        public async Task<Embed> ListAsync(ulong guildId, string serverName) 
         {
             try
             {
@@ -126,7 +128,7 @@ namespace Kaguya.Modules.Music
                 /* Get The Player and make sure it isn't null. */
                 var player = _lavaSocketClient.GetPlayer(guildId);
                 if (player == null)
-                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Queue", $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId).commandPrefix}h m` for proper usage.");
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Queue", $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId, serverName).commandPrefix}h m` for proper usage.");
 
                 if (player.IsPlaying)
                 {
@@ -162,9 +164,9 @@ namespace Kaguya.Modules.Music
 
         }
 
-        public async Task<Embed> SkipTrackAsync(ulong guildId)
+        public async Task<Embed> SkipTrackAsync(ulong guildId, string serverName)
         {
-            var cmdPrefix = Servers.GetServer(guildId).commandPrefix;
+            var cmdPrefix = Servers.GetServer(guildId, serverName).commandPrefix;
 
             try
             {

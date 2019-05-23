@@ -13,6 +13,12 @@ Version 1.14
 - Help command for $roll is now up to date.
 - Help command for $kaguyaexit is now up to date.
 - Fixed a bug where if you got a non-critical 100 roll it would say you've won a critical anyway.
+- The music player will now no longer play songs longer than 10 minutes.
+- Fixed a typo where with "$h hdm", the help command said that the Administrator permission was needed to use the command (when you don't need it).
+- Fixed a typo with $kick where the "kicker"'s ID was shown instead of their username.
+- Added a new command: warn - Allows any user with the "Kick Users" permission to warn a user. If a user has too many warnings, a punishment will trigger (this is configurable through warnset).
+- Added a new command: warnset - Configures the server's warning punishments.
+- Added a new command: warnoptions - Allows administrators to see the available warning punishments for users.
 
 Version 1.13.1
 

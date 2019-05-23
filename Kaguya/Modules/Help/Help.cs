@@ -53,9 +53,39 @@ namespace Kaguya.Modules
                 case "hdm":
                     stopWatch.Start();
                     embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`");
+                    embed.WithDescription($"{Context.User.Mention}Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "warnset":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Warnset | `{cmdPrefix}warnset`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Administrator**" +
                         $"\n" +
-                        $"\nSends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
+                        $"\nConfigures the server's warning punishments. You may `mute`, `kick`, `shadowban`, and `ban` users on the specified amount of warnings." +
+                        $"\nFor example, if you use `{cmdPrefix}warnset 4 mute`, users who are warned for the fourth time will be muted. Same goes for the rest of the warning types." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}warnset <num> <warning punishment>`");
+                    embed.WithFooter($"If you forget the warning punishments, you may use {cmdPrefix}warnoptions to see the list.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "warn":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Warn | `{cmdPrefix}warn`");
+                    embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
+                        $"\n" +
+                        $"\nWarns a user. This will add a (currently non-revocable) warning to a user (typically for a rule violation of some sort)." +
+                        $"\nThe user will know they have been warned when this command is executed (they will be DM'd with who warned them)." +
+                        $"\nIf a user reaches a certain number of warnings required to trigger a \"punishment\", they will be punished according to the server's `{cmdPrefix}warnset` configuration." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}warn <user {{ID, Name, Mention}}>`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "warnoptions":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Warning Options | `{cmdPrefix}warnoptions`");
+                    embed.WithDescription($"{Context.User.Mention} Displays available ways to punish users through my warning system." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}warnoptions`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "toggleannouncements":

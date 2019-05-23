@@ -24,11 +24,11 @@ namespace Kaguya.Modules.Music
 
         [Command("queue")]
         public async Task MusicQueue()
-            => await ReplyAsync("", false, await musicService.ListAsync(Context.Guild.Id));
+            => await ReplyAsync("", false, await musicService.ListAsync(Context.Guild.Id, Context.Guild.Name));
 
         [Command("skip")]
         public async Task SkipTrack()
-            => await ReplyAsync("", false, await musicService.SkipTrackAsync(Context.Guild.Id));
+            => await ReplyAsync("", false, await musicService.SkipTrackAsync(Context.Guild.Id, Context.Guild.Name));
 
         [Command("volume")]
         public async Task Volume(int volume)

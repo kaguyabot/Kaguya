@@ -33,10 +33,10 @@ namespace Kaguya.Core.Server_Files
         public List<string> JoinedUsers { get; set; }
         public bool IsBlacklisted { get; set; }
         public bool BlackJackInProgress { get; set; }
-        public Server(ulong id)
+        public Server(ulong id, string serverName)
         {
             ID = id;
-            ServerName = "";
+            ServerName = serverName;
             commandPrefix = "$";
             MessageAnnouncements = true;
             MutedMembers = new Dictionary<string, string>();

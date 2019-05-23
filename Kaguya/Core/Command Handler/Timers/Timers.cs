@@ -82,7 +82,7 @@ namespace Kaguya.Core.Command_Handler
                         if (guild == null) //If the server returns null, delete it from the database.
                         {
                             logger.ConsoleCriticalAdvisory($"Guild returned null for {server.ID} [REMOVING!!], Timers.cs line 109.");
-                            Servers.RemoveServer(server.ID);
+                            Servers.RemoveServer(server.ID, server.ServerName);
                             continue;
                         }
 
@@ -139,7 +139,7 @@ namespace Kaguya.Core.Command_Handler
                 if (guild == null)
                 {
                     logger.ConsoleCriticalAdvisory($"Guild returned null for {server.ID} [REMOVING!!], Timers.cs line 109."); 
-                    Servers.RemoveServer(server.ID);
+                    Servers.RemoveServer(server.ID, server.ServerName);
                     continue;
                 }
                 if (guild != null && oldServerName != guild.Name)

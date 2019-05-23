@@ -39,7 +39,7 @@ namespace Kaguya.Modules
         }
 
         [Command("warn")]
-        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task WarnMembers([Remainder]List<SocketGuildUser> users)
         {
@@ -47,7 +47,6 @@ namespace Kaguya.Modules
             var server = Servers.GetServer(Context.Guild);
             var warnActions = server.WarnActions;
             var warnedMembers = server.WarnedMembers;
-            var warningPunishments = warnActions.Keys.ToList();
 
             foreach (var user in users)
             {
@@ -61,6 +60,15 @@ namespace Kaguya.Modules
                     warnedMembers.Remove(userID);
                 }
 
+                await user.GetOrCreateDMChannelAsync();
+
+                EmbedBuilder embed2 = new EmbedBuilder();
+                embed2.WithTitle("⚠️ Warning Received");
+                embed2.WithDescription($"You have received a warning from `{Context.User}` in the server `{Context.Guild.Name}`.");
+                embed2.WithFooter($"You currently have {userWarnings} warnings.");
+                embed2.WithColor(Red);
+                await user.SendMessageAsync(embed: embed2.Build());
+
                 warnedMembers.Add(userID, userWarnings);
                 embed.WithDescription($"{Context.User.Mention} **User `{users.ElementAt(i)}` has been warned.**");
                 embed.WithFooter($"User now has {userWarnings} warning(s).");
@@ -70,19 +78,22 @@ namespace Kaguya.Modules
 
                 if (warnActions.Values.Contains(userWarnings)) //If a user has the same amount of warnings (or more) as a warnaction, do stuff.
                 {
+                    int[] warnNums = new int[4];
 
-                    string warnAction = warnActions //Continue working here
-                    switch (warnAction)
-                    {
-                        case "mute":
-                            await MuteMembers(users); break;
-                        case "kick":
-                            await MassKick(users); break;
-                        case "shadowban":
-                            await ShadowBan(users.FirstOrDefault() as IGuildUser); break;
-                        case "ban":
-                            await MassBan(users); break;
-                    }
+                    warnActions.TryGetValue("mute", out warnNums[3]);
+                    warnActions.TryGetValue("kick", out warnNums[2]);
+                    warnActions.TryGetValue("shadowban", out warnNums[1]);
+                    warnActions.TryGetValue("ban", out warnNums[0]);
+
+                    if (userWarnings >= warnNums[0])
+                        await Ban(user);
+                    else if (userWarnings >= warnNums[1])
+                        await ShadowBan(user);
+                    else if (userWarnings >= warnNums[2])
+                        await Kick(user);
+                    else if (userWarnings >= warnNums[3])
+                        await Mute(user);
+
                 }
                 Servers.SaveServers();
             }
@@ -135,7 +146,6 @@ namespace Kaguya.Modules
         }
 
         [Command("warnoptions")]
-        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task WarnOptions()
         {
             stopWatch.Start();
@@ -152,7 +162,7 @@ namespace Kaguya.Modules
         [RequireUserPermission(GuildPermission.MuteMembers)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.MuteMembers)]
-        public async Task MuteMembers(string timeout, [Remainder]List<SocketGuildUser> users)
+        public async Task Mute(string timeout, [Remainder]List<SocketGuildUser> users)
         {
             stopWatch.Start();
 
@@ -364,6 +374,63 @@ namespace Kaguya.Modules
                 await BE();
                 logger.ConsoleGuildAdvisory(Context.Guild, "User muted.");
             }
+
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("mute")]
+        [Alias("m")]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        [RequireBotPermission(GuildPermission.MuteMembers)]
+        public async Task Mute(IGuildUser user)
+        {
+            stopWatch.Start();
+
+            var server = Servers.GetServer(Context.Guild);
+            var cmdPrefix = server.commandPrefix;
+            var roles = Context.Guild.Roles;
+            var channels = Context.Guild.Channels;
+
+            var muteRole = roles.FirstOrDefault(x => x.Name == "kaguya-mute");
+
+            if (!roles.Contains(muteRole))
+            {
+                await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
+                embed.WithDescription($"**{Context.User.Mention} I didn't find my mute role, so I created it. Please try again!**");
+                embed.WithColor(Red);
+                await BE();
+                logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                return;
+            }
+
+            int i = 0;
+
+            if (!(Context.Channel as SocketGuildChannel).GetPermissionOverwrite(muteRole).HasValue)
+            {
+                embed.WithDescription($"{Context.User.Mention} Performing first time setup. Please wait...");
+                embed.WithColor(Violet);
+                await BE();
+            }
+
+            foreach (var channel in channels)
+            {
+                if (!channel.GetPermissionOverwrite(muteRole).HasValue)
+                {
+                    i++;
+                    var permissionOverwrite = new OverwritePermissions(PermValue.Inherit, PermValue.Inherit, PermValue.Deny, PermValue.Inherit, PermValue.Deny);
+                    await channel.AddPermissionOverwriteAsync(muteRole, permissionOverwrite); //Denies ability to add reactions and send messages.
+                }
+            }
+            if (i > 0)
+                logger.ConsoleGuildAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
+
+            await user.AddRoleAsync(muteRole);
+            embed.WithDescription($"{Context.User.Mention} User `{user}` has been muted.");
+            embed.WithColor(Violet);
+            await BE();
+            logger.ConsoleGuildAdvisory(Context.Guild, "User muted.");
 
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -584,7 +651,7 @@ namespace Kaguya.Modules
             await BE();
             foreach (var server in servers)
             {
-                var isolatedServer = Servers.GetServer(server.ID);
+                var isolatedServer = Servers.GetServer(server.ID, Context.Guild.Name);
                 ulong isolatedServerID = isolatedServer.ID;
                 var guild = _client.GetGuild(isolatedServerID);
                 if (guild != null)
@@ -742,7 +809,7 @@ namespace Kaguya.Modules
                 {
                     await user.KickAsync(reason);
                     embed.WithTitle($"User Kicked");
-                    embed.WithDescription($"`{Context.User.Username}#{Context.User.Discriminator}` has kicked `{user}` with reason: \"{reason}\"");
+                    embed.WithDescription($"`{Context.User}` has kicked `{user}` with reason: \"{reason}\"");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -776,7 +843,7 @@ namespace Kaguya.Modules
         [Alias("b")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
-        public async Task Ban(IGuildUser user, [Remainder]string reason = "No reason provided.")
+        public async Task Ban(IGuildUser user)
         {
             stopWatch.Start();
 
@@ -784,24 +851,12 @@ namespace Kaguya.Modules
 
             if (user.Id != sOwnerID)
             {
-                if (reason != "No reason provided.")
-                {
-                    await user.BanAsync(reason: reason);
-                    embed.WithTitle($"User Banned");
-                    embed.WithDescription($"{Context.User.Mention} has banned `{user}` with reason: \"{reason}\"");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-                }
-                else
-                {
-                    await user.BanAsync(0, reason);
-                    embed.WithTitle($"User Banned");
-                    embed.WithDescription($"{Context.User.Mention} has banned `{user}` without a specified reason.");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-                }
+                await user.BanAsync();
+                embed.WithTitle($"User Banned");
+                embed.WithDescription($"{Context.User.Mention} has banned `{user}`.");
+                embed.WithColor(Pink);
+                await BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else if(user.Id == Context.User.Id)
             {
