@@ -38,7 +38,7 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("warn1")]
+        [Command("warn")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task WarnMembers([Remainder]List<SocketGuildUser> users)
@@ -104,7 +104,7 @@ namespace Kaguya.Modules
             }
         }
 
-        [Command("warnset1")]
+        [Command("warnset")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task WarnSettings(int warnNum, [Remainder]string warnAction)
