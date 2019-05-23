@@ -844,6 +844,9 @@ namespace Kaguya.Modules
                         $"\n{cmdPrefix}shadowban" +
                         $"\n{cmdPrefix}unblacklist" +
                         $"\n{cmdPrefix}unshadowban" +
+                        $"\n{cmdPrefix}warn" +
+                        $"\n{cmdPrefix}warnset" +
+                        $"\n{cmdPrefix}warnoptions" +
                         $"\n" +
                         $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                         "\n```";

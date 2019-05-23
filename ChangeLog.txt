@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.14.1
+
+- Added the warn, warnset, and warnoptions commands to the help command (I forgot)!
+
 Version 1.14
 
 - New logtype: "LevelAnnouncements". Server admins may now specify a specific channel to send level up announcements in!
