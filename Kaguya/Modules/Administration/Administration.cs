@@ -38,7 +38,7 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("warn")]
+        [Command("warn1")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task WarnMembers([Remainder]List<SocketGuildUser> users)
@@ -85,21 +85,26 @@ namespace Kaguya.Modules
                     warnActions.TryGetValue("shadowban", out warnNums[1]);
                     warnActions.TryGetValue("ban", out warnNums[0]);
 
-                    if (userWarnings >= warnNums[0])
-                        await Ban(user);
-                    else if (userWarnings >= warnNums[1])
-                        await ShadowBan(user);
-                    else if (userWarnings >= warnNums[2])
-                        await Kick(user);
-                    else if (userWarnings >= warnNums[3])
+                    if (userWarnings >= warnNums[3] && warnNums[3] != 0)
                         await Mute(user);
+                    if (userWarnings >= warnNums[2] && warnNums[2] != 0)
+                        await Kick(user);
+                    if (userWarnings >= warnNums[1] && warnNums[1] != 0)
+                        await ShadowBan(user);
+                    else if (userWarnings >= warnNums[0] && warnNums[0] != 0)
+                        await Ban(user);
+
+                    Console.WriteLine("Ban: " + warnNums[0]);
+                    Console.WriteLine("Shadowban: " + warnNums[1]);
+                    Console.WriteLine("Kick: " + warnNums[2]);
+                    Console.WriteLine("Mute: " + warnNums[3]);
 
                 }
                 Servers.SaveServers();
             }
         }
 
-        [Command("warnset")]
+        [Command("warnset1")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task WarnSettings(int warnNum, [Remainder]string warnAction)

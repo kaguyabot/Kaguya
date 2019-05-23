@@ -1,16 +1,16 @@
-﻿using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
-using Kaguya.Core.Server_Files;
-using Kaguya.Core.Commands;
-using Kaguya.Core;
-using System.Diagnostics;
 using Discord.WebSocket;
-using System;
+using Kaguya.Core;
+using Kaguya.Core.Commands;
+using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
+using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Discord.Addons.Interactive;
+using System.Threading.Tasks;
 
 namespace Kaguya.Modules
 {

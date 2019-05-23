@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.14.2
+
+- Fixed a major bug with $warn where it would not execute the proper warn action.
+
 Version 1.14.1
 
 - Added the warn, warnset, and warnoptions commands to the help command (I forgot)!
