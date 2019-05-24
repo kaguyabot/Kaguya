@@ -3,6 +3,39 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.15
+
+- Kaguya Supporter!
+    - With the supporter program, users may purchase "keys" that can be redeemed in chat!
+    - These keys are one time use, so it is safe to use them in a public chat.
+    - This is NOT a recurring subscription!
+    - These keys grant you "supporter" status for 30, 60, or 90 days.
+    - The keys stack, so if you wish to purchase multiple keys you may! You may also give them away if you wish.
+- What does a supporter get?
+    - Supporters get a few small perks.
+    - Supporters get a stackable 2x critical hit ratio (stacks with the 2x $voteclaim bonus)
+    - Supporters have no "gamble limit" (it's 25,000 for normal users).
+    - Supporters get a special "supporter" Discord role. (Not automated right now, but it will be soon. I'll do it manually until then.)
+    - Supporters receive 600 "Kaguya Diamonds" per month of their supporter.
+        - Kaguya Diamonds are a premium currency that are non-transferrable and cannot be gambled.
+        - I will come up with a use for these sooner than later.
+    - As a supporter, you get the snuggly feeling that comes with knowing you're helping keep Kaguya online.
+    - More perks are coming in the future!
+- Where can I purchase the keys?
+    - All keys can be purchased directly through https://stageosu.selly.store/. This is the ONLY place you can buy keys!
+    - Keys may be purchased through PayPal. You may also use Bitcoin and Ethereum.
+    - More information on the perks can be found on that page!
+- Kaguya's Key System has some rules too:
+    - ANY USER CAUGHT PHISHING OR SCAMMING PEOPLE BY ATTEMPTING TO RE-SELL THEIR KEY WILL BE BLACKLISTED FROM KAGUYA.
+    - ANY USER WHO FILES A FALSE CHARGEBACK CLAIM WILL BE BLACKLISTED AND WILL BE REPORTED TO THE PROPER AUTHORITIES.
+    - DO NOT RESELL YOUR KEY.
+    - DO NOT TRUST ANYONE WHO OFFERS THEIR KEY(S) TO YOU AT A LOWER PRICE. DO NOT BUY FROM THEM!!
+    - I, STAGE#0001 WITH ID 146092837723832320, AM THE ONLY ONE WHO CAN CREATE AUTHORIZED KEYS. I WILL NEVER DM YOU WITH A KEY, EVER!
+    - ANYONE WHO ATTEMPTS TO PRETEND TO BE ME SHOULD BE REPORTED TO DISCORD DIRECTLY AT https://support.discordapp.com/hc/en-us/requests/new?ticket_form_id=360000029731
+- Some minor bug fixes. 
+- I hope you guys enjoy this feature! Remember, it is ENTIRELY optional. It's simply a way for users to financially support the Kaguya project. xoxo ily all <3
+
+
 Version 1.14.2
 
 - Fixed a major bug with $warn where it would not execute the proper warn action.

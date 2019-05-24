@@ -262,7 +262,7 @@ namespace Kaguya.Modules
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to gamble less than one point.");
                 return;
             }
-            if (points > 25000)
+            if (points > 25000 && !((userAccount.KaguyaSupporterExpiration - DateTime.Now).TotalSeconds > 0))
             {
                 embed.WithTitle("Gambling: Too Many Points!");
                 embed.WithDescription($"**{user.Mention} you are attempting to gamble too many points!" +
