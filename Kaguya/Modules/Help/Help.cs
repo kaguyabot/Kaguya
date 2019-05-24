@@ -3,6 +3,7 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
+using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.Commands;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
@@ -802,6 +803,28 @@ namespace Kaguya.Modules
                         $"\n**Volume:** Sets the volume to a value between 0-150. `{cmdPrefix}m volume <0-150>`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "supporter":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Kaguya Supporter Tags | `{cmdPrefix}supporter`");
+                    embed.WithDescription($"{Context.User.Mention} Displays information on Kaguya's Supporter Tag feature.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "redeem":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Supporter Key Redemption | `{cmdPrefix}redeem`");
+                    embed.WithDescription($"{Context.User.Mention} Allows a user to redeem a Kaguya Supporter Key. Keys are one time use and are purchased " +
+                        $"through the **[Kaguya Supporter Store](https://stageosu.selly.store/)**. Keys are safe to redeem in public Discord channels." +
+                        $"\n" +
+                        $"\nAfter purchasing a supporter key, check your E-Mail because that's where your key will be!");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "diamonds":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Kaguya Diamonds | `{cmdPrefix}diamonds`");
+                    embed.WithDescription($"{Context.User.Mention} Displays how many `Kaguya Diamonds` you have. Diamonds are able to be earned through being a supporter. " +
+                        $"For more information, check out `{cmdPrefix}supporter`!");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 default:
                     stopWatch.Start();
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
@@ -870,6 +893,7 @@ namespace Kaguya.Modules
                 $"\n{cmdPrefix}roll [gr]" +
                 $"\n{cmdPrefix}masspointsdistribute" +
                 $"\n{cmdPrefix}points" +
+                $"\n{cmdPrefix}diamonds" +
                 $"\n{cmdPrefix}pointsadd [addpoints]" +
                 $"\n{cmdPrefix}timely [t]" +
                 $"\n{cmdPrefix}timelyreset" +
@@ -946,9 +970,11 @@ namespace Kaguya.Modules
             string help = "```css" +
                     "\nAll commands in category: Help" +
                     "\n" +
+                    $"\n{cmdPrefix}bug" +
                     $"\n{cmdPrefix}help [h]" +
                     $"\n{cmdPrefix}helpdm [hdm]" +
-                    $"\n{cmdPrefix}bug" +
+                    $"\n{cmdPrefix}redeem" +
+                    $"\n{cmdPrefix}supporter" +
                     $"\n{cmdPrefix}vote" +
                     $"\n{cmdPrefix}voteclaim" +
                     $"\n" +
@@ -1160,6 +1186,27 @@ namespace Kaguya.Modules
                 embed.WithColor(Red);
                 await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
+        }
+
+        [Command("supporter")]
+        public async Task SupporterInfo()
+        {
+            stopWatch.Start();
+            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
+            await GlobalCommandResponses.CreateCommandResponse(Context, stopWatch.ElapsedMilliseconds,
+                "Kaguya Supporter",
+                "For those who wish to support the growth and development of the Kaguya Project, and get some cool perks in return, " +
+                "the Kaguya Supporter system is for you! While completely optional, those who wish to financially support may purchase a " +
+                "**Kaguya Supporter Key** from the official Kaguya store. The funds received from the supporter tags go directly into Kaguya's " +
+                "server and advertising budget. This way, we can keep her alive while also spreading her awesomeness to as many servers as possible!" +
+                "\n" +
+                "\n**If you wish to, you may purchase a supporter tag through the Kaguya Store: <https://stageosu.selly.store/>**" +
+                "\n" +
+                "\nSupporter Keys are available in `30`, `60`, and `90` day intervals. You may purchase as many keys as you wish, as the time stacks." +
+                "\n" +
+                $"\nKeys are redeemed through the `{cmdPrefix}redeem` command, and are one time use. They are safe to redeem in a public Discord channel!",
+                "Supporter perks and benefits are described in the Kaguya Store. Thank you for considering!! 💙");
         }
 
     }

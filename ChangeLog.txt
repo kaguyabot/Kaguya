@@ -3,6 +3,14 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.15.1
+
+- $h redeem command added.
+- $h diamonds command added.
+- $h supporter command added.
+- $supporter and $diamonds commands added.
+
+
 Version 1.15
 
 - Kaguya Supporter!

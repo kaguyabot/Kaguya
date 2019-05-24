@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.UserAccounts;
+using Discord.WebSocket;
 
 namespace Kaguya.Modules.Supporter
 {
@@ -22,6 +23,10 @@ namespace Kaguya.Modules.Supporter
             List<string> thirtyDayKeys = File.ReadAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/30DayKeys.txt").ToList();
             List<string> sixtyDayKeys = File.ReadAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/60DayKeys.txt").ToList();
             List<string> ninetyDayKeys = File.ReadAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/90DayKeys.txt").ToList();
+
+            var _client = Global.Client;
+            var stage = _client.GetUser(146092837723832320);
+
 
             foreach (string thirtyDayKey in thirtyDayKeys)
             {
@@ -37,6 +42,10 @@ namespace Kaguya.Modules.Supporter
                         "Successfully Redeemed Supporter Tag!",
                         "Thank you so much for supporting the Kaguya Project! **`30 Days`** of Kaguya Supporter time have been added to your account.",
                         "The key you have just redeemed is no longer redeemable.");
+
+                    await stage.GetOrCreateDMChannelAsync();
+                    //await 
+                    
                     return;
                 }
             }
@@ -73,7 +82,7 @@ namespace Kaguya.Modules.Supporter
                         "Thank you so much for supporting the Kaguya Project! **`90 Days`** of Kaguya Supporter time and **`1,800 Kaguya Diamonds`** have been added to your account.",
                         "The key you have just redeemed is no longer redeemable.");
                 }
-        }
+            }
         }
     }
 }

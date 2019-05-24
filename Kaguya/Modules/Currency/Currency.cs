@@ -15,6 +15,7 @@ using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
 using Kaguya.Core;
 using System.Diagnostics;
+using Kaguya.Core.Command_Handler.EmbedHandlers;
 
 namespace Kaguya.Modules
 {
@@ -191,6 +192,20 @@ namespace Kaguya.Modules
             embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
+        [Command("diamonds")]
+        public async Task Diamonds()
+        {
+            stopWatch.Start();
+            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var userAccount = UserAccounts.GetAccount(Context.User);
+            var diamonds = userAccount.KaguyaDiamonds;
+
+            await GlobalCommandResponses.CreateCommandResponse(Context,
+                stopWatch.ElapsedMilliseconds,
+                description: $"{Context.User.Mention} You currently have <a:KaguyaDiamonds:581562698228301876> **`{diamonds.ToString("N0")}`.**",
+                footer: $"Diamonds are given to Kaguya Supporters. Find out more with {cmdPrefix}supporter.");
         }
 
         [Command("masspointsdistribute")] //currency

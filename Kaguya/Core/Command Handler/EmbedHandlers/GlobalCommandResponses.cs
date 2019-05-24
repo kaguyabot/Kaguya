@@ -80,6 +80,10 @@ namespace Kaguya.Core.Command_Handler.EmbedHandlers
 
             return;
         }
+
+        /// <summary>
+        /// Called whenever a Kaguya Supporter Key is redeemed.
+        /// </summary>
         public static async Task CreateSuccessfulRedemption(SocketCommandContext context, string key, string title = null, string description = null, string footer = null, string thumbnailURL = null)
         {
             Logger logger = new Logger();
