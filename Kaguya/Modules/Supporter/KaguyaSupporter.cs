@@ -25,52 +25,73 @@ namespace Kaguya.Modules.Supporter
 
             foreach (string thirtyDayKey in thirtyDayKeys)
             {
-                if (key.Contains(thirtyDayKey))
+                try
                 {
-                    userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(30);
-                    userAccount.KaguyaDiamonds += 600;
-                    UserAccounts.SaveAccounts();
-                    thirtyDayKeys.Remove(thirtyDayKey);
-                    File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/30DayKeys.txt", thirtyDayKeys);
+                    if (key.Contains(thirtyDayKey))
+                    {
+                        userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(30);
+                        userAccount.KaguyaDiamonds += 600;
+                        UserAccounts.SaveAccounts();
+                        thirtyDayKeys.Remove(thirtyDayKey);
+                        File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/30DayKeys.txt", thirtyDayKeys);
 
-                    await GlobalCommandResponses.CreateSuccessfulRedemption(Context, thirtyDayKey,
-                        "Successfully Redeemed Supporter Tag!",
-                        "Thank you so much for supporting the Kaguya Project! **`30 Days`** of Kaguya Supporter time have been added to your account.",
-                        "The key you have just redeemed is no longer redeemable.");
+                        await GlobalCommandResponses.CreateSuccessfulRedemption(Context, thirtyDayKey,
+                            "Successfully Redeemed Supporter Tag!",
+                            "Thank you so much for supporting the Kaguya Project! **`30 Days`** of Kaguya Supporter time have been added to your account.",
+                            "The key you have just redeemed is no longer redeemable.");
+                    }
+                }
+                catch(InvalidOperationException)
+                {
+                    return;
                 }
             }
 
             foreach (string sixtyDayKey in sixtyDayKeys)
             {
-                if (key.Contains(sixtyDayKey))
+                try
                 {
-                    userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(60);
-                    userAccount.KaguyaDiamonds += 1200;
-                    UserAccounts.SaveAccounts();
-                    thirtyDayKeys.Remove(sixtyDayKey);
-                    File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/60DayKeys.txt", thirtyDayKeys);
+                    if (key.Contains(sixtyDayKey))
+                    {
+                        userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(60);
+                        userAccount.KaguyaDiamonds += 1200;
+                        UserAccounts.SaveAccounts();
+                        thirtyDayKeys.Remove(sixtyDayKey);
+                        File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/60DayKeys.txt", thirtyDayKeys);
 
-                    await GlobalCommandResponses.CreateSuccessfulRedemption(Context, sixtyDayKey,
-                        "Successfully Redeemed Supporter Tag!",
-                        "Thank you so much for supporting the Kaguya Project! **`60 Days`** of Kaguya Supporter time and **`1,200 Kaguya Diamonds`**have been added to your account.",
-                        "The key you have just redeemed is no longer redeemable.");
+                        await GlobalCommandResponses.CreateSuccessfulRedemption(Context, sixtyDayKey,
+                            "Successfully Redeemed Supporter Tag!",
+                            "Thank you so much for supporting the Kaguya Project! **`60 Days`** of Kaguya Supporter time and **`1,200 Kaguya Diamonds`**have been added to your account.",
+                            "The key you have just redeemed is no longer redeemable.");
+                    }
+                }
+                catch(InvalidOperationException)
+                {
+                    return;
                 }
             }
 
             foreach (string ninetyDayKey in ninetyDayKeys)
             {
-                if (key.Contains(ninetyDayKey))
+                try
                 {
-                    userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(90);
-                    userAccount.KaguyaDiamonds += 1800;
-                    UserAccounts.SaveAccounts();
-                    thirtyDayKeys.Remove(ninetyDayKey);
-                    File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/90DayKeys.txt", thirtyDayKeys);
+                    if (key.Contains(ninetyDayKey))
+                    {
+                        userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(90);
+                        userAccount.KaguyaDiamonds += 1800;
+                        UserAccounts.SaveAccounts();
+                        thirtyDayKeys.Remove(ninetyDayKey);
+                        File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/90DayKeys.txt", thirtyDayKeys);
 
-                    await GlobalCommandResponses.CreateSuccessfulRedemption(Context, ninetyDayKey,
-                        "Successfully Redeemed Supporter Tag!",
-                        "Thank you so much for supporting the Kaguya Project! **`90 Days`** of Kaguya Supporter time and **`1,800 Kaguya Diamonds`** have been added to your account.",
-                        "The key you have just redeemed is no longer redeemable.");
+                        await GlobalCommandResponses.CreateSuccessfulRedemption(Context, ninetyDayKey,
+                            "Successfully Redeemed Supporter Tag!",
+                            "Thank you so much for supporting the Kaguya Project! **`90 Days`** of Kaguya Supporter time and **`1,800 Kaguya Diamonds`** have been added to your account.",
+                            "The key you have just redeemed is no longer redeemable.");
+                    }
+                }
+                catch(InvalidOperationException)
+                {
+                    return;
                 }
             }
         }
