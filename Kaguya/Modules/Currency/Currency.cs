@@ -158,8 +158,9 @@ namespace Kaguya.Modules
             timeout = command.TimelyHours;
             bonus = command.TimelyPoints;
             Random rand = new Random();
-            bool critical = rand.Next(100) < 14; ;
+            bool critical = rand.Next(100) < 14;
             var difference = DateTime.Now - userAccount.LastReceivedTimelyPoints;
+            var supporterTime = userAccount.KaguyaSupporterExpiration - DateTime.Now;
 
             if (!CanReceiveTimelyPoints(userAccount, (int)timeout))
             {
@@ -174,6 +175,10 @@ namespace Kaguya.Modules
             }
             if (difference.TotalHours < 12) //Difference of now compared to when user last upvoted Kaguya on DBL.
                 critical = rand.Next(100) < 28;
+            if (supporterTime.TotalSeconds > 0)
+                critical = rand.Next(100) < 28;
+            if (difference.TotalHours < 12 && supporterTime.TotalSeconds > 0)
+                critical = rand.Next(100) < 56;
             if(critical) { bonus *= 3.50; }
             userAccount.Points += (uint)bonus;
             userAccount.LastReceivedTimelyPoints = DateTime.Now;
@@ -276,9 +281,16 @@ namespace Kaguya.Modules
             bool critical = crit.Next(100) < 8;
 
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
+            var supporterTime = userAccount.KaguyaSupporterExpiration - DateTime.Now;
 
             if (difference.TotalHours < 12)
                 critical = crit.Next(100) < 16;
+
+            if (supporterTime.TotalSeconds > 0)
+                critical = crit.Next(100) < 16;
+
+            if (supporterTime.TotalSeconds > 0 && difference.TotalHours < 12)
+                critical = crit.Next(100) < 32;
 
             if (roll <= 66)
             {
@@ -447,6 +459,7 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
+            var supporterTime = userAccount.KaguyaSupporterExpiration - DateTime.Now;
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
             Random crit = new Random();
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
@@ -456,7 +469,13 @@ namespace Kaguya.Modules
             if (difference.TotalHours < 12)
                 critical = crit.Next(100) < 16; //16% if they've upvoted Kaguya within the last 12 hours.
 
-            if(!CanReceiveWeeklyPoints(userAccount, timeout))
+            if (supporterTime.TotalSeconds > 0)
+                critical = crit.Next(100) < 16;
+
+            if (supporterTime.TotalSeconds > 0 && difference.TotalHours < 12)
+                critical = crit.Next(100) < 32;
+
+            if (!CanReceiveWeeklyPoints(userAccount, timeout))
             {
                 var weeklyDifference = DateTime.Now - userAccount.LastReceivedWeeklyPoints;
                 var formattedTime = $"{weeklyDifference.Days}d {weeklyDifference.Hours}h {weeklyDifference.Minutes}m {weeklyDifference.Seconds}s";
