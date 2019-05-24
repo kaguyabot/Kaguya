@@ -80,5 +80,17 @@ namespace Kaguya.Core.Command_Handler.EmbedHandlers
 
             return;
         }
+        public static async Task CreateSuccessfulRedemption(SocketCommandContext context, string key, string title = null, string description = null, string footer = null, string thumbnailURL = null)
+        {
+            Logger logger = new Logger();
+            var embed = await Task.Run(() => (new EmbedBuilder()
+                .WithTitle(title)
+                .WithDescription(description)
+                .WithThumbnailUrl(thumbnailURL)
+                .WithFooter(footer)
+                .WithColor(252, 132, 255).Build())); //Pink
+            await context.Channel.SendMessageAsync(embed: embed.ToEmbedBuilder().Build());
+            logger.ConsoleKeyRedemption(context, key);
+        }
     }
 }

@@ -5,3 +5,6 @@ Kaguya/bin*
 Kaguya/obj*
 Lavalink/logs/spring.log
 *.gz
+30DayKeys.txt
+60DayKeys.txt
+90DayKeys.txt

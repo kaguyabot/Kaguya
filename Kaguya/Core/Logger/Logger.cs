@@ -102,6 +102,16 @@ namespace Kaguya.Core
                 $"\nTime: [{DateTime.Now}]");
         }
 
+        /// <summary>Console logging event for general status advisory messages/updates, such as when the _client.SetGameAsync() task is executed.</summary>
+        public void ConsoleKeyRedemption(SocketCommandContext context, string key)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nUser has redeemed a supporter key!" +
+                $"\nUser: [\"{context.User}\"]" +
+                $"\nKey: [\"{key}\"]" +
+                $"\nTime: [{DateTime.Now}]");
+        }
+
         /// <summary>Console logging event for critical errors when an exception is thrown.</summary>
         public void ConsoleCriticalAdvisory(Exception e, string message)
         {

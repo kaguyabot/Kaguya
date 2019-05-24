@@ -321,7 +321,7 @@
     <Compile Include="Modules\osu\BeatmapLinkParser.cs" />
     <Compile Include="Modules\osu\osu.cs" />
     <Compile Include="Modules\osu\osuTop.cs" />
-    <Compile Include="Modules\Patreon\Patreon.cs" />
+    <Compile Include="Modules\Supporter\KaguyaSupporter.cs" />
     <Compile Include="Modules\Utility\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

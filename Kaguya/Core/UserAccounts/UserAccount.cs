@@ -14,12 +14,14 @@ namespace Kaguya.Core.UserAccounts
         public List<ulong> IsInServerIDs { get; set; }
         public uint Points { get; set; }
         public uint EXP { get; set; }
+        public uint KaguyaDiamonds { get; set; }
         public int Rep { get; set; }
         public DateTime LastReceivedEXP { get; set; }
         public DateTime LastReceivedTimelyPoints { get; set; }
         public DateTime LastGivenRep { get; set; }
         public DateTime LastReceivedWeeklyPoints { get; set; }
         public DateTime LastUpvotedKaguya { get; set; }
+        public DateTime KaguyaSupporterExpiration { get; set; }
         public uint LevelNumber
         {
             get
@@ -43,6 +45,7 @@ namespace Kaguya.Core.UserAccounts
             IsInServerIDs = new List<ulong>();
             Points = 0;
             EXP = 0;
+            KaguyaDiamonds = 0;
             Rep = 0;
             Blacklisted = 0;
             LifetimeGambleWins = 0;
