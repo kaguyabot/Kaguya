@@ -6,6 +6,7 @@ Changelog:
 Version 1.16
 
 - $ban may now include a reason. This reason is sent to the log channel for banned users, if there is one.
+    - This feature will come for other logtypes soon.
 - Logtype "Shadowbans" added! You may now log to a specific channel for shadowban events.
 - Logtype "Unshadowbans" added.
 - "Violet" color has been darkened for some log events.
