@@ -13,6 +13,8 @@ Version 1.16
 - Logtype "UserIsBanned" has been renamed to "bans".
 - Logtype "UserIsUnbanned" has been renamed to "unbans".
 - Fixed a bug where the ServerMessageLog file would get corrupted, resulting in the messageupdated and messagedeleted logtypes being rendered useless.
+- A timer that was supposed to start on Ready never would launch. That is now fixed.
+- "Verify message received" now only occurs every 2 minutes (was 1).
 
 Version 1.15.1
 

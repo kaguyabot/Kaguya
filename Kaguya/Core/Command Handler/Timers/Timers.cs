@@ -73,7 +73,7 @@ namespace Kaguya.Core.Command_Handler
 
         public Task CheckChannelPermissions()
         {
-            Timer timer = new Timer(86400000); //24 hours
+            Timer timer = new Timer(7200000); //2 hours
             timer.Elapsed += Check_Channel_Permissions_Elapsed;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -199,7 +199,7 @@ namespace Kaguya.Core.Command_Handler
 
         public Task VerifyMessageReceived()
         {
-            Timer timer = new Timer(60000); //Every 60 seconds, make sure the bot is seeing messages. If it hasn't seen a message in 15 seconds, restart!
+            Timer timer = new Timer(120000); //Every 120 seconds, make sure the bot is seeing messages. If it hasn't seen a message in 15 seconds, restart!
             timer.Elapsed += Verify_Message_Received_Elapsed;
             timer.AutoReset = true;
             timer.Enabled = true;

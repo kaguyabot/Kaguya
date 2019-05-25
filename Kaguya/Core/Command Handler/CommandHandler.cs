@@ -64,6 +64,7 @@ namespace Kaguya
                 _client.Ready += timers.GameTimer;
                 _client.Ready += timers.VerifyMessageReceived;
                 _client.Ready += timers.ServerMessageLogCheck;
+                _client.Ready += timers.VerifyUsers;
                 _client.Ready += timers.ResourcesBackup;
                 _client.Ready += timers.LogFileTimer;
 
