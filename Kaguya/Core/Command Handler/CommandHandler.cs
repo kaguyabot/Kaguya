@@ -65,6 +65,7 @@ namespace Kaguya
                 _client.Ready += timers.VerifyMessageReceived;
                 _client.Ready += timers.ServerMessageLogCheck;
                 _client.Ready += timers.ResourcesBackup;
+                _client.Ready += timers.LogFileTimer;
 
                 _lavaSocketClient.Log += musicLogger.MusicLogger;
                 _lavaSocketClient.OnTrackFinished += musicLogger.OnTrackFinished;

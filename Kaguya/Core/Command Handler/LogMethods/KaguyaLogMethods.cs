@@ -191,7 +191,6 @@ namespace Kaguya.Core.CommandHandler
                         {
                             ServerMessageLog currentLog = ServerMessageLogs.GetLog(guild);
                             currentLog.AddMessage(msg);
-                            ServerMessageLogs.SaveServerLogging();
                             return Task.CompletedTask;
                         }
                         else

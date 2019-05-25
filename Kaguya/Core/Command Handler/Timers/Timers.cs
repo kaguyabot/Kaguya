@@ -20,6 +20,20 @@ namespace Kaguya.Core.Command_Handler
         readonly public IServiceProvider _services;
         readonly Logger logger = new Logger();
 
+        public Task LogFileTimer()
+        {
+            Timer timer = new Timer(2000); //2 Seconds
+            timer.Elapsed += Log_File_Timer_Elapsed;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            return Task.CompletedTask;
+        }
+
+        private void Log_File_Timer_Elapsed(object sender, ElapsedEventArgs e) //Saves the log every 2 seconds.
+        {
+            ServerMessageLogs.SaveServerLogging();
+        }
+
         public Task GameTimer()
         {
             Timer timer = new Timer(300000); //5 minutes
