@@ -23,8 +23,10 @@ namespace Kaguya.Core.Server_Files
         public ulong LogUpdatedMessages { get; set; }
         public ulong LogWhenUserJoins { get; set; }
         public ulong LogWhenUserLeaves { get; set; }
-        public ulong LogWhenUserIsBanned { get; set; }
-        public ulong LogWhenUserIsUnbanned { get; set; }
+        public ulong LogBans { get; set; }
+        public ulong LogUnbans { get; set; }
+        public ulong LogShadowbans { get; set; }
+        public ulong LogUnShadowbans { get; set; }
         public ulong LogChangesToLogSettings { get; set; }
         public ulong LogWhenUserSaysFilteredPhrase { get; set; }
         public ulong LogWhenUserConnectsToVoiceChannel { get; set; }
@@ -32,7 +34,8 @@ namespace Kaguya.Core.Server_Files
         public ulong LogLevelUpAnnouncements { get; set; }
         public List<string> JoinedUsers { get; set; }
         public bool IsBlacklisted { get; set; }
-        public bool BlackJackInProgress { get; set; }
+        public string MostRecentBanReason { get; set; }
+        public string MostRecentShadowbanReason { get; set; }
         public Server(ulong id, string serverName)
         {
             ID = id;

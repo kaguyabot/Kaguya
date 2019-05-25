@@ -27,7 +27,7 @@ namespace Kaguya.Core.CommandHandler
         readonly Color Yellow = new Color(255, 255, 102);
         readonly Color SkyBlue = new Color(63, 242, 255);
         readonly Color Red = new Color(255, 0, 0);
-        readonly Color Violet = new Color(238, 130, 238);
+        readonly Color Violet = new Color(148, 0, 211);
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
 
@@ -172,9 +172,7 @@ namespace Kaguya.Core.CommandHandler
         public Task LeftGuild(SocketGuild guild)
         {
             ServerMessageLogs.RemoveLog(guild.Id);
-            
             logger.ConsoleGuildConnectionAdvisory(guild, "Disconnected from guild.");
-
             return Task.CompletedTask;
         }
 
@@ -302,13 +300,45 @@ namespace Kaguya.Core.CommandHandler
         public async Task LoggingUserBanned(SocketUser user, SocketGuild server)
         {
             Server currentServer = Servers.GetServer(server);
-            ulong loggingChannelID = currentServer.LogWhenUserIsBanned;
+            ulong loggingChannelID = currentServer.LogBans;
             if (loggingChannelID == 0) return;
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();
             embed.WithTitle("User Banned");
-            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}`");
+            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}` \nReason: `{currentServer.MostRecentBanReason}`");
             embed.WithThumbnailUrl("https://i.imgur.com/TKAMjoi.png");
+            embed.WithTimestamp(DateTime.Now);
+            embed.WithColor(Violet);
+            await logChannel.SendMessageAsync("", false, embed.Build());
+        }
+
+        public async Task LoggingUserShadowbanned(SocketUser user, SocketGuild server)
+        {
+            Server currentServer = Servers.GetServer(server);
+            ulong loggingChannelID = currentServer.LogShadowbans;
+            if (loggingChannelID == 0) return;
+            ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.WithTitle("User Shadowbanned");
+            embed.WithDescription($"User: `{user}`\nUser ID: `{user.Id}` \nReason: `{currentServer.MostRecentShadowbanReason}`");
+            embed.WithThumbnailUrl("https://i.imgur.com/1TvqYfQ.png");
+            embed.WithTimestamp(DateTime.Now);
+            embed.WithColor(Violet);
+            await logChannel.SendMessageAsync("", false, embed.Build());
+
+            Servers.SaveServers();
+        }
+
+        public async Task LoggingUserUnShadowbanned(SocketUser user, SocketGuild server)
+        {
+            Server currentServer = Servers.GetServer(server);
+            ulong loggingChannelID = currentServer.LogUnShadowbans;
+            if (loggingChannelID == 0) return;
+            ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.WithTitle("User Un-Shadowbanned");
+            embed.WithDescription($"User: `{user}`\nUser ID: `{user.Id}`");
+            embed.WithThumbnailUrl("https://i.imgur.com/1gRBQHT.png");
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(Violet);
             await logChannel.SendMessageAsync("", false, embed.Build());
@@ -317,7 +347,7 @@ namespace Kaguya.Core.CommandHandler
         public async Task LoggingUserUnbanned(SocketUser user, SocketGuild server)
         {
             Server currentServer = Servers.GetServer(server);
-            ulong loggingChannelID = currentServer.LogWhenUserIsUnbanned;
+            ulong loggingChannelID = currentServer.LogUnbans;
             if (loggingChannelID == 0) return;
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();

@@ -3,13 +3,22 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.16
+
+- $ban may now include a reason. This reason is sent to the log channel for banned users, if there is one.
+- Logtype "Shadowbans" added! You may now log to a specific channel for shadowban events.
+- Logtype "Unshadowbans" added.
+- "Violet" color has been darkened for some log events.
+- Logtype "UserIsBanned" has been renamed to "bans".
+- Logtype "UserIsUnbanned" has been renamed to "unbans".
+
+
 Version 1.15.1
 
 - $h redeem command added.
 - $h diamonds command added.
 - $h supporter command added.
 - $supporter and $diamonds commands added.
-
 
 Version 1.15
 

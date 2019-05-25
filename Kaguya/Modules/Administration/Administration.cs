@@ -4,6 +4,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
+using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Commands;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
@@ -848,22 +849,13 @@ namespace Kaguya.Modules
         [Alias("b")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
-        public async Task Ban(IGuildUser user)
+        public async Task Ban(IGuildUser user, [Remainder]string reason = "No reason specified.")
         {
             stopWatch.Start();
-
+            Console.WriteLine(reason);
             var sOwnerID = Context.Guild.Owner.Id;
 
-            if (user.Id != sOwnerID)
-            {
-                await user.BanAsync();
-                embed.WithTitle($"User Banned");
-                embed.WithDescription($"{Context.User.Mention} has banned `{user}`.");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-            }
-            else if(user.Id == Context.User.Id)
+            if(user.Id == Context.User.Id)
             {
                 embed.WithDescription($"**{Context.User.Mention} You may not ban yourself!**");
                 embed.WithColor(Red);
@@ -874,6 +866,16 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{Context.User.Mention} I cannot ban the server owner!**");
                 embed.WithColor(Red);
                 await BE();
+            }
+            else if (user.Id != sOwnerID)
+            {
+                await user.BanAsync();
+                embed.WithTitle($"User Banned");
+                embed.WithDescription($"{Context.User.Mention} has banned `{user}`.");
+                embed.WithColor(Pink);
+                await BE(); stopWatch.Stop();
+                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                Servers.GetServer(Context.Guild).MostRecentBanReason = reason;
             }
         }
 
@@ -949,9 +951,12 @@ namespace Kaguya.Modules
         [Command("shadowban")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
-        public async Task ShadowBan(IGuildUser user) //Shadowbans a user from a server.
+        public async Task ShadowBan(IGuildUser user, [Remainder]string reason = "No reason specified.") //Shadowbans a user from a server.
         {
             stopWatch.Start();
+
+            var server = Servers.GetServer(Context.Guild);
+            server.MostRecentShadowbanReason = reason;
 
             embed.WithDescription($"Shadowbanning `[{user.Username}#{user.Discriminator}]`...");
             embed.WithColor(Red);
@@ -973,6 +978,12 @@ namespace Kaguya.Modules
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             logger.ConsoleGuildAdvisory(Context.Guild, user as SocketGuildUser, stopWatch.ElapsedMilliseconds, "User shadowbanned.");
+
+            if (server.LogShadowbans != 0) //Shadowban logtype.
+            {
+                KaguyaLogMethods logMethods = new KaguyaLogMethods();
+                await logMethods.LoggingUserShadowbanned(user as SocketUser, Context.Guild);
+            }
         }
 
         [Command("unshadowban")]
@@ -981,6 +992,7 @@ namespace Kaguya.Modules
         public async Task UnShadowBan(IGuildUser user) //Un-Shadowbans a user from a server.
         {
             stopWatch.Start();
+            Server server = Servers.GetServer(Context.Guild);
 
             embed.WithDescription($"Un-Shadow Banning `[{user.Username}#{user.Discriminator}]`...");
             embed.WithColor(Red);
@@ -1002,6 +1014,12 @@ namespace Kaguya.Modules
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             logger.ConsoleGuildAdvisory(Context.Guild, user as SocketGuildUser, stopWatch.ElapsedMilliseconds, "User un-shadowbanned.");
+
+            if(server.LogUnShadowbans != 0)
+            {
+                KaguyaLogMethods logMethods = new KaguyaLogMethods();
+                await logMethods.LoggingUserUnShadowbanned(user as SocketUser, Context.Guild);
+            }
         }
 
         [Command("clear")] //administration
@@ -1086,19 +1104,19 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "userisbanned":
-                    server.LogWhenUserIsBanned = logChannelID;
+                case "bans":
+                    server.LogBans = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
-                    embed.WithDescription($"{Context.User.Mention} All log messages for `User Banned` will be sent in channel {channel.Name}");
+                    embed.WithDescription($"{Context.User.Mention} All log messages for `Bans` will be sent in channel {channel.Name}");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "userisunbanned":
-                    server.LogWhenUserIsUnbanned = logChannelID;
+                case "unbans":
+                    server.LogUnbans = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
-                    embed.WithDescription($"{Context.User.Mention} All log messages for `User Kicked` will be sent in channel {channel.Name}");
+                    embed.WithDescription($"{Context.User.Mention} All log messages for `Unbans` will be sent in channel {channel.Name}");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
@@ -1142,18 +1160,36 @@ namespace Kaguya.Modules
                         "Log Channel Set",
                         $"{Context.User.Mention} All log messages for `level announcements` will be sent in channel {channel.Name}");
                     break;
+                case "shadowbans":
+                    server.LogShadowbans = logChannelID;
+                    Servers.SaveServers();
+                    await GlobalCommandResponses.CreateCommandResponse(Context,
+                        stopWatch.ElapsedMilliseconds,
+                        "Log Channel Set",
+                        $"{Context.User.Mention} All log messages for `shadowbans` will be sent in channel {channel.Name}");
+                    break;
+                case "unshadowbans":
+                    server.LogUnShadowbans = logChannelID;
+                    Servers.SaveServers();
+                    await GlobalCommandResponses.CreateCommandResponse(Context,
+                        stopWatch.ElapsedMilliseconds,
+                        "Log Channel Set",
+                        $"{Context.User.Mention} All log messages for `un-shadowbans` will be sent in channel {channel.Name}");
+                    break;
                 case "all":
                     server.LogDeletedMessages = logChannelID;
                     server.LogUpdatedMessages = logChannelID;
                     server.LogWhenUserJoins = logChannelID;
                     server.LogWhenUserLeaves = logChannelID;
-                    server.LogWhenUserIsBanned = logChannelID;
-                    server.LogWhenUserIsUnbanned = logChannelID;
+                    server.LogBans = logChannelID;
+                    server.LogUnbans = logChannelID;
                     server.LogChangesToLogSettings = logChannelID;
                     server.LogWhenUserSaysFilteredPhrase = logChannelID;
                     server.LogWhenUserConnectsToVoiceChannel = logChannelID;
                     server.LogWhenUserDisconnectsFromVoiceChannel = logChannelID;
                     server.LogLevelUpAnnouncements = logChannelID;
+                    server.LogShadowbans = logChannelID;
+                    server.LogUnShadowbans = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages will be sent in channel {channel.Name}");
@@ -1212,19 +1248,19 @@ namespace Kaguya.Modules
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "userisbanned":
-                    server.LogWhenUserIsBanned = 0;
+                case "bans":
+                    server.LogBans = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
-                    embed.WithDescription($"{Context.User.Mention} Log messages for `User Banned` have been disabled");
+                    embed.WithDescription($"{Context.User.Mention} Log messages for `Bans` have been disabled");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
-                case "userisunbanned":
-                    server.LogWhenUserIsUnbanned = 0;
+                case "unbans":
+                    server.LogUnbans = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
-                    embed.WithDescription($"{Context.User.Mention} Log messages for `User Unbanned` have been disabled");
+                    embed.WithDescription($"{Context.User.Mention} Log messages for `Unbans` have been disabled");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
@@ -1268,21 +1304,39 @@ namespace Kaguya.Modules
                         "Log Channel Set",
                         $"{Context.User.Mention} Log messages for `level announcements` have been disabled.");
                     break;
+                case "shadowbans":
+                    server.LogShadowbans = 0;
+                    Servers.SaveServers();
+                    await GlobalCommandResponses.CreateCommandResponse(Context,
+                        stopWatch.ElapsedMilliseconds,
+                        "Log Channel Set",
+                        $"{Context.User.Mention} Log messages for `shadowbans` have been disabled.");
+                    break;
+                case "unshadowbans":
+                    server.LogUnShadowbans = 0;
+                    Servers.SaveServers();
+                    await GlobalCommandResponses.CreateCommandResponse(Context,
+                        stopWatch.ElapsedMilliseconds,
+                        "Log Channel Set",
+                        $"{Context.User.Mention} Log messages for `un-shadowbans` have been disabled.");
+                    break;
                 case "all":
                     server.LogDeletedMessages = 0;
                     server.LogUpdatedMessages = 0;
                     server.LogWhenUserJoins = 0;
                     server.LogWhenUserLeaves = 0;
-                    server.LogWhenUserIsBanned = 0;
-                    server.LogWhenUserIsUnbanned = 0;
+                    server.LogBans = 0;
+                    server.LogUnbans = 0;
                     server.LogChangesToLogSettings = 0;
                     server.LogWhenUserSaysFilteredPhrase = 0;
                     server.LogWhenUserConnectsToVoiceChannel = 0;
                     server.LogWhenUserDisconnectsFromVoiceChannel = 0;
                     server.LogLevelUpAnnouncements = 0;
+                    server.LogShadowbans = 0;
+                    server.LogUnShadowbans = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Reset");
-                    embed.WithDescription($"{Context.User.Mention} Log messages for `everything` have been disabled");
+                    embed.WithDescription($"{Context.User.Mention} Log messages for `everything` have been disabled.");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
@@ -1305,8 +1359,9 @@ namespace Kaguya.Modules
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             var server = Servers.GetServer(Context.Guild);
             ulong[] logChannels = { server.LogDeletedMessages, server.LogUpdatedMessages, server.LogWhenUserJoins, server.LogWhenUserLeaves,
-            server.LogWhenUserIsBanned, server.LogWhenUserIsUnbanned, server.LogChangesToLogSettings, server.LogWhenUserSaysFilteredPhrase,
-            server.LogWhenUserConnectsToVoiceChannel, server.LogWhenUserDisconnectsFromVoiceChannel, server.LogLevelUpAnnouncements };
+            server.LogBans, server.LogUnbans, server.LogChangesToLogSettings, server.LogWhenUserSaysFilteredPhrase,
+            server.LogWhenUserConnectsToVoiceChannel, server.LogWhenUserDisconnectsFromVoiceChannel, server.LogLevelUpAnnouncements, server.LogShadowbans,
+            server.LogUnShadowbans};
             embed.WithTitle("List of Log Events");
             embed.WithDescription($"List of all types of logging you can subscribe to. Use these with {cmdPrefix}log to enable logging!" +
                 "\n" +
@@ -1314,13 +1369,15 @@ namespace Kaguya.Modules
                 $"\n**UpdatedMessages** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[1])}`**" +
                 $"\n**UserJoins** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[2])}`**" +
                 $"\n**UserLeaves** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[3])}`**" +
-                $"\n**UserIsBanned** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[4])}`**" +
-                $"\n**UserIsUnbanned** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[5])}`**" +
+                $"\n**Bans** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[4])}`**" +
+                $"\n**Unbans** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[5])}`**" +
                 $"\n**ChangesToLogSettings** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[6])}`**" +
                 $"\n**FilteredPhrases** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[7])}`**" +
                 $"\n**UserConnectsToVoice** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[8])}`**" +
                 $"\n**UserDisconnectsFromVoice** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[9])}`**" +
                 $"\n**LevelAnnouncements** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[10])}`**" +
+                $"\n**Shadowbans** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[11])}`**" +
+                $"\n**Unshadowbans** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[12])}`**" +
                 "\n**All**");
             embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
