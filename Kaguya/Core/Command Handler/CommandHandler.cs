@@ -68,6 +68,8 @@ namespace Kaguya
                 _client.Ready += timers.ResourcesBackup;
                 _client.Ready += timers.LogFileTimer;
 
+                Console.WriteLine("\nStatus: All Timers Enabled.");
+
                 _lavaSocketClient.Log += musicLogger.MusicLogger;
                 _lavaSocketClient.OnTrackFinished += musicLogger.OnTrackFinished;
                 _lavaSocketClient.OnTrackException += musicLogger.OnTrackException;

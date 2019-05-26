@@ -196,7 +196,7 @@ namespace Kaguya.Core.CommandHandler
                         else
                         {
                             logger.ConsoleCriticalAdvisory($"Failed to cache message for {guild.Name} with ID: {guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 195!");
-                            ServerMessageLogs.RemoveLog(guild.Id);
+                            ServerMessageLogs.DeleteLog(guild);
                             ServerMessageLogs.SaveServerLogging();
                             return Task.CompletedTask;
                         }

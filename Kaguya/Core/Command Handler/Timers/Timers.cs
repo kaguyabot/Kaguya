@@ -119,8 +119,11 @@ namespace Kaguya.Core.Command_Handler
                                 }
                             }
                         }
-                        logger.ConsoleGuildAdvisory($"Kaguya has been granted permissions for {i} new channels.");
-                        continue;
+                        if (i > 0)
+                        {
+                            logger.ConsoleGuildAdvisory($"Kaguya has been granted permissions for {i} new channels.");
+                            continue;
+                        }
                     }
                 }
             }

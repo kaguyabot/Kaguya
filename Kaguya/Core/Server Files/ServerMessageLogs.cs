@@ -67,7 +67,6 @@ namespace Kaguya.Core.Server_Files
         private static ServerMessageLog CreateLog(ulong id)
         {
             var newLog = new ServerMessageLog(id);
-
             serverMessageLogs.Add(newLog);
             SaveServerLogging();
             return newLog;
