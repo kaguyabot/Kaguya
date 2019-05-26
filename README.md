@@ -5,22 +5,9 @@ My goal for the Kaguya project is for Kaguya to be one of the top general purpos
 
 ### It should be noted that, unfortunately, Kaguya is not very "self-hoster" friendly, even though you can compile the code yourself and insert your own Token. You will find with self hosting that there are some hard-coded values, like my name as the creator of the bot, and Kaguya as the bot itself (not whatever your bot's name is). For the forseeable future, I cannot see myself adding in support for self-hosting.
 
-# Feature Spotlight
+# Features and Commands
 
-## Administration
-#### Kicking, banning, masskicking, massbanning, message clearing
-
-## osu! Related
-#### Team role creation (for tournaments), recent, osutop, osuset
-
-## Currency
-#### Superb gambling system, daily bonus points, detailed individualized profiles coming soon!
-
-## Utility
-#### Text and voice channel creation/deletion, customizable bot prefix!
-
-## EXP
-#### EXP checking, server and global EXP leaderboards, reputation and leveling systems!
+![Kaguya's Full Command List + Features](https://i.imgur.com/ZreRC1X.jpg)
 
 # Coming soon
 
