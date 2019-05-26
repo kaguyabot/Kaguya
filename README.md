@@ -12,13 +12,11 @@ My goal for the Kaguya project is for Kaguya to be one of the top general purpos
 # Coming soon
 
 ## Administration
-#### Message logging and automatic moderation features, as well as custom word/phrase blacklisting, automatic server raid and spam protection, member muting (configurable per-use mute duration configuration options)
+#### More automatic moderation, server spam protection, server raid protection.
 
 ## Utility
 #### Giveaway functionality
 
 ## EXP/Currency
-#### Full-fledge profiles for users through a $profile command. This will be an image with statistics on the user.
+#### Full-fledge profiles for users through a $profile command.
 
-## osu!
-#### More tournament-oriented commands, including a referee helper and match analysis tool! Long-term: Add in screenshot image recognition to automatically detect scores when screenshots are posted.
