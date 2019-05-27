@@ -168,11 +168,18 @@ namespace Kaguya.Modules
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "points":
                     stopWatch.Start();
-                    embed.WithTitle($"Help: Points | `{cmdPrefix}points`");
-                    embed.WithDescription($"Help: Kaguya Points Balance | `{cmdPrefix}points`" +
-                        $"\nReturns the value of points a user has in their account." +
+                    embed.WithTitle($"Help: Kaguya Points Balance | `{cmdPrefix}points`");
+                    embed.WithDescription($"Returns the value of points a user has in their account." +
                         $"\nSyntax: `{cmdPrefix}points {{This returns the amount of points you have in your account}}`" +
                         $"\nSyntax: `{cmdPrefix}points <user> {{This returns the amount of points someone else has in their account.}}`");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "profile":
+                case "p":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Profile | `{cmdPrefix}profile`");
+                    embed.WithDescription($"\n{Context.User.Mention} Shows you all of your Kaguya stats at once!" +
+                        $"\nSyntax: `{cmdPrefix}profile`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "pointsadd":
