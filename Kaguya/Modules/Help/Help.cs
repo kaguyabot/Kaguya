@@ -983,6 +983,7 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}bug" +
                     $"\n{cmdPrefix}help [h]" +
                     $"\n{cmdPrefix}helpdm [hdm]" +
+                    $"\n{cmdPrefix}profile [p]" +
                     $"\n{cmdPrefix}redeem" +
                     $"\n{cmdPrefix}supporter" +
                     $"\n{cmdPrefix}vote" +
@@ -1121,6 +1122,39 @@ namespace Kaguya.Modules
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
+
+        [Command("profile")]
+        [Alias("p")]
+        public async Task Profile()
+        {
+            stopWatch.Start();
+            var user = Context.User;
+            UserAccount account = UserAccounts.GetAccount(user);
+
+            System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
+            string monthName = mfi.GetMonthName(user.CreatedAt.Month).ToString();
+
+            embed.WithTitle($"Kaguya Profile for {user.Username}");
+            embed.AddField("User Information",
+                $"User: `{user}`" +
+                $"\nID: `{user.Id}`" +
+                $"\nAccount Created: `{monthName} {user.CreatedAt.Day}, {user.CreatedAt.Year}`", true);
+            embed.AddField("Kaguya Data",
+                $"Points: `{account.Points.ToString("N0")}`" +
+                $"\nEXP: `{account.EXP.ToString("N0")}`" +
+                $"\nRep: `{account.Rep.ToString("N0")}`" +
+                $"\nLevel: `{account.LevelNumber.ToString("N0")}`" +
+                $"\n<a:KaguyaDiamonds:581562698228301876>: `{account.KaguyaDiamonds.ToString("N0")}`" +
+                $"\nLifetime Gambles: `{account.LifetimeGambles.ToString("N0")}`" +
+                $"\nAverage Gamble Win %: `{(account.LifetimeGambleWins / account.LifetimeGambles * 100).ToString("N2")}%`" +
+                $"\nAverage Elite+ Roll %: `{(account.LifetimeEliteRolls / account.LifetimeGambles * 100).ToString("N2")}%`", true);
+            embed.WithThumbnailUrl(user.GetAvatarUrl());
+            embed.WithColor(Pink);
+            await BE();
+
+            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+        }
+
 
         [Command("bug")]
         public async Task BugReport([Remainder]string report)

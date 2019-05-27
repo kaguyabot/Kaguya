@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.16.3
+
+- $profile command added. See all of your Kaguya stats at once! Alias: "$p"
+
 Version 1.16.2
 
 - Kaguya will no longer reply to invalid commands. They will instead fail silently.
