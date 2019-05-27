@@ -14,6 +14,11 @@ Version 1.16.2
     - Level 27 should now be around level 50 (~20,000 EXP), 
     - Level 22 should now be around level 41 (~13,500 EXP)
     - The rate of earning EXP is unchanged.
+- Global Kaguya Warnings added. This is for me (or any future Kaguya Administrators) to $kaguyawarn someone. After 3
+    global warnings, the user will be blacklisted from Kaguya. They will be DM'd with why they received the warning, and 
+    will be told how many warnings they have. Upon receiving a blacklist from warnings, they will have their points, rep,
+    and EXP set to zero. These warnings are primarily sent to users seen abusing Kaguya, abusing the $bug report feature,
+    or is exploiting the bot in some other way.
 
 
 Version 1.16.1

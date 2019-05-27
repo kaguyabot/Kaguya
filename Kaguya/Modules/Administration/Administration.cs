@@ -170,10 +170,12 @@ namespace Kaguya.Modules
             stopWatch.Start();
             var user = _client.GetUser(ID);
             UserAccount userAccount = UserAccounts.GetAccount(user);
+
             var totalWarnings = userAccount.KaguyaWarnings;
             totalWarnings++; //Adds a global Kaguya warning to the user's account.
+            userAccount.KaguyaWarnings = totalWarnings;
 
-            UserAccounts.SaveAccounts(); //This isn't working for some god damn reason?!
+            UserAccounts.SaveAccounts();
 
             await user.GetOrCreateDMChannelAsync();
 
@@ -192,7 +194,7 @@ namespace Kaguya.Modules
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 stopWatch.ElapsedMilliseconds,
                 $"Kaguya Global Warning",
-                $"{Context.User.Mention} User `{user.ToString().ToUpper()}` has received a Kaguya Warning.",
+                $"{Context.User.Mention} User `{user}` has received a Kaguya Warning.",
                 $"User currently has {totalWarnings} warning(s).");
 
             if (totalWarnings >= 3)
@@ -221,7 +223,7 @@ namespace Kaguya.Modules
                 embed.WithColor(Violet);
                 await BE();
 
-                logger.ConsoleCriticalAdvisory($"USER {user} BLACKLISTED: RECEIVED 3 KAGUYA WARNINGS!!");
+                logger.ConsoleCriticalAdvisory($"USER {user.ToString().ToUpper()} BLACKLISTED: RECEIVED 3 KAGUYA WARNINGS!!");
             }
         }
 
