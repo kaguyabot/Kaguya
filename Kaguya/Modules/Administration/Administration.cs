@@ -192,7 +192,7 @@ namespace Kaguya.Modules
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 stopWatch.ElapsedMilliseconds,
                 $"Kaguya Global Warning",
-                $"{Context.User.Mention} User `{user}` has received a Kaguya Warning.",
+                $"{Context.User.Mention} User `{user.ToString().ToUpper()}` has received a Kaguya Warning.",
                 $"User currently has {totalWarnings} warning(s).");
 
             if (totalWarnings >= 3)
