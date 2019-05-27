@@ -163,6 +163,68 @@ namespace Kaguya.Modules
                 $"\n```Mute, Kick, Shadowban, Ban```");
         }
 
+        [Command("kaguyawarn")]
+        [RequireOwner]
+        public async Task KaguyaGlobalWarning(ulong ID, [Remainder]string reason = "No reason provided.")
+        {
+            stopWatch.Start();
+            var user = _client.GetUser(ID);
+            UserAccount userAccount = UserAccounts.GetAccount(user);
+            var totalWarnings = userAccount.KaguyaWarnings;
+            totalWarnings++; //Adds a global Kaguya warning to the user's account.
+
+            UserAccounts.SaveAccounts(); //This isn't working for some god damn reason?!
+
+            await user.GetOrCreateDMChannelAsync();
+
+            embed.WithTitle($"⚠️ Kaguya Global Warning");
+            embed.WithDescription($"You have received a global warning from a **Kaguya Administrator**. Upon receiving `three` warnings, " +
+                $"you will be permanently blacklisted from using Kaguya. This results in all `points`, `experience points`, and `rep` being reset to zero." +
+                $"\n" +
+                $"\nNote from Administrator `{Context.User}`:" +
+                $"\n" +
+                $"\n\"{reason}\"");
+            embed.WithFooter($"You currently have {totalWarnings} warning(s).");
+            embed.WithColor(Red);
+
+            await user.SendMessageAsync(embed: embed.Build());
+
+            await GlobalCommandResponses.CreateCommandResponse(Context,
+                stopWatch.ElapsedMilliseconds,
+                $"Kaguya Global Warning",
+                $"{Context.User.Mention} User `{user}` has received a Kaguya Warning.",
+                $"User currently has {totalWarnings} warning(s).");
+
+            if (totalWarnings >= 3)
+            {
+                userAccount.Blacklisted = 1;
+                userAccount.EXP = 0;
+                userAccount.Points = 0;
+                userAccount.Rep = 0;
+
+                UserAccounts.SaveAccounts();
+
+                embed.WithTitle($"⚠️ Kaguya Blacklist ⚠️");
+                embed.WithDescription($"You have been blacklisted from Kaguya due to receiving too many global warnings from a Kaguya Administrator." +
+                    $"\n" +
+                    $"\nNew Points Balance: `0`" +
+                    $"\nNew EXP Balance: `0`" +
+                    $"\nNew Rep Balance: `0`" +
+                    $"\n");
+                embed.WithFooter($"You currently have {totalWarnings} warning(s).");
+                embed.WithColor(Red);
+
+                await user.SendMessageAsync(embed: embed.Build());
+
+                embed.WithTitle($"User Blacklisted");
+                embed.WithDescription($"User `{user}` has been blacklisted from Kaguya for receiving three global warnings from a Kaguya Administrator.");
+                embed.WithColor(Violet);
+                await BE();
+
+                logger.ConsoleCriticalAdvisory($"USER {user} BLACKLISTED: RECEIVED 3 KAGUYA WARNINGS!!");
+            }
+        }
+
         [Command("mute")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]

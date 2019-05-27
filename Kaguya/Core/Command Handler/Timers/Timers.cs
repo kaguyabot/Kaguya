@@ -121,7 +121,7 @@ namespace Kaguya.Core.Command_Handler
                         }
                         if (i > 0)
                         {
-                            logger.ConsoleGuildAdvisory($"Kaguya has been granted permissions for {i} new channels.");
+                            logger.ConsoleGuildAdvisory($"Kaguya has been granted permissions for {i} new channels in Guild: {server.ServerName}.");
                             continue;
                         }
                     }

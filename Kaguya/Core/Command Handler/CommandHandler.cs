@@ -163,11 +163,6 @@ namespace Kaguya
                 switch (result.Error)
                 {
                     case CommandError.UnknownCommand:
-                        embed.WithDescription($"**Error: The command `{context.Message.Content}` does not exist!**");
-                        embed.WithFooter($"Use {guild.commandPrefix}h for the full commands list! Tag me with \"prefix <symbol>\" to edit my prefix!");
-                        embed.WithColor(Red);
-                        await context.Channel.SendMessageAsync(embed: embed.Build());
-                        consoleLogger.ConsoleCommandLog(context, CommandError.UnknownCommand, $"The command {context.Message.Content} does not exist!");
                         break;
                     case CommandError.BadArgCount:
                         var cmdPrefix = Servers.GetServer(context.Guild).commandPrefix;

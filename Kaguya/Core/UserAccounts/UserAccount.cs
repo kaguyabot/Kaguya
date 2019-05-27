@@ -16,6 +16,7 @@ namespace Kaguya.Core.UserAccounts
         public uint EXP { get; set; }
         public uint KaguyaDiamonds { get; set; }
         public int Rep { get; set; }
+        public int KaguyaWarnings { get; set; }
         public DateTime LastReceivedEXP { get; set; }
         public DateTime LastReceivedTimelyPoints { get; set; }
         public DateTime LastGivenRep { get; set; }
@@ -26,7 +27,7 @@ namespace Kaguya.Core.UserAccounts
         {
             get
             {
-                return (uint)Math.Sqrt(EXP / 27);
+                return (uint)Math.Sqrt(EXP / 8);
             }
         }
         
@@ -51,6 +52,7 @@ namespace Kaguya.Core.UserAccounts
             LifetimeGambleWins = 0;
             LifetimeGambleLosses = 0;
             LifetimeEliteRolls = 0;
+            KaguyaWarnings = 0;
         }
 
         public void AddSName(string server)

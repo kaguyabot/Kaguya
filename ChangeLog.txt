@@ -3,9 +3,22 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.16.2
+
+- Kaguya will no longer reply to invalid commands. They will instead fail silently.
+- EXP leveling formula adjusted from (Square Root(EXP / 27)) --> (Square Root(EXP / 8)).
+    - This results in requiring significantly less EXP to level up, but this change was primarily put in place
+       because the gaps between levels were becoming too large too soon. For example, the difference between levels
+       33 and 27 was over 10,000 EXP (roughly 900 messages with a 110-130 second cooldown between them.)
+    - Level 33 should now be around level 60 (~30,000 EXP),
+    - Level 27 should now be around level 50 (~20,000 EXP), 
+    - Level 22 should now be around level 41 (~13,500 EXP)
+    - The rate of earning EXP is unchanged.
+
+
 Version 1.16.1
 
-- Small hotfix for the logger (it was getting really flooded).
+- Small hotfix for the console logger (it was getting really flooded).
 
 Version 1.16
 

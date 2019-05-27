@@ -910,8 +910,8 @@ namespace Kaguya.Modules
                 $"\n{cmdPrefix}createvoicechannel [cvc]" +
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
                 $"\n{cmdPrefix}deletevoicechannel [dvc]" +
-                $"\n{cmdPrefix}prefix" +
                 $"\n{cmdPrefix}inrole" +
+                $"\n{cmdPrefix}prefix" +
                 $"\n{cmdPrefix}toggleannouncements" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
