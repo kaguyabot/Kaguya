@@ -10,15 +10,20 @@ Version 1.16.2
     - This results in requiring significantly less EXP to level up, but this change was primarily put in place
        because the gaps between levels were becoming too large too soon. For example, the difference between levels
        33 and 27 was over 10,000 EXP (roughly 900 messages with a 110-130 second cooldown between them.)
-    - Level 33 should now be around level 60 (~30,000 EXP),
-    - Level 27 should now be around level 50 (~20,000 EXP), 
-    - Level 22 should now be around level 41 (~13,500 EXP)
-    - The rate of earning EXP is unchanged.
+    - Level 33 should now be around level 61 (~30,000 EXP),
+    - Level 27 should now be around level 49 (~20,000 EXP), 
+    - Level 35 is now ~10,000 EXP.
+    - Level 24 is now ~5,000 EXP.
+    - Level 10 is now ~1,000 EXP.
+    - Level 1 is now ~80 EXP.
+    - The rate of earning EXP has been changed from (7-11 every 110-130 seconds --> 5-8 every 110-130 seconds).
+        - Please give feedback on what you think about this EXP change!
 - Global Kaguya Warnings added. This is for me (or any future Kaguya Administrators) to $kaguyawarn someone. After 3
     global warnings, the user will be blacklisted from Kaguya. They will be DM'd with why they received the warning, and 
     will be told how many warnings they have. Upon receiving a blacklist from warnings, they will have their points, rep,
     and EXP set to zero. These warnings are primarily sent to users seen abusing Kaguya, abusing the $bug report feature,
     or is exploiting the bot in some other way.
+    - This command won't be listed in the command list.
 
 
 Version 1.16.1

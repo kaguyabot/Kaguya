@@ -23,7 +23,7 @@ namespace Kaguya.Core.LevelingSystem
                     return;
                 uint oldLevel = userAccount.LevelNumber;
                 Random random = new Random();
-                uint newExp = (uint)random.Next(7, 11);
+                uint newExp = (uint)random.Next(5, 8);
                 userAccount.EXP += newExp;
                 userAccount.LastReceivedEXP = DateTime.Now;
                 UserAccounts.UserAccounts.SaveAccounts();
@@ -51,13 +51,9 @@ namespace Kaguya.Core.LevelingSystem
                 Console.WriteLine($"Failed to embed message (Leveling.cs) Guild: {channel.Guild.Name} Channel: {channel.Name}. Possibly attempted to send leveling message to " +
                     "a channel that the bot cannot access.");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
-                await StaticMusicEmbedHandler.CreateErrorEmbed("Leveling Exception", "Exception thrown when processing a leveling command." + //Sends response to user
-                    $"\nException: `{e.Message}` \n`Leveling.cs Line 51`", "This has been automatically reported as a bug and will be fixed as soon as possible.");
-                await GlobalCommandResponses.CreateAutomaticBugReport("Leveling Exception: Leveling.cs Line 51", "Exception thrown when processing a leveling command." + //Sends bug to Kaguya Support Server.
-                    $"\nException Message: {e.Message}");
+                return;
             }
         }
 

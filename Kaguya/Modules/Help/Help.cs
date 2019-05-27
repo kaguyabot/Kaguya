@@ -109,6 +109,16 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}bug <message>`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                case "kaguyawarn":
+                    stopWatch.Start();
+                    embed.WithTitle($"Help: Global Warnings | `{cmdPrefix}kaguyawarn`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nAdds a Global Kaguya Warning to a user. Upon 3 warnings, the target will be blacklisted. This is generally for abusing Kaguya's features, such as the $bug report feature " +
+                        $"or exploiting a Kaguya system (think EXP, points, etc.)");
+                    embed.WithFooter($"Blacklists applied from warnings are not removed.");
+                    embed.WithColor(Pink);
+                    await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "vote":
                     stopWatch.Start();
                     embed.WithTitle($"Help: Voting | `{cmdPrefix}vote`");
