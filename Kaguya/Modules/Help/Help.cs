@@ -967,6 +967,7 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}m queue" +
                     $"\n{cmdPrefix}m skip" +
                     $"\n{cmdPrefix}m volume" +
+                    $"\n{cmdPrefix}m jump" +
                     $"\n" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```";

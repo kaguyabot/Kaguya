@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.17.1
+
+- Forgot to add $m jump to the help command ^_^'
+
 Version 1.17
 
 - Fixed a bug where the music player could not load songs.
