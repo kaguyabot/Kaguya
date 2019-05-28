@@ -41,5 +41,9 @@ namespace Kaguya.Modules.Music
         [Command("Resume")]
         public async Task Resume()
             => await ReplyAsync("", false, await musicService.Pause(Context.Guild.Id));
+
+        [Command("Jump")]
+        public async Task Jump(int jumpNum)
+            => await ReplyAsync("", false, await musicService.Jump(Context.Guild.Id, jumpNum));
     }
 }

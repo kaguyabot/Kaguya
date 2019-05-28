@@ -809,7 +809,7 @@ namespace Kaguya.Modules
                 case "m":
                     stopWatch.Start();
                     embed.WithTitle($"Help: Music Commands | `{cmdPrefix}m <modifier>`");
-                    embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}p`command group is for all Kaguya Music commands. They are described in detail below:" +
+                    embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}m`command group is for all Kaguya Music commands. They are described in detail below:" +
                         $"\n" +
                         $"\n**Play/Pause:** Plays or pauses the music player. `{cmdPrefix}m play <song name>`, `{cmdPrefix}m pause`" +
                         $"\n**Join:** Makes Kaguya join the voice channel you are currently in. `{cmdPrefix}m join`" +
@@ -817,7 +817,8 @@ namespace Kaguya.Modules
                         $"\n**Queue:** Displays Kaguya's playlist. Add more songs to the queue with the play command. `{cmdPrefix}m queue`" +
                         $"\n**Resume:** If Kaguya's music player is paused, she will resume playing music. `{cmdPrefix}m resume`" +
                         $"\n**Skip:** Skips the current song. `{cmdPrefix}m skip`" +
-                        $"\n**Volume:** Sets the volume to a value between 0-150. `{cmdPrefix}m volume <0-150>`");
+                        $"\n**Volume:** Sets the volume to a value between 0-150. `{cmdPrefix}m volume <0-200>`" +
+                        $"\n**Jump:** Jump to a specific position in the queue, skipping all songs before it in one go.`{cmdPrefix}m jump <jumpNum>`");
                     embed.WithColor(Pink);
                     await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
                 case "supporter":
@@ -1162,6 +1163,11 @@ namespace Kaguya.Modules
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
+        [Command("suggest")]
+        public async Task Suggest([Remainder]string report)
+        {
+            //code here
+        }
 
         [Command("bug")]
         public async Task BugReport([Remainder]string report)

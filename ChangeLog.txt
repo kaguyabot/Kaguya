@@ -3,6 +3,17 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.17
+
+- Fixed a bug where the music player could not load songs.
+- Fixed a bug where the music player could not skip songs.
+- Fixed a bug where the music player would die instead of not load a song longer than 10 minutes.
+- Replies to music related funcitons have been improved.
+- Music volume has been allowed to go from 0-200 (was 1-149).
+- "$m jump" command added. You may now jump to a spot in the queue!
+- Fixed a typo in the $m help command that was confusing. It had $p in there instead.
+
+
 Version 1.16.4
 
 - $p and $profile now have help commands.
