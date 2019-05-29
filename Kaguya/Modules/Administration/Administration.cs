@@ -20,7 +20,7 @@ using System.Timers;
 
 namespace Kaguya.Modules
 {
-    public class AdministrationCommands : InteractiveBase<SocketCommandContext>
+    public class AdministrationCommands : InteractiveBase<ShardedCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);
@@ -32,7 +32,7 @@ namespace Kaguya.Modules
         public string botToken = Config.bot.Token;
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
-        readonly DiscordSocketClient _client = Global.Client;
+        readonly DiscordShardedClient _client = Global.Client;
 
         public async Task BE() //Method to build and send an embedded message.
         {

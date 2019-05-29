@@ -21,7 +21,7 @@ using Kaguya.Core.Command_Handler.EmbedHandlers;
 namespace Kaguya.Modules.osu
 {
     [Group("osutop")]
-    public class osuTop : InteractiveBase<SocketCommandContext>
+    public class osuTop : InteractiveBase<ShardedCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         readonly Color Pink = new Color(252, 132, 255);

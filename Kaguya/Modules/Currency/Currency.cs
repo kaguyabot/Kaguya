@@ -19,7 +19,7 @@ using Kaguya.Core.Command_Handler.EmbedHandlers;
 
 namespace Kaguya.Modules
 {
-    public class Currency : ModuleBase<SocketCommandContext>
+    public class Currency : ModuleBase<ShardedCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);

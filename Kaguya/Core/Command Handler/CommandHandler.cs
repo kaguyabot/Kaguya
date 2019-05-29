@@ -23,9 +23,9 @@ namespace Kaguya
 {
     class CommandHandler
     {
-        DiscordSocketClient _client;
+        DiscordShardedClient _client;
         CommandService _commands;
-        LavaSocketClient _lavaSocketClient;
+        LavaShardClient _lavaShardClient;
         private IServiceProvider _services;
         readonly Color Yellow = new Color(255, 255, 102);
         readonly Color SkyBlue = new Color(63, 242, 255);
@@ -39,11 +39,13 @@ namespace Kaguya
         public string osuApiKey = Config.bot.OsuApiKey;
         public string tillerinoApiKey = Config.bot.TillerinoApiKey;
 
-        public CommandHandler(IServiceProvider provider)
+        public CommandHandler(IServiceProvider services)
         {
-            this._services = provider;
-            _client = this._services.GetService<DiscordSocketClient>();
-            _commands = new CommandService();
+            _services = services;
+            _client = services.GetRequiredService<DiscordShardedClient>();
+            _commands = services.GetRequiredService<CommandService>();
+
+            _client.MessageReceived += HandleCommandAsync;
         }
 
         public async Task InitializeAsync()
@@ -51,69 +53,15 @@ namespace Kaguya
             try
             {
                 _client = Global.Client;
-                _lavaSocketClient = Global.lavaSocketClient;
+                _lavaShardClient = Global.lavaShardClient;
 
                 _commands = new CommandService();
                 _commands.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTR());
                 await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-
-                _client.Connected += logger.ClientConnected;
-                _client.Ready += logger.OnReady;
-                _client.Ready += timers.CheckChannelPermissions;
-                _client.Ready += timers.ServerInformationUpdate;
-                _client.Ready += timers.GameTimer;
-                _client.Ready += timers.VerifyMessageReceived;
-                _client.Ready += timers.ServerMessageLogCheck;
-                _client.Ready += timers.VerifyUsers;
-                _client.Ready += timers.ResourcesBackup;
-                _client.Ready += timers.LogFileTimer;
-
-                Console.WriteLine("\nStatus: All Timers Enabled.");
-
-                _lavaSocketClient.Log += musicLogger.MusicLogger;
-                _lavaSocketClient.OnTrackFinished += musicLogger.OnTrackFinished;
-                _lavaSocketClient.OnTrackException += musicLogger.OnTrackException;
-
-                _client.MessageReceived += HandleCommandAsync;
-                _client.MessageReceived += logger.osuLinkParser;
-                _client.JoinedGuild += logger.JoinedNewGuild;
-                _client.LeftGuild += logger.LeftGuild;
-                _client.MessageReceived += logger.MessageCache;
-                _client.MessageDeleted += logger.LoggingDeletedMessages;
-                _client.MessageUpdated += logger.LoggingEditedMessages;
-                _client.UserJoined += logger.LoggingUserJoins;
-                _client.UserLeft += logger.LoggingUserLeaves;
-                _client.UserBanned += logger.LoggingUserBanned;
-                _client.UserUnbanned += logger.LoggingUserUnbanned;
-                _client.MessageReceived += logger.LogChangesToLogSettings;
-                _client.MessageReceived += logger.UserSaysFilteredPhrase;
-                _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
-                _client.Disconnected += logger.ClientDisconnected;
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (Exception exSub in ex.LoaderExceptions)
-                {
-                    sb.AppendLine(exSub.Message);
-                    FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
-                    if (exFileNotFound != null)
-                    {
-                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
-                        {
-                            sb.AppendLine("Fusion Log:");
-                            sb.AppendLine(exFileNotFound.FusionLog);
-                        }
-                    }
-                    sb.AppendLine();
-                }
-                string errorMessage = sb.ToString();
-                Console.WriteLine(errorMessage);
-                return;
             }
             catch (Exception e)
             {
-                consoleLogger.ConsoleCriticalAdvisory(e, "InitializeAsync method threw an exception. CommandHandler.cs line 105.");
+                consoleLogger.ConsoleCriticalAdvisory(e, "InitializeAsync method threw an exception. CommandHandler.cs line 62.");
                 return;
             }
         }
@@ -131,7 +79,7 @@ namespace Kaguya
             if (guild.IsBlacklisted) { return; }
 
 
-            var context = new SocketCommandContext(_client, msg);
+            var context = new ShardedCommandContext(_client, msg);
 
             foreach (string phrase in guild.FilteredWords)
             {
@@ -206,18 +154,11 @@ namespace Kaguya
                 File.AppendAllText(filePath, $"{s.Content} - User: {s.Author} - Time: {DateTime.Now.ToLongTimeString()}\n");
             }
 
-
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
                 string filePath = $"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
                 File.AppendAllText(filePath, $"{s.Content} - User: {s.Author} - Time: {DateTime.Now.ToLongTimeString()}\n");
             }
-        }
-
-        private Task MusicLogger(LogMessage msg)
-        {
-            consoleLogger.ConsoleMusicLog(msg);
-            return Task.CompletedTask;
         }
     }
 }

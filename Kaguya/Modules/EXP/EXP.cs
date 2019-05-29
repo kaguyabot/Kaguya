@@ -20,7 +20,7 @@ using System.Diagnostics;
 
 namespace Kaguya.Modules
 {
-    public class EXP : ModuleBase<SocketCommandContext>
+    public class EXP : ModuleBase<ShardedCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);

@@ -2,6 +2,13 @@
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
+using Kaguya.Core;
+using Kaguya.Core.Command_Handler;
+using Kaguya.Core.Command_Handler.LogMethods;
+using Kaguya.Core.CommandHandler;
+using Kaguya.Core.LevelingSystem;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.UserAccounts;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -10,6 +17,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Victoria;
 
 namespace Kaguya
 {
@@ -18,98 +26,109 @@ namespace Kaguya
         static void Main(string[] args)
             => new Program().StartAsync().GetAwaiter().GetResult();
 
-        DiscordSocketClient _client;
-        CommandHandler _handler;
+        //DiscordSocketClient _client;
         public string version = Utilities.GetAlert("VERSION");
+        DiscordShardedClient _client;
+        CommandService _commands;
+        LavaShardClient _lavaShardClient;
+        private IServiceProvider _services;
+        readonly Color Yellow = new Color(255, 255, 102);
+        readonly Color SkyBlue = new Color(63, 242, 255);
+        readonly Color Red = new Color(255, 0, 0);
+        readonly Color Violet = new Color(238, 130, 238);
+        readonly Color Pink = new Color(252, 132, 255);
+        readonly KaguyaLogMethods logger = new KaguyaLogMethods();
+        readonly MusicLogMethods musicLogger = new MusicLogMethods();
+        readonly Timers timers = new Timers();
+        readonly Logger consoleLogger = new Logger();
+        public string osuApiKey = Config.bot.OsuApiKey;
+        public string tillerinoApiKey = Config.bot.TillerinoApiKey;
 
         public async Task StartAsync()
         {
+            string name = Environment.UserName; // Greets user in console
+            string message = Utilities.GetFormattedAlert("WELCOME_&NAME_&VERSION", name, version);
+            Console.WriteLine(message);
+
             try
             {
-                string name = Environment.UserName; // Greets user in console
-                string message = Utilities.GetFormattedAlert("WELCOME_&NAME_&VERSION", name, version);
-                Console.WriteLine(message);
-                if (Config.bot.Token == "" || Config.bot.Token == null && Config.bot.CmdPrefix == "" || Config.bot.CmdPrefix == null) //default values in config.json when first launched, first time setup essentially.
+                var config = new DiscordSocketConfig
                 {
-                    Console.WriteLine("Bot token not found. Get your bot's token from the Discord Developer portal and paste it here: ");
-                    string token = Console.ReadLine();
-                    Console.Write("Command prefix not found. What would you like it to be?" +
-                        "\n(This is typically one symbol, such as \"!, #, $, %, etc.\": ");
-                    string prefix = Console.ReadLine();
-                    BotConfig bot = new BotConfig
-                    {
-                        Token = token,
-                        CmdPrefix = prefix
-                    };
-                    string json = JsonConvert.SerializeObject(bot, Formatting.Indented);
-                    File.WriteAllText("Resources" + "/" + "config.json", json);
-                    Console.WriteLine("Confirmed. Restarting in 5 seconds...");
-                    var filePath = Assembly.GetExecutingAssembly().Location;
-                    await Task.Delay(5000);
-                    Process.Start(filePath);
-                    Environment.Exit(0);
-                }
-                try
+                    TotalShards = 1
+                };
+
+                using (var services = ConfigureServices(config))
                 {
-                    _client = new DiscordSocketClient(new DiscordSocketConfig
-                    {
-                        MessageCacheSize = 100
-                    });
-                    try
-                    {
-                        await _client.LoginAsync(TokenType.Bot, Config.bot.Token);
-                    }
-                    catch (System.Net.Http.HttpRequestException)
-                    {
-                        Console.WriteLine("Error: Could not successfully connect. Do you have a stable internet connection?");
-                        await Task.Delay(10000);
-                        Console.WriteLine("Exiting...");
-                        await Task.Delay(2000);
-                        Environment.Exit(0);
-                        return;
-                    }
+                    var _client = services.GetRequiredService<DiscordShardedClient>();
+
+                    Global.Client = _client;
+
+                    var logger = new KaguyaLogMethods();
+                    var timers = new Timers();
+
+                    _client.ShardReady += ReadyAsync;
+                    _client.ShardReady += logger.OnReady;
+                    _client.ShardReady += timers.CheckChannelPermissions;
+                    _client.ShardReady += timers.ServerInformationUpdate;
+                    _client.ShardReady += timers.GameTimer;
+                    _client.ShardReady += timers.VerifyMessageReceived;
+                    _client.ShardReady += timers.ServerMessageLogCheck;
+                    _client.ShardReady += timers.VerifyUsers;
+                    _client.ShardReady += timers.ResourcesBackup;
+                    _client.ShardReady += timers.LogFileTimer;
+
+                    //_lavaShardClient.Log += musicLogger.MusicLogger;
+                    //_lavaShardClient.OnTrackFinished += musicLogger.OnTrackFinished;
+                    //_lavaShardClient.OnTrackException += musicLogger.OnTrackException;
+
+                    _client.MessageReceived += logger.osuLinkParser;
+                    _client.JoinedGuild += logger.JoinedNewGuild;
+                    _client.LeftGuild += logger.LeftGuild;
+                    _client.MessageReceived += logger.MessageCache;
+                    _client.MessageDeleted += logger.LoggingDeletedMessages;
+                    _client.MessageUpdated += logger.LoggingEditedMessages;
+                    _client.UserJoined += logger.LoggingUserJoins;
+                    _client.UserLeft += logger.LoggingUserLeaves;
+                    _client.UserBanned += logger.LoggingUserBanned;
+                    _client.UserUnbanned += logger.LoggingUserUnbanned;
+                    _client.MessageReceived += logger.LogChangesToLogSettings;
+                    _client.MessageReceived += logger.UserSaysFilteredPhrase;
+                    _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
+                    _client.ShardDisconnected += logger.ClientDisconnected;
+
+                    await services.GetRequiredService<CommandHandler>().InitializeAsync();
+                    await _client.LoginAsync(TokenType.Bot, Config.bot.Token);
+
                     await _client.StartAsync();
                     Global.Client = _client;
 
-                    var serviceProvider = new ServiceCollection()
-                        .AddSingleton(_client)
-                        .AddSingleton(new InteractiveService(_client))
-                        .AddSingleton(new CommandService(
-                        new CommandServiceConfig { CaseSensitiveCommands = false, ThrowOnError = false })).BuildServiceProvider();
-
-                    _handler = new CommandHandler(serviceProvider);
-                    await _handler.InitializeAsync();
-
                     await Task.Delay(-1);
                 }
-                catch (Discord.Net.HttpException)
-                {
-                    Console.WriteLine("You have an invalid bot token. Edit /Resources/config.json and supply the proper token.");
-                    Console.WriteLine("Press any key to exit...");
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                }
             }
-            catch (ReflectionTypeLoadException ex) //Finds missing packages and tells us what they are in the console
+            catch (Discord.Net.HttpException)
             {
-                StringBuilder sb = new StringBuilder();
-                foreach (Exception exSub in ex.LoaderExceptions)
-                {
-                    sb.AppendLine(exSub.Message);
-                    FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
-                    if (exFileNotFound != null)
-                    {
-                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
-                        {
-                            sb.AppendLine("Fusion Log:");
-                            sb.AppendLine(exFileNotFound.FusionLog);
-                        }
-                    }
-                    sb.AppendLine();
-                }
-                string errorMessage = sb.ToString();
-                Console.WriteLine(errorMessage);
+                Console.WriteLine("You have an invalid bot token. Edit /Resources/config.json and supply the proper token.");
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
+                Environment.Exit(0);
             }
+        }
+
+        private ServiceProvider ConfigureServices(DiscordSocketConfig config)
+        {
+            return new ServiceCollection()
+                        .AddSingleton(new DiscordShardedClient(config))
+                        .AddSingleton<CommandService>()
+                        .AddSingleton<CommandHandler>()
+                        .AddSingleton<InteractiveService>()
+                        .BuildServiceProvider();
+        }
+
+        private Task ReadyAsync(DiscordSocketClient shard)
+        {
+            Console.WriteLine($"Shard {shard.ShardId} logged in.");
+            Console.WriteLine($"Timers for shard {shard.ShardId} have been enabled.");
+            return Task.CompletedTask;
         }
     }
 }

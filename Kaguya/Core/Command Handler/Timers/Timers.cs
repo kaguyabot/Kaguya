@@ -16,11 +16,11 @@ namespace Kaguya.Core.Command_Handler
 {
     public class Timers
     {
-        readonly DiscordSocketClient _client = Global.Client;
+        readonly DiscordShardedClient _client = Global.Client;
         readonly public IServiceProvider _services;
         readonly Logger logger = new Logger();
 
-        public Task LogFileTimer()
+        public Task LogFileTimer(DiscordSocketClient _client)
         {
             Timer timer = new Timer(2000); //2 Seconds
             timer.Elapsed += Log_File_Timer_Elapsed;
@@ -34,7 +34,7 @@ namespace Kaguya.Core.Command_Handler
             ServerMessageLogs.SaveServerLogging();
         }
 
-        public Task GameTimer()
+        public Task GameTimer(DiscordSocketClient _client)
         {
             Timer timer = new Timer(300000); //5 minutes
             timer.Elapsed += Game_Timer_Elapsed;
@@ -71,7 +71,7 @@ namespace Kaguya.Core.Command_Handler
             logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
         }
 
-        public Task CheckChannelPermissions()
+        public Task CheckChannelPermissions(DiscordSocketClient _client)
         {
             Timer timer = new Timer(7200000); //2 hours
             timer.Elapsed += Check_Channel_Permissions_Elapsed;
@@ -133,7 +133,7 @@ namespace Kaguya.Core.Command_Handler
             }
         }
 
-        public Task ServerInformationUpdate()
+        public Task ServerInformationUpdate(DiscordSocketClient _client)
         {
             Timer timer = new Timer(86400000); //24 hours
             timer.Elapsed += Server_Information_Update_Elapsed;
@@ -169,7 +169,7 @@ namespace Kaguya.Core.Command_Handler
             logger.ConsoleStatusAdvisory($"Updated server names for {i} guilds.");
         }
 
-        public Task VerifyUsers()
+        public Task VerifyUsers(DiscordSocketClient _client)
         {
             Timer timer = new Timer(360000); //1 hour
             timer.Elapsed += Verify_Users_Elapsed;
@@ -200,7 +200,7 @@ namespace Kaguya.Core.Command_Handler
             }
         }
 
-        public Task VerifyMessageReceived()
+        public Task VerifyMessageReceived(DiscordSocketClient _client)
         {
             Timer timer = new Timer(120000); //Every 120 seconds, make sure the bot is seeing messages. If it hasn't seen a message in 15 seconds, restart!
             timer.Elapsed += Verify_Message_Received_Elapsed;
@@ -221,7 +221,7 @@ namespace Kaguya.Core.Command_Handler
             }
         }
 
-        public Task ServerMessageLogCheck()
+        public Task ServerMessageLogCheck(DiscordSocketClient _client)
         {
             Timer timer = new Timer(86400000); //Every 24 hours, if a ServerMessageLog entry contains a time greater than two weeks, delete the entry.
             timer.Elapsed += Server_Message_Log_Check;
@@ -263,7 +263,7 @@ namespace Kaguya.Core.Command_Handler
             logger.ConsoleTimerElapsed($"Removed {i} lines across {i2} server message logs.");
         }
 
-        public Task ResourcesBackup()
+        public Task ResourcesBackup(DiscordSocketClient _client)
         {
             Timer timer = new Timer(900000); //Every 15 minutes, backup the resources folder.
             timer.Elapsed += Resources_Backup_Elapsed;
