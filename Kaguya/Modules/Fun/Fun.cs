@@ -8,7 +8,7 @@ using Discord.WebSocket;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Embed;
 using NekosSharp;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules
 {

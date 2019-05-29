@@ -9,36 +9,40 @@ namespace Kaguya.Core.Embed
         private static readonly Color RedColor = new Color(255, 0, 0);
         private static readonly Color VioletColor = new Color(111, 22, 255);
         private static readonly Color GoldColor = new Color(255, 223, 0);
+        private static readonly Color BlueColor = new Color(0, 255, 255);
         private static readonly Color PinkColor = new Color(252, 132, 255);
 
-        public EmbedType EmbedType;
+        public EmbedColor EmbedType;
 
         public KaguyaEmbedBuilder()
         {
             SetColor();
         }
 
-        public KaguyaEmbedBuilder(EmbedType type)
+        public KaguyaEmbedBuilder(EmbedColor type)
         {
             SetColor(type);
         }
 
-        public void SetColor(EmbedType type = EmbedType.PINK)
+        public void SetColor(EmbedColor type = EmbedColor.PINK)
         {
             Color color;
             switch (type)
             {
-                case EmbedType.VIOLET:
+                case EmbedColor.VIOLET:
                     color = VioletColor;
                     break;
-                case EmbedType.GOLD:
+                case EmbedColor.GOLD:
                     color = GoldColor;
                     break;
-                case EmbedType.PINK:
+                case EmbedColor.PINK:
                     color = PinkColor;
                     break;
-                case EmbedType.RED:
+                case EmbedColor.RED:
                     color = RedColor;
+                    break;
+                case EmbedColor.BLUE:
+                    color = BlueColor;
                     break;
                 default:
                     color = RedColor;
@@ -48,11 +52,12 @@ namespace Kaguya.Core.Embed
         }
     }
 
-    public enum EmbedType
+    public enum EmbedColor
     {
         RED,
         VIOLET,
         GOLD,
+        BLUE,
         PINK
     }
 }

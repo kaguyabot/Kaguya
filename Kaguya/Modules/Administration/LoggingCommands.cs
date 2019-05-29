@@ -6,7 +6,7 @@ using Kaguya.Core.Server_Files;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Kaguya.Core.Embed;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Administration
 {

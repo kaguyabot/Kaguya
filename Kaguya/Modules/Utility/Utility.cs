@@ -13,7 +13,7 @@ using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Utility
 {
@@ -70,7 +70,7 @@ namespace Kaguya.Modules.Utility
                 embed.WithTitle("Change Command Prefix: Failure!");
                 embed.WithDescription("The chosen prefix is too long! Please select a combination of less than 4 characters/symbols ");
                 embed.WithFooter($"To reset the command prefix, type {cmdPrefix}prefix!");
-                embed.SetColor(EmbedType.RED);
+                embed.SetColor(EmbedColor.RED);
                 await BE();
                 // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Invalid prefix."); ERROR HANDLER HERE
                 return;

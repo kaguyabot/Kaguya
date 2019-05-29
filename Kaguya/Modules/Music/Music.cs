@@ -9,10 +9,6 @@ namespace Kaguya.Modules.Music
     {
         private readonly MusicService musicService = new MusicService();
 
-        [Command("join")]
-        public async Task MusicJoin()
-            => await ReplyAsync("", false, await musicService.JoinOrPlayAsync((SocketGuildUser)Context.User, Context.Channel, Context.Guild.Id));
-
         [Command("play")]
         public async Task MusicPlay([Remainder]string search) 
             => await ReplyAsync("", false, await musicService.JoinOrPlayAsync((SocketGuildUser)Context.User, Context.Channel, Context.Guild.Id, search));

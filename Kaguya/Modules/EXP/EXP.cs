@@ -9,7 +9,7 @@ using Kaguya.Core.UserAccounts;
 using Kaguya.Core;
 using System.Diagnostics;
 using Kaguya.Core.Embed;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 
 namespace Kaguya.Modules
@@ -114,7 +114,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.TotalMinutes)}m {(int)(60 - difference.Seconds)}s " +
                     $"before you can give rep again!**");
-                embed.SetColor(EmbedType.RED);
+                embed.SetColor(EmbedColor.RED);
                 await BE();
                 // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
             }
@@ -125,7 +125,7 @@ namespace Kaguya.Modules
                 UserAccounts.SaveAccounts();
                 Console.WriteLine($"{Context.User.Username}#{Context.User.Discriminator} has given +1 rep to {userAccount.Username}");
                 embed.WithTitle("+Rep Author");
-                embed.SetColor(EmbedType.RED);
+                embed.SetColor(EmbedColor.RED);
                 embed.WithDescription("**Successfully gave +1 rep to my creator** uwu.");
                 await BE();
             }
@@ -142,7 +142,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.Minutes)}m {(int)(60 - difference.Seconds)} " +
                     $"before you can give rep again!**");
-                embed.SetColor(EmbedType.RED);
+                embed.SetColor(EmbedColor.RED);
                 await BE();
                 // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
             }
@@ -150,7 +150,7 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} You may not rep yourself!**");
-                embed.SetColor(EmbedType.RED);
+                embed.SetColor(EmbedColor.RED);
                 await BE();
                 //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to rep themselves."); return;
             }

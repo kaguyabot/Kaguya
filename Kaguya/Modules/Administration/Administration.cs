@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
 using Kaguya.Core.Embed;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 #pragma warning disable CS0472
 
@@ -34,6 +34,7 @@ namespace Kaguya.Modules
         }
 
         [Command("warn")]
+        [Alias("w")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task WarnMembers([Remainder]List<SocketGuildUser> users)
@@ -67,7 +68,7 @@ namespace Kaguya.Modules
                 warnedMembers.Add(userID, userWarnings);
                 embed.WithDescription($"{Context.User.Mention} **User `{users.ElementAt(i)}` has been warned.**");
                 embed.WithFooter($"User now has {userWarnings} warning(s).");
-                embed.SetColor(EmbedType.VIOLET);
+                embed.SetColor(EmbedColor.VIOLET);
                 await ReplyAsync(embed: embed.Build());
                 i++;
 
@@ -100,6 +101,7 @@ namespace Kaguya.Modules
         }
 
         [Command("warnset")]
+        [Alias("ws")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task WarnSettings(int warnNum, [Remainder]string warnAction)
@@ -146,6 +148,7 @@ namespace Kaguya.Modules
         }
 
         [Command("warnoptions")]
+        [Alias("wo")]
         public async Task WarnOptions()
         {
             stopWatch.Start();
@@ -155,6 +158,62 @@ namespace Kaguya.Modules
                 $"{Context.User.Mention} The following warning options are available:" +
                 $"\n" +
                 $"\n```Mute, Kick, Shadowban, Ban```");
+        }
+
+        [Command("warnpunishments")]
+        [Alias("wp")]
+        [RequireUserPermission(GuildPermission.KickMembers)]
+        public async Task WarningPunishments()
+        {
+            stopWatch.Start();
+
+            Server guild = Servers.GetServer(Context.Guild);
+
+            guild.WarnActions.TryGetValue("mute", out int muteNum);
+            guild.WarnActions.TryGetValue("kick", out int kickNum);
+            guild.WarnActions.TryGetValue("shadowban", out int shadowbanNum);
+            guild.WarnActions.TryGetValue("ban", out int banNum);
+
+            string muteString = null;
+            string kickString = null;
+            string shadowbanString = null;
+            string banString = null;
+
+            //These switches are here so that if the warnings aren't set, there will be text that replaces the '0 warnings'
+            //that would normally be shown in the embedded message.
+
+            switch (muteNum)
+            {
+                case 0: muteString = "Not set."; break;
+                default: muteString = $"{muteNum} Warnings"; break;
+            }
+            switch (kickNum)
+            {
+                case 0: kickString = "Not set."; break;
+                default: kickString = $"{kickNum} Warnings"; break;
+            }
+            switch (shadowbanNum)
+            {
+                case 0: shadowbanString = "Not set."; break;
+                default: shadowbanString = $"{shadowbanNum} Warnings"; break;
+            }
+            switch (banNum)
+            {
+                case 0: banString = "Not set."; break;
+                default: banString = $"{banNum} Warnings"; break;
+            }
+
+            await GlobalCommandResponses.CreateCommandResponse(Context,
+                stopWatch.ElapsedMilliseconds,
+                "Server Warning Punishments",
+                $"{Context.User.Mention} {Context.Guild.Name} currently has the following warning configuration:" +
+                $"\n" +
+                $"\n```" +
+                $"\nMutes: {muteString}" +
+                $"\nKicks: {kickString}" +
+                $"\nShadowbans: {shadowbanString}" +
+                $"\nBans: {banString}" +
+                $"\n```");
         }
 
         [Command("kaguyawarn")]
@@ -212,11 +271,53 @@ namespace Kaguya.Modules
 
                 embed.WithTitle($"User Blacklisted");
                 embed.WithDescription($"User `{user}` has been blacklisted from Kaguya for receiving three global warnings from a Kaguya Administrator.");
-                embed.SetColor(EmbedType.VIOLET);
+                embed.SetColor(EmbedColor.VIOLET);
                 await BE();
 
                 logger.ConsoleCriticalAdvisory($"USER {user.ToString().ToUpper()} BLACKLISTED: RECEIVED 3 KAGUYA WARNINGS!!");
             }
+        }
+
+        [Command("assignrole")]
+        [Alias("ar")]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task AssignRole(string roleName, [Remainder]List<SocketGuildUser> users)
+        {
+            var roles = Context.Guild.Roles;
+            var role = roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
+            string rolesAddedTo = "";
+            foreach(var user in users)
+            {
+                await user.AddRoleAsync(role);
+                rolesAddedTo += $"\n`{user}`";
+            }
+
+            embed.WithTitle($"Assign Role");
+            embed.WithDescription($"{Context.User.Mention} I have assigned the `{role.Name}` role to {rolesAddedTo}.");
+            embed.SetColor(EmbedColor.VIOLET);
+            await BE();
+        }
+
+        [Command("removerole")]
+        [Alias("rr")]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task RemoveRole(string roleName, [Remainder]List<SocketGuildUser> users)
+        {
+            var roles = Context.Guild.Roles;
+            var role = roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
+            string rolesRemovedFrom = "";
+            foreach (var user in users)
+            {
+                await user.RemoveRoleAsync(role);
+                rolesRemovedFrom += $"\n`{user}`";
+            }
+
+            embed.WithTitle($"Remove Role");
+            embed.WithDescription($"{Context.User.Mention} I have removed the `{role.Name}` role from {rolesRemovedFrom}.");
+            embed.SetColor(EmbedColor.VIOLET);
+            await BE();
         }
 
         [Command("mute")]
@@ -241,7 +342,7 @@ namespace Kaguya.Modules
                 logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
 
                 embed.WithDescription($"**{Context.User.Mention} I needed to create the mute role for first time setup! Please retry this command.**");
-                embed.SetColor(EmbedType.VIOLET);
+                embed.SetColor(EmbedColor.VIOLET);
                 await BE(); return;
 
             }
@@ -276,7 +377,7 @@ namespace Kaguya.Modules
             if(!(Context.Channel as SocketGuildChannel).GetPermissionOverwrite(muteRole).HasValue)
             {
                 embed.WithDescription($"{Context.User.Mention} Performing first time setup. Please wait...");
-                embed.SetColor(EmbedType.VIOLET);
+                embed.SetColor(EmbedColor.VIOLET);
                 await BE();
             }
 
@@ -338,7 +439,7 @@ namespace Kaguya.Modules
 
                     embed.WithDescription($"{Context.User.Mention} User `{user.Username}#{user.Discriminator}` " +
                         $"has been muted for `{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1}`");
-                    embed.SetColor(EmbedType.VIOLET);
+                    embed.SetColor(EmbedColor.VIOLET);
                     await BE();
                     stopWatch.Stop();
                     logger.ConsoleGuildAdvisory(Context.Guild, $"User muted for {timeout}.");
@@ -411,7 +512,7 @@ namespace Kaguya.Modules
             if (!(Context.Channel as SocketGuildChannel).GetPermissionOverwrite(muteRole).HasValue)
             {
                 embed.WithDescription($"{Context.User.Mention} Performing first time setup. Please wait...");
-                embed.SetColor(EmbedType.VIOLET);
+                embed.SetColor(EmbedColor.VIOLET);
                 await BE();
             }
 
@@ -431,7 +532,7 @@ namespace Kaguya.Modules
             {
                 await user.AddRoleAsync(muteRole);
                 embed.WithDescription($"{Context.User.Mention} User `{user}` has been muted.");
-                embed.SetColor(EmbedType.VIOLET);
+                embed.SetColor(EmbedColor.VIOLET);
                 await BE();
                 logger.ConsoleGuildAdvisory(Context.Guild, "User muted.");
             }
@@ -470,7 +571,7 @@ namespace Kaguya.Modules
             if (!(Context.Channel as SocketGuildChannel).GetPermissionOverwrite(muteRole).HasValue)
             {
                 embed.WithDescription($"{Context.User.Mention} Performing first time setup. Please wait...");
-                embed.SetColor(EmbedType.VIOLET);
+                embed.SetColor(EmbedColor.VIOLET);
                 await BE();
             }
 
@@ -488,7 +589,7 @@ namespace Kaguya.Modules
 
             await user.AddRoleAsync(muteRole);
             embed.WithDescription($"{Context.User.Mention} User `{user}` has been muted.");
-            embed.SetColor(EmbedType.VIOLET);
+            embed.SetColor(EmbedColor.VIOLET);
             await BE();
             logger.ConsoleGuildAdvisory(Context.Guild, "User muted.");
 
@@ -518,7 +619,7 @@ namespace Kaguya.Modules
             }
 
             embed.WithDescription($"{Context.User.Mention} Unmuted `{i}` user(s).");
-            embed.SetColor(EmbedType.VIOLET);
+            embed.SetColor(EmbedColor.VIOLET);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -829,7 +930,7 @@ namespace Kaguya.Modules
         public async Task LeaveGuild()
         {
             embed.WithTitle("Leaving Server");
-            embed.SetColor(EmbedType.RED);
+            embed.SetColor(EmbedColor.RED);
             embed.WithDescription($"Administrator {Context.User.Mention} has directed me to leave. Goodbye!");
             await BE();
             await Context.Guild.LeaveAsync();
@@ -893,7 +994,7 @@ namespace Kaguya.Modules
 
                 await user.BanAsync();
                 embed.WithDescription($"**{user} has been permanently banned by {Context.User.Mention}.**");
-                embed.SetColor(EmbedType.VIOLET);
+                embed.SetColor(EmbedColor.VIOLET);
                 await BE();
             }
             stopWatch.Stop();

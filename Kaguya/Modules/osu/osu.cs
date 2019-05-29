@@ -12,7 +12,7 @@ using System.Net;
 using Kaguya.Core.Server_Files;
 using OppaiSharp;
 using Kaguya.Core.Embed;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 #pragma warning disable
 
@@ -42,7 +42,7 @@ namespace Kaguya.Modules
                 if (player == null)
                 {
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
-                    embed.SetColor(EmbedType.RED);
+                    embed.SetColor(EmbedColor.RED);
                     await BE();
                     // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "No osu! username specified."); ERROR HANDLER HERE
                     return;
@@ -145,7 +145,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{Context.User.Mention} **ERROR: This username does not match a valid osu! username!**");
                 embed.WithFooter($"I have kept your osu! username as {oldUsername}. If you believe this is a mistake, contact Stage#0001.");
                 await BE();
-                embed.SetColor(EmbedType.RED);
+                embed.SetColor(EmbedColor.RED);
                 //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
                 return;
             }
@@ -268,7 +268,7 @@ namespace Kaguya.Modules
                 {
                     embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
                     await BE();
-                    embed.SetColor(EmbedType.RED);
+                    embed.SetColor(EmbedColor.RED);
                     //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
                     return;
                 }

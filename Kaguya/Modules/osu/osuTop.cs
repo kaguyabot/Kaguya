@@ -13,7 +13,7 @@ using static Kaguya.Modules.osuStandard;
 using Discord.Addons.Interactive;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.Embed;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.osu
 {
@@ -38,7 +38,7 @@ namespace Kaguya.Modules.osu
             if (num.ToString().Count() > 2)
             {
                 embed.WithDescription($"{Context.User.Mention} **ERROR: Failed to parse number! Numbers must be between 1 and 10!** ");
-                embed.SetColor(EmbedType.RED);
+                embed.SetColor(EmbedColor.RED);
                 await BE();
                 // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to parse Int32"); ERROR HANDLER HERE
             }
@@ -382,7 +382,7 @@ namespace Kaguya.Modules.osu
                 if (jsonPlayer == "[]")
                 {
                     embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
-                    embed.SetColor(EmbedType.RED);
+                    embed.SetColor(EmbedColor.RED);
                     await BE();
                     // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
                     return;
