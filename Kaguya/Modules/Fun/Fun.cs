@@ -1,36 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Core.UserAccounts;
-using System.Net;
-using System.Timers;
 using Kaguya.Core.Server_Files;
-using Kaguya.Core.Commands;
-using Kaguya.Core;
-using System.Diagnostics;
+using Kaguya.Core.Embed;
 using NekosSharp;
+using EmbedType = Kaguya.Core.Embed.EmbedType;
 
 namespace Kaguya.Modules
 {
     public class Fun : ModuleBase<ShardedCommandContext>
     {
-        public EmbedBuilder embed = new EmbedBuilder();
-        Color Pink = new Color(252, 132, 255);
-        Color Red = new Color(255, 0, 0);
-        Color Gold = new Color(255, 223, 0);
-        Color Violet = new Color(238, 130, 238);
-        public BotConfig bot = new BotConfig();
-        public string version = Utilities.GetAlert("VERSION");
-        public string botToken = Config.bot.Token;
-        Logger logger = new Logger();
-        Stopwatch stopWatch = new Stopwatch();
+        public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
         readonly NekoClient nekoClient = new NekoClient("Kaguya");
 
 
@@ -42,35 +26,28 @@ namespace Kaguya.Modules
         [Command("echo")] //fun
         public async Task Echo([Remainder]string message = "")
         {
-            stopWatch.Start();
-
             var filteredWords = Servers.GetServer(Context.Guild).FilteredWords;
 
             if (message == "")
             {
                 embed.WithDescription($"**{Context.User.Mention} No message specified!**");
-                embed.WithColor(Red);
-                await BE(); logger.ConsoleCommandLog(Context); return;
+                await BE(); return;
             }
 
             embed.WithDescription(message);
-            embed.WithColor(Pink);
 
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("pick")] //fun
         public async Task PickOne([Remainder]string message = "")
         {
-            stopWatch.Start();
             if (message == "")
             {
                 embed.WithTitle("Pick: Missing Options!");
                 embed.WithDescription($"**{Context.User.Mention} No options specified!**");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User did not specify any options to pick from."); return;
+                await BE();
+                //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User did not specify any options to pick from."); return;
             }
 
             string[] options = message.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
@@ -80,16 +57,13 @@ namespace Kaguya.Modules
 
             embed.WithTitle("Choice for " + Context.User.Username);
             embed.WithDescription(selection);
-            embed.WithColor(Pink);
 
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("8ball")]
         public async Task EightBall([Remainder]string question)
         {
-            stopWatch.Start();
             string filePath = "Resources/8ball.txt";
             string[] responses = File.ReadAllLines(filePath);
             Random rand = new Random();
@@ -98,197 +72,161 @@ namespace Kaguya.Modules
 
             embed.WithTitle("Magic 8Ball");
             embed.WithDescription($"**{Context.User.Mention} {responses[num]}**");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
             
         }
 
         [Command("slap")]
         public async Task Slap(string target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.SlapGif();
             embed.WithTitle($"{Context.User.Username} slaped {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("slap")]
         public async Task Slap(IGuildUser target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.SlapGif();
             embed.WithTitle($"{Context.User.Username} slaped {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("hug")]
         public async Task Hug(string target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.HugGif();
             embed.WithTitle($"{Context.User.Username} hugged {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("hug")]
         public async Task Hug(IGuildUser target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.HugGif();
             embed.WithTitle($"{Context.User.Username} hugged {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("kiss")]
         public async Task Kiss(string target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.KissGif();
             embed.WithTitle($"{Context.User.Username} kissed {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("kiss")]
         public async Task Kiss(IGuildUser target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.KissGif();
             embed.WithTitle($"{Context.User.Username} kissed {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("pat")]
         public async Task Pat(string target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.PatGif();
             embed.WithTitle($"{Context.User.Username} patted {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("pat")]
         public async Task Pat(IGuildUser target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.PatGif();
             embed.WithTitle($"{Context.User.Username} patted {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("poke")]
         public async Task Poke(string target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.PokeGif();
             embed.WithTitle($"{Context.User.Username} poked {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("poke")]
         public async Task Poke(IGuildUser target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.PokeGif();
             embed.WithTitle($"{Context.User.Username} poked {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("tickle")]
         public async Task Tickle(string target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.TickleGif();
             embed.WithTitle($"{Context.User.Username} tickled {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("tickle")]
         public async Task Tickle(IGuildUser target)
         {
-            stopWatch.Start();
             var gif = await nekoClient.Action_v3.TickleGif();
             embed.WithTitle($"{Context.User.Username} tickled {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("baka")]
         public async Task Baka()
         {
-            stopWatch.Start();
             var gif = await nekoClient.Image_v3.BakaGif();
             embed.WithTitle($"Baka!!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("nekoavatar")]
         public async Task NekoAvatar()
         {
-            stopWatch.Start();
             var gif = await nekoClient.Image_v3.NekoAvatar();
             embed.WithTitle($"Neko Avatar for {Context.User.Username}");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("smug")]
         public async Task Smug()
         {
-            stopWatch.Start();
             var gif = await nekoClient.Image_v3.SmugGif();
             embed.WithTitle($"Smug（￣＾￣）");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("waifu")]
         public async Task Waifu()
         {
-            stopWatch.Start();
             var gif = await nekoClient.Image_v3.Waifu();
             embed.WithTitle($"Waifu (ﾉ≧ڡ≦)");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("wallpaper")]
         public async Task Wallpaper()
         {
-            stopWatch.Start();
             var gif = await nekoClient.Image_v3.Wallpaper();
             embed.WithTitle($"Wallpaper for {Context.User.Username}");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.WithColor(Violet);
-            await BE(); stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         //[Command("blackjack1", RunMode = RunMode.Async)]

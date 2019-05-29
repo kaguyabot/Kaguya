@@ -1,21 +1,17 @@
 ﻿using Discord.WebSocket;
 using Discord.Commands;
 using System;
-using System.Net.Http;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Core.Server_Files;
 using Discord;
 using Kaguya.Modules.osu;
 using System.Diagnostics;
-using System.Timers;
-using Kaguya.Core.Command_Handler;
 using DiscordBotsList.Api;
 using DiscordBotsList.Api.Objects;
 using System.Collections.Generic;
 using Victoria;
-using Victoria.Entities;
-using System.IO;
+using Kaguya.Core.Embed;
 
 namespace Kaguya.Core.CommandHandler
 {
@@ -23,7 +19,6 @@ namespace Kaguya.Core.CommandHandler
     {
         readonly DiscordShardedClient _client = Global.Client;
         readonly LavaShardClient _lavaShardClient = Global.lavaShardClient;
-        readonly public IServiceProvider _services;
         readonly Color Yellow = new Color(255, 255, 102);
         readonly Color SkyBlue = new Color(63, 242, 255);
         readonly Color Red = new Color(255, 0, 0);
@@ -84,7 +79,7 @@ namespace Kaguya.Core.CommandHandler
             if (s != null)
             {
                 BeatmapLinkParser parser = new BeatmapLinkParser();
-                EmbedBuilder embed = new EmbedBuilder();
+                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
                 if (s is SocketUserMessage msg)
                 {
                     var context = new ShardedCommandContext(_client, msg);
