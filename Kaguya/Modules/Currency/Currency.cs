@@ -138,7 +138,6 @@ namespace Kaguya.Modules
                 embed.WithTitle("Timely Points");
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
                     $" Please wait until `{timeout} hours` have passed to receive more timely points.");
-                embed.SetColor(EmbedType.PINK);
                 await BE();
                 return;
             }
@@ -157,7 +156,6 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{Context.User.Mention} it's a critical hit! {Context.User.Username} has received `{bonus}` points! Claim again in {timeout}h.");
             else
                 embed.WithDescription($"{Context.User.Mention} has received `{bonus.ToString("N0")}` points! Claim again in {timeout}h.");
-            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -209,7 +207,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **Has decided to redistribute their points balance to everyone in the server!**");
                 embed.WithFooter($"{memberCount} members have been awarded {distributedPoints} points thanks to {Context.User.Username}. How generous!");
-                embed.EmbedType(EmbedType.GOLD)
+                embed.SetColor(EmbedType.GOLD);
                 await BE();
             }
         }
@@ -275,7 +273,6 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and lost their bet of `{points.ToString("N0")}`! Better luck next time!** <:SagiriBlush:498009810692734977>");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
-                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
             else if (67 <= roll && roll <= 78)
@@ -298,7 +295,6 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
-                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
             else if (79 <= roll && roll <= 89)
@@ -444,7 +440,6 @@ namespace Kaguya.Modules
             {
                 embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points!**");
             }
-            embed.SetColor(EmbedType.PINK);
             await BE();
 
             userAccount.Points += bonus;

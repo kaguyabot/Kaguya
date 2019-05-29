@@ -538,7 +538,6 @@ namespace Kaguya.Modules
             embed.WithTitle("Filtered word added");
             embed.WithDescription($"**{Context.User.Mention} Successfully added specified word to the filter.**");
             embed.WithFooter($"To view your current list of filtered words, type {cmdPrefix}viewfilter!");
-            embed.SetColor(EmbedType.PINK);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Administrator has added word to their filter: \"{phrase}\"");
         }
@@ -559,7 +558,6 @@ namespace Kaguya.Modules
             embed.WithTitle("Filtered word added");
             embed.WithDescription($"**{Context.User.Mention} Successfully removed specified word from the filter.**");
             embed.WithFooter($"To view your current list of filtered words, type {cmdPrefix}filterview!");
-            embed.SetColor(EmbedType.PINK);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Administrator has removed word \"{phrase}\" from their filter");
         }
@@ -587,7 +585,6 @@ namespace Kaguya.Modules
             {
                 embed.AddField("#" + i++.ToString(), phrase);
             }
-            embed.SetColor(EmbedType.PINK);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -633,7 +630,6 @@ namespace Kaguya.Modules
             else if(userAccount.Username == null || userAccount.Username == "")
                 embed.WithDescription($"ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
             embed.WithFooter("Please note that all Points and EXP are not able to be restored.");
-            embed.SetColor(EmbedType.PINK);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "User Unblacklisted");
         }
@@ -765,7 +761,6 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Remove All Roles");
                 embed.WithDescription($"`{i}` roles have been removed from `{user}`.");
-                embed.SetColor(EmbedType.PINK);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
@@ -794,7 +789,6 @@ namespace Kaguya.Modules
                     embed.AddField("Role Deleted", $"`{role.Name}` with `{role.Permissions.ToList().Count()}` permissions has been deleted.");
                     await role.DeleteAsync();
                 }
-                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
             else if (roles.Count() == 0)
@@ -809,7 +803,6 @@ namespace Kaguya.Modules
                 await role.DeleteAsync();
                 embed.WithTitle("Role Deletion: Success");
                 embed.WithDescription($"**{Context.User.Mention} Successfully deleted role `{role.Name}`**");
-                embed.SetColor(EmbedType.PINK);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
