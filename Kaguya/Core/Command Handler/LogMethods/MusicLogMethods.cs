@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
 using Victoria;
 using Victoria.Entities;
-using Kaguya.Core;
-using System.Diagnostics;
 
 namespace Kaguya.Core.Command_Handler.LogMethods
 {

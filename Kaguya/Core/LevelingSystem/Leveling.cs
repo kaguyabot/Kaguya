@@ -1,7 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using Kaguya.Core.Command_Handler.EmbedHandlers;
-using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;

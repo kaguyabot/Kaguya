@@ -1,11 +1,9 @@
 ﻿using Discord.WebSocket;
-using Discord.Commands;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Core.Server_Files;
 using Discord;
-using Kaguya.Modules.osu;
 using System.Diagnostics;
 using System.Timers;
 using System.Collections.Generic;

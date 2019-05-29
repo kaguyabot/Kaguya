@@ -10,10 +10,9 @@ using Discord.WebSocket;
 using Kaguya.Core.UserAccounts;
 using System.Net;
 using Kaguya.Core.Server_Files;
-using Kaguya.Core.Commands;
 using OppaiSharp;
-using Kaguya.Core;
-using System.Diagnostics;
+using Kaguya.Core.Embed;
+using EmbedType = Kaguya.Core.Embed.EmbedType;
 
 #pragma warning disable
 
@@ -22,16 +21,7 @@ namespace Kaguya.Modules
     public class osuStandard : ModuleBase<ShardedCommandContext>
     {
         readonly DiscordSocketClient _client;
-        public EmbedBuilder embed = new EmbedBuilder();
-        readonly Color Pink = new Color(252, 132, 255);
-        readonly Color Red = new Color(255, 0, 0);
-        readonly Color Gold = new Color(255, 223, 0);
-        readonly BotConfig bot = new BotConfig();
-        readonly string version = Utilities.GetAlert("VERSION");
-        readonly string botToken = Config.bot.Token;
-        readonly string osuapikey = Config.bot.OsuApiKey;
-        readonly Logger logger = new Logger();
-        readonly Stopwatch stopWatch = new Stopwatch();
+        public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -41,7 +31,6 @@ namespace Kaguya.Modules
         [Command("osu")]
         public async Task osuProfile([Remainder]string player = null)
         {
-            stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             string osuapikey = Config.bot.OsuApiKey;
             string jsonProfile;
@@ -53,9 +42,10 @@ namespace Kaguya.Modules
                 if (player == null)
                 {
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
-                    embed.WithColor(Red);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "No osu! username specified."); return;
+                    embed.SetColor(EmbedType.RED);
+                    await BE();
+                    // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "No osu! username specified."); ERROR HANDLER HERE
+                    return;
                 }
             }
 
@@ -70,9 +60,9 @@ namespace Kaguya.Modules
             {
                 embed.WithDescription($"**{Context.User.Mention} I couldn't download information for the specified user!**");
                 embed.WithFooter($"If this persists, please contact Stage#0001. Error code: OAPI_RETURN_NULL");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API Returned Null"); return;
+                await BE();
+                //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API Returned Null"); ERROR HANDLER HERE
+                return;
             }
 
             var userProfileObject = JsonConvert.DeserializeObject<dynamic>(jsonProfile)[0];
@@ -129,16 +119,12 @@ namespace Kaguya.Modules
                 $"\n**`That's over {(difference.TotalDays / 31).ToString("N0")} months!`**");
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
             embed.WithFooter($"Stats accurate as of {DateTime.Now}");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-
+            await BE();
         }
 
         [Command("osuset")] //osu
         public async Task osuSet([Remainder]string username)
         {
-            stopWatch.Start();
             var userAccount = UserAccounts.GetAccount(Context.User);
             string oldUsername = userAccount.OsuUsername;
             if (oldUsername == null)
@@ -150,7 +136,7 @@ namespace Kaguya.Modules
 
             using (WebClient client = new WebClient())
             {
-                jsonProfile = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u={username}"); //Downloads user data
+                jsonProfile = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={Config.bot.OsuApiKey}&u={username}"); //Downloads user data
             }
 
             if(jsonProfile == "[]")
@@ -158,18 +144,16 @@ namespace Kaguya.Modules
                 userAccount.OsuUsername = oldUsername;
                 embed.WithDescription($"{Context.User.Mention} **ERROR: This username does not match a valid osu! username!**");
                 embed.WithFooter($"I have kept your osu! username as {oldUsername}. If you believe this is a mistake, contact Stage#0001.");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); return;
+                await BE();
+                embed.SetColor(EmbedType.RED);
+                //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
+                return;
             }
-
             UserAccounts.SaveAccounts();
 
             embed.WithTitle("osu! Username Set");
             embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed from `{oldUsername}` to `{userAccount.OsuUsername}`.**");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
             
         }
 
@@ -177,7 +161,6 @@ namespace Kaguya.Modules
         [Alias("r")]
         public async Task osuRecent(string player = null)
         {
-            stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             string osuapikey = Config.bot.OsuApiKey;
 
@@ -188,7 +171,6 @@ namespace Kaguya.Modules
                 {
                     embed.WithTitle("osu! Recent");
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
-                    embed.WithColor(Red);
                     await BE(); return;
                 }
             }
@@ -214,7 +196,6 @@ namespace Kaguya.Modules
                         .WithName("" + mapUserNameObject.username + " hasn't got any recent plays")
                         .WithIconUrl("https://a.ppy.sh/" + mapUserNameObject.user_id);
                 });
-                embed.WithColor(Pink);
                 await BE();
             }
             else
@@ -286,9 +267,10 @@ namespace Kaguya.Modules
                 if(NormalUserName == "[]")
                 {
                     embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
-                    embed.WithColor(Red);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); return;
+                    await BE();
+                    embed.SetColor(EmbedType.RED);
+                    //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
+                    return;
                 }
 
                 var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
@@ -349,9 +331,7 @@ namespace Kaguya.Modules
                 });
                 embed.WithDescription($"{playerRecentString}");
                 embed.WithFooter(footer);
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                await BE();
             }
         }
 
@@ -382,7 +362,6 @@ namespace Kaguya.Modules
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task CreateTeamRoles(string teamName, [Remainder]List<SocketGuildUser> users)
         {
-            stopWatch.Start();
             var participantRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "participant" || x.Name == "Participant");
             var roleName = "Team: " + teamName;
             var teamRole = await Context.Guild.CreateRoleAsync(roleName);
@@ -393,9 +372,7 @@ namespace Kaguya.Modules
 
                 embed.AddField("Participant Added", $"**{user}** has been added to {teamRole.Mention} and {participantRole.Mention}.");
             }
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("delteams")] //osu
@@ -404,11 +381,9 @@ namespace Kaguya.Modules
         [RequireOwner]
         public async Task DeleteTeams()
         {
-            stopWatch.Start();
             var roles = Context.Guild.Roles;
             embed.WithTitle("Teams Deleted");
             embed.WithDescription("The following teams have been deleted: ");
-            embed.WithColor(Pink);
             foreach (IRole role in roles)
             {
                 if (role.Name.Contains("Team: "))
@@ -417,9 +392,7 @@ namespace Kaguya.Modules
                     embed.WithDescription(embed.Description.ToString() + $"\n`{role}`");
                 }
             }
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "Teams deleted.");
-            
+            await BE();
         }
 
         private bool UserIsAdmin(SocketGuildUser user)
@@ -434,5 +407,4 @@ namespace Kaguya.Modules
             return user.Roles.Contains(targetRole);
         }
     }
-
 }

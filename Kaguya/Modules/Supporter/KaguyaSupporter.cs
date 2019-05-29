@@ -2,14 +2,10 @@
 using System.IO;
 using System.Threading.Tasks;
 using Discord.Commands;
-using System.Net;
-using Kaguya.Core.Commands;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.UserAccounts;
-using Discord.WebSocket;
 
 namespace Kaguya.Modules.Supporter
 {

@@ -5,10 +5,8 @@ using Discord.WebSocket;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.CommandHandler;
-using Kaguya.Core.Commands;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
-using Kaguya.Modules.Administration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +14,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
+using Kaguya.Core.Embed;
+using EmbedType = Kaguya.Core.Embed.EmbedType;
 
 #pragma warning disable CS0472
 
@@ -23,14 +23,7 @@ namespace Kaguya.Modules
 {
     public class AdministrationCommands : InteractiveBase<ShardedCommandContext>
     {
-        public EmbedBuilder embed = new EmbedBuilder();
-        public Color Pink = new Color(252, 132, 255);
-        public Color Red = new Color(255, 0, 0);
-        public Color Gold = new Color(255, 223, 0);
-        public Color Violet = new Color(127, 0, 255);
-        public BotConfig bot = new BotConfig();
-        public string version = Utilities.GetAlert("VERSION");
-        public string botToken = Config.bot.Token;
+        public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
         readonly DiscordShardedClient _client = Global.Client;
@@ -68,13 +61,13 @@ namespace Kaguya.Modules
                 embed2.WithTitle("⚠️ Warning Received");
                 embed2.WithDescription($"You have received a warning from `{Context.User}` in the server `{Context.Guild.Name}`.");
                 embed2.WithFooter($"You currently have {userWarnings} warnings.");
-                embed2.WithColor(Red);
+                embed2.WithColor(111, 22, 255); //Violet, have to use this because of "embed2"
                 await user.SendMessageAsync(embed: embed2.Build());
 
                 warnedMembers.Add(userID, userWarnings);
                 embed.WithDescription($"{Context.User.Mention} **User `{users.ElementAt(i)}` has been warned.**");
                 embed.WithFooter($"User now has {userWarnings} warning(s).");
-                embed.WithColor(Violet);
+                embed.SetColor(EmbedType.VIOLET);
                 await ReplyAsync(embed: embed.Build());
                 i++;
 
@@ -188,7 +181,6 @@ namespace Kaguya.Modules
                 $"\n" +
                 $"\n\"{reason}\"");
             embed.WithFooter($"You currently have {totalWarnings} warning(s).");
-            embed.WithColor(Red);
 
             await user.SendMessageAsync(embed: embed.Build());
 
@@ -215,13 +207,12 @@ namespace Kaguya.Modules
                     $"\nNew Rep Balance: `0`" +
                     $"\n");
                 embed.WithFooter($"You currently have {totalWarnings} warning(s).");
-                embed.WithColor(Red);
 
                 await user.SendMessageAsync(embed: embed.Build());
 
                 embed.WithTitle($"User Blacklisted");
                 embed.WithDescription($"User `{user}` has been blacklisted from Kaguya for receiving three global warnings from a Kaguya Administrator.");
-                embed.WithColor(Violet);
+                embed.SetColor(EmbedType.VIOLET);
                 await BE();
 
                 logger.ConsoleCriticalAdvisory($"USER {user.ToString().ToUpper()} BLACKLISTED: RECEIVED 3 KAGUYA WARNINGS!!");
@@ -250,7 +241,7 @@ namespace Kaguya.Modules
                 logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
 
                 embed.WithDescription($"**{Context.User.Mention} I needed to create the mute role for first time setup! Please retry this command.**");
-                embed.WithColor(Violet);
+                embed.SetColor(EmbedType.VIOLET);
                 await BE(); return;
 
             }
@@ -285,7 +276,7 @@ namespace Kaguya.Modules
             if(!(Context.Channel as SocketGuildChannel).GetPermissionOverwrite(muteRole).HasValue)
             {
                 embed.WithDescription($"{Context.User.Mention} Performing first time setup. Please wait...");
-                embed.WithColor(Violet);
+                embed.SetColor(EmbedType.VIOLET);
                 await BE();
             }
 
@@ -347,7 +338,7 @@ namespace Kaguya.Modules
 
                     embed.WithDescription($"{Context.User.Mention} User `{user.Username}#{user.Discriminator}` " +
                         $"has been muted for `{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1}`");
-                    embed.WithColor(Violet);
+                    embed.SetColor(EmbedType.VIOLET);
                     await BE();
                     stopWatch.Stop();
                     logger.ConsoleGuildAdvisory(Context.Guild, $"User muted for {timeout}.");
@@ -410,7 +401,6 @@ namespace Kaguya.Modules
             {
                 await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
                 embed.WithDescription($"**{Context.User.Mention} I didn't find my mute role, so I created it. Please try again!**");
-                embed.WithColor(Red);
                 await BE();
                 logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
                 return;
@@ -421,7 +411,7 @@ namespace Kaguya.Modules
             if (!(Context.Channel as SocketGuildChannel).GetPermissionOverwrite(muteRole).HasValue)
             {
                 embed.WithDescription($"{Context.User.Mention} Performing first time setup. Please wait...");
-                embed.WithColor(Violet);
+                embed.SetColor(EmbedType.VIOLET);
                 await BE();
             }
 
@@ -441,7 +431,7 @@ namespace Kaguya.Modules
             {
                 await user.AddRoleAsync(muteRole);
                 embed.WithDescription($"{Context.User.Mention} User `{user}` has been muted.");
-                embed.WithColor(Violet);
+                embed.SetColor(EmbedType.VIOLET);
                 await BE();
                 logger.ConsoleGuildAdvisory(Context.Guild, "User muted.");
             }
@@ -470,7 +460,6 @@ namespace Kaguya.Modules
             {
                 await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
                 embed.WithDescription($"**{Context.User.Mention} I didn't find my mute role, so I created it. Please try again!**");
-                embed.WithColor(Red);
                 await BE();
                 logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
                 return;
@@ -481,7 +470,7 @@ namespace Kaguya.Modules
             if (!(Context.Channel as SocketGuildChannel).GetPermissionOverwrite(muteRole).HasValue)
             {
                 embed.WithDescription($"{Context.User.Mention} Performing first time setup. Please wait...");
-                embed.WithColor(Violet);
+                embed.SetColor(EmbedType.VIOLET);
                 await BE();
             }
 
@@ -499,7 +488,7 @@ namespace Kaguya.Modules
 
             await user.AddRoleAsync(muteRole);
             embed.WithDescription($"{Context.User.Mention} User `{user}` has been muted.");
-            embed.WithColor(Violet);
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
             logger.ConsoleGuildAdvisory(Context.Guild, "User muted.");
 
@@ -529,7 +518,7 @@ namespace Kaguya.Modules
             }
 
             embed.WithDescription($"{Context.User.Mention} Unmuted `{i}` user(s).");
-            embed.WithColor(Violet);
+            embed.SetColor(EmbedType.VIOLET);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -550,7 +539,6 @@ namespace Kaguya.Modules
             embed.WithTitle("Filtered word added");
             embed.WithDescription($"**{Context.User.Mention} Successfully added specified word to the filter.**");
             embed.WithFooter($"To view your current list of filtered words, type {cmdPrefix}viewfilter!");
-            embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Administrator has added word to their filter: \"{phrase}\"");
         }
@@ -571,7 +559,6 @@ namespace Kaguya.Modules
             embed.WithTitle("Filtered word added");
             embed.WithDescription($"**{Context.User.Mention} Successfully removed specified word from the filter.**");
             embed.WithFooter($"To view your current list of filtered words, type {cmdPrefix}filterview!");
-            embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Administrator has removed word \"{phrase}\" from their filter");
         }
@@ -589,7 +576,6 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Empty Filter");
                 embed.WithDescription($"{Context.User.Mention} Server filter is empty!");
-                embed.WithColor(Red);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
             }
@@ -600,7 +586,6 @@ namespace Kaguya.Modules
             {
                 embed.AddField("#" + i++.ToString(), phrase);
             }
-            embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -617,7 +602,6 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Filter Clearing");
                 embed.WithDescription($"The filtered words list for **{Context.Guild.Name}** is already empty!");
-                embed.WithColor(Red);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
             }
@@ -627,7 +611,6 @@ namespace Kaguya.Modules
 
             embed.WithTitle("Cleared Filter");
             embed.WithDescription($"All filtered words for **{Context.Guild.Name}** have been successfully removed!");
-            embed.WithColor(Red);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -648,7 +631,6 @@ namespace Kaguya.Modules
             else if(userAccount.Username == null || userAccount.Username == "")
                 embed.WithDescription($"ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
             embed.WithFooter("Please note that all Points and EXP are not able to be restored.");
-            embed.WithColor(Pink);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "User Unblacklisted");
         }
@@ -691,7 +673,6 @@ namespace Kaguya.Modules
         {
             stopWatch.Start();
             embed.WithDescription($"Creating accounts for **`{Context.Guild.MemberCount}`** users...");
-            embed.WithColor(Red);
             await BE();
             var users = Context.Guild.Users;
             foreach (var user in users)
@@ -704,7 +685,6 @@ namespace Kaguya.Modules
             Console.WriteLine($"Created accounts for {Context.Guild.MemberCount} users.");
             embed.WithTitle("Admin Server Scraping");
             embed.WithDescription("Accounts obtained.");
-            embed.WithColor(Red);
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "Server scraped");
         }
@@ -718,7 +698,6 @@ namespace Kaguya.Modules
             var _client = Global.Client;
             var servers = Servers.GetAllServers();
             embed.WithDescription($"**{Context.User.Mention} Scraping...**");
-            embed.WithColor(Red);
             await BE();
             foreach (var server in servers)
             {
@@ -745,7 +724,6 @@ namespace Kaguya.Modules
             }
             UserAccounts.SaveAccounts();
             embed.WithDescription($"**{Context.User.Mention} Created accounts for `{UserAccounts.GetAllAccounts().Count}` users.**");
-            embed.WithColor(Red);
             await BE();
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Database scraped: {UserAccounts.GetAllAccounts().Count} users affected.");
@@ -775,7 +753,6 @@ namespace Kaguya.Modules
                         i--;
                         embed.WithDescription($"{Context.User.Mention} I failed to remove {role.Mention} from `{user}`. This most likely occurred because this role is higher than yours in the hierarchy, " +
                             $"or this role is automatically managed by an integration (bot specific roles).");
-                        embed.WithColor(Red);
                         await BE();
                     }
                 }
@@ -785,14 +762,12 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Remove All Roles");
                 embed.WithDescription($"`{i}` roles have been removed from `{user}`.");
-                embed.WithColor(Pink);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
             else
             {
                 embed.WithDescription($"Failed to remove roles from `{user}`.");
-                embed.WithColor(Red);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to remove roles from user.");
             }
@@ -815,14 +790,12 @@ namespace Kaguya.Modules
                     embed.AddField("Role Deleted", $"`{role.Name}` with `{role.Permissions.ToList().Count()}` permissions has been deleted.");
                     await role.DeleteAsync();
                 }
-                embed.WithColor(Pink);
                 await BE();
             }
             else if (roles.Count() == 0)
             {
                 embed.WithTitle("Role Deletion: Error");
                 embed.WithDescription($"**{Context.User.Mention} I could not find the specified role!**");
-                embed.WithColor(Red);
                 await BE(); return;
             }
             else if (roles.Count() == 1)
@@ -831,7 +804,6 @@ namespace Kaguya.Modules
                 await role.DeleteAsync();
                 embed.WithTitle("Role Deletion: Success");
                 embed.WithDescription($"**{Context.User.Mention} Successfully deleted role `{role.Name}`**");
-                embed.WithColor(Pink);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
@@ -847,7 +819,7 @@ namespace Kaguya.Modules
             await Context.Guild.CreateRoleAsync(role);
             embed.WithTitle("Role Created");
             embed.WithDescription($"{Context.User.Mention} role **{role}** has been created.");
-            embed.WithColor(Pink);
+            
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -857,8 +829,8 @@ namespace Kaguya.Modules
         public async Task LeaveGuild()
         {
             embed.WithTitle("Leaving Server");
+            embed.SetColor(EmbedType.RED);
             embed.WithDescription($"Administrator {Context.User.Mention} has directed me to leave. Goodbye!");
-            embed.WithColor(Red);
             await BE();
             await Context.Guild.LeaveAsync();
             logger.ConsoleGuildAdvisory(Context.Guild, "KaguyaExit command executed.");
@@ -877,13 +849,11 @@ namespace Kaguya.Modules
             if(user.Id == Context.User.Id)
             {
                 embed.WithDescription($"**{Context.User.Mention} You may not ban yourself!**");
-                embed.WithColor(Red);
                 await BE();
             }
             else if (user.Id == sOwnerID)
             {
                 embed.WithDescription($"**{Context.User.Mention} I cannot ban the server owner!**");
-                embed.WithColor(Red);
                 await BE();
             }
             else if (user.Id != sOwnerID)
@@ -891,7 +861,6 @@ namespace Kaguya.Modules
                 await user.BanAsync();
                 embed.WithTitle($"User Banned");
                 embed.WithDescription($"{Context.User.Mention} has banned `{user}`.");
-                embed.WithColor(Pink);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 Servers.GetServer(Context.Guild).MostRecentBanReason = reason;
@@ -911,7 +880,6 @@ namespace Kaguya.Modules
                 if(user.Id == Context.User.Id)
                 {
                     embed.WithDescription($"**{Context.User.Mention} You may not ban yourself!**");
-                    embed.WithColor(Red);
                     await BE();
                     continue;
                 }
@@ -919,14 +887,13 @@ namespace Kaguya.Modules
                 if (user.Id == sOwner.Id)
                 {
                     embed.WithDescription($"**{Context.User.Mention} You may not ban the server owner!**");
-                    embed.WithColor(Red);
                     await BE();
                     continue;
                 }
 
                 await user.BanAsync();
                 embed.WithDescription($"**{user} has been permanently banned by {Context.User.Mention}.**");
-                embed.WithColor(Violet);
+                embed.SetColor(EmbedType.VIOLET);
                 await BE();
             }
             stopWatch.Stop();
@@ -951,7 +918,6 @@ namespace Kaguya.Modules
                     await user.KickAsync(reason);
                     embed.WithTitle($"User Kicked");
                     embed.WithDescription($"`{Context.User}` has kicked `{user}` with reason: \"{reason}\"");
-                    embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 }
@@ -960,7 +926,6 @@ namespace Kaguya.Modules
                     await user.KickAsync(reason);
                     embed.WithTitle($"User Kicked");
                     embed.WithDescription($"`{Context.User.Mention}` has kicked `{user}` without a specified reason.");
-                    embed.WithColor(Pink);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 }
@@ -969,13 +934,11 @@ namespace Kaguya.Modules
             else if (user.Id == Context.User.Id)
             {
                 embed.WithDescription($"**{Context.User.Mention} You may not ban yourself!**");
-                embed.WithColor(Red);
                 await BE();
             }
             else if (user.Id == sOwner.Id)
             {
                 embed.WithDescription($"**{Context.User.Mention} I cannot ban the server owner!**");
-                embed.WithColor(Red);
                 await BE();
             }
         }
@@ -1005,7 +968,6 @@ namespace Kaguya.Modules
 
                 await user.KickAsync();
                 embed.WithDescription($"**{user} has been kicked by {Context.User.Mention}.**");
-                embed.WithColor(Pink);
                 await BE();
             }
             stopWatch.Stop();
@@ -1062,7 +1024,6 @@ namespace Kaguya.Modules
             server.MostRecentShadowbanReason = reason;
 
             embed.WithDescription($"Shadowbanning `[{user.Username}#{user.Discriminator}]`...");
-            embed.WithColor(Red);
             await BE();
 
             var channels = Context.Guild.Channels;
@@ -1076,7 +1037,6 @@ namespace Kaguya.Modules
 
             embed.WithDescription($"**{Context.User.Mention} User `{user.Username}#{user.Discriminator}` has been shadowbanned from " +
                 $"`{Context.Guild.Name} [{i} channels]`**");
-            embed.WithColor(Red);
             await BE();
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
@@ -1098,7 +1058,6 @@ namespace Kaguya.Modules
             Server server = Servers.GetServer(Context.Guild);
 
             embed.WithDescription($"Un-Shadow Banning `[{user.Username}#{user.Discriminator}]`...");
-            embed.WithColor(Red);
             await BE();
 
             var channels = Context.Guild.Channels;
@@ -1112,7 +1071,6 @@ namespace Kaguya.Modules
 
             embed.WithDescription($"**{Context.User.Mention} User `{user.Username}#{user.Discriminator}` has been un-shadowbanned from " +
                 $"`{Context.Guild.Name} [{i} channels]`**");
-            embed.WithColor(Red);
             await BE();
             stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);

@@ -1,6 +1,5 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Core.Commands;
 using System.Threading.Tasks;
 
 namespace Kaguya.Modules.Music
