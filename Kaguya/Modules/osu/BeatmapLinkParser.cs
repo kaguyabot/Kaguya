@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Kaguya.Core;
 using Kaguya.Core.Embed;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.osu
 {

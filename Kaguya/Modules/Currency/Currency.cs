@@ -9,7 +9,7 @@ using Kaguya.Core.Commands;
 using System.Diagnostics;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.Embed;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules
 {
@@ -97,7 +97,7 @@ namespace Kaguya.Modules
             UserAccounts.SaveAccounts();
             embed.WithTitle("Points Awarded");
             embed.WithDescription($"{Context.User.Mention} has awarded `{bonus.ToString("N0")}` points to `{i.ToString("N0")}` users!");
-            embed.SetColor(EmbedType.GOLD);
+            embed.SetColor(EmbedColor.GOLD);
             await BE();
         }
 
@@ -207,7 +207,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **Has decided to redistribute their points balance to everyone in the server!**");
                 embed.WithFooter($"{memberCount} members have been awarded {distributedPoints} points thanks to {Context.User.Username}. How generous!");
-                embed.SetColor(EmbedType.GOLD);
+                embed.SetColor(EmbedColor.GOLD);
                 await BE();
             }
         }
@@ -391,7 +391,7 @@ namespace Kaguya.Modules
                     $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
-                embed.SetColor(EmbedType.GOLD);
+                embed.SetColor(EmbedColor.GOLD);
                 await BE();
             }
         }
@@ -423,7 +423,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Weekly Points");
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}weekly`!" +
                     $" Please wait until `7 days` have passed to receive your weekly bonus.");
-                embed.SetColor(EmbedType.RED);
+                embed.SetColor(EmbedColor.RED);
                 await BE();
                 // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User has not waited for the weekly bonus timer to reset."); CREATE ERROR HANDLER
                 return;

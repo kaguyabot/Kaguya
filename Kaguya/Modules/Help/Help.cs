@@ -6,12 +6,13 @@ using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Kaguya.Core.Embed;
-using EmbedType = Kaguya.Core.Embed.EmbedType;
+using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules
 {
@@ -45,6 +46,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention}Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
                     await BE(); break;
                 case "warnset":
+                case "ws":
                     embed.WithTitle($"Help: Warnset | `{cmdPrefix}warnset`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Administrator**" +
                         $"\n" +
@@ -55,6 +57,7 @@ namespace Kaguya.Modules
                     embed.WithFooter($"If you forget the warning punishments, you may use {cmdPrefix}warnoptions to see the list.");
                     await BE(); break;
                 case "warn":
+                case "w":
                     embed.WithTitle($"Help: Warn | `{cmdPrefix}warn`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
                         $"\n" +
@@ -65,10 +68,19 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}warn <user {{ID, Name, Mention}}>`");
                     await BE(); break;
                 case "warnoptions":
+                case "wo":
                     embed.WithTitle($"Help: Warning Options | `{cmdPrefix}warnoptions`");
                     embed.WithDescription($"{Context.User.Mention} Displays available ways to punish users through my warning system." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}warnoptions`");
+                        $"\nSyntax: `{cmdPrefix}warnoptions`"); break;
+                case "warnpunishments":
+                case "wp":
+                    embed.WithTitle($"Help: Warning Configuration | `{cmdPrefix}warnpunishments`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Kick Members**" +
+                        $"\n" +
+                        $"\nDisplays what punishments have been set for the server and at how many warnings they will be triggered." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}warnpunishments`");
                     await BE(); break;
                 case "toggleannouncements":
                     embed.WithTitle($"Help: Toggle Announcements | `{cmdPrefix}toggleannouncements`");
@@ -378,6 +390,24 @@ namespace Kaguya.Modules
                         "\nRemoves all roles from the specified user." +
                         $"\nSyntax: `{cmdPrefix}removeallroles @User#0000`.");
                     await BE(); break;
+                case "removerole":
+                case "rr":
+                    embed.WithTitle($"Help: Removing Roles | `{cmdPrefix}removerole`, `{cmdPrefix}rr`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
+                        "\n" +
+                        "\nRemoves the role from the specified user(s)." +
+                        $"\nSyntax: `{cmdPrefix}removerole @User#0000`." +
+                        $"\nSyntax: `{cmdPrefix}rr <Name> <ID> <@Name#0000> <20945832042384>`");
+                    await BE(); break;
+                case "addrole":
+                case "ar":
+                    embed.WithTitle($"Help: Adding Roles | `{cmdPrefix}addrole`, `{cmdPrefix}ar`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
+                        "\n" +
+                        "\nAdds the role to the specified user(s)." +
+                        $"\nSyntax: `{cmdPrefix}addrole @User#0000`." +
+                        $"\nSyntax: `{cmdPrefix}ar <Name> <ID> <@Name#0000> <20945832042384>`");
+                    await BE(); break;
                 case "deleterole":
                 case "dr":
                     embed.WithTitle($"Help: Deleting Roles | `{cmdPrefix}deleterole`, `{cmdPrefix}dr`");
@@ -650,6 +680,10 @@ namespace Kaguya.Modules
                         $"\n**Volume:** Sets the volume to a value between 0-150. `{cmdPrefix}m volume <0-200>`" +
                         $"\n**Jump:** Jump to a specific position in the queue, skipping all songs before it in one go.`{cmdPrefix}m jump <jumpNum>`");
                     await BE(); break;
+                case "invite":
+                    embed.WithTitle($"Help: Kaguya Invites | `{cmdPrefix}invite`");
+                    embed.WithDescription($"{Context.User.Mention} Use of this command will result in you being sent a DM with a link to join my support Discord server as well as a link to add me to your server!");
+                    await BE(); break;
                 case "supporter":
                     embed.WithTitle($"Help: Kaguya Supporter Tags | `{cmdPrefix}supporter`");
                     embed.WithDescription($"{Context.User.Mention} Displays information on Kaguya's Supporter Tag feature.");
@@ -665,6 +699,12 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Kaguya Diamonds | `{cmdPrefix}diamonds`");
                     embed.WithDescription($"{Context.User.Mention} Displays how many `Kaguya Diamonds` you have. Diamonds are able to be earned through being a supporter. " +
                         $"For more information, check out `{cmdPrefix}supporter`!");
+                    await BE(); break;
+                case "sync":
+                    embed.WithTitle($"Help: Supporter Sync | `{cmdPrefix}sync`");
+                    embed.WithDescription($"{Context.User.Mention} This is a supporter only command that will automatically give you the \"Supporter\" role in the Kaguya Support Server. " +
+                        $"Note: You must use this command in the support server!");
+                    embed.WithFooter($"Use the {cmdPrefix}invite command for a link to the support server if you need one!");
                     await BE(); break;
                 default:
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
@@ -685,6 +725,7 @@ namespace Kaguya.Modules
             string administration = "```css" +
                         "\nAll commands in category: Administration" +
                         "\n" +
+                        $"\n{cmdPrefix}addrole [ar]" +
                         $"\n{cmdPrefix}ban [b]" +
                         $"\n{cmdPrefix}clear [c] [purge]" +
                         $"\n{cmdPrefix}createrole [cr]" +
@@ -701,15 +742,17 @@ namespace Kaguya.Modules
                         $"\n{cmdPrefix}masskick" +
                         $"\n{cmdPrefix}mute [m]" +
                         $"\n{cmdPrefix}removeallroles [rar]" +
+                        $"\n{cmdPrefix}removerole [rr]" +
                         $"\n{cmdPrefix}resetlogchannel [rlog]" +
                         $"\n{cmdPrefix}setlogchannel [log]" +
                         $"\n{cmdPrefix}scrapeserver" +
                         $"\n{cmdPrefix}shadowban" +
                         $"\n{cmdPrefix}unblacklist" +
                         $"\n{cmdPrefix}unshadowban" +
-                        $"\n{cmdPrefix}warn" +
-                        $"\n{cmdPrefix}warnset" +
-                        $"\n{cmdPrefix}warnoptions" +
+                        $"\n{cmdPrefix}warn [w]" +
+                        $"\n{cmdPrefix}warnset [ws]" +
+                        $"\n{cmdPrefix}warnoptions [wo]" +
+                        $"\n{cmdPrefix}warnpunishments [wp]" +
                         $"\n" +
                         $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                         "\n```";
@@ -814,6 +857,7 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}bug" +
                     $"\n{cmdPrefix}help [h]" +
                     $"\n{cmdPrefix}helpdm [hdm]" +
+                    $"\n{cmdPrefix}invite" +
                     $"\n{cmdPrefix}profile [p]" +
                     $"\n{cmdPrefix}redeem" +
                     $"\n{cmdPrefix}supporter" +
@@ -929,6 +973,50 @@ namespace Kaguya.Modules
                 Forward = true,
                 Trash = true
             });
+        }
+
+        [Command("sync")]
+        public async Task Sync()
+        {
+            var userAccount = UserAccounts.GetAccount(Context.User);
+            var difference = userAccount.KaguyaSupporterExpiration - DateTime.Now;
+
+            if(difference.TotalSeconds > 0 && Context.Guild.Id == 546880579057221644) //This means that someone is an active supporter in the Kaguya Support server.
+            {
+                var supporterRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "supporter");
+
+                await (Context.User as IGuildUser).AddRoleAsync(supporterRole);
+
+                embed.WithTitle($"Kaguya Supporter Sync");
+                embed.WithDescription($"The `Supporter` role has successfully been applied!");
+                embed.WithFooter($"Thanks so much for your support!");
+                await BE();
+            }
+            else if(!(difference.TotalSeconds > 0) && Context.Guild.Id == 546880579057221644)
+            {
+                embed.WithTitle($"Kaguya Supporter Sync");
+                embed.WithDescription($"{Context.User.Mention} You must be an active supporter to use this command!");
+                embed.SetColor(EmbedType.RED);
+                await BE();
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        [Command("invite")]
+        public async Task Invite()
+        {
+            await Context.User.GetOrCreateDMChannelAsync();
+
+            embed.WithDescription($"Here's a link to my support server: https://discord.gg/yhcNC97" +
+                $"\nHere's a link that you can use to add me to your server: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847");
+            embed.SetColor(EmbedType.PINK);
+            await Context.User.SendMessageAsync(embed: embed.Build());
+
+            embed.WithDescription($"{Context.User.Mention} DM: Sent! <:Kaguya:581581938884608001>");
+            await BE();
         }
 
         [Command("helpdm")] //help
