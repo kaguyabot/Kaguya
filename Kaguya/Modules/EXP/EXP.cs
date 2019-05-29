@@ -38,7 +38,6 @@ namespace Kaguya.Modules
             UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
-            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -57,7 +56,6 @@ namespace Kaguya.Modules
             UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
-            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -82,7 +80,6 @@ namespace Kaguya.Modules
             {
                 embed.AddField($"#{i++} {user.Username}", $"Level: {user.LevelNumber} - EXP: {user.EXP}");
             }
-            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -99,7 +96,6 @@ namespace Kaguya.Modules
             {
                 embed.AddField($"#{i++} {user.Username}", $"Level: {user.LevelNumber} - EXP: {user.EXP}");
             }
-            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -118,6 +114,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.TotalMinutes)}m {(int)(60 - difference.Seconds)}s " +
                     $"before you can give rep again!**");
+                embed.SetColor(EmbedType.RED);
                 await BE();
                 // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
             }
@@ -128,9 +125,8 @@ namespace Kaguya.Modules
                 UserAccounts.SaveAccounts();
                 Console.WriteLine($"{Context.User.Username}#{Context.User.Discriminator} has given +1 rep to {userAccount.Username}");
                 embed.WithTitle("+Rep Author");
+                embed.SetColor(EmbedType.RED);
                 embed.WithDescription("**Successfully gave +1 rep to my creator** uwu.");
-                embed.WithFooter("Thank you for showing your support <3");
-                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
         }
@@ -146,6 +142,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.Minutes)}m {(int)(60 - difference.Seconds)} " +
                     $"before you can give rep again!**");
+                embed.SetColor(EmbedType.RED);
                 await BE();
                 // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
             }
@@ -153,6 +150,7 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} You may not rep yourself!**");
+                embed.SetColor(EmbedType.RED);
                 await BE();
                 //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to rep themselves."); return;
             }
@@ -163,7 +161,6 @@ namespace Kaguya.Modules
                 UserAccounts.SaveAccounts();
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} Successfully gave rep to {user.Mention}!**");
-                embed.SetColor(EmbedType.PINK);
                 await BE();
                 // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
@@ -176,7 +173,6 @@ namespace Kaguya.Modules
             var userAccount = UserAccounts.GetAccount(user);
 
             embed.WithDescription($"{user.Mention} You have `{userAccount.Rep}` rep!");
-            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -198,7 +194,6 @@ namespace Kaguya.Modules
             var account = UserAccounts.GetAccount(Context.User);
             embed.WithTitle("Level");
             embed.WithDescription($"{Context.User.Mention} you have {account.LevelNumber} levels.");
-            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 

@@ -15,40 +15,15 @@ namespace Kaguya.Core.Embed
 
         public KaguyaEmbedBuilder()
         {
-            Init();
+            SetColor();
         }
 
         public KaguyaEmbedBuilder(EmbedType type)
         {
-            Init(type);
+            SetColor(type);
         }
 
-        private void Init(EmbedType type = EmbedType.RED)
-        {
-            EmbedType = type;
-            Color color;
-            switch (type)
-            {
-                case EmbedType.VIOLET:
-                    color = VioletColor;
-                    break;
-                case EmbedType.GOLD:
-                    color = GoldColor;
-                    break;
-                case EmbedType.PINK:
-                    color = PinkColor;
-                    break;
-                case EmbedType.RED:
-                    color = RedColor;
-                    break;
-                default:
-                    color = RedColor;
-                    break;
-            }
-            WithColor(color);
-        }
-
-        public void SetColor(EmbedType type)
+        public void SetColor(EmbedType type = EmbedType.PINK)
         {
             Color color;
             switch (type)

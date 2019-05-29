@@ -825,7 +825,7 @@ namespace Kaguya.Modules
             await Context.Guild.CreateRoleAsync(role);
             embed.WithTitle("Role Created");
             embed.WithDescription($"{Context.User.Mention} role **{role}** has been created.");
-            embed.SetColor(EmbedType.PINK);
+            
             await BE(); stopWatch.Stop();
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
@@ -835,6 +835,7 @@ namespace Kaguya.Modules
         public async Task LeaveGuild()
         {
             embed.WithTitle("Leaving Server");
+            embed.SetColor(EmbedType.RED);
             embed.WithDescription($"Administrator {Context.User.Mention} has directed me to leave. Goodbye!");
             await BE();
             await Context.Guild.LeaveAsync();
@@ -866,7 +867,6 @@ namespace Kaguya.Modules
                 await user.BanAsync();
                 embed.WithTitle($"User Banned");
                 embed.WithDescription($"{Context.User.Mention} has banned `{user}`.");
-                embed.SetColor(EmbedType.PINK);
                 await BE(); stopWatch.Stop();
                 logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 Servers.GetServer(Context.Guild).MostRecentBanReason = reason;
@@ -924,7 +924,6 @@ namespace Kaguya.Modules
                     await user.KickAsync(reason);
                     embed.WithTitle($"User Kicked");
                     embed.WithDescription($"`{Context.User}` has kicked `{user}` with reason: \"{reason}\"");
-                    embed.SetColor(EmbedType.PINK);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 }
@@ -933,7 +932,6 @@ namespace Kaguya.Modules
                     await user.KickAsync(reason);
                     embed.WithTitle($"User Kicked");
                     embed.WithDescription($"`{Context.User.Mention}` has kicked `{user}` without a specified reason.");
-                    embed.SetColor(EmbedType.PINK);
                     await BE(); stopWatch.Stop();
                     logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
                 }
@@ -976,7 +974,6 @@ namespace Kaguya.Modules
 
                 await user.KickAsync();
                 embed.WithDescription($"**{user} has been kicked by {Context.User.Mention}.**");
-                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
             stopWatch.Stop();

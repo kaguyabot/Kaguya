@@ -42,6 +42,7 @@ namespace Kaguya.Modules
                 if (player == null)
                 {
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
+                    embed.SetColor(EmbedType.RED);
                     await BE();
                     // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "No osu! username specified."); ERROR HANDLER HERE
                     return;
@@ -118,7 +119,6 @@ namespace Kaguya.Modules
                 $"\n**`That's over {(difference.TotalDays / 31).ToString("N0")} months!`**");
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
             embed.WithFooter($"Stats accurate as of {DateTime.Now}");
-            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -145,6 +145,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{Context.User.Mention} **ERROR: This username does not match a valid osu! username!**");
                 embed.WithFooter($"I have kept your osu! username as {oldUsername}. If you believe this is a mistake, contact Stage#0001.");
                 await BE();
+                embed.SetColor(EmbedType.RED);
                 //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
                 return;
             }
@@ -152,7 +153,6 @@ namespace Kaguya.Modules
 
             embed.WithTitle("osu! Username Set");
             embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed from `{oldUsername}` to `{userAccount.OsuUsername}`.**");
-            embed.SetColor(EmbedType.PINK);
             await BE();
             
         }
@@ -196,7 +196,6 @@ namespace Kaguya.Modules
                         .WithName("" + mapUserNameObject.username + " hasn't got any recent plays")
                         .WithIconUrl("https://a.ppy.sh/" + mapUserNameObject.user_id);
                 });
-                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
             else
@@ -269,6 +268,7 @@ namespace Kaguya.Modules
                 {
                     embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
                     await BE();
+                    embed.SetColor(EmbedType.RED);
                     //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
                     return;
                 }
@@ -331,7 +331,6 @@ namespace Kaguya.Modules
                 });
                 embed.WithDescription($"{playerRecentString}");
                 embed.WithFooter(footer);
-                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
         }
@@ -373,7 +372,6 @@ namespace Kaguya.Modules
 
                 embed.AddField("Participant Added", $"**{user}** has been added to {teamRole.Mention} and {participantRole.Mention}.");
             }
-            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -386,7 +384,6 @@ namespace Kaguya.Modules
             var roles = Context.Guild.Roles;
             embed.WithTitle("Teams Deleted");
             embed.WithDescription("The following teams have been deleted: ");
-            embed.SetColor(EmbedType.PINK);
             foreach (IRole role in roles)
             {
                 if (role.Name.Contains("Team: "))

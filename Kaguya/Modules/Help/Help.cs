@@ -28,7 +28,7 @@ namespace Kaguya.Modules
         [Alias("help")]
         public async Task HelpCommand([Remainder]string command)
         {
-            
+
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
             switch (command.ToLower())
@@ -38,14 +38,12 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Help!! | `{cmdPrefix}h` / `{cmdPrefix}help`");
                     embed.WithDescription($"Shows the command list. If typed with the name of a command (Ex: `{cmdPrefix}help <command>`), the response will instead contain helpful information on the specified " +
                         $"command, including how to use it.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "helpdm":
                 case "hdm":
                     embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`");
                     embed.WithDescription($"{Context.User.Mention}Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "warnset":
                     embed.WithTitle($"Help: Warnset | `{cmdPrefix}warnset`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Administrator**" +
@@ -55,8 +53,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}warnset <num> <warning punishment>`");
                     embed.WithFooter($"If you forget the warning punishments, you may use {cmdPrefix}warnoptions to see the list.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "warn":
                     embed.WithTitle($"Help: Warn | `{cmdPrefix}warn`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
@@ -66,15 +63,13 @@ namespace Kaguya.Modules
                         $"\nIf a user reaches a certain number of warnings required to trigger a \"punishment\", they will be punished according to the server's `{cmdPrefix}warnset` configuration." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}warn <user {{ID, Name, Mention}}>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "warnoptions":
                     embed.WithTitle($"Help: Warning Options | `{cmdPrefix}warnoptions`");
                     embed.WithDescription($"{Context.User.Mention} Displays available ways to punish users through my warning system." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}warnoptions`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "toggleannouncements":
                     embed.WithTitle($"Help: Toggle Announcements | `{cmdPrefix}toggleannouncements`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -82,8 +77,7 @@ namespace Kaguya.Modules
                         $"\nToggles the server's preference for in-chat level announcements." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}toggleannouncements`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "bug":
                     embed.WithTitle($"Help: Bug Report | `{cmdPrefix}bug`");
                     embed.WithDescription($"{Context.User.Mention} Allows you to report a bug directly to the support server's `#bugs` channel so that my creator can take a look at what's wrong (and hopefully fix it)! " +
@@ -91,8 +85,7 @@ namespace Kaguya.Modules
                         $"result in a `permanent blacklist` from all of Kaguya. A bug report that leads to something getting fixed will result in `+2000 Kaguya points` added to your account on the next patch as a thank you!" +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}bug <message>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "kaguyawarn":
                     embed.WithTitle($"Help: Global Warnings | `{cmdPrefix}kaguyawarn`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
@@ -100,21 +93,18 @@ namespace Kaguya.Modules
                         $"\nAdds a Global Kaguya Warning to a user. Upon 3 warnings, the target will be blacklisted. This is generally for abusing Kaguya's features, such as the $bug report feature " +
                         $"or exploiting a Kaguya system (think EXP, points, etc.)");
                     embed.WithFooter($"Blacklists applied from warnings are not removed.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "vote":
                     embed.WithTitle($"Help: Voting | `{cmdPrefix}vote`");
                     embed.WithDescription($"{Context.User.Mention} I will reply with a link to my discordbots.org page. If you wish to support me and want more people to have the ability to use me, " +
                         $"give me an upvote! My creator and I greatly appreciate it uwu. After voting, use `{cmdPrefix}voteclaim` to get some rewards for your support!");
                     embed.WithFooter($"Use {cmdPrefix}h voteclaim to find out what the rewards for upvoting are!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "voteclaim":
                     embed.WithTitle($"Help: Claiming Voting Rewards | `{cmdPrefix}voteclaim`");
                     embed.WithDescription($"{Context.User.Mention} Use this command after voting (see `{cmdPrefix}h vote`) to have some rewards applied to your Kaguya account!" +
                         $"\nRewards: `2x critical hit chance for 12 hours` and `500 Kaguya Points`! You may ask \"well, what's a critical?\" I have a help command for that! Use `{cmdPrefix}h critical` to find out more!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "critical":
                     embed.WithTitle($"Help: Critical Hits");
                     embed.WithDescription($"{Context.User.Mention} No matter what currency related command you use (roll, timely, weekly, etc.), there is a chance that reward can be a \"critical\"." +
@@ -127,50 +117,43 @@ namespace Kaguya.Modules
                         $"\nWeekly: `8% chance that the value of your reward will be multiplied by 3.5x`" +
                         $"\n" +
                         $"\nIf you have successfully used `{cmdPrefix}voteclaim` within the last 12 hours, these percentages are doubled.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "exp":
                     embed.WithTitle($"Help: EXP | `{cmdPrefix}exp`");
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}exp`." +
                         $"\nReturns the value of experience points the user has in their account." +
                         $"\nSyntax: `{cmdPrefix}exp`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "expadd":
                 case "addexp":
                     embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd` / `{cmdPrefix}addexp");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n{Context.User.Mention} Adds EXP points to the specified user. The number of exp you are adding must be a positive whole number." +
                         $"\nSyntax: `{cmdPrefix}expadd <number of experience points to add> <User {{ID, Name, Mention}}>`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "points":
                     embed.WithTitle($"Help: Kaguya Points Balance | `{cmdPrefix}points`");
                     embed.WithDescription($"Returns the value of points a user has in their account." +
                         $"\nSyntax: `{cmdPrefix}points {{This returns the amount of points you have in your account}}`" +
                         $"\nSyntax: `{cmdPrefix}points <user> {{This returns the amount of points someone else has in their account.}}`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "profile":
                 case "p":
                     embed.WithTitle($"Help: Profile | `{cmdPrefix}profile`");
                     embed.WithDescription($"\n{Context.User.Mention} Shows you all of your Kaguya stats at once!" +
                         $"\nSyntax: `{cmdPrefix}profile`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "pointsadd":
                 case "addpoints":
                     embed.WithTitle($"Help: Adding Points | `{cmdPrefix}pointsadd`, `{cmdPrefix}addpoints`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n{Context.User.Mention} Adds points to the specified user's kaguya account. The number of points you are adding must be a positive whole number." +
                         $"\nSyntax: `{cmdPrefix}pointsadd <number of points to add> <User {{ID, Name, Mention}}>`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "level":
                     embed.WithTitle($"Help: Level | `{cmdPrefix}level`");
                     embed.WithDescription($"{Context.User.Mention} Displays your current Kaguya level!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "createtextchannel":
                 case "ctc":
                     embed.WithTitle($"Help: Creating Text Channels | `{cmdPrefix}createtextchannel`, `{cmdPrefix}ctc`");
@@ -179,8 +162,7 @@ namespace Kaguya.Modules
                         $"\n{Context.User.Mention} Creates a text channel with the speficied name. " +
                         $"\nSyntax: `{cmdPrefix}createtextchannel <channel name>`. " +
                         $"\nThis name can have spaces. Example: `{cmdPrefix}createtextchannel testing 123`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "deletetextchannel":
                 case "dtc":
                     embed.WithTitle($"Help: Deleting Text Channels | `{cmdPrefix}deletetextchannel`, `{cmdPrefix}dtc`");
@@ -189,9 +171,8 @@ namespace Kaguya.Modules
                         $"\n{Context.User.Mention} Deletes a text channel with the speficied name. " +
                         $"\nThis name can **not** have spaces. Type the text channel exactly as displayed; If the text channel contains a `-`, type that in." +
                         $"\nSyntax: `{cmdPrefix}deletetextchannel <channel name>`." +
-                        $"Example: `{cmdPrefix}deletetextchannel super-long-name-with-lots-of-spaces`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                        $"Example: `{cmdPrefix}deletetextchannel super-long-name-with-lots-of-spaces`.");   
+                    await BE(); break;
                 case "createvoicechannel":
                 case "cvc":
                     embed.WithTitle($"Help: Creating Voice Channels | `{cmdPrefix}createvoicechannel`, `{cmdPrefix}cvc`");
@@ -200,8 +181,7 @@ namespace Kaguya.Modules
                         $"\n{Context.User.Mention} Creates a voice channel with the speficied name." +
                         $"\nThis name can have spaces." +
                         $"\nSyntax: `{cmdPrefix}createvoicechannel <channel name>`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "deletevoicechannel":
                 case "dvc":
                     embed.WithTitle($"Help: Deleting Voice Channels | `{cmdPrefix}deletevoicechannel`, `{cmdPrefix}dvc");
@@ -211,119 +191,102 @@ namespace Kaguya.Modules
                         $"\nThis name can have spaces. Replace the `-` symbols with spaces." +
                         $"\nSyntax: `{cmdPrefix}deletevoicechannel <channel name>`." +
                         $"Example: `{cmdPrefix}deletevoicechannel super long name with lots of spaces`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "createrole":
                 case "cr":
                     embed.WithTitle($"Help: Creating Roles | `{cmdPrefix}createrole`, `{cmdPrefix}cr`");
                     embed.WithDescription($"{Context.User.Mention} Creates a role with the specified name. The role will have no special permissions or colors." +
                         $"\nSyntax: `{cmdPrefix}createrole <name>`, `{cmdPrefix}cr <name>`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "inrole":
                     embed.WithTitle($"Help: Inrole | `{cmdPrefix}inrole`");
                     embed.WithDescription($"{Context.User.Mention} Shows a list of up to 70 members with the role specified (in alphabetical order)." +
                         $"\nSyntax: `{cmdPrefix}inrole <roleName>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "echo":
                     embed.WithTitle($"Help: Echoed Messages | `{cmdPrefix}echo`");
                     embed.WithDescription($"{Context.User.Mention} Makes the bot repeat anything you say!" +
                         $"\nSyntax: `{cmdPrefix}echo <message>`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "pick":
                     embed.WithTitle($"Help: Pick | `{cmdPrefix}pick`");
                     embed.WithDescription($"{Context.User.Mention} Tells the bot to pick between any amount of options, randomly." +
                         $"\nSyntax: `{cmdPrefix}pick option1|option2|option3|option4`...etc." +
                         $"\nYou may have as many \"Options\" as you'd like!" +
                         $"\nThe bot will always pick with totally random odds.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "8ball":
                     embed.WithTitle($"Help: Magic 8Ball | `{cmdPrefix}8ball`");
                     embed.WithDescription($"{Context.User.Mention} Ask Kaguya a question and she will use her divine powers to answer you extremely accurately!" +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}8ball <question>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "slap":
                     embed.WithTitle($"Help: Slapping! | `{cmdPrefix}slap`");
                     embed.WithDescription($"{Context.User.Mention} Slap someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}slap <word>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "hug":
                     embed.WithTitle($"Help: Hugging! | `{cmdPrefix}hug`");
                     embed.WithDescription($"{Context.User.Mention} hug someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}hug <word>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "kiss":
                     embed.WithTitle($"Help: Kissing! | `{cmdPrefix}kiss`");
                     embed.WithDescription($"{Context.User.Mention} Hug someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}kiss <word>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "pat":
                     embed.WithTitle($"Help: Patting! | `{cmdPrefix}pat`");
                     embed.WithDescription($"{Context.User.Mention} pat someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}pat <word>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "poke":
                     embed.WithTitle($"Help: Poking! | `{cmdPrefix}poke`");
                     embed.WithDescription($"{Context.User.Mention} Poke someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}poke <word>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "tickle":
                     embed.WithTitle($"Help: Tickling! | `{cmdPrefix}tickle`");
                     embed.WithDescription($"{Context.User.Mention} Tickle someone! An emotionally-accurate gif will be displayed in chat to show your target how you really feel." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}tickle <word>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "baka":
                     embed.WithTitle($"Help: Baka | `{cmdPrefix}baka`");
                     embed.WithDescription($"{Context.User.Mention} Someone said something stupid? Show them how much of a baka they are with the baka command! An emotionally-accurate gif will be posted in chat." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}baka`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "nekoavatar":
                     embed.WithTitle($"Help: Neko Avatar | `{cmdPrefix}nekoavatar`");
                     embed.WithDescription($"{Context.User.Mention} Generates a Neko Avatar for you!" +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}nekoavatar`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "smug":
                     embed.WithTitle($"Help: Smug | `{cmdPrefix}smug`");
                     embed.WithDescription($"{Context.User.Mention} Posts a \"smug\" gif in chat." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}smug`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "waifu":
                     embed.WithTitle($"Help: Waifu! | `{cmdPrefix}waifu`");
                     embed.WithDescription($"{Context.User.Mention} Posts an image of a waifu in chat." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}waifu`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "wallpaper":
                     embed.WithTitle($"Help: Wallpaper! | `{cmdPrefix}wallpaper`");
                     embed.WithDescription($"{Context.User.Mention} An anime wallpaper will be posted in chat!" +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}wallpaper`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "timely":
                 case "t":
                     embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely`");
@@ -331,16 +294,14 @@ namespace Kaguya.Modules
                         "\nThese points are added to your Kaguya account. The timely command has a 14% chance of landing a critical hit, " +
                         "multiplying your reward by `3.50x`." +
                         $"\nSyntax: `{cmdPrefix}timely`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "weekly":
                     embed.WithTitle($"Help: Weekly Points | `{cmdPrefix}weekly`");
                     embed.WithDescription($"{Context.User.Mention} The weekly command allows any user to claim 5,000 points every week." +
                         "\nThese points are automatically added to your Kaguya account. The weekly command has an 8% chance to land a critical hit, multiplying " +
                         "your reward by `3.50x`." +
                         $"\nSyntax: `{cmdPrefix}weekly`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "clear":
                 case "purge":
                 case "c":
@@ -349,8 +310,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nDeletes a specified number of messages in a given channel. This number may not exceed `100`. Messages older than two weeks will need to be deleted manually." +
                         $"\nSyntax: `{cmdPrefix}clear <num>`, `{cmdPrefix}purge <num>`, {cmdPrefix}c <num>");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "kick":
                 case "k":
                     embed.WithTitle($"Help: Kicking Users | `{cmdPrefix}kick`, `{cmdPrefix}k`");
@@ -358,8 +318,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nKicks an individual member from the server." +
                         $"\nSyntax: `{cmdPrefix}kick @User#0000`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "mute":
                     embed.WithTitle($"Help: Muting Users | `{cmdPrefix}mute`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Mute Members, Manage Roles**" +
@@ -372,8 +331,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nSyntax `<Required parameter>, [Optional parameter]`: " +
                         $"\n`{cmdPrefix}mute [time {{<Num>s<Num>m<Num>h<Num>d}}] <list of users {{IDs, Username, or Mention}}>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "shadowban":
                     embed.WithTitle($"Help: Shadowbanning Users | `{cmdPrefix}shadowban`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
@@ -381,8 +339,7 @@ namespace Kaguya.Modules
                         $"\nShadowbans an individual member from the server, blocking all access to all channels. All permissions " +
                         $"for this user, in every channel, will be denied. Their roles will remain, however." +
                         $"\nSyntax: `{cmdPrefix}shadowban @User#0000`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "unshadowban":
                     embed.WithTitle($"Help: Un-Shadowbanning Users | `{cmdPrefix}unshadowban`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
@@ -390,8 +347,7 @@ namespace Kaguya.Modules
                         $"\nUn-Shadowbans an individual member from the server, reinstating all access to all channels. All permissions " +
                         $"for this user, in every channel, will be set to default (the user is neither allowed or denied any explicit permissions)." +
                         $"\nSyntax: `{cmdPrefix}unshadowban @User#0000`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "ban":
                 case "b":
                     embed.WithTitle($"Help: Banning Users | `{cmdPrefix}ban`, `{cmdPrefix}b`");
@@ -399,24 +355,21 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nBans an individual member from the server." +
                         $"\nSyntax: `{cmdPrefix}ban @User#0000`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "massban":
                     embed.WithTitle($"Help: Mass Banning of Users | `{cmdPrefix}massban`");
                     embed.WithDescription($"**{Context.User.Mention} Permissions Required: Administrator**" +
                         $"\n" +
                         $"\nTakes a list of mentioned users and permanently bans them simultaneously." +
                         $"\nSyntax: `{cmdPrefix}massban @mentioneduser#0001 @otheruser#0002 @smellysushi#2623 [...]`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "masskick":
                     embed.WithTitle($"Help: Mass Kicking of Users | `{cmdPrefix}masskick`");
                     embed.WithDescription($"**{Context.User.Mention} Permissions Required: Administrator**" +
                         $"\n" +
                         $"\nTakes a list of mentioned users and kicks them simultaneously." +
                         $"\nSyntax: `{cmdPrefix}masskick @bullyHunter#0001 @stinkysushi#0002 @smellysushi#2623 [...]`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "removeallroles":
                 case "rar":
                     embed.WithTitle($"Help: Removing All Roles | `{cmdPrefix}removeallroles`, `{cmdPrefix}rar`");
@@ -424,8 +377,7 @@ namespace Kaguya.Modules
                         "\n" +
                         "\nRemoves all roles from the specified user." +
                         $"\nSyntax: `{cmdPrefix}removeallroles @User#0000`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "deleterole":
                 case "dr":
                     embed.WithTitle($"Help: Deleting Roles | `{cmdPrefix}deleterole`, `{cmdPrefix}dr`");
@@ -434,16 +386,14 @@ namespace Kaguya.Modules
                         $"\nDeletes a role from the server (and in the process, removes said role from everyone who had it). " +
                         $"If multiple matches of the same role are found, the bot will delete all occurrences of said role." +
                         $"\nSyntax: `{cmdPrefix}deleterole <role name>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "osu":
                     embed.WithTitle($"Help: osu! | `{cmdPrefix}osu`");
                     embed.WithDescription($"{Context.User.Mention} Presents lots of statistics from the given osu! profile name. If your `{cmdPrefix}osuset` username " +
                         $"is set, you may use `{cmdPrefix}osu` by itself. Otherwise, you must specify a name afterward." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}osu`, `{cmdPrefix}osu <username>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "createteamrole":
                 case "ctr":
                     embed.WithTitle($"Help: Create Team Roles | `{cmdPrefix}createteamrole`, `{cmdPrefix}ctr`");
@@ -454,8 +404,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}createteamrole <role name> <mentioned users>`" +
                         $"\nExample: `{cmdPrefix}createteamrole \"Smelly Sushi\" @user1#0000 @smellyfish#2100 @smellysushilover#9999`.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "osutop":
                     embed.WithTitle($"Help: osu! Top | `{cmdPrefix}osutop`");
                     embed.WithDescription($"\n" +
@@ -463,8 +412,7 @@ namespace Kaguya.Modules
                         $"\nThe number of requested plays to display may not be more than 10." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 8 \"Smelly sushi\"`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "osutop -n":
                     embed.WithTitle($"Help: osu! Top Extension: -n | `{cmdPrefix}osutop -n`");
                     embed.WithDescription($"{Context.User.Mention} Displays the specified top play for a given player. If the player variable is left blank, " +
@@ -473,32 +421,28 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}osutop -n <num> [player]`" +
                         $"\nExamples: `{cmdPrefix}osutop -n 75`, `{cmdPrefix}osutop -n 90 nathan on osu`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "delteams":
                     embed.WithTitle($"Help: Deleting Teams | `{cmdPrefix}delteams`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: `Manage Roles`, `Administrator`, `Bot Owner`**" +
                         $"\n" +
                         $"\nDeletes all team roles. A team role is any role that has the word \"Team: \" inside of it (with the space)." +
                         $"\nThis command will delete ALL team roles upon execution, making this command dangerous and irreversable.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "recent":
                 case "r":
                     embed.WithTitle($"Help: osu! Recent | `{cmdPrefix}r` / `{cmdPrefix}recent`");
                     embed.WithDescription($"{Context.User.Mention} Displays the most recent osu! play for the given user. If there is no user specified," +
                         $" the bot will use the osu! username that was specified to the command executor's Kaguya account (through {cmdPrefix}osuset).\n" +
                         $"As of right now, no response will be given for an invalid username.\n");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "osuset":
                     string name = Context.User.Username;
                     embed.WithTitle($"Help: osuset | `{cmdPrefix}osuset`");
                     embed.WithDescription($"{Context.User.Mention} Adds an osu! username to your Kaguya account! Setting your osu! username allows you to use all osu! related commands without any additional " +
                         $"parameters. For example, instead of typing `{cmdPrefix}osutop {name}`, you can now just type `{cmdPrefix}osutop` to get your most recent osu! plays. Same thing for `{cmdPrefix}r` / `{cmdPrefix}recent`!");
                     embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "massblacklist":
                     embed.WithTitle($"Help: Mass Blacklist | `{cmdPrefix}massblacklist`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner, Administrator**" +
@@ -507,16 +451,15 @@ namespace Kaguya.Modules
                         $"These users will have all of their EXP and Points reset to zero, and will be permanently filtered from receiving EXP and executing Kaguya commands." +
                         $"\nSyntax: `{cmdPrefix}massblacklist @username#123` | `{cmdPrefix}massblacklist @username#123 @ToxicPlayer123#7777 @SuckySmellySushi#1234`");
                     embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "unblacklist":
                     embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}unblacklist <UserID>`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
                         $"\nUnblacklists the specified userID." +
                         $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+
+                    await BE(); break;
                 case "roll":
                 case "gr":
                     embed.WithTitle($"Help: Betting | `{cmdPrefix}roll` / `{cmdPrefix}gr`");
@@ -530,15 +473,13 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nIn addition, all rolls have an `8%` chance of landing a critical hit, multiplying the `multiplier` of the roll by `2.50x` (except for a 100 roll). " +
                         $"The best possible roll is a `critical 100`, multiplying your bet by `30x` (The odds of this are `1 / 1,250` or `0.08%`.)");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "kaguyaexit":
                     embed.WithTitle($"Help: Kaguya Exit! | `{cmdPrefix}kaguyaexit`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
                         $"\nAdministrator only command that forces Kaguya to leave the current server.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "prefix":
                     embed.WithTitle($"Help: Prefix Alteration | `{cmdPrefix}prefix`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -546,22 +487,19 @@ namespace Kaguya.Modules
                         $"\nAllows a server administrator to change the bot's command prefix. Typically, this is one or two symbols `(!, $, %, >, etc.)`." +
                         $"\nTo reset the command prefix, type {cmdPrefix}prefix, or tag me and type `prefix`! The bot will always display the last known command prefix " +
                         $"and the new prefix when using this command.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "serverexplb":
                 case "explb":
                     embed.WithTitle($"Help: Server EXP Leaderboard | `{cmdPrefix}serverexplb` / `{cmdPrefix}explb`");
                     embed.WithDescription($"{Context.User.Mention} Displays the 10 top EXP holders in the server. This command " +
                         $"also displays their level.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "globalexplb":
                 case "gexplb":
                     embed.WithTitle($"Help: Global EXP Leaderboard | `{cmdPrefix}globalexplb` / `{cmdPrefix}gexplb`");
                     embed.WithDescription($"{Context.User.Mention} Displays the 10 top EXP holders in the entire Kaguya database! This command " +
                         $"also displays their level.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "scrapeserver":
                     embed.WithTitle($"Help: Server Scraping | `{cmdPrefix}scrapeserver`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
@@ -570,8 +508,7 @@ namespace Kaguya.Modules
                         $"in chat. This function is automatically called when using `{cmdPrefix}massblacklist` to ensure that " +
                         $"there is no question on whether they will be able to be banned/unbanned. Creating a user account allows for name " +
                         $"and ID logging, the latter is necessary if a bot owner wishes to unblacklist a user.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "scrapedatabase":
                     embed.WithTitle($"Help: Database Scraping | `{cmdPrefix}scrapedatabase`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
@@ -579,40 +516,34 @@ namespace Kaguya.Modules
                         $"\nCreates an account for every user in every server that Kaguya is connected to. This command will not create accounts " +
                         $"for other bots or users in servers with over `3,500` members. This command primarily exists for stability reasons (occasionally, if a " +
                         $"user doesn't have an account, a bot function may not work for said user [such as with `$ctr`]).");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "bugaward":
                     embed.WithTitle($"Help: Bug Rewards | `{cmdPrefix}bugaward`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
                         $"\nDMs the target and adds 2,000 Kaguya Points to their account. This is the reward for a `$bug` report that directly led to a patch/fix.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "rep":
                     embed.WithTitle($"Help: Rep | `{cmdPrefix}rep`");
                     embed.WithDescription($"{Context.User.Mention} Allows any user in the server to add one reputation point to another member." +
                         $"\nThis can be done once every 24 hours, and can not be used on yourself. This rep will show on your Kaguya profile!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "rep author":
                 case "repauthor":
                     embed.WithTitle($"Help: +Rep Author | `{cmdPrefix}repauthor` / `{cmdPrefix}rep author`");
                     embed.WithDescription($"{Context.User.Mention} Gives my creator your daily +rep point!");
                     embed.WithFooter($"We appreciate your generosity uwu | To give rep to another user, use $rep!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "author":
                     embed.WithTitle($"Help: Author | `{cmdPrefix}author`");
                     embed.WithDescription($"{Context.User.Mention} Displays information about my creator!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "timelyreset":
                     embed.WithTitle($"Help: Timely Reset | `{cmdPrefix}timelyreset`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
                         $"\nAllows a bot owner to reset the {cmdPrefix}timely cooldown for every user in the Kaguya database.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "filteradd":
                 case "fa":
                     embed.WithTitle($"Help: Filter Adding | `{cmdPrefix}filteradd` / `{cmdPrefix}fa`");
@@ -624,8 +555,7 @@ namespace Kaguya.Modules
                         $"\nNote: **Kaguya's filter is also a wildcard filter, which means any message that contains what's filtered will be deleted. " +
                         $"Example: if you filter \"`https://www.twitch.tv/\", this will delete all twitch links.**" +
                         $"\nExamples: `{cmdPrefix}fa Smelly Sushi`, `{cmdPrefix}fa frogs`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "filterremove":
                 case "fr":
                     embed.WithTitle($"Help: Filter Removing | `{cmdPrefix}filterremove` / `{cmdPrefix}fr`");
@@ -634,16 +564,14 @@ namespace Kaguya.Modules
                         $"\nAllows a server administrator to remove a word or phrase from the list of filtered words for the server." +
                         $"\nSpaces may be used when removing a phrase from the filter. The filter is not case sensitive." +
                         $"\nExamples: `{cmdPrefix}fr Smelly Sashimi`, `{cmdPrefix}fr caterpillars`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "filterview":
                 case "fv":
                     embed.WithTitle($"Help: Viewing Filtered Words | `{cmdPrefix}filterview` / `{cmdPrefix}fv`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Messages**" +
                         $"\n" +
                         $"\nAllows viewing of all filtered words and phrases in the server. Ideally this would be used in a private \"Moderator\" channel.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "filterclear":
                 case "clearfilter":
                     embed.WithTitle($"Help: Filter Clearing | `{cmdPrefix}filterclear` / `{cmdPrefix}clearfilter`");
@@ -653,8 +581,7 @@ namespace Kaguya.Modules
                         $"\nThis command does not take any parameters." +
                         $"\nExamples: `{cmdPrefix}filterclear`, `{cmdPrefix}clearfilter`");
                     embed.WithFooter("This action is dangerous and irreversible!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "setlogchannel":
                 case "log":
                     embed.WithTitle($"Help: Set Logging Channel | `{cmdPrefix}setlogchannel` / `{cmdPrefix}log`");
@@ -667,8 +594,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}setlogchannel <logtype> <#logging-channel>`");
                     embed.WithFooter("To see all available log types, and to see what channel the log types are being sent to, use $logtypes");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "resetlogchannel":
                 case "rlog":
                     embed.WithTitle($"Help: Resetting Logging Channels | `{cmdPrefix}resetlogchannel`");
@@ -679,8 +605,7 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}resetlogchannel <logtype>`" +
                         $"\nExample: `{cmdPrefix}resetlogchannel all` would disable all logging in the server.");
                     embed.WithFooter("To see all available log types, and to see what channel the log types are being sent to, use $logtypes");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "logtypes":
                 case "loglist":
                     embed.WithTitle($"Help: Log Types | `{cmdPrefix}logtypes`");
@@ -690,8 +615,7 @@ namespace Kaguya.Modules
                         $"currently occupied by the specified logtype will be displayed. If the log type is not logging at all, it will not " +
                         $"show any channels after it.");
                     embed.WithFooter("Note to Server Admins: This command will put out the log list in the chat channel you call this command from.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "awardeveryone":
                 case "awardall":
                     embed.WithTitle($"Help: Awarding Points | `{cmdPrefix}awardeveryone` / `{cmdPrefix}awardall`");
@@ -699,23 +623,20 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nAllows a bot owner to award a specified number of points to **all** users in their Kaguya database." +
                         $"\nThis can be a negative number, however it can not send a user's points below zero.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "masspointsdistribute":
                     embed.WithTitle($"Help: Mass Distributing Points | `{cmdPrefix}masspointsdistribute`");
                     embed.WithDescription($"{Context.User.Mention} Allows any user to mass redistribute all of their Kaguya Points evenly to the rest of the server. " +
                         $"Upon using this command, your points will be set to zero and they will have been evenly divided amongst everyone in the server. If you do not " +
                         $"have at least one point for every member in the server, the command will not be executed.");
                     embed.WithFooter("What a generous act!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "n":
                     embed.WithTitle($"Help: NSFW | `{cmdPrefix}n`");
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}n` command will post a 2D image (no real people) in an NSFW channel with the specified tag." +
                         $"\nWhen using the `{cmdPrefix}n` command, append a tag to the end like so: `{cmdPrefix}n <tag>`." +
                         $"\nNSFW Command List: `$n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif, bomb>` (Select one).");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "m":
                     embed.WithTitle($"Help: Music Commands | `{cmdPrefix}m <modifier>`");
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}m`command group is for all Kaguya Music commands. They are described in detail below:" +
@@ -728,30 +649,25 @@ namespace Kaguya.Modules
                         $"\n**Skip:** Skips the current song. `{cmdPrefix}m skip`" +
                         $"\n**Volume:** Sets the volume to a value between 0-150. `{cmdPrefix}m volume <0-200>`" +
                         $"\n**Jump:** Jump to a specific position in the queue, skipping all songs before it in one go.`{cmdPrefix}m jump <jumpNum>`");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "supporter":
                     embed.WithTitle($"Help: Kaguya Supporter Tags | `{cmdPrefix}supporter`");
                     embed.WithDescription($"{Context.User.Mention} Displays information on Kaguya's Supporter Tag feature.");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "redeem":
                     embed.WithTitle($"Help: Supporter Key Redemption | `{cmdPrefix}redeem`");
                     embed.WithDescription($"{Context.User.Mention} Allows a user to redeem a Kaguya Supporter Key. Keys are one time use and are purchased " +
                         $"through the **[Kaguya Supporter Store](https://stageosu.selly.store/)**. Keys are safe to redeem in public Discord channels." +
                         $"\n" +
                         $"\nAfter purchasing a supporter key, check your E-Mail because that's where your key will be!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 case "diamonds":
                     embed.WithTitle($"Help: Kaguya Diamonds | `{cmdPrefix}diamonds`");
                     embed.WithDescription($"{Context.User.Mention} Displays how many `Kaguya Diamonds` you have. Diamonds are able to be earned through being a supporter. " +
                         $"For more information, check out `{cmdPrefix}supporter`!");
-                    embed.SetColor(EmbedType.PINK);
-                    await BE();  break;
+                    await BE(); break;
                 default:
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
-                    embed.SetColor(EmbedType.PINK);
                     await BE(); // stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User requested a help command for a command that doesn't exist."); ERROR HANDLER NEEDED
                     break;
             }
@@ -761,7 +677,7 @@ namespace Kaguya.Modules
         [Alias("h")]
         public async Task HelpCommand()
         {
-            
+
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
             PaginatedMessage message = new PaginatedMessage();
@@ -1023,7 +939,7 @@ namespace Kaguya.Modules
 
             embed.WithTitle("Help");
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
-            embed.SetColor(EmbedType.PINK);
+
             await BE();
             await Context.User.SendMessageAsync($"Need the commands list? Type `{cmdPrefix}h` to see a scrollable list of categories with all of their commands." +
                 $"\nType `{cmdPrefix}h <command name>` for more information on how to use the command and a detailed description of what it does." +
@@ -1036,7 +952,7 @@ namespace Kaguya.Modules
         [Alias("p")]
         public async Task Profile()
         {
-            
+
             var user = Context.User;
             UserAccount account = UserAccounts.GetAccount(user);
 
@@ -1058,14 +974,14 @@ namespace Kaguya.Modules
                 $"\nAverage Gamble Win %: `{(account.LifetimeGambleWins / account.LifetimeGambles * 100).ToString("N2")}%`" +
                 $"\nAverage Elite+ Roll %: `{(account.LifetimeEliteRolls / account.LifetimeGambles * 100).ToString("N2")}%`", true);
             embed.WithThumbnailUrl(user.GetAvatarUrl());
-            embed.SetColor(EmbedType.PINK);
+
             await BE();
         }
 
         [Command("bug")]
         public async Task BugReport([Remainder]string report)
         {
-            
+
 
             var bugChannel = Global.Client.GetChannel(547448889620299826); //Kaguya support server #bugs channel.
 
@@ -1086,13 +1002,13 @@ namespace Kaguya.Modules
         [Command("vote")]
         public async Task Vote()
         {
-            
+
             embed.WithTitle("Discord Bot List Voting");
             embed.WithDescription($"Show Kaguya some love and give her an upvote! https://discordbots.org/bot/538910393918160916/vote" +
                 $"\nUsers that upvote receive a `2x` critical hit percentage for the next `12 hours` and `500` Kaguya points! Users may vote every 12 hours!");
             embed.WithFooter($"Thanks for showing your support! Use {Servers.GetServer(Context.Guild).commandPrefix}voteclaim to claim your reward!");
-            embed.SetColor(EmbedType.PINK);
-            await BE(); 
+
+            await BE();
         }
 
         [Command("voteclaim")]
@@ -1121,11 +1037,11 @@ namespace Kaguya.Modules
 
                     embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points` and `2x critical hit rate` have been applied.");
                     embed.WithFooter("Thanks so much for your support!!");
-                    embed.SetColor(EmbedType.PINK);
+
                     await BE();
                 }
             }
-            else if(dblResponse.Contains("{\"voted\":0}"))
+            else if (dblResponse.Contains("{\"voted\":0}"))
             {
                 embed.WithDescription($"**{Context.User.Mention} you have not upvoted me! Please do so with the vote command!**");
                 await BE();
@@ -1136,7 +1052,7 @@ namespace Kaguya.Modules
         public async Task SupporterInfo()
         {
             Stopwatch stopWatch = new Stopwatch();
-            
+
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
             await GlobalCommandResponses.CreateCommandResponse(Context, stopWatch.ElapsedMilliseconds,

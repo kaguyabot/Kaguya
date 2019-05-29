@@ -35,7 +35,6 @@ namespace Kaguya.Modules
             }
 
             embed.WithDescription(message);
-            embed.SetColor(EmbedType.PINK);
 
             await BE();
         }
@@ -58,7 +57,6 @@ namespace Kaguya.Modules
 
             embed.WithTitle("Choice for " + Context.User.Username);
             embed.WithDescription(selection);
-            embed.SetColor(EmbedType.PINK);
 
             await BE();
         }
@@ -74,7 +72,6 @@ namespace Kaguya.Modules
 
             embed.WithTitle("Magic 8Ball");
             embed.WithDescription($"**{Context.User.Mention} {responses[num]}**");
-            embed.SetColor(EmbedType.PINK);
             await BE();
             
         }
