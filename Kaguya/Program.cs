@@ -77,10 +77,6 @@ namespace Kaguya
                     _client.ShardReady += timers.ResourcesBackup;
                     _client.ShardReady += timers.LogFileTimer;
 
-                    //_lavaShardClient.Log += musicLogger.MusicLogger;
-                    //_lavaShardClient.OnTrackFinished += musicLogger.OnTrackFinished;
-                    //_lavaShardClient.OnTrackException += musicLogger.OnTrackException;
-
                     _client.MessageReceived += logger.osuLinkParser;
                     _client.JoinedGuild += logger.JoinedNewGuild;
                     _client.LeftGuild += logger.LeftGuild;
