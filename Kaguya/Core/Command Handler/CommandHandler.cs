@@ -201,6 +201,16 @@ namespace Kaguya
                         consoleLogger.ConsoleCommandLog(context, CommandError.Unsuccessful, $"{result.ErrorReason}");
                         break;
                 }
+
+                string filePath = $"{Directory.GetCurrentDirectory()}/Logs/FailedCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
+                File.AppendAllText(filePath, $"{s.Content} - User: {s.Author} - Time: {DateTime.Now.ToLongTimeString()}\n");
+            }
+
+
+            if(result.IsSuccess)
+            {
+                string filePath = $"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
+                File.AppendAllText(filePath, $"{s.Content} - User: {s.Author} - Time: {DateTime.Now.ToLongTimeString()}\n");
             }
         }
 

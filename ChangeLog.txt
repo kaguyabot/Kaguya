@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.18
+
+- Successful and failed commands are now logged in a file (stored locally).
+
 Version 1.17.1
 
 - Forgot to add $m jump to the help command ^_^'
