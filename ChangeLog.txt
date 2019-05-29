@@ -8,6 +8,8 @@ Version 1.18
 - Successful and failed commands are now logged in a file (stored locally).
 - Kaguya is now sharded. This means she can support tens of thousands of servers!
 - Cleaned up a ton of code in Program.cs and CommandHandler.cs (two most important files in the whole system.)
+- Updated 10+ Discord related packages for Kaguya.
+- Logging cmds moved from Administration.cs to LoggingCommands.cs in the Administration folder.
 
 Version 1.17.1
 
