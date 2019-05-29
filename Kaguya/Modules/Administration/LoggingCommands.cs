@@ -1,36 +1,19 @@
 ﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
-using Discord.WebSocket;
-using Kaguya.Core;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
-using Kaguya.Core.CommandHandler;
-using Kaguya.Core.Commands;
 using Kaguya.Core.Server_Files;
-using Kaguya.Core.UserAccounts;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Timers;
+using Kaguya.Core.Embed;
+using EmbedType = Kaguya.Core.Embed.EmbedType;
 
 namespace Kaguya.Modules.Administration
 {
     public class LoggingCommands : InteractiveBase<SocketCommandContext>
     {
-        public EmbedBuilder embed = new EmbedBuilder();
-        public Color Pink = new Color(252, 132, 255);
-        public Color Red = new Color(255, 0, 0);
-        public Color Gold = new Color(255, 223, 0);
-        public Color Violet = new Color(127, 0, 255);
-        public BotConfig bot = new BotConfig();
-        public string version = Utilities.GetAlert("VERSION");
-        public string botToken = Config.bot.Token;
-        readonly Logger logger = new Logger();
+        public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
         readonly Stopwatch stopWatch = new Stopwatch();
-        readonly DiscordShardedClient _client = Global.Client;
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -54,81 +37,81 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Deleted Messages` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "updatedmessages":
                     server.LogUpdatedMessages = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Edited Messages` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "userjoins":
                     server.LogWhenUserJoins = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `User Joins` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "userleaves":
                     server.LogWhenUserLeaves = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `User Leaves` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "bans":
                     server.LogBans = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Bans` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "unbans":
                     server.LogUnbans = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Unbans` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "changestologsettings":
                     server.LogChangesToLogSettings = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `changes to log settings` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "filteredphrases":
                     server.LogWhenUserSaysFilteredPhrase = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Filtered Phrases` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "userconnectstovoice":
                     server.LogWhenUserConnectsToVoiceChannel = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `user connected to voice` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "userdisconnectsfromvoice":
                     server.LogWhenUserDisconnectsFromVoiceChannel = logChannelID;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `user disconnected from voice` will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "levelannouncements":
                     server.LogLevelUpAnnouncements = logChannelID;
                     Servers.SaveServers();
@@ -170,15 +153,14 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages will be sent in channel {channel.Name}");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 default:
                     embed.WithTitle("Invalid Log Specification");
                     embed.WithDescription($"{Context.User.Mention} Invalid logging type!");
-                    embed.WithColor(Red);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE();
+                     break;
             }
         }
 
@@ -198,81 +180,81 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Deleted Messages` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "updatedmessages":
                     server.LogUpdatedMessages = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Updated Messages` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "userjoins":
                     server.LogWhenUserJoins = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `User Joins` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "userleaves":
                     server.LogWhenUserLeaves = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `User Leaves` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "bans":
                     server.LogBans = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Bans` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "unbans":
                     server.LogUnbans = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Unbans` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "changestologsettings":
                     server.LogChangesToLogSettings = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `changes to log settings` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "filteredphrases":
                     server.LogWhenUserSaysFilteredPhrase = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Filtered Phrases` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "userconnectstovoice":
                     server.LogWhenUserConnectsToVoiceChannel = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `user connects to voice` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "userdisconnectsfromvoice":
                     server.LogWhenUserDisconnectsFromVoiceChannel = 0;
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `user disconnects from voice` have been disabled");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 case "levelannouncements":
                     server.LogLevelUpAnnouncements = 0;
                     Servers.SaveServers();
@@ -314,15 +296,14 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Reset");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `everything` have been disabled.");
-                    embed.WithColor(Pink);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    embed.EmbedType = EmbedType.PINK;
+                    await BE();
+                     break;
                 default:
                     embed.WithTitle("Invalid Log Specification");
                     embed.WithDescription($"{Context.User.Mention} Please specify a valid logging type!");
-                    embed.WithColor(Red);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); break;
+                    await BE();
+                    break;
             }
         }
 
@@ -356,9 +337,8 @@ namespace Kaguya.Modules.Administration
                 $"\n**Shadowbans** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[11])}`**" +
                 $"\n**Unshadowbans** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[12])}`**" +
                 "\n**All**");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.PINK;
+            await BE();
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using Discord;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Victoria.Entities;
 
 namespace Kaguya.Modules.Music
 {

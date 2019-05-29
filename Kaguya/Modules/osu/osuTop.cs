@@ -1,37 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using Kaguya.Core.UserAccounts;
 using System.Net;
 using Kaguya.Core.Server_Files;
-using Kaguya.Core.Commands;
 using OppaiSharp;
-using Kaguya.Core;
 using System.Diagnostics;
 using static Kaguya.Modules.osuStandard;
 using Discord.Addons.Interactive;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
+using Kaguya.Core.Embed;
+using EmbedType = Kaguya.Core.Embed.EmbedType;
 
 namespace Kaguya.Modules.osu
 {
     [Group("osutop")]
     public class osuTop : InteractiveBase<ShardedCommandContext>
     {
-        public EmbedBuilder embed = new EmbedBuilder();
-        readonly Color Pink = new Color(252, 132, 255);
-        readonly Color Red = new Color(255, 0, 0);
-        readonly Color Gold = new Color(255, 223, 0);
-        readonly string version = Utilities.GetAlert("VERSION");
-        readonly string botToken = Config.bot.Token;
-        readonly string osuapikey = Config.bot.OsuApiKey;
-        readonly Logger logger = new Logger();
-        readonly Stopwatch stopWatch = new Stopwatch();
+        public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -41,20 +30,20 @@ namespace Kaguya.Modules.osu
         [Command()]
         public async Task TopOsuPlays(int num = 5, [Remainder]string player = null)
         {
+            var stopWatch = new Stopwatch();
             stopWatch.Start();
+
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
             if (num.ToString().Count() > 2)
             {
                 embed.WithDescription($"{Context.User.Mention} **ERROR: Failed to parse number! Numbers must be between 1 and 10!** ");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to parse Int32");
+                await BE();
+                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to parse Int32"); ERROR HANDLER HERE
             }
             if (num < 1 || num > 10)
             {
                 embed.WithDescription($"{Context.User.Mention} **ERROR: Number for top plays must be between 1 and 10!** ");
-                embed.WithColor(Red);
                 await BE(); return;
             }
 
@@ -65,9 +54,9 @@ namespace Kaguya.Modules.osu
                 {
                     embed.WithTitle($"osu! Top {num}");
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
-                    embed.WithColor(Red);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to acquire username."); return;
+                    await BE();
+                    // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Failed to acquire username."); ERROR HANDLER HERE
+                    return;
                 }
             }
 
@@ -78,9 +67,7 @@ namespace Kaguya.Modules.osu
             if (num > 10)
             {
                 embed.WithDescription($"{Context.User.Mention} You may not request more than 10 top plays.");
-                embed.WithColor(Red);
-                stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to request more than 10 top plays.");
+                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to request more than 10 top plays."); ERROR HANDLER HERE
                 return;
             }
             string jsonTop = "";
@@ -196,9 +183,9 @@ namespace Kaguya.Modules.osu
             if (jsonPlayer == "[]")
             {
                 embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); return;
+                await BE();
+                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
+                return;
             }
 
             var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonPlayer)[0];
@@ -227,7 +214,6 @@ namespace Kaguya.Modules.osu
                 author.IconUrl = $"https://osu.ppy.sh/images/flags/{playerCountry}.png";
             });
 
-            stopWatch.Stop();
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 stopWatch.ElapsedMilliseconds,
                 $"**Top {num} osu! standard plays for {username}:**",
@@ -239,6 +225,7 @@ namespace Kaguya.Modules.osu
         [Command("-n")] //osutop extension for a specific top play. Almost the exact same thing as osutop.
         public async Task SpecificOsuTopPlay(int num, [Remainder]string player = null)
         {
+            var stopWatch = new Stopwatch();
             stopWatch.Start();
 
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
@@ -394,9 +381,9 @@ namespace Kaguya.Modules.osu
                 if (jsonPlayer == "[]")
                 {
                     embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
-                    embed.WithColor(Red);
-                    await BE(); stopWatch.Stop();
-                    logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); return;
+                    await BE();
+                    // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
+                    return;
                 }
 
                 var playerObject = JsonConvert.DeserializeObject<dynamic>(jsonPlayer)[0];
@@ -428,9 +415,8 @@ namespace Kaguya.Modules.osu
                 embed.WithTitle($"**Top #{num} play for {username}:**");
                 embed.WithUrl($"https://osu.ppy.sh/u/{playerID}");
                 embed.WithDescription($"{TopPlayString}");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                embed.EmbedType = EmbedType.PINK;
+                await BE();
             }
         }
     }

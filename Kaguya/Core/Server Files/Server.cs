@@ -1,11 +1,4 @@
-﻿using Discord;
-using Discord.WebSocket;
-using Kaguya.Modules.Administration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Kaguya.Core.Server_Files
 {

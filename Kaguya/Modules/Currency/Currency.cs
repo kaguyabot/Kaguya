@@ -1,35 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core.UserAccounts;
-using System.Net;
-using System.Timers;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
-using Kaguya.Core;
 using System.Diagnostics;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
+using Kaguya.Core.Embed;
+using EmbedType = Kaguya.Core.Embed.EmbedType;
 
 namespace Kaguya.Modules
 {
     public class Currency : ModuleBase<ShardedCommandContext>
     {
-        public EmbedBuilder embed = new EmbedBuilder();
-        public Color Pink = new Color(252, 132, 255);
-        public Color Red = new Color(255, 0, 0);
-        public Color Gold = new Color(255, 223, 0);
-        public BotConfig bot = new BotConfig();
-        public string version = Utilities.GetAlert("VERSION");
-        public string botToken = Config.bot.Token;
-        readonly Logger logger = new Logger();
-        readonly Stopwatch stopWatch = new Stopwatch();
+        public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -39,15 +25,13 @@ namespace Kaguya.Modules
         [Command("points")] //currency
         public async Task Points(IGuildUser user = null)
         {
-            stopWatch.Start();
             if (user == null)
                 user = Context.User as IGuildUser;
             var account = UserAccounts.GetAccount(user as SocketUser);
             embed.WithTitle("Points");
             embed.WithDescription($"{user.Mention} has {account.Points} points.");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.PINK;
+            await BE();
         }
 
         [Command("pointsadd")] //currency
@@ -55,7 +39,6 @@ namespace Kaguya.Modules
         [RequireOwner]
         public async Task PointsAdd(uint points, IGuildUser user = null)
         {
-            stopWatch.Start();
             if (user == null)
             {
                 var userAccount = UserAccounts.GetAccount(Context.User);
@@ -63,9 +46,8 @@ namespace Kaguya.Modules
                 UserAccounts.SaveAccounts();
                 embed.WithTitle("Adding Points");
                 embed.WithDescription($"{user.Mention} has been awarded {points} points.");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                embed.EmbedType = EmbedType.PINK;
+                await BE();
             }
             else if (user is IGuildUser)
             {
@@ -74,17 +56,15 @@ namespace Kaguya.Modules
                 UserAccounts.SaveAccounts();
                 embed.WithTitle("Adding Points");
                 embed.WithDescription($"{user.Mention} has been awarded {points} points.");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                embed.EmbedType = EmbedType.PINK;
+                await BE();
             }
             else
             {
                 embed.WithTitle("Adding Points");
                 embed.WithDescription($"{Context.User.Mention} Unable to add points to {user}! Make sure they exist and try again!");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User does not exist!");
+                embed.EmbedType = EmbedType.PINK;
+                await BE();
             }
         }
 
@@ -92,7 +72,6 @@ namespace Kaguya.Modules
         [RequireOwner]
         public async Task BugAward(IUser user)
         {
-            stopWatch.Start();
             var userAccount = UserAccounts.GetAccount(user as SocketUser);
             userAccount.Points += 2000;
             UserAccounts.SaveAccounts();
@@ -105,7 +84,6 @@ namespace Kaguya.Modules
 
             embed.WithDescription($"{Context.User.Mention} The user has been rewarded and was sent a DM.");
             await BE();
-            stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
         [Command("awardeveryone")] //currency
@@ -113,7 +91,6 @@ namespace Kaguya.Modules
         [RequireOwner]
         public async Task AwardEveryone(int bonus)
         {
-            stopWatch.Start();
             var userAccounts = UserAccounts.GetAllAccounts();
             int i = 0;
             foreach (UserAccount account in userAccounts)
@@ -124,16 +101,14 @@ namespace Kaguya.Modules
             UserAccounts.SaveAccounts();
             embed.WithTitle("Points Awarded");
             embed.WithDescription($"{Context.User.Mention} has awarded `{bonus.ToString("N0")}` points to `{i.ToString("N0")}` users!");
-            embed.WithColor(Gold);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.GOLD;
+            await BE();
         }
 
         [Command("timelyreset")] //currency
         [RequireOwner]
         public async Task TimelyReset()
         {
-            stopWatch.Start();
             var accounts = UserAccounts.GetAllAccounts();
             foreach (var account in accounts)
             {
@@ -142,16 +117,14 @@ namespace Kaguya.Modules
             }
             embed.WithTitle("Timely Reset");
             embed.WithDescription($"**{Context.User.Mention} Timely points for `{accounts.Count}` users have been reset!**");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.PINK;
+            await BE();
         }
 
         [Command("timely")] //currency
         [Alias("t")]
         public async Task DailyPoints(uint timeout = 24, double bonus = 500)
         {
-            stopWatch.Start();
             Command command = Commands.GetCommand();
             var userAccount = UserAccounts.GetAccount(Context.User);
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
@@ -169,9 +142,8 @@ namespace Kaguya.Modules
                 embed.WithTitle("Timely Points");
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
                     $" Please wait until `{timeout} hours` have passed to receive more timely points.");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User needs to wait before receiving more timely points.");
+                embed.EmbedType = EmbedType.PINK;
+                await BE();
                 return;
             }
             if (difference.TotalHours < 12) //Difference of now compared to when user last upvoted Kaguya on DBL.
@@ -189,18 +161,19 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{Context.User.Mention} it's a critical hit! {Context.User.Username} has received `{bonus}` points! Claim again in {timeout}h.");
             else
                 embed.WithDescription($"{Context.User.Mention} has received `{bonus.ToString("N0")}` points! Claim again in {timeout}h.");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.PINK;
+            await BE();
         }
 
         [Command("diamonds")]
         public async Task Diamonds()
         {
+            var stopWatch = new Stopwatch();
             stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             var userAccount = UserAccounts.GetAccount(Context.User);
             var diamonds = userAccount.KaguyaDiamonds;
+            stopWatch.Stop();
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 stopWatch.ElapsedMilliseconds,
@@ -211,7 +184,6 @@ namespace Kaguya.Modules
         [Command("masspointsdistribute")] //currency
         public async Task MassPointsDistribute()
         {
-            stopWatch.Start();
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
             uint userPoints = userAccount.Points;
             SocketGuild guild = Context.Guild;
@@ -222,17 +194,13 @@ namespace Kaguya.Modules
             {
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **You do not have enough points! You need at least `{memberCount - userPoints}` more points to execute this command!**");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User does not have enough points to execute this command."); return;
+                await BE();
             }
             if (memberCount < 25)
             {
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **You do not have enough members in this server! 25 non-bot members must be present in the server for this command to work.**");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Guild does not have at least 25 non-bot members."); return;
+                await BE();
             }
             else
             {
@@ -245,9 +213,8 @@ namespace Kaguya.Modules
                 embed.WithTitle("Mass Points Distribute");
                 embed.WithDescription($"{Context.User.Mention} **Has decided to redistribute their points balance to everyone in the server!**");
                 embed.WithFooter($"{memberCount} members have been awarded {distributedPoints} points thanks to {Context.User.Username}. How generous!");
-                embed.WithColor(Gold);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
+                embed.EmbedType = EmbedType.GOLD;
+                await BE();
             }
         }
 
@@ -255,7 +222,6 @@ namespace Kaguya.Modules
         [Alias("gr")]
         public async Task GamblePoints(int points)
         {
-            stopWatch.Start();
             var user = Context.User;
             var userAccount = UserAccounts.GetAccount(Context.User);
             if (points > userAccount.Points)
@@ -263,18 +229,14 @@ namespace Kaguya.Modules
                 embed.WithTitle("Gambling: Insufficient Points!");
                 embed.WithDescription($"{user.Mention} you have an insufficient amount of points!" +
                     $"\nThe maximum amount you may gamble is {userAccount.Points}.");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User has insufficient points balance.");
+                await BE();
                 return;
             }
             if (points < 1)
             {
                 embed.WithTitle("Gambling: Too Few Points!");
                 embed.WithDescription($"{user.Mention} You may not gamble less than one point!");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to gamble less than one point.");
+                await BE();
                 return;
             }
             if (points > 25000 && !((userAccount.KaguyaSupporterExpiration - DateTime.Now).TotalSeconds > 0))
@@ -282,9 +244,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Gambling: Too Many Points!");
                 embed.WithDescription($"**{user.Mention} you are attempting to gamble too many points!" +
                     $"\nThe maximum amount you may gamble is `25,000` points.**");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to gamble more than 25,000 points.");
+                await BE();
                 return;
             }
 
@@ -319,12 +279,8 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and lost their bet of `{points.ToString("N0")}`! Better luck next time!** <:SagiriBlush:498009810692734977>");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
-                embed.WithColor(Pink);
+                embed.EmbedType = EmbedType.PINK;
                 await BE();
-
-                UserAccounts.SaveAccounts(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-                return;
             }
             else if (67 <= roll && roll <= 78)
             {
@@ -346,12 +302,8 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
-                embed.WithColor(Pink);
+                embed.EmbedType = EmbedType.PINK;
                 await BE();
-
-                UserAccounts.SaveAccounts(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-                return;
             }
             else if (79 <= roll && roll <= 89)
             {
@@ -373,12 +325,8 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
-                embed.WithColor(Pink);
+                embed.EmbedType = EmbedType.PINK;
                 await BE();
-
-                UserAccounts.SaveAccounts(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-                return;
             }
             else if (90 <= roll && roll <= 95)
             {
@@ -402,12 +350,8 @@ namespace Kaguya.Modules
                     $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
-                embed.WithColor(Pink);
+                embed.EmbedType = EmbedType.PINK;
                 await BE();
-
-                UserAccounts.SaveAccounts(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-                return;
             }
             else if (96 <= roll && roll <= 99)
             {
@@ -431,12 +375,10 @@ namespace Kaguya.Modules
                     $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
-                embed.WithColor(Pink);
+                embed.EmbedType = EmbedType.PINK;
                 await BE();
 
-                UserAccounts.SaveAccounts(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-                return;
+                UserAccounts.SaveAccounts();
             }
             else if (roll == 100)
             {
@@ -460,19 +402,14 @@ namespace Kaguya.Modules
                     $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");
                 embed.WithFooter($"New Points Balance: {userAccount.Points.ToString("N0")} | Lifetime Gambles: {userAccount.LifetimeGambles} | " +
                     $"Average Lifetime Win Percent: {(userAccount.LifetimeGambleWins / userAccount.LifetimeGambles).ToString("P")}");
-                embed.WithColor(Gold); 
+                embed.EmbedType = EmbedType.GOLD;
                 await BE();
-
-                UserAccounts.SaveAccounts(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
-                return;
             }
         }
 
         [Command("weekly")]
         public async Task WeeklyPoints(int timeout = 168, uint bonus = 5000)
         {
-            stopWatch.Start();
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
             var supporterTime = userAccount.KaguyaSupporterExpiration - DateTime.Now;
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
@@ -497,9 +434,9 @@ namespace Kaguya.Modules
                 embed.WithTitle("Weekly Points");
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}weekly`!" +
                     $" Please wait until `7 days` have passed to receive your weekly bonus.");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User has not waited for the weekly bonus timer to reset.");
+                embed.EmbedType = EmbedType.PINK;
+                await BE();
+                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User has not waited for the weekly bonus timer to reset."); CREATE ERROR HANDLER
                 return;
             }
 
@@ -514,13 +451,11 @@ namespace Kaguya.Modules
             {
                 embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points!**");
             }
-            embed.WithColor(Pink);
+            embed.EmbedType = EmbedType.PINK;
             await BE();
 
             userAccount.Points += bonus;
             UserAccounts.SaveAccounts();
-            stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
         internal static bool CanReceiveTimelyPoints(UserAccount user, int timeout)

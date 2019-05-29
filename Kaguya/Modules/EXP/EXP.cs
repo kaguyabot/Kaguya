@@ -1,36 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core.UserAccounts;
-using System.Net;
-using System.Timers;
-using Kaguya.Core.Server_Files;
-using Kaguya.Core.Commands;
-using Kaguya.Core;
-using System.Diagnostics;
-
+using Kaguya.Core.Embed;
+using EmbedType = Kaguya.Core.Embed.EmbedType;
 
 
 namespace Kaguya.Modules
 {
     public class EXP : ModuleBase<ShardedCommandContext>
     {
-        public EmbedBuilder embed = new EmbedBuilder();
-        public Color Pink = new Color(252, 132, 255);
-        public Color Red = new Color(255, 0, 0);
-        public Color Gold = new Color(255, 223, 0);
-        public BotConfig bot = new BotConfig();
-        public string version = Utilities.GetAlert("VERSION");
-        public string botToken = Config.bot.Token;
-        Logger logger = new Logger();
-        Stopwatch stopWatch = new Stopwatch();
+        public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -42,7 +26,6 @@ namespace Kaguya.Modules
         [RequireOwner]
         public async Task ExpAdd(int exp)
         {
-            stopWatch.Start();
             var account = UserAccounts.GetAccount(Context.User);
 
             if (exp > 0)
@@ -53,9 +36,8 @@ namespace Kaguya.Modules
             UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.PINK;
+            await BE();
         }
 
         [Command("expadd")] //exp
@@ -63,7 +45,6 @@ namespace Kaguya.Modules
         [RequireOwner]
         public async Task ExpAdd(int exp, [Remainder]IGuildUser user)
         {
-            stopWatch.Start();
             var account = UserAccounts.GetAccount(user as SocketUser);
 
             if (exp > 0)
@@ -74,16 +55,14 @@ namespace Kaguya.Modules
             UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.PINK;
+            await BE();
         }
 
         [Command("serverexplb")] //exp
         [Alias("explb")]
         public async Task ServerEXPLeaderboard()
         {
-            stopWatch.Start();
             List<UserAccount> userAccounts = new List<UserAccount>();
             var users = Context.Guild.Users;
 
@@ -101,16 +80,14 @@ namespace Kaguya.Modules
             {
                 embed.AddField($"#{i++} {user.Username}", $"Level: {user.LevelNumber} - EXP: {user.EXP}");
             }
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.PINK;
+            await BE();
         }
 
         [Command("globalexplb")] //exp
         [Alias("gexplb")]
         public async Task GlobalEXPLeaderboard()
         {
-            stopWatch.Start();
             var users = UserAccounts.GetAllAccounts();
             UserAccounts.SaveAccounts();
             var users10 = users.OrderByDescending(u => u.EXP).Take(10);
@@ -120,16 +97,14 @@ namespace Kaguya.Modules
             {
                 embed.AddField($"#{i++} {user.Username}", $"Level: {user.LevelNumber} - EXP: {user.EXP}");
             }
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.PINK;
+            await BE();
         }
 
         [Command("repauthor")] //exp
         [Alias("rep author")]
         public async Task RepAuthor(int timeout = 24)
         {
-            stopWatch.Start();
             var userAccount = UserAccounts.GetAuthor();
 
             var commandUserAcc = UserAccounts.GetAccount(Context.User);
@@ -141,9 +116,8 @@ namespace Kaguya.Modules
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.TotalMinutes)}m {(int)(60 - difference.Seconds)}s " +
                     $"before you can give rep again!**");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
+                await BE();
+                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
             }
             else
             {
@@ -154,16 +128,14 @@ namespace Kaguya.Modules
                 embed.WithTitle("+Rep Author");
                 embed.WithDescription("**Successfully gave +1 rep to my creator** uwu.");
                 embed.WithFooter("Thank you for showing your support <3");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds); return;
+                embed.EmbedType = EmbedType.PINK;
+                await BE();
             }
         }
 
         [Command("rep")] //exp
         public async Task Rep(IGuildUser user, int timeout = 24)
         {
-            stopWatch.Start();
             var userAccount = UserAccounts.GetAccount(Context.User);
             var targetAccount = UserAccounts.GetAccount((SocketUser)user);
             var difference = DateTime.Now - userAccount.LastGivenRep;
@@ -172,17 +144,15 @@ namespace Kaguya.Modules
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.Minutes)}m {(int)(60 - difference.Seconds)} " +
                     $"before you can give rep again!**");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
+                await BE();
+                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
             }
             if (userAccount == targetAccount)
             {
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} You may not rep yourself!**");
-                embed.WithColor(Red);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to rep themselves."); return;
+                await BE();
+                //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to rep themselves."); return;
             }
             else
             {
@@ -191,9 +161,9 @@ namespace Kaguya.Modules
                 UserAccounts.SaveAccounts();
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} Successfully gave rep to {user.Mention}!**");
-                embed.WithColor(Pink);
-                await BE(); stopWatch.Stop();
-                logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                embed.EmbedType = EmbedType.PINK;
+                await BE();
+                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
         }
 
@@ -204,7 +174,7 @@ namespace Kaguya.Modules
             var userAccount = UserAccounts.GetAccount(user);
 
             embed.WithDescription($"{user.Mention} You have `{userAccount.Rep}` rep!");
-            embed.WithColor(Pink);
+            embed.EmbedType = EmbedType.PINK;
             await BE();
         }
 
@@ -214,25 +184,20 @@ namespace Kaguya.Modules
             if(user is null)
                 user = Context.User as IGuildUser;
 
-            stopWatch.Start();
             var account = UserAccounts.GetAccount(user as SocketUser);
             embed.WithTitle("Experience Points");
             embed.WithDescription($"{Context.User.Mention} `{user}` has `{account.EXP.ToString("N0")}` EXP.");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            await BE();
         }
 
         [Command("level")] //exp
         public async Task Level()
         {
-            stopWatch.Start();
             var account = UserAccounts.GetAccount(Context.User);
             embed.WithTitle("Level");
             embed.WithDescription($"{Context.User.Mention} you have {account.LevelNumber} levels.");
-            embed.WithColor(Pink);
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+            embed.EmbedType = EmbedType.PINK;
+            await BE();
         }
 
         private bool UserIsAdmin(SocketGuildUser user)

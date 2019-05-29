@@ -295,6 +295,7 @@
     <Compile Include="Core\Commands\Command.cs" />
     <Compile Include="Core\Commands\Commands.cs" />
     <Compile Include="Core\Data Storage\DataStorage2.cs" />
+    <Compile Include="Core\Embed\KaguyaEmbedBuilder.cs" />
     <Compile Include="Core\LevelingSystem\Leveling.cs" />
     <Compile Include="Core\Data Storage\DataStorage.cs" />
     <Compile Include="Core\Logger\Logger.cs" />
