@@ -118,7 +118,7 @@ namespace Kaguya.Modules
                 $"\n**`That's over {(difference.TotalDays / 31).ToString("N0")} months!`**");
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
             embed.WithFooter($"Stats accurate as of {DateTime.Now}");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -152,7 +152,7 @@ namespace Kaguya.Modules
 
             embed.WithTitle("osu! Username Set");
             embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed from `{oldUsername}` to `{userAccount.OsuUsername}`.**");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
             
         }
@@ -196,7 +196,7 @@ namespace Kaguya.Modules
                         .WithName("" + mapUserNameObject.username + " hasn't got any recent plays")
                         .WithIconUrl("https://a.ppy.sh/" + mapUserNameObject.user_id);
                 });
-                embed.EmbedType = EmbedType.PINK;
+                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
             else
@@ -331,7 +331,7 @@ namespace Kaguya.Modules
                 });
                 embed.WithDescription($"{playerRecentString}");
                 embed.WithFooter(footer);
-                embed.EmbedType = EmbedType.PINK;
+                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
         }
@@ -373,7 +373,7 @@ namespace Kaguya.Modules
 
                 embed.AddField("Participant Added", $"**{user}** has been added to {teamRole.Mention} and {participantRole.Mention}.");
             }
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -386,7 +386,7 @@ namespace Kaguya.Modules
             var roles = Context.Guild.Roles;
             embed.WithTitle("Teams Deleted");
             embed.WithDescription("The following teams have been deleted: ");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             foreach (IRole role in roles)
             {
                 if (role.Name.Contains("Team: "))

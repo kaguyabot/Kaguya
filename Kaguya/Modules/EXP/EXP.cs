@@ -6,6 +6,8 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core.UserAccounts;
+using Kaguya.Core;
+using System.Diagnostics;
 using Kaguya.Core.Embed;
 using EmbedType = Kaguya.Core.Embed.EmbedType;
 
@@ -36,7 +38,7 @@ namespace Kaguya.Modules
             UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -55,7 +57,7 @@ namespace Kaguya.Modules
             UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -80,7 +82,7 @@ namespace Kaguya.Modules
             {
                 embed.AddField($"#{i++} {user.Username}", $"Level: {user.LevelNumber} - EXP: {user.EXP}");
             }
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -97,7 +99,7 @@ namespace Kaguya.Modules
             {
                 embed.AddField($"#{i++} {user.Username}", $"Level: {user.LevelNumber} - EXP: {user.EXP}");
             }
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -128,7 +130,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("+Rep Author");
                 embed.WithDescription("**Successfully gave +1 rep to my creator** uwu.");
                 embed.WithFooter("Thank you for showing your support <3");
-                embed.EmbedType = EmbedType.PINK;
+                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
         }
@@ -161,7 +163,7 @@ namespace Kaguya.Modules
                 UserAccounts.SaveAccounts();
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} Successfully gave rep to {user.Mention}!**");
-                embed.EmbedType = EmbedType.PINK;
+                embed.SetColor(EmbedType.PINK);
                 await BE();
                 // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
             }
@@ -174,7 +176,7 @@ namespace Kaguya.Modules
             var userAccount = UserAccounts.GetAccount(user);
 
             embed.WithDescription($"{user.Mention} You have `{userAccount.Rep}` rep!");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -196,7 +198,7 @@ namespace Kaguya.Modules
             var account = UserAccounts.GetAccount(Context.User);
             embed.WithTitle("Level");
             embed.WithDescription($"{Context.User.Mention} you have {account.LevelNumber} levels.");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 

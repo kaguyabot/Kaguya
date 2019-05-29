@@ -139,7 +139,7 @@ namespace Kaguya.Modules.osu
                     $"\n**95% FC:** `{unranked95.Total.ToString("N0")}pp` **98% FC:** `{unranked98.Total.ToString("N0")}pp`" +
                     $"\n**99% FC:** `{unranked99.Total.ToString("N0")}pp` **100% FC (SS):** `{unranked100.Total.ToString("N0")}pp`");
                 embed.WithFooter($"Status: {status} | 💙 Amount: {favoriteCount}");
-                embed.EmbedType = EmbedType.PINK;
+                embed.SetColor(EmbedType.PINK);
                 await context.Channel.SendMessageAsync(embed: embed.Build());
                 stopWatch.Stop();
                 logger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
@@ -176,13 +176,10 @@ namespace Kaguya.Modules.osu
                 $"\n**95% FC:** `{(int)value95}pp` **98% FC:** `{(int)value98}pp`" +
                 $"\n**99% FC:** `{(int)value99}pp` **100% FC (SS):** `{(int)value100}pp`");
             embed.WithFooter($"Status: {status} | 💙 Amount: {favoriteCount} | Pass Rate: {passRate.ToString("N2")}%");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await context.Channel.SendMessageAsync(embed: embed.Build());
             stopWatch.Stop();
             logger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
-            return;
         }
     }
-
-
 }

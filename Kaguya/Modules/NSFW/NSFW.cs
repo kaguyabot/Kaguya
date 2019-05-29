@@ -2,8 +2,10 @@
 #endregion
 
 using Discord.Commands;
+using Kaguya.Core;
 using NekosSharp;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Kaguya.Core.Embed;
 using EmbedType = Kaguya.Core.Embed.EmbedType;
@@ -30,7 +32,7 @@ namespace Kaguya.Modules.NSFW
             var lewd = $"https://i.nhentai.net/galleries/1238853/{lewdNum}.png";
             embed.WithAuthor("NSFW: Hentai", $"{Context.User.GetAvatarUrl()}", $"{lewd}");
             embed.WithImageUrl(lewd);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -43,7 +45,7 @@ namespace Kaguya.Modules.NSFW
                 var lewd = await nekoClient.Nsfw_v3.Hentai();
                 embed.WithAuthor("NSFW: Hentai Bomb", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
                 embed.WithImageUrl(lewd.ImageUrl);
-                embed.EmbedType = EmbedType.VIOLET;
+                embed.SetColor(EmbedType.VIOLET);
                 await BE();
             }
         }
@@ -56,7 +58,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Lewd", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -68,7 +70,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Boobs", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -80,7 +82,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Anal", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -92,7 +94,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: BDSM", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -104,7 +106,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Blowjob", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -116,7 +118,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Classic", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -128,7 +130,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Cum", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -140,7 +142,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Ero Feet", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -152,7 +154,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Ero Yuri", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -164,7 +166,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Pussy", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -176,7 +178,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Solo", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -188,7 +190,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Hentai", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -200,7 +202,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Avatar", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -212,7 +214,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Trap", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -224,7 +226,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Yuri", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -236,7 +238,7 @@ namespace Kaguya.Modules.NSFW
 
             embed.WithAuthor("NSFW: Hentai Gif", $"{Context.User.GetAvatarUrl()}", $"{lewd.ImageUrl}");
             embed.WithImageUrl(lewd.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
     }

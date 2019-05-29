@@ -81,7 +81,7 @@ namespace Kaguya.Modules.Utility
             embed.WithTitle("Change Command Prefix: Success!");
             embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");
             embed.WithFooter($"If you ever forget the prefix, tag me and type \"`prefix`\"!");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
         
@@ -96,7 +96,7 @@ namespace Kaguya.Modules.Utility
             embed.WithDescription($"Programmed with love by `{author.Username}` uwu");
             embed.WithFooter($"{author.Username} is level {author.LevelNumber} with {author.EXP} EXP and has +{author.Rep} rep!" +
                 $"\nTo +rep Stage, type `{cmdPrefix}rep author`!");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -109,7 +109,7 @@ namespace Kaguya.Modules.Utility
             var channel = await Context.Guild.CreateTextChannelAsync(name);
             embed.WithTitle("Text Channel Created");
             embed.WithDescription($"{Context.User.Mention} has successfully created the text channel `#{name}`.");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -126,7 +126,7 @@ namespace Kaguya.Modules.Utility
                     await channel.DeleteAsync();
                     embed.WithTitle("Text Channel Deleted");
                     embed.WithDescription($"{Context.User.Mention} has successfully deleted the text channel {(channel.Name)}.");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                     return;
                 }
@@ -142,7 +142,7 @@ namespace Kaguya.Modules.Utility
             var channel = await Context.Guild.CreateVoiceChannelAsync(name);
             embed.WithTitle("Voice Channel Created");
             embed.WithDescription($"{Context.User.Mention} has successfully created the voice channel #{name}.");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
 
@@ -159,7 +159,7 @@ namespace Kaguya.Modules.Utility
                     await VoiceChannel.DeleteAsync();
                     embed.WithTitle("Voice Channel Deleted");
                     embed.WithDescription($"{Context.User.Mention} Successfully deleted the voice channel `{VoiceChannel.Name}`!");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                 }
             }

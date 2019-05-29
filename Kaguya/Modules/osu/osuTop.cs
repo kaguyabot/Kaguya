@@ -415,7 +415,7 @@ namespace Kaguya.Modules.osu
                 embed.WithTitle($"**Top #{num} play for {username}:**");
                 embed.WithUrl($"https://osu.ppy.sh/u/{playerID}");
                 embed.WithDescription($"{TopPlayString}");
-                embed.EmbedType = EmbedType.PINK;
+                embed.SetColor(EmbedType.PINK);
                 await BE();
             }
         }

@@ -37,7 +37,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Deleted Messages` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "updatedmessages":
@@ -45,7 +45,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Edited Messages` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "userjoins":
@@ -53,7 +53,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `User Joins` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "userleaves":
@@ -61,7 +61,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `User Leaves` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "bans":
@@ -69,7 +69,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Bans` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "unbans":
@@ -77,7 +77,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Unbans` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "changestologsettings":
@@ -85,7 +85,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `changes to log settings` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "filteredphrases":
@@ -93,7 +93,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Filtered Phrases` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "userconnectstovoice":
@@ -101,7 +101,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `user connected to voice` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "userdisconnectsfromvoice":
@@ -109,7 +109,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `user disconnected from voice` will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "levelannouncements":
@@ -153,7 +153,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages will be sent in channel {channel.Name}");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 default:
@@ -180,7 +180,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Deleted Messages` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "updatedmessages":
@@ -188,7 +188,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Updated Messages` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "userjoins":
@@ -196,7 +196,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `User Joins` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "userleaves":
@@ -204,7 +204,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `User Leaves` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "bans":
@@ -212,7 +212,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Bans` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "unbans":
@@ -220,7 +220,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Unbans` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "changestologsettings":
@@ -228,7 +228,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `changes to log settings` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "filteredphrases":
@@ -236,7 +236,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Filtered Phrases` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "userconnectstovoice":
@@ -244,7 +244,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `user connects to voice` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "userdisconnectsfromvoice":
@@ -252,7 +252,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `user disconnects from voice` have been disabled");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 case "levelannouncements":
@@ -296,7 +296,7 @@ namespace Kaguya.Modules.Administration
                     Servers.SaveServers();
                     embed.WithTitle("Log Channel Reset");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `everything` have been disabled.");
-                    embed.EmbedType = EmbedType.PINK;
+                    embed.SetColor(EmbedType.PINK);
                     await BE();
                      break;
                 default:
@@ -337,7 +337,7 @@ namespace Kaguya.Modules.Administration
                 $"\n**Shadowbans** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[11])}`**" +
                 $"\n**Unshadowbans** - Currently Assigned to: **`#{Context.Guild.GetChannel(logChannels[12])}`**" +
                 "\n**All**");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
         }
     }

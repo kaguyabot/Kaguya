@@ -1,4 +1,6 @@
-﻿using Discord;
+﻿using System;
+using System.Collections.Immutable;
+using Discord;
 
 namespace Kaguya.Core.Embed
 {
@@ -24,6 +26,30 @@ namespace Kaguya.Core.Embed
         private void Init(EmbedType type = EmbedType.RED)
         {
             EmbedType = type;
+            Color color;
+            switch (type)
+            {
+                case EmbedType.VIOLET:
+                    color = VioletColor;
+                    break;
+                case EmbedType.GOLD:
+                    color = GoldColor;
+                    break;
+                case EmbedType.PINK:
+                    color = PinkColor;
+                    break;
+                case EmbedType.RED:
+                    color = RedColor;
+                    break;
+                default:
+                    color = RedColor;
+                    break;
+            }
+            WithColor(color);
+        }
+
+        public void SetColor(EmbedType type)
+        {
             Color color;
             switch (type)
             {

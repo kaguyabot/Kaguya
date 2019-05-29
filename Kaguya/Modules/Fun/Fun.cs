@@ -35,7 +35,7 @@ namespace Kaguya.Modules
             }
 
             embed.WithDescription(message);
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
 
             await BE();
         }
@@ -58,7 +58,7 @@ namespace Kaguya.Modules
 
             embed.WithTitle("Choice for " + Context.User.Username);
             embed.WithDescription(selection);
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
 
             await BE();
         }
@@ -74,7 +74,7 @@ namespace Kaguya.Modules
 
             embed.WithTitle("Magic 8Ball");
             embed.WithDescription($"**{Context.User.Mention} {responses[num]}**");
-            embed.EmbedType = EmbedType.PINK;
+            embed.SetColor(EmbedType.PINK);
             await BE();
             
         }
@@ -85,7 +85,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.SlapGif();
             embed.WithTitle($"{Context.User.Username} slaped {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -95,7 +95,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.SlapGif();
             embed.WithTitle($"{Context.User.Username} slaped {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -105,7 +105,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.HugGif();
             embed.WithTitle($"{Context.User.Username} hugged {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -115,7 +115,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.HugGif();
             embed.WithTitle($"{Context.User.Username} hugged {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -125,7 +125,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.KissGif();
             embed.WithTitle($"{Context.User.Username} kissed {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -135,7 +135,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.KissGif();
             embed.WithTitle($"{Context.User.Username} kissed {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -145,7 +145,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.PatGif();
             embed.WithTitle($"{Context.User.Username} patted {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -155,7 +155,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.PatGif();
             embed.WithTitle($"{Context.User.Username} patted {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -165,7 +165,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.PokeGif();
             embed.WithTitle($"{Context.User.Username} poked {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -175,7 +175,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.PokeGif();
             embed.WithTitle($"{Context.User.Username} poked {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -185,7 +185,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.TickleGif();
             embed.WithTitle($"{Context.User.Username} tickled {target}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -195,7 +195,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Action_v3.TickleGif();
             embed.WithTitle($"{Context.User.Username} tickled {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -205,7 +205,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Image_v3.BakaGif();
             embed.WithTitle($"Baka!!");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -215,7 +215,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Image_v3.NekoAvatar();
             embed.WithTitle($"Neko Avatar for {Context.User.Username}");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -225,7 +225,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Image_v3.SmugGif();
             embed.WithTitle($"Smug（￣＾￣）");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -235,7 +235,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Image_v3.Waifu();
             embed.WithTitle($"Waifu (ﾉ≧ڡ≦)");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
@@ -245,7 +245,7 @@ namespace Kaguya.Modules
             var gif = await nekoClient.Image_v3.Wallpaper();
             embed.WithTitle($"Wallpaper for {Context.User.Username}");
             embed.WithImageUrl(gif.ImageUrl);
-            embed.EmbedType = EmbedType.VIOLET;
+            embed.SetColor(EmbedType.VIOLET);
             await BE();
         }
 
