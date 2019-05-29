@@ -1164,12 +1164,6 @@ namespace Kaguya.Modules
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
         }
 
-        [Command("suggest")]
-        public async Task Suggest([Remainder]string report)
-        {
-            //code here
-        }
-
         [Command("bug")]
         public async Task BugReport([Remainder]string report)
         {
