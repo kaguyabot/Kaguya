@@ -19,7 +19,7 @@ using System.Diagnostics;
 
 namespace Kaguya.Modules
 {
-    public class osuStandard : ModuleBase<SocketCommandContext>
+    public class osuStandard : ModuleBase<ShardedCommandContext>
     {
         readonly DiscordSocketClient _client;
         public EmbedBuilder embed = new EmbedBuilder();

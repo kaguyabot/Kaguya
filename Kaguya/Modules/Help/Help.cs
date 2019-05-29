@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Kaguya.Modules
 {
-    public class Help : InteractiveBase<SocketCommandContext>
+    public class Help : InteractiveBase<ShardedCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);
@@ -24,7 +24,7 @@ namespace Kaguya.Modules
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
         public string botToken = Config.bot.Token;
-        readonly DiscordSocketClient _client = Global.Client;
+        readonly DiscordShardedClient _client = Global.Client;
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
 

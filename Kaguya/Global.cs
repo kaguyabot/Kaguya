@@ -10,9 +10,9 @@ namespace Kaguya
 {
     internal static class Global
     {
-        internal static DiscordSocketClient Client { get; set; }
+        internal static DiscordShardedClient Client { get; set; }
 
-        public static LavaSocketClient lavaSocketClient = new LavaSocketClient();
+        public static LavaShardClient lavaShardClient = new LavaShardClient();
         public static LavaRestClient lavaRestClient = new LavaRestClient();
     }
 }

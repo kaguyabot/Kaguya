@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Kaguya.Modules.Music
 {
     [Group("m")]
-    public class Music : ModuleBase<SocketCommandContext>
+    public class Music : ModuleBase<ShardedCommandContext>
     {
         private readonly MusicService musicService = new MusicService();
 

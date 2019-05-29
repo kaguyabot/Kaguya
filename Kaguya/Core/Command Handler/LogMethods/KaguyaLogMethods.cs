@@ -21,8 +21,8 @@ namespace Kaguya.Core.CommandHandler
 {
     public class KaguyaLogMethods
     {
-        readonly DiscordSocketClient _client = Global.Client;
-        readonly LavaSocketClient _lavaSocketClient = Global.lavaSocketClient;
+        readonly DiscordShardedClient _client = Global.Client;
+        readonly LavaShardClient _lavaShardClient = Global.lavaShardClient;
         readonly public IServiceProvider _services;
         readonly Color Yellow = new Color(255, 255, 102);
         readonly Color SkyBlue = new Color(63, 242, 255);
@@ -31,7 +31,7 @@ namespace Kaguya.Core.CommandHandler
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
 
-        public async Task OnReady()
+        public async Task OnReady(DiscordSocketClient _client)
         {
             _ = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = _client.GetUser(ID).MutualGuilds;
@@ -68,7 +68,7 @@ namespace Kaguya.Core.CommandHandler
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            await _lavaSocketClient.StartAsync(_client);
+            await _lavaShardClient.StartAsync(Global.Client);
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\nKaguya Music Service Started.");
 
@@ -87,7 +87,7 @@ namespace Kaguya.Core.CommandHandler
                 EmbedBuilder embed = new EmbedBuilder();
                 if (s is SocketUserMessage msg)
                 {
-                    var context = new SocketCommandContext(_client, msg);
+                    var context = new ShardedCommandContext(_client, msg);
                     if (s.Content.Contains("https://osu.ppy.sh/beatmapsets/"))
                     {
                         await parser.LinkParserMethod(s, embed, context);
@@ -447,15 +447,9 @@ namespace Kaguya.Core.CommandHandler
             }
         }
 
-        public Task ClientDisconnected(Exception e)
+        public Task ClientDisconnected(Exception e, DiscordSocketClient client)
         {
-            logger.ConsoleCriticalAdvisory(e, "KAGUYA IS IN DISCONNECTED STATE!!");
-            return Task.CompletedTask;
-        }
-
-        public Task ClientConnected()
-        {
-            logger.ConsoleStatusAdvisory("Client connected.");
+            logger.ConsoleCriticalAdvisory(e, $"SHARD {client.ShardId} IS IN DISCONNECTED STATE!!");
             return Task.CompletedTask;
         }
     }

@@ -13,7 +13,7 @@ using Discord.WebSocket;
 
 namespace Kaguya.Modules.Supporter
 {
-    public class KaguyaSupporter : ModuleBase<SocketCommandContext>
+    public class KaguyaSupporter : ModuleBase<ShardedCommandContext>
     {
         [Command("redeem")]
         public async Task KeyRedeem([Remainder]string key)

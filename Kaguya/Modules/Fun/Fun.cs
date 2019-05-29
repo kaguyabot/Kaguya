@@ -19,7 +19,7 @@ using NekosSharp;
 
 namespace Kaguya.Modules
 {
-    public class Fun : ModuleBase<SocketCommandContext>
+    public class Fun : ModuleBase<ShardedCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         Color Pink = new Color(252, 132, 255);

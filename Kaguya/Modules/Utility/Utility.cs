@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Kaguya.Modules
 {
-    public class Utility : InteractiveBase<SocketCommandContext>
+    public class Utility : InteractiveBase<ShardedCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         public Color Pink = new Color(252, 132, 255);
@@ -26,7 +26,7 @@ namespace Kaguya.Modules
         public BotConfig bot = new BotConfig();
         public string version = Utilities.GetAlert("VERSION");
         public string botToken = Config.bot.Token;
-        public InteractiveService _interactive = new InteractiveService(Global.Client);
+        //public InteractiveService _interactive = new InteractiveService(Global.Client);
         Logger logger = new Logger();
         Stopwatch stopWatch = new Stopwatch();
 

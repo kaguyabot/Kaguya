@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Kaguya.Modules.NSFW
 {
     [Group("n")] //NSFW Commands...Proceed with caution!
-    public class NSFW : ModuleBase<SocketCommandContext>
+    public class NSFW : ModuleBase<ShardedCommandContext>
     {
         public EmbedBuilder embed = new EmbedBuilder();
         Color Violet = new Color(238, 130, 238);

@@ -15,7 +15,7 @@ namespace Kaguya.Modules.Music
 {
     public class MusicService
     {
-        readonly LavaSocketClient _lavaSocketClient = Global.lavaSocketClient;
+        readonly LavaShardClient _lavaShardClient = Global.lavaShardClient;
         readonly LavaRestClient _lavaRestClient = Global.lavaRestClient;
         readonly Logger logger = new Logger();
 
@@ -40,18 +40,18 @@ namespace Kaguya.Modules.Music
             try
             {
                 //Try get the player. If it returns null then the user has used the command !Play without using the command !Join.
-                var player = _lavaSocketClient.GetPlayer(guildId);
+                var player = _lavaShardClient.GetPlayer(guildId);
                 if (player == null)
                 {
                     //User Used Command !Play before they used !Join
                     //So We Create a Connection To The Users Voice Channel.
-                    await _lavaSocketClient.ConnectAsync(user.VoiceChannel);
+                    await _lavaShardClient.ConnectAsync(user.VoiceChannel);
                     Options.TryAdd(user.Guild.Id, new AudioOptions
                     {
                         Summoner = user
                     });
                     //Now we can set the player to out newly created player.
-                    player = _lavaSocketClient.GetPlayer(guildId);
+                    player = _lavaShardClient.GetPlayer(guildId);
                 }
 
                 //Find The YouTube Track the User requested.
@@ -97,7 +97,7 @@ namespace Kaguya.Modules.Music
             try
             {
                 //Get The Player Via GuildID.
-                var player = _lavaSocketClient.GetPlayer(guildId);
+                var player = _lavaShardClient.GetPlayer(guildId);
 
                 //if The Player is playing, Stop it.
                 if (player.IsPlaying)
@@ -105,7 +105,7 @@ namespace Kaguya.Modules.Music
 
                 //Leave the voice channel.
                 var channelName = player.VoiceChannel.Name;
-                await _lavaSocketClient.DisconnectAsync(user.VoiceChannel);
+                await _lavaShardClient.DisconnectAsync(user.VoiceChannel);
                 logger.ConsoleMusicLog($"Kaguya has disconnected from {channelName}.");
                 return await StaticMusicEmbedHandler.CreateBasicEmbed("Music", $"Disconnected from {channelName}.");
             }
@@ -129,7 +129,7 @@ namespace Kaguya.Modules.Music
                 var descriptionBuilder = new StringBuilder();
 
                 /* Get The Player and make sure it isn't null. */
-                var player = _lavaSocketClient.GetPlayer(guildId);
+                var player = _lavaShardClient.GetPlayer(guildId);
                 if (player == null)
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId, serverName).commandPrefix}h m` for proper usage.");
 
@@ -173,7 +173,7 @@ namespace Kaguya.Modules.Music
 
             try
             {
-                var player = _lavaSocketClient.GetPlayer(guildId);
+                var player = _lavaShardClient.GetPlayer(guildId);
                 /* Check if the player exists */
                 if (player == null)
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Skip", $"Could not aquire player.\nAre you using the bot right now? Check `{cmdPrefix}h m` for information on Kaguya's music service.");
@@ -220,7 +220,7 @@ namespace Kaguya.Modules.Music
             }
             try
             {
-                var player = _lavaSocketClient.GetPlayer(guildId);
+                var player = _lavaShardClient.GetPlayer(guildId);
                 await player.SetVolumeAsync(volume);
                 logger.ConsoleMusicLog($"Bot Volume set to: {volume}.");
                 return await StaticMusicEmbedHandler.CreateBasicEmbed($"🔊 Music Volume", $"Volume has been set to {volume}.");
@@ -235,7 +235,7 @@ namespace Kaguya.Modules.Music
         {
             try
             {
-                var player = _lavaSocketClient.GetPlayer(guildID);
+                var player = _lavaShardClient.GetPlayer(guildID);
                 if (player.IsPaused)
                 {
                     await player.ResumeAsync();
@@ -259,7 +259,7 @@ namespace Kaguya.Modules.Music
 
             try
             {
-                var player = _lavaSocketClient.GetPlayer(guildID);
+                var player = _lavaShardClient.GetPlayer(guildID);
                 if(player.Queue.Count < 1)
                 {
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Queue Jump", $"There aren't any available songs to jump to!");
