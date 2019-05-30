@@ -12,6 +12,8 @@ namespace Kaguya.Core.Server_Files
         public Dictionary<string, int> WarnActions { get; set; }
         public Dictionary<ulong, int> WarnedMembers { get; set; }
         public List<string> FilteredWords { get; set; }
+        public List<ulong> BlacklistedChannels { get; set; }
+        public List<ulong> WhitelistedChannels { get; set; }
         public ulong LogDeletedMessages { get; set; }
         public ulong LogUpdatedMessages { get; set; }
         public ulong LogWhenUserJoins { get; set; }
@@ -38,6 +40,8 @@ namespace Kaguya.Core.Server_Files
             MutedMembers = new Dictionary<string, string>();
             WarnedMembers = new Dictionary<ulong, int>();
             WarnActions = new Dictionary<string, int>();
+            BlacklistedChannels = new List<ulong>();
+            WhitelistedChannels = new List<ulong>();
             FilteredWords = new List<string>();
             IsBlacklisted = false;
             JoinedUsers = new List<string>();

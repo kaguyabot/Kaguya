@@ -310,6 +310,7 @@
     <Compile Include="ListSocketGuildUserTR.cs" />
     <Compile Include="Core\PlayData.cs" />
     <Compile Include="Modules\Administration\Administration.cs" />
+    <Compile Include="Modules\Administration\ChannelWhitelistBlacklist.cs" />
     <Compile Include="Modules\Administration\LoggingCommands.cs" />
     <Compile Include="Modules\Currency\Currency.cs" />
     <Compile Include="Modules\EXP\EXP.cs" />

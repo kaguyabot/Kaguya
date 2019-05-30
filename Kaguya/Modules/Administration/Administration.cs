@@ -32,7 +32,7 @@ namespace Kaguya.Modules
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
-
+        
         [Command("warn")]
         [Alias("w")]
         [RequireUserPermission(GuildPermission.KickMembers)]

@@ -72,6 +72,9 @@ namespace Kaguya
             if (userAccount.Blacklisted == 1) { return; }
             if (guild.IsBlacklisted) { return; }
 
+            if (guild.BlacklistedChannels.Contains(msg.Channel.Id)) { return; }
+            else if(!guild.WhitelistedChannels.Contains(msg.Channel.Id) && guild.WhitelistedChannels.Count > 0) { return; }
+
 
             var context = new ShardedCommandContext(_client, msg);
 

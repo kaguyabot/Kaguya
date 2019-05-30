@@ -3,7 +3,15 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
-Vertsion 1.19.1
+Version 1.19.2
+
+- $channelwhitelist [cwl] command added, this allows server administrators to make Kaguya only work in a certain set of channels.
+- $channelblacklist [cbl] command added, this allows server administrators to block Kaguya from responding in a certain set of channels.
+- $whitelist and $blacklist commands added, these allow server administrators to see what channels are currently whitelisted/blacklisted respectively.
+    - You can think of this as a "viewwhitelist" / "viewblacklist" command.
+- NOTE: Setting the whitelist will clear the blacklist, and setting the blacklist will clear the whitelist!
+
+Version 1.19.1
 
 - Fixed a bug where commands were not logged to the console.
 - Fixed a bug where commands that were logged had the wrong execution time.
