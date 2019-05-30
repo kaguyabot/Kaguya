@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Vertsion 1.19.1
+
+- Fixed a bug where commands were not logged to the console.
+- Fixed a bug where commands that were logged had the wrong execution time.
+
 Version 1.19
 
 - Code modification, color for all embeds defaults to pink (you no longer have to specify it in the code). (Thank you to "CakeAndBanana" for contributing this change)

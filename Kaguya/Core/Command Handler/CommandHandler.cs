@@ -29,7 +29,6 @@ namespace Kaguya
         private IServiceProvider _services;
         readonly KaguyaLogMethods logger = new KaguyaLogMethods();
         readonly MusicLogMethods musicLogger = new MusicLogMethods();
-        readonly Stopwatch stopWatch = new Stopwatch();
         readonly Timers timers = new Timers();
         readonly Logger consoleLogger = new Logger();
 
@@ -62,6 +61,7 @@ namespace Kaguya
 
         private async Task HandleCommandAsync(SocketMessage s)
         {
+            Stopwatch stopWatch = new Stopwatch();
             var msg = s as SocketUserMessage;
             var user = msg.Author as SocketGuildUser;
             if (msg is null || user is null || user.IsBot) return;
@@ -102,7 +102,11 @@ namespace Kaguya
             stopWatch.Start();
             var result = await _commands.ExecuteAsync(context, argPos, _services);
             stopWatch.Stop();
-            stopWatch.Reset();
+
+            if(result.IsSuccess)
+            {
+                consoleLogger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
+            }
 
             if (!result.IsSuccess)
             {
