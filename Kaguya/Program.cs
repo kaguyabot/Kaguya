@@ -2,11 +2,14 @@
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
+using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
+using Kaguya.Core.Command_Handler.LogMethods;
 using Kaguya.Core.CommandHandler;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using Victoria;
 
 namespace Kaguya
 {
@@ -17,6 +20,16 @@ namespace Kaguya
 
         //DiscordSocketClient _client;
         public string version = Utilities.GetAlert("VERSION");
+        DiscordShardedClient _client;
+        CommandService _commands;
+        LavaShardClient _lavaShardClient;
+        private IServiceProvider _services;
+        readonly KaguyaLogMethods logger = new KaguyaLogMethods();
+        readonly MusicLogMethods musicLogger = new MusicLogMethods();
+        readonly Timers timers = new Timers();
+        readonly Logger consoleLogger = new Logger();
+        public string osuApiKey = Config.bot.OsuApiKey;
+        public string tillerinoApiKey = Config.bot.TillerinoApiKey;
 
         public async Task StartAsync()
         {
