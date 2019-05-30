@@ -6,16 +6,8 @@ using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
 using Kaguya.Core.Command_Handler.LogMethods;
 using Kaguya.Core.CommandHandler;
-using Kaguya.Core.LevelingSystem;
-using Kaguya.Core.Server_Files;
-using Kaguya.Core.UserAccounts;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Victoria;
 
@@ -28,19 +20,6 @@ namespace Kaguya
 
         //DiscordSocketClient _client;
         public string version = Utilities.GetAlert("VERSION");
-        DiscordShardedClient _client;
-        CommandService _commands;
-        LavaShardClient _lavaShardClient;
-        private IServiceProvider _services;
-        readonly Color Yellow = new Color(255, 255, 102);
-        readonly Color SkyBlue = new Color(63, 242, 255);
-        readonly Color Red = new Color(255, 0, 0);
-        readonly Color Violet = new Color(238, 130, 238);
-        readonly Color Pink = new Color(252, 132, 255);
-        readonly KaguyaLogMethods logger = new KaguyaLogMethods();
-        readonly MusicLogMethods musicLogger = new MusicLogMethods();
-        readonly Timers timers = new Timers();
-        readonly Logger consoleLogger = new Logger();
         public string osuApiKey = Config.bot.OsuApiKey;
         public string tillerinoApiKey = Config.bot.TillerinoApiKey;
 

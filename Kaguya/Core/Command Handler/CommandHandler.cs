@@ -99,7 +99,10 @@ namespace Kaguya
 
             var embed = new KaguyaEmbedBuilder();
 
+            stopWatch.Start();
             var result = await _commands.ExecuteAsync(context, argPos, _services);
+            stopWatch.Stop();
+            stopWatch.Reset();
 
             if (!result.IsSuccess)
             {
