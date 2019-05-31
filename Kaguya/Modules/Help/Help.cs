@@ -518,6 +518,69 @@ namespace Kaguya.Modules
                         $"\nTo reset the command prefix, type {cmdPrefix}prefix, or tag me and type `prefix`! The bot will always display the last known command prefix " +
                         $"and the new prefix when using this command.");
                     await BE(); break;
+                case "channelwhitelist":
+                case "cwl":
+                    embed.WithTitle($"Help: Channel Whitelisting | `{cmdPrefix}channelwhitelist`, `{cmdPrefix}cwl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nAllows a server administrator to whitelist a channel (or multiple, subsequent channels). Whitelisted " +
+                        $"channels are the only channels that Kaguya will respond to commands from. Using this command clears " +
+                        $"any blacklisted channels this server has specified, so keep that in mind." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}channelwhitelist #<channel>`" +
+                        $"\nSyntax: `{cmdPrefix}cbl <channel-name/ID>`");
+                    await BE(); break;
+                case "channelblacklist":
+                case "cbl":
+                    embed.WithTitle($"Help: Channel Blacklisting | `{cmdPrefix}channelblacklist`, `{cmdPrefix}cbl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nAllows a server administrator to blacklist a channel (or multiple, subsequent channels). Blacklisted " +
+                        $"channels are channels that Kaguya will not respond to. Use of this command clears any whitelisted channels " +
+                        $"in the server." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}channelblacklist #<channel>`" +
+                        $"\nSyntax: `{cmdPrefix}cbl <channel-name/ID>`");
+                    await BE(); break;
+                case "channelunblacklist":
+                case "cubl":
+                    embed.WithTitle($"Help: Channel Un-Blacklisting | `{cmdPrefix}channelunblacklist`, `{cmdPrefix}cubl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nAllows a server administrator to un-blacklist a channel (or multiple, subsequent channels). Blacklisted " +
+                        $"channels are channels that Kaguya will not respond to. Use this command to re-allow command execution in the specified channel." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}channelunblacklist #<channel>`" +
+                        $"\nSyntax: `{cmdPrefix}cubl <channel-name/ID>`");
+                    await BE(); break;
+                case "channelunwhitelist":
+                case "cuwl":
+                    embed.WithTitle($"Help: Channel Un-Whitelisting | `{cmdPrefix}channelunwhitelist`, `{cmdPrefix}cuwl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nAllows a server administrator to un-whitelist a channel (or multiple, subsequent channels). Whitelisted " +
+                        $"channels are channels that Kaguya will isolate for command responses. Use of this command revokes Kaguya's " +
+                        $"ability to send messages in the specified channel. " +
+                        $"\n" +
+                        $"\nNote: This is not the same as blacklisting a channel." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}channelunwhitelist #<channel>`" +
+                        $"\nSyntax: `{cmdPrefix}cuwl <channel-name/ID>`");
+                    await BE(); break;
+                case "whitelist":
+                case "wl":
+                    embed.WithTitle($"Help: Server Whitelist | `{cmdPrefix}whitelist`, `{cmdPrefix}wl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nDisplays any whitelisted channels for the server.");
+                    await BE(); break;
+                case "blacklist":
+                case "bl":
+                    embed.WithTitle($"Help: Server Blacklist | `{cmdPrefix}blacklist`, `{cmdPrefix}bl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nDisplays any blacklisted channels for the server.");
+                    await BE(); break;
                 case "serverexplb":
                 case "explb":
                     embed.WithTitle($"Help: Server EXP Leaderboard | `{cmdPrefix}serverexplb` / `{cmdPrefix}explb`");
@@ -529,6 +592,10 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Global EXP Leaderboard | `{cmdPrefix}globalexplb` / `{cmdPrefix}gexplb`");
                     embed.WithDescription($"{Context.User.Mention} Displays the 10 top EXP holders in the entire Kaguya database! This command " +
                         $"also displays their level.");
+                    await BE(); break;
+                case "fact":
+                    embed.WithTitle($"Help: Random Facts | `{cmdPrefix}fact`");
+                    embed.WithDescription($"{Context.User.Mention} Displays a random fact in chat!");
                     await BE(); break;
                 case "scrapeserver":
                     embed.WithTitle($"Help: Server Scraping | `{cmdPrefix}scrapeserver`");
@@ -727,6 +794,9 @@ namespace Kaguya.Modules
                         "\n" +
                         $"\n{cmdPrefix}addrole [ar]" +
                         $"\n{cmdPrefix}ban [b]" +
+                        $"\n{cmdPrefix}blacklist [bl]" +
+                        $"\n{cmdPrefix}channelblacklist [cbl]" +
+                        $"\n{cmdPrefix}channelwhitelist [cwl]" +
                         $"\n{cmdPrefix}clear [c] [purge]" +
                         $"\n{cmdPrefix}createrole [cr]" +
                         $"\n{cmdPrefix}deleterole [dr]" +
@@ -753,6 +823,7 @@ namespace Kaguya.Modules
                         $"\n{cmdPrefix}warnset [ws]" +
                         $"\n{cmdPrefix}warnoptions [wo]" +
                         $"\n{cmdPrefix}warnpunishments [wp]" +
+                        $"\n{cmdPrefix}whitelist [wl]" +
                         $"\n" +
                         $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                         "\n```";
@@ -806,6 +877,7 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}echo" +
                     $"\n{cmdPrefix}pick" +
                     $"\n{cmdPrefix}8ball" +
+                    $"\n{cmdPrefix}fact" +
                     $"\n{cmdPrefix}slap" +
                     $"\n{cmdPrefix}hug" +
                     $"\n{cmdPrefix}kiss" +

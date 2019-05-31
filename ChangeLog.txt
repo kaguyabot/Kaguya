@@ -3,6 +3,12 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.19.3
+
+- $fact command added. Displays a random fact in chat!
+- channel white/blacklist commands added to help command.
+- Help commands for all channel whitelisting/blacklisting commands have been added.
+
 Version 1.19.2
 
 - $channelwhitelist [cwl] command added, this allows server administrators to make Kaguya only work in a certain set of channels.
