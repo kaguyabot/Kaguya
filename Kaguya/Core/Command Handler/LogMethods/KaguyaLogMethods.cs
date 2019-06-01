@@ -131,7 +131,7 @@ namespace Kaguya.Core.CommandHandler
                 $"\n`@Kaguya#2708 prefix` (<-- Prefix has been reset from `<old prefix>` to `$`)" +
                 $"\n" +
                 $"\nFinally, if you wish to report a bug, please go to the Kaguya github page (found through `{cmdPrefix}helpdm`) and create an issue." +
-                $"\nYou may also let me know in Kaguya's dedicated support server: https://discord.gg/yhcNC97" +
+                $"\nYou may also let me know in Kaguya's dedicated support server: https://discord.gg/aumCJhr" +
                 $"\n" +
                 $"\nThank you, and enjoy!");
 
@@ -152,7 +152,7 @@ namespace Kaguya.Core.CommandHandler
                         logger.ConsoleCriticalAdvisory(exception, $"Guild {guild.Name} has been blacklisted.");
 
                         await guild.Owner.SendMessageAsync($"**This server has been blacklisted because I was unable to alter text channel permissions." +
-                            $"\nPlease contact Stage#0001 in my support server (https://discord.gg/yhcNC97) to be unblacklisted!**");
+                            $"\nPlease contact Stage#0001 in my support server (https://discord.gg/aumCJhr) to be unblacklisted!**");
                         server.IsBlacklisted = true;
                         break;
                     }

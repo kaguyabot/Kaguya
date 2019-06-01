@@ -1105,7 +1105,7 @@ namespace Kaguya.Modules
                 $"\nType `{cmdPrefix}h <command name>` for more information on how to use the command and a detailed description of what it does." +
                 $"\nAdd me to your server with this link!: <https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847>" +
                 $"\nWant to keep track of all the changes? Feel free to check out the Kaguya GitHub page!: <https://github.com/stageosu/Kaguya>" +
-                $"\nKaguya Support Server: https://discord.gg/yhcNC97 (This is also a good place to see what's coming soon and get notified when new updates come out :D)");
+                $"\nKaguya Support Server: https://discord.gg/aumCJhr (This is also a good place to see what's coming soon and get notified when new updates come out :D)");
         }
 
         [Command("profile")]

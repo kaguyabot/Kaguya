@@ -88,7 +88,7 @@ namespace Kaguya.Core.Command_Handler
                 }
             }
 
-            string[] games = { "Support Server: yhcNC97", "$help | @Kaguya#2708 help",
+            string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
             $"Servicing {mutualGuilds.Count()} guilds", $"Serving {i.ToString("N0")} users" };
             displayIndex++;
             if (displayIndex >= games.Length)

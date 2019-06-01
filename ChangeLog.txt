@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.19.6
+
+- All support server invite links have been replaced with a current one.
+
+
 Version 1.19.5
 
 - Scrapeserver and Scrapedatabase commands removed (owner only, but they were useless.)
