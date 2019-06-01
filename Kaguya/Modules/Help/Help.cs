@@ -1082,7 +1082,7 @@ namespace Kaguya.Modules
         {
             await Context.User.GetOrCreateDMChannelAsync();
 
-            embed.WithDescription($"Here's a link to my support server: https://discord.gg/yhcNC97" +
+            embed.WithDescription($"Here's a link to my support server: https://discord.gg/aumCJhr" +
                 $"\nHere's a link that you can use to add me to your server: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847");
             embed.SetColor(EmbedType.PINK);
             await Context.User.SendMessageAsync(embed: embed.Build());
