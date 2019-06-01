@@ -6,6 +6,7 @@ using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
 using Kaguya.Core.Command_Handler.LogMethods;
 using Kaguya.Core.CommandHandler;
+using Kaguya.Core.Server_Files;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -55,6 +56,7 @@ namespace Kaguya
                     _client.ShardReady += timers.VerifyUsers;
                     _client.ShardReady += timers.ResourcesBackup;
                     _client.ShardReady += timers.LogFileTimer;
+                    _client.ShardReady += timers.AntiRaidTimer;
 
                     _client.MessageReceived += logger.osuLinkParser;
                     _client.JoinedGuild += logger.JoinedNewGuild;
@@ -70,6 +72,7 @@ namespace Kaguya
                     _client.MessageReceived += logger.UserSaysFilteredPhrase;
                     _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
                     _client.ShardDisconnected += logger.ClientDisconnected;
+                    _client.UserJoined += AntiRaidIncrease;
 
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
                     await _client.LoginAsync(TokenType.Bot, Config.bot.Token);
@@ -87,6 +90,14 @@ namespace Kaguya
                 Console.ReadKey();
                 Environment.Exit(0);
             }
+        }
+
+        private Task AntiRaidIncrease(SocketGuildUser user)
+        {
+            var server = Servers.GetServer(user.Guild);
+            server.UsersJoinedLast30Seconds.Add(user.Id);
+            Servers.SaveServers();
+            return Task.CompletedTask;
         }
 
         private ServiceProvider ConfigureServices(DiscordSocketConfig config)

@@ -3,6 +3,18 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.19.5
+
+- Scrapeserver and Scrapedatabase commands removed (owner only, but they were useless.)
+- Adds $antiraid command, bot owner only. Very basic, and is pretty much untested.
+
+
+Version 1.19.4
+
+- $warn/$w now allows moderators to add a reason for their mute. Syntax: $m <user> [reason]
+    - If no reason is specified, the user will be DM'd with "No reason specified".
+    - If there is a reason, the user will be DM'd with the reason.
+
 Version 1.19.3
 
 - $fact command added. Displays a random fact in chat!

@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Kaguya.Core.Embed;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
+using System.IO;
 
 #pragma warning disable CS0472
 
@@ -743,7 +744,6 @@ namespace Kaguya.Modules
         public async Task MassBlacklist(List<SocketGuildUser> users)
         {
             stopWatch.Start();
-            await ScrapeServer();
 
             foreach (var user in users)
             {
@@ -752,82 +752,25 @@ namespace Kaguya.Modules
                 var userAccount = UserAccounts.GetAccount(user);
                 userAccount.EXP = 0;
                 userAccount.Points = 0;
-                userAccount.Blacklisted = 1;
+                userAccount.Blacklisted = 0;
+
                 UserAccounts.SaveAccounts();
 
-                await user.SendMessageAsync($"You have been permanently banned from `{serverName}` with ID `{serverID}`." +
-                    $"\nYour new Kaguya EXP amount is `{userAccount.EXP}`. Your new Kaguya currency amount is `{userAccount.Points}`." +
-                    $"\nUser `{userAccount.Username}` with ID `{userAccount.ID}` has been permanently blacklisted from all Kaguya functions, " +
-                    $"and can no longer execute any of the Kaguya commands." +
-                    $"\nIf you wish to appeal this blacklist, message `Stage#0001` on Discord.");
-                await user.BanAsync();
-                await ReplyAsync($"**{user.Mention} has been permanently `banned` and `blacklisted`.**");
+                await ReplyAsync($"**{user} has been permanently `blacklisted`.**");
                 logger.ConsoleGuildAdvisory(Context.Guild, user, stopWatch.ElapsedMilliseconds, $"User {user.Username}#{user.Discriminator} has been blacklisted.");
             }
             stopWatch.Stop();
         }
 
-        [Command("scrapeserver")] //administration
-        [RequireUserPermission(GuildPermission.Administrator)]
         [RequireOwner]
-        public async Task ScrapeServer() //Scrapes the server and creates accounts for ALL users, even if they've never typed in chat.
+        [Command("antiraid")]
+        public async Task AntiRaid()
         {
-            stopWatch.Start();
-            embed.WithDescription($"Creating accounts for **`{Context.Guild.MemberCount}`** users...");
-            await BE();
-            var users = Context.Guild.Users;
-            foreach (var user in users)
-            {
-                var userAccount = UserAccounts.GetAccount(user);
-                userAccount.Username = user.Username + "#" + user.Discriminator;
-                userAccount.ID = user.Id;
-                UserAccounts.SaveAccounts();
-            }
-            Console.WriteLine($"Created accounts for {Context.Guild.MemberCount} users.");
-            embed.WithTitle("Admin Server Scraping");
-            embed.WithDescription("Accounts obtained.");
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "Server scraped");
-        }
+            var server = Servers.GetServer(Context.Guild);
+            server.AntiRaid = true;
+            Servers.SaveServers();
 
-        [Command("scrapedatabase")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        [RequireOwner]
-        public async Task ScrapeDatabase() //Scrapes the entire bot database and creates accounts for every single member of every single guild the bot is in.
-        {
-            stopWatch.Start();
-            var _client = Global.Client;
-            var servers = Servers.GetAllServers();
-            embed.WithDescription($"**{Context.User.Mention} Scraping...**");
-            await BE();
-            foreach (var server in servers)
-            {
-                var isolatedServer = Servers.GetServer(server.ID, Context.Guild.Name);
-                ulong isolatedServerID = isolatedServer.ID;
-                var guild = _client.GetGuild(isolatedServerID);
-                if (guild != null)
-                {
-                    if (guild.MemberCount > 3500) { continue; } //If the guild has more than 3500 members, don't create accounts for everyone.
-                    var guildUsers = guild.Users;
-                    foreach (var user in guildUsers) //Creates account for the user, logging name, ID, and what servers they share with Kaguya.
-                    {
-                        if (user.IsBot) continue;
-                        var userAccount = UserAccounts.GetAccount(user);
-                        userAccount.Username = user.Username + "#" + user.Discriminator;
-                        userAccount.ID = user.Id;
-
-                        if(!userAccount.IsInServerIDs.Contains(guild.Id))
-                            userAccount.IsInServerIDs.Add(guild.Id);
-                        if (!userAccount.IsInServers.Contains(guild.Name))
-                            userAccount.IsInServers.Add(guild.Name);
-                    }
-                }
-            }
-            UserAccounts.SaveAccounts();
-            embed.WithDescription($"**{Context.User.Mention} Created accounts for `{UserAccounts.GetAllAccounts().Count}` users.**");
-            await BE();
-            stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Database scraped: {UserAccounts.GetAllAccounts().Count} users affected.");
+            await ReplyAsync("Antiraid enabled.");
         }
 
         [Command("removeallroles")] //admin

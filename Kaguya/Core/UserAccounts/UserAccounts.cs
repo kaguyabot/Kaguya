@@ -38,6 +38,11 @@ namespace Kaguya.Core.UserAccounts
             return GetOrCreateAccount(user.Id);
         }
 
+        public static UserAccount GetAccount(ulong id)
+        {
+            return GetOrCreateAccount(id);
+        }
+
         public static UserAccount GetAuthor()
         {
             return GetOrCreateAccount(146092837723832320);

@@ -18,6 +18,37 @@ namespace Kaguya.Core.Command_Handler
         readonly public IServiceProvider _services;
         readonly Logger logger = new Logger();
 
+        public Task AntiRaidTimer(DiscordSocketClient client)
+        {
+            Timer timer = new Timer(30000); //30 Seconds
+            timer.Elapsed += Raid_Timer_Elapsed;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            return Task.CompletedTask;
+        }
+
+        private void Raid_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var guilds = Servers.GetAllServers();
+            foreach (var guild in guilds)
+            {
+                if(guild.UsersJoinedLast30Seconds.Count() >= 5 && guild.AntiRaid == true)
+                {
+                    foreach(var user in guild.UsersJoinedLast30Seconds)
+                    {
+                        var userToBeBanned = _client.GetUser(user);
+                        ((SocketGuildUser)userToBeBanned).BanAsync();
+                        logger.ConsoleCriticalAdvisory($"I have banned {userToBeBanned} from a guild!");
+                    }
+                }
+
+                guild.UsersJoinedLast30Seconds.Clear();
+
+            }
+            Servers.SaveServers();
+            logger.ConsoleStatusAdvisory("AntiRaid count reset.");
+        }
+
         public Task LogFileTimer(DiscordSocketClient _client)
         {
             Timer timer = new Timer(2000); //2 Seconds

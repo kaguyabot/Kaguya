@@ -11,6 +11,8 @@ namespace Kaguya.Core.Server_Files
         public Dictionary<string, string> MutedMembers { get; set; }
         public Dictionary<string, int> WarnActions { get; set; }
         public Dictionary<ulong, int> WarnedMembers { get; set; }
+        public List<ulong> UsersJoinedLast30Seconds { get; set; }
+        public bool AntiRaid { get; set; } = false;
         public List<string> FilteredWords { get; set; }
         public List<ulong> BlacklistedChannels { get; set; }
         public List<ulong> WhitelistedChannels { get; set; }

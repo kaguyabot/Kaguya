@@ -62,6 +62,7 @@ namespace Kaguya
         private async Task HandleCommandAsync(SocketMessage s)
         {
             Stopwatch stopWatch = new Stopwatch();
+
             var msg = s as SocketUserMessage;
             var user = msg.Author as SocketGuildUser;
             if (msg is null || user is null || user.IsBot) return;
@@ -74,7 +75,6 @@ namespace Kaguya
 
             if (guild.BlacklistedChannels.Contains(msg.Channel.Id)) { return; }
             else if(!guild.WhitelistedChannels.Contains(msg.Channel.Id) && guild.WhitelistedChannels.Count > 0) { return; }
-
 
             var context = new ShardedCommandContext(_client, msg);
 
