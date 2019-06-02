@@ -291,7 +291,6 @@ namespace Kaguya.Modules.Administration
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task LogList()
         {
-            stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             var server = Servers.GetServer(Context.Guild);
             ulong[] logChannels = { server.LogDeletedMessages, server.LogUpdatedMessages, server.LogWhenUserJoins, server.LogWhenUserLeaves,
