@@ -193,7 +193,7 @@ namespace Kaguya.Modules
         {
             var account = UserAccounts.GetAccount(Context.User);
             embed.WithTitle("Level");
-            embed.WithDescription($"{Context.User.Mention} you have {account.LevelNumber} levels.");
+            embed.WithDescription($"{Context.User.Mention} you are level: {account.LevelNumber}");
             await BE();
         }
 
