@@ -184,7 +184,7 @@ namespace Kaguya.Modules
 
             var account = UserAccounts.GetAccount(user as SocketUser);
             embed.WithTitle("Experience Points");
-            embed.WithDescription($"{Context.User.Mention} `{user}` has `{account.EXP.ToString("N0")}` EXP.");
+            embed.WithDescription($"{Context.User.Mention} has `{account.EXP.ToString("N0")}` EXP.");
             await BE();
         }
 
@@ -193,7 +193,7 @@ namespace Kaguya.Modules
         {
             var account = UserAccounts.GetAccount(Context.User);
             embed.WithTitle("Level");
-            embed.WithDescription($"{Context.User.Mention} you have {account.LevelNumber} levels.");
+            embed.WithDescription($"{Context.User.Mention} you are level: {account.LevelNumber}");
             await BE();
         }
 
