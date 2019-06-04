@@ -141,12 +141,12 @@ namespace Kaguya.Modules
                 await BE();
                 return;
             }
-            if (difference.TotalHours < 12) //Difference of now compared to when user last upvoted Kaguya on DBL.
-                critical = rand.Next(100) < 28;
+            if (difference.TotalHours < 6) //Difference of now compared to when user last upvoted Kaguya on DBL.
+                critical = rand.Next(100) < 12;
             if (supporterTime.TotalSeconds > 0)
-                critical = rand.Next(100) < 28;
+                critical = rand.Next(100) < 12;
             if (difference.TotalHours < 12 && supporterTime.TotalSeconds > 0)
-                critical = rand.Next(100) < 56;
+                critical = rand.Next(100) < 24;
             if(critical) { bonus *= 3.50; }
             userAccount.Points += (uint)bonus;
             userAccount.LastReceivedTimelyPoints = DateTime.Now;
@@ -166,13 +166,46 @@ namespace Kaguya.Modules
             stopWatch.Start();
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             var userAccount = UserAccounts.GetAccount(Context.User);
-            var diamonds = userAccount.KaguyaDiamonds;
+            var diamonds = userAccount.Diamonds;
             stopWatch.Stop();
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
-                stopWatch.ElapsedMilliseconds,
                 description: $"{Context.User.Mention} You currently have <a:KaguyaDiamonds:581562698228301876> **`{diamonds.ToString("N0")}`.**",
                 footer: $"Diamonds are given to Kaguya Supporters. Find out more with {cmdPrefix}supporter.");
+        }
+
+        [Command("diamondconvert")] //Currency
+        [Alias("dc")]
+        public async Task DiamondConvert(int diamonds)
+        {
+            var userAccount = UserAccounts.GetAccount(Context.User);
+
+            if (diamonds > 0)
+            {
+                if (userAccount.Diamonds < diamonds)
+                {
+                    embed.WithDescription($"{Context.User.Mention} You don't have enough <a:KaguyaDiamonds:581562698228301876>");
+                    embed.SetColor(EmbedColor.RED);
+                    await BE(); return;
+                }
+
+                userAccount.Points += (uint)(diamonds * 100);
+                userAccount.Diamonds -= (uint)diamonds;
+
+                UserAccounts.SaveAccounts();
+
+                embed.WithDescription($"{Context.User.Mention} **Successfully converted " +
+                    $"<a:KaguyaDiamonds:581562698228301876>`{diamonds.ToString("N0")}` into `{(diamonds * 100).ToString("N0")}` points.**");
+                embed.WithFooter($"New Totals - Diamonds: {userAccount.Diamonds.ToString("N0")} Points: {userAccount.Points.ToString("N0")}");
+                await BE();
+            }
+            else
+            {
+                embed.WithDescription($"{Context.User.Mention} A minimum of <a:KaguyaDiamonds:581562698228301876>`1` is required!");
+                embed.SetColor(EmbedColor.RED);
+                await BE(); return;
+            }
+
         }
 
         [Command("masspointsdistribute")] //currency
@@ -247,19 +280,18 @@ namespace Kaguya.Modules
             Random rand = new Random();
             Random crit = new Random();
             var roll = rand.Next(101);
-            bool critical = crit.Next(100) < 8;
+            bool critical = crit.Next(100) < 5;
 
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
-            var supporterTime = userAccount.KaguyaSupporterExpiration - DateTime.Now;
 
             if (difference.TotalHours < 12)
-                critical = crit.Next(100) < 16;
+                critical = crit.Next(100) < 10;
 
-            if (supporterTime.TotalSeconds > 0)
-                critical = crit.Next(100) < 16;
+            if (userAccount.IsSupporter)
+                critical = crit.Next(100) < 10;
 
-            if (supporterTime.TotalSeconds > 0 && difference.TotalHours < 12)
-                critical = crit.Next(100) < 32;
+            if (userAccount.IsSupporter && difference.TotalHours < 12)
+                critical = crit.Next(100) < 20;
 
             if (roll <= 66)
             {
@@ -408,13 +440,13 @@ namespace Kaguya.Modules
             bool critical = crit.Next(100) < 8; //8% chance of weekly being a critical roll
 
             if (difference.TotalHours < 12)
-                critical = crit.Next(100) < 16; //16% if they've upvoted Kaguya within the last 12 hours.
+                critical = crit.Next(100) < 12; //16% if they've upvoted Kaguya within the last 12 hours.
 
             if (supporterTime.TotalSeconds > 0)
-                critical = crit.Next(100) < 16;
+                critical = crit.Next(100) < 12;
 
             if (supporterTime.TotalSeconds > 0 && difference.TotalHours < 12)
-                critical = crit.Next(100) < 32;
+                critical = crit.Next(100) < 24;
 
             if (!CanReceiveWeeklyPoints(userAccount, timeout))
             {

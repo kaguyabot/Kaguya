@@ -28,6 +28,9 @@ namespace Kaguya.Core.CommandHandler
 
         public async Task OnReady(DiscordSocketClient _client)
         {
+            Config.bot.RecentVoteClaimAttempts = 0; //Resets rate limit for DBL API.
+            Console.WriteLine("\nRecent voteclaim attempts reset to 0.");
+
             _ = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = _client.GetUser(ID).MutualGuilds;
 
@@ -37,10 +40,13 @@ namespace Kaguya.Core.CommandHandler
             Console.WriteLine("\nRetrieving bot from DBL API...");
             try
             {
-                IDblSelfBot me = await dblAPI.GetMeAsync();
-                Console.WriteLine("Pushing stats to DBL API...");
-                await me.UpdateStatsAsync(mutualGuilds.Count());
-                Console.WriteLine("Success.");
+                if (Global.ShardsLoggedIn == Global.ShardsToLogIn)
+                {
+                    IDblSelfBot me = await dblAPI.GetMeAsync();
+                    Console.WriteLine("Pushing stats to DBL API...");
+                    await me.UpdateStatsAsync(mutualGuilds.Count());
+                    Console.WriteLine("Success.");
+                }
             }
             catch (Exception e)
             {
@@ -63,11 +69,10 @@ namespace Kaguya.Core.CommandHandler
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            await _lavaShardClient.StartAsync(Global.Client);
+            await _lavaShardClient.StartAsync(Global.Client); //Initializes the music service.
+
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\nKaguya Music Service Started.");
-
-            Console.WriteLine($"\nAce Pilot Kaguya cleared for takeoff. Servicing {mutualGuilds.Count()} guilds and {i.ToString("N0")} members.");
             Console.WriteLine("\nBegin Logging.\n");
             Console.WriteLine("--------------------------------------------");
         }

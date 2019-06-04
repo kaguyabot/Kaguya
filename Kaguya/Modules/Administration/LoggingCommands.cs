@@ -106,7 +106,6 @@ namespace Kaguya.Modules.Administration
                     server.LogLevelUpAnnouncements = logChannelID;
                     Servers.SaveServers();
                     await GlobalCommandResponses.CreateCommandResponse(Context,
-                        stopWatch.ElapsedMilliseconds,
                         "Log Channel Set",
                         $"{Context.User.Mention} All log messages for `level announcements` will be sent in channel {channel.Name}");
                     break;
@@ -114,7 +113,6 @@ namespace Kaguya.Modules.Administration
                     server.LogShadowbans = logChannelID;
                     Servers.SaveServers();
                     await GlobalCommandResponses.CreateCommandResponse(Context,
-                        stopWatch.ElapsedMilliseconds,
                         "Log Channel Set",
                         $"{Context.User.Mention} All log messages for `shadowbans` will be sent in channel {channel.Name}");
                     break;
@@ -122,7 +120,6 @@ namespace Kaguya.Modules.Administration
                     server.LogUnShadowbans = logChannelID;
                     Servers.SaveServers();
                     await GlobalCommandResponses.CreateCommandResponse(Context,
-                        stopWatch.ElapsedMilliseconds,
                         "Log Channel Set",
                         $"{Context.User.Mention} All log messages for `un-shadowbans` will be sent in channel {channel.Name}");
                     break;
@@ -238,7 +235,6 @@ namespace Kaguya.Modules.Administration
                     server.LogLevelUpAnnouncements = 0;
                     Servers.SaveServers();
                     await GlobalCommandResponses.CreateCommandResponse(Context,
-                        stopWatch.ElapsedMilliseconds,
                         "Log Channel Set",
                         $"{Context.User.Mention} Log messages for `level announcements` have been disabled.");
                     break;
@@ -246,7 +242,6 @@ namespace Kaguya.Modules.Administration
                     server.LogShadowbans = 0;
                     Servers.SaveServers();
                     await GlobalCommandResponses.CreateCommandResponse(Context,
-                        stopWatch.ElapsedMilliseconds,
                         "Log Channel Set",
                         $"{Context.User.Mention} Log messages for `shadowbans` have been disabled.");
                     break;
@@ -254,7 +249,6 @@ namespace Kaguya.Modules.Administration
                     server.LogUnShadowbans = 0;
                     Servers.SaveServers();
                     await GlobalCommandResponses.CreateCommandResponse(Context,
-                        stopWatch.ElapsedMilliseconds,
                         "Log Channel Set",
                         $"{Context.User.Mention} Log messages for `un-shadowbans` have been disabled.");
                     break;

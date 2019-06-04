@@ -3,6 +3,40 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.20
+
+- Fixed a typo in the help command of $cwl
+- Fixed an issue where some commands were being logged twice in the console.
+- Removed a few unused user account variables
+- Removed the "VerifyUsers" timer.
+- Removed a few other poor/unused timers.
+- IsBlacklisted is now a boolean, not an integer.
+- KaguyaDiamonds has been renamed to Diamonds in UserAccount.cs (Line 12)
+- When kicking a user (without a reason), the kicker's username will now properly be displayed.
+- Command execution time should be at least slightly improved.
+- ConsoleCommandLog.CreateCommandResponse no longer logs to the console, resulting in no more duplicate command logs.
+- The "servicing x guilds" count is now separated with a comma if over 1,000 guilds.
+- Resources folder is now backed up every 5 minutes (was 15). Logs are now backed up as well.
+- $voteclaim should now be able to more accurately detect whether you have voted or not.
+- New timer for the Discorbots.org API ratelimit. If there are 50 $voteclaim attempts within 75 seconds, the bot will not execute that function until the appropriate time has passed.
+    - This ensures we don't get blocked by them!
+- $n bomb usage is now limited to 10 per hour. You may reset this cooldown once every 12 hours with $voteclaim.
+    - Kaguya supporters have no cooldown on $n bomb (This was implemented because the command is very resource intensive).
+- $diamondconvert/$dc command added. If you have diamonds in your account ($diamonds), you may convert them to points! 1 diamond is worth 100 points.
+- Critical hit chances have been significantly reduced.
+    - Timely points:
+        - No vote, no supporter: 6% (was 12%)
+        - No vote with supporter (or vice versa): 12% (was 28%)
+        - Vote and Supporter: 24% (was 56%)
+    - Gambling:
+        - No vote, no supporter: 5% (was 8%)
+        - No vote with supporter (or vice versa): 10% (was 16%)
+        - Vote and supporter: 20% (was 32%)
+    - Weekly points:
+        - No vote, no supporter: 8% (same as before)
+        - No vote with supporter (or vice versa): 12% (was 16%)
+        - Vote and supporter: 24% (was 32%)
+
 Version 1.19.6
 
 - All support server invite links have been replaced with a current one.

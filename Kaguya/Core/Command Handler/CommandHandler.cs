@@ -70,7 +70,7 @@ namespace Kaguya
             var guild = Servers.GetServer(user.Guild);
             var userAccount = UserAccounts.GetAccount(user);
 
-            if (userAccount.Blacklisted == 1) { return; }
+            if (userAccount.IsBlacklisted == true) { return; }
             if (guild.IsBlacklisted) { return; }
 
             if (guild.BlacklistedChannels.Contains(msg.Channel.Id)) { return; }

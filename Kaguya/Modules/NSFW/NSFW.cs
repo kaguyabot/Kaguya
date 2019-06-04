@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Kaguya.Core.Embed;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
+using Kaguya.Core.UserAccounts;
+using Kaguya.Core.Server_Files;
 
 namespace Kaguya.Modules.NSFW
 {
@@ -39,6 +41,33 @@ namespace Kaguya.Modules.NSFW
         [RequireNsfw]
         public async Task NSFWBomb()
         {
+            var userAccount = UserAccounts.GetAccount(Context.User);
+            var difference = userAccount.NBombCooldownReset - DateTime.Now;
+            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            bool isSupporter = userAccount.IsSupporter;
+
+            if(difference.TotalSeconds < 0)
+            {
+                userAccount.NBombUsesThisHour = 10;
+                userAccount.NBombCooldownReset = DateTime.Now + TimeSpan.FromMinutes(60);
+                UserAccounts.SaveAccounts();
+            }
+
+            if (!isSupporter && userAccount.NBombUsesThisHour <= 0)
+            {
+                embed.WithDescription($"{Context.User.Mention} You are out of `{cmdPrefix}n bomb` uses for this hour." +
+                    $"\nTo reset the cooldown, use `{cmdPrefix}vote` followed by `{cmdPrefix}voteclaim`.");
+                embed.WithFooter($"Supporters have no cooldown. For more information, use {cmdPrefix}supporter");
+                await BE();
+                return;
+            }
+
+            if (!isSupporter)
+            {
+                userAccount.NBombUsesThisHour -= 1;
+                UserAccounts.SaveAccounts();
+            }
+
             for (int i = 0; i < 5; i++)
             {
                 var lewd = await nekoClient.Nsfw_v3.Hentai();
@@ -46,6 +75,14 @@ namespace Kaguya.Modules.NSFW
                 embed.WithImageUrl(lewd.ImageUrl);
                 await BE();
             }
+
+            if (!isSupporter && userAccount.NBombUsesThisHour == 2)
+            {
+                embed.WithDescription($"{Context.User.Mention} You only have 2 `{cmdPrefix}n bomb` uses left for this hour!");
+                embed.SetColor(EmbedType.RED);
+                await BE();
+            }
+
         }
 
         [Command("lewd")]

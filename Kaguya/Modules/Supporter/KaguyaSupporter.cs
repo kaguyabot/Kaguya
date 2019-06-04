@@ -29,7 +29,7 @@ namespace Kaguya.Modules.Supporter
                 if (key.Contains(thirtyDayKey))
                 {
                     userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(30);
-                    userAccount.KaguyaDiamonds += 600;
+                    userAccount.Diamonds += 600;
                     UserAccounts.SaveAccounts();
                     thirtyDayKeys.Remove(thirtyDayKey);
                     File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/30DayKeys.txt", thirtyDayKeys);
@@ -51,7 +51,7 @@ namespace Kaguya.Modules.Supporter
                 if (key.Contains(sixtyDayKey))
                 {
                     userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(60);
-                    userAccount.KaguyaDiamonds += 1200;
+                    userAccount.Diamonds += 1200;
                     UserAccounts.SaveAccounts();
                     thirtyDayKeys.Remove(sixtyDayKey);
                     File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/60DayKeys.txt", thirtyDayKeys);
@@ -68,7 +68,7 @@ namespace Kaguya.Modules.Supporter
                 if (key.Contains(ninetyDayKey))
                 {
                     userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(90);
-                    userAccount.KaguyaDiamonds += 1800;
+                    userAccount.Diamonds += 1800;
                     UserAccounts.SaveAccounts();
                     thirtyDayKeys.Remove(ninetyDayKey);
                     File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/90DayKeys.txt", thirtyDayKeys);

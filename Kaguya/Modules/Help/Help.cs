@@ -124,8 +124,8 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nCritical Rewards:" +
                         $"\n" +
-                        $"\nRolls: `8% chance that the multiplier of your bet is multiplied by 2.5x`" +
-                        $"\nTimely: `14% chance that the value of your reward is multiplied by 3.5x`" +
+                        $"\nRolls: `5% chance that the multiplier of your bet is multiplied by 2.5x`" +
+                        $"\nTimely: `6% chance that the value of your reward is multiplied by 3.5x`" +
                         $"\nWeekly: `8% chance that the value of your reward will be multiplied by 3.5x`" +
                         $"\n" +
                         $"\nIf you have successfully used `{cmdPrefix}voteclaim` within the last 12 hours, these percentages are doubled.");
@@ -303,14 +303,14 @@ namespace Kaguya.Modules
                 case "t":
                     embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely`");
                     embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim 500 free points every 24 hours." +
-                        "\nThese points are added to your Kaguya account. The timely command has a 14% chance of landing a critical hit, " +
+                        "\nThese points are added to your Kaguya account. The timely command has a `6%` chance of landing a critical hit, " +
                         "multiplying your reward by `3.50x`." +
                         $"\nSyntax: `{cmdPrefix}timely`");
                     await BE(); break;
                 case "weekly":
                     embed.WithTitle($"Help: Weekly Points | `{cmdPrefix}weekly`");
                     embed.WithDescription($"{Context.User.Mention} The weekly command allows any user to claim 5,000 points every week." +
-                        "\nThese points are automatically added to your Kaguya account. The weekly command has an 8% chance to land a critical hit, multiplying " +
+                        "\nThese points are automatically added to your Kaguya account. The weekly command has a `8%` chance to land a critical hit, multiplying " +
                         "your reward by `3.50x`." +
                         $"\nSyntax: `{cmdPrefix}weekly`");
                     await BE(); break;
@@ -501,8 +501,8 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nThe maximum amount of points you can gamble at one time is set to `25,000`." +
                         $"\n" +
-                        $"\nIn addition, all rolls have an `8%` chance of landing a critical hit, multiplying the `multiplier` of the roll by `2.50x` (except for a 100 roll). " +
-                        $"The best possible roll is a `critical 100`, multiplying your bet by `30x` (The odds of this are `1 / 1,250` or `0.08%`.)");
+                        $"\nIn addition, all rolls have a `5%` chance of landing a critical hit, multiplying the `multiplier` of the roll by `2.50x` (except for a 100 roll). " +
+                        $"The best possible roll is a `critical 100`, multiplying your bet by `30x` (The odds of this are `1 / 2,000` or `0.05%`.)");
                     await BE(); break;
                 case "kaguyaexit":
                     embed.WithTitle($"Help: Kaguya Exit! | `{cmdPrefix}kaguyaexit`");
@@ -528,7 +528,7 @@ namespace Kaguya.Modules
                         $"any blacklisted channels this server has specified, so keep that in mind." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}channelwhitelist #<channel>`" +
-                        $"\nSyntax: `{cmdPrefix}cbl <channel-name/ID>`");
+                        $"\nSyntax: `{cmdPrefix}cwl <channel-name/ID>`");
                     await BE(); break;
                 case "channelblacklist":
                 case "cbl":
@@ -732,7 +732,8 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: NSFW | `{cmdPrefix}n`");
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}n` command will post a 2D image (no real people) in an NSFW channel with the specified tag." +
                         $"\nWhen using the `{cmdPrefix}n` command, append a tag to the end like so: `{cmdPrefix}n <tag>`." +
-                        $"\nNSFW Command List: `$n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif, bomb>` (Select one).");
+                        $"\nNSFW Command List: `{cmdPrefix}n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif, bomb>` (Select one).");
+                    embed.WithFooter($"{cmdPrefix}n bomb usage is limited to 10 uses per hour for non-supporters.");
                     await BE(); break;
                 case "m":
                     embed.WithTitle($"Help: Music Commands | `{cmdPrefix}m <modifier>`");
@@ -1129,7 +1130,7 @@ namespace Kaguya.Modules
                 $"\nEXP: `{account.EXP.ToString("N0")}`" +
                 $"\nRep: `{account.Rep.ToString("N0")}`" +
                 $"\nLevel: `{account.LevelNumber.ToString("N0")}`" +
-                $"\n<a:KaguyaDiamonds:581562698228301876>: `{account.KaguyaDiamonds.ToString("N0")}`" +
+                $"\n<a:KaguyaDiamonds:581562698228301876>: `{account.Diamonds.ToString("N0")}`" +
                 $"\nLifetime Gambles: `{account.LifetimeGambles.ToString("N0")}`" +
                 $"\nAverage Gamble Win %: `{(account.LifetimeGambleWins / account.LifetimeGambles * 100).ToString("N2")}%`" +
                 $"\nAverage Elite+ Roll %: `{(account.LifetimeEliteRolls / account.LifetimeGambles * 100).ToString("N2")}%`", true);
@@ -1174,36 +1175,46 @@ namespace Kaguya.Modules
         [Command("voteclaim")]
         public async Task VoteClaim()
         {
-            HttpClient client = new HttpClient();
-
-            UserAccount userAccount = UserAccounts.GetAccount(Context.User);
-            var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"{Config.bot.DblApiKey}");
-            var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.BotUserID}/check?userId={Context.User.Id}");
-
-            if (dblResponse.Contains("{\"voted\":1}"))
+            if (Config.bot.RecentVoteClaimAttempts <= 50)
             {
-                if (difference.TotalHours < 12)
+                Config.bot.RecentVoteClaimAttempts++;
+                HttpClient client = new HttpClient();
+                UserAccount userAccount = UserAccounts.GetAccount(Context.User);
+                var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"{Config.bot.DblApiKey}");
+                var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.BotUserID}/check?userId={Context.User.Id}");
+
+                if (dblResponse.Contains("{\"voted\":1}"))
                 {
-                    embed.WithDescription($"**{Context.User.Mention} You've already upvoted me and claimed your reward!" +
-                        $"\nTime remaining: `{11 - (int)difference.TotalHours} hours {60 - difference.Minutes} minutes and {60 - difference.Seconds} seconds`**");
-                    await BE();
+                    if (difference.TotalSeconds < 43200)
+                    {
+                        embed.WithDescription($"**{Context.User.Mention} You've already upvoted me and claimed your reward!" +
+                            $"\nTime remaining: `{11 - (int)difference.TotalHours} hours {60 - difference.Minutes} minutes and {60 - difference.Seconds} seconds`**");
+                        await BE();
+                    }
+                    else if (difference.TotalSeconds > 43200)
+                    {
+                        userAccount.LastUpvotedKaguya = DateTime.Now;
+                        userAccount.Points += 500;
+
+                        embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points` and `2x critical hit rate` have been applied.");
+                        embed.WithFooter("Thanks so much for your support!!");
+
+                        await BE();
+                    }
                 }
-                else if (difference.TotalHours > 12)
+                else if (dblResponse.Contains("{\"voted\":0}"))
                 {
-                    userAccount.LastUpvotedKaguya = DateTime.Now;
-                    userAccount.Points += 500;
-
-                    embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points` and `2x critical hit rate` have been applied.");
-                    embed.WithFooter("Thanks so much for your support!!");
-
+                    embed.WithDescription($"**{Context.User.Mention} you have not upvoted me! Please do so with the vote command!**");
+                    embed.WithFooter($"If you have upvoted, please wait two minutes and try again.");
                     await BE();
                 }
             }
-            else if (dblResponse.Contains("{\"voted\":0}"))
+            else
             {
-                embed.WithDescription($"**{Context.User.Mention} you have not upvoted me! Please do so with the vote command!**");
+                embed.WithDescription($"{Context.User.Mention} I am being rate limited! Please try again in 60 seconds.");
+                embed.SetColor(EmbedType.RED);
                 await BE();
             }
         }
@@ -1212,10 +1223,9 @@ namespace Kaguya.Modules
         public async Task SupporterInfo()
         {
             Stopwatch stopWatch = new Stopwatch();
-
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
-            await GlobalCommandResponses.CreateCommandResponse(Context, stopWatch.ElapsedMilliseconds,
+            await GlobalCommandResponses.CreateCommandResponse(Context,
                 "Kaguya Supporter",
                 "For those who wish to support the growth and development of the Kaguya Project, and get some cool perks in return, " +
                 "the Kaguya Supporter system is for you! While completely optional, those who wish to financially support may purchase a " +

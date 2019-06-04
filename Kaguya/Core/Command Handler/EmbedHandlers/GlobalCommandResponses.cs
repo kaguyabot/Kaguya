@@ -18,7 +18,7 @@ namespace Kaguya.Core.Command_Handler.EmbedHandlers
         /// <param name="description">Description of the embedded message.</param>
         /// <param name="footer">Footer of the embedded message.</param>
         /// <returns></returns>
-        public static async Task CreateCommandResponse(SocketCommandContext context, long timespan, string title = null, string description = null, string footer = null, string thumbnailURL = null)
+        public static async Task CreateCommandResponse(SocketCommandContext context, string title = null, string description = null, string footer = null, string thumbnailURL = null)
         {
             Logger logger = new Logger();
             var embed = await Task.Run(() => (new EmbedBuilder()
@@ -28,7 +28,6 @@ namespace Kaguya.Core.Command_Handler.EmbedHandlers
                 .WithFooter(footer)
                 .WithColor(252, 132, 255).Build())); //Pink
             await context.Channel.SendMessageAsync(embed: embed.ToEmbedBuilder().Build());
-            logger.ConsoleCommandLog(context, timespan);
         }
 
         /// <summary>

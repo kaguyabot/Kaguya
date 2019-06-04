@@ -32,9 +32,13 @@ namespace Kaguya
 
             try
             {
+                int shards = 1; //SET NUMBER OF SHARDS HERE!!
+
+                Global.ShardsToLogIn = shards;
+
                 var config = new DiscordSocketConfig
                 {
-                    TotalShards = 1
+                    TotalShards = shards
                 };
 
                 using (var services = ConfigureServices(config))
@@ -45,18 +49,12 @@ namespace Kaguya
 
                     var logger = new KaguyaLogMethods();
                     var timers = new Timers();
-
                     _client.ShardReady += ReadyAsync;
                     _client.ShardReady += logger.OnReady;
-                    _client.ShardReady += timers.CheckChannelPermissions;
-                    _client.ShardReady += timers.ServerInformationUpdate;
                     _client.ShardReady += timers.GameTimer;
                     _client.ShardReady += timers.VerifyMessageReceived;
-                    _client.ShardReady += timers.ServerMessageLogCheck;
-                    _client.ShardReady += timers.VerifyUsers;
                     _client.ShardReady += timers.ResourcesBackup;
-                    _client.ShardReady += timers.LogFileTimer;
-                    _client.ShardReady += timers.AntiRaidTimer;
+                    _client.ShardReady += timers.MessageCacheTimer;
 
                     _client.MessageReceived += logger.osuLinkParser;
                     _client.JoinedGuild += logger.JoinedNewGuild;
@@ -112,8 +110,28 @@ namespace Kaguya
 
         private Task ReadyAsync(DiscordSocketClient shard)
         {
-            Console.WriteLine($"Shard {shard.ShardId} logged in.");
-            Console.WriteLine($"Timers for shard {shard.ShardId} have been enabled.");
+            ulong.TryParse(Config.bot.BotUserID, out ulong ID);
+            var mutualGuilds = Global.Client.GetUser(ID).MutualGuilds;
+
+            int i = 0;
+            foreach (var guild in mutualGuilds)
+            {
+                for (int j = 0; j <= guild.MemberCount; j++)
+                {
+                    i++;
+                }
+            }
+
+            Console.WriteLine($"\nKaguya Ace shard {shard.ShardId} cleared for takeoff! Servicing {mutualGuilds.Count.ToString("N0")} guilds and {i.ToString("N0")} members!");
+
+            Global.TotalGuildCount += mutualGuilds.Count;
+            Global.TotalMemberCount += i;
+            Global.ShardsLoggedIn++;
+
+            Console.WriteLine("\nGuilds: " + Global.TotalGuildCount);
+            Console.WriteLine("Members: " + Global.TotalMemberCount);
+            Console.WriteLine("Shards Logged In: " + Global.ShardsLoggedIn);
+
             return Task.CompletedTask;
         }
     }

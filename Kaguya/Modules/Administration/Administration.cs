@@ -141,7 +141,6 @@ namespace Kaguya.Modules.Administration
             Servers.SaveServers();
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
-                stopWatch.ElapsedMilliseconds,
                 "Warn Settings Changed",
                 $"I now have `{warnAction.ToLower()}s` set to occur on `{warnNum}` {warning}.");
             stopWatch.Stop();
@@ -153,7 +152,6 @@ namespace Kaguya.Modules.Administration
         {
             stopWatch.Start();
             await GlobalCommandResponses.CreateCommandResponse(Context,
-                stopWatch.ElapsedMilliseconds,
                 "Warn Options",
                 $"{Context.User.Mention} The following warning options are available:" +
                 $"\n" +
@@ -205,7 +203,6 @@ namespace Kaguya.Modules.Administration
             }
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
-                stopWatch.ElapsedMilliseconds,
                 "Server Warning Punishments",
                 $"{Context.User.Mention} {Context.Guild.Name} currently has the following warning configuration:" +
                 $"\n" +
@@ -246,14 +243,13 @@ namespace Kaguya.Modules.Administration
             await user.SendMessageAsync(embed: embed.Build());
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
-                stopWatch.ElapsedMilliseconds,
                 $"Kaguya Global Warning",
                 $"{Context.User.Mention} User `{user}` has received a Kaguya Warning.",
                 $"User currently has {totalWarnings} warning(s).");
 
             if (totalWarnings >= 3)
             {
-                userAccount.Blacklisted = 1;
+                userAccount.IsBlacklisted = true;
                 userAccount.EXP = 0;
                 userAccount.Points = 0;
                 userAccount.Rep = 0;
@@ -705,7 +701,7 @@ namespace Kaguya.Modules.Administration
         {
             stopWatch.Start();
             var userAccount = UserAccounts.GetAccount(id);
-            userAccount.Blacklisted = 0;
+            userAccount.IsBlacklisted = false;
             UserAccounts.SaveAccounts();
 
             embed.WithTitle("User Unblacklisted");
@@ -733,7 +729,7 @@ namespace Kaguya.Modules.Administration
                 var userAccount = UserAccounts.GetAccount(user);
                 userAccount.EXP = 0;
                 userAccount.Points = 0;
-                userAccount.Blacklisted = 0;
+                userAccount.IsBlacklisted = false;
 
                 UserAccounts.SaveAccounts();
 
@@ -938,7 +934,7 @@ namespace Kaguya.Modules.Administration
                 {
                     await user.KickAsync(reason);
                     embed.WithTitle($"User Kicked");
-                    embed.WithDescription($"`{Context.User.Mention}` has kicked `{user}` without a specified reason.");
+                    embed.WithDescription($"`{Context.User}` has kicked `{user}` without a specified reason.");
                     await BE();
                 }
             }

@@ -216,7 +216,6 @@ namespace Kaguya.Modules.osu
             });
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
-                stopWatch.ElapsedMilliseconds,
                 $"**Top {num} osu! standard plays for {username}:**",
                 $"osu! Stats for player **{username}**:\n" + TopPlayString,
                 thumbnailURL: $"https://osu.ppy.sh/u/{playerID}");

@@ -6,19 +6,17 @@ namespace Kaguya.Core.Server_Files
 {
     public static class Servers
     {
-        private static List<Server> servers;
-
         private static string serversFile = "Resources/servers.json";
 
         static Servers()
         {
             if (DataStorage2.SaveExists(serversFile))
             {
-                servers = DataStorage2.LoadServers(serversFile).ToList();
+                Global.Servers = DataStorage2.LoadServers(serversFile).ToList();
             }
             else
             {
-                servers = new List<Server>();
+                Global.Servers = new List<Server>();
                 SaveServers();
             }
         }
@@ -36,18 +34,18 @@ namespace Kaguya.Core.Server_Files
         public static Server RemoveServer(ulong ID, string serverName)
         {
             var server = Servers.GetServer(ID, serverName);
-            servers.Remove(server);
+            Global.Servers.Remove(server);
             return server;
         }
 
         public static List<Server> GetAllServers()
         {
-            return servers;
+            return Global.Servers;
         }
 
         private static Server GetOrCreateServer(ulong id, string serverName)
         {
-            var result = from a in servers
+            var result = from a in Global.Servers
                          where a.ID == id
                          select a;
 
@@ -60,14 +58,14 @@ namespace Kaguya.Core.Server_Files
         {
             var newServer = new Server(id, serverName);
 
-            servers.Add(newServer);
+            Global.Servers.Add(newServer);
             SaveServers();
             return newServer;
         }
 
         public static void SaveServers()
         {
-            DataStorage2.SaveServers(servers, serversFile);
+            DataStorage2.SaveServers(Global.Servers, serversFile);
         }
     }
 }

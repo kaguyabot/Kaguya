@@ -6,31 +6,29 @@ namespace Kaguya.Core.UserAccounts
 {
     public static class UserAccounts
     {
-        private static List<UserAccount> accounts;
-
         private static string accountsFile = "Resources/accounts.json";
 
         static UserAccounts()
         {
             if(DataStorage2.SaveExists(accountsFile))
             {
-                accounts = DataStorage2.LoadUserAccounts(accountsFile).ToList();
+                Global.UserAccounts = DataStorage2.LoadUserAccounts(accountsFile).ToList();
             }
             else
             {
-                accounts = new List<UserAccount>();
+                Global.UserAccounts = new List<UserAccount>();
                 SaveAccounts();
             }
         }
 
         public static List<UserAccount> GetAllAccounts()
         {
-            return accounts;
+            return Global.UserAccounts;
         }
 
         public static void SaveAccounts()
         {
-            DataStorage2.SaveUserAccounts(accounts, accountsFile);
+            DataStorage2.SaveUserAccounts(Global.UserAccounts, accountsFile);
         }
 
         public static UserAccount GetAccount(SocketUser user)
@@ -50,7 +48,7 @@ namespace Kaguya.Core.UserAccounts
 
         private static UserAccount GetOrCreateAccount(ulong id)
         {
-            var result = from a in accounts
+            var result = from a in Global.UserAccounts
                          where a.ID == id
                          select a;
 
@@ -63,7 +61,7 @@ namespace Kaguya.Core.UserAccounts
         {
             var newAccount = new UserAccount(id);
 
-            accounts.Add(newAccount);
+            Global.UserAccounts.Add(newAccount);
             SaveAccounts();
             return newAccount;
         }
