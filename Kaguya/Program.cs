@@ -75,8 +75,6 @@ namespace Kaguya
 
                     _lavaClient.OnTrackFinished += MusicService.TrackCompletedAsync;
                     
-
-
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
                     await _client.LoginAsync(TokenType.Bot, Config.bot.Token);
 

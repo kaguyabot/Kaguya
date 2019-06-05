@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.21.1
+
+- $m join command removed from command list.
+- $stats command created (needs to be worked on)
+
 Version 1.21
 
 - Fixed a bug where songs queued in the music player would not skip to the next song when finished.

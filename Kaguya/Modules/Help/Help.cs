@@ -739,8 +739,7 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Music Commands | `{cmdPrefix}m <modifier>`");
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}m`command group is for all Kaguya Music commands. They are described in detail below:" +
                         $"\n" +
-                        $"\n**Play/Pause:** Plays or pauses the music player. `{cmdPrefix}m play <song name>`, `{cmdPrefix}m pause`" +
-                        $"\n**Join:** Makes Kaguya join the voice channel you are currently in. `{cmdPrefix}m join`" +
+                        $"\n**Play/Pause:** Plays or pauses the music player. Use this command first if Kaguya is not in the voice channel yet. `{cmdPrefix}m play <song name>`, `{cmdPrefix}m pause`" +
                         $"\n**Leave:** Makes Kaguya leave the voice channel she is currently in. `{cmdPrefix}m leave`" +
                         $"\n**Queue:** Displays Kaguya's playlist. Add more songs to the queue with the play command. `{cmdPrefix}m queue`" +
                         $"\n**Resume:** If Kaguya's music player is paused, she will resume playing music. `{cmdPrefix}m resume`" +
@@ -905,7 +904,6 @@ namespace Kaguya.Modules
             string music = "```css" +
                     "\nAll commands in category: Music!" +
                     "\n" +
-                    $"\n{cmdPrefix}m join" +
                     $"\n{cmdPrefix}m play" +
                     $"\n{cmdPrefix}m pause" +
                     $"\n{cmdPrefix}m resume" +
@@ -952,6 +950,7 @@ namespace Kaguya.Modules
                     "\nAll commands in category: NSFW" +
                     "\nNote: ALL NSFW images are 2D!" +
                     "\n" +
+                    $"\n{cmdPrefix}n" +
                     $"\n{cmdPrefix}n lewd" +
                     $"\n{cmdPrefix}n boobs" +
                     $"\n{cmdPrefix}n anal" +
@@ -1150,8 +1149,6 @@ namespace Kaguya.Modules
         [Command("bug")]
         public async Task BugReport([Remainder]string report)
         {
-
-
             var bugChannel = Global.client.GetChannel(547448889620299826); //Kaguya support server #bugs channel.
 
             embed.WithTitle($"Bug Report");

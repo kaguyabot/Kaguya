@@ -36,7 +36,6 @@ namespace Kaguya.Core.CommandHandler
 
             AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
 
-
             Console.WriteLine("\nRetrieving bot from DBL API...");
             try
             {

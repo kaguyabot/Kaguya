@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -20,13 +21,50 @@ namespace Kaguya.Modules.Utility
     public class Utility : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
-        //public InteractiveService _interactive = new InteractiveService(Global.Client);
+        private readonly DiscordShardedClient _client = Global.client;
         Logger logger = new Logger();
 
         public async Task BE() //Method to build and send an embedded message.
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
+
+        //[Command("stats")]
+        //public async Task KaguyaStats()
+        //{
+        //    var shard = _client.GetShardIdFor(Context.Guild as IGuild) + 1;
+
+        //    int textChannels = 0;
+        //    int voiceChannels = 0;
+
+        //    foreach(var guild in _client.Guilds)
+        //    {
+        //        textChannels += guild.TextChannels.Count;
+        //        voiceChannels += guild.VoiceChannels.Count;
+        //    }
+
+        //    embed.WithTitle($"Kaguya Statistics");
+
+        //    embed.AddField("Author",
+        //        $"User: `Stage#0001`" +
+        //        $"\nID: `146092837723832320`");
+
+        //    embed.AddField("Command Stats",
+        //        $"Commands Ran Today: **`{File.ReadAllLines($"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt").Count().ToString("N0")}`**");
+
+        //    embed.AddField($"Shard Stats", 
+        //        $"Current Shard: **`{shard}/{Global.ShardsLoggedIn}`**" +
+        //        $"\nGuild Presence: **`{_client.Guilds.Count.ToString("N0")}`**" +
+        //        $"\nText Channel Presence: **`{textChannels.ToString("N0")}`**" +
+        //        $"\nVoice Channel Presence: **`{voiceChannels.ToString("N0")}`**" +
+        //        $"\n");
+
+        //   // embed.AddField($"Global Stats",
+        //      //  $"Guild Presence: **`{}`**");
+
+
+        //    await BE();
+        //}
 
         [Command("toggleannouncements")]
         [RequireUserPermission(GuildPermission.Administrator)]

@@ -16,9 +16,9 @@ namespace Kaguya.Modules.Supporter
         {
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
 
-            List<string> thirtyDayKeys = File.ReadAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/30DayKeys.txt").ToList();
-            List<string> sixtyDayKeys = File.ReadAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/60DayKeys.txt").ToList();
-            List<string> ninetyDayKeys = File.ReadAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/90DayKeys.txt").ToList();
+            List<string> thirtyDayKeys = File.ReadAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/30DayKeys.txt").ToList();
+            List<string> sixtyDayKeys = File.ReadAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/60DayKeys.txt").ToList();
+            List<string> ninetyDayKeys = File.ReadAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/90DayKeys.txt").ToList();
 
             var _client = Global.client;
             var stage = _client.GetUser(146092837723832320);
@@ -32,7 +32,7 @@ namespace Kaguya.Modules.Supporter
                     userAccount.Diamonds += 600;
                     UserAccounts.SaveAccounts();
                     thirtyDayKeys.Remove(thirtyDayKey);
-                    File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/30DayKeys.txt", thirtyDayKeys);
+                    File.WriteAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/30DayKeys.txt", thirtyDayKeys);
 
                     await GlobalCommandResponses.CreateSuccessfulRedemption(Context, thirtyDayKey,
                         "Successfully Redeemed Supporter Tag!",
@@ -54,7 +54,7 @@ namespace Kaguya.Modules.Supporter
                     userAccount.Diamonds += 1200;
                     UserAccounts.SaveAccounts();
                     thirtyDayKeys.Remove(sixtyDayKey);
-                    File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/60DayKeys.txt", thirtyDayKeys);
+                    File.WriteAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/60DayKeys.txt", thirtyDayKeys);
 
                     await GlobalCommandResponses.CreateSuccessfulRedemption(Context, sixtyDayKey,
                         "Successfully Redeemed Supporter Tag!",
@@ -71,7 +71,7 @@ namespace Kaguya.Modules.Supporter
                     userAccount.Diamonds += 1800;
                     UserAccounts.SaveAccounts();
                     thirtyDayKeys.Remove(ninetyDayKey);
-                    File.WriteAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/90DayKeys.txt", thirtyDayKeys);
+                    File.WriteAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/90DayKeys.txt", thirtyDayKeys);
 
                     await GlobalCommandResponses.CreateSuccessfulRedemption(Context, ninetyDayKey,
                         "Successfully Redeemed Supporter Tag!",
