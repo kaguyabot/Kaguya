@@ -45,7 +45,7 @@ namespace Kaguya
         {
             try
             {
-                _client = Global.Client;
+                _client = Global.client;
                 _lavaShardClient = Global.lavaShardClient;
 
                 _commands = new CommandService();

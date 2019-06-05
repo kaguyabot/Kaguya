@@ -211,12 +211,18 @@ namespace Kaguya.Core
                 $"\nMessage: [\"{msg.Message}\"]");
         }
 
-        /// <summary>Console logging event for music.</summary>
-        public void ConsoleMusicLog(string msg)
+        public void ConsoleMusicLogNoUser(string msg)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"Music Service:" +
-                $"\n" +
+                $"\nMessage: [\"{msg}\"]");
+        }
+
+        /// <summary>Console logging event for music.</summary>
+        public void ConsoleMusicLog(SocketGuildUser user, string msg)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nMusic Service - Guild: [{user.Guild}]" +
                 $"\nMessage: [\"{msg}\"]");
         }
 

@@ -14,7 +14,7 @@ namespace Kaguya.Core.Command_Handler
 {
     public class Timers
     {
-        readonly DiscordShardedClient _client = Global.Client;
+        readonly DiscordShardedClient _client = Global.client;
         readonly public IServiceProvider _services;
         readonly Logger logger = new Logger();
 

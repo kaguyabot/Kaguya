@@ -3,6 +3,14 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.21
+
+- Fixed a bug where songs queued in the music player would not skip to the next song when finished.
+- All NSFW images are now guaranteed to be compliant with Discord's Terms of Service.
+- All NSFW tags have been temporarily disabled as a result, except for ($n, $n bomb, and $n gif).
+- NSFW collection significantly improved. Higher quality images, and only the best of the best stuff.
+- NSFW images no longer come with an embedded message, they are sent as individual files.
+
 Version 1.20
 
 - Fixed a typo in the help command of $cwl

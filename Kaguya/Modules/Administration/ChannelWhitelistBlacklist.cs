@@ -14,7 +14,7 @@ namespace Kaguya.Modules.Administration
     public class ChannelWhitelistBlacklist : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
-        readonly DiscordShardedClient _client = Global.Client;
+        readonly DiscordShardedClient _client = Global.client;
 
         public async Task BE() //Method to build and send an embedded message.
         {

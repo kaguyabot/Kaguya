@@ -768,6 +768,13 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Displays how many `Kaguya Diamonds` you have. Diamonds are able to be earned through being a supporter. " +
                         $"For more information, check out `{cmdPrefix}supporter`!");
                     await BE(); break;
+                case "diamondconvert":
+                case "dc":
+                    embed.WithTitle($"Help: Diamond Convert | `{cmdPrefix}diamondconvert`, `{cmdPrefix}dc`");
+                    embed.WithDescription($"{Context.User.Mention} Converts your diamonds into points. 10 <a:KaguyaDiamonds:581562698228301876> = 1,000 points." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}dc <diamonds to convert>`");
+                    await BE(); break;
                 case "sync":
                     embed.WithTitle($"Help: Supporter Sync | `{cmdPrefix}sync`");
                     embed.WithDescription($"{Context.User.Mention} This is a supporter only command that will automatically give you the \"Supporter\" role in the Kaguya Support Server. " +
@@ -849,6 +856,7 @@ namespace Kaguya.Modules
                 $"\n{cmdPrefix}masspointsdistribute" +
                 $"\n{cmdPrefix}points" +
                 $"\n{cmdPrefix}diamonds" +
+                $"\n{cmdPrefix}diamondconvert [dc]" +
                 $"\n{cmdPrefix}pointsadd [addpoints]" +
                 $"\n{cmdPrefix}timely [t]" +
                 $"\n{cmdPrefix}timelyreset" +
@@ -1144,7 +1152,7 @@ namespace Kaguya.Modules
         {
 
 
-            var bugChannel = Global.Client.GetChannel(547448889620299826); //Kaguya support server #bugs channel.
+            var bugChannel = Global.client.GetChannel(547448889620299826); //Kaguya support server #bugs channel.
 
             embed.WithTitle($"Bug Report");
             embed.WithDescription($"Report from user `{Context.User.Username}#{Context.User.Discriminator}` with ID: `{Context.User.Id}`" +

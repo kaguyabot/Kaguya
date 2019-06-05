@@ -26,7 +26,7 @@ namespace Kaguya.Modules.Administration
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
-        readonly DiscordShardedClient _client = Global.Client;
+        readonly DiscordShardedClient _client = Global.client;
 
         public async Task BE() //Method to build and send an embedded message.
         {

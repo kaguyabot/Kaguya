@@ -63,7 +63,7 @@ namespace Kaguya.Core.Command_Handler.EmbedHandlers
         public static async Task CreateAutomaticBugReport(string source, string bug, string footer = null)
         {
             Logger logger = new Logger();
-            var _client = Global.Client;
+            var _client = Global.client;
             var embed = await Task.Run(() => new EmbedBuilder()
             .WithTitle("Automatic Bug Report")
             .WithDescription($"Source: `{source}`" +

@@ -20,7 +20,7 @@ namespace Kaguya.Modules.Supporter
             List<string> sixtyDayKeys = File.ReadAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/60DayKeys.txt").ToList();
             List<string> ninetyDayKeys = File.ReadAllLines("C:/Users/Administrator/Documents/GitHub/Kaguya/90DayKeys.txt").ToList();
 
-            var _client = Global.Client;
+            var _client = Global.client;
             var stage = _client.GetUser(146092837723832320);
 
 

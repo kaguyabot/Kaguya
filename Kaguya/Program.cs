@@ -7,6 +7,7 @@ using Kaguya.Core.Command_Handler;
 using Kaguya.Core.Command_Handler.LogMethods;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Server_Files;
+using Kaguya.Modules.Music;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -19,7 +20,6 @@ namespace Kaguya
         static void Main(string[] args)
             => new Program().StartAsync().GetAwaiter().GetResult();
 
-        //DiscordSocketClient _client;
         public string version = Utilities.GetAlert("VERSION");
         public string osuApiKey = Config.bot.OsuApiKey;
         public string tillerinoApiKey = Config.bot.TillerinoApiKey;
@@ -43,9 +43,11 @@ namespace Kaguya
 
                 using (var services = ConfigureServices(config))
                 {
-                    var _client = services.GetRequiredService<DiscordShardedClient>();
+                    DiscordShardedClient _client = services.GetRequiredService<DiscordShardedClient>();
+                    LavaShardClient _lavaClient = new LavaShardClient();
 
-                    Global.Client = _client;
+                    Global.client = _client;
+                    Global.lavaShardClient = _lavaClient;
 
                     var logger = new KaguyaLogMethods();
                     var timers = new Timers();
@@ -70,13 +72,15 @@ namespace Kaguya
                     _client.MessageReceived += logger.UserSaysFilteredPhrase;
                     _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
                     _client.ShardDisconnected += logger.ClientDisconnected;
-                    _client.UserJoined += AntiRaidIncrease;
+
+                    _lavaClient.OnTrackFinished += MusicService.TrackCompletedAsync;
+                    
+
 
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
                     await _client.LoginAsync(TokenType.Bot, Config.bot.Token);
 
                     await _client.StartAsync();
-                    Global.Client = _client;
 
                     await Task.Delay(-1);
                 }
@@ -88,14 +92,6 @@ namespace Kaguya
                 Console.ReadKey();
                 Environment.Exit(0);
             }
-        }
-
-        private Task AntiRaidIncrease(SocketGuildUser user)
-        {
-            var server = Servers.GetServer(user.Guild);
-            server.UsersJoinedLast30Seconds.Add(user.Id);
-            Servers.SaveServers();
-            return Task.CompletedTask;
         }
 
         private ServiceProvider ConfigureServices(DiscordSocketConfig config)
@@ -111,7 +107,7 @@ namespace Kaguya
         private Task ReadyAsync(DiscordSocketClient shard)
         {
             ulong.TryParse(Config.bot.BotUserID, out ulong ID);
-            var mutualGuilds = Global.Client.GetUser(ID).MutualGuilds;
+            var mutualGuilds = Global.client.GetUser(ID).MutualGuilds;
 
             int i = 0;
             foreach (var guild in mutualGuilds)

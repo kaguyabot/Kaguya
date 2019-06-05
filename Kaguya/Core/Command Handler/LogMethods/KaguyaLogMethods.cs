@@ -17,7 +17,7 @@ namespace Kaguya.Core.CommandHandler
 {
     public class KaguyaLogMethods
     {
-        readonly DiscordShardedClient _client = Global.Client;
+        readonly DiscordShardedClient _client = Global.client;
         readonly LavaShardClient _lavaShardClient = Global.lavaShardClient;
         readonly Color Yellow = new Color(255, 255, 102);
         readonly Color SkyBlue = new Color(63, 242, 255);
@@ -26,13 +26,13 @@ namespace Kaguya.Core.CommandHandler
         readonly Logger logger = new Logger();
         readonly Stopwatch stopWatch = new Stopwatch();
 
-        public async Task OnReady(DiscordSocketClient _client)
+        public async Task OnReady(DiscordSocketClient client)
         {
             Config.bot.RecentVoteClaimAttempts = 0; //Resets rate limit for DBL API.
             Console.WriteLine("\nRecent voteclaim attempts reset to 0.");
 
             _ = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
-            var mutualGuilds = _client.GetUser(ID).MutualGuilds;
+            var mutualGuilds = client.GetUser(ID).MutualGuilds;
 
             AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
 
@@ -69,7 +69,7 @@ namespace Kaguya.Core.CommandHandler
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            await _lavaShardClient.StartAsync(Global.Client); //Initializes the music service.
+            await _lavaShardClient.StartAsync(Global.client); //Initializes the music service.
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\nKaguya Music Service Started.");

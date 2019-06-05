@@ -21,7 +21,7 @@ namespace Kaguya.Core.CommandHandler
                 .WithTitle(title)
                 .WithDescription(description)
                 .WithFooter(footer)
-                .WithColor(252, 132, 255).Build())); //Pink
+                .WithColor(0, 255, 255).Build())); //Pink
             return embed;
         }
 
@@ -35,6 +35,8 @@ namespace Kaguya.Core.CommandHandler
         /// <returns></returns>
         public static async Task<Discord.Embed> CreateMusicEmbed(string title, string description, string footer = null)
         {
+            Logger logger = new Logger();
+            logger.ConsoleMusicLogNoUser($"{description}");
             var embed = await Task.Run(() => (new EmbedBuilder()
                 .WithTitle(title)
                 .WithDescription(description)
