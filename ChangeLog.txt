@@ -3,6 +3,14 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.21.2
+
+- $n bomb command limited to five uses per hour (was ten).
+    - This is to prevent gateway deadlocking (where the bot crashes basically).
+    - (If someone wants to spam this five times in succession, nothing will happen anymore. Ten would deadlock the bot.)
+- $stats command finalized
+- Administrators now automatically override any channel whitelists/blacklists.
+
 Version 1.21.1
 
 - $m join command removed from command list.

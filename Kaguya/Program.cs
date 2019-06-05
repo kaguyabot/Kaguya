@@ -107,19 +107,34 @@ namespace Kaguya
             ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = Global.client.GetUser(ID).MutualGuilds;
 
-            int i = 0;
-            foreach (var guild in mutualGuilds)
+            int memberCount = 0;
+            int textChannelCount = 0;
+            int voiceChannelCount = 0;
+
+            foreach(var guild in mutualGuilds)
             {
                 for (int j = 0; j <= guild.MemberCount; j++)
                 {
-                    i++;
+                    memberCount++;
+                }
+
+                for (int k = 0; k < guild.TextChannels.Count; k++)
+                {
+                    textChannelCount++;
+                }
+
+                for (int l = 0; l < guild.VoiceChannels.Count; l++)
+                {
+                    voiceChannelCount++;
                 }
             }
 
-            Console.WriteLine($"\nKaguya Ace shard {shard.ShardId} cleared for takeoff! Servicing {mutualGuilds.Count.ToString("N0")} guilds and {i.ToString("N0")} members!");
+            Console.WriteLine($"\nKaguya shard {shard.ShardId} cleared for takeoff! Servicing {mutualGuilds.Count.ToString("N0")} guilds and {memberCount.ToString("N0")} members!");
 
             Global.TotalGuildCount += mutualGuilds.Count;
-            Global.TotalMemberCount += i;
+            Global.TotalMemberCount += memberCount;
+            Global.TotalTextChannels += textChannelCount;
+            Global.TotalVoiceChannels += voiceChannelCount;
             Global.ShardsLoggedIn++;
 
             Console.WriteLine("\nGuilds: " + Global.TotalGuildCount);

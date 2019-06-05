@@ -166,6 +166,10 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Level | `{cmdPrefix}level`");
                     embed.WithDescription($"{Context.User.Mention} Displays your current Kaguya level!");
                     await BE(); break;
+                case "stats":
+                    embed.WithTitle($"Help: Stats | `{cmdPrefix}stats`");
+                    embed.WithDescription($"{Context.User.Mention} Displays some interesting Kaguya Statistics!");
+                    await BE(); break;
                 case "createtextchannel":
                 case "ctc":
                     embed.WithTitle($"Help: Creating Text Channels | `{cmdPrefix}createtextchannel`, `{cmdPrefix}ctc`");
@@ -525,7 +529,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nAllows a server administrator to whitelist a channel (or multiple, subsequent channels). Whitelisted " +
                         $"channels are the only channels that Kaguya will respond to commands from. Using this command clears " +
-                        $"any blacklisted channels this server has specified, so keep that in mind." +
+                        $"any blacklisted channels this server has specified, so keep that in mind. Administrators are immune to whitelists." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}channelwhitelist #<channel>`" +
                         $"\nSyntax: `{cmdPrefix}cwl <channel-name/ID>`");
@@ -537,7 +541,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nAllows a server administrator to blacklist a channel (or multiple, subsequent channels). Blacklisted " +
                         $"channels are channels that Kaguya will not respond to. Use of this command clears any whitelisted channels " +
-                        $"in the server." +
+                        $"in the server. Administrators are immune to blacklists." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}channelblacklist #<channel>`" +
                         $"\nSyntax: `{cmdPrefix}cbl <channel-name/ID>`");
@@ -733,7 +737,7 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}n` command will post a 2D image (no real people) in an NSFW channel with the specified tag." +
                         $"\nWhen using the `{cmdPrefix}n` command, append a tag to the end like so: `{cmdPrefix}n <tag>`." +
                         $"\nNSFW Command List: `{cmdPrefix}n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif, bomb>` (Select one).");
-                    embed.WithFooter($"{cmdPrefix}n bomb usage is limited to 10 uses per hour for non-supporters.");
+                    embed.WithFooter($"{cmdPrefix}n bomb usage is limited to 5 uses per hour for non-supporters.");
                     await BE(); break;
                 case "m":
                     embed.WithTitle($"Help: Music Commands | `{cmdPrefix}m <modifier>`");

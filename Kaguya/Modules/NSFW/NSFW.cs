@@ -49,7 +49,7 @@ namespace Kaguya.Modules.NSFW
 
             if (difference.TotalSeconds < 0)
             {
-                userAccount.NBombUsesThisHour = 10;
+                userAccount.NBombUsesThisHour = 5;
                 userAccount.NBombCooldownReset = DateTime.Now + TimeSpan.FromMinutes(60);
                 UserAccounts.SaveAccounts();
             }
@@ -73,13 +73,6 @@ namespace Kaguya.Modules.NSFW
             {
                 var imageCollection = Global.stillsCollection;
                 await Context.Channel.SendFileAsync(imageCollection[rand.Next(imageCollection.Length)]);
-            }
-
-            if (!isSupporter && userAccount.NBombUsesThisHour == 2)
-            {
-                embed.WithDescription($"{Context.User.Mention} You only have 2 `{cmdPrefix}n bomb` uses left for this hour!");
-                embed.SetColor(EmbedType.RED);
-                await BE();
             }
 
         }

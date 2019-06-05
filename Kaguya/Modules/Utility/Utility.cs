@@ -29,42 +29,69 @@ namespace Kaguya.Modules.Utility
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        //[Command("stats")]
-        //public async Task KaguyaStats()
-        //{
-        //    var shard = _client.GetShardIdFor(Context.Guild as IGuild) + 1;
+        [Command("stats")]
+        public async Task KaguyaStats()
+        {
+            var shard = _client.GetShardIdFor(Context.Guild as IGuild) + 1;
 
-        //    int textChannels = 0;
-        //    int voiceChannels = 0;
+            int textChannels = 0;
+            int voiceChannels = 0;
+            uint totalCurrency = 0;
+            uint totalDiamonds = 0;
+            uint totalSupporters = 0;
+            double totalGambles = 0;
+            double totalGambleWins = 0;
 
-        //    foreach(var guild in _client.Guilds)
-        //    {
-        //        textChannels += guild.TextChannels.Count;
-        //        voiceChannels += guild.VoiceChannels.Count;
-        //    }
+            foreach (var guild in _client.Guilds)
+            {
+                textChannels += guild.TextChannels.Count;
+                voiceChannels += guild.VoiceChannels.Count;
+            }
 
-        //    embed.WithTitle($"Kaguya Statistics");
+            foreach(var account in Global.UserAccounts)
+            {
+                totalCurrency += account.Points;
+                totalDiamonds += account.Diamonds;
+                if (account.IsSupporter)
+                    totalSupporters++;
+                totalGambles += account.LifetimeGambles;
+                totalGambleWins += account.LifetimeGambleWins;
+            }
 
-        //    embed.AddField("Author",
-        //        $"User: `Stage#0001`" +
-        //        $"\nID: `146092837723832320`");
+            embed.WithTitle($"Kaguya Statistics");
 
-        //    embed.AddField("Command Stats",
-        //        $"Commands Ran Today: **`{File.ReadAllLines($"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt").Count().ToString("N0")}`**");
+            embed.AddField("Author",
+                $"User: `Stage#0001`" +
+                $"\nID: `146092837723832320`");
 
-        //    embed.AddField($"Shard Stats", 
-        //        $"Current Shard: **`{shard}/{Global.ShardsLoggedIn}`**" +
-        //        $"\nGuild Presence: **`{_client.Guilds.Count.ToString("N0")}`**" +
-        //        $"\nText Channel Presence: **`{textChannels.ToString("N0")}`**" +
-        //        $"\nVoice Channel Presence: **`{voiceChannels.ToString("N0")}`**" +
-        //        $"\n");
+            embed.AddField("Command Stats",
+                $"Commands Ran Today: **`{File.ReadAllLines($"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt").Count().ToString("N0")}`**");
 
-        //   // embed.AddField($"Global Stats",
-        //      //  $"Guild Presence: **`{}`**");
+            embed.AddField($"Shard Stats",
+                $"Version: **`{Utilities.GetAlert("VERSION")}`**" +
+                $"\nCurrent Shard: **`{shard}/{Global.ShardsLoggedIn}`**" +
+                $"\nGuilds: **`{_client.Guilds.Count.ToString("N0")}`**" +
+                $"\nText Channels: **`{textChannels.ToString("N0")}`**" +
+                $"\nVoice Channels: **`{voiceChannels.ToString("N0")}`**");
 
+            var timeDiff = DateTime.Now - Process.GetCurrentProcess().StartTime;
 
-        //    await BE();
-        //}
+            embed.AddField($"Global Stats",
+             $"Uptime: **`{timeDiff.TotalDays.ToString("N0")} days, {timeDiff.Hours} hours, {timeDiff.Minutes} minutes {timeDiff.Seconds} seconds`**" +
+             $"\nGuilds: **`{Global.TotalGuildCount.ToString("N0")}`**" +
+             $"\nMembers: **`{Global.TotalMemberCount.ToString("N0")}`**" +
+             $"\nText Channels: **`{Global.TotalTextChannels.ToString("N0")}`**" +
+             $"\nVoice Channels: **`{Global.TotalVoiceChannels.ToString("N0")}`**");
+
+            embed.AddField($"User Stats",
+                $"Registered Users: **`{Global.UserAccounts.Count.ToString("N0")}`**" +
+                $"\nTotal Currency: **`{totalCurrency.ToString("N0")}`**" +
+                $"\nTotal <a:KaguyaDiamonds:581562698228301876>: **`{totalDiamonds.ToString("N0")}`**" +
+                $"\nTotal Gambles: **`{totalGambles.ToString("N0")}`**" +
+                $"\nGlobal Average Gamble Win %: **`{(totalGambleWins / totalGambles * 100).ToString("N3")}%`**");
+
+            await BE();
+        }
 
         [Command("toggleannouncements")]
         [RequireUserPermission(GuildPermission.Administrator)]

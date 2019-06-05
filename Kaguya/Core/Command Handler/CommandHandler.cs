@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Kaguya.Core.Embed;
 using Victoria;
+using Discord;
 
 #pragma warning disable
 
@@ -73,8 +74,8 @@ namespace Kaguya
             if (userAccount.IsBlacklisted == true) { return; }
             if (guild.IsBlacklisted) { return; }
 
-            if (guild.BlacklistedChannels.Contains(msg.Channel.Id)) { return; }
-            else if(!guild.WhitelistedChannels.Contains(msg.Channel.Id) && guild.WhitelistedChannels.Count > 0) { return; }
+            if (guild.BlacklistedChannels.Contains(msg.Channel.Id) && !((msg.Author as IGuildUser).GuildPermissions.Administrator)) { return; }
+            else if(!guild.WhitelistedChannels.Contains(msg.Channel.Id) && guild.WhitelistedChannels.Count > 0 && !((msg.Author as IGuildUser).GuildPermissions.Administrator)) { return; }
 
             var context = new ShardedCommandContext(_client, msg);
 

@@ -16,6 +16,8 @@ namespace Kaguya
         public static List<Server> Servers { get; set; }
         public static int TotalGuildCount { get; set; }
         public static int TotalMemberCount { get; set; }
+        public static int TotalTextChannels { get; set; }
+        public static int TotalVoiceChannels { get; set; }
         public static int ShardsToLogIn { get; set; }
         public static int ShardsLoggedIn { get; set; }
         public static string[] stillsCollection = Directory.GetFiles($"{Directory.GetCurrentDirectory()}/Hentai/Stills");
