@@ -10,6 +10,7 @@ using Kaguya.Core.Server_Files;
 using Kaguya.Modules.Music;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Victoria;
 
@@ -131,15 +132,16 @@ namespace Kaguya
 
             Console.WriteLine($"\nKaguya shard {shard.ShardId} cleared for takeoff! Servicing {mutualGuilds.Count.ToString("N0")} guilds and {memberCount.ToString("N0")} members!");
 
-            Global.TotalGuildCount += mutualGuilds.Count;
-            Global.TotalMemberCount += memberCount;
-            Global.TotalTextChannels += textChannelCount;
-            Global.TotalVoiceChannels += voiceChannelCount;
-            Global.ShardsLoggedIn++;
+            if((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMinutes < 30)
+            {
+                Global.TotalGuildCount += mutualGuilds.Count;
+                Global.TotalMemberCount += memberCount;
+                Global.TotalTextChannels += textChannelCount;
+                Global.TotalVoiceChannels += voiceChannelCount;
+                Global.ShardsLoggedIn++;
+            }
 
-            Console.WriteLine("\nGuilds: " + Global.TotalGuildCount);
-            Console.WriteLine("Members: " + Global.TotalMemberCount);
-            Console.WriteLine("Shards Logged In: " + Global.ShardsLoggedIn);
+            Console.WriteLine("\nShards Logged In: " + Global.ShardsLoggedIn);
 
             return Task.CompletedTask;
         }

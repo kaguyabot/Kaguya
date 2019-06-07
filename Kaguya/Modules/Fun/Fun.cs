@@ -8,11 +8,12 @@ using Discord.WebSocket;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.Embed;
 using NekosSharp;
+using Discord.Addons.Interactive;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules
 {
-    public class Fun : ModuleBase<ShardedCommandContext>
+    public class Fun : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
         readonly NekoClient nekoClient = new NekoClient("Kaguya");
@@ -21,6 +22,8 @@ namespace Kaguya.Modules
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
+
+
 
         [Command("fact")]
         public async Task RandomFact()
@@ -46,8 +49,13 @@ namespace Kaguya.Modules
                 await BE(); return;
             }
 
-            embed.WithDescription(message);
+            foreach(var word in filteredWords)
+            {
+                if (message.Contains(word))
+                    return;
+            }
 
+            embed.WithDescription(message);
             await BE();
         }
 
@@ -59,7 +67,6 @@ namespace Kaguya.Modules
                 embed.WithTitle("Pick: Missing Options!");
                 embed.WithDescription($"**{Context.User.Mention} No options specified!**");
                 await BE();
-                //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User did not specify any options to pick from."); return;
             }
 
             string[] options = message.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
