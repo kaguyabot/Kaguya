@@ -23,8 +23,6 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-
-
         [Command("fact")]
         public async Task RandomFact()
         {
