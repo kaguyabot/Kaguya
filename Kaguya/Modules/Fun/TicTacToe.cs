@@ -34,17 +34,14 @@ namespace Kaguya.Modules.Fun
                 { PlayChoice.empty, PlayChoice.empty, PlayChoice.empty } };
             string[] playChoices = new string[9] { "1a", "2a", "3a", "1b", "2b", "3b", "1c", "2c", "3c" }; //TicTacToe play choices.
 
-            bool gameInProgress = true;
-
             embed.WithTitle($"🎮 Tic Tac Toe");
-            embed.WithDescription($"A new game of Tic Tac Toe has started between {Context.User.Mention} and {player2.Mention}!");
+            embed.WithDescription($"A new game of Tic Tac Toe has started between {Context.User.Mention} and {player2.Mention}!" +
+                $"\n" +
+                $"\n{Context.User.Mention} It is your turn to play! You have 30 seconds to make your selection!");
             await BE();
 
             do
             {
-                embed.WithDescription($"{Context.User.Mention} It is your turn to play! You have 30 seconds to make your selection!");
-                await BE();
-
                 bool p1Repeat = true;
                 bool p2Repeat = true;
                 bool p1Turn = true;
@@ -81,7 +78,7 @@ namespace Kaguya.Modules.Fun
                             $"**3** {GetString(grid[0, 2])} | {GetString(grid[1, 2])} | {GetString(grid[2, 2])}\n" +
                             $"**2** {GetString(grid[0, 1])} | {GetString(grid[1, 1])} | {GetString(grid[2, 1])}\n" +
                             $"**1** {GetString(grid[0, 0])} | {GetString(grid[1, 0])} | {GetString(grid[2, 0])}\n" +
-                            $"¯¯¯**A**¯¯¯¯**B**¯¯¯¯**C**¯¯";
+                            $"¯¯¯**A**¯¯¯¯**B**¯¯¯¯**C**¯¯"; //Formatting
 
                         //Checks for any potential winning matches.
 
@@ -192,6 +189,7 @@ namespace Kaguya.Modules.Fun
         }
 
         private List<string> selectedTiles = new List<string>();
+        private bool gameInProgress = true;
 
         private string GetString(PlayChoice playChoice)
         {

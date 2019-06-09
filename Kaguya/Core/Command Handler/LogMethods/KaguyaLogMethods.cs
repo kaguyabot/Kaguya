@@ -72,9 +72,6 @@ namespace Kaguya.Core.CommandHandler
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\nKaguya Music Service Started.");
-
-            
-
             Console.WriteLine("\nBegin Logging.\n");
             Console.WriteLine("--------------------------------------------");
         }

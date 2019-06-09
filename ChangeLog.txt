@@ -10,6 +10,7 @@ Version 1.22
 - $echo will now no longer execute the command if a filtered phrase is detected.
 - $ping command added.
 - Fully functional tictactoe game added! Check out "$h ttt" or "$h tictactoe" for more info!
+- Removed the Global Avg Gamble Win % stat from $stats
 
 
 Version 1.21.2

@@ -61,7 +61,6 @@ namespace Kaguya.Modules.Utility
             uint totalDiamonds = 0;
             uint totalSupporters = 0;
             double totalGambles = 0;
-            double totalGambleWins = 0;
 
             foreach (var guild in _client.Guilds)
             {
@@ -76,7 +75,6 @@ namespace Kaguya.Modules.Utility
                 if (account.IsSupporter)
                     totalSupporters++;
                 totalGambles += account.LifetimeGambles;
-                totalGambleWins += account.LifetimeGambleWins;
             }
 
             embed.WithTitle($"Kaguya Statistics");
@@ -108,8 +106,7 @@ namespace Kaguya.Modules.Utility
                 $"Registered Users: **`{Global.UserAccounts.Count.ToString("N0")}`**" +
                 $"\nTotal Currency: **`{totalCurrency.ToString("N0")}`**" +
                 $"\nTotal <a:KaguyaDiamonds:581562698228301876>: **`{totalDiamonds.ToString("N0")}`**" +
-                $"\nTotal Gambles: **`{totalGambles.ToString("N0")}`**" +
-                $"\nGlobal Average Gamble Win %: **`{(totalGambleWins / totalGambles * 100).ToString("N3")}%`**");
+                $"\nTotal Gambles: **`{totalGambles.ToString("N0")}`**");
 
             await BE();
         }
