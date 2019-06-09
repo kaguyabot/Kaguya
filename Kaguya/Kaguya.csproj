@@ -315,6 +315,7 @@
     <Compile Include="Modules\Currency\Currency.cs" />
     <Compile Include="Modules\EXP\EXP.cs" />
     <Compile Include="Modules\Fun\Fun.cs" />
+    <Compile Include="Modules\Fun\TicTacToe.cs" />
     <Compile Include="Modules\Fun\TriviaGame.cs" />
     <Compile Include="Modules\Help\Help.cs" />
     <Compile Include="Modules\Music\AudioOptions.cs" />

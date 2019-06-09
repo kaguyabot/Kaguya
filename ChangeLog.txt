@@ -3,12 +3,13 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
-Version 1.21.3
+Version 1.22
 
 - Fixed a bug with $stats where if a shard disconnected and re-logged in, it would re-add the stats for that shard to the total counts.
     - Now, this will only apply for the first 30 minutes (if this is too long, I will make it shorter, but usually shards don't disconnect within this time frame.)
 - $echo will now no longer execute the command if a filtered phrase is detected.
 - $ping command added.
+- Fully functional tictactoe game added! Check out "$h ttt" or "$h tictactoe" for more info!
 
 
 Version 1.21.2

@@ -231,6 +231,24 @@ namespace Kaguya.Modules
                         $"\nYou may have as many \"Options\" as you'd like!" +
                         $"\nThe bot will always pick with totally random odds.");
                     await BE(); break;
+                case "tictactoe":
+                case "ttt":
+                    embed.WithTitle($"Help: Tic Tac Toe! | `{cmdPrefix}tictactoe`, `{cmdPrefix}ttt`");
+                    embed.WithDescription($"{Context.User.Mention} Allows you to play Tic Tac Toe with a friend!" +
+                        $"\n" +
+                        $"\nInitiate a Tic Tac Toe game by typing \n`{cmdPrefix}ttt {{@User#0000 / User ID / Username}}`." +
+                        $"\nCurrently, the person who initiates the game will go first." +
+                        $"\n" +
+                        $"\nHow to play:" +
+                        $"\n" +
+                        $"\nThe first person to get three in a row (vertically, horizontally, or diagonally) wins! " +
+                        $"To make your move, simply reply in chat with your move. An example move could be `3A`, `2B`, or `1C`. " +
+                        $"Moves always begin with a number between 1 and 3, and end with a letter between A and C. You do not type " +
+                        $"the command prefix `{cmdPrefix}` when typing your move." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}ttt <{{@User#0000 / User ID / Username}}>`" +
+                        $"\nSyntax: `{cmdPrefix}tictactoe <{{@User#0000 / User ID / Username}}>`");
+                    await BE(); break;
                 case "8ball":
                     embed.WithTitle($"Help: Magic 8Ball | `{cmdPrefix}8ball`");
                     embed.WithDescription($"{Context.User.Mention} Ask Kaguya a question and she will use her divine powers to answer you extremely accurately!" +

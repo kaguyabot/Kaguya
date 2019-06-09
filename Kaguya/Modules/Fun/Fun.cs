@@ -10,6 +10,7 @@ using Kaguya.Core.Embed;
 using NekosSharp;
 using Discord.Addons.Interactive;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
+using System.Collections.Generic;
 
 namespace Kaguya.Modules.Fun
 {
@@ -18,161 +19,9 @@ namespace Kaguya.Modules.Fun
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
         readonly NekoClient nekoClient = new NekoClient("Kaguya");
 
-        public async Task BE() //Method to build and send an embedded message.
+        public async Task BE()
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
-        }
-
-        [RequireContext(ContextType.Guild)]
-        [Command("tictactoe", RunMode = RunMode.Async)]
-        [Alias("ttt")]
-        public async Task TicTacToe(IGuildUser player2 = null)
-        {
-            PlayChoice[,] playArea = new PlayChoice[3, 3] {
-                { PlayChoice.empty, PlayChoice.empty, PlayChoice.empty },
-                { PlayChoice.empty, PlayChoice.empty, PlayChoice.empty},
-                { PlayChoice.empty, PlayChoice.empty, PlayChoice.empty } };
-            string[] playChoices = new string[9] { "1a", "2a", "3a", "1b", "2b", "3b", "1c", "2c", "3c" }; //TicTacToe play choices.
-
-            bool gameInProgress = true;
-
-            embed.WithTitle($"🎮 Tic Tac Toe");
-            embed.WithDescription($"A new game of Tic Tac Toe has started between {Context.User.Mention} and {player2.Mention}!");
-            await BE();
-
-            do {
-                embed.WithDescription($"{Context.User.Mention} It is your turn to play! You have 30 seconds to make your selection!");
-                await BE();
-
-                bool p1Repeat = true;
-                bool p2Repeat = true;
-                bool p1Turn = true;
-                bool p2Turn = true;
-
-                do //If player 1 makes a bad selection, keep repeating until they get it right.
-                {
-                    SocketMessage p1Ans = await Interactive.NextMessageAsync(Context, false, timeout: TimeSpan.FromSeconds(30));
-                    if (!playChoices.Any(p1Ans.Content.ToLower().Contains) && p1Ans.Author.Id == Context.User.Id)
-                    {
-                        p1Repeat = true;
-                    }
-                    else if (playChoices.Any(p1Ans.Content.ToLower().Contains))
-                    {
-                        //Store choice in play board.
-
-                        playArea = AnswerSwitch(playArea, p1Ans, PlayChoice.x);
-
-                        string playString = $"{GetString(playArea[0, 0])} | {GetString(playArea[0, 1])} | {GetString(playArea[0, 2])}\n" +
-                            $"{GetString(playArea[1, 0])} | {GetString(playArea[1, 1])} | {GetString(playArea[1, 2])}\n" +
-                            $"{GetString(playArea[2, 0])} | {GetString(playArea[2, 1])} | {GetString(playArea[2, 2])}";
-
-                        embed.WithDescription($"New play area: \n{playString}");
-                        await BE();
-                        p1Turn = false;
-                        p2Turn = true;
-                        break;
-                    }
-                    else
-                    {
-                        embed.WithDescription("I failed for an unknown reason! If this is a repeated issue, please join the support server and contact Stage! Otherwise, please start a new game.");
-                        await BE();
-                        p1Turn = false;
-                        p2Turn = true;
-                        break;
-                    }
-                }
-                while (p1Repeat && p1Turn);
-
-                embed.WithDescription($"{player2.Mention} It is your turn to play! You have 30 seconds to make your selection!");
-                await BE();
-
-                do //If player 2 makes a bad selection, keep repeating until they get it right.
-                {
-                    SocketMessage p2Ans = await Interactive.NextMessageAsync(Context, false, timeout: TimeSpan.FromSeconds(30));
-                    if (!playChoices.Any(p2Ans.Content.ToLower().Contains) && p2Ans.Author.Id == player2.Id)
-                    {
-                        p2Repeat = true;
-                    }
-                    else if (playChoices.Any(p2Ans.Content.ToLower().Contains) && p2Ans.Author.Id == player2.Id)
-                    {
-                        //Store choice in play board.
-
-                        playArea = AnswerSwitch(playArea, p2Ans, PlayChoice.o);
-
-                        string playString = $"{GetString(playArea[0, 0])} | {GetString(playArea[0, 1])} | {GetString(playArea[0, 2])}\n" +
-                            $"{GetString(playArea[1, 0])} | {GetString(playArea[1, 1])} | {GetString(playArea[1, 2])}\n" +
-                            $"{GetString(playArea[2, 0])} | {GetString(playArea[2, 1])} | {GetString(playArea[2, 2])}";
-
-                        embed.WithDescription($"New play area: \n{playString}");
-                        await BE();
-                        p2Turn = false;
-                        p1Turn = true;
-                        break;
-                    }
-                    else
-                    {
-                        embed.WithDescription("I failed for an unknown reason! If this is a repeated issue, please join the support server and contact Stage! Otherwise, please start a new game.");
-                        await BE();
-                        p2Turn = false;
-                        p1Turn = true;
-                        break;
-                    }
-                }
-                while (p2Repeat && p2Turn);
-            }
-            //Code for end game logic
-            while (gameInProgress);
-        }
-
-        private string GetString(PlayChoice playChoice)
-        {
-            if (playChoice == PlayChoice.x)
-                return "❌";
-            if (playChoice == PlayChoice.o)
-                return "⭕";
-            return "\\_\\_\\_\\_";
-        }
-
-        private PlayChoice[,] AnswerSwitch(PlayChoice[,] playArea, SocketMessage answer, PlayChoice playChoice)
-        {
-            switch (answer.Content.ToLower())
-            {
-                case "1a":
-                case "a1":
-                    playArea[0, 0] = playChoice; break;
-                case "2a":
-                case "a2":
-                    playArea[0, 1] = playChoice; break;
-                case "3a":
-                case "a3":
-                    playArea[0, 2] = playChoice; break;
-                case "1b":
-                case "b1":
-                    playArea[1, 0] = playChoice; break;
-                case "2b":
-                case "b2":
-                    playArea[1, 1] = playChoice; break;
-                case "3b":
-                case "b3":
-                    playArea[1, 2] = playChoice; break;
-                case "1c":
-                case "c1":
-                    playArea[2, 0] = playChoice; break;
-                case "2c":
-                case "c2":
-                    playArea[2, 1] = playChoice; break;
-                case "3c":
-                case "c3":
-                    playArea[2, 2] = playChoice; break;
-            }
-            return playArea;
-        }
-
-        enum PlayChoice //TicTacToe play choices
-        {
-            x,
-            o,
-            empty
         }
 
         [Command("fact")]
