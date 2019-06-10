@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.22.1
+
+- Added help command for $ping.
+
 Version 1.22
 
 - Fixed a bug with $stats where if a shard disconnected and re-logged in, it would re-add the stats for that shard to the total counts.

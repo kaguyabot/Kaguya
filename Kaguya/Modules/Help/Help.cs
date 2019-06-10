@@ -170,6 +170,10 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Stats | `{cmdPrefix}stats`");
                     embed.WithDescription($"{Context.User.Mention} Displays some interesting Kaguya Statistics!");
                     await BE(); break;
+                case "ping":
+                    embed.WithTitle($"Help: Ping | `{cmdPrefix}ping`");
+                    embed.WithDescription($"{Context.User.Mention} Displays Discord's latency in real time.");
+                    await BE(); break;
                 case "createtextchannel":
                 case "ctc":
                     embed.WithTitle($"Help: Creating Text Channels | `{cmdPrefix}createtextchannel`, `{cmdPrefix}ctc`");
