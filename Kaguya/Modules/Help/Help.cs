@@ -926,20 +926,20 @@ namespace Kaguya.Modules
                     "\nAll commands in category: Fun" +
                     "\n" +
                     $"\n{cmdPrefix}8ball" +
-                    $"\n{cmdPrefix}baka" +
+                    $"\n{cmdPrefix}baka [TEMPORARILY DISABLED]" +
                     $"\n{cmdPrefix}echo" +
                     $"\n{cmdPrefix}fact" +
-                    $"\n{cmdPrefix}hug" +
-                    $"\n{cmdPrefix}kiss" +
-                    $"\n{cmdPrefix}nekoavatar" +
-                    $"\n{cmdPrefix}pat" +
+                    $"\n{cmdPrefix}hug [TEMPORARILY DISABLED]" +
+                    $"\n{cmdPrefix}kiss [TEMPORARILY DISABLED]" +
+                    $"\n{cmdPrefix}nekoavatar [TEMPORARILY DISABLED]" +
+                    $"\n{cmdPrefix}pat [TEMPORARILY DISABLED]" +
                     $"\n{cmdPrefix}pick" +
-                    $"\n{cmdPrefix}poke" +
-                    $"\n{cmdPrefix}slap" +
-                    $"\n{cmdPrefix}smug" +
-                    $"\n{cmdPrefix}tickle" +
-                    $"\n{cmdPrefix}waifu" +
-                    $"\n{cmdPrefix}wallpaper" +
+                    $"\n{cmdPrefix}poke [TEMPORARILY DISABLED]" +
+                    $"\n{cmdPrefix}slap [TEMPORARILY DISABLED]" +
+                    $"\n{cmdPrefix}smug [TEMPORARILY DISABLED]" +
+                    $"\n{cmdPrefix}tickle [TEMPORARILY DISABLED]" +
+                    $"\n{cmdPrefix}waifu [TEMPORARILY DISABLED]" +
+                    $"\n{cmdPrefix}wallpaper [TEMPORARILY DISABLED]" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n" +
                     $"\n```";
