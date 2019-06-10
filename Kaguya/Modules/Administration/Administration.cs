@@ -883,10 +883,13 @@ namespace Kaguya.Modules.Administration
 
         [Command("massban")] //administration
         [RequireUserPermission(GuildPermission.Administrator)]
-        [RequireBotPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.BanMembers)]
         public async Task MassBan([Remainder]List<SocketGuildUser> users)
         {
             var sOwner = Context.Guild.Owner;
+            string bannedUsers = "";
+            string bannedErrors = "";
+            int i = 0;
 
             foreach (var user in users)
             {
@@ -904,13 +907,36 @@ namespace Kaguya.Modules.Administration
                     continue;
                 }
 
-                await user.BanAsync();
-                embed.WithDescription($"**{user} has been permanently banned by {Context.User.Mention}.**");
+                try
+                {
+                    i++;
+                    await user.BanAsync();
+                    bannedUsers += $"\n**{user} has been permanently banned by {Context.User.Mention}.**";
+                }
+                catch (Exception)
+                {
+                    bannedErrors += $"\nError when banning {user}. Make sure Kaguya's role is at the top of the hierarchy! " +
+                        $"Otherwise, this account has been deleted.";
+                    continue;
+                }
+            }
+
+            if (bannedUsers != "")
+            {
+                embed.WithDescription($"{bannedUsers}");
                 embed.SetColor(EmbedColor.VIOLET);
                 await BE();
             }
+
+            if(bannedErrors != "")
+            {
+                embed.WithDescription($"{bannedErrors}");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+            }
+
             stopWatch.Stop();
-            logger.ConsoleGuildAdvisory("Users massbanned.");
+            logger.ConsoleGuildAdvisory($"{i} Users massbanned in guild {Context.Guild.Name}.");
         }
 
         [Command("kick")] //admin

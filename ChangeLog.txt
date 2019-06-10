@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.22.2
+
+- $massban command largely improved. Now, instead of breaking the ban cycle when it runs into an error, it will continue.
+    - Errors include things like deleted accounts or if Kaguya's role is not at the top of the hierarchy.
+
 Version 1.22.1
 
 - Added help command for $ping.
