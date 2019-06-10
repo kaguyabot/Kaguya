@@ -11,6 +11,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
+using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
@@ -29,6 +30,26 @@ namespace Kaguya.Modules.Utility
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
+        [Command("ping")]
+        public async Task Ping()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            embed.WithTitle("Pong! 🏓");
+            embed.WithDescription($"\n📡 Discord Latency: {Global.client.Latency}ms");
+            await ReplyAsync(embed: embed.Build());
+        }
+
+        [RequireOwner]
+        [Command("reloadconfig")]
+        [Alias("rc")]
+        public async Task ReloadAccounts() //UNTESTED!!
+        {
+            await ReplyAsync("Reloading Data...");
+            KaguyaLogMethods.LoadKaguyaData();
+            await ReplyAsync("User accounts and servers have been reloaded.");
+        }
+
         [Command("stats")]
         public async Task KaguyaStats()
         {
@@ -40,7 +61,6 @@ namespace Kaguya.Modules.Utility
             uint totalDiamonds = 0;
             uint totalSupporters = 0;
             double totalGambles = 0;
-            double totalGambleWins = 0;
 
             foreach (var guild in _client.Guilds)
             {
@@ -55,7 +75,6 @@ namespace Kaguya.Modules.Utility
                 if (account.IsSupporter)
                     totalSupporters++;
                 totalGambles += account.LifetimeGambles;
-                totalGambleWins += account.LifetimeGambleWins;
             }
 
             embed.WithTitle($"Kaguya Statistics");
@@ -65,7 +84,7 @@ namespace Kaguya.Modules.Utility
                 $"\nID: `146092837723832320`");
 
             embed.AddField("Command Stats",
-                $"Commands Ran Today: **`{File.ReadAllLines($"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt").Count().ToString("N0")}`**");
+                $"Commands Run Today: **`{File.ReadAllLines($"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt").Count().ToString("N0")}`**");
 
             embed.AddField($"Shard Stats",
                 $"Version: **`{Utilities.GetAlert("VERSION")}`**" +
@@ -77,7 +96,7 @@ namespace Kaguya.Modules.Utility
             var timeDiff = DateTime.Now - Process.GetCurrentProcess().StartTime;
 
             embed.AddField($"Global Stats",
-             $"Uptime: **`{timeDiff.TotalDays.ToString("N0")} days, {timeDiff.Hours} hours, {timeDiff.Minutes} minutes {timeDiff.Seconds} seconds`**" +
+             $"Uptime: **`{timeDiff.Days.ToString("N0")} days, {timeDiff.Hours} hours, {timeDiff.Minutes} minutes {timeDiff.Seconds} seconds`**" +
              $"\nGuilds: **`{Global.TotalGuildCount.ToString("N0")}`**" +
              $"\nMembers: **`{Global.TotalMemberCount.ToString("N0")}`**" +
              $"\nText Channels: **`{Global.TotalTextChannels.ToString("N0")}`**" +
@@ -87,8 +106,7 @@ namespace Kaguya.Modules.Utility
                 $"Registered Users: **`{Global.UserAccounts.Count.ToString("N0")}`**" +
                 $"\nTotal Currency: **`{totalCurrency.ToString("N0")}`**" +
                 $"\nTotal <a:KaguyaDiamonds:581562698228301876>: **`{totalDiamonds.ToString("N0")}`**" +
-                $"\nTotal Gambles: **`{totalGambles.ToString("N0")}`**" +
-                $"\nGlobal Average Gamble Win %: **`{(totalGambleWins / totalGambles * 100).ToString("N3")}%`**");
+                $"\nTotal Gambles: **`{totalGambles.ToString("N0")}`**");
 
             await BE();
         }

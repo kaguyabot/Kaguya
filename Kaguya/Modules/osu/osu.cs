@@ -356,25 +356,6 @@ namespace Kaguya.Modules
             PF = (1 << 14),
         }
 
-        [Command("createteamrole")] //osu
-        [Alias("ctr")]
-        [RequireUserPermission(GuildPermission.ManageRoles)]
-        [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task CreateTeamRoles(string teamName, [Remainder]List<SocketGuildUser> users)
-        {
-            var participantRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "participant" || x.Name == "Participant");
-            var roleName = "Team: " + teamName;
-            var teamRole = await Context.Guild.CreateRoleAsync(roleName);
-            foreach (var user in users)
-            {
-                await user.AddRoleAsync(teamRole);
-                await user.AddRoleAsync(participantRole);
-
-                embed.AddField("Participant Added", $"**{user}** has been added to {teamRole.Mention} and {participantRole.Mention}.");
-            }
-            await BE();
-        }
-
         [Command("delteams")] //osu
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]

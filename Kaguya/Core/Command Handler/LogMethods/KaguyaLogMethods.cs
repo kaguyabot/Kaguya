@@ -78,6 +78,15 @@ namespace Kaguya.Core.CommandHandler
 
         #pragma warning disable IDE1006 //Disable warnings for naming styles
 
+        public static void LoadKaguyaData()
+        {
+            if (Global.ShardsLoggedIn == Global.ShardsToLogIn) //Loads data files.
+            {
+                Global.UserAccounts = DataStorage2.LoadUserAccounts("Resources/accounts.json").ToList();
+                Global.Servers = DataStorage2.LoadServers("Resources/servers.json").ToList();
+            }
+        }
+
         public async Task osuLinkParser(SocketMessage s)
         {
             if (s != null)
