@@ -827,7 +827,7 @@ namespace Kaguya.Modules.Administration
             }
         }
 
-        [Command("createrole")] //admin
+        [Command("createrole")]
         [Alias("cr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]

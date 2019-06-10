@@ -42,12 +42,12 @@ namespace Kaguya.Modules
                     await BE(); break;
                 case "helpdm":
                 case "hdm":
-                    embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`");
+                    embed.WithTitle($"Help: HelpDM | `{cmdPrefix}helpdm`, `{cmdPrefix}hdm`");
                     embed.WithDescription($"{Context.User.Mention}Sends a DM with helpful information, including a link to add the bot to your own server, and a link to the Kaguya Github page!");
                     await BE(); break;
                 case "warnset":
                 case "ws":
-                    embed.WithTitle($"Help: Warnset | `{cmdPrefix}warnset`");
+                    embed.WithTitle($"Help: Warnset | `{cmdPrefix}warnset`, `{cmdPrefix}ws`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Administrator**" +
                         $"\n" +
                         $"\nConfigures the server's warning punishments. You may `mute`, `kick`, `shadowban`, and `ban` users on the specified amount of warnings." +
@@ -58,7 +58,7 @@ namespace Kaguya.Modules
                     await BE(); break;
                 case "warn":
                 case "w":
-                    embed.WithTitle($"Help: Warn | `{cmdPrefix}warn`");
+                    embed.WithTitle($"Help: Warn | `{cmdPrefix}warn`, `{cmdPrefix}w`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
                         $"\n" +
                         $"\nWarns a user. This will add a (currently non-revocable) warning to a user (typically for a rule violation of some sort)." +
@@ -75,7 +75,7 @@ namespace Kaguya.Modules
                         $"\nSyntax: `{cmdPrefix}warnoptions`"); break;
                 case "warnpunishments":
                 case "wp":
-                    embed.WithTitle($"Help: Warning Configuration | `{cmdPrefix}warnpunishments`");
+                    embed.WithTitle($"Help: Warning Configuration | `{cmdPrefix}warnpunishments`, `{cmdPrefix}wp`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Kick Members**" +
                         $"\n" +
                         $"\nDisplays what punishments have been set for the server and at how many warnings they will be triggered." +
@@ -138,7 +138,7 @@ namespace Kaguya.Modules
                     await BE(); break;
                 case "expadd":
                 case "addexp":
-                    embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd` / `{cmdPrefix}addexp");
+                    embed.WithTitle($"Help: Adding Experience Points | `{cmdPrefix}expadd` / `{cmdPrefix}addexp`");
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n{Context.User.Mention} Adds EXP points to the specified user. The number of exp you are adding must be a positive whole number." +
                         $"\nSyntax: `{cmdPrefix}expadd <number of experience points to add> <User {{ID, Name, Mention}}>`.");
@@ -151,7 +151,7 @@ namespace Kaguya.Modules
                     await BE(); break;
                 case "profile":
                 case "p":
-                    embed.WithTitle($"Help: Profile | `{cmdPrefix}profile`");
+                    embed.WithTitle($"Help: Profile | `{cmdPrefix}profile`, `{cmdPrefix}p`");
                     embed.WithDescription($"\n{Context.User.Mention} Shows you all of your Kaguya stats at once!" +
                         $"\nSyntax: `{cmdPrefix}profile`");
                     await BE(); break;
@@ -211,7 +211,9 @@ namespace Kaguya.Modules
                 case "createrole":
                 case "cr":
                     embed.WithTitle($"Help: Creating Roles | `{cmdPrefix}createrole`, `{cmdPrefix}cr`");
-                    embed.WithDescription($"{Context.User.Mention} Creates a role with the specified name. The role will have no special permissions or colors." +
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
+                        $"\n" +
+                        $"\nCreates a role with the specified name. The role will have no special permissions or colors." +
                         $"\nSyntax: `{cmdPrefix}createrole <name>`, `{cmdPrefix}cr <name>`.");
                     await BE(); break;
                 case "inrole":
@@ -323,7 +325,7 @@ namespace Kaguya.Modules
                     await BE(); break;
                 case "timely":
                 case "t":
-                    embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely`");
+                    embed.WithTitle($"Help: Timely Points | `{cmdPrefix}timely`, `{cmdPrefix}t`");
                     embed.WithDescription($"{Context.User.Mention} The timely command allows any user to claim 500 free points every 24 hours." +
                         "\nThese points are added to your Kaguya account. The timely command has a `6%` chance of landing a critical hit, " +
                         "multiplying your reward by `3.50x`." +
@@ -417,9 +419,9 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Removing Roles | `{cmdPrefix}removerole`, `{cmdPrefix}rr`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
                         "\n" +
-                        "\nRemoves the role from the specified user(s)." +
-                        $"\nSyntax: `{cmdPrefix}removerole @User#0000`." +
-                        $"\nSyntax: `{cmdPrefix}rr <Name> <ID> <@Name#0000> <20945832042384>`");
+                        "\nRemoves the role from the specified user(s). This may be a list of users!" +
+                        $"\nSyntax: `{cmdPrefix}removerole <role> <@User#0000>`." +
+                        $"\nSyntax: `{cmdPrefix}rr <role> <Name / ID / @User#0000> [any subsequent users]`");
                     await BE(); break;
                 case "addrole":
                 case "ar":
@@ -505,11 +507,13 @@ namespace Kaguya.Modules
                     embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS.");
                     await BE(); break;
                 case "unblacklist":
-                    embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}unblacklist <UserID>`");
+                    embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}unblacklist`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
                         $"\nUnblacklists the specified userID." +
-                        $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json.");
+                        $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}unblacklist <User ID>`");
 
                     await BE(); break;
                 case "roll":
@@ -524,7 +528,9 @@ namespace Kaguya.Modules
                         $"\nThe maximum amount of points you can gamble at one time is set to `25,000`." +
                         $"\n" +
                         $"\nIn addition, all rolls have a `5%` chance of landing a critical hit, multiplying the `multiplier` of the roll by `2.50x` (except for a 100 roll). " +
-                        $"The best possible roll is a `critical 100`, multiplying your bet by `30x` (The odds of this are `1 / 2,000` or `0.05%`.)");
+                        $"The best possible roll is a `critical 100`, multiplying your bet by `30x` (The odds of this are `1 / 2,000` or `0.05%`.)" +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}roll <points>`");
                     await BE(); break;
                 case "kaguyaexit":
                     embed.WithTitle($"Help: Kaguya Exit! | `{cmdPrefix}kaguyaexit`");
@@ -716,23 +722,26 @@ namespace Kaguya.Modules
                     await BE(); break;
                 case "resetlogchannel":
                 case "rlog":
-                    embed.WithTitle($"Help: Resetting Logging Channels | `{cmdPrefix}resetlogchannel`");
+                    embed.WithTitle($"Help: Resetting Logging Channels | `{cmdPrefix}resetlogchannel`, `{cmdPrefix}rlog`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
                         $"\nAllows an Administrator to reset (disable) the logging channel for a given log type." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}resetlogchannel <logtype>`" +
+                        $"\nSyntax: `{cmdPrefix}rlog <logtype>`" +
                         $"\nExample: `{cmdPrefix}resetlogchannel all` would disable all logging in the server.");
                     embed.WithFooter("To see all available log types, and to see what channel the log types are being sent to, use $logtypes");
                     await BE(); break;
                 case "logtypes":
                 case "loglist":
-                    embed.WithTitle($"Help: Log Types | `{cmdPrefix}logtypes`");
+                    embed.WithTitle($"Help: Log Types | `{cmdPrefix}logtypes`, `{cmdPrefix}loglist`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
                         $"\nAllows an Administrator to see a list of all available log types. In addition to this, the channels that are " +
                         $"currently occupied by the specified logtype will be displayed. If the log type is not logging at all, it will not " +
-                        $"show any channels after it.");
+                        $"show any channels after it." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}logtypes`" +
+                        $"\nSyntax: `{cmdPrefix}loglist`");
                     embed.WithFooter("Note to Server Admins: This command will put out the log list in the chat channel you call this command from.");
                     await BE(); break;
                 case "awardeveryone":
@@ -792,7 +801,8 @@ namespace Kaguya.Modules
                 case "diamondconvert":
                 case "dc":
                     embed.WithTitle($"Help: Diamond Convert | `{cmdPrefix}diamondconvert`, `{cmdPrefix}dc`");
-                    embed.WithDescription($"{Context.User.Mention} Converts your diamonds into points. 10 <a:KaguyaDiamonds:581562698228301876> = 1,000 points." +
+                    embed.WithDescription($"{Context.User.Mention} Converts your diamonds into points. This may be any amount of diamonds, so long as you have them." +
+                        $"\n10 <a:KaguyaDiamonds:581562698228301876> = 1,000 points." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}dc <diamonds to convert>`");
                     await BE(); break;
@@ -804,7 +814,7 @@ namespace Kaguya.Modules
                     await BE(); break;
                 default:
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
-                    await BE(); // stopWatch.Stop(); logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User requested a help command for a command that doesn't exist."); ERROR HANDLER NEEDED
+                    await BE();
                     break;
             }
         }
@@ -823,9 +833,11 @@ namespace Kaguya.Modules
                         "\n" +
                         $"\n{cmdPrefix}addrole [ar]" +
                         $"\n{cmdPrefix}ban [b]" +
-                        $"\n{cmdPrefix}blacklist [bl]" +
+                        $"\n{cmdPrefix}blacklist [bl] [Owner Only]" +
                         $"\n{cmdPrefix}channelblacklist [cbl]" +
+                        $"\n{cmdPrefix}channelunblacklist [cubl]" +
                         $"\n{cmdPrefix}channelwhitelist [cwl]" +
+                        $"\n{cmdPrefix}channelunwhitelist [cuwl]" +
                         $"\n{cmdPrefix}clear [c] [purge]" +
                         $"\n{cmdPrefix}createrole [cr]" +
                         $"\n{cmdPrefix}deleterole [dr]" +
@@ -834,19 +846,20 @@ namespace Kaguya.Modules
                         $"\n{cmdPrefix}filterremove [fr]" +
                         $"\n{cmdPrefix}filterview [fv]" +
                         $"\n{cmdPrefix}kaguyaexit" +
+                        $"\n{cmdPrefix}kaguyawarn [Owner Only]" +
                         $"\n{cmdPrefix}kick [k]" +
                         $"\n{cmdPrefix}logtypes [loglist]" +
                         $"\n{cmdPrefix}massban" +
-                        $"\n{cmdPrefix}massblacklist" +
+                        $"\n{cmdPrefix}massblacklist [Owner Only]" +
                         $"\n{cmdPrefix}masskick" +
-                        $"\n{cmdPrefix}mute [m]" +
+                        $"\n{cmdPrefix}mute" +
                         $"\n{cmdPrefix}removeallroles [rar]" +
                         $"\n{cmdPrefix}removerole [rr]" +
                         $"\n{cmdPrefix}resetlogchannel [rlog]" +
                         $"\n{cmdPrefix}setlogchannel [log]" +
-                        $"\n{cmdPrefix}scrapeserver" +
                         $"\n{cmdPrefix}shadowban" +
                         $"\n{cmdPrefix}unblacklist" +
+                        $"\n{cmdPrefix}unmute" +
                         $"\n{cmdPrefix}unshadowban" +
                         $"\n{cmdPrefix}warn [w]" +
                         $"\n{cmdPrefix}warnset [ws]" +
@@ -860,7 +873,7 @@ namespace Kaguya.Modules
                     "\nAll commands in category: Experience Points" +
                     "\n" +
                     $"\n{cmdPrefix}exp" +
-                    $"\n{cmdPrefix}expadd [addexp]" +
+                    $"\n{cmdPrefix}expadd [addexp] [Owner Only]" +
                     $"\n{cmdPrefix}level" +
                     $"\n{cmdPrefix}globalexplb [gexplb]" +
                     $"\n{cmdPrefix}rep" +
@@ -873,14 +886,15 @@ namespace Kaguya.Modules
                 "\nAll commands in category: Currency" +
                 "\n" +
                 $"\n{cmdPrefix}awardeveryone [awardall]" +
-                $"\n{cmdPrefix}roll [gr]" +
-                $"\n{cmdPrefix}masspointsdistribute" +
-                $"\n{cmdPrefix}points" +
+                $"\n{cmdPrefix}bugaward [Owner Only]" +
                 $"\n{cmdPrefix}diamonds" +
                 $"\n{cmdPrefix}diamondconvert [dc]" +
-                $"\n{cmdPrefix}pointsadd [addpoints]" +
+                $"\n{cmdPrefix}masspointsdistribute" +
+                $"\n{cmdPrefix}points" +
+                $"\n{cmdPrefix}pointsadd [addpoints] [Owner Only]" +
+                $"\n{cmdPrefix}roll [gr]" +
                 $"\n{cmdPrefix}timely [t]" +
-                $"\n{cmdPrefix}timelyreset" +
+                $"\n{cmdPrefix}timelyreset [Owner Only]" +
                 $"\n{cmdPrefix}weekly" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
@@ -895,7 +909,10 @@ namespace Kaguya.Modules
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
                 $"\n{cmdPrefix}deletevoicechannel [dvc]" +
                 $"\n{cmdPrefix}inrole" +
+                $"\n{cmdPrefix}kill [Owner Only]" +
                 $"\n{cmdPrefix}prefix" +
+                $"\n{cmdPrefix}restart [Owner Only]" +
+                $"\n{cmdPrefix}stats" +
                 $"\n{cmdPrefix}toggleannouncements" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
@@ -904,19 +921,19 @@ namespace Kaguya.Modules
             string fun = "```css" +
                     "\nAll commands in category: Fun" +
                     "\n" +
-                    $"\n{cmdPrefix}echo" +
-                    $"\n{cmdPrefix}pick" +
                     $"\n{cmdPrefix}8ball" +
+                    $"\n{cmdPrefix}baka" +
+                    $"\n{cmdPrefix}echo" +
                     $"\n{cmdPrefix}fact" +
-                    $"\n{cmdPrefix}slap" +
                     $"\n{cmdPrefix}hug" +
                     $"\n{cmdPrefix}kiss" +
-                    $"\n{cmdPrefix}tickle" +
-                    $"\n{cmdPrefix}pat" +
-                    $"\n{cmdPrefix}poke" +
-                    $"\n{cmdPrefix}baka" +
                     $"\n{cmdPrefix}nekoavatar" +
+                    $"\n{cmdPrefix}pat" +
+                    $"\n{cmdPrefix}pick" +
+                    $"\n{cmdPrefix}poke" +
+                    $"\n{cmdPrefix}slap" +
                     $"\n{cmdPrefix}smug" +
+                    $"\n{cmdPrefix}tickle" +
                     $"\n{cmdPrefix}waifu" +
                     $"\n{cmdPrefix}wallpaper" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
@@ -935,15 +952,13 @@ namespace Kaguya.Modules
                     $"\n{cmdPrefix}m volume" +
                     $"\n{cmdPrefix}m jump" +
                     $"\n" +
-                    $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                    $"\nType \"{cmdPrefix}h m\" for more information on Kaguya's Music Module." +
                     $"\n```";
 
             string osu = "```css" +
                     "\nAll commands in category: osu!" +
                     "\n" +
                     $"\n{cmdPrefix}osu" +
-                    $"\n{cmdPrefix}createteamrole [ctr]" +
-                    $"\n{cmdPrefix}delteams" +
                     $"\n{cmdPrefix}osuset" +
                     $"\n{cmdPrefix}osutop" +
                     $"\n{cmdPrefix}osutop -n" +

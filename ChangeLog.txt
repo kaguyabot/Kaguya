@@ -11,6 +11,17 @@ Version 1.22
 - $ping command added.
 - Fully functional tictactoe game added! Check out "$h ttt" or "$h tictactoe" for more info!
 - Removed the Global Avg Gamble Win % stat from $stats
+- Added a [Owner Only] tag to all bot commands that require owner (in the $help command).
+- Added lot of missing commands to the $help command list
+- Added a lot of missing $h <command> help commands.
+- $scrapeserver removed from the command list. This was owner only but it was useless and was removed awhile ago.
+- Alphabetized all of the command lists. (Except for Music, because $m play is the most important one, for example.)
+- $createteamrole command removed.
+- $delteams command removed from the command list. This is because it's only designed for one server. It is still active, but is now owner only.
+- Added missing aliases to various help commands.
+- Added missing aliases to various missing commands in the $h command list.
+- Added missing permissions to some help commands (Ex: Permissions Required: ...)
+- Fixed wrong help command for $removerole
 
 
 Version 1.21.2
