@@ -13,11 +13,13 @@ using Kaguya.Core.Server_Files;
 using OppaiSharp;
 using Kaguya.Core.Embed;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
+using Kaguya.Core.Attributes;
 
 #pragma warning disable
 
 namespace Kaguya.Modules
 {
+    [KaguyaModule("osu")]
     public class osuStandard : ModuleBase<ShardedCommandContext>
     {
         readonly DiscordSocketClient _client;

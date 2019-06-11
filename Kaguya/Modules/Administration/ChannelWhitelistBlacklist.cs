@@ -3,6 +3,7 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
+using Kaguya.Core.Attributes;
 using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using System.Diagnostics;
@@ -11,6 +12,7 @@ using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Administration
 {
+    [KaguyaModule("Administration")]
     public class ChannelWhitelistBlacklist : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();

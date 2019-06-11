@@ -11,9 +11,11 @@ using System.Diagnostics;
 using Kaguya.Core;
 using Kaguya.Core.Embed;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
+using Kaguya.Core.Attributes;
 
 namespace Kaguya.Modules.osu
 {
+    [KaguyaModule("osu")]
     public class BeatmapLinkParser
     {
         public string osuapikey = Config.bot.OsuApiKey;

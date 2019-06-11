@@ -12,10 +12,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Kaguya.Core.Embed;
+using Kaguya.Core.Attributes;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules
 {
+    [KaguyaModule("Help")]
     public class Help : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
@@ -816,6 +818,12 @@ namespace Kaguya.Modules
                         $"Note: You must use this command in the support server!");
                     embed.WithFooter($"Use the {cmdPrefix}invite command for a link to the support server if you need one!");
                     await BE(); break;
+                case "owner":
+                    embed.WithTitle($"Help: Owner Command List | `{cmdPrefix}owner`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nOwner only command that displays all other owner only commands.");
+                    await BE(); break;
                 default:
                     embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
                     await BE();
@@ -837,7 +845,6 @@ namespace Kaguya.Modules
                         "\n" +
                         $"\n{cmdPrefix}addrole [ar]" +
                         $"\n{cmdPrefix}ban [b]" +
-                        $"\n{cmdPrefix}blacklist [bl] [Owner Only]" +
                         $"\n{cmdPrefix}channelblacklist [cbl]" +
                         $"\n{cmdPrefix}channelunblacklist [cubl]" +
                         $"\n{cmdPrefix}channelwhitelist [cwl]" +
@@ -850,11 +857,9 @@ namespace Kaguya.Modules
                         $"\n{cmdPrefix}filterremove [fr]" +
                         $"\n{cmdPrefix}filterview [fv]" +
                         $"\n{cmdPrefix}kaguyaexit" +
-                        $"\n{cmdPrefix}kaguyawarn [Owner Only]" +
                         $"\n{cmdPrefix}kick [k]" +
                         $"\n{cmdPrefix}logtypes [loglist]" +
                         $"\n{cmdPrefix}massban" +
-                        $"\n{cmdPrefix}massblacklist [Owner Only]" +
                         $"\n{cmdPrefix}masskick" +
                         $"\n{cmdPrefix}mute" +
                         $"\n{cmdPrefix}removeallroles [rar]" +
@@ -877,7 +882,6 @@ namespace Kaguya.Modules
                     "\nAll commands in category: Experience Points" +
                     "\n" +
                     $"\n{cmdPrefix}exp" +
-                    $"\n{cmdPrefix}expadd [addexp] [Owner Only]" +
                     $"\n{cmdPrefix}level" +
                     $"\n{cmdPrefix}globalexplb [gexplb]" +
                     $"\n{cmdPrefix}rep" +
@@ -890,15 +894,12 @@ namespace Kaguya.Modules
                 "\nAll commands in category: Currency" +
                 "\n" +
                 $"\n{cmdPrefix}awardeveryone [awardall]" +
-                $"\n{cmdPrefix}bugaward [Owner Only]" +
                 $"\n{cmdPrefix}diamonds" +
                 $"\n{cmdPrefix}diamondconvert [dc]" +
                 $"\n{cmdPrefix}masspointsdistribute" +
                 $"\n{cmdPrefix}points" +
-                $"\n{cmdPrefix}pointsadd [addpoints] [Owner Only]" +
                 $"\n{cmdPrefix}roll [gr]" +
                 $"\n{cmdPrefix}timely [t]" +
-                $"\n{cmdPrefix}timelyreset [Owner Only]" +
                 $"\n{cmdPrefix}weekly" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
@@ -913,9 +914,7 @@ namespace Kaguya.Modules
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
                 $"\n{cmdPrefix}deletevoicechannel [dvc]" +
                 $"\n{cmdPrefix}inrole" +
-                $"\n{cmdPrefix}kill [Owner Only]" +
                 $"\n{cmdPrefix}prefix" +
-                $"\n{cmdPrefix}restart [Owner Only]" +
                 $"\n{cmdPrefix}stats" +
                 $"\n{cmdPrefix}toggleannouncements" +
                 $"\n" +
@@ -1094,6 +1093,33 @@ namespace Kaguya.Modules
                 Forward = true,
                 Trash = true
             });
+        }
+
+        [Command("owner")]
+        [RequireOwner]
+        public async Task OwnerCommands()
+        {
+            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
+            string commands = "```css" +
+                "\nAll commands in category: Administration" +
+                "\n" +
+                $"\n{cmdPrefix}blacklist [bl] " +
+                $"\n{cmdPrefix}bugaward " +
+                $"\n{cmdPrefix}expadd [addexp] " +
+                $"\n{cmdPrefix}kaguyawarn " +
+                $"\n{cmdPrefix}kill " +
+                $"\n{cmdPrefix}massblacklist " +
+                $"\n{cmdPrefix}pointsadd [addpoints] " +
+                $"\n{cmdPrefix}restart " +
+                $"\n{cmdPrefix}timelyreset " +
+                $"\n" +
+                $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                "\n```";
+
+            embed.WithTitle("Owner Commands");
+            embed.WithDescription(commands);
+            await BE();
         }
 
         [Command("sync")]

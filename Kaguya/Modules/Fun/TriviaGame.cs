@@ -7,9 +7,11 @@ using Discord;
 using Discord.Commands;
 using Kaguya.Core.Embed;
 using Discord.Addons.Interactive;
+using Kaguya.Core.Attributes;
 
 namespace Kaguya.Modules.Fun
 {
+    [KaguyaModule("Fun")]
     [Group("trivia")]
     public class TriviaGame : InteractiveBase<SocketCommandContext>
     {

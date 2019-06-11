@@ -285,6 +285,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Attributes\KaguyaModuleAttribute.cs" />
     <Compile Include="Core\Command Handler\CommandHandler.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Core\Command Handler\EmbedHandlers\GlobalCommandResponses.cs" />

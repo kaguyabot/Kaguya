@@ -1,9 +1,11 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using Kaguya.Core.Attributes;
 using System.Threading.Tasks;
 
 namespace Kaguya.Modules.Music
 {
+    [KaguyaModule("Music")]
     [Group("m")]
     public class Music : ModuleBase<ShardedCommandContext>
     {
