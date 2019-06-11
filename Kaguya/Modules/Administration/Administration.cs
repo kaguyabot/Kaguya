@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Discord;
+using Discord.Addons.Interactive;
+using Discord.Commands;
+using Discord.WebSocket;
+using Kaguya.Core;
+using Kaguya.Core.Command_Handler.EmbedHandlers;
+using Kaguya.Core.CommandHandler;
+using Kaguya.Core.Embed;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.UserAccounts;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
-using Discord;
-using Discord.Addons.Interactive;
-using Discord.Commands;
-using Discord.WebSocket;
-using Kaguya.Core;
-using Kaguya.Core.CommandHandler;
-using Kaguya.Core.Command_Handler.EmbedHandlers;
-using Kaguya.Core.Embed;
-using Kaguya.Core.Server_Files;
-using Kaguya.Core.UserAccounts;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 #pragma warning disable CS0472
@@ -33,6 +33,13 @@ namespace Kaguya.Modules.Administration
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
         
+        [Command("disable")]
+        [RequireOwner]
+        public async Task Disable(string command, string reason)
+        {
+
+        }
+
         [Command("warn")]
         [Alias("w")]
         [RequireUserPermission(GuildPermission.KickMembers)]
@@ -715,39 +722,34 @@ namespace Kaguya.Modules.Administration
         }
 
         [Command("massblacklist")] //administration
-        [RequireUserPermission(GuildPermission.Administrator)]
-        [RequireBotPermission(GuildPermission.Administrator)]
         [RequireOwner]
-        public async Task MassBlacklist(List<SocketGuildUser> users)
+        public async Task MassBlacklist(params ulong[] users)
         {
             stopWatch.Start();
+            string blacklist = "";
 
             foreach (var user in users)
             {
+                var discordUser = _client.GetUser(user); 
+
                 var serverID = Context.Guild.Id;
                 var serverName = Context.Guild.Name;
                 var userAccount = UserAccounts.GetAccount(user);
                 userAccount.EXP = 0;
                 userAccount.Points = 0;
-                userAccount.IsBlacklisted = false;
+                userAccount.IsBlacklisted = true;
 
                 UserAccounts.SaveAccounts();
 
-                await ReplyAsync($"**{user} has been permanently `blacklisted`.**");
-                logger.ConsoleGuildAdvisory(Context.Guild, user, stopWatch.ElapsedMilliseconds, $"User {user.Username}#{user.Discriminator} has been blacklisted.");
+                blacklist += $"\n**`{discordUser}` has been `blacklisted`.**";
+                logger.ConsoleCriticalAdvisory($"{discordUser} has been permanently blacklisted.");
             }
+
+            embed.WithTitle($"Mass Blacklist");
+            embed.WithDescription(blacklist);
+            await BE();
+
             stopWatch.Stop();
-        }
-
-        [RequireOwner]
-        [Command("antiraid")]
-        public async Task AntiRaid()
-        {
-            var server = Servers.GetServer(Context.Guild);
-            server.AntiRaid = true;
-            Servers.SaveServers();
-
-            await ReplyAsync("Antiraid enabled.");
         }
 
         [Command("removeallroles")] //admin
@@ -984,6 +986,10 @@ namespace Kaguya.Modules.Administration
         {
             var sOwner = Context.Guild.Owner;
 
+            int i = 0;
+            string kickedUsers = "";
+            string erroredUsers = "";
+
             foreach (var user in users)
             {
                 if (user.Id == Context.User.Id)
@@ -998,10 +1004,33 @@ namespace Kaguya.Modules.Administration
                     continue;
                 }
 
-                await user.KickAsync();
-                embed.WithDescription($"**{user} has been kicked by {Context.User.Mention}.**");
+                try
+                {
+                    i++;
+                    await user.KickAsync();
+                    kickedUsers += $"\n**{user} has been kicked by {Context.User.Mention}.**";
+                }
+                catch (Exception)
+                {
+                    erroredUsers += $"\n**Failed to kick {user} due to an error. Either the user does not exist or Kaguya is not " +
+                        $"at the top of the role hierarchy!**";
+                }
+            }
+
+            if(kickedUsers != "")
+            {
+                embed.WithDescription(kickedUsers);
+                embed.SetColor(EmbedColor.VIOLET);
                 await BE();
             }
+
+            if(erroredUsers != "")
+            {
+                embed.WithDescription(erroredUsers);
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+            }
+
             logger.ConsoleGuildAdvisory(Context.Guild, "Users masskicked.");
         }
 

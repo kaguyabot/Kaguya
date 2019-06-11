@@ -507,7 +507,7 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use Kaguya again. These users are permanently banned from the server this command is executed in." +
                         $"These users will have all of their EXP and Points reset to zero, and will be permanently filtered from receiving EXP and executing Kaguya commands." +
-                        $"\nSyntax: `{cmdPrefix}massblacklist @username#123` | `{cmdPrefix}massblacklist @username#123 @ToxicPlayer123#7777 @SuckySmellySushi#1234`");
+                        $"\nSyntax: `{cmdPrefix}massblacklist userID[]`");
                     embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS.");
                     await BE(); break;
                 case "unblacklist":

@@ -11,14 +11,18 @@ namespace Kaguya.Core.LevelingSystem
 
         internal static async void UserSentMessage(SocketGuildUser user, SocketTextChannel channel)
         {
-            Color Pink = new Color(252, 132, 255);
             try
             {
                 UserAccount userAccount = UserAccounts.UserAccounts.GetAccount(user);
                 Random RNGTimeout = new Random();
                 Logger logger = new Logger();
+
                 if (!CanReceiveExperience(userAccount, RNGTimeout.Next(110, 130)))
                     return;
+
+                if (Servers.GetServer(user.Guild).IsBlacklisted == true)
+                    return;
+
                 uint oldLevel = userAccount.LevelNumber;
                 Random random = new Random();
                 uint newExp = (uint)random.Next(5, 8);
@@ -32,9 +36,8 @@ namespace Kaguya.Core.LevelingSystem
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.WithDescription($"**{user.Nickname} [{user.Username}#{user.Discriminator}] just leveled up!**" +
                         $"\nLevel: {userAccount.LevelNumber.ToString("N0")} | EXP: {userAccount.EXP.ToString("N0")}");
-                    embed.WithColor(Pink);
                     if(guild.LogLevelUpAnnouncements == 0)
-                    await channel.SendMessageAsync("", false, embed.Build());
+                        await channel.SendMessageAsync("", false, embed.Build());
                     else if(guild.LogLevelUpAnnouncements != 0) //If the server has a specified channel for level up announcements, send it there instead of in the chat the user leveled up in.
                     {
                         var textChannel = Global.client.GetChannel(guild.LogLevelUpAnnouncements);

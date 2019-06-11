@@ -307,7 +307,7 @@
     <Compile Include="Core\UserAccounts\UserAccounts.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="ListSocketGuildUserTR.cs" />
+    <Compile Include="Core\TypeReaders\ListSocketGuildUserTR.cs" />
     <Compile Include="Core\PlayData.cs" />
     <Compile Include="Modules\Administration\Administration.cs" />
     <Compile Include="Modules\Administration\ChannelWhitelistBlacklist.cs" />
