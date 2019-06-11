@@ -10,11 +10,9 @@ using System.Diagnostics;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.Embed;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
-using Kaguya.Core.Attributes;
 
 namespace Kaguya.Modules
 {
-    [KaguyaModule("Currency")]
     public class Currency : ModuleBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();

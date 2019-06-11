@@ -13,11 +13,9 @@ using Kaguya.Core.UserAccounts;
 using Kaguya.Core.Server_Files;
 using System.IO;
 using System.Linq;
-using Kaguya.Core.Attributes;
 
 namespace Kaguya.Modules.NSFW
 {
-    [KaguyaModule("NSFW")]
     [Group("n")] //NSFW Commands...Proceed with caution!
     public class NSFW : ModuleBase<ShardedCommandContext>
     {

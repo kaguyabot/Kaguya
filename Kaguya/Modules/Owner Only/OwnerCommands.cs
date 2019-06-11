@@ -9,13 +9,9 @@ using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Timers;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Owner_Only
@@ -32,12 +28,12 @@ namespace Kaguya.Modules.Owner_Only
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("disable")]
-        [RequireOwner]
-        public async Task Disable(string command, [Remainder]string reason)
-        {
+        //[Command("disable")]
+        //[RequireOwner]
+        //public async Task Disable(string command, [Remainder]string reason)
+        //{
 
-        }
+        //}
 
         [Command("kaguyawarn")]
         [RequireOwner]

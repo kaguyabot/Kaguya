@@ -12,12 +12,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Kaguya.Core.Embed;
-using Kaguya.Core.Attributes;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules
 {
-    [KaguyaModule("Help")]
     public class Help : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
