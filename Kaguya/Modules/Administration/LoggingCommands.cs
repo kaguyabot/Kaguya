@@ -11,12 +11,8 @@ using Kaguya.Core.Attributes;
 
 namespace Kaguya.Modules.Administration
 {
-<<<<<<< Updated upstream
     [KaguyaModule("Administration")]
-    public class LoggingCommands : InteractiveBase<SocketCommandContext>
-=======
     public class LoggingCommands : InteractiveBase<ShardedCommandContext>
->>>>>>> Stashed changes
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
         readonly Stopwatch stopWatch = new Stopwatch();
