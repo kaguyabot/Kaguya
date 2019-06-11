@@ -35,13 +35,6 @@ namespace Kaguya.Modules.Administration
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
         
-        [Command("disable")]
-        [RequireOwner]
-        public async Task Disable(string command, [Remainder]string reason)
-        {
-
-        }
-
         [Command("warn")]
         [Alias("w")]
         [RequireUserPermission(GuildPermission.KickMembers)]
@@ -221,68 +214,6 @@ namespace Kaguya.Modules.Administration
                 $"\nShadowbans: {shadowbanString}" +
                 $"\nBans: {banString}" +
                 $"\n```");
-            stopWatch.Stop();
-        }
-
-        [Command("kaguyawarn")]
-        [RequireOwner]
-        public async Task KaguyaGlobalWarning(ulong ID, [Remainder]string reason = "No reason provided.")
-        {
-            stopWatch.Start();
-            var user = _client.GetUser(ID);
-            UserAccount userAccount = UserAccounts.GetAccount(user);
-
-            var totalWarnings = userAccount.KaguyaWarnings;
-            totalWarnings++; //Adds a global Kaguya warning to the user's account.
-            userAccount.KaguyaWarnings = totalWarnings;
-
-            UserAccounts.SaveAccounts();
-
-            await user.GetOrCreateDMChannelAsync();
-
-            embed.WithTitle($"⚠️ Kaguya Global Warning");
-            embed.WithDescription($"You have received a global warning from a **Kaguya Administrator**. Upon receiving `three` warnings, " +
-                $"you will be permanently blacklisted from using Kaguya. This results in all `points`, `experience points`, and `rep` being reset to zero." +
-                $"\n" +
-                $"\nNote from Administrator `{Context.User}`:" +
-                $"\n" +
-                $"\n\"{reason}\"");
-            embed.WithFooter($"You currently have {totalWarnings} warning(s).");
-
-            await user.SendMessageAsync(embed: embed.Build());
-
-            await GlobalCommandResponses.CreateCommandResponse(Context,
-                $"Kaguya Global Warning",
-                $"{Context.User.Mention} User `{user}` has received a Kaguya Warning.",
-                $"User currently has {totalWarnings} warning(s).");
-
-            if (totalWarnings >= 3)
-            {
-                userAccount.IsBlacklisted = true;
-                userAccount.EXP = 0;
-                userAccount.Points = 0;
-                userAccount.Rep = 0;
-
-                UserAccounts.SaveAccounts();
-
-                embed.WithTitle($"⚠️ Kaguya Blacklist ⚠️");
-                embed.WithDescription($"You have been blacklisted from Kaguya due to receiving too many global warnings from a Kaguya Administrator." +
-                    $"\n" +
-                    $"\nNew Points Balance: `0`" +
-                    $"\nNew EXP Balance: `0`" +
-                    $"\nNew Rep Balance: `0`" +
-                    $"\n");
-                embed.WithFooter($"You currently have {totalWarnings} warning(s).");
-
-                await user.SendMessageAsync(embed: embed.Build());
-
-                embed.WithTitle($"User Blacklisted");
-                embed.WithDescription($"User `{user}` has been blacklisted from Kaguya for receiving three global warnings from a Kaguya Administrator.");
-                embed.SetColor(EmbedColor.VIOLET);
-                await BE();
-
-                logger.ConsoleCriticalAdvisory($"USER {user.ToString().ToUpper()} BLACKLISTED: RECEIVED 3 KAGUYA WARNINGS!!");
-            }
             stopWatch.Stop();
         }
 
@@ -701,57 +632,6 @@ namespace Kaguya.Modules.Administration
             embed.WithTitle("Cleared Filter");
             embed.WithDescription($"All filtered words for **{Context.Guild.Name}** have been successfully removed!");
             await BE();
-        }
-
-
-        [Command("Unblacklist")] //administration
-        [RequireOwner]
-        public async Task Unblacklist(SocketUser id)
-        {
-            stopWatch.Start();
-            var userAccount = UserAccounts.GetAccount(id);
-            userAccount.IsBlacklisted = false;
-            UserAccounts.SaveAccounts();
-
-            embed.WithTitle("User Unblacklisted");
-            if(userAccount.Username != null)
-                embed.WithDescription($"User `{userAccount.Username}` with ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
-            else if(userAccount.Username == null || userAccount.Username == "")
-                embed.WithDescription($"ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
-            embed.WithFooter("Please note that all Points and EXP are not able to be restored.");
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "User Unblacklisted");
-        }
-
-        [Command("massblacklist")] //administration
-        [RequireOwner]
-        public async Task MassBlacklist(params ulong[] users)
-        {
-            stopWatch.Start();
-            string blacklist = "";
-
-            foreach (var user in users)
-            {
-                var discordUser = _client.GetUser(user); 
-
-                var serverID = Context.Guild.Id;
-                var serverName = Context.Guild.Name;
-                var userAccount = UserAccounts.GetAccount(user);
-                userAccount.EXP = 0;
-                userAccount.Points = 0;
-                userAccount.IsBlacklisted = true;
-
-                UserAccounts.SaveAccounts();
-
-                blacklist += $"\n**`{discordUser}` has been `blacklisted`.**";
-                logger.ConsoleCriticalAdvisory($"{discordUser} has been permanently blacklisted.");
-            }
-
-            embed.WithTitle($"Mass Blacklist");
-            embed.WithDescription(blacklist);
-            await BE();
-
-            stopWatch.Stop();
         }
 
         [Command("removeallroles")] //admin

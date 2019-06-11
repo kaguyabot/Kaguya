@@ -358,26 +358,6 @@ namespace Kaguya.Modules
             PF = (1 << 14),
         }
 
-        [Command("delteams")] //osu
-        [RequireUserPermission(GuildPermission.Administrator)]
-        [RequireBotPermission(GuildPermission.Administrator)]
-        [RequireOwner]
-        public async Task DeleteTeams()
-        {
-            var roles = Context.Guild.Roles;
-            embed.WithTitle("Teams Deleted");
-            embed.WithDescription("The following teams have been deleted: ");
-            foreach (IRole role in roles)
-            {
-                if (role.Name.Contains("Team: "))
-                {
-                    await role.DeleteAsync();
-                    embed.WithDescription(embed.Description.ToString() + $"\n`{role}`");
-                }
-            }
-            await BE();
-        }
-
         private bool UserIsAdmin(SocketGuildUser user)
         {
             string targetRoleName = "Administrator";

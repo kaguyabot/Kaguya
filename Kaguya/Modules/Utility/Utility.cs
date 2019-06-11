@@ -42,16 +42,6 @@ namespace Kaguya.Modules.Utility
             await ReplyAsync(embed: embed.Build());
         }
 
-        [RequireOwner]
-        [Command("reloadconfig")]
-        [Alias("rc")]
-        public async Task ReloadAccounts() //UNTESTED!!
-        {
-            await ReplyAsync("Reloading Data...");
-            KaguyaLogMethods.LoadKaguyaData();
-            await ReplyAsync("User accounts and servers have been reloaded.");
-        }
-
         [Command("stats")]
         public async Task KaguyaStats()
         {
@@ -345,31 +335,6 @@ namespace Kaguya.Modules.Utility
                     "Inrole: Unknown Exception",
                     $"Exception at Utility.cs line 532. Exception: {e.Message}");
             }
-        }
-
-        [Command("restart")]
-        [RequireOwner]
-        public async Task Restart()
-        {
-            embed.WithDescription($"**{Context.User.Mention} Attempting to restart...**");
-            await BE(); logger.ConsoleCriticalAdvisory("Attempting to restart...");
-
-            var filePath = Assembly.GetExecutingAssembly().Location;
-            Process.Start(filePath); logger.ConsoleCriticalAdvisory("Process started!!");
-
-            embed.WithDescription($"**{Context.User.Mention} Process started successfully. Exiting...**");
-            await BE();
-
-            Environment.Exit(0);
-        }
-
-        [Command("kill")]
-        [RequireOwner]
-        public async Task Kill()
-        {
-            embed.WithDescription($"**{Context.User.Mention} Exiting...**");
-            await BE(); logger.ConsoleCriticalAdvisory("Exiting!!");
-            Environment.Exit(0);
         }
 
         private bool UserIsAdmin(SocketGuildUser user)
