@@ -3,7 +3,6 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
-using Kaguya.Core.Attributes;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Embed;
@@ -22,7 +21,6 @@ using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Administration
 {
-    [KaguyaModule("Administration")]
     public class AdministrationCommands : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();

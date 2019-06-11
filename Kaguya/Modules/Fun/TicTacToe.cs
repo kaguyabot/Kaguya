@@ -11,11 +11,9 @@ using NekosSharp;
 using Discord.Addons.Interactive;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
 using System.Collections.Generic;
-using Kaguya.Core.Attributes;
 
 namespace Kaguya.Modules.Fun
 {
-    [KaguyaModule("Fun")]
     public class TicTacToe : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();

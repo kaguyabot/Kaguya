@@ -7,11 +7,9 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Kaguya.Core.Embed;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
-using Kaguya.Core.Attributes;
 
 namespace Kaguya.Modules.Administration
 {
-    [KaguyaModule("Administration")]
     public class LoggingCommands : InteractiveBase<SocketCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();

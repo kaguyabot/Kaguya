@@ -14,11 +14,9 @@ using Discord.Addons.Interactive;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.Embed;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
-using Kaguya.Core.Attributes;
 
 namespace Kaguya.Modules.osu
 {
-    [KaguyaModule("osu")]
     [Group("osutop")]
     public class osuTop : InteractiveBase<ShardedCommandContext>
     {
