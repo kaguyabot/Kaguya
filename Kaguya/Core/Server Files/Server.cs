@@ -14,6 +14,7 @@ namespace Kaguya.Core.Server_Files
         public List<ulong> UsersJoinedLast30Seconds { get; set; }
         public bool AntiRaid { get; set; } = false;
         public List<string> FilteredWords { get; set; }
+        public List<ulong> AutoAssignedRoles { get; set; }
         public List<ulong> BlacklistedChannels { get; set; }
         public List<ulong> WhitelistedChannels { get; set; }
         public ulong LogDeletedMessages { get; set; }
@@ -45,6 +46,7 @@ namespace Kaguya.Core.Server_Files
             BlacklistedChannels = new List<ulong>();
             WhitelistedChannels = new List<ulong>();
             FilteredWords = new List<string>();
+            AutoAssignedRoles = new List<ulong>();
             IsBlacklisted = false;
             JoinedUsers = new List<string>();
         }

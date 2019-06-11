@@ -28,12 +28,12 @@ namespace Kaguya.Modules.Owner_Only
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        //[Command("disable")]
-        //[RequireOwner]
-        //public async Task Disable(string command, [Remainder]string reason)
-        //{
+        [Command("disable")]
+        [RequireOwner]
+        public async Task Disable(string command, [Remainder]string reason)
+        {
 
-        //}
+        }
 
         [Command("kaguyawarn")]
         [RequireOwner]

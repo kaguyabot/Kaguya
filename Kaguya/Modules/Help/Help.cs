@@ -225,6 +225,41 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Shows a list of up to 70 members with the role specified (in alphabetical order)." +
                         $"\nSyntax: `{cmdPrefix}inrole <roleName>`");
                     await BE(); break;
+                case "autoassign":
+                case "aa":
+                    embed.WithTitle($"Help: Auto Assign Roles | `{cmdPrefix}autoassign`, `{cmdPrefix}aa`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nAdds a role to a list of auto-assignable roles. " +
+                        $"An auto assigned role is a role that is given to a new user whenever they join the server." +
+                        $"\nSyntax: `{cmdPrefix}aa <role>`.");
+                    await BE(); break;
+                case "autoassignremove":
+                case "aar":
+                    embed.WithTitle($"Help: Auto Assign Roles | `{cmdPrefix}autoassignremove`, `{cmdPrefix}aar`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nRemoves a role from the list of auto-assignable roles. " +
+                        $"An auto assigned role is a role that is given to a new user whenever they join the server." +
+                        $"\nSyntax: `{cmdPrefix}aar <role>`.");
+                    await BE(); break;
+                case "autoassignclear":
+                case "aac":
+                    embed.WithTitle($"Help: Auto Assign Roles | `{cmdPrefix}autoassignclear`, `{cmdPrefix}aac`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nRemoves all roles from the list of auto-assignable roles. " +
+                        $"An auto assigned role is a role that is given to a new user whenever they join the server." +
+                        $"\nSyntax: `{cmdPrefix}aac`.");
+                    await BE(); break;
+                case "autoassignview":
+                case "aav":
+                    embed.WithTitle($"Help: Auto Assign Roles | `{cmdPrefix}autoassignview`, `{cmdPrefix}aav`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nDisplays the list of auto assigned roles for the server. " +
+                        $"\nSyntax: `{cmdPrefix}aav`.");
+                    await BE(); break;
                 case "echo":
                     embed.WithTitle($"Help: Echoed Messages | `{cmdPrefix}echo`");
                     embed.WithDescription($"{Context.User.Mention} Makes the bot repeat anything you say!" +
@@ -907,6 +942,10 @@ namespace Kaguya.Modules
                 "\nAll commands in category: Utility" +
                 "\n" +
                 $"\n{cmdPrefix}author" +
+                $"\n{cmdPrefix}autoassign [aa]" +
+                $"\n{cmdPrefix}autoassignremove [aar]" +
+                $"\n{cmdPrefix}autoassignclear [aac]" +
+                $"\n{cmdPrefix}autoassignview [aav]" +
                 $"\n{cmdPrefix}createtextchannel [ctc]" +
                 $"\n{cmdPrefix}createvoicechannel [cvc]" +
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +

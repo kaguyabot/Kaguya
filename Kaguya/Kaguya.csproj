@@ -327,6 +327,7 @@
     <Compile Include="Modules\osu\osuTop.cs" />
     <Compile Include="Modules\Owner Only\OwnerCommands.cs" />
     <Compile Include="Modules\Supporter\KaguyaSupporter.cs" />
+    <Compile Include="Modules\Utility\AutoAssignRoles.cs" />
     <Compile Include="Modules\Utility\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -96,11 +96,15 @@ namespace Kaguya.Modules.Music
         public static async Task<Embed> TrackCompletedAsync(LavaPlayer player, LavaTrack track, TrackEndReason reason)
         {
             if (!reason.ShouldPlayNext())
+            {
+                await player.VoiceChannel.DisconnectAsync();
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Continuation", "I have failed to continue the queue! If you believe this is an error, " +
                     $"please contact `Stage#0001` in my support server! Use `{Servers.GetServer(player.TextChannel.Guild as SocketGuild).commandPrefix}hdm` for an invite!");
+            }
 
             if (!player.Queue.TryDequeue(out var item) || !(item is LavaTrack nextTrack))
             {
+                await player.VoiceChannel.DisconnectAsync();
                 return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", "There are no more items left in the queue, so I have stopped playing!");
             }
 

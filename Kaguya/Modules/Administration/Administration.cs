@@ -920,8 +920,6 @@ namespace Kaguya.Modules.Administration
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task ClearMessages(int amount = 10)
         {
-            stopWatch.Start();
-
             if(!(amount > 0))
             {
                 await GlobalCommandResponses.CreateCommandError(Context,
@@ -947,8 +945,8 @@ namespace Kaguya.Modules.Administration
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
             var m = await ReplyAsync($"Clearing of messages completed. This message will be deleted in 3 seconds.");
+            await Task.Delay(3000);
             await m.DeleteAsync();
-            stopWatch.Stop();
         }
 
         [Command("shadowban")]
