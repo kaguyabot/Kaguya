@@ -110,14 +110,6 @@ namespace Kaguya.Core.CommandHandler
             }
         }
 
-        public void ServerLogMethod(SocketCommandContext context)
-        {
-            var server = Servers.GetServer(context.Guild);
-            server.ID = context.Guild.Id;
-            server.ServerName = context.Guild.Name;
-            ServerMessageLogs.SaveServerLogging();
-        }
-
         public async Task JoinedNewGuild(SocketGuild guild)
         {
             logger.ConsoleGuildConnectionAdvisory(guild, "Joined new guild");

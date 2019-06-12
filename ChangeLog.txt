@@ -7,18 +7,18 @@ Version 1.23
 
 - $massban command largely improved. Now, instead of breaking the ban cycle when it runs into an error, it will continue.
     - Errors include things like deleted accounts or if Kaguya's role is not at the top of the hierarchy.
-- Made the same types of improvements to $masskick
-- All commands that use the Nekos.Life API have been disabled (until it comes back online)
+    - Made the same types of improvements to $masskick
 - Users may no longer earn EXP in blacklisted servers.
 - Massblacklist no longer requires the bot owner to also have administrator when using it.
-- Totally fixed $massblacklist. Now takes in a ulong[] instead of List<SocketGuildUser> 
+- Totally fixed $massblacklist. Now takes in a list of IDs instead of a list of guild users.
     - This means blacklists don't have to be of people that are in the same server you execute the command from.
 - Unused $antiraid (owner only) command removed.
-- If a music player has finished playing, with no more songs in the queue, it will now automatically disconnect. (Same for music errors.)
+- If the music player has finished playing, with no more songs in the queue, it will now automatically disconnect. (Same for music errors.)
 - $autoassign [aa] command added.
 - $autoassignremove [aar] command added.
 - $autoassignclear [aac] command added.
 - $autoassignview [aav] command added.
+- Improved music service exception message. It's now less generic/vague.
 
 
 Version 1.22.1

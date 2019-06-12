@@ -73,7 +73,6 @@ namespace Kaguya.Modules.Music
                 if (player.CurrentTrack != null && player.IsPlaying || player.IsPaused)
                 {
                     player.Queue.Enqueue(track);
-                    logger.ConsoleMusicLog(user, $"{track.Title} has been added to the music queue.");
                     return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"🎵 {track.Title} has been added to queue.");
                 }
                 //Player was not playing anything, so lets play the requested track.
@@ -83,7 +82,6 @@ namespace Kaguya.Modules.Music
                     await player.StopAsync();
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"This song is longer than 10 minutes, therefore it cannot be played!");
                 }
-                logger.ConsoleMusicLog(user, $"🎵 Now Playing: {track.Title}\nUrl: {track.Uri}");
                 return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"Now Playing: {track.Title}\nUrl: {track.Uri}");
             }
             //If after all the checks we did, something still goes wrong. Tell the user about it so they can report it back to us.
@@ -126,7 +124,6 @@ namespace Kaguya.Modules.Music
                 //Leave the voice channel.
                 var channelName = player.VoiceChannel.Name;
                 await _lavaShardClient.DisconnectAsync(user.VoiceChannel);
-                logger.ConsoleMusicLog(user, $"Kaguya has disconnected from {channelName}.");
                 return await StaticMusicEmbedHandler.CreateBasicEmbed("Music", $"Disconnected from {channelName}.");
             }
             //Tell the user about the error so they can report it back to us.
