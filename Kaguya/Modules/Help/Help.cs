@@ -1100,7 +1100,7 @@ namespace Kaguya.Modules
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
             string commands = "```css" +
-                "\nAll commands in category: Administration" +
+                "\nAll commands in category: Owner Only" +
                 "\n" +
                 $"\n{cmdPrefix}blacklist [bl] " +
                 $"\n{cmdPrefix}bugaward " +
