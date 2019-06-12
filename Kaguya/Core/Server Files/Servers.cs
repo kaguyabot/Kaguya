@@ -23,17 +23,17 @@ namespace Kaguya.Core.Server_Files
 
         public static Server GetServer(SocketGuild guild)
         {
-            return GetOrCreateServer(guild.Id, guild.Name);
+            return GetOrCreateServer(guild.Id);
         }
 
-        public static Server GetServer(ulong Id, string serverName)
+        public static Server GetServer(ulong Id)
         {
-            return GetOrCreateServer(Id, serverName);
+            return GetOrCreateServer(Id);
         }
 
-        public static Server RemoveServer(ulong ID, string serverName)
+        public static Server RemoveServer(ulong ID)
         {
-            var server = Servers.GetServer(ID, serverName);
+            var server = Servers.GetServer(ID);
             Global.Servers.Remove(server);
             return server;
         }
@@ -43,20 +43,20 @@ namespace Kaguya.Core.Server_Files
             return Global.Servers;
         }
 
-        private static Server GetOrCreateServer(ulong id, string serverName)
+        private static Server GetOrCreateServer(ulong id)
         {
             var result = from a in Global.Servers
                          where a.ID == id
                          select a;
 
             var server = result.FirstOrDefault();
-            if (server == null) server = CreateServer(id, serverName);
+            if (server == null) server = CreateServer(id);
             return server;
         }
 
-        private static Server CreateServer(ulong id, string serverName)
+        private static Server CreateServer(ulong id)
         {
-            var newServer = new Server(id, serverName);
+            var newServer = new Server(id);
 
             Global.Servers.Add(newServer);
             SaveServers();

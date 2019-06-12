@@ -536,23 +536,23 @@ namespace Kaguya.Modules
                         $"parameters. For example, instead of typing `{cmdPrefix}osutop {name}`, you can now just type `{cmdPrefix}osutop` to get your most recent osu! plays. Same thing for `{cmdPrefix}r` / `{cmdPrefix}recent`!");
                     embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
                     await BE(); break;
-                case "massblacklist":
-                    embed.WithTitle($"Help: Mass Blacklist | `{cmdPrefix}massblacklist`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner, Administrator**" +
+                case "userblacklist":
+                case "ubl":
+                    embed.WithTitle($"Help: User Mass Blacklist | `{cmdPrefix}userblacklist`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
                         $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use Kaguya again. These users are permanently banned from the server this command is executed in." +
                         $"These users will have all of their EXP and Points reset to zero, and will be permanently filtered from receiving EXP and executing Kaguya commands." +
-                        $"\nSyntax: `{cmdPrefix}massblacklist userID[]`");
-                    embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS.");
+                        $"\nSyntax: `{cmdPrefix}ubl <params ulong[] IDs>`");
                     await BE(); break;
-                case "unblacklist":
-                    embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}unblacklist`");
+                case "userunblacklist":
+                case "uubl":
+                    embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}userunblacklist`, `{cmdPrefix}ubl`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
-                        $"\nUnblacklists the specified userID." +
-                        $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json." +
+                        $"\nUnblacklists the specified user IDs." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}unblacklist <User ID>`");
+                        $"\nSyntax: `{cmdPrefix}uubl <params ulong[] IDs>`");
 
                     await BE(); break;
                 case "roll":
@@ -647,6 +647,24 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
                         $"\nDisplays any blacklisted channels for the server.");
+                    await BE(); break;
+                case "serverblacklist":
+                case "sbl":
+                    embed.WithTitle($"Help: Owner Guild Blacklist | `{cmdPrefix}serverblacklist`, `{cmdPrefix}sbl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nBlacklists the specified server ID." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}sbl <params ulong[] IDs>`");
+                    await BE(); break;
+                case "serverunblacklist":
+                case "subl":
+                    embed.WithTitle($"Help: Owner Guild Un-Blacklist | `{cmdPrefix}serverunblacklist`, `{cmdPrefix}subl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nUn-Blacklists the specified server ID." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}subl <params ulong[] IDs>`");
                     await BE(); break;
                 case "serverexplb":
                 case "explb":

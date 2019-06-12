@@ -9,6 +9,7 @@ using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -28,12 +29,47 @@ namespace Kaguya.Modules.Owner_Only
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("ownerblacklist")]
-        [Alias("obl")]
+        [Command("serverblacklist")]
+        [Alias("sbl")]
         [RequireOwner]
-        public async Task OwnerBlacklist(ulong ID)
+        public async Task OwnerBlacklist(params ulong[] IDs)
         {
+            string description = "";
 
+            foreach (var ID in IDs)
+            {
+                var guild = Servers.GetServer(ID);
+                var server = _client.GetGuild(ID);
+                guild.IsBlacklisted = true;
+                Servers.SaveServers();
+                description += $"\n{server.Name} has been blacklisted!";
+            }
+            embed.WithTitle("Server Blacklist");
+            embed.WithDescription(description);
+            embed.SetColor(EmbedColor.VIOLET);
+            await BE();
+        }
+
+        [Command("serverunblacklist")]
+        [Alias("subl")]
+        [RequireOwner]
+        public async Task OwnerUnBlacklist(params ulong[] IDs)
+        {
+            string description = "";
+
+            foreach (var ID in IDs)
+            {
+                var guild = Servers.GetServer(ID);
+                var server = _client.GetGuild(ID);
+                guild.IsBlacklisted = false;
+                Servers.SaveServers();
+                description += $"\n{server.Name} has been un-blacklisted!";
+            }
+
+            embed.WithTitle("Server Un-Blacklist");
+            embed.WithDescription(description);
+            embed.SetColor(EmbedColor.VIOLET);
+            await BE();
         }
 
         [Command("kaguyawarn")]
@@ -98,26 +134,36 @@ namespace Kaguya.Modules.Owner_Only
             stopWatch.Stop();
         }
 
-        [Command("Unblacklist")] //administration
+        [Command("userunblacklist")] //administration
+        [Alias("uubl")]
         [RequireOwner]
-        public async Task Unblacklist(SocketUser id)
+        public async Task Unblacklist(params ulong[] IDs)
         {
-            stopWatch.Start();
-            var userAccount = UserAccounts.GetAccount(id);
-            userAccount.IsBlacklisted = false;
-            UserAccounts.SaveAccounts();
+            string description = "";
+            int i = 0;
 
-            embed.WithTitle("User Unblacklisted");
-            if (userAccount.Username != null)
-                embed.WithDescription($"User `{userAccount.Username}` with ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
-            else if (userAccount.Username == null || userAccount.Username == "")
-                embed.WithDescription($"ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
-            embed.WithFooter("Please note that all Points and EXP are not able to be restored.");
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "User Unblacklisted");
+            foreach (var ID in IDs)
+            {
+                var user = _client.GetUser(ID);
+                var userAccount = UserAccounts.GetAccount(ID);
+                userAccount.IsBlacklisted = false;
+                UserAccounts.SaveAccounts();
+
+                description += $"\n`{user.Username}` has been `unblacklisted`.";
+                i++;
+            }
+
+            if (IDs.Length > 1) //Simply here for grammar.
+                embed.WithTitle($"Unblacklisted {i} users.");
+            else
+                embed.WithTitle($"Unblacklisted {i} user.");
+            embed.WithDescription(description);
+            embed.SetColor(EmbedColor.VIOLET);
+            await BE();
         }
 
-        [Command("massblacklist")] //administration
+        [Command("userblacklist")]
+        [Alias("ubl")]
         [RequireOwner]
         public async Task MassBlacklist(params ulong[] users)
         {
@@ -277,15 +323,18 @@ namespace Kaguya.Modules.Owner_Only
             string commands = "```css" +
                 "\nAll commands in category: Administration" +
                 "\n" +
-                $"\n{cmdPrefix}blacklist [bl] " +
-                $"\n{cmdPrefix}bugaward " +
-                $"\n{cmdPrefix}expadd [addexp] " +
-                $"\n{cmdPrefix}kaguyawarn " +
-                $"\n{cmdPrefix}kill " +
-                $"\n{cmdPrefix}massblacklist " +
-                $"\n{cmdPrefix}pointsadd [addpoints] " +
-                $"\n{cmdPrefix}restart " +
-                $"\n{cmdPrefix}timelyreset " +
+                $"\n{cmdPrefix}bugaward" +
+                $"\n{cmdPrefix}expadd [addexp]" +
+                $"\n{cmdPrefix}kaguyawarn" +
+                $"\n{cmdPrefix}kill" +
+                $"\n{cmdPrefix}massblacklist" +
+                $"\n{cmdPrefix}pointsadd [addpoints]" +
+                $"\n{cmdPrefix}restart" +
+                $"\n{cmdPrefix}serverblacklist [sbl]" +
+                $"\n{cmdPrefix}serverunblacklist [subl]" +
+                $"\n{cmdPrefix}timelyreset" +
+                $"\n{cmdPrefix}userblacklist [ubl]" +
+                $"\n{cmdPrefix}userunblacklist [uubl]" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 "\n```";

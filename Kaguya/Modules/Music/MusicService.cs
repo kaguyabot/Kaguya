@@ -148,7 +148,7 @@ namespace Kaguya.Modules.Music
                 /* Get The Player and make sure it isn't null. */
                 var player = _lavaShardClient.GetPlayer(guildId);
                 if (player == null)
-                    return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId, serverName).commandPrefix}h m` for proper usage.");
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId).commandPrefix}h m` for proper usage.");
 
                 if (player.IsPlaying)
                 {
@@ -186,7 +186,7 @@ namespace Kaguya.Modules.Music
 
         public async Task<Embed> SkipTrackAsync(ulong guildId, string serverName)
         {
-            var cmdPrefix = Servers.GetServer(guildId, serverName).commandPrefix;
+            var cmdPrefix = Servers.GetServer(guildId).commandPrefix;
 
             try
             {

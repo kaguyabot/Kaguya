@@ -11,8 +11,8 @@ namespace Kaguya.Core.Server_Files
         public Dictionary<string, string> MutedMembers { get; set; }
         public Dictionary<string, int> WarnActions { get; set; }
         public Dictionary<ulong, int> WarnedMembers { get; set; }
-        public List<ulong> UsersJoinedLast30Seconds { get; set; }
-        public bool AntiRaid { get; set; } = false;
+        public bool AntiRaid { get; set; }
+        public List<ulong> AntiRaidList { get; set; }
         public List<string> FilteredWords { get; set; }
         public List<ulong> AutoAssignedRoles { get; set; }
         public List<ulong> BlacklistedChannels { get; set; }
@@ -34,10 +34,10 @@ namespace Kaguya.Core.Server_Files
         public bool IsBlacklisted { get; set; }
         public string MostRecentBanReason { get; set; }
         public string MostRecentShadowbanReason { get; set; }
-        public Server(ulong id, string serverName)
+        public Server(ulong id)
         {
             ID = id;
-            ServerName = serverName;
+            ServerName = "";
             commandPrefix = "$";
             MessageAnnouncements = true;
             MutedMembers = new Dictionary<string, string>();
@@ -47,6 +47,8 @@ namespace Kaguya.Core.Server_Files
             WhitelistedChannels = new List<ulong>();
             FilteredWords = new List<string>();
             AutoAssignedRoles = new List<ulong>();
+            AntiRaidList = new List<ulong>();
+            AntiRaid = false;
             IsBlacklisted = false;
             JoinedUsers = new List<string>();
         }

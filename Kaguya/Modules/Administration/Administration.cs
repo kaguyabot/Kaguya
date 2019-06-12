@@ -3,7 +3,6 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
-
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Embed;
@@ -33,6 +32,143 @@ namespace Kaguya.Modules.Administration
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
         
+        [Command("antiraid", RunMode = RunMode.Async)]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.BanMembers)]
+        public async Task AntiRaid()
+        {
+            embed.WithTitle("Kaguya Antiraid Setup");
+            embed.WithDescription("Welcome to the Kaguya Anti-Raid setup! In this \"wizard\" so to speak, " +
+                "we will be setting up the antiraid service to protect your server." +
+                "\n" +
+                "\n**Step 1:** Please reply with the number of seconds you want me to wait before triggering the Anti-Raid protections." +
+                "\nExample: `20`");
+            embed.WithFooter("You have 5 minutes to make your selection. Respond with \"cancel\" at anytime to cancel.");
+            await BE();
+
+            var seconds = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300));
+
+            if ((DateTime.Now.AddSeconds(300) - DateTime.Now).TotalSeconds < 0) //Supposed to say "If 300 seconds has passed, then..."
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The setup has been cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (seconds.Content.ToLower().Contains("cancel"))
+            {
+                embed.WithDescription($"Cancelled the Anti-Raid setup.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (!int.TryParse(seconds.Content, out int secondsResult))
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"You did not give me a proper number of seconds. Please try again!");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if(secondsResult > 300)
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The maximum number of seconds is 300. Please try again!");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            embed.WithDescription("Great, thanks for that information! <:Kaguya:581581938884608001>" +
+                "\n" +
+                $"\n**Step 2:** Please let me know how many users you want me to wait for before punishing." +
+                $"\n" +
+                $"\n*Example: The response `5` tells me that if `5` users join in `{secondsResult} seconds`, only then will I punish all of them.*");
+            await BE();
+
+            var users = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300));
+
+            if((DateTime.Now.AddSeconds(300) - DateTime.Now).TotalSeconds < 0) //Supposed to say "If 300 seconds has passed, then..."
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The setup has been cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (seconds.Content.ToLower().Contains("cancel"))
+            {
+                embed.WithDescription($"Anti-Raid setup cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (!int.TryParse(users.Content, out int usersResult))
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"You did not give me a proper number of users. Please try again!");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            embed.WithDescription($"Awesome! So far, I've got that you want to wait `{secondsResult} seconds` before punishing " +
+                $"`{usersResult} users`. If that looks good, great! Let's continue." +
+                $"\n" +
+                $"\nNow, we will be determining how to punish these users. Here are your available options:" +
+                $"\n`Mute, Kick, Shadowban, Ban`" +
+                $"\n" +
+                $"\n**Step 3:** Please reply with exactly what punishment you want for your anti-raid protection." +
+                $"\n" +
+                $"\nExample: `Kick` or `Mute`");
+            await BE();
+
+            var punishment = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300));
+
+            if(punishment.Content.ToLower().Contains("cancel"))
+            {
+                embed.WithDescription($"Anti-Raid setup cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if(!(punishment.Content.ToLower().Contains("mute") || punishment.Content.ToLower().Contains("kick") ||
+                punishment.Content.ToLower().Contains("ban") || punishment.Content.ToLower().Contains("shadowban")))
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"You did not give me a proper punishment. Please try again!");
+                embed.WithDescription("Acceptable responses: `Mute, Kick, Shadowban, Ban`");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            embed.WithTitle($"Anti-Raid Setup Success!");
+            embed.WithDescription($"Congratulations! You have successfully configured my Anti-Raid service." +
+                $"\n" +
+                $"\nCurrent configuration: If `{usersResult} users` join within `{secondsResult} seconds`, I will `{punishment}` them.");
+
+            await BE();
+
+            switch(punishment.Content.ToLower())
+            {
+                case "mute":
+                case "kick":
+                case "shadowban":
+                case "ban":
+
+
+                    break;
+            }
+        }
+
         [Command("warn")]
         [Alias("w")]
         [RequireUserPermission(GuildPermission.KickMembers)]
