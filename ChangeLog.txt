@@ -23,8 +23,10 @@ Version 1.23
 - $serverunblacklist [subl] owner only command added.
 - $massblacklist renamed to $userblacklist
     - Alias added: $ubl
-- $reloadconfig has been tested and works! This allows for file modification without the need to restart the bot
-
+- $reloadconfig has been tested and works! This allows for file modification without the need to restart the bot.
+- Completely removed all NSFW tags except for $n, $n bomb, and $n gif.
+    - I will focus on improving these for now. It is simply way too time consuming to manually create tags for thousands of images.
+    - They have been removed from the command list.
 
 Version 1.22.1
 

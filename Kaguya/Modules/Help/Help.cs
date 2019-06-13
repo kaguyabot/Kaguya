@@ -819,8 +819,8 @@ namespace Kaguya.Modules
                 case "n":
                     embed.WithTitle($"Help: NSFW | `{cmdPrefix}n`");
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}n` command will post a 2D image (no real people) in an NSFW channel with the specified tag." +
-                        $"\nWhen using the `{cmdPrefix}n` command, append a tag to the end like so: `{cmdPrefix}n <tag>`." +
-                        $"\nNSFW Command List: `{cmdPrefix}n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif, bomb>` (Select one).");
+                        $"\nWhen using the `{cmdPrefix}n` command, you may also append an optional modifier to the end like so: `{cmdPrefix}n <modifier>`." +
+                        $"\nNSFW Modifiers: `{cmdPrefix}n <bomb (Sends 5 images at once), gif>` (Select one).");
                     embed.WithFooter($"{cmdPrefix}n bomb usage is limited to 5 uses per hour for non-supporters.");
                     await BE(); break;
                 case "m":
@@ -1046,23 +1046,8 @@ namespace Kaguya.Modules
                     "\nNote: ALL NSFW images are 2D!" +
                     "\n" +
                     $"\n{cmdPrefix}n" +
-                    $"\n{cmdPrefix}n lewd" +
-                    $"\n{cmdPrefix}n boobs" +
-                    $"\n{cmdPrefix}n anal" +
-                    $"\n{cmdPrefix}n bdsm" +
-                    $"\n{cmdPrefix}n bj" +
-                    $"\n{cmdPrefix}n classic" +
-                    $"\n{cmdPrefix}n cum" +
-                    $"\n{cmdPrefix}n feet" +
-                    $"\n{cmdPrefix}n eroyuri" +
-                    $"\n{cmdPrefix}n pussy" +
-                    $"\n{cmdPrefix}n solo" +
-                    $"\n{cmdPrefix}n hentai" +
-                    $"\n{cmdPrefix}n avatar" +
-                    $"\n{cmdPrefix}n trap" +
-                    $"\n{cmdPrefix}n yuri" +
-                    $"\n{cmdPrefix}n gif" +
                     $"\n{cmdPrefix}n bomb" +
+                    $"\n{cmdPrefix}n gif" +
                     $"\n" +
                     $"\nType \"{cmdPrefix}h n\" for more information. Must be used in an NSFW channel." +
                     $"\n```";
