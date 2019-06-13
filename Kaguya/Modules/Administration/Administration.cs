@@ -34,9 +34,11 @@ namespace Kaguya.Modules.Administration
         
         [Command("antiraid", RunMode = RunMode.Async)]
         [RequireUserPermission(GuildPermission.Administrator)]
-        [RequireBotPermission(GuildPermission.BanMembers)]
+        [RequireBotPermission(GuildPermission.Administrator)]
         public async Task AntiRaid()
         {
+            var server = Servers.GetServer(Context.Guild);
+
             embed.WithTitle("Kaguya Antiraid Setup");
             embed.WithDescription("Welcome to the Kaguya Anti-Raid setup! In this \"wizard\" so to speak, " +
                 "we will be setting up the antiraid service to protect your server." +
@@ -46,7 +48,7 @@ namespace Kaguya.Modules.Administration
             embed.WithFooter("You have 5 minutes to make your selection. Respond with \"cancel\" at anytime to cancel.");
             await BE();
 
-            var seconds = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300));
+            var seconds = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 1: Seconds
 
             if ((DateTime.Now.AddSeconds(300) - DateTime.Now).TotalSeconds < 0) //Supposed to say "If 300 seconds has passed, then..."
             {
@@ -83,6 +85,15 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
+            if(secondsResult < 5)
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The minimum number of seconds is 5. Please try again!");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
             embed.WithDescription("Great, thanks for that information! <:Kaguya:581581938884608001>" +
                 "\n" +
                 $"\n**Step 2:** Please let me know how many users you want me to wait for before punishing." +
@@ -90,7 +101,7 @@ namespace Kaguya.Modules.Administration
                 $"\n*Example: The response `5` tells me that if `5` users join in `{secondsResult} seconds`, only then will I punish all of them.*");
             await BE();
 
-            var users = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300));
+            var users = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 2: Number of users.
 
             if((DateTime.Now.AddSeconds(300) - DateTime.Now).TotalSeconds < 0) //Supposed to say "If 300 seconds has passed, then..."
             {
@@ -101,7 +112,7 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
-            if (seconds.Content.ToLower().Contains("cancel"))
+            if (users.Content.ToLower().Contains("cancel"))
             {
                 embed.WithDescription($"Anti-Raid setup cancelled.");
                 embed.SetColor(EmbedColor.RED);
@@ -118,6 +129,25 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
+            if(usersResult < 2)
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The minimum number of users must be greater than one! Please try again!");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (usersResult > 100)
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The maximum number of users can not be more than 100! Please try again!");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            server.AntiRaidCount = usersResult;
             embed.WithDescription($"Awesome! So far, I've got that you want to wait `{secondsResult} seconds` before punishing " +
                 $"`{usersResult} users`. If that looks good, great! Let's continue." +
                 $"\n" +
@@ -129,7 +159,7 @@ namespace Kaguya.Modules.Administration
                 $"\nExample: `Kick` or `Mute`");
             await BE();
 
-            var punishment = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300));
+            var punishment = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 3: Punishment.
 
             if(punishment.Content.ToLower().Contains("cancel"))
             {
@@ -150,6 +180,8 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
+            Servers.SaveServers();
+
             embed.WithTitle($"Anti-Raid Setup Success!");
             embed.WithDescription($"Congratulations! You have successfully configured my Anti-Raid service." +
                 $"\n" +
@@ -160,11 +192,26 @@ namespace Kaguya.Modules.Administration
             switch(punishment.Content.ToLower())
             {
                 case "mute":
+                    server.AntiRaid = true;
+                    server.AntiRaidSeconds = secondsResult;
+                    server.AntiRaidPunishment = "mute";
+                    break;
                 case "kick":
+                    server.AntiRaid = true;
+                    server.AntiRaidSeconds = secondsResult;
+                    server.AntiRaidPunishment = "kick";
+                    break;
                 case "shadowban":
+                    server.AntiRaid = true;
+                    server.AntiRaidSeconds = secondsResult;
+                    server.AntiRaidPunishment = "shadowban";
+                    break;
                 case "ban":
-
-
+                    server.AntiRaid = true;
+                    server.AntiRaidSeconds = secondsResult;
+                    server.AntiRaidPunishment = "ban";
+                    break;
+                default:
                     break;
             }
         }

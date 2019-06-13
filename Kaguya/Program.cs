@@ -50,12 +50,14 @@ namespace Kaguya
 
                     var logger = new KaguyaLogMethods();
                     var timers = new Timers();
+
                     _client.ShardReady += ReadyAsync;
                     _client.ShardReady += logger.OnReady;
                     _client.ShardReady += timers.GameTimer;
                     _client.ShardReady += timers.VerifyMessageReceived;
                     _client.ShardReady += timers.ResourcesBackup;
                     _client.ShardReady += timers.MessageCacheTimer;
+                    _client.ShardReady += timers.ServersCleanup;
 
                     _client.MessageReceived += logger.osuLinkParser;
                     _client.JoinedGuild += logger.JoinedNewGuild;
@@ -65,6 +67,7 @@ namespace Kaguya
                     _client.MessageUpdated += logger.LoggingEditedMessages;
                     _client.UserJoined += logger.LoggingUserJoins;
                     _client.UserJoined += AutoAssignRoles.AutoAssignRole;
+                    _client.UserJoined += timers.AntiRaidTimer; //Anti-Raid timer.
                     _client.UserLeft += logger.LoggingUserLeaves;
                     _client.UserBanned += logger.LoggingUserBanned;
                     _client.UserUnbanned += logger.LoggingUserUnbanned;

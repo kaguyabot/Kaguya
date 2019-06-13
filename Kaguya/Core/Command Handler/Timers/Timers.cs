@@ -18,6 +18,164 @@ namespace Kaguya.Core.Command_Handler
         readonly public IServiceProvider _services;
         readonly Logger logger = new Logger();
 
+        private bool AntiRaidActive(SocketGuild guild)
+        {
+            return Servers.GetServer(guild).AntiRaidList.Count > 0;
+        }
+
+        public Task AntiRaidTimer(SocketUser user)
+        {
+            var server = Servers.GetServer((user as SocketGuildUser).Guild);
+
+            if (server.AntiRaid == true )
+            {
+                var seconds = server.AntiRaidSeconds;
+                var punishment = server.AntiRaidPunishment;
+                server.AntiRaidList.Add(user.Id);
+
+                Timer timer = new Timer(seconds);
+                timer.Elapsed += (sender, e) => Anti_Raid_Timer_Elapsed(sender, e, server);
+                timer.AutoReset = false;
+                timer.Enabled = true;
+                return Task.CompletedTask;
+            }
+            else //If anti raid is not enabled for the server.
+                return Task.CompletedTask;
+        }
+
+        private async Task Anti_Raid_Timer_Elapsed(object sender, ElapsedEventArgs e, Server server)
+        {
+            var users = server.AntiRaidList;
+            var guild = _client.GetGuild(server.ID);
+
+
+            switch (server.AntiRaidPunishment.ToLower())
+            {
+                case "mute":
+                    string mutedUsers = "Kaguya Anti-Raid Service: Members Muted\n";
+                    string notMutedUsers = "";
+
+                    var muteRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
+
+                    foreach (var user in users)
+                    {
+                        var guildUser = _client.GetUser(user);
+                        try
+                        {
+                            if (server.AntiRaidList.Count >= server.AntiRaidCount)
+                            {
+                                await (guildUser as SocketGuildUser).AddRoleAsync(muteRole); //Applies punishment.
+                                mutedUsers += $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                            }
+                            else
+                            { return; }
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to mute user in guild {guild.Name}!" +
+                                $"\nException: {ex.Message}");
+                            notMutedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO MUTE USERS!! ⚠️" +
+                                $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`" +
+                                $"\nException: `{ex.Message}`";
+                            continue;
+                        }
+                    }
+
+                    if (notMutedUsers != "")
+                        await guild.Owner.SendMessageAsync(notMutedUsers); //DMs the owner of the server if something really bad happens.
+                    else
+                        await guild.Owner.SendMessageAsync(mutedUsers);
+                    break;
+                case "kick":
+                case "shadowban":
+                case "ban":
+                    string bannedUsers = "Kaguya Anti-Raid Service: Members Muted\n";
+                    string notBannedUsers = "";
+
+                    foreach (var user in users)
+                    {
+                        var guildUser = _client.GetUser(user);
+
+                        try
+                        {
+                            if (server.AntiRaidList.Count >= server.AntiRaidCount)
+                            {
+                                await guild.AddBanAsync(guildUser); //Applies punishment.
+                                bannedUsers += $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                            }
+                            else
+                            { return; }
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to ban user in guild {guild.Name}!" +
+                                $"\nException: {ex.Message}");
+                            notBannedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO BAN USERS!! ⚠️" +
+                                $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`" +
+                                $"\nException: `{ex.Message}`";
+                            continue;
+                        }
+                    }
+
+                    if (notBannedUsers != "")
+                        await guild.Owner.SendMessageAsync(notBannedUsers); //DMs the owner of the server if something really bad happens.
+                    else
+                        await guild.Owner.SendMessageAsync(bannedUsers);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public Task ServersCleanup(DiscordSocketClient _client)
+        {
+            Timer timer = new Timer(3600000); //1 Hour
+            timer.Elapsed += Servers_Cleanup_Elapsed;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            return Task.CompletedTask;
+        }
+
+        private void Servers_Cleanup_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var servers = _client.Guilds;
+            var serverFile = Servers.GetAllServers();
+            double i = 0;
+
+            foreach (var guild in serverFile)
+            {
+                guild.ServerName = "This is a test name.";
+            }
+
+            foreach (var server in servers)
+            {
+                try
+                {
+                    Servers.GetServer(server).ServerName = server.Name;
+                    i++;
+                    Console.WriteLine($"{(i / servers.Count).ToString("N3")}% complete.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed. Exception: {ex.Message}");
+                    i--;
+                    continue;
+                }
+            }
+
+            foreach (var guild in serverFile.ToArray())
+            {
+                if (guild.ServerName == "This is a test name.")
+                {
+                    serverFile.Remove(guild);
+                }
+            }
+
+            logger.ConsoleStatusAdvisory($"Timer Elapsed: Removed {i} guilds from the database because I am no longer connected to them!");
+
+            Servers.SaveServers();
+        }
+
         public Task VoteClaimRateLimitTimer(DiscordSocketClient _client)
         {
             Timer timer = new Timer(75000); //75 Seconds

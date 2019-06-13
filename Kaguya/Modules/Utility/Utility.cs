@@ -143,7 +143,6 @@ namespace Kaguya.Modules.Utility
                 embed.WithFooter($"To reset the command prefix, type {cmdPrefix}prefix!");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
-                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Invalid prefix."); ERROR HANDLER HERE
                 return;
             }
 
@@ -152,7 +151,7 @@ namespace Kaguya.Modules.Utility
 
             embed.WithTitle("Change Command Prefix: Success!");
             embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");
-            embed.WithFooter($"If you ever forget the prefix, tag me and type \"`prefix`\"!");
+            embed.WithFooter($"If you ever forget the prefix, tag me and type \"prefix\"!");
             await BE();
         }
         
