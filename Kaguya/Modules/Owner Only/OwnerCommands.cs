@@ -134,7 +134,7 @@ namespace Kaguya.Modules.Owner_Only
             stopWatch.Stop();
         }
 
-        [Command("userunblacklist")] //administration
+        [Command("userunblacklist")] 
         [Alias("uubl")]
         [RequireOwner]
         public async Task Unblacklist(params ulong[] IDs)
@@ -367,11 +367,12 @@ namespace Kaguya.Modules.Owner_Only
         [RequireOwner]
         [Command("reloadconfig")]
         [Alias("rc")]
-        public async Task ReloadAccounts() //UNTESTED!!
+        public async Task ReloadAccounts()
         {
-            await ReplyAsync("Reloading Data...");
             KaguyaLogMethods.LoadKaguyaData();
-            await ReplyAsync("User accounts and servers have been reloaded.");
+            embed.WithDescription("User accounts and servers have been reloaded.");
+            embed.SetColor(EmbedColor.VIOLET);
+            await BE();
         }
 
         [Command("restart")]

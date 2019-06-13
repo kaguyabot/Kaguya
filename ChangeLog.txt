@@ -23,6 +23,7 @@ Version 1.23
 - $serverunblacklist [subl] owner only command added.
 - $massblacklist renamed to $userblacklist
     - Alias added: $ubl
+- $reloadconfig has been tested and works! This allows for file modification without the need to restart the bot
 
 
 Version 1.22.1

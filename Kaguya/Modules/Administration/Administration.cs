@@ -683,7 +683,7 @@ namespace Kaguya.Modules.Administration
             await BE();
         }
 
-        [Command("filteradd")] //administration
+        [Command("filteradd")] 
         [Alias("fa")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
@@ -703,7 +703,7 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Administrator has added word to their filter: \"{phrase}\"");
         }
 
-        [Command("filterremove")] //administration
+        [Command("filterremove")] 
         [Alias("fr")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
@@ -723,7 +723,7 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Administrator has removed word \"{phrase}\" from their filter");
         }
 
-        [Command("filterview")] //administration
+        [Command("filterview")] 
         [Alias("fv", "viewfilter")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         public async Task FilterView()
@@ -746,7 +746,7 @@ namespace Kaguya.Modules.Administration
             await BE();
         }
 
-        [Command("filterclear")] //administration
+        [Command("filterclear")] 
         [Alias("clearfilter")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task FilterClear()
@@ -768,7 +768,7 @@ namespace Kaguya.Modules.Administration
             await BE();
         }
 
-        [Command("removeallroles")] //admin
+        [Command("removeallroles")] 
         [Alias("rar")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -811,7 +811,7 @@ namespace Kaguya.Modules.Administration
             }
         }
 
-        [Command("deleterole")] //admin
+        [Command("deleterole")] 
         [Alias("dr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -858,7 +858,7 @@ namespace Kaguya.Modules.Administration
             await BE();
         }
 
-        [Command("kaguyaexit")] //admin
+        [Command("kaguyaexit")] 
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task LeaveGuild()
         {
@@ -870,7 +870,7 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleGuildAdvisory(Context.Guild, "KaguyaExit command executed.");
         }
 
-        [Command("ban")] //admin
+        [Command("ban")] 
         [Alias("b")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
@@ -899,7 +899,7 @@ namespace Kaguya.Modules.Administration
             }
         }
 
-        [Command("massban")] //administration
+        [Command("massban")] 
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.BanMembers)]
         public async Task MassBan([Remainder]List<SocketGuildUser> users)
@@ -957,7 +957,7 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleGuildAdvisory($"{i} Users massbanned in guild {Context.Guild.Name}.");
         }
 
-        [Command("kick")] //admin
+        [Command("kick")] 
         [Alias("k")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
@@ -995,7 +995,7 @@ namespace Kaguya.Modules.Administration
             }
         }
 
-        [Command("masskick")] //administration
+        [Command("masskick")] 
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task MassKick([Remainder]List<SocketGuildUser> users)
@@ -1050,7 +1050,7 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleGuildAdvisory(Context.Guild, "Users masskicked.");
         }
 
-        [Command("clear")] //administration
+        [Command("clear")] 
         [Alias("c", "purge")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
