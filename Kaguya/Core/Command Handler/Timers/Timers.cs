@@ -25,6 +25,10 @@ namespace Kaguya.Core.Command_Handler
 
         public Task AntiRaidTimer(SocketUser user)
         {
+            if (AntiRaidActive((user as SocketGuildUser).Guild))
+                return Task.CompletedTask;
+
+
             var server = Servers.GetServer((user as SocketGuildUser).Guild);
 
             if (server.AntiRaid == true )
@@ -33,7 +37,7 @@ namespace Kaguya.Core.Command_Handler
                 var punishment = server.AntiRaidPunishment;
                 server.AntiRaidList.Add(user.Id);
 
-                Timer timer = new Timer(seconds);
+                Timer timer = new Timer(seconds * 1000);
                 timer.Elapsed += (sender, e) => Anti_Raid_Timer_Elapsed(sender, e, server);
                 timer.AutoReset = false;
                 timer.Enabled = true;
