@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.UserAccounts;
+using Kaguya.Core.Attributes;
 
 namespace Kaguya.Modules.Supporter
 {

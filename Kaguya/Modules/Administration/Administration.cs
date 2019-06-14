@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
+using Kaguya.Core.Attributes;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 #pragma warning disable CS0472

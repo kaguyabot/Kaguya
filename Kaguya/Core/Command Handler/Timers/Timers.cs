@@ -25,9 +25,9 @@ namespace Kaguya.Core.Command_Handler
 
         public Task AntiRaidTimer(SocketUser user)
         {
+            #pragma warning disable //Can't await Anti_Raid_Timer_Elapsed
             if (AntiRaidActive((user as SocketGuildUser).Guild))
                 return Task.CompletedTask;
-
 
             var server = Servers.GetServer((user as SocketGuildUser).Guild);
 
