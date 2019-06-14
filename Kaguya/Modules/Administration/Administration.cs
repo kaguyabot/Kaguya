@@ -196,21 +196,25 @@ namespace Kaguya.Modules.Administration
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "mute";
+                    Servers.SaveServers();
                     break;
                 case "kick":
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "kick";
+                    Servers.SaveServers();
                     break;
                 case "shadowban":
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "shadowban";
+                    Servers.SaveServers();
                     break;
                 case "ban":
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "ban";
+                    Servers.SaveServers();
                     break;
                 default:
                     break;

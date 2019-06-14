@@ -52,7 +52,6 @@ namespace Kaguya.Core.Command_Handler
             var users = server.AntiRaidList;
             var guild = _client.GetGuild(server.ID);
 
-
             switch (server.AntiRaidPunishment.ToLower())
             {
                 case "mute":
@@ -91,9 +90,74 @@ namespace Kaguya.Core.Command_Handler
                         await guild.Owner.SendMessageAsync(mutedUsers);
                     break;
                 case "kick":
+                    string kickedUsers = "Kaguya Anti-Raid Service: Members Kicked\n";
+                    string notKickedUsers = "";
+
+                    foreach (var user in users)
+                    {
+                        var guildUser = _client.GetUser(user);
+                        try
+                        {
+                            if (server.AntiRaidList.Count >= server.AntiRaidCount)
+                            {
+                                await (guildUser as SocketGuildUser).KickAsync(); //Applies punishment.
+                                kickedUsers += $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                            }
+                            else
+                            { return; }
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to kick user in guild {guild.Name}!" +
+                                $"\nException: {ex.Message}");
+                            notKickedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO KICK USERS!! ⚠️" +
+                                $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                            continue;
+                        }
+                    }
+
+                    if (notKickedUsers != "")
+                        await guild.Owner.SendMessageAsync(notKickedUsers); //DMs the owner of the server if something really bad happens.
+                    else
+                        await guild.Owner.SendMessageAsync(kickedUsers);
+                    break;
                 case "shadowban":
+                    string shadowbannedUsers = "Kaguya Anti-Raid Service: Members Shadowbanned\n";
+                    string notShadowbannedUsers = "";
+
+                    foreach (var user in users)
+                    {
+                        var guildUser = _client.GetUser(user);
+                        try
+                        {
+                            if (server.AntiRaidList.Count >= server.AntiRaidCount)
+                            {
+                                foreach (var channel in guild.Channels)
+                                {
+                                    await channel.AddPermissionOverwriteAsync((IUser)guildUser, OverwritePermissions.DenyAll(channel)); //Applies punishment.
+                                }
+                                shadowbannedUsers += $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                            }
+                            else
+                            { return; }
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to shadowban user in guild {guild.Name}!" +
+                                $"\nException: {ex.Message}");
+                            notShadowbannedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO SHADOWBAN USERS!! ⚠️" +
+                                $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                            continue;
+                        }
+                    }
+
+                    if (notShadowbannedUsers != "")
+                        await guild.Owner.SendMessageAsync(notShadowbannedUsers); //DMs the owner of the server if something really bad happens.
+                    else
+                        await guild.Owner.SendMessageAsync(shadowbannedUsers);
+                    break;
                 case "ban":
-                    string bannedUsers = "Kaguya Anti-Raid Service: Members Muted\n";
+                    string bannedUsers = "Kaguya Anti-Raid Service: Members Banned\n";
                     string notBannedUsers = "";
 
                     foreach (var user in users)
@@ -136,51 +200,51 @@ namespace Kaguya.Core.Command_Handler
             Timer timer = new Timer(3600000); //1 Hour
             timer.Elapsed += Servers_Cleanup_Elapsed;
             timer.AutoReset = true;
-            timer.Enabled = true;
+            timer.Enabled = false; //Return when confident that it'll work
             return Task.CompletedTask;
         }
 
         private void Servers_Cleanup_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var servers = _client.Guilds;
-            var serverFile = Servers.GetAllServers();
-            double i = 0;
+            //var servers = _client.Guilds;
+            //var serverFile = Servers.GetAllServers();
+            //double i = 0;
 
-            foreach (var guild in serverFile)
-            {
-                guild.ServerName = "This is a test name.";
-            }
+            //foreach (var guild in serverFile)
+            //{
+            //    guild.ServerName = "This is a test name.";
+            //}
 
-            foreach (var server in servers)
-            {
-                try
-                {
-                    Servers.GetServer(server).ServerName = server.Name;
-                    i++;
-                    Console.WriteLine($"{(i / servers.Count).ToString("N3")}% complete.");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Failed. Exception: {ex.Message}");
-                    i--;
-                    continue;
-                }
-            }
+            //foreach (var server in servers)
+            //{
+            //    try
+            //    {
+            //        Servers.GetServer(server).ServerName = server.Name;
+            //        i++;
+            //        Console.WriteLine($"{(i / servers.Count).ToString("N3")}% complete.");
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"Failed. Exception: {ex.Message}");
+            //        i--;
+            //        continue;
+            //    }
+            //}
 
-            foreach (var guild in serverFile.ToArray())
-            {
-                if (guild.ServerName == "This is a test name.")
-                {
-                    serverFile.Remove(guild);
-                }
-            }
+            //foreach (var guild in serverFile.ToArray())
+            //{
+            //    if (guild.ServerName == "This is a test name.")
+            //    {
+            //        serverFile.Remove(guild);
+            //    }
+            //}
 
-            logger.ConsoleStatusAdvisory($"Timer Elapsed: Removed {i} guilds from the database because I am no longer connected to them!");
+            //logger.ConsoleStatusAdvisory($"Timer Elapsed: Removed {i} guilds from the database because I am no longer connected to them!");
 
-            Servers.SaveServers();
+            //Servers.SaveServers();
         }
 
-        public Task VoteClaimRateLimitTimer(DiscordSocketClient _client)
+        public Task VoteClaimRateLimitTimer(DiscordSocketClient _client) //Bandaid until I use the webhook
         {
             Timer timer = new Timer(75000); //75 Seconds
             timer.Elapsed += Vote_Claim_Timer_Elapsed;
@@ -194,14 +258,25 @@ namespace Kaguya.Core.Command_Handler
             Config.bot.RecentVoteClaimAttempts = 0;
         }
 
+        int gameTimersActive = 0; //Prevents more than one timer being active at a time, per shard.
+        int messageCacheTimersActive = 0;
+        int gameRotationTimersActive = 0;
+        int resourcesBackupTimersActive = 0;
+
         public Task MessageCacheTimer(DiscordSocketClient _client)
         {
-            Timer timer = new Timer(2000); //2 Seconds
-            timer.Elapsed += Message_Cache_Timer_Elapsed;
-            timer.AutoReset = true;
-            timer.Enabled = true;
+            if (messageCacheTimersActive < Global.ShardsToLogIn)
+            {
+                Timer timer = new Timer(3000); //2 Seconds
+                timer.Elapsed += Message_Cache_Timer_Elapsed;
+                timer.AutoReset = true;
+                timer.Enabled = true;
+                messageCacheTimersActive++;
+                return Task.CompletedTask;
+            }
             return Task.CompletedTask;
         }
+
 
         private void Message_Cache_Timer_Elapsed(object sender, ElapsedEventArgs e) //Saves the log every 2 seconds.
         {
@@ -210,10 +285,15 @@ namespace Kaguya.Core.Command_Handler
 
         public Task GameTimer(DiscordSocketClient _client)
         {
-            Timer timer = new Timer(300000); //5 minutes
-            timer.Elapsed += Game_Timer_Elapsed;
-            timer.AutoReset = true;
-            timer.Enabled = true;
+            if (gameTimersActive < Global.ShardsToLogIn)
+            {
+                Timer timer = new Timer(300000); //5 minutes
+                timer.Elapsed += Game_Timer_Elapsed;
+                timer.AutoReset = true;
+                timer.Enabled = true;
+                gameTimersActive++;
+                return Task.CompletedTask;
+            }
             return Task.CompletedTask;
         }
 
@@ -221,28 +301,22 @@ namespace Kaguya.Core.Command_Handler
 
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
-            var mutualGuilds = _client.GetUser(ID).MutualGuilds;
-
-            int i = 0;
-            foreach (var guild in mutualGuilds)
+            if (gameRotationTimersActive < Global.ShardsToLogIn)
             {
-                for (int j = 0; j <= guild.MemberCount; j++)
+                var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
+
+                string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
+            $"Servicing {Global.TotalGuildCount.ToString("N0")} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
+                $"{Utilities.GetAlert("VERSION")}"};
+                displayIndex++;
+                if (displayIndex >= games.Length)
                 {
-                    i++;
+                    displayIndex = 0;
                 }
-            }
 
-            string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
-            $"Servicing {mutualGuilds.Count().ToString("N0")} guilds", $"Serving {i.ToString("N0")} users" };
-            displayIndex++;
-            if (displayIndex >= games.Length)
-            {
-                displayIndex = 0;
+                _client.SetGameAsync(games[displayIndex]);
+                logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
             }
-
-            _client.SetGameAsync(games[displayIndex]);
-            logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
         }
 
         public Task VerifyMessageReceived(DiscordSocketClient _client)
@@ -268,10 +342,14 @@ namespace Kaguya.Core.Command_Handler
 
         public Task ResourcesBackup(DiscordSocketClient _client)
         {
-            Timer timer = new Timer(300000); //Every 5 minutes, backup the resources folder.
-            timer.Elapsed += Resources_Backup_Elapsed;
-            timer.AutoReset = true;
-            timer.Enabled = true;
+            if (resourcesBackupTimersActive < 1)
+            {
+                Timer timer = new Timer(300000); //Every 5 minutes, backup the resources folder.
+                timer.Elapsed += Resources_Backup_Elapsed;
+                timer.AutoReset = true;
+                timer.Enabled = true;
+                return Task.CompletedTask;
+            }
             return Task.CompletedTask;
         }
 
