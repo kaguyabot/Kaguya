@@ -23,34 +23,40 @@ namespace Kaguya.Core.Command_Handler
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
         }
 
-        public Task AntiRaidTimer(SocketUser user)
+        public Task AntiRaidTimer(SocketGuildUser user)
         {
             #pragma warning disable //Can't await Anti_Raid_Timer_Elapsed
-            if (AntiRaidActive((user as SocketGuildUser).Guild))
-                return Task.CompletedTask;
-
+           
             var server = Servers.GetServer((user as SocketGuildUser).Guild);
 
-            if (server.AntiRaid == true )
+            if (server.AntiRaid == true)
             {
                 var seconds = server.AntiRaidSeconds;
                 var punishment = server.AntiRaidPunishment;
                 server.AntiRaidList.Add(user.Id);
+                Servers.SaveServers();
+
+                if (!AntiRaidActive((user as SocketGuildUser).Guild))
+                    return Task.CompletedTask;
 
                 Timer timer = new Timer(seconds * 1000);
-                timer.Elapsed += (sender, e) => Anti_Raid_Timer_Elapsed(sender, e, server);
+                timer.Elapsed += (sender, e) => Anti_Raid_Timer_Elapsed(sender, e, server, user);
                 timer.AutoReset = false;
                 timer.Enabled = true;
+
                 return Task.CompletedTask;
             }
             else //If anti raid is not enabled for the server.
                 return Task.CompletedTask;
         }
 
-        private async Task Anti_Raid_Timer_Elapsed(object sender, ElapsedEventArgs e, Server server)
+        private async Task Anti_Raid_Timer_Elapsed(object sender, ElapsedEventArgs e, Server server, SocketGuildUser user)
         {
-            var users = server.AntiRaidList;
+            var userIDs = server.AntiRaidList;
             var guild = _client.GetGuild(server.ID);
+            var roles = guild.Roles;
+
+            Console.WriteLine("Antiraid started.");
 
             switch (server.AntiRaidPunishment.ToLower())
             {
@@ -58,17 +64,16 @@ namespace Kaguya.Core.Command_Handler
                     string mutedUsers = "Kaguya Anti-Raid Service: Members Muted\n";
                     string notMutedUsers = "";
 
-                    var muteRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
+                    var muteRole = roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
 
-                    foreach (var user in users)
+                    foreach (var userID in userIDs)
                     {
-                        var guildUser = _client.GetUser(user);
                         try
                         {
                             if (server.AntiRaidList.Count >= server.AntiRaidCount)
                             {
-                                await (guildUser as SocketGuildUser).AddRoleAsync(muteRole); //Applies punishment.
-                                mutedUsers += $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                                await user.AddRoleAsync(muteRole); //Applies punishment.
+                                mutedUsers += $"\n`{user.ToString()}` - ID: `{user.Id}`";
                             }
                             else
                             { return; }
@@ -78,7 +83,7 @@ namespace Kaguya.Core.Command_Handler
                             logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to mute user in guild {guild.Name}!" +
                                 $"\nException: {ex.Message}");
                             notMutedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO MUTE USERS!! ⚠️" +
-                                $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`" +
+                                $"\n`{user.ToString()}` - ID: `{user.Id}`" +
                                 $"\nException: `{ex.Message}`";
                             continue;
                         }
@@ -88,20 +93,21 @@ namespace Kaguya.Core.Command_Handler
                         await guild.Owner.SendMessageAsync(notMutedUsers); //DMs the owner of the server if something really bad happens.
                     else
                         await guild.Owner.SendMessageAsync(mutedUsers);
+                    server.AntiRaidList.Clear();
+                    Servers.SaveServers();
                     break;
                 case "kick":
                     string kickedUsers = "Kaguya Anti-Raid Service: Members Kicked\n";
                     string notKickedUsers = "";
 
-                    foreach (var user in users)
+                    foreach (var userID in userIDs)
                     {
-                        var guildUser = _client.GetUser(user);
                         try
                         {
                             if (server.AntiRaidList.Count >= server.AntiRaidCount)
                             {
-                                await (guildUser as SocketGuildUser).KickAsync(); //Applies punishment.
-                                kickedUsers += $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                                await user.KickAsync(); //Applies punishment.
+                                kickedUsers += $"\n`{user}` - ID: `{user.Id}`";
                             }
                             else
                             { return; }
@@ -111,7 +117,7 @@ namespace Kaguya.Core.Command_Handler
                             logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to kick user in guild {guild.Name}!" +
                                 $"\nException: {ex.Message}");
                             notKickedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO KICK USERS!! ⚠️" +
-                                $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                                $"\n`{user}` - ID: `{user.Id}`";
                             continue;
                         }
                     }
@@ -120,23 +126,24 @@ namespace Kaguya.Core.Command_Handler
                         await guild.Owner.SendMessageAsync(notKickedUsers); //DMs the owner of the server if something really bad happens.
                     else
                         await guild.Owner.SendMessageAsync(kickedUsers);
+                    server.AntiRaidList.Clear();
+                    Servers.SaveServers();
                     break;
                 case "shadowban":
                     string shadowbannedUsers = "Kaguya Anti-Raid Service: Members Shadowbanned\n";
                     string notShadowbannedUsers = "";
 
-                    foreach (var user in users)
+                    foreach (var userID in userIDs)
                     {
-                        var guildUser = _client.GetUser(user);
                         try
                         {
                             if (server.AntiRaidList.Count >= server.AntiRaidCount)
                             {
                                 foreach (var channel in guild.Channels)
                                 {
-                                    await channel.AddPermissionOverwriteAsync((IUser)guildUser, OverwritePermissions.DenyAll(channel)); //Applies punishment.
+                                    await channel.AddPermissionOverwriteAsync(user, OverwritePermissions.DenyAll(channel)); //Applies punishment.
                                 }
-                                shadowbannedUsers += $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                                shadowbannedUsers += $"\n`{user}` - ID: `{user.Id}`";
                             }
                             else
                             { return; }
@@ -146,7 +153,7 @@ namespace Kaguya.Core.Command_Handler
                             logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to shadowban user in guild {guild.Name}!" +
                                 $"\nException: {ex.Message}");
                             notShadowbannedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO SHADOWBAN USERS!! ⚠️" +
-                                $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                                $"\n`{user}` - ID: `{user.Id}`";
                             continue;
                         }
                     }
@@ -155,21 +162,21 @@ namespace Kaguya.Core.Command_Handler
                         await guild.Owner.SendMessageAsync(notShadowbannedUsers); //DMs the owner of the server if something really bad happens.
                     else
                         await guild.Owner.SendMessageAsync(shadowbannedUsers);
+                    server.AntiRaidList.Clear();
+                    Servers.SaveServers();
                     break;
                 case "ban":
                     string bannedUsers = "Kaguya Anti-Raid Service: Members Banned\n";
                     string notBannedUsers = "";
 
-                    foreach (var user in users)
+                    foreach (var userID in userIDs)
                     {
-                        var guildUser = _client.GetUser(user);
-
                         try
                         {
                             if (server.AntiRaidList.Count >= server.AntiRaidCount)
                             {
-                                await guild.AddBanAsync(guildUser); //Applies punishment.
-                                bannedUsers += $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`";
+                                await guild.AddBanAsync(user); //Applies punishment.
+                                bannedUsers += $"\n`{user}` - ID: `{user.Id}`";
                             }
                             else
                             { return; }
@@ -179,7 +186,7 @@ namespace Kaguya.Core.Command_Handler
                             logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to ban user in guild {guild.Name}!" +
                                 $"\nException: {ex.Message}");
                             notBannedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO BAN USERS!! ⚠️" +
-                                $"\n`{guildUser.ToString()}` - ID: `{guildUser.Id}`" +
+                                $"\n`{user}` - ID: `{user.Id}`" +
                                 $"\nException: `{ex.Message}`";
                             continue;
                         }
@@ -189,6 +196,8 @@ namespace Kaguya.Core.Command_Handler
                         await guild.Owner.SendMessageAsync(notBannedUsers); //DMs the owner of the server if something really bad happens.
                     else
                         await guild.Owner.SendMessageAsync(bannedUsers);
+                    server.AntiRaidList.Clear();
+                    Servers.SaveServers();
                     break;
                 default:
                     break;

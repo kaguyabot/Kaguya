@@ -220,7 +220,7 @@ namespace Kaguya.Modules.Owner_Only
             else
             {
                 embed.WithTitle("Adding Points");
-                embed.WithDescription($"{Context.User.Mention} Unable to add points to {user}! Make sure they exist and try again!");
+                embed.WithDescription($"{Context.User.Mention} Unable to add points to {user.Mention}! Make sure they exist and try again!");
                 await BE();
             }
         }
@@ -310,7 +310,7 @@ namespace Kaguya.Modules.Owner_Only
 
             UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
-            embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
+            embed.WithDescription($"{user.Mention} has gained {exp} EXP.");
             await BE();
         }
 

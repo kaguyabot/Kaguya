@@ -65,7 +65,7 @@ namespace Kaguya.Core.CommandHandler
                     i++;
                 }
             }
-
+            
             Console.ForegroundColor = ConsoleColor.White;
             LoadKaguyaData(); //Loads all user accounts and servers into memory.
             await _lavaShardClient.StartAsync(Global.client); //Initializes the music service.

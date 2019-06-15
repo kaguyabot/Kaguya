@@ -130,7 +130,7 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
-            if(usersResult < 2)
+            if(usersResult < 1) //To-do: Change to 2
             {
                 embed.WithTitle($"Anti-Raid Setup Failed!");
                 embed.WithDescription($"The minimum number of users must be greater than one! Please try again!");

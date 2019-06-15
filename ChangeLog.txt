@@ -32,6 +32,8 @@ Version 1.23
 - Fixed a bug where timers (such as updating the game, backing up files, etc) would overlap each other if a shard disconnected, then reconnected.
     - Now, there will only be one timer (per shard).
 - New "game" added to the rotation: Kaguya's current version!
+- Fixed a bug where $expadd <num> <user> would mention the user of the command, not the recipient
+- Fixed the same bug with $points <target> and $exp <target>
 
 
 Version 1.22.1
