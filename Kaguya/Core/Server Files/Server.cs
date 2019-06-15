@@ -33,6 +33,7 @@ namespace Kaguya.Core.Server_Files
         public ulong LogWhenUserConnectsToVoiceChannel { get; set; }
         public ulong LogWhenUserDisconnectsFromVoiceChannel { get; set; }
         public ulong LogLevelUpAnnouncements { get; set; }
+        public ulong LogAntiRaids { get; set; }
         public bool IsBlacklisted { get; set; }
         public string MostRecentBanReason { get; set; }
         public string MostRecentShadowbanReason { get; set; }

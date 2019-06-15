@@ -90,9 +90,9 @@ namespace Kaguya.Core.Command_Handler
                     }
 
                     if (notMutedUsers != "")
-                        await guild.Owner.SendMessageAsync(notMutedUsers); //DMs the owner of the server if something really bad happens.
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(notMutedUsers); //DMs the owner of the server if something really bad happens.
                     else
-                        await guild.Owner.SendMessageAsync(mutedUsers);
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(mutedUsers);
                     server.AntiRaidList.Clear();
                     Servers.SaveServers();
                     break;
@@ -123,9 +123,9 @@ namespace Kaguya.Core.Command_Handler
                     }
 
                     if (notKickedUsers != "")
-                        await guild.Owner.SendMessageAsync(notKickedUsers); //DMs the owner of the server if something really bad happens.
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(notKickedUsers); //DMs the owner of the server if something really bad happens.
                     else
-                        await guild.Owner.SendMessageAsync(kickedUsers);
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(kickedUsers);
                     server.AntiRaidList.Clear();
                     Servers.SaveServers();
                     break;
@@ -159,9 +159,9 @@ namespace Kaguya.Core.Command_Handler
                     }
 
                     if (notShadowbannedUsers != "")
-                        await guild.Owner.SendMessageAsync(notShadowbannedUsers); //DMs the owner of the server if something really bad happens.
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(notShadowbannedUsers); //DMs the owner of the server if something really bad happens.
                     else
-                        await guild.Owner.SendMessageAsync(shadowbannedUsers);
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(shadowbannedUsers);
                     server.AntiRaidList.Clear();
                     Servers.SaveServers();
                     break;
@@ -193,9 +193,9 @@ namespace Kaguya.Core.Command_Handler
                     }
 
                     if (notBannedUsers != "")
-                        await guild.Owner.SendMessageAsync(notBannedUsers); //DMs the owner of the server if something really bad happens.
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(notBannedUsers); //DMs the owner of the server if something really bad happens.
                     else
-                        await guild.Owner.SendMessageAsync(bannedUsers);
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(bannedUsers);
                     server.AntiRaidList.Clear();
                     Servers.SaveServers();
                     break;

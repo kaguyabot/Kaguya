@@ -51,22 +51,9 @@ namespace Kaguya.Modules.Administration
 
             var seconds = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 1: Seconds
 
-            if ((DateTime.Now.AddSeconds(300) - DateTime.Now).TotalSeconds < 0) //Supposed to say "If 300 seconds has passed, then..."
-            {
-                embed.WithTitle($"Anti-Raid Setup Failed!");
-                embed.WithDescription($"The setup has been cancelled.");
-                embed.SetColor(EmbedColor.RED);
-                await BE();
-                return;
-            }
+            await TimeoutMethod();
 
-            if (seconds.Content.ToLower().Contains("cancel"))
-            {
-                embed.WithDescription($"Cancelled the Anti-Raid setup.");
-                embed.SetColor(EmbedColor.RED);
-                await BE();
-                return;
-            }
+            await CancelMethod(seconds);
 
             if (!int.TryParse(seconds.Content, out int secondsResult))
             {
@@ -77,7 +64,7 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
-            if(secondsResult > 300)
+            if (secondsResult > 300)
             {
                 embed.WithTitle($"Anti-Raid Setup Failed!");
                 embed.WithDescription($"The maximum number of seconds is 300. Please try again!");
@@ -86,7 +73,7 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
-            if(secondsResult < 5)
+            if (secondsResult < 5)
             {
                 embed.WithTitle($"Anti-Raid Setup Failed!");
                 embed.WithDescription($"The minimum number of seconds is 5. Please try again!");
@@ -104,22 +91,9 @@ namespace Kaguya.Modules.Administration
 
             var users = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 2: Number of users.
 
-            if((DateTime.Now.AddSeconds(300) - DateTime.Now).TotalSeconds < 0) //Supposed to say "If 300 seconds has passed, then..."
-            {
-                embed.WithTitle($"Anti-Raid Setup Failed!");
-                embed.WithDescription($"The setup has been cancelled.");
-                embed.SetColor(EmbedColor.RED);
-                await BE();
-                return;
-            }
+            await TimeoutMethod();
 
-            if (users.Content.ToLower().Contains("cancel"))
-            {
-                embed.WithDescription($"Anti-Raid setup cancelled.");
-                embed.SetColor(EmbedColor.RED);
-                await BE();
-                return;
-            }
+            await CancelMethod(users);
 
             if (!int.TryParse(users.Content, out int usersResult))
             {
@@ -130,7 +104,7 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
-            if(usersResult < 1) //To-do: Change to 2
+            if (usersResult < 1) //To-do: Change to 2
             {
                 embed.WithTitle($"Anti-Raid Setup Failed!");
                 embed.WithDescription($"The minimum number of users must be greater than one! Please try again!");
@@ -162,15 +136,9 @@ namespace Kaguya.Modules.Administration
 
             var punishment = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 3: Punishment.
 
-            if(punishment.Content.ToLower().Contains("cancel"))
-            {
-                embed.WithDescription($"Anti-Raid setup cancelled.");
-                embed.SetColor(EmbedColor.RED);
-                await BE();
-                return;
-            }
+            await CancelMethod(punishment);
 
-            if(!(punishment.Content.ToLower().Contains("mute") || punishment.Content.ToLower().Contains("kick") ||
+            if (!(punishment.Content.ToLower().Contains("mute") || punishment.Content.ToLower().Contains("kick") ||
                 punishment.Content.ToLower().Contains("ban") || punishment.Content.ToLower().Contains("shadowban")))
             {
                 embed.WithTitle($"Anti-Raid Setup Failed!");
@@ -183,14 +151,34 @@ namespace Kaguya.Modules.Administration
 
             Servers.SaveServers();
 
-            embed.WithTitle($"Anti-Raid Setup Success!");
-            embed.WithDescription($"Congratulations! You have successfully configured my Anti-Raid service." +
+            embed.WithDescription($"Awesome! Here's what I've got so far: " +
                 $"\n" +
-                $"\nCurrent configuration: If `{usersResult} users` join within `{secondsResult} seconds`, I will `{punishment}` them.");
-
+                $"\nIf `{usersResult} users` join within `{secondsResult} seconds`, I will `{punishment}` them." +
+                $"\n" +
+                $"\n**Step 4:** Finally, tell me what channel you want me to send my announcements to regarding raids." +
+                "\n*Example Response: `#logs`*");
+            embed.WithFooter("I would suggest creating a private #logs channel (or something similar) if you haven't already.");
             await BE();
 
-            switch(punishment.Content.ToLower())
+            var channel = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300));
+            
+            await CancelMethod(channel);
+            await TimeoutMethod();
+
+            var channelID = channel.Content.Split('>').FirstOrDefault();
+            channelID = channelID.Split('#').Last();
+
+            if (ulong.TryParse(channelID, out ulong result))
+            {
+                server.LogAntiRaids = result;
+                embed.WithDescription($"Got it! I'll send all messages to that channel. The anti-raid setup is now complete, " +
+                    $"your server is protected!");
+                embed.WithFooter("IMPORTANT: My role \"Kaguya\" MUST be at the top of the role heirarchy for this service to work!!");
+                embed.SetColor(EmbedColor.GREEN);
+                await BE();
+            }
+
+            switch (punishment.Content.ToLower())
             {
                 case "mute":
                     server.AntiRaid = true;
@@ -218,6 +206,29 @@ namespace Kaguya.Modules.Administration
                     break;
                 default:
                     break;
+            }
+        }
+
+        private async Task TimeoutMethod()
+        {
+            if ((DateTime.Now.AddSeconds(300) - DateTime.Now).TotalSeconds < 0) //Supposed to say "If 300 seconds has passed, then..."
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The setup has been cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+        }
+
+        private async Task CancelMethod(SocketMessage reply)
+        {
+            if (reply.Content.ToLower().Contains("cancel"))
+            {
+                embed.WithDescription($"Anti-Raid setup cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
             }
         }
 
