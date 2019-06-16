@@ -1138,6 +1138,33 @@ namespace Kaguya.Modules
             });
         }
 
+        [Command("owner")]
+        [RequireOwner]
+        public async Task OwnerCommands()
+        {
+            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+
+            string commands = "```css" +
+                "\nAll commands in category: Owner Only" +
+                "\n" +
+                $"\n{cmdPrefix}blacklist [bl] " +
+                $"\n{cmdPrefix}bugaward " +
+                $"\n{cmdPrefix}expadd [addexp] " +
+                $"\n{cmdPrefix}kaguyawarn " +
+                $"\n{cmdPrefix}kill " +
+                $"\n{cmdPrefix}massblacklist " +
+                $"\n{cmdPrefix}pointsadd [addpoints] " +
+                $"\n{cmdPrefix}restart " +
+                $"\n{cmdPrefix}timelyreset " +
+                $"\n" +
+                $"\nType {cmdPrefix}h <command> for more information on a specific command." +
+                "\n```";
+
+            embed.WithTitle("Owner Commands");
+            embed.WithDescription(commands);
+            await BE();
+        }
+
         [Command("sync")]
         public async Task Sync()
         {
