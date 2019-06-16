@@ -227,6 +227,14 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} Shows a list of up to 70 members with the role specified (in alphabetical order)." +
                         $"\nSyntax: `{cmdPrefix}inrole <roleName>`");
                     await BE(); break;
+                case "antiraid":
+                    embed.WithTitle($"Help: Anti-Raid Service | `{cmdPrefix}antiraid`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nBegins an interactive setup of the Kaguya Anti-Raid service." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}antiraid`");
+                    await BE(); break;
                 case "autoassign":
                 case "aa":
                     embed.WithTitle($"Help: Auto Assign Roles | `{cmdPrefix}autoassign`, `{cmdPrefix}aa`");
@@ -555,7 +563,15 @@ namespace Kaguya.Modules
                         $"\nUnblacklists the specified user IDs." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}uubl <params ulong[] IDs>`");
-
+                    await BE(); break;
+                case "reloadconfig":
+                    embed.WithTitle($"Help: Reload Config | `{cmdPrefix}reloadconfig`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nReloads all user accounts and servers into memory. This should be used if these files are " +
+                        $"altered and you don't want to restart the bot." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}reloadconfig`");
                     await BE(); break;
                 case "roll":
                 case "gr":
@@ -683,23 +699,6 @@ namespace Kaguya.Modules
                 case "fact":
                     embed.WithTitle($"Help: Random Facts | `{cmdPrefix}fact`");
                     embed.WithDescription($"{Context.User.Mention} Displays a random fact in chat!");
-                    await BE(); break;
-                case "scrapeserver":
-                    embed.WithTitle($"Help: Server Scraping | `{cmdPrefix}scrapeserver`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
-                        $"\n" +
-                        $"\nOrders the bot to create user accounts for every individual in the server, even if they have never typed " +
-                        $"in chat. This function is automatically called when using `{cmdPrefix}massblacklist` to ensure that " +
-                        $"there is no question on whether they will be able to be banned/unbanned. Creating a user account allows for name " +
-                        $"and ID logging, the latter is necessary if a bot owner wishes to unblacklist a user.");
-                    await BE(); break;
-                case "scrapedatabase":
-                    embed.WithTitle($"Help: Database Scraping | `{cmdPrefix}scrapedatabase`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
-                        $"\n" +
-                        $"\nCreates an account for every user in every server that Kaguya is connected to. This command will not create accounts " +
-                        $"for other bots or users in servers with over `3,500` members. This command primarily exists for stability reasons (occasionally, if a " +
-                        $"user doesn't have an account, a bot function may not work for said user [such as with `$ctr`]).");
                     await BE(); break;
                 case "bugaward":
                     embed.WithTitle($"Help: Bug Rewards | `{cmdPrefix}bugaward`");
@@ -897,6 +896,8 @@ namespace Kaguya.Modules
                         "\nAll commands in category: Administration" +
                         "\n" +
                         $"\n{cmdPrefix}addrole [ar]" +
+                        $"\n{cmdPrefix}antiraid" +
+                        $"\n{cmdPrefix}antiraidoff" +
                         $"\n{cmdPrefix}ban [b]" +
                         $"\n{cmdPrefix}channelblacklist [cbl]" +
                         $"\n{cmdPrefix}channelunblacklist [cubl]" +

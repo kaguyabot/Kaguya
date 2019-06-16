@@ -327,8 +327,9 @@ namespace Kaguya.Modules.Owner_Only
                 $"\n{cmdPrefix}expadd [addexp]" +
                 $"\n{cmdPrefix}kaguyawarn" +
                 $"\n{cmdPrefix}kill" +
-                $"\n{cmdPrefix}massblacklist" +
+                $"\n{cmdPrefix}userblacklist" +
                 $"\n{cmdPrefix}pointsadd [addpoints]" +
+                $"\n{cmdPrefix}reloadconfig" +
                 $"\n{cmdPrefix}restart" +
                 $"\n{cmdPrefix}serverblacklist [sbl]" +
                 $"\n{cmdPrefix}serverunblacklist [subl]" +
