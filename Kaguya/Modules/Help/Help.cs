@@ -103,14 +103,16 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
                         $"\nAdds a Global Kaguya Warning to a user. Upon 3 warnings, the target will be blacklisted. This is generally for abusing Kaguya's features, such as the $bug report feature " +
-                        $"or exploiting a Kaguya system (think EXP, points, etc.)");
+                        $"or exploiting a Kaguya system (think EXP, points, etc.)" +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}kaguyawarn <ID> <Reason>`");
                     embed.WithFooter($"Blacklists applied from warnings are not removed.");
                     await BE(); break;
                 case "vote":
                     embed.WithTitle($"Help: Voting | `{cmdPrefix}vote`");
                     embed.WithDescription($"{Context.User.Mention} I will reply with a link to my discordbots.org page. If you wish to support me and want more people to have the ability to use me, " +
                         $"give me an upvote! My creator and I greatly appreciate it uwu. After voting, use `{cmdPrefix}voteclaim` to get some rewards for your support!");
-                    embed.WithFooter($"Use {cmdPrefix}h voteclaim to find out what the rewards for upvoting are!");
+                    embed.WithFooter($"Use \"{cmdPrefix}h voteclaim\" to find out what the rewards for upvoting are!");
                     await BE(); break;
                 case "voteclaim":
                     embed.WithTitle($"Help: Claiming Voting Rewards | `{cmdPrefix}voteclaim`");

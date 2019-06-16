@@ -57,7 +57,6 @@ namespace Kaguya
                     _client.ShardReady += timers.VerifyMessageReceived;
                     _client.ShardReady += timers.ResourcesBackup;
                     _client.ShardReady += timers.MessageCacheTimer;
-                    _client.ShardReady += timers.ServersCleanup;
 
                     _client.MessageReceived += logger.osuLinkParser;
                     _client.JoinedGuild += logger.JoinedNewGuild;

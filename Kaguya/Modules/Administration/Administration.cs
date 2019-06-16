@@ -58,7 +58,8 @@ namespace Kaguya.Modules.Administration
             if (!int.TryParse(seconds.Content, out int secondsResult))
             {
                 embed.WithTitle($"Anti-Raid Setup Failed!");
-                embed.WithDescription($"You did not give me a proper number of seconds. Please try again!");
+                embed.WithDescription($"You did not give me a proper number of seconds.");
+                embed.WithFooter("The anti-raid setup has been cancelled.");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
                 return;
@@ -68,15 +69,17 @@ namespace Kaguya.Modules.Administration
             {
                 embed.WithTitle($"Anti-Raid Setup Failed!");
                 embed.WithDescription($"The maximum number of seconds is 300. Please try again!");
+                embed.WithFooter("The anti-raid setup has been cancelled.");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
                 return;
             }
 
-            if (secondsResult < 5)
+            if (secondsResult < 3)
             {
                 embed.WithTitle($"Anti-Raid Setup Failed!");
-                embed.WithDescription($"The minimum number of seconds is 5. Please try again!");
+                embed.WithDescription($"The minimum number of seconds is 3. Please try again!");
+                embed.WithFooter("The anti-raid setup has been cancelled.");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
                 return;
@@ -90,7 +93,7 @@ namespace Kaguya.Modules.Administration
             await BE();
 
             var users = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 2: Number of users.
-
+            //CONTINUE POLISHING HERE 
             await TimeoutMethod();
 
             await CancelMethod(users);
@@ -172,8 +175,12 @@ namespace Kaguya.Modules.Administration
             {
                 server.LogAntiRaids = result;
                 embed.WithDescription($"Got it! I'll send all messages to that channel. The anti-raid setup is now complete, " +
-                    $"your server is protected!");
-                embed.WithFooter("IMPORTANT: My role \"Kaguya\" MUST be at the top of the role heirarchy for this service to work!!");
+                    $"your server is protected! <:peepoBlanket:588362907423866930>" +
+                    $"\n" +
+                    $"\n**Be sure not to delete this channel. If you do, your anti-raid will remain active until cancelled " +
+                    $"without any notifications!**");
+                embed.WithFooter($"\nIMPORTANT: My role \"Kaguya\" MUST be at the top of the role heirarchy for this service to work!! " +
+                    "To cancel the anti-raid, use the \"antiraidoff\" command.");
                 embed.SetColor(EmbedColor.GREEN);
                 await BE();
             }
@@ -230,6 +237,22 @@ namespace Kaguya.Modules.Administration
                 await BE();
                 return;
             }
+        }
+
+        [Command("antiraidoff")]
+        [RequireAdmin]
+        public async Task AntiRaidOff()
+        {
+            Server server = Servers.GetServer(Context.Guild);
+            server.AntiRaid = false;
+            server.AntiRaidList.Clear();
+            server.LogAntiRaids = 0;
+            Servers.SaveServers();
+
+            embed.WithTitle("Anti-Raid Disabled");
+            embed.WithDescription($"I have disabled Anti-Raid protections for this server.");
+            embed.SetColor(EmbedColor.VIOLET);
+            await BE();
         }
 
         [Command("warn")]

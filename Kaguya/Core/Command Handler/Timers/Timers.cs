@@ -9,6 +9,7 @@ using System.Timers;
 using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
+using Kaguya.Core.Embed;
 
 namespace Kaguya.Core.Command_Handler
 {
@@ -17,6 +18,7 @@ namespace Kaguya.Core.Command_Handler
         readonly DiscordShardedClient _client = Global.client;
         readonly public IServiceProvider _services;
         readonly Logger logger = new Logger();
+        KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
         private bool AntiRaidActive(SocketGuild guild)
         {
@@ -52,16 +54,15 @@ namespace Kaguya.Core.Command_Handler
 
         private async Task Anti_Raid_Timer_Elapsed(object sender, ElapsedEventArgs e, Server server, SocketGuildUser user)
         {
+            
             var userIDs = server.AntiRaidList;
             var guild = _client.GetGuild(server.ID);
             var roles = guild.Roles;
 
-            Console.WriteLine("Antiraid started.");
-
             switch (server.AntiRaidPunishment.ToLower())
             {
                 case "mute":
-                    string mutedUsers = "Kaguya Anti-Raid Service: Members Muted\n";
+                    string mutedUsers = "";
                     string notMutedUsers = "";
 
                     var muteRole = roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
@@ -74,6 +75,7 @@ namespace Kaguya.Core.Command_Handler
                             {
                                 await user.AddRoleAsync(muteRole); //Applies punishment.
                                 mutedUsers += $"\n`{user.ToString()}` - ID: `{user.Id}`";
+                                logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User muted.");
                             }
                             else
                             { return; }
@@ -82,22 +84,33 @@ namespace Kaguya.Core.Command_Handler
                         {
                             logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to mute user in guild {guild.Name}!" +
                                 $"\nException: {ex.Message}");
-                            notMutedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO MUTE USERS!! ⚠️" +
-                                $"\n`{user.ToString()}` - ID: `{user.Id}`" +
-                                $"\nException: `{ex.Message}`";
+                            notMutedUsers += $"\n`{user.ToString()}` - ID: `{user.Id}`";
                             continue;
                         }
                     }
 
                     if (notMutedUsers != "")
-                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(notMutedUsers); //DMs the owner of the server if something really bad happens.
+                    {
+                        embed.WithTitle("⚠️ Kaguya Anti-Raid Advisory: FAILED TO MUTE USERS!! ⚠️");
+                        embed.WithDescription(notMutedUsers);
+                        embed.WithFooter("Ensure that my role is at the top of the heirarchy and that there is a \"kaguya-mute\" role!");
+                        embed.SetColor(EmbedColor.RED);
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
+                    }
                     else
-                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(mutedUsers);
+                    {
+                        embed.WithTitle("Kaguya Anti-Raid: Users Muted");
+                        embed.WithDescription(mutedUsers);
+                        embed.SetColor(EmbedColor.VIOLET);
+                        embed.WithThumbnailUrl("https://i.imgur.com/6kBEiug.png");
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
+                    }
+
                     server.AntiRaidList.Clear();
                     Servers.SaveServers();
                     break;
                 case "kick":
-                    string kickedUsers = "Kaguya Anti-Raid Service: Members Kicked\n";
+                    string kickedUsers = "";
                     string notKickedUsers = "";
 
                     foreach (var userID in userIDs)
@@ -108,6 +121,7 @@ namespace Kaguya.Core.Command_Handler
                             {
                                 await user.KickAsync(); //Applies punishment.
                                 kickedUsers += $"\n`{user}` - ID: `{user.Id}`";
+                                logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User kicked.");
                             }
                             else
                             { return; }
@@ -123,14 +137,26 @@ namespace Kaguya.Core.Command_Handler
                     }
 
                     if (notKickedUsers != "")
-                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(notKickedUsers); //DMs the owner of the server if something really bad happens.
+                    {
+                        embed.WithTitle("⚠️ Kaguya Anti-Raid Advisory: FAILED TO KICK USERS!! ⚠️");
+                        embed.WithDescription(notKickedUsers);
+                        embed.WithFooter("Ensure that my role is at the top of the heirarchy and that there is a \"kaguya-mute\" role!");
+                        embed.SetColor(EmbedColor.RED);
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
+                    }
                     else
-                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(kickedUsers);
+                    {
+                        embed.WithTitle("Kaguya Anti-Raid: Users Muted");
+                        embed.WithDescription(kickedUsers);
+                        embed.SetColor(EmbedColor.VIOLET);
+                        embed.WithThumbnailUrl("https://i.imgur.com/6kBEiug.png");
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
+                    }
                     server.AntiRaidList.Clear();
                     Servers.SaveServers();
                     break;
                 case "shadowban":
-                    string shadowbannedUsers = "Kaguya Anti-Raid Service: Members Shadowbanned\n";
+                    string shadowbannedUsers = "";
                     string notShadowbannedUsers = "";
 
                     foreach (var userID in userIDs)
@@ -144,6 +170,7 @@ namespace Kaguya.Core.Command_Handler
                                     await channel.AddPermissionOverwriteAsync(user, OverwritePermissions.DenyAll(channel)); //Applies punishment.
                                 }
                                 shadowbannedUsers += $"\n`{user}` - ID: `{user.Id}`";
+                                logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User shadowbanned.");
                             }
                             else
                             { return; }
@@ -159,14 +186,26 @@ namespace Kaguya.Core.Command_Handler
                     }
 
                     if (notShadowbannedUsers != "")
-                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(notShadowbannedUsers); //DMs the owner of the server if something really bad happens.
+                    {
+                        embed.WithTitle("⚠️ Kaguya Anti-Raid Advisory: FAILED TO SHADOWBAN USERS!! ⚠️");
+                        embed.WithDescription(shadowbannedUsers);
+                        embed.WithFooter("Ensure that my role is at the top of the heirarchy and that there is a \"kaguya-mute\" role!");
+                        embed.SetColor(EmbedColor.RED);
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
+                    }
                     else
-                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(shadowbannedUsers);
+                    {
+                        embed.WithTitle("Kaguya Anti-Raid: Users Shadowbanned");
+                        embed.WithDescription(shadowbannedUsers);
+                        embed.SetColor(EmbedColor.VIOLET);
+                        embed.WithThumbnailUrl("https://i.imgur.com/6kBEiug.png");
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
+                    }
                     server.AntiRaidList.Clear();
                     Servers.SaveServers();
                     break;
                 case "ban":
-                    string bannedUsers = "Kaguya Anti-Raid Service: Members Banned\n";
+                    string bannedUsers = "";
                     string notBannedUsers = "";
 
                     foreach (var userID in userIDs)
@@ -177,6 +216,7 @@ namespace Kaguya.Core.Command_Handler
                             {
                                 await guild.AddBanAsync(user); //Applies punishment.
                                 bannedUsers += $"\n`{user}` - ID: `{user.Id}`";
+                                logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User banned.");
                             }
                             else
                             { return; }
@@ -186,71 +226,33 @@ namespace Kaguya.Core.Command_Handler
                             logger.ConsoleCriticalAdvisory($"Kaguya Anti-Raid Advisory: Failed to ban user in guild {guild.Name}!" +
                                 $"\nException: {ex.Message}");
                             notBannedUsers += $"\n⚠️ Kaguya Anti-Raid Advisory: FAILED TO BAN USERS!! ⚠️" +
-                                $"\n`{user}` - ID: `{user.Id}`" +
-                                $"\nException: `{ex.Message}`";
+                                $"\n`{user}` - ID: `{user.Id}`";
                             continue;
                         }
                     }
 
                     if (notBannedUsers != "")
-                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(notBannedUsers); //DMs the owner of the server if something really bad happens.
+                    {
+                        embed.WithTitle("⚠️ Kaguya Anti-Raid Advisory: FAILED TO BAN USERS!! ⚠️");
+                        embed.WithDescription(notBannedUsers);
+                        embed.WithFooter("Ensure that my role is at the top of the heirarchy and that there is a \"kaguya-mute\" role!");
+                        embed.SetColor(EmbedColor.RED);
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
+                    }
                     else
-                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(bannedUsers);
+                    {
+                        embed.WithTitle("Kaguya Anti-Raid: Users Shadowbanned");
+                        embed.WithDescription(bannedUsers);
+                        embed.SetColor(EmbedColor.VIOLET);
+                        embed.WithThumbnailUrl("https://i.imgur.com/6kBEiug.png");
+                        await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
+                    }
                     server.AntiRaidList.Clear();
                     Servers.SaveServers();
                     break;
                 default:
                     break;
             }
-        }
-
-        public Task ServersCleanup(DiscordSocketClient _client)
-        {
-            Timer timer = new Timer(3600000); //1 Hour
-            timer.Elapsed += Servers_Cleanup_Elapsed;
-            timer.AutoReset = true;
-            timer.Enabled = false; //Return when confident that it'll work
-            return Task.CompletedTask;
-        }
-
-        private void Servers_Cleanup_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            //var servers = _client.Guilds;
-            //var serverFile = Servers.GetAllServers();
-            //double i = 0;
-
-            //foreach (var guild in serverFile)
-            //{
-            //    guild.ServerName = "This is a test name.";
-            //}
-
-            //foreach (var server in servers)
-            //{
-            //    try
-            //    {
-            //        Servers.GetServer(server).ServerName = server.Name;
-            //        i++;
-            //        Console.WriteLine($"{(i / servers.Count).ToString("N3")}% complete.");
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine($"Failed. Exception: {ex.Message}");
-            //        i--;
-            //        continue;
-            //    }
-            //}
-
-            //foreach (var guild in serverFile.ToArray())
-            //{
-            //    if (guild.ServerName == "This is a test name.")
-            //    {
-            //        serverFile.Remove(guild);
-            //    }
-            //}
-
-            //logger.ConsoleStatusAdvisory($"Timer Elapsed: Removed {i} guilds from the database because I am no longer connected to them!");
-
-            //Servers.SaveServers();
         }
 
         public Task VoteClaimRateLimitTimer(DiscordSocketClient _client) //Bandaid until I use the webhook
