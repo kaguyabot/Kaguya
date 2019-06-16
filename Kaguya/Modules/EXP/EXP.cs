@@ -22,42 +22,6 @@ namespace Kaguya.Modules
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("expadd")] //exp
-        [Alias("addexp")]
-        [RequireOwner]
-        public async Task ExpAdd(int exp)
-        {
-            var account = UserAccounts.GetAccount(Context.User);
-
-            if (exp > 0)
-                account.EXP += (uint)exp;
-            else if (exp < 0)
-                account.EXP -= (uint)exp;
-
-            UserAccounts.SaveAccounts();
-            embed.WithTitle("Adding Experience Points");
-            embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
-            await BE();
-        }
-
-        [Command("expadd")] //exp
-        [Alias("addexp")]
-        [RequireOwner]
-        public async Task ExpAdd(int exp, [Remainder]IGuildUser user)
-        {
-            var account = UserAccounts.GetAccount(user as SocketUser);
-
-            if (exp > 0)
-                account.EXP += (uint)exp;
-            else if (exp < 0)
-                account.EXP -= (uint)exp;
-
-            UserAccounts.SaveAccounts();
-            embed.WithTitle("Adding Experience Points");
-            embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
-            await BE();
-        }
-
         [Command("serverexplb")] //exp
         [Alias("explb")]
         public async Task ServerEXPLeaderboard()
@@ -183,7 +147,7 @@ namespace Kaguya.Modules
 
             var account = UserAccounts.GetAccount(user as SocketUser);
             embed.WithTitle("Experience Points");
-            embed.WithDescription($"{Context.User.Mention} has `{account.EXP.ToString("N0")}` EXP.");
+            embed.WithDescription($"{user.Mention} has `{account.EXP.ToString("N0")}` EXP.");
             await BE();
         }
 

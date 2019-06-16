@@ -11,6 +11,7 @@ namespace Kaguya.Core.Embed
         private static readonly Color GoldColor = new Color(255, 223, 0);
         private static readonly Color BlueColor = new Color(0, 255, 255);
         private static readonly Color PinkColor = new Color(252, 132, 255);
+        private static readonly Color GreenColor = new Color(0, 204, 0);
 
         public EmbedColor EmbedType;
 
@@ -44,6 +45,9 @@ namespace Kaguya.Core.Embed
                 case EmbedColor.BLUE:
                     color = BlueColor;
                     break;
+                case EmbedColor.GREEN:
+                    color = GreenColor;
+                    break;
                 default:
                     color = RedColor;
                     break;
@@ -58,6 +62,7 @@ namespace Kaguya.Core.Embed
         VIOLET,
         GOLD,
         BLUE,
-        PINK
+        PINK,
+        GREEN
     }
 }

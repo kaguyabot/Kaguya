@@ -2,12 +2,10 @@
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
-using Kaguya.Core.Command_Handler.LogMethods;
 using Kaguya.Core.CommandHandler;
-using Kaguya.Core.Server_Files;
 using Kaguya.Modules.Music;
+using Kaguya.Modules.Utility;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
@@ -52,6 +50,7 @@ namespace Kaguya
 
                     var logger = new KaguyaLogMethods();
                     var timers = new Timers();
+
                     _client.ShardReady += ReadyAsync;
                     _client.ShardReady += logger.OnReady;
                     _client.ShardReady += timers.GameTimer;
@@ -66,6 +65,8 @@ namespace Kaguya
                     _client.MessageDeleted += logger.LoggingDeletedMessages;
                     _client.MessageUpdated += logger.LoggingEditedMessages;
                     _client.UserJoined += logger.LoggingUserJoins;
+                    _client.UserJoined += AutoAssignRoles.AutoAssignRole;
+                    _client.UserJoined += timers.AntiRaidTimer; //Anti-Raid timer.
                     _client.UserLeft += logger.LoggingUserLeaves;
                     _client.UserBanned += logger.LoggingUserBanned;
                     _client.UserUnbanned += logger.LoggingUserUnbanned;

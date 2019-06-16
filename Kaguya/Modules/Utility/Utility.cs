@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
-using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Utility
@@ -38,16 +36,6 @@ namespace Kaguya.Modules.Utility
             embed.WithTitle("Pong! 🏓");
             embed.WithDescription($"\n📡 Discord Latency: {Global.client.Latency}ms");
             await ReplyAsync(embed: embed.Build());
-        }
-
-        [RequireOwner]
-        [Command("reloadconfig")]
-        [Alias("rc")]
-        public async Task ReloadAccounts() //UNTESTED!!
-        {
-            await ReplyAsync("Reloading Data...");
-            KaguyaLogMethods.LoadKaguyaData();
-            await ReplyAsync("User accounts and servers have been reloaded.");
         }
 
         [Command("stats")]
@@ -155,7 +143,6 @@ namespace Kaguya.Modules.Utility
                 embed.WithFooter($"To reset the command prefix, type {cmdPrefix}prefix!");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
-                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "Invalid prefix."); ERROR HANDLER HERE
                 return;
             }
 
@@ -164,7 +151,7 @@ namespace Kaguya.Modules.Utility
 
             embed.WithTitle("Change Command Prefix: Success!");
             embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");
-            embed.WithFooter($"If you ever forget the prefix, tag me and type \"`prefix`\"!");
+            embed.WithFooter($"If you ever forget the prefix, tag me and type \"prefix\"!");
             await BE();
         }
         
@@ -343,31 +330,6 @@ namespace Kaguya.Modules.Utility
                     "Inrole: Unknown Exception",
                     $"Exception at Utility.cs line 532. Exception: {e.Message}");
             }
-        }
-
-        [Command("restart")]
-        [RequireOwner]
-        public async Task Restart()
-        {
-            embed.WithDescription($"**{Context.User.Mention} Attempting to restart...**");
-            await BE(); logger.ConsoleCriticalAdvisory("Attempting to restart...");
-
-            var filePath = Assembly.GetExecutingAssembly().Location;
-            Process.Start(filePath); logger.ConsoleCriticalAdvisory("Process started!!");
-
-            embed.WithDescription($"**{Context.User.Mention} Process started successfully. Exiting...**");
-            await BE();
-
-            Environment.Exit(0);
-        }
-
-        [Command("kill")]
-        [RequireOwner]
-        public async Task Kill()
-        {
-            embed.WithDescription($"**{Context.User.Mention} Exiting...**");
-            await BE(); logger.ConsoleCriticalAdvisory("Exiting!!");
-            Environment.Exit(0);
         }
 
         private bool UserIsAdmin(SocketGuildUser user)

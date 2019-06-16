@@ -21,7 +21,7 @@ namespace Kaguya.Modules.NSFW
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
         
-        NekoClient nekoClient = new NekoClient("Kaguya");
+        //NekoClient nekoClient = new NekoClient("Kaguya");
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -74,172 +74,6 @@ namespace Kaguya.Modules.NSFW
                 var imageCollection = Global.stillsCollection;
                 await Context.Channel.SendFileAsync(imageCollection[rand.Next(imageCollection.Length)]);
             }
-
-        }
-
-        [Command("lewd")]
-        [RequireNsfw]
-        public async Task LewdNeko()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("boobs")]
-        [RequireNsfw]
-        public async Task Boobs()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("anal")]
-        [RequireNsfw]
-        public async Task Anal()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("bdsm")]
-        [RequireNsfw]
-        public async Task BDSM()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("bj")]
-        [RequireNsfw]
-        public async Task Blowjob()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("classic")]
-        [RequireNsfw]
-        public async Task Classic()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("cum")]
-        [RequireNsfw]
-        public async Task Cum()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("feet")]
-        [RequireNsfw]
-        public async Task Feet()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("eroyuri")]
-        [RequireNsfw]
-        public async Task EroYuri()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("pussy")]
-        [RequireNsfw]
-        public async Task Pussy()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("solo")]
-        [RequireNsfw]
-        public async Task Solo()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("hentai")]
-        [RequireNsfw]
-        public async Task Hentai()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("avatar")]
-        [RequireNsfw]
-        public async Task KetaAvatar()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("trap")]
-        [RequireNsfw]
-        public async Task Trap()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
-        }
-
-        [Command("yuri")]
-        [RequireNsfw]
-        public async Task Yuri()
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
-                $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
-            embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
-            await BE();
         }
 
         [Command("gif")]
@@ -251,5 +85,172 @@ namespace Kaguya.Modules.NSFW
             var gif = imageCollection[rand.Next(imageCollection.Length)];
             await Context.Channel.SendFileAsync(gif);
         }
+
+        //[Command("lewd")]
+        //[RequireNsfw]
+        //public async Task LewdNeko()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("boobs")]
+        //[RequireNsfw]
+        //public async Task Boobs()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("anal")]
+        //[RequireNsfw]
+        //public async Task Anal()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("bdsm")]
+        //[RequireNsfw]
+        //public async Task BDSM()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("bj")]
+        //[RequireNsfw]
+        //public async Task Blowjob()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("classic")]
+        //[RequireNsfw]
+        //public async Task Classic()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("cum")]
+        //[RequireNsfw]
+        //public async Task Cum()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("feet")]
+        //[RequireNsfw]
+        //public async Task Feet()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("eroyuri")]
+        //[RequireNsfw]
+        //public async Task EroYuri()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("pussy")]
+        //[RequireNsfw]
+        //public async Task Pussy()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("solo")]
+        //[RequireNsfw]
+        //public async Task Solo()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("hentai")]
+        //[RequireNsfw]
+        //public async Task Hentai()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("avatar")]
+        //[RequireNsfw]
+        //public async Task KetaAvatar()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("trap")]
+        //[RequireNsfw]
+        //public async Task Trap()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+        //[Command("yuri")]
+        //[RequireNsfw]
+        //public async Task Yuri()
+        //{
+        //    string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+        //    embed.WithDescription($"All tags have temporarily been disabled to ensure compliance with Discord's Terms of Service. " +
+        //        $"Please use `{cmdPrefix}n`, `{cmdPrefix}n bomb`, or `{cmdPrefix}n gif` for the time being. These images are guaranteed to be TOS compliant.");
+        //    embed.WithFooter("We apologize for any inconvenience. We are working hard to return all tags as soon as possible.");
+        //    await BE();
+        //}
+
+
     }
 }

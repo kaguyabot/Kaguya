@@ -20,7 +20,7 @@ namespace Kaguya.Modules.Administration
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("setlogchannel")] //administration
+        [Command("setlogchannel")] 
         [Alias("log")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
@@ -150,7 +150,7 @@ namespace Kaguya.Modules.Administration
             }
         }
 
-        [Command("resetlogchannel")] //administration
+        [Command("resetlogchannel")] 
         [Alias("rlog")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
@@ -279,7 +279,7 @@ namespace Kaguya.Modules.Administration
             }
         }
 
-        [Command("logtypes")] //administration
+        [Command("logtypes")] 
         [Alias("loglist")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]

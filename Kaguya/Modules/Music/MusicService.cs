@@ -73,7 +73,6 @@ namespace Kaguya.Modules.Music
                 if (player.CurrentTrack != null && player.IsPlaying || player.IsPaused)
                 {
                     player.Queue.Enqueue(track);
-                    logger.ConsoleMusicLog(user, $"{track.Title} has been added to the music queue.");
                     return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"🎵 {track.Title} has been added to queue.");
                 }
                 //Player was not playing anything, so lets play the requested track.
@@ -83,7 +82,6 @@ namespace Kaguya.Modules.Music
                     await player.StopAsync();
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"This song is longer than 10 minutes, therefore it cannot be played!");
                 }
-                logger.ConsoleMusicLog(user, $"🎵 Now Playing: {track.Title}\nUrl: {track.Uri}");
                 return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"Now Playing: {track.Title}\nUrl: {track.Uri}");
             }
             //If after all the checks we did, something still goes wrong. Tell the user about it so they can report it back to us.
@@ -96,11 +94,15 @@ namespace Kaguya.Modules.Music
         public static async Task<Embed> TrackCompletedAsync(LavaPlayer player, LavaTrack track, TrackEndReason reason)
         {
             if (!reason.ShouldPlayNext())
+            {
+                await player.VoiceChannel.DisconnectAsync();
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Continuation", "I have failed to continue the queue! If you believe this is an error, " +
                     $"please contact `Stage#0001` in my support server! Use `{Servers.GetServer(player.TextChannel.Guild as SocketGuild).commandPrefix}hdm` for an invite!");
+            }
 
             if (!player.Queue.TryDequeue(out var item) || !(item is LavaTrack nextTrack))
             {
+                await player.VoiceChannel.DisconnectAsync();
                 return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", "There are no more items left in the queue, so I have stopped playing!");
             }
 
@@ -122,7 +124,6 @@ namespace Kaguya.Modules.Music
                 //Leave the voice channel.
                 var channelName = player.VoiceChannel.Name;
                 await _lavaShardClient.DisconnectAsync(user.VoiceChannel);
-                logger.ConsoleMusicLog(user, $"Kaguya has disconnected from {channelName}.");
                 return await StaticMusicEmbedHandler.CreateBasicEmbed("Music", $"Disconnected from {channelName}.");
             }
             //Tell the user about the error so they can report it back to us.
@@ -147,7 +148,7 @@ namespace Kaguya.Modules.Music
                 /* Get The Player and make sure it isn't null. */
                 var player = _lavaShardClient.GetPlayer(guildId);
                 if (player == null)
-                    return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId, serverName).commandPrefix}h m` for proper usage.");
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId).commandPrefix}h m` for proper usage.");
 
                 if (player.IsPlaying)
                 {
@@ -185,7 +186,7 @@ namespace Kaguya.Modules.Music
 
         public async Task<Embed> SkipTrackAsync(ulong guildId, string serverName)
         {
-            var cmdPrefix = Servers.GetServer(guildId, serverName).commandPrefix;
+            var cmdPrefix = Servers.GetServer(guildId).commandPrefix;
 
             try
             {

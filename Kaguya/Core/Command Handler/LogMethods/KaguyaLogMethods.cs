@@ -65,11 +65,10 @@ namespace Kaguya.Core.CommandHandler
                     i++;
                 }
             }
-
+            
             Console.ForegroundColor = ConsoleColor.White;
-
+            LoadKaguyaData(); //Loads all user accounts and servers into memory.
             await _lavaShardClient.StartAsync(Global.client); //Initializes the music service.
-
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\nKaguya Music Service Started.");
             Console.WriteLine("\nBegin Logging.\n");
@@ -78,11 +77,13 @@ namespace Kaguya.Core.CommandHandler
 
         #pragma warning disable IDE1006 //Disable warnings for naming styles
 
-        public static void LoadKaguyaData()
+        public static void LoadKaguyaData() //When called, loads/reloads all accounts and servers into memory.
         {
-            if (Global.ShardsLoggedIn == Global.ShardsToLogIn) //Loads data files.
+            if (Global.ShardsLoggedIn == Global.ShardsToLogIn)
             {
+                Console.WriteLine("\nAccounts loaded.");
                 Global.UserAccounts = DataStorage2.LoadUserAccounts("Resources/accounts.json").ToList();
+                Console.WriteLine("\nServers loaded.");
                 Global.Servers = DataStorage2.LoadServers("Resources/servers.json").ToList();
             }
         }
@@ -108,14 +109,6 @@ namespace Kaguya.Core.CommandHandler
                 }
                 else { return; }
             }
-        }
-
-        public void ServerLogMethod(SocketCommandContext context)
-        {
-            var server = Servers.GetServer(context.Guild);
-            server.ID = context.Guild.Id;
-            server.ServerName = context.Guild.Name;
-            ServerMessageLogs.SaveServerLogging();
         }
 
         public async Task JoinedNewGuild(SocketGuild guild)

@@ -7,7 +7,6 @@ using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
-using Kaguya.Core.UserAccounts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,6 +14,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
+using Kaguya.Core.Attributes;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 #pragma warning disable CS0472
@@ -33,11 +33,226 @@ namespace Kaguya.Modules.Administration
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
         
-        [Command("disable")]
-        [RequireOwner]
-        public async Task Disable(string command, [Remainder]string reason)
+        [Command("antiraid", RunMode = RunMode.Async)]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task AntiRaid()
         {
+            var server = Servers.GetServer(Context.Guild);
 
+            embed.WithTitle("Kaguya Antiraid Setup");
+            embed.WithDescription("Welcome to the Kaguya Anti-Raid setup! In this \"wizard\" so to speak, " +
+                "we will be setting up the antiraid service to protect your server." +
+                "\n" +
+                "\n**Step 1:** Please reply with the number of seconds you want me to wait before triggering the Anti-Raid protections." +
+                "\nExample: `20`");
+            embed.WithFooter("You have 5 minutes to make your selection. Respond with \"cancel\" at anytime to cancel.");
+            await BE();
+
+            var seconds = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 1: Seconds
+
+            await TimeoutMethod();
+
+            await CancelMethod(seconds);
+
+            if (!int.TryParse(seconds.Content, out int secondsResult))
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"You did not give me a proper number of seconds.");
+                embed.WithFooter("The anti-raid setup has been cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (secondsResult > 300)
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The maximum number of seconds is 300. Please try again!");
+                embed.WithFooter("The anti-raid setup has been cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (secondsResult < 3)
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The minimum number of seconds is 3. Please try again!");
+                embed.WithFooter("The anti-raid setup has been cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            embed.WithDescription("Great, thanks for that information! <:Kaguya:581581938884608001>" +
+                "\n" +
+                $"\n**Step 2:** Please let me know how many users you want me to wait for before punishing." +
+                $"\n" +
+                $"\n*Example: The response `5` tells me that if `5` users join in `{secondsResult} seconds`, only then will I punish all of them.*");
+            await BE();
+
+            var users = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 2: Number of users.
+            //CONTINUE POLISHING HERE 
+            await TimeoutMethod();
+
+            await CancelMethod(users);
+
+            if (!int.TryParse(users.Content, out int usersResult))
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"You did not give me a proper number of users. Please try again!");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (usersResult < 1) //To-do: Change to 2
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The minimum number of users must be greater than one! Please try again!");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (usersResult > 100)
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The maximum number of users can not be more than 100! Please try again!");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            server.AntiRaidCount = usersResult;
+            embed.WithDescription($"Awesome! So far, I've got that you want to wait `{secondsResult} seconds` before punishing " +
+                $"`{usersResult} users`. If that looks good, great! Let's continue." +
+                $"\n" +
+                $"\nNow, we will be determining how to punish these users. Here are your available options:" +
+                $"\n`Mute, Kick, Shadowban, Ban`" +
+                $"\n" +
+                $"\n**Step 3:** Please reply with exactly what punishment you want for your anti-raid protection." +
+                $"\n" +
+                $"\nExample: `Kick` or `Mute`");
+            await BE();
+
+            var punishment = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 3: Punishment.
+
+            await CancelMethod(punishment);
+
+            if (!(punishment.Content.ToLower().Contains("mute") || punishment.Content.ToLower().Contains("kick") ||
+                punishment.Content.ToLower().Contains("ban") || punishment.Content.ToLower().Contains("shadowban")))
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"You did not give me a proper punishment. Please try again!");
+                embed.WithDescription("Acceptable responses: `Mute, Kick, Shadowban, Ban`");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            Servers.SaveServers();
+
+            embed.WithDescription($"Awesome! Here's what I've got so far: " +
+                $"\n" +
+                $"\nIf `{usersResult} users` join within `{secondsResult} seconds`, I will `{punishment}` them." +
+                $"\n" +
+                $"\n**Step 4:** Finally, tell me what channel you want me to send my announcements to regarding raids." +
+                "\n*Example Response: `#logs`*");
+            embed.WithFooter("I would suggest creating a private #logs channel (or something similar) if you haven't already.");
+            await BE();
+
+            var channel = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300));
+            
+            await CancelMethod(channel);
+            await TimeoutMethod();
+
+            var channelID = channel.Content.Split('>').FirstOrDefault();
+            channelID = channelID.Split('#').Last();
+
+            if (ulong.TryParse(channelID, out ulong result))
+            {
+                server.LogAntiRaids = result;
+                embed.WithDescription($"Got it! I'll send all messages to that channel. The anti-raid setup is now complete, " +
+                    $"your server is protected! <:peepoBlanket:588362907423866930>" +
+                    $"\n" +
+                    $"\n**Be sure not to delete this channel. If you do, your anti-raid will remain active until cancelled " +
+                    $"without any notifications!**");
+                embed.WithFooter($"\nIMPORTANT: My role \"Kaguya\" MUST be at the top of the role heirarchy for this service to work!! " +
+                    "To cancel the anti-raid, use the \"antiraidoff\" command.");
+                embed.SetColor(EmbedColor.GREEN);
+                await BE();
+            }
+
+            switch (punishment.Content.ToLower())
+            {
+                case "mute":
+                    server.AntiRaid = true;
+                    server.AntiRaidSeconds = secondsResult;
+                    server.AntiRaidPunishment = "mute";
+                    Servers.SaveServers();
+                    break;
+                case "kick":
+                    server.AntiRaid = true;
+                    server.AntiRaidSeconds = secondsResult;
+                    server.AntiRaidPunishment = "kick";
+                    Servers.SaveServers();
+                    break;
+                case "shadowban":
+                    server.AntiRaid = true;
+                    server.AntiRaidSeconds = secondsResult;
+                    server.AntiRaidPunishment = "shadowban";
+                    Servers.SaveServers();
+                    break;
+                case "ban":
+                    server.AntiRaid = true;
+                    server.AntiRaidSeconds = secondsResult;
+                    server.AntiRaidPunishment = "ban";
+                    Servers.SaveServers();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private async Task TimeoutMethod()
+        {
+            if ((DateTime.Now.AddSeconds(300) - DateTime.Now).TotalSeconds < 0) //Supposed to say "If 300 seconds has passed, then..."
+            {
+                embed.WithTitle($"Anti-Raid Setup Failed!");
+                embed.WithDescription($"The setup has been cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+        }
+
+        private async Task CancelMethod(SocketMessage reply)
+        {
+            if (reply.Content.ToLower().Contains("cancel"))
+            {
+                embed.WithDescription($"Anti-Raid setup cancelled.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+        }
+
+        [Command("antiraidoff")]
+        [RequireAdmin]
+        public async Task AntiRaidOff()
+        {
+            Server server = Servers.GetServer(Context.Guild);
+            server.AntiRaid = false;
+            server.AntiRaidList.Clear();
+            server.LogAntiRaids = 0;
+            Servers.SaveServers();
+
+            embed.WithTitle("Anti-Raid Disabled");
+            embed.WithDescription($"I have disabled Anti-Raid protections for this server.");
+            embed.SetColor(EmbedColor.VIOLET);
+            await BE();
         }
 
         [Command("warn")]
@@ -219,68 +434,6 @@ namespace Kaguya.Modules.Administration
                 $"\nShadowbans: {shadowbanString}" +
                 $"\nBans: {banString}" +
                 $"\n```");
-            stopWatch.Stop();
-        }
-
-        [Command("kaguyawarn")]
-        [RequireOwner]
-        public async Task KaguyaGlobalWarning(ulong ID, [Remainder]string reason = "No reason provided.")
-        {
-            stopWatch.Start();
-            var user = _client.GetUser(ID);
-            UserAccount userAccount = UserAccounts.GetAccount(user);
-
-            var totalWarnings = userAccount.KaguyaWarnings;
-            totalWarnings++; //Adds a global Kaguya warning to the user's account.
-            userAccount.KaguyaWarnings = totalWarnings;
-
-            UserAccounts.SaveAccounts();
-
-            await user.GetOrCreateDMChannelAsync();
-
-            embed.WithTitle($"⚠️ Kaguya Global Warning");
-            embed.WithDescription($"You have received a global warning from a **Kaguya Administrator**. Upon receiving `three` warnings, " +
-                $"you will be permanently blacklisted from using Kaguya. This results in all `points`, `experience points`, and `rep` being reset to zero." +
-                $"\n" +
-                $"\nNote from Administrator `{Context.User}`:" +
-                $"\n" +
-                $"\n\"{reason}\"");
-            embed.WithFooter($"You currently have {totalWarnings} warning(s).");
-
-            await user.SendMessageAsync(embed: embed.Build());
-
-            await GlobalCommandResponses.CreateCommandResponse(Context,
-                $"Kaguya Global Warning",
-                $"{Context.User.Mention} User `{user}` has received a Kaguya Warning.",
-                $"User currently has {totalWarnings} warning(s).");
-
-            if (totalWarnings >= 3)
-            {
-                userAccount.IsBlacklisted = true;
-                userAccount.EXP = 0;
-                userAccount.Points = 0;
-                userAccount.Rep = 0;
-
-                UserAccounts.SaveAccounts();
-
-                embed.WithTitle($"⚠️ Kaguya Blacklist ⚠️");
-                embed.WithDescription($"You have been blacklisted from Kaguya due to receiving too many global warnings from a Kaguya Administrator." +
-                    $"\n" +
-                    $"\nNew Points Balance: `0`" +
-                    $"\nNew EXP Balance: `0`" +
-                    $"\nNew Rep Balance: `0`" +
-                    $"\n");
-                embed.WithFooter($"You currently have {totalWarnings} warning(s).");
-
-                await user.SendMessageAsync(embed: embed.Build());
-
-                embed.WithTitle($"User Blacklisted");
-                embed.WithDescription($"User `{user}` has been blacklisted from Kaguya for receiving three global warnings from a Kaguya Administrator.");
-                embed.SetColor(EmbedColor.VIOLET);
-                await BE();
-
-                logger.ConsoleCriticalAdvisory($"USER {user.ToString().ToUpper()} BLACKLISTED: RECEIVED 3 KAGUYA WARNINGS!!");
-            }
             stopWatch.Stop();
         }
 
@@ -616,7 +769,7 @@ namespace Kaguya.Modules.Administration
             await BE();
         }
 
-        [Command("filteradd")] //administration
+        [Command("filteradd")] 
         [Alias("fa")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
@@ -636,7 +789,7 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Administrator has added word to their filter: \"{phrase}\"");
         }
 
-        [Command("filterremove")] //administration
+        [Command("filterremove")] 
         [Alias("fr")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
@@ -656,7 +809,7 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, $"Administrator has removed word \"{phrase}\" from their filter");
         }
 
-        [Command("filterview")] //administration
+        [Command("filterview")] 
         [Alias("fv", "viewfilter")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         public async Task FilterView()
@@ -679,7 +832,7 @@ namespace Kaguya.Modules.Administration
             await BE();
         }
 
-        [Command("filterclear")] //administration
+        [Command("filterclear")] 
         [Alias("clearfilter")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task FilterClear()
@@ -701,58 +854,7 @@ namespace Kaguya.Modules.Administration
             await BE();
         }
 
-
-        [Command("Unblacklist")] //administration
-        [RequireOwner]
-        public async Task Unblacklist(SocketUser id)
-        {
-            stopWatch.Start();
-            var userAccount = UserAccounts.GetAccount(id);
-            userAccount.IsBlacklisted = false;
-            UserAccounts.SaveAccounts();
-
-            embed.WithTitle("User Unblacklisted");
-            if(userAccount.Username != null)
-                embed.WithDescription($"User `{userAccount.Username}` with ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
-            else if(userAccount.Username == null || userAccount.Username == "")
-                embed.WithDescription($"ID `{userAccount.ID}` has been Unblacklisted from Kaguya functionality.");
-            embed.WithFooter("Please note that all Points and EXP are not able to be restored.");
-            await BE(); stopWatch.Stop();
-            logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, "User Unblacklisted");
-        }
-
-        [Command("massblacklist")] //administration
-        [RequireOwner]
-        public async Task MassBlacklist(params ulong[] users)
-        {
-            stopWatch.Start();
-            string blacklist = "";
-
-            foreach (var user in users)
-            {
-                var discordUser = _client.GetUser(user); 
-
-                var serverID = Context.Guild.Id;
-                var serverName = Context.Guild.Name;
-                var userAccount = UserAccounts.GetAccount(user);
-                userAccount.EXP = 0;
-                userAccount.Points = 0;
-                userAccount.IsBlacklisted = true;
-
-                UserAccounts.SaveAccounts();
-
-                blacklist += $"\n**`{discordUser}` has been `blacklisted`.**";
-                logger.ConsoleCriticalAdvisory($"{discordUser} has been permanently blacklisted.");
-            }
-
-            embed.WithTitle($"Mass Blacklist");
-            embed.WithDescription(blacklist);
-            await BE();
-
-            stopWatch.Stop();
-        }
-
-        [Command("removeallroles")] //admin
+        [Command("removeallroles")] 
         [Alias("rar")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -795,7 +897,7 @@ namespace Kaguya.Modules.Administration
             }
         }
 
-        [Command("deleterole")] //admin
+        [Command("deleterole")] 
         [Alias("dr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -842,7 +944,7 @@ namespace Kaguya.Modules.Administration
             await BE();
         }
 
-        [Command("kaguyaexit")] //admin
+        [Command("kaguyaexit")] 
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task LeaveGuild()
         {
@@ -854,7 +956,7 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleGuildAdvisory(Context.Guild, "KaguyaExit command executed.");
         }
 
-        [Command("ban")] //admin
+        [Command("ban")] 
         [Alias("b")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
@@ -883,7 +985,7 @@ namespace Kaguya.Modules.Administration
             }
         }
 
-        [Command("massban")] //administration
+        [Command("massban")] 
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.BanMembers)]
         public async Task MassBan([Remainder]List<SocketGuildUser> users)
@@ -941,7 +1043,7 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleGuildAdvisory($"{i} Users massbanned in guild {Context.Guild.Name}.");
         }
 
-        [Command("kick")] //admin
+        [Command("kick")] 
         [Alias("k")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
@@ -979,7 +1081,7 @@ namespace Kaguya.Modules.Administration
             }
         }
 
-        [Command("masskick")] //administration
+        [Command("masskick")] 
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task MassKick([Remainder]List<SocketGuildUser> users)
@@ -1034,14 +1136,12 @@ namespace Kaguya.Modules.Administration
             logger.ConsoleGuildAdvisory(Context.Guild, "Users masskicked.");
         }
 
-        [Command("clear")] //administration
+        [Command("clear")] 
         [Alias("c", "purge")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task ClearMessages(int amount = 10)
         {
-            stopWatch.Start();
-
             if(!(amount > 0))
             {
                 await GlobalCommandResponses.CreateCommandError(Context,
@@ -1067,8 +1167,8 @@ namespace Kaguya.Modules.Administration
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
             var m = await ReplyAsync($"Clearing of messages completed. This message will be deleted in 3 seconds.");
+            await Task.Delay(3000);
             await m.DeleteAsync();
-            stopWatch.Stop();
         }
 
         [Command("shadowban")]

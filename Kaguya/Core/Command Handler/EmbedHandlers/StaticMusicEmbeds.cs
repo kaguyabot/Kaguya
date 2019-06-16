@@ -41,8 +41,7 @@ namespace Kaguya.Core.CommandHandler
                 .WithTitle(title)
                 .WithDescription(description)
                 .WithFooter(footer)
-                .WithColor(0, 255, 255) //Light Blue
-                .WithCurrentTimestamp().Build()));
+                .WithColor(0, 255, 255).Build())); //Light Blue
             return embed;
         }
 

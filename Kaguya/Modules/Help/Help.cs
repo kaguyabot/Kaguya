@@ -103,14 +103,16 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
                         $"\nAdds a Global Kaguya Warning to a user. Upon 3 warnings, the target will be blacklisted. This is generally for abusing Kaguya's features, such as the $bug report feature " +
-                        $"or exploiting a Kaguya system (think EXP, points, etc.)");
+                        $"or exploiting a Kaguya system (think EXP, points, etc.)" +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}kaguyawarn <ID> <Reason>`");
                     embed.WithFooter($"Blacklists applied from warnings are not removed.");
                     await BE(); break;
                 case "vote":
                     embed.WithTitle($"Help: Voting | `{cmdPrefix}vote`");
                     embed.WithDescription($"{Context.User.Mention} I will reply with a link to my discordbots.org page. If you wish to support me and want more people to have the ability to use me, " +
                         $"give me an upvote! My creator and I greatly appreciate it uwu. After voting, use `{cmdPrefix}voteclaim` to get some rewards for your support!");
-                    embed.WithFooter($"Use {cmdPrefix}h voteclaim to find out what the rewards for upvoting are!");
+                    embed.WithFooter($"Use \"{cmdPrefix}h voteclaim\" to find out what the rewards for upvoting are!");
                     await BE(); break;
                 case "voteclaim":
                     embed.WithTitle($"Help: Claiming Voting Rewards | `{cmdPrefix}voteclaim`");
@@ -224,6 +226,49 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: Inrole | `{cmdPrefix}inrole`");
                     embed.WithDescription($"{Context.User.Mention} Shows a list of up to 70 members with the role specified (in alphabetical order)." +
                         $"\nSyntax: `{cmdPrefix}inrole <roleName>`");
+                    await BE(); break;
+                case "antiraid":
+                    embed.WithTitle($"Help: Anti-Raid Service | `{cmdPrefix}antiraid`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nBegins an interactive setup of the Kaguya Anti-Raid service." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}antiraid`");
+                    await BE(); break;
+                case "autoassign":
+                case "aa":
+                    embed.WithTitle($"Help: Auto Assign Roles | `{cmdPrefix}autoassign`, `{cmdPrefix}aa`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nAdds a role to a list of auto-assignable roles. " +
+                        $"An auto assigned role is a role that is given to a new user whenever they join the server." +
+                        $"\nSyntax: `{cmdPrefix}aa <role>`.");
+                    await BE(); break;
+                case "autoassignremove":
+                case "aar":
+                    embed.WithTitle($"Help: Auto Assign Roles | `{cmdPrefix}autoassignremove`, `{cmdPrefix}aar`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nRemoves a role from the list of auto-assignable roles. " +
+                        $"An auto assigned role is a role that is given to a new user whenever they join the server." +
+                        $"\nSyntax: `{cmdPrefix}aar <role>`.");
+                    await BE(); break;
+                case "autoassignclear":
+                case "aac":
+                    embed.WithTitle($"Help: Auto Assign Roles | `{cmdPrefix}autoassignclear`, `{cmdPrefix}aac`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nRemoves all roles from the list of auto-assignable roles. " +
+                        $"An auto assigned role is a role that is given to a new user whenever they join the server." +
+                        $"\nSyntax: `{cmdPrefix}aac`.");
+                    await BE(); break;
+                case "autoassignview":
+                case "aav":
+                    embed.WithTitle($"Help: Auto Assign Roles | `{cmdPrefix}autoassignview`, `{cmdPrefix}aav`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
+                        $"\n" +
+                        $"\nDisplays the list of auto assigned roles for the server. " +
+                        $"\nSyntax: `{cmdPrefix}aav`.");
                     await BE(); break;
                 case "echo":
                     embed.WithTitle($"Help: Echoed Messages | `{cmdPrefix}echo`");
@@ -501,24 +546,32 @@ namespace Kaguya.Modules
                         $"parameters. For example, instead of typing `{cmdPrefix}osutop {name}`, you can now just type `{cmdPrefix}osutop` to get your most recent osu! plays. Same thing for `{cmdPrefix}r` / `{cmdPrefix}recent`!");
                     embed.WithFooter("Ensure your username is spelled properly, otherwise all osu! related commands will not work for you!");
                     await BE(); break;
-                case "massblacklist":
-                    embed.WithTitle($"Help: Mass Blacklist | `{cmdPrefix}massblacklist`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner, Administrator**" +
+                case "userblacklist":
+                case "ubl":
+                    embed.WithTitle($"Help: User Mass Blacklist | `{cmdPrefix}userblacklist`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
                         $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use Kaguya again. These users are permanently banned from the server this command is executed in." +
                         $"These users will have all of their EXP and Points reset to zero, and will be permanently filtered from receiving EXP and executing Kaguya commands." +
-                        $"\nSyntax: `{cmdPrefix}massblacklist userID[]`");
-                    embed.WithFooter("Bot owners: This command is EXTREMELY DANGEROUS.");
+                        $"\nSyntax: `{cmdPrefix}ubl <params ulong[] IDs>`");
                     await BE(); break;
-                case "unblacklist":
-                    embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}unblacklist`");
+                case "userunblacklist":
+                case "uubl":
+                    embed.WithTitle($"Help: Unblacklisting Users | `{cmdPrefix}userunblacklist`, `{cmdPrefix}ubl`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
-                        $"\nUnblacklists the specified userID." +
-                        $"\nSelf-Hosters: If you do not know the ID of the person to unblacklist, look through accounts.json." +
+                        $"\nUnblacklists the specified user IDs." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}unblacklist <User ID>`");
-
+                        $"\nSyntax: `{cmdPrefix}uubl <params ulong[] IDs>`");
+                    await BE(); break;
+                case "reloadconfig":
+                    embed.WithTitle($"Help: Reload Config | `{cmdPrefix}reloadconfig`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nReloads all user accounts and servers into memory. This should be used if these files are " +
+                        $"altered and you don't want to restart the bot." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}reloadconfig`");
                     await BE(); break;
                 case "roll":
                 case "gr":
@@ -613,6 +666,24 @@ namespace Kaguya.Modules
                         $"\n" +
                         $"\nDisplays any blacklisted channels for the server.");
                     await BE(); break;
+                case "serverblacklist":
+                case "sbl":
+                    embed.WithTitle($"Help: Owner Guild Blacklist | `{cmdPrefix}serverblacklist`, `{cmdPrefix}sbl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nBlacklists the specified server ID." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}sbl <params ulong[] IDs>`");
+                    await BE(); break;
+                case "serverunblacklist":
+                case "subl":
+                    embed.WithTitle($"Help: Owner Guild Un-Blacklist | `{cmdPrefix}serverunblacklist`, `{cmdPrefix}subl`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nUn-Blacklists the specified server ID." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}subl <params ulong[] IDs>`");
+                    await BE(); break;
                 case "serverexplb":
                 case "explb":
                     embed.WithTitle($"Help: Server EXP Leaderboard | `{cmdPrefix}serverexplb` / `{cmdPrefix}explb`");
@@ -628,23 +699,6 @@ namespace Kaguya.Modules
                 case "fact":
                     embed.WithTitle($"Help: Random Facts | `{cmdPrefix}fact`");
                     embed.WithDescription($"{Context.User.Mention} Displays a random fact in chat!");
-                    await BE(); break;
-                case "scrapeserver":
-                    embed.WithTitle($"Help: Server Scraping | `{cmdPrefix}scrapeserver`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
-                        $"\n" +
-                        $"\nOrders the bot to create user accounts for every individual in the server, even if they have never typed " +
-                        $"in chat. This function is automatically called when using `{cmdPrefix}massblacklist` to ensure that " +
-                        $"there is no question on whether they will be able to be banned/unbanned. Creating a user account allows for name " +
-                        $"and ID logging, the latter is necessary if a bot owner wishes to unblacklist a user.");
-                    await BE(); break;
-                case "scrapedatabase":
-                    embed.WithTitle($"Help: Database Scraping | `{cmdPrefix}scrapedatabase`");
-                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator, Bot Owner**" +
-                        $"\n" +
-                        $"\nCreates an account for every user in every server that Kaguya is connected to. This command will not create accounts " +
-                        $"for other bots or users in servers with over `3,500` members. This command primarily exists for stability reasons (occasionally, if a " +
-                        $"user doesn't have an account, a bot function may not work for said user [such as with `$ctr`]).");
                     await BE(); break;
                 case "bugaward":
                     embed.WithTitle($"Help: Bug Rewards | `{cmdPrefix}bugaward`");
@@ -766,8 +820,8 @@ namespace Kaguya.Modules
                 case "n":
                     embed.WithTitle($"Help: NSFW | `{cmdPrefix}n`");
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}n` command will post a 2D image (no real people) in an NSFW channel with the specified tag." +
-                        $"\nWhen using the `{cmdPrefix}n` command, append a tag to the end like so: `{cmdPrefix}n <tag>`." +
-                        $"\nNSFW Command List: `{cmdPrefix}n <lewd, boobs, anal, bdsm, bj, classic, cum, feet, eroyuri, pussy, solo, hentai, avatar, trap, yuri, gif, bomb>` (Select one).");
+                        $"\nWhen using the `{cmdPrefix}n` command, you may also append an optional modifier to the end like so: `{cmdPrefix}n <modifier>`." +
+                        $"\nNSFW Modifiers: `{cmdPrefix}n <bomb (Sends 5 images at once), gif>` (Select one).");
                     embed.WithFooter($"{cmdPrefix}n bomb usage is limited to 5 uses per hour for non-supporters.");
                     await BE(); break;
                 case "m":
@@ -842,6 +896,8 @@ namespace Kaguya.Modules
                         "\nAll commands in category: Administration" +
                         "\n" +
                         $"\n{cmdPrefix}addrole [ar]" +
+                        $"\n{cmdPrefix}antiraid" +
+                        $"\n{cmdPrefix}antiraidoff" +
                         $"\n{cmdPrefix}ban [b]" +
                         $"\n{cmdPrefix}channelblacklist [cbl]" +
                         $"\n{cmdPrefix}channelunblacklist [cubl]" +
@@ -907,6 +963,10 @@ namespace Kaguya.Modules
                 "\nAll commands in category: Utility" +
                 "\n" +
                 $"\n{cmdPrefix}author" +
+                $"\n{cmdPrefix}autoassign [aa]" +
+                $"\n{cmdPrefix}autoassignremove [aar]" +
+                $"\n{cmdPrefix}autoassignclear [aac]" +
+                $"\n{cmdPrefix}autoassignview [aav]" +
                 $"\n{cmdPrefix}createtextchannel [ctc]" +
                 $"\n{cmdPrefix}createvoicechannel [cvc]" +
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
@@ -989,23 +1049,8 @@ namespace Kaguya.Modules
                     "\nNote: ALL NSFW images are 2D!" +
                     "\n" +
                     $"\n{cmdPrefix}n" +
-                    $"\n{cmdPrefix}n lewd" +
-                    $"\n{cmdPrefix}n boobs" +
-                    $"\n{cmdPrefix}n anal" +
-                    $"\n{cmdPrefix}n bdsm" +
-                    $"\n{cmdPrefix}n bj" +
-                    $"\n{cmdPrefix}n classic" +
-                    $"\n{cmdPrefix}n cum" +
-                    $"\n{cmdPrefix}n feet" +
-                    $"\n{cmdPrefix}n eroyuri" +
-                    $"\n{cmdPrefix}n pussy" +
-                    $"\n{cmdPrefix}n solo" +
-                    $"\n{cmdPrefix}n hentai" +
-                    $"\n{cmdPrefix}n avatar" +
-                    $"\n{cmdPrefix}n trap" +
-                    $"\n{cmdPrefix}n yuri" +
-                    $"\n{cmdPrefix}n gif" +
                     $"\n{cmdPrefix}n bomb" +
+                    $"\n{cmdPrefix}n gif" +
                     $"\n" +
                     $"\nType \"{cmdPrefix}h n\" for more information. Must be used in an NSFW channel." +
                     $"\n```";
