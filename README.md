@@ -1,5 +1,10 @@
 # Kaguya
-Kaguya Bot Project Created by Stage
+
+<a href="https://discordbots.org/bot/538910393918160916" >
+  <img src="https://discordbots.org/api/widget/538910393918160916.svg" alt="Kaguya" />
+</a>
+
+### Kaguya Bot Project Created by Stage
 
 My goal for the Kaguya project is for Kaguya to be one of the top general purpose bots to exist in the Discord Bot "marketplace" so to speak. Kaguya boasts well over 100 features, making her one of the largest and most powerful bots on the market. She makes the perfect addition to any Discord server!
 
