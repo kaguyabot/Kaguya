@@ -82,7 +82,7 @@ namespace Kaguya.Modules.Supporter
                         "The key you have just redeemed is no longer redeemable.");
 
                     var dmChannel = await stage.GetOrCreateDMChannelAsync();
-                    await dmChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 60 days!");
+                    await dmChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 90 days!");
                 }
             }
         }
