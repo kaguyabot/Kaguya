@@ -62,7 +62,6 @@ namespace Kaguya.Modules.Supporter
 
                     var dmChannel = await stage.GetOrCreateDMChannelAsync();
                     await dmChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 60 days!");
-
                 }
             }
 
