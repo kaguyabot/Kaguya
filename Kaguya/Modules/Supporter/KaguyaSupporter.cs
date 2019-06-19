@@ -20,8 +20,7 @@ namespace Kaguya.Modules.Supporter
             List<string> sixtyDayKeys = File.ReadAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/60DayKeys.txt").ToList();
             List<string> ninetyDayKeys = File.ReadAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/90DayKeys.txt").ToList();
 
-            var _client = Global.client;
-            var stage = _client.GetUser(146092837723832320);
+            var stage = Global.client.GetUser(146092837723832320);
 
 
             foreach (string thirtyDayKey in thirtyDayKeys)
@@ -39,8 +38,8 @@ namespace Kaguya.Modules.Supporter
                         "Thank you so much for supporting the Kaguya Project! **`30 Days`** of Kaguya Supporter time have been added to your account.",
                         "The key you have just redeemed is no longer redeemable.");
 
-                    await stage.GetOrCreateDMChannelAsync();
-                    //await 
+                    var dmChannel = await stage.GetOrCreateDMChannelAsync();
+                    await dmChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!");
                     
                     return;
                 }
@@ -60,6 +59,9 @@ namespace Kaguya.Modules.Supporter
                         "Successfully Redeemed Supporter Tag!",
                         "Thank you so much for supporting the Kaguya Project! **`60 Days`** of Kaguya Supporter time and **`1,200 Kaguya Diamonds`**have been added to your account.",
                         "The key you have just redeemed is no longer redeemable.");
+
+                    var dmChannel = await stage.GetOrCreateDMChannelAsync();
+                    await dmChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 60 days!");
                 }
             }
 
@@ -77,6 +79,9 @@ namespace Kaguya.Modules.Supporter
                         "Successfully Redeemed Supporter Tag!",
                         "Thank you so much for supporting the Kaguya Project! **`90 Days`** of Kaguya Supporter time and **`1,800 Kaguya Diamonds`** have been added to your account.",
                         "The key you have just redeemed is no longer redeemable.");
+
+                    var dmChannel = await stage.GetOrCreateDMChannelAsync();
+                    await dmChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 90 days!");
                 }
             }
         }
