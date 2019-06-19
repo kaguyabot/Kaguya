@@ -25,6 +25,59 @@ namespace Kaguya.Core.Command_Handler
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
         }
 
+        public Task SupporterExpirationTimer(DiscordSocketClient client) //Checks supporter expiration times
+        {
+            if (SupporterExpTimersActive < 1)
+            {
+                Timer timer = new Timer(1000); //1 second, should be significantly longer (every hour?)
+                timer.Enabled = true;
+                timer.Elapsed += Supporter_Expiration_Timer_Elapsed;
+                timer.AutoReset = true;
+                SupporterExpTimersActive++;
+                return Task.CompletedTask;
+            }
+            return Task.CompletedTask;
+        }
+
+        private int SupporterExpTimersActive = 0;
+
+        private async void Supporter_Expiration_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var accounts = UserAccounts.UserAccounts.GetAllAccounts();
+            var role = _client.GetGuild(546880579057221644).Roles.FirstOrDefault(x => x.Name.ToLower() == "supporter");
+            foreach(var account in accounts)
+            {
+                var difference = account.KaguyaSupporterExpiration - DateTime.Now;
+                if(difference.TotalSeconds < 0) //If the supporter tag has expired
+                {
+                    try
+                    {
+                        var user = _client.GetUser(account.ID);
+                        await (user as SocketGuildUser).RemoveRoleAsync(role); //Null Ref Exception, Cont here
+                        await user.GetOrCreateDMChannelAsync();
+
+                        embed.WithTitle("Kaguya Supporter Status");
+                        embed.WithDescription($"**Your Kaguya supporter tag has expired!** <a:SataniaCry:442688289674100736>" +
+                            $"\n" +
+                            $"\nTo renew your supporter tag and keep your benefits, " +
+                            $"please visit the following link: <https://stageosu.selly.store/>" +
+                            $"\n" +
+                            $"\nWe hope to see you again soon, and thanks for your support of the Kaguya Project! <:norilove:543371982855602186>");
+                        embed.SetColor(EmbedColor.RED);
+                        await user.SendMessageAsync(embed: embed.Build());
+                    }
+                    catch(Exception ex)
+                    {
+                        logger.ConsoleStatusAdvisory($"An exception occurred when removing a Kaguya Supporter Tag:" +
+                            $"\n" +
+                            $"\n{ex.Message}");
+                        continue;
+                    }
+                }
+                Console.WriteLine("Supporter tag not removed.");
+            }
+        }
+
         public Task AntiRaidTimer(SocketGuildUser user)
         {
             #pragma warning disable //Can't await Anti_Raid_Timer_Elapsed

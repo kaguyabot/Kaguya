@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.24
+
+- $repauthor no longer embeds with a red color on a successful use. (It's now pink)
+
 Version 1.23
 
 - $antiraid command added. Features an interactive setup for a very powerful anti-raid service.
