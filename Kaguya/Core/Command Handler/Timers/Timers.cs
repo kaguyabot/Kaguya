@@ -1,15 +1,14 @@
-﻿using Discord.WebSocket;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Kaguya.Core.Server_Files;
-using Discord;
-using System.Diagnostics;
-using System.Timers;
-using System.Collections.Generic;
-using System.Reflection;
-using System.IO;
+﻿using Discord;
+using Discord.WebSocket;
 using Kaguya.Core.Embed;
+using Kaguya.Core.Server_Files;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace Kaguya.Core.Command_Handler
 {
@@ -29,7 +28,7 @@ namespace Kaguya.Core.Command_Handler
         {
             if (SupporterExpTimersActive < 1)
             {
-                Timer timer = new Timer(1000); //1 second, should be significantly longer (every hour?)
+                Timer timer = new Timer(5000); //5 second, should be significantly longer (every hour?)
                 timer.Enabled = true;
                 timer.Elapsed += Supporter_Expiration_Timer_Elapsed;
                 timer.AutoReset = true;
@@ -43,38 +42,36 @@ namespace Kaguya.Core.Command_Handler
 
         private async void Supporter_Expiration_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var accounts = UserAccounts.UserAccounts.GetAllAccounts();
-            var role = _client.GetGuild(546880579057221644).Roles.FirstOrDefault(x => x.Name.ToLower() == "supporter");
-            foreach(var account in accounts)
+            var guild = _client.GetGuild(546880579057221644);
+            var role = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "supporter");
+            foreach(var user in guild.Users)
             {
-                var difference = account.KaguyaSupporterExpiration - DateTime.Now;
-                if(difference.TotalSeconds < 0) //If the supporter tag has expired
+                var account = UserAccounts.UserAccounts.GetAccount(user.Id);
+                if(!account.IsSupporter) //If the supporter tag has expired
                 {
                     try
                     {
-                        var user = _client.GetUser(account.ID);
-                        await (user as SocketGuildUser).RemoveRoleAsync(role); //Null Ref Exception, Cont here
-                        await user.GetOrCreateDMChannelAsync();
+                        await (user as SocketGuildUser).RemoveRoleAsync(role);
 
                         embed.WithTitle("Kaguya Supporter Status");
-                        embed.WithDescription($"**Your Kaguya supporter tag has expired!** <a:SataniaCry:442688289674100736>" +
+                        embed.WithDescription($"<a:crabPls:588362913379516442> **Your Kaguya supporter tag has expired!** <a:crabPls:588362913379516442>" +
                             $"\n" +
                             $"\nTo renew your supporter tag and keep your benefits, " +
                             $"please visit the following link: <https://stageosu.selly.store/>" +
                             $"\n" +
                             $"\nWe hope to see you again soon, and thanks for your support of the Kaguya Project! <:norilove:543371982855602186>");
                         embed.SetColor(EmbedColor.RED);
+
+                        await user.GetOrCreateDMChannelAsync();
                         await user.SendMessageAsync(embed: embed.Build());
+
+                        logger.ConsoleStatusAdvisory($"{user}'s supporter role has been removed.");
                     }
-                    catch(Exception ex)
+                    catch(Exception ex) //Continue here
                     {
-                        logger.ConsoleStatusAdvisory($"An exception occurred when removing a Kaguya Supporter Tag:" +
-                            $"\n" +
-                            $"\n{ex.Message}");
-                        continue;
+                        logger.ConsoleCriticalAdvisory(ex, $"Exception occurred when removing supporter role from user. {user}");
                     }
                 }
-                Console.WriteLine("Supporter tag not removed.");
             }
         }
 
