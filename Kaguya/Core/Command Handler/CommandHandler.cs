@@ -98,7 +98,7 @@ namespace Kaguya
 
             int argPos = 0;
 
-            if (!msg.HasStringPrefix(guild.commandPrefix, ref argPos) && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
+            if (!msg.HasStringPrefix(guild.commandPrefix.ToLower(), ref argPos) && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
                 return;
 
             var embed = new KaguyaEmbedBuilder();
