@@ -28,7 +28,7 @@ namespace Kaguya.Core.Command_Handler
         {
             if (SupporterExpTimersActive < 1)
             {
-                Timer timer = new Timer(5000); //5 second, should be significantly longer (every hour?)
+                Timer timer = new Timer(5000); //5 second, should be significantly longer (every 1800000 ms)
                 timer.Enabled = true;
                 timer.Elapsed += Supporter_Expiration_Timer_Elapsed;
                 timer.AutoReset = true;
@@ -44,14 +44,15 @@ namespace Kaguya.Core.Command_Handler
         {
             var guild = _client.GetGuild(546880579057221644);
             var role = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "supporter");
-            foreach(var user in guild.Users)
+            foreach (var account in UserAccounts.UserAccounts.GetAllAccounts())
             {
-                var account = UserAccounts.UserAccounts.GetAccount(user.Id);
-                if(!account.IsSupporter) //If the supporter tag has expired
+                var difference = account.KaguyaSupporterExpiration - DateTime.Now;
+                if (difference.TotalMinutes < 30 && account.IsSupporter == false) //If the supporter tag has expired within 30 minutes
                 {
                     try
                     {
-                        await (user as SocketGuildUser).RemoveRoleAsync(role);
+                        var user = Global.client.GetUser(account.ID);
+                        await (user as SocketGuildUser).RemoveRoleAsync(role); //Get user as SocketGuildUser successfully and continue here.
 
                         embed.WithTitle("Kaguya Supporter Status");
                         embed.WithDescription($"<a:crabPls:588362913379516442> **Your Kaguya supporter tag has expired!** <a:crabPls:588362913379516442>" +
@@ -62,14 +63,14 @@ namespace Kaguya.Core.Command_Handler
                             $"\nWe hope to see you again soon, and thanks for your support of the Kaguya Project! <:norilove:543371982855602186>");
                         embed.SetColor(EmbedColor.RED);
 
-                        await user.GetOrCreateDMChannelAsync();
-                        await user.SendMessageAsync(embed: embed.Build());
+                        var dmChannel = await user.GetOrCreateDMChannelAsync();
+                        await dmChannel.SendMessageAsync(embed: embed.Build());
 
-                        logger.ConsoleStatusAdvisory($"{user}'s supporter role has been removed.");
+                        logger.ConsoleStatusAdvisory($"{account}'s supporter role has been removed.");
                     }
-                    catch(Exception ex) //Continue here
+                    catch (Exception ex) //Continue here
                     {
-                        logger.ConsoleCriticalAdvisory(ex, $"Exception occurred when removing supporter role from user. {user}");
+                        logger.ConsoleCriticalAdvisory(ex, $"Exception occurred when removing supporter role from user. {account}");
                     }
                 }
             }
