@@ -24,7 +24,7 @@ namespace Kaguya.Modules.Supporter
             List<string> ninetyDayKeys = File.ReadAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/90DayKeys.txt").ToList();
 
             var stage = Global.client.GetUser(146092837723832320);
-            var guild = Servers.GetServer(Context.Guild);
+            var guild = Servers.GetServer(546880579057221644);
 
             foreach (string thirtyDayKey in thirtyDayKeys)
             {
@@ -43,8 +43,15 @@ namespace Kaguya.Modules.Supporter
 
                     var dmOwnerChannel = await stage.GetOrCreateDMChannelAsync();
                     var dmUserChannel = await Context.User.GetOrCreateDMChannelAsync();
-                    await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(30, 3.99, guild.commandPrefix.ToLower()));
-                    await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is ``{key}`");
+                    try
+                    {
+                        await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is `{key}`");
+                        await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(30, 1.12, guild.commandPrefix.ToLower()));
+                    }
+                    catch
+                    {
+                        //
+                    }
                 }
             }
 
@@ -65,8 +72,15 @@ namespace Kaguya.Modules.Supporter
 
                     var dmOwnerChannel = await stage.GetOrCreateDMChannelAsync();
                     var dmUserChannel = await Context.User.GetOrCreateDMChannelAsync();
-                    await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(60, 7.99, guild.commandPrefix.ToLower()));
-                    await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 60 days!\nKey used for this tag is ``{key}``");
+                    try
+                    {
+                        await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is `{key}`");
+                        await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(60, 2.25   , guild.commandPrefix.ToLower()));
+                    }
+                    catch
+                    {
+                        //
+                    }
                 }
             }
 
@@ -87,22 +101,30 @@ namespace Kaguya.Modules.Supporter
 
                     var dmOwnerChannel = await stage.GetOrCreateDMChannelAsync();
                     var dmUserChannel = await Context.User.GetOrCreateDMChannelAsync();
-                    await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(90, 10.99, guild.commandPrefix.ToLower()));
-                    await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 90 days!\nKey used for this tag is ``{key}`");
+                    try
+                    {
+                        await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is `{key}`");
+                        await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(90, 3.10, guild.commandPrefix.ToLower()));
+                    }
+                    catch
+                    {
+                        //
+                    }
                 }
             }
         }
 
-        public Embed GetDmRedeemEmbed(int days, double price, string prefix)
+        public Embed GetDmRedeemEmbed(int days, double servertime, string prefix)
         {
             return new KaguyaEmbedBuilder()
                 .WithTitle("Kaguya Supporter Tag Redemption")
-                .WithDescription($"Thanks so much for redeeming a {days} day Supporter Tag! You help keep me running for {((price / 110) * days).ToString("N3")} days.\n\n * *Here's what to do next**:" +
-                $"\n - Most of your perks are already active, but if you wantthe cool Supporter role in my wonderful support Discord server, follow these instructions." +
-                $"\n\n - Use the {prefix}invite command to get a link to my support server." +
+                .WithDescription($"Thanks so much for redeeming a {days} days Supporter Tag! You help keep me running for {servertime} days.\n\n * *Here's what to do next**:" +
+                $"\n - Most of your perks are already active, but if you want the cool Supporter role in my wonderful support Discord server, follow these instructions." +
+                $"\n\n - Use the  `{prefix}invite` command to get a link to my support server." +
                 $"\n - Once inside, use the {prefix}sync command in the `#bot-commands` chat." +
                 $"\n - There you go!You now have the supporter role." +
-                $"\n\nWhen your supporter tag expires, you will receive a notification from me.Thanks so much for your support!!").Build();
+                $"\n\nWhen your supporter tag expires, you will receive a notification from me." +
+                $"\n\nThanks so much for your support!!").Build();
         }
     }
 }
