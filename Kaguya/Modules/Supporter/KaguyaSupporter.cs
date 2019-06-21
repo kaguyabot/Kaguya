@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.UserAccounts;
+using Discord;
+using Kaguya.Core.Embed;
+using Kaguya.Core.Server_Files;
 
 namespace Kaguya.Modules.Supporter
 {
@@ -21,7 +24,7 @@ namespace Kaguya.Modules.Supporter
             List<string> ninetyDayKeys = File.ReadAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/90DayKeys.txt").ToList();
 
             var stage = Global.client.GetUser(146092837723832320);
-
+            var guild = Servers.GetServer(Context.Guild);
 
             foreach (string thirtyDayKey in thirtyDayKeys)
             {
@@ -38,10 +41,10 @@ namespace Kaguya.Modules.Supporter
                         "Thank you so much for supporting the Kaguya Project! **`30 Days`** of Kaguya Supporter time have been added to your account.",
                         "The key you have just redeemed is no longer redeemable.");
 
-                    var dmChannel = await stage.GetOrCreateDMChannelAsync();
-                    await dmChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!");
-                    
-                    return;
+                    var dmOwnerChannel = await stage.GetOrCreateDMChannelAsync();
+                    var dmUserChannel = await Context.User.GetOrCreateDMChannelAsync();
+                    await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(30, guild.commandPrefix.ToLower()));
+                    await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is ``{key}`");
                 }
             }
 
@@ -60,8 +63,10 @@ namespace Kaguya.Modules.Supporter
                         "Thank you so much for supporting the Kaguya Project! **`60 Days`** of Kaguya Supporter time and **`1,200 Kaguya Diamonds`**have been added to your account.",
                         "The key you have just redeemed is no longer redeemable.");
 
-                    var dmChannel = await stage.GetOrCreateDMChannelAsync();
-                    await dmChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 60 days!");
+                    var dmOwnerChannel = await stage.GetOrCreateDMChannelAsync();
+                    var dmUserChannel = await Context.User.GetOrCreateDMChannelAsync();
+                    await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(60, guild.commandPrefix.ToLower()));
+                    await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 60 days!\nKey used for this tag is ``{key}``");
                 }
             }
 
@@ -80,10 +85,24 @@ namespace Kaguya.Modules.Supporter
                         "Thank you so much for supporting the Kaguya Project! **`90 Days`** of Kaguya Supporter time and **`1,800 Kaguya Diamonds`** have been added to your account.",
                         "The key you have just redeemed is no longer redeemable.");
 
-                    var dmChannel = await stage.GetOrCreateDMChannelAsync();
-                    await dmChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 90 days!");
+                    var dmOwnerChannel = await stage.GetOrCreateDMChannelAsync();
+                    var dmUserChannel = await Context.User.GetOrCreateDMChannelAsync();
+                    await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(90, guild.commandPrefix.ToLower()));
+                    await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 90 days!\nKey used for this tag is ``{key}`");
                 }
             }
+        }
+
+        public Embed GetDmRedeemEmbed(int days, string prefix)
+        {
+            return new KaguyaEmbedBuilder()
+                .WithTitle("Kaguya Supporter Tag Redemption")
+                .WithDescription($"Thanks so much for redeeming a {days} day Supporter Tag! You help keep me running for {days / 30} days.\n\n * *Here's what to do next**:" +
+                $"\n - Most of your perks are already active, but if you wantthe cool Supporter role in my wonderful support Discord server, follow these instructions." +
+                $"\n\n - Use the {prefix}invite command to get a link to my support server." +
+                $"\n - Once inside, use the {prefix}sync command in the `#bot-commands` chat." +
+                $"\n - There you go!You now have the supporter role." +
+                $"\n\nWhen your supporter tag expires, you will receive a notification from me.Thanks so much for your support!!").Build();
         }
     }
 }
