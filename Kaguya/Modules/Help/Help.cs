@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using Kaguya.Core.Embed;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
-namespace Kaguya.Modules
+namespace Kaguya.Modules.Help
 {
     public class Help : InteractiveBase<ShardedCommandContext>
     {
@@ -1224,36 +1224,6 @@ namespace Kaguya.Modules
                 $"\nAdd me to your server with this link!: <https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847>" +
                 $"\nWant to keep track of all the changes? Feel free to check out the Kaguya GitHub page!: <https://github.com/stageosu/Kaguya>" +
                 $"\nKaguya Support Server: https://discord.gg/aumCJhr (This is also a good place to see what's coming soon and get notified when new updates come out :D)");
-        }
-
-        [Command("profile")]
-        [Alias("p")]
-        public async Task Profile()
-        {
-
-            var user = Context.User;
-            UserAccount account = UserAccounts.GetAccount(user);
-
-            System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
-            string monthName = mfi.GetMonthName(user.CreatedAt.Month).ToString();
-
-            embed.WithTitle($"Kaguya Profile for {user.Username}");
-            embed.AddField("User Information",
-                $"User: `{user}`" +
-                $"\nID: `{user.Id}`" +
-                $"\nAccount Created: `{monthName} {user.CreatedAt.Day}, {user.CreatedAt.Year}`", true);
-            embed.AddField("Kaguya Data",
-                $"Points: `{account.Points.ToString("N0")}`" +
-                $"\nEXP: `{account.EXP.ToString("N0")}`" +
-                $"\nRep: `{account.Rep.ToString("N0")}`" +
-                $"\nLevel: `{account.LevelNumber.ToString("N0")}`" +
-                $"\n<a:KaguyaDiamonds:581562698228301876>: `{account.Diamonds.ToString("N0")}`" +
-                $"\nLifetime Gambles: `{account.LifetimeGambles.ToString("N0")}`" +
-                $"\nAverage Gamble Win %: `{(account.LifetimeGambleWins / account.LifetimeGambles * 100).ToString("N2")}%`" +
-                $"\nAverage Elite+ Roll %: `{(account.LifetimeEliteRolls / account.LifetimeGambles * 100).ToString("N2")}%`", true);
-            embed.WithThumbnailUrl(user.GetAvatarUrl());
-
-            await BE();
         }
 
         [Command("bug")]

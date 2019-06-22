@@ -28,7 +28,7 @@ namespace Kaguya.Core.Command_Handler
         {
             if (SupporterExpTimersActive < 1)
             {
-                Timer timer = new Timer(5000); //5 second, should be significantly longer (every 1800000 ms)
+                Timer timer = new Timer(1800000); //30 seconds
                 timer.Enabled = true;
                 timer.Elapsed += Supporter_Expiration_Timer_Elapsed;
                 timer.AutoReset = true;
@@ -46,13 +46,13 @@ namespace Kaguya.Core.Command_Handler
             var role = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "supporter");
             foreach (var account in UserAccounts.UserAccounts.GetAllAccounts())
             {
-                var difference = account.KaguyaSupporterExpiration - DateTime.Now;
-                if (difference.TotalMinutes < 30 && account.IsSupporter == false) //If the supporter tag has expired within 30 minutes
+                var difference = DateTime.Now - account.KaguyaSupporterExpiration;
+                if (difference.TotalMinutes < 30 && !account.IsSupporter) //If the supporter tag has expired within 30 minutes
                 {
                     try
                     {
-                        var user = Global.client.GetUser(account.ID);
-                        await (user as SocketGuildUser).RemoveRoleAsync(role); //Get user as SocketGuildUser successfully and continue here.
+                        var user = guild.GetUser(account.ID);
+                        await user.RemoveRoleAsync(role); //Get user as SocketGuildUser successfully and continue here.
 
                         embed.WithTitle("Kaguya Supporter Status");
                         embed.WithDescription($"<a:crabPls:588362913379516442> **Your Kaguya supporter tag has expired!** <a:crabPls:588362913379516442>" +
@@ -66,7 +66,7 @@ namespace Kaguya.Core.Command_Handler
                         var dmChannel = await user.GetOrCreateDMChannelAsync();
                         await dmChannel.SendMessageAsync(embed: embed.Build());
 
-                        logger.ConsoleStatusAdvisory($"{account}'s supporter role has been removed.");
+                        logger.ConsoleStatusAdvisory($"{account.Username}'s supporter role has been removed.");
                     }
                     catch (Exception ex) //Continue here
                     {
