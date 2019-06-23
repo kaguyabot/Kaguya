@@ -52,7 +52,7 @@ namespace Kaguya.Core.Command_Handler
                     try
                     {
                         var user = guild.GetUser(account.ID);
-                        await user.RemoveRoleAsync(role); //Get user as SocketGuildUser successfully and continue here.
+                        await user.RemoveRoleAsync(role); 
 
                         embed.WithTitle("Kaguya Supporter Status");
                         embed.WithDescription($"<a:crabPls:588362913379516442> **Your Kaguya supporter tag has expired!** <a:crabPls:588362913379516442>" +

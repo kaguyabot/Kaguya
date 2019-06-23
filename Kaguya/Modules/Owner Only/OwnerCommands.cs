@@ -86,7 +86,7 @@ namespace Kaguya.Modules.Owner_Only
 
             UserAccounts.SaveAccounts();
 
-            await user.GetOrCreateDMChannelAsync();
+            var dmChannel = await user.GetOrCreateDMChannelAsync();
 
             embed.WithTitle($"⚠️ Kaguya Global Warning");
             embed.WithDescription($"You have received a global warning from a **Kaguya Administrator**. Upon receiving `three` warnings, " +
@@ -97,7 +97,7 @@ namespace Kaguya.Modules.Owner_Only
                 $"\n\"{reason}\"");
             embed.WithFooter($"You currently have {totalWarnings} warning(s).");
 
-            await user.SendMessageAsync(embed: embed.Build());
+            await dmChannel.SendMessageAsync(embed: embed.Build());
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 $"Kaguya Global Warning",
@@ -233,8 +233,8 @@ namespace Kaguya.Modules.Owner_Only
             userAccount.Points += 2000;
             UserAccounts.SaveAccounts();
 
-            await user.GetOrCreateDMChannelAsync();
-            await user.SendMessageAsync($"Hello, you reported a bug that led to a fix! As a reward, `2,000 Kaguya Points` have been added to your account. Thank you for your contribution, and " +
+            var dmChannel = await user.GetOrCreateDMChannelAsync();
+            await dmChannel.SendMessageAsync($"Hello, you reported a bug that led to a fix! As a reward, `2,000 Kaguya Points` have been added to your account. Thank you for your contribution, and " +
                 $"if you notice anymore bugs, don't hesitate to keep using the bug reporter!" +
                 $"\n" +
                 $"\n-Stage.");

@@ -1198,12 +1198,12 @@ namespace Kaguya.Modules.Help
         [Command("invite")]
         public async Task Invite()
         {
-            await Context.User.GetOrCreateDMChannelAsync();
+            var dmChannel = await Context.User.GetOrCreateDMChannelAsync();
 
             embed.WithDescription($"Here's a link to my support server: https://discord.gg/aumCJhr" +
                 $"\nHere's a link that you can use to add me to your server: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847");
             embed.SetColor(EmbedType.PINK);
-            await Context.User.SendMessageAsync(embed: embed.Build());
+            await dmChannel.SendMessageAsync(embed: embed.Build());
 
             embed.WithDescription($"{Context.User.Mention} DM: Sent! <:Kaguya:581581938884608001>");
             await BE();
