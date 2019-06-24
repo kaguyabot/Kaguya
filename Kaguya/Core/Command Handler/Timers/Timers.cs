@@ -55,7 +55,7 @@ namespace Kaguya.Core.Command_Handler
                         await user.RemoveRoleAsync(role); 
 
                         embed.WithTitle("Kaguya Supporter Status");
-                        embed.WithDescription($"<a:crabPls:588362913379516442> **Your Kaguya supporter tag has expired!** <a:crabPls:588362913379516442>" +
+                        embed.WithDescription($"<:MikuStare:588362907486781451> **Your Kaguya supporter tag has expired!** <:MikuStare:588362907486781451>" +
                             $"\n" +
                             $"\nTo renew your supporter tag and keep your benefits, " +
                             $"please visit the following link: <https://stageosu.selly.store/>" +
@@ -129,7 +129,7 @@ namespace Kaguya.Core.Command_Handler
                                 logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User muted.");
                             }
                             else
-                            { return; }
+                            { server.AntiRaidList.Clear(); }
                         }
                         catch (Exception ex)
                         {
@@ -175,7 +175,7 @@ namespace Kaguya.Core.Command_Handler
                                 logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User kicked.");
                             }
                             else
-                            { return; }
+                            { server.AntiRaidList.Clear(); }
                         }
                         catch (Exception ex)
                         {
@@ -224,7 +224,7 @@ namespace Kaguya.Core.Command_Handler
                                 logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User shadowbanned.");
                             }
                             else
-                            { return; }
+                            { server.AntiRaidList.Clear(); }
                         }
                         catch (Exception ex)
                         {
@@ -270,7 +270,7 @@ namespace Kaguya.Core.Command_Handler
                                 logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User banned.");
                             }
                             else
-                            { return; }
+                            { server.AntiRaidList.Clear(); }
                         }
                         catch (Exception ex)
                         {

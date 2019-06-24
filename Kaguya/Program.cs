@@ -5,6 +5,7 @@ using Discord.WebSocket;
 using Kaguya.Core.Command_Handler;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Modules.Music;
+using Kaguya.Modules.Owner_Only;
 using Kaguya.Modules.Utility;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -75,6 +76,8 @@ namespace Kaguya
                     _client.MessageReceived += logger.UserSaysFilteredPhrase;
                     _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
                     _client.ShardDisconnected += logger.ClientDisconnected;
+
+                    Global.client.ReactionAdded += OwnerCommands.AddPointsFromReaction;
 
                     _lavaClient.OnTrackFinished += MusicService.TrackCompletedAsync;
                     
