@@ -55,7 +55,7 @@ namespace Kaguya.Core.Command_Handler
                         await user.RemoveRoleAsync(role); 
 
                         embed.WithTitle("Kaguya Supporter Status");
-                        embed.WithDescription($"<:MikuStare:588362907486781451> **Your Kaguya supporter tag has expired!** <:MikuStare:588362907486781451>" +
+                        embed.WithDescription($"⚠ **Your Kaguya supporter tag has expired!** ⚠" +
                             $"\n" +
                             $"\nTo renew your supporter tag and keep your benefits, " +
                             $"please visit the following link: <https://stageosu.selly.store/>" +
@@ -66,7 +66,7 @@ namespace Kaguya.Core.Command_Handler
                         var dmChannel = await user.GetOrCreateDMChannelAsync();
                         await dmChannel.SendMessageAsync(embed: embed.Build());
 
-                        logger.ConsoleStatusAdvisory($"{account.Username}'s supporter role has been removed.");
+                        logger.ConsoleStatusAdvisory($"{account.Username}'s supporter role has been removed (if they had one) and they have been notified.");
                     }
                     catch (Exception ex) //Continue here
                     {
