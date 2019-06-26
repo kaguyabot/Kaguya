@@ -119,7 +119,6 @@ namespace Kaguya.Core
             Console.WriteLine($"\nCRITICAL ERROR:" +
                 $"\nERROR MESSAGE: [\"{message}\"]" +
                 $"\nEXCEPTION: [\"{e.Message}\"]" +
-                $"\nStack Trace: [\"{e.StackTrace}\"]" +
                 $"\nTime: [{DateTime.Now}]");
         }
 

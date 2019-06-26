@@ -93,7 +93,6 @@ namespace Kaguya.Modules.Administration
             await BE();
 
             var users = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 2: Number of users.
-            //CONTINUE POLISHING HERE 
             await TimeoutMethod();
 
             await CancelMethod(users);
@@ -277,14 +276,14 @@ namespace Kaguya.Modules.Administration
                     warnedMembers.Remove(userID);
                 }
 
-                await user.GetOrCreateDMChannelAsync();
+                var dmChannel = await user.GetOrCreateDMChannelAsync();
 
                 EmbedBuilder embed2 = new EmbedBuilder();
                 embed2.WithTitle("⚠️ Warning Received");
                 embed2.WithDescription($"You have received a warning from `{Context.User}` in the server `{Context.Guild.Name}`.");
                 embed2.WithFooter($"You currently have {userWarnings} warnings.");
                 embed2.WithColor(111, 22, 255); //Violet, have to use this because of "embed2"
-                await user.SendMessageAsync(embed: embed2.Build());
+                await dmChannel.SendMessageAsync(embed: embed2.Build());
 
                 warnedMembers.Add(userID, userWarnings);
                 embed.WithDescription($"{Context.User.Mention} **User `{users.ElementAt(i)}` has been warned.**");

@@ -320,6 +320,7 @@
     <Compile Include="Modules\Fun\TicTacToe.cs" />
     <Compile Include="Modules\Fun\TriviaGame.cs" />
     <Compile Include="Modules\Help\Help.cs" />
+    <Compile Include="Modules\Help\Profile.cs" />
     <Compile Include="Modules\Music\AudioOptions.cs" />
     <Compile Include="Modules\Music\Music.cs" />
     <Compile Include="Modules\Music\MusicService.cs" />

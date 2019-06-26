@@ -1,15 +1,14 @@
-﻿using Discord.WebSocket;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Kaguya.Core.Server_Files;
-using Discord;
-using System.Diagnostics;
-using System.Timers;
-using System.Collections.Generic;
-using System.Reflection;
-using System.IO;
+﻿using Discord;
+using Discord.WebSocket;
 using Kaguya.Core.Embed;
+using Kaguya.Core.Server_Files;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace Kaguya.Core.Command_Handler
 {
@@ -23,6 +22,58 @@ namespace Kaguya.Core.Command_Handler
         private bool AntiRaidActive(SocketGuild guild)
         {
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
+        }
+
+        public Task SupporterExpirationTimer(DiscordSocketClient client) //Checks supporter expiration times
+        {
+            if (SupporterExpTimersActive < 1)
+            {
+                Timer timer = new Timer(1800000); //30 seconds
+                timer.Enabled = true;
+                timer.Elapsed += Supporter_Expiration_Timer_Elapsed;
+                timer.AutoReset = true;
+                SupporterExpTimersActive++;
+                return Task.CompletedTask;
+            }
+            return Task.CompletedTask;
+        }
+
+        private int SupporterExpTimersActive = 0;
+
+        private async void Supporter_Expiration_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var guild = _client.GetGuild(546880579057221644);
+            var role = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "supporter");
+            foreach (var account in UserAccounts.UserAccounts.GetAllAccounts())
+            {
+                var difference = DateTime.Now - account.KaguyaSupporterExpiration;
+                if (difference.TotalMinutes < 30 && !account.IsSupporter) //If the supporter tag has expired within 30 minutes
+                {
+                    try
+                    {
+                        var user = guild.GetUser(account.ID);
+                        await user.RemoveRoleAsync(role); 
+
+                        embed.WithTitle("Kaguya Supporter Status");
+                        embed.WithDescription($"⚠ **Your Kaguya supporter tag has expired!** ⚠" +
+                            $"\n" +
+                            $"\nTo renew your supporter tag and keep your benefits, " +
+                            $"please visit the following link: <https://stageosu.selly.store/>" +
+                            $"\n" +
+                            $"\nWe hope to see you again soon, and thanks for your support of the Kaguya Project! <:norilove:543371982855602186>");
+                        embed.SetColor(EmbedColor.RED);
+
+                        var dmChannel = await user.GetOrCreateDMChannelAsync();
+                        await dmChannel.SendMessageAsync(embed: embed.Build());
+
+                        logger.ConsoleStatusAdvisory($"{account.Username}'s supporter role has been removed (if they had one) and they have been notified.");
+                    }
+                    catch (Exception ex) //Continue here
+                    {
+                        logger.ConsoleCriticalAdvisory(ex, $"Exception occurred when removing supporter role from user. {account}");
+                    }
+                }
+            }
         }
 
         public Task AntiRaidTimer(SocketGuildUser user)
@@ -78,7 +129,7 @@ namespace Kaguya.Core.Command_Handler
                                 logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User muted.");
                             }
                             else
-                            { return; }
+                            { server.AntiRaidList.Clear(); }
                         }
                         catch (Exception ex)
                         {
@@ -124,7 +175,7 @@ namespace Kaguya.Core.Command_Handler
                                 logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User kicked.");
                             }
                             else
-                            { return; }
+                            { server.AntiRaidList.Clear(); }
                         }
                         catch (Exception ex)
                         {
@@ -173,7 +224,7 @@ namespace Kaguya.Core.Command_Handler
                                 logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User shadowbanned.");
                             }
                             else
-                            { return; }
+                            { server.AntiRaidList.Clear(); }
                         }
                         catch (Exception ex)
                         {
@@ -219,7 +270,7 @@ namespace Kaguya.Core.Command_Handler
                                 logger.ConsoleGuildAdvisory(user.Guild, user, $"Kaguya Anti-Raid: User banned.");
                             }
                             else
-                            { return; }
+                            { server.AntiRaidList.Clear(); }
                         }
                         catch (Exception ex)
                         {
@@ -368,7 +419,7 @@ namespace Kaguya.Core.Command_Handler
         {
             string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             string executingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            CopyDirectory(@$"{executingDirectory}/Resources", $"{desktop}/Resources Backup");
+            CopyDirectory($@"{executingDirectory}/Resources", $"{desktop}/Resources Backup");
             CopyDirectory($@"{executingDirectory}/Logs", $"{desktop}/Logs Backup");
 
             logger.ConsoleTimerElapsed($"Backed up Resources and Log files.");

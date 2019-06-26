@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using Kaguya.Core.Embed;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
-namespace Kaguya.Modules
+namespace Kaguya.Modules.Help
 {
     public class Help : InteractiveBase<ShardedCommandContext>
     {
@@ -551,9 +551,9 @@ namespace Kaguya.Modules
                     embed.WithTitle($"Help: User Mass Blacklist | `{cmdPrefix}userblacklist`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
-                        $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use Kaguya again. These users are permanently banned from the server this command is executed in." +
+                        $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use Kaguya again." +
                         $"These users will have all of their EXP and Points reset to zero, and will be permanently filtered from receiving EXP and executing Kaguya commands." +
-                        $"\nSyntax: `{cmdPrefix}ubl <params ulong[] IDs>`");
+                        $"\nSyntax: `{cmdPrefix}ubl <list of user IDs>`");
                     await BE(); break;
                 case "userunblacklist":
                 case "uubl":
@@ -1198,12 +1198,12 @@ namespace Kaguya.Modules
         [Command("invite")]
         public async Task Invite()
         {
-            await Context.User.GetOrCreateDMChannelAsync();
+            var dmChannel = await Context.User.GetOrCreateDMChannelAsync();
 
             embed.WithDescription($"Here's a link to my support server: https://discord.gg/aumCJhr" +
                 $"\nHere's a link that you can use to add me to your server: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847");
             embed.SetColor(EmbedType.PINK);
-            await Context.User.SendMessageAsync(embed: embed.Build());
+            await dmChannel.SendMessageAsync(embed: embed.Build());
 
             embed.WithDescription($"{Context.User.Mention} DM: Sent! <:Kaguya:581581938884608001>");
             await BE();
@@ -1224,36 +1224,6 @@ namespace Kaguya.Modules
                 $"\nAdd me to your server with this link!: <https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847>" +
                 $"\nWant to keep track of all the changes? Feel free to check out the Kaguya GitHub page!: <https://github.com/stageosu/Kaguya>" +
                 $"\nKaguya Support Server: https://discord.gg/aumCJhr (This is also a good place to see what's coming soon and get notified when new updates come out :D)");
-        }
-
-        [Command("profile")]
-        [Alias("p")]
-        public async Task Profile()
-        {
-
-            var user = Context.User;
-            UserAccount account = UserAccounts.GetAccount(user);
-
-            System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
-            string monthName = mfi.GetMonthName(user.CreatedAt.Month).ToString();
-
-            embed.WithTitle($"Kaguya Profile for {user.Username}");
-            embed.AddField("User Information",
-                $"User: `{user}`" +
-                $"\nID: `{user.Id}`" +
-                $"\nAccount Created: `{monthName} {user.CreatedAt.Day}, {user.CreatedAt.Year}`", true);
-            embed.AddField("Kaguya Data",
-                $"Points: `{account.Points.ToString("N0")}`" +
-                $"\nEXP: `{account.EXP.ToString("N0")}`" +
-                $"\nRep: `{account.Rep.ToString("N0")}`" +
-                $"\nLevel: `{account.LevelNumber.ToString("N0")}`" +
-                $"\n<a:KaguyaDiamonds:581562698228301876>: `{account.Diamonds.ToString("N0")}`" +
-                $"\nLifetime Gambles: `{account.LifetimeGambles.ToString("N0")}`" +
-                $"\nAverage Gamble Win %: `{(account.LifetimeGambleWins / account.LifetimeGambles * 100).ToString("N2")}%`" +
-                $"\nAverage Elite+ Roll %: `{(account.LifetimeEliteRolls / account.LifetimeGambles * 100).ToString("N2")}%`", true);
-            embed.WithThumbnailUrl(user.GetAvatarUrl());
-
-            await BE();
         }
 
         [Command("bug")]
@@ -1305,17 +1275,18 @@ namespace Kaguya.Modules
                     if (difference.TotalSeconds < 43200)
                     {
                         embed.WithDescription($"**{Context.User.Mention} You've already upvoted me and claimed your reward!" +
-                            $"\nTime remaining: `{11 - (int)difference.TotalHours} hours {60 - difference.Minutes} minutes and {60 - difference.Seconds} seconds`**");
+                            $"\nTime remaining: `{11 - (int)difference.TotalHours} hours {59 - difference.Minutes} minutes and {60 - difference.Seconds} seconds`**");
                         await BE();
                     }
                     else if (difference.TotalSeconds > 43200)
                     {
                         userAccount.LastUpvotedKaguya = DateTime.Now;
                         userAccount.Points += 500;
+                        userAccount.NBombUsesThisHour = 5;
 
-                        embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points` and `2x critical hit rate` have been applied.");
+                        embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points`, `2x critical hit rate` " +
+                            $"and `cooldown resets` have been applied.");
                         embed.WithFooter("Thanks so much for your support!!");
-
                         await BE();
                     }
                 }

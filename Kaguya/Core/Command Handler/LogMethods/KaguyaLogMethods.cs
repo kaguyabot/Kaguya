@@ -120,8 +120,8 @@ namespace Kaguya.Core.CommandHandler
             var channels = guild.Channels;
             var kID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             IUser kaguya = _client.GetUser(ID);
-            await owner.GetOrCreateDMChannelAsync();
-            await owner.SendMessageAsync($"Hey there, {owner.Username}, I am Kaguya! I will serve as your server's all-in-one Discord Bot solution complete with powerful administrative commands, " +
+            var dmChannel = await owner.GetOrCreateDMChannelAsync();
+            await dmChannel.SendMessageAsync($"Hey there, {owner.Username}, I am Kaguya! I will serve as your server's all-in-one Discord Bot solution complete with powerful administrative commands, " +
                 $"in-depth customizable logging, leveling/currency systems, osu! related commands, and more! Before we continue please read the following statement from my creator as it contains very " +
                 $"helpful information on how to use me!" +
                 $"\n" +

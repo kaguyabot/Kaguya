@@ -26,18 +26,28 @@ namespace Kaguya.Modules.Fun
         [RequireContext(ContextType.Guild)]
         [Command("tictactoe", RunMode = RunMode.Async)]
         [Alias("ttt")]
-        public async Task TicTacToeGame(IGuildUser player2 = null)
+        public async Task TicTacToeGame(IGuildUser player2)
         {
+            gameInProgress = true;
+
             PlayChoice[,] grid = new PlayChoice[3, 3] {
                 { PlayChoice.empty, PlayChoice.empty, PlayChoice.empty },
                 { PlayChoice.empty, PlayChoice.empty, PlayChoice.empty},
                 { PlayChoice.empty, PlayChoice.empty, PlayChoice.empty } };
             string[] playChoices = new string[9] { "1a", "2a", "3a", "1b", "2b", "3b", "1c", "2c", "3c" }; //TicTacToe play choices.
 
+            string blankAreaString =
+                            $"**3** {GetString(grid[0, 2])} | {GetString(grid[1, 2])} | {GetString(grid[2, 2])}\n" +
+                            $"**2** {GetString(grid[0, 1])} | {GetString(grid[1, 1])} | {GetString(grid[2, 1])}\n" +
+                            $"**1** {GetString(grid[0, 0])} | {GetString(grid[1, 0])} | {GetString(grid[2, 0])}\n" +
+                            $"¯¯¯**A**¯¯¯¯**B**¯¯¯¯**C**¯¯";
+
             embed.WithTitle($"🎮 Tic Tac Toe");
             embed.WithDescription($"A new game of Tic Tac Toe has started between {Context.User.Mention} and {player2.Mention}!" +
                 $"\n" +
-                $"\n{Context.User.Mention} It is your turn to play! You have 30 seconds to make your selection!");
+                $"\n{Context.User.Mention} It is your turn to play! You have 30 seconds to make your selection!" +
+                $"\n" +
+                $"\n{blankAreaString}");
             await BE();
 
             do
@@ -189,8 +199,8 @@ namespace Kaguya.Modules.Fun
         }
 
         private List<string> selectedTiles = new List<string>();
-        private bool gameInProgress = true;
-
+        private bool gameInProgress = false;
+        
         private string GetString(PlayChoice playChoice)
         {
             if (playChoice == PlayChoice.x)

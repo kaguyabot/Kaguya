@@ -3,6 +3,16 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.24
+
+- $repauthor no longer embeds with a red color on a successful use. (It's now pink)
+- Custom command prefixes are no longer case sensitive.
+- When a user successfully redeems a supporter tag, they are now DM'd and Stage is sent a notification through DM as well.
+- When a new game of tic tac toe is started, the blank play area is now shown.
+- Fixed a bug with the anti-raid service where it would unexpectedly punish users.
+- Fixed a bug that prevented users who successfully used $voteclaim from having their $n bomb cooldown reset.
+- When a user's Kaguya supporter tag expires, their role is removed and the user is DM'd.
+
 Version 1.23
 
 - $antiraid command added. Features an interactive setup for a very powerful anti-raid service.
