@@ -29,29 +29,6 @@ namespace Kaguya.Modules.Owner_Only
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("event")]
-        [RequireOwner]
-        public async Task Event(int points)
-        {
-            var channel = Context.Channel;
-            var msg = Context.Message;
-            var reaction = new Emoji("🥳");
-            EventPoints = points;
-
-            embed.WithDescription($"A new event has started!");
-        }
-
-        private static int EventPoints { get; set; }
-
-        public static Task AddPointsFromReaction(Cacheable<IUserMessage, ulong> cache, 
-            ISocketMessageChannel channel, SocketReaction reaction)
-        {
-            var account = UserAccounts.GetAccount(reaction.UserId);
-            account.Points += (uint)EventPoints;
-            UserAccounts.SaveAccounts();
-            return Task.CompletedTask; //CONTINUE HERE
-        }
-
         [Command("serverblacklist")]
         [Alias("sbl")]
         [RequireOwner]

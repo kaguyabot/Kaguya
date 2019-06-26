@@ -77,8 +77,6 @@ namespace Kaguya
                     _client.UserVoiceStateUpdated += logger.UserConnectsToVoice;
                     _client.ShardDisconnected += logger.ClientDisconnected;
 
-                    Global.client.ReactionAdded += OwnerCommands.AddPointsFromReaction;
-
                     _lavaClient.OnTrackFinished += MusicService.TrackCompletedAsync;
                     
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();

@@ -551,9 +551,9 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: User Mass Blacklist | `{cmdPrefix}userblacklist`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
-                        $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use Kaguya again. These users are permanently banned from the server this command is executed in." +
+                        $"\nA bot owner may execute this command on a list of users they deem unworthy of being able to ever use Kaguya again." +
                         $"These users will have all of their EXP and Points reset to zero, and will be permanently filtered from receiving EXP and executing Kaguya commands." +
-                        $"\nSyntax: `{cmdPrefix}ubl <params ulong[] IDs>`");
+                        $"\nSyntax: `{cmdPrefix}ubl <list of user IDs>`");
                     await BE(); break;
                 case "userunblacklist":
                 case "uubl":
@@ -1275,17 +1275,18 @@ namespace Kaguya.Modules.Help
                     if (difference.TotalSeconds < 43200)
                     {
                         embed.WithDescription($"**{Context.User.Mention} You've already upvoted me and claimed your reward!" +
-                            $"\nTime remaining: `{11 - (int)difference.TotalHours} hours {60 - difference.Minutes} minutes and {60 - difference.Seconds} seconds`**");
+                            $"\nTime remaining: `{11 - (int)difference.TotalHours} hours {59 - difference.Minutes} minutes and {60 - difference.Seconds} seconds`**");
                         await BE();
                     }
                     else if (difference.TotalSeconds > 43200)
                     {
                         userAccount.LastUpvotedKaguya = DateTime.Now;
                         userAccount.Points += 500;
+                        userAccount.NBombUsesThisHour = 5;
 
-                        embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points` and `2x critical hit rate` have been applied.");
+                        embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points`, `2x critical hit rate` " +
+                            $"and `cooldown resets` have been applied.");
                         embed.WithFooter("Thanks so much for your support!!");
-
                         await BE();
                     }
                 }

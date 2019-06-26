@@ -93,7 +93,6 @@ namespace Kaguya.Modules.Administration
             await BE();
 
             var users = await NextMessageAsync(timeout: TimeSpan.FromSeconds(300)); //Step 2: Number of users.
-            //CONTINUE POLISHING HERE 
             await TimeoutMethod();
 
             await CancelMethod(users);

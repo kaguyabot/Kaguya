@@ -419,7 +419,7 @@ namespace Kaguya.Core.Command_Handler
         {
             string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             string executingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            CopyDirectory(@$"{executingDirectory}/Resources", $"{desktop}/Resources Backup");
+            CopyDirectory($@"{executingDirectory}/Resources", $"{desktop}/Resources Backup");
             CopyDirectory($@"{executingDirectory}/Logs", $"{desktop}/Logs Backup");
 
             logger.ConsoleTimerElapsed($"Backed up Resources and Log files.");
