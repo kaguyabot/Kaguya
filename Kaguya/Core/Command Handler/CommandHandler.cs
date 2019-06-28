@@ -110,6 +110,8 @@ namespace Kaguya
             if(result.IsSuccess)
             {
                 consoleLogger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
+                userAccount.LastUsedCommand = msg.Content.ToLower();
+                UserAccounts.SaveAccounts();
             }
 
             if (!result.IsSuccess)

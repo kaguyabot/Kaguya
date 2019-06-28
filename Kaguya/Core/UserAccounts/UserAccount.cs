@@ -13,6 +13,8 @@ namespace Kaguya.Core.UserAccounts
         public int Rep { get; set; }
         public int KaguyaWarnings { get; set; }
         public int NBombUsesThisHour { get; set; }
+        public int RatelimitStrikes { get; set; }
+        public string LastUsedCommand { get; set; }
         public bool IsSupporter
         {
             get
@@ -59,6 +61,8 @@ namespace Kaguya.Core.UserAccounts
             LifetimeGambleLosses = 0;
             LifetimeGambles = 0;
             LifetimeEliteRolls = 0;
+            RatelimitStrikes = 0;
+            LastUsedCommand = "";
         }
     }
 
