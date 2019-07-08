@@ -3,6 +3,12 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.25
+
+- If a user runs out of "$n bomb" uses for the hour, it will now display this in the console.
+- Whenever a shard is connected, it will now be announced in a kaguya support text channel.
+
+
 Version 1.24
 
 - $repauthor no longer embeds with a red color on a successful use. (It's now pink)

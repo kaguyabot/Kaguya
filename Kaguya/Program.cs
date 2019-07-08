@@ -4,6 +4,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core.Command_Handler;
 using Kaguya.Core.CommandHandler;
+using Kaguya.Core.Embed;
 using Kaguya.Modules.Music;
 using Kaguya.Modules.Owner_Only;
 using Kaguya.Modules.Utility;
@@ -110,6 +111,7 @@ namespace Kaguya
         {
             ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = Global.client.GetUser(ID).MutualGuilds;
+            var announceChannel = Global.client.GetGuild(546880579057221644).GetChannel(582401241011716115);
 
             int memberCount = 0;
             int textChannelCount = 0;
@@ -137,11 +139,18 @@ namespace Kaguya
 
             if((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMinutes < 30)
             {
+                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
+
                 Global.TotalGuildCount += mutualGuilds.Count;
                 Global.TotalMemberCount += memberCount;
                 Global.TotalTextChannels += textChannelCount;
                 Global.TotalVoiceChannels += voiceChannelCount;
                 Global.ShardsLoggedIn++;
+
+                embed.WithTitle("Kaguya Shard Advisory");
+                embed.WithDescription($"Kaguya Shard {shard.ShardId} logged in. " +
+                    $"Servicing {mutualGuilds.Count} guilds and {memberCount} members.");
+                (announceChannel as SocketTextChannel).SendMessageAsync(embed: embed.Build());
             }
 
             Console.WriteLine("\nShards Logged In: " + Global.ShardsLoggedIn);

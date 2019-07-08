@@ -20,8 +20,6 @@ namespace Kaguya.Modules.NSFW
     public class NSFW : ModuleBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
-        
-        //NekoClient nekoClient = new NekoClient("Kaguya");
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -56,6 +54,8 @@ namespace Kaguya.Modules.NSFW
 
             if (!isSupporter && userAccount.NBombUsesThisHour <= 0)
             {
+                Logger logger = new Logger();
+                logger.ConsoleStatusAdvisory($"User {Context.User.Username} is out of \"$n bomb\" uses for this hour.");
                 embed.WithDescription($"{Context.User.Mention} You are out of `{cmdPrefix}n bomb` uses for this hour." +
                     $"\nTo reset the cooldown, use `{cmdPrefix}vote` followed by `{cmdPrefix}voteclaim`.");
                 embed.WithFooter($"Supporters have no cooldown. For more information, use {cmdPrefix}supporter");
