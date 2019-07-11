@@ -285,6 +285,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Attributes\KaguyaCommandAttribute.cs" />
     <Compile Include="Core\Attributes\RequireAdminAttribute.cs" />
     <Compile Include="Core\Attributes\RequireSupporterAttribute.cs" />
     <Compile Include="Core\Command Handler\CommandHandler.cs" />

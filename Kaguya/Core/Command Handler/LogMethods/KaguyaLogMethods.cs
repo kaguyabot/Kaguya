@@ -219,7 +219,7 @@ namespace Kaguya.Core.CommandHandler
             await cache.GetOrDownloadAsync();
             var msg = cache;
 
-            foreach (string loggedMessage in currentLog.LastThousandMessages)
+            foreach (string loggedMessage in currentLog.LastFiveHundredMessages)
             {
                 if (loggedMessage.Contains(msg.Id.ToString()))
                 {
@@ -248,7 +248,7 @@ namespace Kaguya.Core.CommandHandler
             await cache.GetOrDownloadAsync();
             var msg = cache;
 
-            foreach (string loggedMessage in currentLog.LastThousandMessages)
+            foreach (string loggedMessage in currentLog.LastFiveHundredMessages)
             {
                 if (loggedMessage.Contains(message.Id.ToString()) & !message.Author.IsBot && (!loggedMessage.Contains(message.Content)))
                 {

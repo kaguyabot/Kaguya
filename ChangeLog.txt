@@ -7,7 +7,18 @@ Version 1.25
 
 - If a user runs out of "$n bomb" uses for the hour, it will now display this in the console.
 - Whenever a shard is connected, it will now be announced in a kaguya support text channel.
-
+- Gambling bad luck prevention added: after 5 rolls, if a user still hasn't won, foreach roll before and thereafter,
+    the roll's "luck" increases by 2%. If I roll 7 losses in a row, my next roll will have a 16% increased chance of 
+    winning.
+- Similarly, if a user has more than 15 rolls and has more than a 45% winrate, they will have a 5% **decreased** 
+    chance of winning on all rolls until their winrate returns to something below 45%. 
+    This is not influenced by bad luck prevention.
+- Fixed a bot-breaking bug where a corrupted file resulted in the bot not working.
+    This file is the servermessagelogs cache file which stores the most 500 recent messages for all guilds.
+    If the bot had to suddenly close, the overwriting of the file would sometimes be corrupted. When the bot
+    attempted to launch next, it would fail to load the file and the bot would freeze.
+    Now, Kaguya will know whether or not the file is corrupted on launch, and if it is, it will delete the cache and
+    create a new one. This will result in significant long-term stability improvements. This file is now impossible to break.
 
 Version 1.24
 

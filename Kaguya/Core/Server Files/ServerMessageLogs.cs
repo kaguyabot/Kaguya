@@ -50,7 +50,7 @@ namespace Kaguya.Core.Server_Files
             return server;
         }
 
-        private static ServerMessageLog GetOrCreateLog(ulong id)
+        public static ServerMessageLog GetOrCreateLog(ulong id)
         {
             var result = from a in serverMessageLogs
                             where a.ID == id
@@ -61,7 +61,7 @@ namespace Kaguya.Core.Server_Files
             return serverMessageLog;
         }
 
-        private static ServerMessageLog CreateLog(ulong id)
+        public static ServerMessageLog CreateLog(ulong id)
         {
             var newLog = new ServerMessageLog(id);
             serverMessageLogs.Add(newLog);

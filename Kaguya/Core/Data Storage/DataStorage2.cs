@@ -4,6 +4,7 @@ using Kaguya.Core.Server_Files;
 using Kaguya.Core.Commands;
 using Newtonsoft.Json;
 using System.IO;
+using System;
 
 namespace Kaguya.Core
 {
@@ -66,11 +67,26 @@ namespace Kaguya.Core
             }
         }
 
+        private static List<ServerMessageLog> serverMessageLogs;
+
         public static IEnumerable<ServerMessageLog> LoadServerMessageLogs(string filepath)
         {
-            if (!File.Exists(filepath)) return null;
-            string json = File.ReadAllText(filepath);
-            return JsonConvert.DeserializeObject<List<ServerMessageLog>>(json);
+            try
+            {
+                if (!File.Exists(filepath)) return null;
+                string json = File.ReadAllText(filepath);
+                return JsonConvert.DeserializeObject<List<ServerMessageLog>>(json);
+            }
+            catch (Exception e)
+            {
+                Logger logger = new Logger();
+                logger.ConsoleCriticalAdvisory(e.Message);
+                File.Delete(filepath);
+                File.WriteAllText(filepath, "[]");
+                string json = File.ReadAllText(filepath);
+                logger.ConsoleStatusAdvisory("Successfully wrote new ServerMessageLogs file.");
+                return JsonConvert.DeserializeObject<List<ServerMessageLog>>(json);
+            }
         }
 
         public static bool SaveExists(string filePath)

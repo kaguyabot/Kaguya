@@ -196,23 +196,37 @@ namespace Kaguya.Modules
             Random rand = new Random();
             Random crit = new Random();
             var roll = rand.Next(101);
-            bool critical = crit.Next(100) < 5;
+            bool critical = crit.Next(101) < 5;
 
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
 
             if (difference.TotalHours < 12)
-                critical = crit.Next(100) < 10;
+                critical = crit.Next(101) < 10;
 
             if (userAccount.IsSupporter)
-                critical = crit.Next(100) < 10;
+                critical = crit.Next(101) < 10;
 
             if (userAccount.IsSupporter && difference.TotalHours < 12)
-                critical = crit.Next(100) < 20;
+                critical = crit.Next(101) < 20;
+
+            if (userAccount.GamblingBadLuckStreak >= 5 && roll < 67)
+            {
+                for(int i = 0; i < userAccount.GamblingBadLuckStreak; i++)
+                {
+                    roll += 2;
+                    if (roll > 100)
+                        roll = 100;
+                }
+            }
+
+            if ((userAccount.LifetimeGambleWins / userAccount.LifetimeGambles) > 45 && userAccount.LifetimeGambles > 15)
+                roll -= 5;
 
             if (roll <= 66)
             {
                 userAccount.LifetimeGambleLosses++;
                 userAccount.LifetimeGambles++;
+                userAccount.GamblingBadLuckStreak++;
 
                 string[] sadEmotes = { "<:PepeHands:431853568669253632>", "<:FeelsBadMan:431647398071107584>", "<:FeelsWeirdMan:431148381449224192>" };
                 Random randEmote = new Random();
@@ -227,6 +241,7 @@ namespace Kaguya.Modules
             {
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
+                userAccount.GamblingBadLuckStreak = 0;
 
                 string[] happyEmotes1 = { "<:peepoHappy:479314678699524116>", "<:EZ:431149816127553547>", "<a:pats:432262215018741780>" };
                 Random randEmote = new Random();
@@ -249,6 +264,7 @@ namespace Kaguya.Modules
             {
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
+                userAccount.GamblingBadLuckStreak = 0;
 
                 string[] happyEmotes2 = { "<:Pog:484960397946912768>", "<:PogChamp:433109653501640715>", "<:nepWink:432745215217106955>" };
                 Random randEmote = new Random();
@@ -272,6 +288,7 @@ namespace Kaguya.Modules
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
+                userAccount.GamblingBadLuckStreak = 0;
 
                 string[] eliteEmotes = { "<:PogU:509194017368702987>", "<a:Banger:506288311829135386>" };
                 Random randEmote = new Random();
@@ -296,6 +313,7 @@ namespace Kaguya.Modules
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
+                userAccount.GamblingBadLuckStreak = 0;
 
                 string[] superEliteEmotes = { "<:YES:462371445864136732>", "<:smug:453259470815100941>", "<:Woww:442687161871892502>" };
                 Random randEmote = new Random();
@@ -322,6 +340,7 @@ namespace Kaguya.Modules
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
+                userAccount.GamblingBadLuckStreak = 0;
 
                 string sirenEmote = "<a:siren:429784681316220939>";
 

@@ -14,7 +14,8 @@ namespace Kaguya.Core.UserAccounts
         public int KaguyaWarnings { get; set; }
         public int NBombUsesThisHour { get; set; }
         public int RatelimitStrikes { get; set; }
-        public string LastUsedCommand { get; set; }
+        public List<string> RecentlyUsedCommands { get; set; }
+        public int GamblingBadLuckStreak { get; set; }
         public bool IsSupporter
         {
             get
@@ -62,7 +63,7 @@ namespace Kaguya.Core.UserAccounts
             LifetimeGambles = 0;
             LifetimeEliteRolls = 0;
             RatelimitStrikes = 0;
-            LastUsedCommand = "";
+            RecentlyUsedCommands = new List<string>();
         }
     }
 
