@@ -1276,7 +1276,7 @@ namespace Kaguya.Modules.Help
                 var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"{Config.bot.DblApiKey}");
-                var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/{Config.bot.BotUserID}/check?userId={Context.User.Id}");
+                var dblResponse = await client.GetStringAsync($"https://discordbots.org/api/bots/538910393918160916/check?userId={Context.User.Id}");
 
                 if (dblResponse.Contains("{\"voted\":1}"))
                 {

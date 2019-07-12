@@ -33,6 +33,12 @@ Version 1.25
 - Fixed a bug with the music player where, when skipping a song, Kaguya would unexpectedly exit from the voice channel.
 - Added $m join so that you can connect the bot to the voice channel before requesting music. (If this doesn't work,
     use $m leave to stop the active player, then $m join/$m play again.)
+- A new function for diamonds has been added: If you run out of $n bomb uses for the hour, while not being a supporter 
+    but have more than 50 diamonds in your account, you will be prompted on whether or not you would like to spend
+    50 of your diamonds to reset the cooldown. This can be done as many times as you want until you have less than
+    50 diamonds. If you do not react with a check mark, you will be reminded that you can upvote Kaguya on DBL to reset
+    your cooldown.
+
 
 Version 1.24
 

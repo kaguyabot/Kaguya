@@ -45,6 +45,7 @@ namespace Kaguya.Modules.NSFW
             var difference = userAccount.NBombCooldownReset - DateTime.Now;
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             bool isSupporter = userAccount.IsSupporter;
+            Logger logger = new Logger();
             Random rand = new Random();
 
             if (difference.TotalSeconds < 0)
@@ -58,21 +59,37 @@ namespace Kaguya.Modules.NSFW
             {
                 embed.WithDescription($"{Context.User.Mention} You are out of `{cmdPrefix}n bomb` uses for this hour." +
                     $"\nHowever, I see that you have more than 50<a:KaguyaDiamonds:581562698228301876> in your account. Would " +
-                    $"you like to use these and reset your cooldown? (You have 10 seconds to respond)");
+                    $"you like to use 50<a:KaguyaDiamonds:581562698228301876> and reset your cooldown? (You have 10 seconds to respond)");
+                embed.WithFooter($"Current Balance: {userAccount.Diamonds} Diamonds");
 
                 Emoji[] reactions = { new Emoji("✅"), new Emoji("❌") };
 
-                ReactionCallbackData data = new ReactionCallbackData("", embed.Build(), timeout: TimeSpan.FromSeconds(15));
+                ReactionCallbackData data = new ReactionCallbackData("", embed.Build(), timeout: TimeSpan.FromSeconds(10));
 
                 var reactionCallback = await Interactive.SendMessageWithReactionCallbacksAsync(Context, data);
                 await reactionCallback.AddReactionsAsync(reactions);
 
-                return;
+                await Task.Delay(10000); //Wait 10 seconds before processing the reactions.
+
+                var reactors = await reactionCallback.GetReactionUsersAsync(reactions[0], 30).FlattenAsync();
+
+                if (reactors.Contains(Context.User))
+                {
+                    userAccount.NBombUsesThisHour = 5;
+                    userAccount.Diamonds -= 50;
+                    UserAccounts.SaveAccounts();
+                    embed.WithDescription($"{Context.User.Mention} I have deducted 50<a:KaguyaDiamonds:581562698228301876> from your " +
+                        $"account and your `{cmdPrefix}n bomb` cooldown has been reset.");
+                    embed.SetColor(EmbedType.BLUE);
+                    await BE();
+                    return;
+                }
+                else
+                    await reactionCallback.DeleteAsync();
             }
 
             if (!isSupporter && userAccount.NBombUsesThisHour <= 0)
             {
-                Logger logger = new Logger();
                 logger.ConsoleStatusAdvisory($"User {Context.User.Username} is out of \"$n bomb\" uses for this hour.");
                 embed.WithDescription($"{Context.User.Mention} You are out of `{cmdPrefix}n bomb` uses for this hour." +
                     $"\nTo reset the cooldown, use `{cmdPrefix}vote` followed by `{cmdPrefix}voteclaim`.");
