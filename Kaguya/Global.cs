@@ -9,8 +9,8 @@ namespace Kaguya
 {
     internal static class Global
     {
-        internal static DiscordShardedClient client = new DiscordShardedClient();
-        public static LavaShardClient lavaShardClient= new LavaShardClient();
+        internal static DiscordShardedClient client { get; set; }
+        public static LavaShardClient lavaShardClient { get; set; }
         public static LavaRestClient lavaRestClient = new LavaRestClient();
         public static List<UserAccount> UserAccounts { get; set; }
         public static List<Server> Servers { get; set; }

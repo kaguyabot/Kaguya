@@ -589,6 +589,11 @@ namespace Kaguya.Modules.Help
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}roll <points>`");
                     await BE(); break;
+                case "history":
+                case "gh":
+                    embed.WithTitle($"Help: Gambling History | `{cmdPrefix}history`, `{cmdPrefix}gh`");
+                    embed.WithDescription($"{Context.User.Mention} Allows any user to see their 10 most recent Kaguya gambles.");
+                    await BE(); break;
                 case "kaguyaexit":
                     embed.WithTitle($"Help: Kaguya Exit! | `{cmdPrefix}kaguyaexit`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -829,11 +834,12 @@ namespace Kaguya.Modules.Help
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}m`command group is for all Kaguya Music commands. They are described in detail below:" +
                         $"\n" +
                         $"\n**Play/Pause:** Plays or pauses the music player. Use this command first if Kaguya is not in the voice channel yet. `{cmdPrefix}m play <song name>`, `{cmdPrefix}m pause`" +
-                        $"\n**Leave:** Makes Kaguya leave the voice channel she is currently in. `{cmdPrefix}m leave`" +
+                        $"\n**Join:** Makes Kaguya join the voice channel the user is currently in, only if there is no current player already active. `{cmdPrefix}m join`" +
+                        $"\n**Leave:** Makes Kaguya leave the voice channel she is currently in and closes any active players. `{cmdPrefix}m leave`" +
                         $"\n**Queue:** Displays Kaguya's playlist. Add more songs to the queue with the play command. `{cmdPrefix}m queue`" +
                         $"\n**Resume:** If Kaguya's music player is paused, she will resume playing music. `{cmdPrefix}m resume`" +
                         $"\n**Skip:** Skips the current song. `{cmdPrefix}m skip`" +
-                        $"\n**Volume:** Sets the volume to a value between 0-150. `{cmdPrefix}m volume <0-200>`" +
+                        $"\n**Volume:** Sets the volume to a value between 0-200. `{cmdPrefix}m volume <0-200>`" +
                         $"\n**Jump:** Jump to a specific position in the queue, skipping all songs before it in one go.`{cmdPrefix}m jump <jumpNum>`");
                     await BE(); break;
                 case "invite":
@@ -950,6 +956,7 @@ namespace Kaguya.Modules.Help
                 $"\n{cmdPrefix}awardeveryone [awardall]" +
                 $"\n{cmdPrefix}diamonds" +
                 $"\n{cmdPrefix}diamondconvert [dc]" +
+                $"\n{cmdPrefix}history [gh]" +
                 $"\n{cmdPrefix}masspointsdistribute" +
                 $"\n{cmdPrefix}points" +
                 $"\n{cmdPrefix}roll [gr]" +
@@ -1006,6 +1013,7 @@ namespace Kaguya.Modules.Help
                     "\n" +
                     $"\n{cmdPrefix}m play" +
                     $"\n{cmdPrefix}m pause" +
+                    $"\n{cmdPrefix}m join" +
                     $"\n{cmdPrefix}m resume" +
                     $"\n{cmdPrefix}m leave" +
                     $"\n{cmdPrefix}m queue" +

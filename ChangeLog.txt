@@ -19,6 +19,20 @@ Version 1.25
     attempted to launch next, it would fail to load the file and the bot would freeze.
     Now, Kaguya will know whether or not the file is corrupted on launch, and if it is, it will delete the cache and
     create a new one. This will result in significant long-term stability improvements. This file is now impossible to break.
+- New stat tracking:
+    - TotalCurrencyGambled
+    - TotalCurrencyAwarded
+    - TotalCurrencyLost
+    - RatelimitStrikes
+    - (10 most) RecentlyUsedCommands
+    - GamblingBadLuckStreak
+    - Gambling history
+- The seconds portion of the "join date" section of the $osu command has been removed.
+- $history command added: allows any user to see their 10 most recent Kaguya gambles and their details.
+- $profile now shows many more stats, including your EXP rank in the Kaguya database!
+- Fixed a bug with the music player where, when skipping a song, Kaguya would unexpectedly exit from the voice channel.
+- Added $m join so that you can connect the bot to the voice channel before requesting music. (If this doesn't work,
+    use $m leave to stop the active player, then $m join/$m play again.)
 
 Version 1.24
 

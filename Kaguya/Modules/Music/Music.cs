@@ -13,13 +13,17 @@ namespace Kaguya.Modules.Music
         public async Task MusicPlay([Remainder]string search) 
             => await ReplyAsync("", false, await musicService.JoinOrPlayAsync((SocketGuildUser)Context.User, Context.Channel, Context.Guild.Id, search));
 
+        [Command("join")]
+        public async Task MusicJoin()
+            => await ReplyAsync("", false, await musicService.JoinAsync((SocketGuildUser)Context.User, Context.Guild.Id));
+
         [Command("leave")]
         public async Task MusicLeave()
             => await ReplyAsync("", false, await musicService.LeaveAsync((SocketGuildUser)Context.User, Context.Guild.Id));
 
         [Command("queue")]
         public async Task MusicQueue()
-            => await ReplyAsync("", false, await musicService.ListAsync(Context.Guild.Id, Context.Guild.Name));
+            => await ReplyAsync("", false, await musicService.ListAsync(Context.Guild.Id));
 
         [Command("skip")]
         public async Task SkipTrack()

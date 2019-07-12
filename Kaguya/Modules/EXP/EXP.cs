@@ -51,7 +51,6 @@ namespace Kaguya.Modules
         public async Task GlobalEXPLeaderboard()
         {
             var users = UserAccounts.GetAllAccounts();
-            UserAccounts.SaveAccounts();
             var users10 = users.OrderByDescending(u => u.EXP).Take(10);
             embed.WithTitle("Kaguya Global EXP Leaderboard");
             int i = 1;
@@ -68,7 +67,6 @@ namespace Kaguya.Modules
         {
             var userAccount = UserAccounts.GetAuthor();
             var commandUserAcc = UserAccounts.GetAccount(Context.User);
-
             var difference = DateTime.Now - commandUserAcc.LastGivenRep;
 
             if (difference.TotalHours < timeout)

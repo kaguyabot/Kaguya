@@ -26,7 +26,9 @@ namespace Kaguya.Modules.Music
         private ConcurrentDictionary<ulong, AudioOptions> Options
             => _lazyOptions.Value;
 
-        public async Task<Embed> JoinOrPlayAsync(SocketGuildUser user, IMessageChannel textChannel, ulong guildId, string query = null)
+        static SocketGuildUser summoner { get; set; }
+
+        public async Task<Embed> JoinOrPlayAsync(SocketGuildUser user, ISocketMessageChannel textChannel, ulong guildId, string query = null)
         {
             //Check If User Is Connected To Voice Cahnnel.
             if (user.VoiceChannel == null)
@@ -40,18 +42,15 @@ namespace Kaguya.Modules.Music
 
             try
             {
-                //Try get the player. If it returns null then the user has used the command !Play without using the command !Join.
                 var player = _lavaShardClient.GetPlayer(guildId);
-                if (player == null)
+                if (player == null || player.VoiceChannel == null)
                 {
-                    //User Used Command !Play before they used !Join
-                    //So We Create a Connection To The Users Voice Channel.
                     await _lavaShardClient.ConnectAsync(user.VoiceChannel);
                     Options.TryAdd(user.Guild.Id, new AudioOptions
                     {
                         Summoner = user
                     });
-                    //Now we can set the player to out newly created player.
+                    summoner = user; 
                     player = _lavaShardClient.GetPlayer(guildId);
                 }
 
@@ -80,6 +79,8 @@ namespace Kaguya.Modules.Music
                 if (player.CurrentTrack.Length.TotalSeconds > 600)
                 {
                     await player.StopAsync();
+                    if (player.Queue.Count > 0)
+                        await player.SkipAsync();
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"This song is longer than 10 minutes, therefore it cannot be played!");
                 }
                 return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"Now Playing: {track.Title}\nUrl: {track.Uri}");
@@ -93,21 +94,29 @@ namespace Kaguya.Modules.Music
 
         public static async Task<Embed> TrackCompletedAsync(LavaPlayer player, LavaTrack track, TrackEndReason reason)
         {
-            if (!reason.ShouldPlayNext())
+            if (reason.Equals(TrackEndReason.LoadFailed))
             {
                 await player.VoiceChannel.DisconnectAsync();
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Continuation", "I have failed to continue the queue! If you believe this is an error, " +
                     $"please contact `Stage#0001` in my support server! Use `{Servers.GetServer(player.TextChannel.Guild as SocketGuild).commandPrefix}hdm` for an invite!");
             }
 
-            if (!player.Queue.TryDequeue(out var item) || !(item is LavaTrack nextTrack))
+            if (player.Queue.Count < 1 && !player.IsPlaying)
             {
                 await player.VoiceChannel.DisconnectAsync();
                 return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", "There are no more items left in the queue, so I have stopped playing!");
             }
 
-            await player.PlayAsync(nextTrack);
-            return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", $"Finished playing: {track.Title}\nNow playing: {nextTrack.Title}");
+            if (player.Queue.TryDequeue(out var item) && item is LavaTrack nextTrack)
+            {
+                if (player.VoiceChannel == null)
+                    await Global.lavaShardClient.ConnectAsync(summoner.VoiceChannel);
+                await player.PlayAsync(nextTrack);
+                return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", $"Finished playing: {track.Title}\nNow playing: {nextTrack.Title}");
+            }
+
+            return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", "I failed to finish playing the requested track for an unknown reason. " +
+                "Please contact my creator (Stage) in the support server (this can be found through the `invite` command).");
         }
 
         public async Task<Embed> LeaveAsync(SocketGuildUser user, ulong guildId)
@@ -133,12 +142,19 @@ namespace Kaguya.Modules.Music
             }
         }
 
+        public async Task<Embed> JoinAsync(SocketGuildUser user, ulong guildId)
+        {
+            var player = _lavaShardClient.GetPlayer(guildId);
+            await _lavaShardClient.ConnectAsync(user.VoiceChannel);
+            return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"Connected to `{user.VoiceChannel.Name}`");
+        }
+
         /// <summary>
         /// Kaguya's music queue.
         /// </summary>
         /// <param name="guildId">ID of the guild this command was executed in.</param>
         /// <returns></returns>
-        public async Task<Embed> ListAsync(ulong guildId, string serverName) 
+        public async Task<Embed> ListAsync(ulong guildId) 
         {
             try
             {

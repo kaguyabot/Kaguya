@@ -44,7 +44,6 @@ namespace Kaguya.Modules
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
                     embed.SetColor(EmbedColor.RED);
                     await BE();
-                    // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "No osu! username specified."); ERROR HANDLER HERE
                     return;
                 }
             }
@@ -61,7 +60,6 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{Context.User.Mention} I couldn't download information for the specified user!**");
                 embed.WithFooter($"If this persists, please contact Stage#0001. Error code: OAPI_RETURN_NULL");
                 await BE();
-                //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API Returned Null"); ERROR HANDLER HERE
                 return;
             }
 
@@ -69,7 +67,7 @@ namespace Kaguya.Modules
 
             string userID = userProfileObject.user_id;
             string username = userProfileObject.username;
-            DateTime joinDate = userProfileObject.join_date; //May throw an error, idk
+            DateTime joinDate = userProfileObject.join_date;
             uint count300 = userProfileObject.count300;
             uint count100 = userProfileObject.count100;
             uint count50 = userProfileObject.count50;
@@ -115,7 +113,7 @@ namespace Kaguya.Modules
                 $"\n▸ **Current Level:** `{level.ToString("N0")}` ~ `{(int)((level - (int)level) * 100)}% to level {(int)level + 1}`!" +
                 $"\n▸ **Total Circles Clicked:** `{(count300 + count100 + count50).ToString("N0")}`" +
                 $"\n▸ {gradeSSH} ~ `{countSSH}` {gradeSS} ~ `{countSS}` {gradeSH} ~ `{countSH}` {gradeS} ~ `{countS}` {gradeA} ~ `{countA}`" +
-                $"\n▸ **{username} joined `{difference.TotalDays.ToString("N0")} days, {difference.Hours} hours, {difference.Minutes} minutes, and {difference.Seconds} seconds ago.`**" +
+                $"\n▸ **{username} joined `{difference.TotalDays.ToString("N0")} days, {difference.Hours} hours, and {difference.Minutes} minutes ago.`**" +
                 $"\n**`That's over {(difference.TotalDays / 31).ToString("N0")} months!`**");
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
             embed.WithFooter($"Stats accurate as of {DateTime.Now}");
@@ -269,7 +267,6 @@ namespace Kaguya.Modules
                     embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
                     await BE();
                     embed.SetColor(EmbedColor.RED);
-                    //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
                     return;
                 }
 
@@ -315,7 +312,7 @@ namespace Kaguya.Modules
                     $"▸ **☆{starRating.ToString("F")}** ▸ **{accuracy.ToString("F")}%**\n" +
                     $"▸ **Combo:** `{maxCombo.ToString("N0")}x / {maxPossibleCombo.ToString("N0")}x`\n" +
                     $"▸ [300 / 100 / 50 / X]: `[{count300} / {count100} / {count50} / {countMiss}]`\n" +
-                    $"▸ **Map Completion:** `{mapCompletion}`%\n" +
+                    $"▸ **Map Completion:** `{mapCompletion}%`\n" +
                     $"▸ **Full Combo Percentage:** `{((maxCombo / maxPossibleCombo) * 100).ToString("N2")}%`\n" +
                     $"▸ **PP for FC**: `{fullComboPP.Total.ToString("N0")}pp`";
 
@@ -354,18 +351,6 @@ namespace Kaguya.Modules
             SO = (1 << 12),
             // Relax2 = (1 << 13),  // Autopilot
             PF = (1 << 14),
-        }
-
-        private bool UserIsAdmin(SocketGuildUser user)
-        {
-            string targetRoleName = "Administrator";
-            var result = from r in user.Guild.Roles
-                         where r.Name == targetRoleName
-                         select r.Id;
-            ulong roleID = result.FirstOrDefault();
-            if (roleID == 0) return false;
-            var targetRole = user.Guild.GetRole(roleID);
-            return user.Roles.Contains(targetRole);
         }
     }
 }

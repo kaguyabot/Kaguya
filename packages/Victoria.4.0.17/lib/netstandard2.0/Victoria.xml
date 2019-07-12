@@ -1,0 +1,526 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Victoria</name>
+    </assembly>
+    <members>
+        <member name="T:Victoria.Configuration">
+            <summary>
+            Configuration follows application.yml. Values should match up in configuration and application.yml.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.Host">
+            <summary>
+            Lavalink host.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.Port">
+            <summary>
+            Lavalink port.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.Password">
+            <summary>
+            Lavalink password.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.BufferSize">
+            <summary>
+            Websocket buffer size.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.SelfDeaf">
+            <summary>
+            Self deaf client.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.LogSeverity">
+            <summary>
+            Logging severity.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.ReconnectAttempts">
+            <summary>
+            Websocket reconnect attempts.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.ReconnectInterval">
+            <summary>
+            Websocket reconnect delay.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.AutoDisconnect">
+            <summary>
+            Whether to automatically disconnect after everyone leaves.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.PreservePlayers">
+            <summary>
+            Should players be preserved if Victoria loses connection?
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.InactivityTimeout">
+            <summary>
+            Timeout before <see cref="P:Victoria.Configuration.AutoDisconnect"/>.
+            </summary>
+        </member>
+        <member name="P:Victoria.Configuration.DefaultVolume">
+            <summary>
+            The default volume players should have when joining a voice chat
+            </summary>
+        </member>
+        <member name="F:Victoria.Entities.LoadType.TrackLoaded">
+            <summary>
+            Returned when a single track is loaded.
+            </summary>
+        </member>
+        <member name="F:Victoria.Entities.LoadType.PlaylistLoaded">
+            <summary>
+            Returned when a playlist is loaded.
+            </summary>
+        </member>
+        <member name="F:Victoria.Entities.LoadType.SearchResult">
+            <summary>
+            Returned when a search result is made (i.e ytsearch: some song).
+            </summary>
+        </member>
+        <member name="F:Victoria.Entities.LoadType.NoMatches">
+            <summary>
+            Returned if no matches/sources could be found for a given identifier.
+            </summary>
+        </member>
+        <member name="F:Victoria.Entities.LoadType.LoadFailed">
+            <summary>
+            Returned if Lavaplayer failed to load something for some reason.
+            </summary>
+        </member>
+        <member name="P:Victoria.Entities.EqualizerBand.Band">
+            <summary>
+            15 bands (0-14) that can be changed.
+            </summary>
+        </member>
+        <member name="P:Victoria.Entities.EqualizerBand.Gain">
+            <summary>
+            Gain is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0, 
+            where -0.25 means the given band is completely muted, and 0.25 means it is doubled.
+            </summary>
+        </member>
+        <member name="M:Victoria.Entities.LavaTrack.ResetPosition">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Victoria.Entities.Cpu">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Victoria.Entities.Frames.Sent">
+            <summary>
+            Average frames sent per minute.
+            </summary>
+        </member>
+        <member name="P:Victoria.Entities.Frames.Nulled">
+            <summary>
+            Average frames nulled per minute. 
+            </summary>
+        </member>
+        <member name="P:Victoria.Entities.Frames.Deficit">
+            <summary>
+            Average frames deficit per minute.
+            </summary>
+        </member>
+        <member name="T:Victoria.Helpers.JavaBinaryHelper">
+            <inheritdoc />
+            <summary>
+            https://raw.githubusercontent.com/DSharpPlus/DSharpPlus/master/DSharpPlus.Lavalink/LavalinkUtil.cs
+            </summary>
+        </member>
+        <member name="M:Victoria.Helpers.JavaBinaryHelper.#ctor(System.IO.Stream)">
+            <inheritdoc />
+        </member>
+        <member name="T:Victoria.Helpers.LyricsHelper">
+            <summary>
+            Contains method for searching lyrics.
+            </summary>
+        </member>
+        <member name="E:Victoria.LavaBaseClient.Log">
+            <summary>
+            Spits out important information.
+            </summary>
+        </member>
+        <member name="E:Victoria.LavaBaseClient.OnServerStats">
+            <summary>
+            Fires when Lavalink server sends stats.
+            </summary>
+        </member>
+        <member name="E:Victoria.LavaBaseClient.OnSocketClosed">
+            <summary>
+            Fires when Lavalink server closes connection. 
+            Params are: <see cref="T:System.Int32"/> ErrorCode, <see cref="T:System.String"/> Reason, <see cref="T:System.Boolean"/> ByRemote.
+            </summary>
+        </member>
+        <member name="E:Victoria.LavaBaseClient.OnTrackStuck">
+            <summary>
+            Fires when a <see cref="T:Victoria.Entities.LavaTrack"/> is stuck. <see cref="T:System.Int64"/> specifies threshold.
+            </summary>
+        </member>
+        <member name="E:Victoria.LavaBaseClient.OnTrackException">
+            <summary>
+            Fires when <see cref="T:Victoria.Entities.LavaTrack"/> throws an exception. <see cref="T:System.String"/> is the error reason.
+            </summary>
+        </member>
+        <member name="E:Victoria.LavaBaseClient.OnPlayerUpdated">
+            <summary>
+            Fires when <see cref="T:Victoria.Entities.LavaTrack"/> receives an updated.
+            </summary>
+        </member>
+        <member name="E:Victoria.LavaBaseClient.OnTrackFinished">
+            <summary>
+            Fires when a track has finished playing.
+            </summary>
+        </member>
+        <member name="P:Victoria.LavaBaseClient.ServerStats">
+            <summary>
+            Keeps up to date with <see cref="E:Victoria.LavaBaseClient.OnServerStats"/>.
+            </summary>
+        </member>
+        <member name="M:Victoria.LavaBaseClient.ConnectAsync(Discord.IVoiceChannel,Discord.ITextChannel)">
+            <summary>
+            Connects to <paramref name="voiceChannel"/> and returns a <see cref="T:Victoria.LavaPlayer"/>.
+            </summary>
+            <param name="voiceChannel">Voice channel to connect to.</param>
+            <param name="textChannel">Optional text channel that can send updates.</param>
+        </member>
+        <member name="M:Victoria.LavaBaseClient.DisconnectAsync(Discord.IVoiceChannel)">
+            <summary>
+            Disconnects from the <paramref name="voiceChannel"/>.
+            </summary>
+            <param name="voiceChannel">Connected voice channel.</param>
+        </member>
+        <member name="M:Victoria.LavaBaseClient.MoveChannelsAsync(Discord.IVoiceChannel)">
+            <summary>
+            Moves voice channels and updates <see cref="P:Victoria.LavaPlayer.VoiceChannel"/>.
+            </summary>
+            <param name="voiceChannel"><see cref="T:Discord.IVoiceChannel"/></param>
+        </member>
+        <member name="M:Victoria.LavaBaseClient.UpdateTextChannel(System.UInt64,Discord.ITextChannel)">
+            <summary>
+            Update the <see cref="P:Victoria.LavaPlayer.TextChannel"/>.
+            </summary>
+            <param name="guildId">Guild Id</param>
+            <param name="textChannel"><see cref="T:Discord.ITextChannel"/></param>
+        </member>
+        <member name="M:Victoria.LavaBaseClient.GetPlayer(System.UInt64)">
+            <summary>
+            Gets an existing <see cref="T:Victoria.LavaPlayer"/> otherwise null.
+            </summary>
+            <param name="guildId">Id of the guild.</param>
+            <returns><see cref="T:Victoria.LavaPlayer"/></returns>
+        </member>
+        <member name="M:Victoria.LavaBaseClient.ToggleAutoDisconnect">
+            <summary>
+            Enables or disables AutoDisconnect <see cref="P:Victoria.Configuration.AutoDisconnect"/>
+            </summary>
+        </member>
+        <member name="M:Victoria.LavaBaseClient.DisposeAsync">
+            <summary>
+            Disposes all <see cref="T:Victoria.LavaPlayer"/>s and closes websocket connection.
+            </summary>
+        </member>
+        <member name="T:Victoria.LavaPlayer">
+            <summary>
+            Represents a <see cref="T:Discord.IVoiceChannel"/> connection.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Victoria.LavaPlayer.IsPaused" -->
+        <member name="P:Victoria.LavaPlayer.IsPlaying">
+            <summary>
+            Checks whether the <see cref="T:Victoria.LavaPlayer"/> is playing or not.
+            </summary>
+        </member>
+        <member name="P:Victoria.LavaPlayer.CurrentTrack">
+            <summary>
+            Current track that is playing.
+            </summary>
+        </member>
+        <member name="P:Victoria.LavaPlayer.TextChannel">
+            <summary>
+            Optional text channel.
+            </summary>
+        </member>
+        <member name="P:Victoria.LavaPlayer.VoiceChannel">
+            <summary>
+            Connected voice channel.
+            </summary>
+        </member>
+        <member name="P:Victoria.LavaPlayer.Queue">
+            <summary>
+            Default queue, takes an object that implements <see cref="T:Victoria.Queue.IQueueObject"/>.
+            </summary>
+        </member>
+        <member name="P:Victoria.LavaPlayer.LastUpdate">
+            <summary>
+            Last time when Lavalink sent an updated.
+            </summary>
+        </member>
+        <member name="P:Victoria.LavaPlayer.CurrentVolume">
+            <summary>
+            Keeps track of volume set by <see cref="M:Victoria.LavaPlayer.SetVolumeAsync(System.Int32)"/>;
+            </summary>
+        </member>
+        <member name="M:Victoria.LavaPlayer.PlayAsync(Victoria.Entities.LavaTrack,System.Boolean)">
+            <summary>
+            Plays the specified <paramref name="track"/>.
+            </summary>
+            <param name="track"><see cref="T:Victoria.Entities.LavaTrack"/></param>
+            <param name="noReplace">If set to true, this operation will be ignored if a track is already playing or paused.</param>
+        </member>
+        <member name="M:Victoria.LavaPlayer.PlayAsync(Victoria.Entities.LavaTrack,System.TimeSpan,System.TimeSpan,System.Boolean)">
+            <summary>
+            Plays the specified <paramref name="track"/>.
+            </summary>
+            <param name="track"></param>
+            <param name="startTime">Optional setting that determines the number of milliseconds to offset the track by.</param>
+            <param name="stopTime">optional setting that determines at the number of milliseconds at which point the track should stop playing.</param>
+            <param name="noReplace">If set to true, this operation will be ignored if a track is already playing or paused.</param>
+        </member>
+        <member name="M:Victoria.LavaPlayer.StopAsync">
+            <summary>
+            Stops playing the current track and sets <see cref="P:Victoria.LavaPlayer.IsPlaying"/> to false.
+            </summary>
+        </member>
+        <member name="M:Victoria.LavaPlayer.ResumeAsync">
+            <summary>
+            Resumes if <see cref="P:Victoria.LavaPlayer.IsPaused"/> is set to true.
+            </summary>
+        </member>
+        <member name="M:Victoria.LavaPlayer.PauseAsync">
+            <summary>
+            Pauses if <see cref="P:Victoria.LavaPlayer.IsPaused"/> is set to false.
+            </summary>
+        </member>
+        <member name="M:Victoria.LavaPlayer.SkipAsync">
+            <summary>
+            Replaces the <see cref="P:Victoria.LavaPlayer.CurrentTrack"/> with the next <see cref="T:Victoria.Entities.LavaTrack"/> from <see cref="P:Victoria.LavaPlayer.Queue"/>.
+            </summary>
+            <returns>Returns the skipped <see cref="T:Victoria.Entities.LavaTrack"/>.</returns>
+        </member>
+        <member name="M:Victoria.LavaPlayer.SeekAsync(System.TimeSpan)">
+            <summary>
+            Seeks the <see cref="P:Victoria.LavaPlayer.CurrentTrack"/> to specified <paramref name="position"/>.
+            </summary>
+            <param name="position">Position must be less than <see cref="P:Victoria.LavaPlayer.CurrentTrack"/>'s position.</param>
+        </member>
+        <member name="M:Victoria.LavaPlayer.SetVolumeAsync(System.Int32)">
+            <summary>
+            Updates <see cref="T:Victoria.LavaPlayer"/> volume and updates <see cref="P:Victoria.LavaPlayer.CurrentVolume"/>.
+            </summary>
+            <param name="volume">Volume may range from 0 to 1000. 100 is default.</param>
+        </member>
+        <member name="M:Victoria.LavaPlayer.EqualizerAsync(System.Collections.Generic.List{Victoria.Entities.EqualizerBand})">
+            <summary>
+            Change the <see cref="T:Victoria.LavaPlayer"/>'s equalizer. There are 15 bands (0-14) that can be changed.
+            </summary>
+            <param name="bands"><see cref="T:Victoria.Entities.EqualizerBand"/></param>
+        </member>
+        <member name="M:Victoria.LavaPlayer.EqualizerAsync(Victoria.Entities.EqualizerBand[])">
+            <summary>
+            Change the <see cref="T:Victoria.LavaPlayer"/>'s equalizer. There are 15 bands (0-14) that can be changed.
+            </summary>
+            <param name="bands"><see cref="T:Victoria.Entities.EqualizerBand"/></param>
+        </member>
+        <member name="T:Victoria.LavaRestClient">
+            <summary>
+            Handles Lavalink's REST features.
+            </summary>
+        </member>
+        <member name="M:Victoria.LavaRestClient.#ctor(System.String,System.Int32,System.String)">
+            <summary>
+            Initializes <see cref="T:Victoria.LavaRestClient"/>.
+            </summary>
+            <param name="host">Lavalink host.</param>
+            <param name="port">Lavalink port.</param>
+            <param name="password">Lavalink server password.</param>
+        </member>
+        <member name="M:Victoria.LavaRestClient.#ctor(Victoria.Configuration)">
+            <summary>
+            Initializes <see cref="T:Victoria.LavaRestClient"/>.
+            </summary>
+            <param name="configuration"><see cref="T:Victoria.Configuration"/></param>
+        </member>
+        <member name="M:Victoria.LavaRestClient.SearchSoundcloudAsync(System.String)">
+            <summary>
+            Searches Soundcloud for your query.
+            </summary>
+            <param name="query">Search query.</param>
+            <returns><see cref="T:Victoria.Entities.SearchResult"/></returns>
+        </member>
+        <member name="M:Victoria.LavaRestClient.SearchYouTubeAsync(System.String)">
+            <summary>
+            Searches YouTube for your query.
+            </summary>
+            <param name="query">Search query.</param>
+            <returns><see cref="T:Victoria.Entities.SearchResult"/></returns>
+        </member>
+        <member name="M:Victoria.LavaRestClient.SearchTracksAsync(System.String,System.Boolean)">
+            <summary>
+            Searches all sources specified in Lavalink's application.yml.
+            </summary>
+            <param name="query">Search query.</param>
+            <returns><see cref="T:Victoria.Entities.SearchResult"/></returns>
+        </member>
+        <member name="T:Victoria.LavaShardClient">
+            <summary>
+            Represents a <see cref="T:Discord.WebSocket.DiscordShardedClient"/> with Lavalink server.
+            </summary>
+        </member>
+        <member name="M:Victoria.LavaShardClient.StartAsync(Discord.WebSocket.DiscordShardedClient,Victoria.Configuration)">
+            <summary>
+            Starts websocket connection with Lavalink server once <see cref="T:Discord.WebSocket.DiscordSocketClient"/> hits ready event.
+            </summary>
+            <param name="socketClient"><see cref="T:Discord.WebSocket.DiscordSocketClient"/></param>
+            <param name="configuration"><see cref="T:Victoria.Configuration"/></param>
+        </member>
+        <member name="T:Victoria.LavaSocketClient">
+            <summary>
+            Represents a <see cref="T:Discord.WebSocket.DiscordSocketClient"/> connection to Lavalink server.
+            </summary>
+        </member>
+        <member name="M:Victoria.LavaSocketClient.StartAsync(Discord.WebSocket.DiscordSocketClient,Victoria.Configuration)">
+            <summary>
+            Starts websocket connection with Lavalink server once <see cref="T:Discord.WebSocket.DiscordSocketClient"/> hits ready event.
+            </summary>
+            <param name="socketClient"><see cref="T:Discord.WebSocket.DiscordSocketClient"/></param>
+            <param name="configuration"><see cref="T:Victoria.Configuration"/></param>
+        </member>
+        <member name="T:Victoria.Queue.IQueueObject">
+            <summary>
+            Every object that needs to be in BaseQueue should inherit from <see cref="T:Victoria.Queue.IQueueObject" />.
+            </summary>
+        </member>
+        <member name="P:Victoria.Queue.IQueueObject.Id">
+            <summary>
+            Unique identifier for this object.
+            </summary>
+        </member>
+        <member name="T:Victoria.Queue.LavaQueue`1">
+            <summary>
+            Queue based on <see cref="T:System.Collections.Generic.LinkedList`1" />. Follows FIFO.
+            </summary>
+            <typeparam name="T">
+            <see cref="T:Victoria.Queue.IQueueObject" />
+            </typeparam>
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.#ctor">
+            <inheritdoc cref="T:Victoria.Queue.LavaQueue`1" />
+        </member>
+        <member name="P:Victoria.Queue.LavaQueue`1.Count">
+            <summary>
+            Returns the total count of items.
+            </summary>
+        </member>
+        <member name="P:Victoria.Queue.LavaQueue`1.Items">
+            <inheritdoc cref="T:System.Collections.Generic.IEnumerable`1" />
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.Enqueue(`0)">
+            <summary>
+            Adds an object.
+            </summary>
+            <param name="value">
+            <see cref="T:Victoria.Queue.IQueueObject" />
+            </param>
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.Dequeue">
+            <summary>
+            Removes the first item from queue.
+            </summary>
+            <returns>
+            <see cref="T:Victoria.Queue.IQueueObject" />
+            </returns>
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.TryDequeue(`0@)">
+            <summary>
+            Safely removes the first item from queue.
+            </summary>
+            <param name="value">
+            <see cref="T:Victoria.Queue.IQueueObject" />
+            </param>
+            <returns><see cref="T:System.Boolean" /> based on if dequeue-ing was successful.</returns>
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.Peek">
+            <summary>
+            Sneaky peaky the first time in list.
+            </summary>
+            <returns>
+            <see cref="T:Victoria.Queue.IQueueObject" />
+            </returns>
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.Remove(`0)">
+            <summary>
+            Removes an item from queue.
+            </summary>
+            <param name="value">
+            <see cref="T:Victoria.Queue.IQueueObject" />
+            </param>
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.Clear">
+            <summary>
+            Clears the queue.
+            </summary>
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.Shuffle">
+            <summary>
+            Shuffles the queue.
+            </summary>
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.RemoveAt(System.Int32)">
+            <summary>
+            Removes an item based on the given index.
+            </summary>
+            <param name="index">Index of item.</param>
+            <returns>
+            <see cref="T:Victoria.Queue.IQueueObject" />
+            </returns>
+        </member>
+        <member name="M:Victoria.Queue.LavaQueue`1.RemoveRange(System.Int32,System.Int32)">
+            <summary>
+            Removes a item from given range.
+            </summary>
+            <param name="from">Start index.</param>
+            <param name="to">End index.</param>
+        </member>
+        <member name="M:Victoria.VictoriaExtensions.FetchThumbnailAsync(Victoria.Entities.LavaTrack)">
+            <summary>
+            Fetches thumbnail of the specified track.
+            </summary>
+            <param name="track"><see cref="T:Victoria.Entities.LavaTrack"/></param>
+        </member>
+        <member name="M:Victoria.VictoriaExtensions.FetchLyricsAsync(Victoria.Entities.LavaTrack)">
+            <summary>
+            Searches lyrics for the specified track.
+            </summary>
+            <param name="track"><see cref="T:Victoria.Entities.LavaTrack"/></param>
+        </member>
+        <member name="M:Victoria.VictoriaExtensions.SanitizeYoutubeUrl(System.String)">
+            <summary>
+            Transforms a single youtube video playlist url to proper youtube url
+            </summary>
+            <param name="url">The youtube url to sanitize</param>
+            <returns>The sanitized youtube url</returns>
+        </member>
+        <member name="M:Victoria.VictoriaExtensions.GetProvider(System.Uri)">
+            <summary>
+            Gets the provider name for an url (example: google.com -> google)
+            </summary>
+            <param name="url">The url to get the provider from</param>
+            <returns>The provider name</returns>
+        </member>
+        <member name="M:Victoria.VictoriaExtensions.ShouldPlayNext(Victoria.Entities.TrackEndReason)">
+            <summary>
+            Checks if the <see cref="T:Victoria.Entities.TrackEndReason"/> is Finished or LoadFailed.
+            </summary>
+            <param name="reason"><see cref="T:Victoria.Entities.TrackEndReason"/></param>
+        </member>
+    </members>
+</doc>

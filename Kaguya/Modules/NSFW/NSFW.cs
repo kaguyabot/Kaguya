@@ -13,11 +13,13 @@ using Kaguya.Core.UserAccounts;
 using Kaguya.Core.Server_Files;
 using System.IO;
 using System.Linq;
+using Discord.Addons.Interactive;
+using Discord;
 
 namespace Kaguya.Modules.NSFW
 {
     [Group("n")] //NSFW Commands...Proceed with caution!
-    public class NSFW : ModuleBase<ShardedCommandContext>
+    public class NSFW : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
@@ -35,7 +37,7 @@ namespace Kaguya.Modules.NSFW
             await Context.Channel.SendFileAsync(imageCollection[rand.Next(imageCollection.Length)]);
         }
 
-        [Command("bomb")]
+        [Command("bomb", RunMode = RunMode.Async)]
         [RequireNsfw]
         public async Task NSFWBomb()
         {
@@ -50,6 +52,22 @@ namespace Kaguya.Modules.NSFW
                 userAccount.NBombUsesThisHour = 5;
                 userAccount.NBombCooldownReset = DateTime.Now + TimeSpan.FromMinutes(60);
                 UserAccounts.SaveAccounts();
+            }
+
+            if(!isSupporter && userAccount.NBombUsesThisHour <= 0 && userAccount.Diamonds >= 50)
+            {
+                embed.WithDescription($"{Context.User.Mention} You are out of `{cmdPrefix}n bomb` uses for this hour." +
+                    $"\nHowever, I see that you have more than 50<a:KaguyaDiamonds:581562698228301876> in your account. Would " +
+                    $"you like to use these and reset your cooldown? (You have 10 seconds to respond)");
+
+                Emoji[] reactions = { new Emoji("✅"), new Emoji("❌") };
+
+                ReactionCallbackData data = new ReactionCallbackData("", embed.Build(), timeout: TimeSpan.FromSeconds(15));
+
+                var reactionCallback = await Interactive.SendMessageWithReactionCallbacksAsync(Context, data);
+                await reactionCallback.AddReactionsAsync(reactions);
+
+                return;
             }
 
             if (!isSupporter && userAccount.NBombUsesThisHour <= 0)

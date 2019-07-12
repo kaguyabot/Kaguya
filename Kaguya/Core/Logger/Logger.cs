@@ -206,14 +206,14 @@ namespace Kaguya.Core
         public void ConsoleMusicLog(LogMessage msg)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"Music Service:" +
+            Console.WriteLine($"\nMusic Service:" +
                 $"\nMessage: [\"{msg.Message}\"]");
         }
 
         public void ConsoleMusicLogNoUser(string msg)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"Music Service:" +
+            Console.WriteLine($"\nMusic Service:" +
                 $"\nMessage: [\"{msg}\"]");
         }
 

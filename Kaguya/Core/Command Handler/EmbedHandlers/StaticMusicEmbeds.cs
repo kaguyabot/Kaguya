@@ -2,6 +2,8 @@
 #endregion
 
 using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace Kaguya.Core.CommandHandler
@@ -45,14 +47,6 @@ namespace Kaguya.Core.CommandHandler
             return embed;
         }
 
-        /// <summary>
-        /// Create's an error embed with a source, error, and optional footer. This is generally used for invalid command executions, command errors, 
-        /// exceptions, etc.
-        /// </summary>
-        /// <param name="source">Source of the error.</param>
-        /// <param name="error">The error that is being thrown.</param>
-        /// <param name="footer">Optional footer to include at the bottom of the embed.</param>
-        /// <returns></returns>
         public static async Task<Discord.Embed> CreateErrorEmbed(string source, string error, string footer = null)
         {
             var embed = await Task.Run(() => new EmbedBuilder()

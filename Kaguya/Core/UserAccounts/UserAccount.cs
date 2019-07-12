@@ -44,6 +44,10 @@ namespace Kaguya.Core.UserAccounts
         public double LifetimeGambleLosses { get; set; }
         public double LifetimeGambles { get; set; }
         public double LifetimeEliteRolls { get; set; }
+        public int TotalCurrencyGambled { get; set; }
+        public int TotalCurrencyAwarded { get; set; }
+        public int TotalCurrencyLost { get; set; }
+        public List<string> GambleHistory { get; set; }
 
         public UserAccount(ulong id)
         {
@@ -64,6 +68,7 @@ namespace Kaguya.Core.UserAccounts
             LifetimeEliteRolls = 0;
             RatelimitStrikes = 0;
             RecentlyUsedCommands = new List<string>();
+            GambleHistory = new List<string>();
         }
     }
 

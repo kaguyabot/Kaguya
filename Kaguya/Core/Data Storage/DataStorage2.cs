@@ -74,19 +74,26 @@ namespace Kaguya.Core
             try
             {
                 if (!File.Exists(filepath)) return null;
+                if (File.ReadAllText(filepath) == "")
+                    NewLog(filepath);
                 string json = File.ReadAllText(filepath);
                 return JsonConvert.DeserializeObject<List<ServerMessageLog>>(json);
             }
             catch (Exception e)
             {
-                Logger logger = new Logger();
-                logger.ConsoleCriticalAdvisory(e.Message);
-                File.Delete(filepath);
-                File.WriteAllText(filepath, "[]");
-                string json = File.ReadAllText(filepath);
-                logger.ConsoleStatusAdvisory("Successfully wrote new ServerMessageLogs file.");
-                return JsonConvert.DeserializeObject<List<ServerMessageLog>>(json);
+                return NewLog(filepath);
             }
+        }
+
+        private static IEnumerable<ServerMessageLog> NewLog(string filepath)
+        {
+            Logger logger = new Logger();
+            logger.ConsoleCriticalAdvisory("ServerMessageLogs was broken so I fixed it.");
+            File.Delete(filepath);
+            File.WriteAllText(filepath, "[]");
+            string json = File.ReadAllText(filepath);
+            logger.ConsoleStatusAdvisory("Successfully wrote new ServerMessageLogs file.");
+            return JsonConvert.DeserializeObject<List<ServerMessageLog>>(json);
         }
 
         public static bool SaveExists(string filePath)

@@ -80,7 +80,8 @@ namespace Kaguya
                     _client.ShardDisconnected += logger.ClientDisconnected;
 
                     _lavaClient.OnTrackFinished += MusicService.TrackCompletedAsync;
-                    
+                    _lavaClient.Log += Log;
+
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
                     await _client.LoginAsync(TokenType.Bot, Config.bot.Token);
 
@@ -98,6 +99,12 @@ namespace Kaguya
             }
         }
 
+        private Task Log(LogMessage msg)
+        {
+            Console.WriteLine(msg.Message);
+            return Task.CompletedTask;
+        }
+
         private ServiceProvider ConfigureServices(DiscordSocketConfig config)
         {
             return new ServiceCollection()
@@ -112,7 +119,7 @@ namespace Kaguya
         {
             ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = Global.client.GetUser(ID).MutualGuilds;
-            var announceChannel = Global.client.GetGuild(546880579057221644).GetChannel(546880579552018433);
+            var announceChannel = Global.client.GetGuild(546880579057221644).GetChannel(546880579552018433); //#kaguya-general in the support server.
 
             int memberCount = 0;
             int textChannelCount = 0;
@@ -160,7 +167,7 @@ namespace Kaguya
                     catch (Exception e)
                     {
                         Logger logger = new Logger();
-                        logger.ConsoleCriticalAdvisory($"Failed to announce shard status in chat: {e.Message}");
+                        logger.ConsoleCriticalAdvisory($"Failed to announce shard status in chat for shard {shard.ShardId}: {e.Message}");
                     }
                 }
             }
