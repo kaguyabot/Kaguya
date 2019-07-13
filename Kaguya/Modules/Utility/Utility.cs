@@ -66,7 +66,6 @@ namespace Kaguya.Modules.Utility
             }
 
             embed.WithTitle($"Kaguya Statistics");
-
             embed.AddField("Author",
                 $"User: `Stage#0001`" +
                 $"\nID: `146092837723832320`");

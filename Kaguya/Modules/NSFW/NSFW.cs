@@ -37,7 +37,7 @@ namespace Kaguya.Modules.NSFW
             await Context.Channel.SendFileAsync(imageCollection[rand.Next(imageCollection.Length)]);
         }
 
-        [Command("bomb", RunMode = RunMode.Async)]
+        [Command("bomb")]
         [RequireNsfw]
         public async Task NSFWBomb()
         {
@@ -53,39 +53,6 @@ namespace Kaguya.Modules.NSFW
                 userAccount.NBombUsesThisHour = 5;
                 userAccount.NBombCooldownReset = DateTime.Now + TimeSpan.FromMinutes(60);
                 UserAccounts.SaveAccounts();
-            }
-
-            if(!isSupporter && userAccount.NBombUsesThisHour <= 0 && userAccount.Diamonds >= 50)
-            {
-                embed.WithDescription($"{Context.User.Mention} You are out of `{cmdPrefix}n bomb` uses for this hour." +
-                    $"\nHowever, I see that you have more than 50<a:KaguyaDiamonds:581562698228301876> in your account. Would " +
-                    $"you like to use 50<a:KaguyaDiamonds:581562698228301876> and reset your cooldown? (You have 10 seconds to respond)");
-                embed.WithFooter($"Current Balance: {userAccount.Diamonds} Diamonds");
-
-                Emoji[] reactions = { new Emoji("✅"), new Emoji("❌") };
-
-                ReactionCallbackData data = new ReactionCallbackData("", embed.Build(), timeout: TimeSpan.FromSeconds(10));
-
-                var reactionCallback = await Interactive.SendMessageWithReactionCallbacksAsync(Context, data);
-                await reactionCallback.AddReactionsAsync(reactions);
-
-                await Task.Delay(10000); //Wait 10 seconds before processing the reactions.
-
-                var reactors = await reactionCallback.GetReactionUsersAsync(reactions[0], 30).FlattenAsync();
-
-                if (reactors.Contains(Context.User))
-                {
-                    userAccount.NBombUsesThisHour = 5;
-                    userAccount.Diamonds -= 50;
-                    UserAccounts.SaveAccounts();
-                    embed.WithDescription($"{Context.User.Mention} I have deducted 50<a:KaguyaDiamonds:581562698228301876> from your " +
-                        $"account and your `{cmdPrefix}n bomb` cooldown has been reset.");
-                    embed.SetColor(EmbedType.BLUE);
-                    await BE();
-                    return;
-                }
-                else
-                    await reactionCallback.DeleteAsync();
             }
 
             if (!isSupporter && userAccount.NBombUsesThisHour <= 0)

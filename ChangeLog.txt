@@ -3,6 +3,13 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.25.1
+
+- Gambling stats are now logged in the console.
+- Released a hotfix that fixed a bug where $n bomb would not work most of the time.
+    - This reverts the feature where a user is prompted to spend their diamonds
+    to reset their $n bomb cooldown if they have enough points.
+
 Version 1.25
 
 - If a user runs out of "$n bomb" uses for the hour, it will now display this in the console.
@@ -38,7 +45,6 @@ Version 1.25
     50 of your diamonds to reset the cooldown. This can be done as many times as you want until you have less than
     50 diamonds. If you do not react with a check mark, you will be reminded that you can upvote Kaguya on DBL to reset
     your cooldown.
-
 
 Version 1.24
 

@@ -166,19 +166,33 @@ namespace Kaguya.Modules
             }
         }
 
-        private void GambleHistory(UserAccount uAccount, int roll, int pointsGambled, int pointsWonLost, bool winner = true)
+        private void GambleHistory(UserAccount uAccount, int roll, int pointsGambled, int pointsWonLost, int luck, bool winner = true)
         {
+            Logger logger = new Logger();
+
             if (uAccount.GambleHistory.Count >= 10)
                 uAccount.GambleHistory.RemoveAt(0);
 
+            int j = 0;
+
+            if (luck >= 5)
+            {
+                for (int i = 0; i < luck; i++)
+                {
+                    j += 2;
+                }
+            }
+
             if (winner)
             {
+                logger.ConsoleGuildAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Gambled: {pointsGambled} - Points Won: {pointsWonLost} - Luck: {j}");
                 uAccount.GambleHistory.Add($"\n🔵 Roll: `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
                     $"Points Won: `{pointsWonLost.ToString("N0")}` - `{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
                 UserAccounts.SaveAccounts();
             }
             else
             {
+                logger.ConsoleGuildAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Lost: {pointsWonLost} - Luck: {j}");
                 uAccount.GambleHistory.Add($"\n🔴 Roll: `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
                     $"Points Lost: `{pointsWonLost.ToString("N0")}` - `{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
                 UserAccounts.SaveAccounts();
@@ -191,12 +205,15 @@ namespace Kaguya.Modules
         {
             var user = Context.User;
             var userAccount = UserAccounts.GetAccount(Context.User);
+            Logger logger = new Logger();
+
             if (points > userAccount.Points)
             {
                 embed.WithTitle("Gambling: Insufficient Points!");
                 embed.WithDescription($"{user.Mention} you have an insufficient amount of points!" +
                     $"\nThe maximum amount you may gamble is {userAccount.Points}.");
                 await BE();
+                logger.ConsoleGuildAdvisory($"User does not have enough points to gamble the requested amount.");
                 return;
             }
             if (points < 1)
@@ -204,6 +221,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Gambling: Too Few Points!");
                 embed.WithDescription($"{user.Mention} You may not gamble less than one point!");
                 await BE();
+                logger.ConsoleGuildAdvisory($"User may not gamble less than one point.");
                 return;
             }
             if (points > 25000 && !((userAccount.KaguyaSupporterExpiration - DateTime.Now).TotalSeconds > 0))
@@ -212,6 +230,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{user.Mention} you are attempting to gamble too many points!" +
                     $"\nThe maximum amount you may gamble is `25,000` points.**");
                 await BE();
+                logger.ConsoleGuildAdvisory("User attempted to gamble too many points.");
                 return;
             }
 
@@ -253,7 +272,7 @@ namespace Kaguya.Modules
                 userAccount.GamblingBadLuckStreak++;
                 userAccount.TotalCurrencyLost += points;
                 userAccount.TotalCurrencyGambled += points;
-                GambleHistory(userAccount, roll, points, points, false);
+                GambleHistory(userAccount, roll, points, points, userAccount.GamblingBadLuckStreak, false);
 
                 string[] sadEmotes = { "<:PepeHands:431853568669253632>", "<:FeelsBadMan:431647398071107584>", "<:FeelsWeirdMan:431148381449224192>" };
                 Random randEmote = new Random();
@@ -268,8 +287,10 @@ namespace Kaguya.Modules
             {
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
-                userAccount.GamblingBadLuckStreak = 0;
                 userAccount.TotalCurrencyGambled += points;
+
+                int luck = userAccount.GamblingBadLuckStreak;
+                userAccount.GamblingBadLuckStreak = 0;
 
                 string[] happyEmotes1 = { "<:peepoHappy:479314678699524116>", "<:EZ:431149816127553547>", "<a:pats:432262215018741780>" };
                 Random randEmote = new Random();
@@ -280,7 +301,7 @@ namespace Kaguya.Modules
 
                 userAccount.Points += (uint)(points * multiplier);
                 userAccount.TotalCurrencyAwarded += points;
-                GambleHistory(userAccount, roll, points, (int)(points * multiplier));
+                GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 if (critical)
                     embed.WithTitle($"Gambling: Winner! It's a critical hit!! {happyEmotes1[num]}");
@@ -299,9 +320,11 @@ namespace Kaguya.Modules
             {
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
-                userAccount.GamblingBadLuckStreak = 0;
                 userAccount.TotalCurrencyAwarded += points;
                 userAccount.TotalCurrencyGambled += points;
+
+                int luck = userAccount.GamblingBadLuckStreak;
+                userAccount.GamblingBadLuckStreak = 0;
 
                 string[] happyEmotes2 = { "<:Pog:484960397946912768>", "<:PogChamp:433109653501640715>", "<:nepWink:432745215217106955>" };
                 Random randEmote = new Random();
@@ -311,7 +334,7 @@ namespace Kaguya.Modules
                 if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
-                GambleHistory(userAccount, roll, points, (int)(points * multiplier));
+                GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 if (critical)
                     embed.WithTitle($"Gambling Winner: High Roll! It's a critical hit!! {happyEmotes2[num]}");
@@ -327,9 +350,12 @@ namespace Kaguya.Modules
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
-                userAccount.GamblingBadLuckStreak = 0;
                 userAccount.TotalCurrencyAwarded += points;
                 userAccount.TotalCurrencyGambled += points;
+
+                int luck = userAccount.GamblingBadLuckStreak;
+                userAccount.GamblingBadLuckStreak = 0;
+
 
                 string[] eliteEmotes = { "<:PogU:509194017368702987>", "<a:Banger:506288311829135386>" };
                 Random randEmote = new Random();
@@ -339,7 +365,7 @@ namespace Kaguya.Modules
                 if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
-                GambleHistory(userAccount, roll, points, (int)(points * multiplier));
+                GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 if (critical)
                     embed.WithTitle($"Gambling Winner: Elite Roll! It's a critical hit!! {eliteEmotes[num]}");
@@ -356,9 +382,11 @@ namespace Kaguya.Modules
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
-                userAccount.GamblingBadLuckStreak = 0;
                 userAccount.TotalCurrencyAwarded += points;
                 userAccount.TotalCurrencyGambled += points;
+
+                int luck = userAccount.GamblingBadLuckStreak;
+                userAccount.GamblingBadLuckStreak = 0;
 
                 string[] superEliteEmotes = { "<:YES:462371445864136732>", "<:smug:453259470815100941>", "<:Woww:442687161871892502>" };
                 Random randEmote = new Random();
@@ -368,7 +396,7 @@ namespace Kaguya.Modules
                 if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
-                GambleHistory(userAccount, roll, points, (int)(points * multiplier));
+                GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 if (critical)
                     embed.WithTitle($"Gambling Winner: Super Elite Roll! It's a critical hit!!! {superEliteEmotes[num]}");
@@ -385,9 +413,11 @@ namespace Kaguya.Modules
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
-                userAccount.GamblingBadLuckStreak = 0;
                 userAccount.TotalCurrencyAwarded += points;
                 userAccount.TotalCurrencyGambled += points;
+
+                int luck = userAccount.GamblingBadLuckStreak;
+                userAccount.GamblingBadLuckStreak = 0;
 
                 string sirenEmote = "<a:siren:429784681316220939>";
 
@@ -401,7 +431,7 @@ namespace Kaguya.Modules
                     embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! {sirenEmote}");
 
                 userAccount.Points += (uint)(points * multiplier);
-                GambleHistory(userAccount, roll, points, (int)(points * multiplier));
+                GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**\n" +
                     $"\nNew Average Chance of Elite+ Roll: **`{(userAccount.LifetimeEliteRolls / userAccount.LifetimeGambles).ToString("P")}`**");

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Linq;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Owner_Only
@@ -27,6 +28,26 @@ namespace Kaguya.Modules.Owner_Only
         public async Task BE() //Method to build and send an embedded message.
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
+        }
+
+        [RequireOwner]
+        [Command("pointslb")]
+        public async Task PointsLeaderboard()
+        {
+            var users = UserAccounts.GetAllAccounts();
+            var order = users.OrderByDescending(x => x.Points).Take(15);
+            string description = "";
+            int i = 0;
+
+            foreach(var user in order)
+            {
+                i++;
+                description += $"\n**#{i}.** `{user.Username}` - Points: `{user.Points.ToString("N0")}`";
+            }
+
+            embed.WithTitle($"Kaguya Global Points Leaderboard");
+            embed.WithDescription(description);
+            await BE();
         }
 
         [Command("serverblacklist")]
