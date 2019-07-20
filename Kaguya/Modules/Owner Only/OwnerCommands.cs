@@ -9,11 +9,10 @@ using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Linq;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Owner_Only

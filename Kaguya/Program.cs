@@ -7,7 +7,6 @@ using Kaguya.Core.Command_Handler;
 using Kaguya.Core.CommandHandler;
 using Kaguya.Core.Embed;
 using Kaguya.Modules.Music;
-using Kaguya.Modules.Owner_Only;
 using Kaguya.Modules.Utility;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -61,6 +60,7 @@ namespace Kaguya
                     _client.ShardReady += timers.ResourcesBackup;
                     _client.ShardReady += timers.MessageCacheTimer;
                     _client.ShardReady += timers.SupporterExpirationTimer;
+                    _client.ShardReady += timers.RateLimitResetTimer;
 
                     _client.MessageReceived += logger.osuLinkParser;
                     _client.JoinedGuild += logger.JoinedNewGuild;

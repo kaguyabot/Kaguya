@@ -39,7 +39,7 @@ namespace Kaguya.Core.CommandHandler
             Console.WriteLine("\nRetrieving bot from DBL API...");
             try
             {
-                if (Global.ShardsLoggedIn == Global.ShardsToLogIn)
+                if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1250) //1250 is around how many guilds the bot should be in.
                 {
                     IDblSelfBot me = await dblAPI.GetMeAsync();
                     Console.WriteLine("Pushing stats to DBL API...");

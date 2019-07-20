@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Core.UserAccounts;
-using System.Net;
-using Kaguya.Core.Server_Files;
-using OppaiSharp;
 using Kaguya.Core.Embed;
+using Kaguya.Core.Server_Files;
+using Kaguya.Core.UserAccounts;
+using Newtonsoft.Json;
+using OppaiSharp;
+using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
 #pragma warning disable

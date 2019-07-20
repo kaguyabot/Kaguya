@@ -90,12 +90,6 @@ namespace Kaguya
 
             Leveling.UserSentMessage(user, msg.Channel as SocketTextChannel);
 
-            string oldUsername = userAccount.Username;
-            string newUsername = context.User.Username;
-
-            if ($"{oldUsername}" != $"{newUsername}#{user.Discriminator}")
-                userAccount.Username = $"{newUsername}#{user.Discriminator}";
-
             int argPos = 0;
 
             if (!msg.HasStringPrefix(guild.commandPrefix.ToLower(), ref argPos) && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
@@ -113,6 +107,7 @@ namespace Kaguya
                 userAccount.RecentlyUsedCommands.Add(msg.Content.ToLower());
                 if (userAccount.RecentlyUsedCommands.Count > 10)
                     userAccount.RecentlyUsedCommands.RemoveAt(0);
+                userAccount.CommandRateLimit++;
                 UserAccounts.SaveAccounts();
             }
 

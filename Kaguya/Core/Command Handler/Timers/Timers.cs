@@ -24,6 +24,98 @@ namespace Kaguya.Core.Command_Handler
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
         }
 
+        private int RateLimitTimersActive = 0;
+
+        public Task RateLimitResetTimer(DiscordSocketClient client)
+        {
+            if(RateLimitTimersActive < 1)
+            {
+                Timer timer = new Timer(5000); //Milliseconds at which to reset the rate limit (5 seconds)
+                timer.Enabled = true;
+                timer.Elapsed += RateLimit_Reset_Timer_Elapsed;
+                RateLimitTimersActive++;
+            }
+            return Task.CompletedTask;
+        }
+
+        private void RateLimit_Reset_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var accounts = Global.UserAccounts;
+            embed.WithTitle($"⚠️ Kaguya Rate Limit Advisory ⚠️");
+
+            foreach(var account in accounts)
+            {
+                //This checks whether the user has previously been temp blacklisted. If they have,
+                //and the expiration is finished, unblacklist them.
+
+                if(account.RatelimitStrikes > 0 && account.RatelimitStrikes < 5 && 
+                    (account.TemporaryBlacklistExpiration - DateTime.Now).TotalSeconds < 0)
+                {
+                    account.IsBlacklisted = false;
+                }
+
+                if(account.CommandRateLimit >= 3) //If someone has used at least 3 commands in 5 seconds, add a strike.
+                {
+                    account.RatelimitStrikes++;
+                    if(account.RatelimitStrikes == 1)
+                    {
+                        string timeout = "60 seconds.";
+                        embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
+                        $"Please slow down with your command usage. You have been blacklisted for {timeout}");
+                        account.IsBlacklisted = true;
+                        account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(60);
+                        Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build()); 
+                        // ^ Try to DM them and let them know they're blacklisted ^
+                    }
+
+                    if(account.RatelimitStrikes == 2)
+                    {
+                        string timeout = "10 minutes";
+                        embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
+                        $"Please slow down with your command usage. You have been blacklisted for {timeout}");
+                        account.IsBlacklisted = true;
+                        account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(600);
+                        Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
+                        // ^ Try to DM them and let them know they're blacklisted ^
+                    }
+
+                    if (account.RatelimitStrikes == 3)
+                    {
+                        string timeout = "60 minutes";
+                        embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
+                        $"Please slow down with your command usage. You have been blacklisted for {timeout}.");
+                        account.IsBlacklisted = true;
+                        account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(3600);
+                        Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
+                        // ^ Try to DM them and let them know they're blacklisted ^
+                    }
+
+                    if (account.RatelimitStrikes == 4)
+                    {
+                        string timeout = "12 hours";
+                        embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
+                        $"Please slow down with your command usage. You have been blacklisted for {timeout}." +
+                        $"\n**If you continue to breach the rate limit (3 commands within 5 seconds), you will be permanently blacklisted.**");
+                        account.IsBlacklisted = true;
+                        account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(43200);
+                        Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
+                        // ^ Try to DM them and let them know they're blacklisted ^
+                    }
+
+                    if(account.RatelimitStrikes == 5)
+                    {
+                        embed.WithDescription($"You have been permanently blacklisted due to repetitive breaching of " +
+                            $"the rate limit. All points and EXP have been reset to zero. This blacklist will not be lifted.");
+                        account.Points = 0;
+                        account.EXP = 0;
+                        account.TemporaryBlacklistExpiration += TimeSpan.FromDays(900000); //Perma blacklist
+                    }
+                }
+                account.CommandRateLimit = 0;
+            }
+            UserAccounts.UserAccounts.SaveAccounts();
+        }
+
         public Task SupporterExpirationTimer(DiscordSocketClient client) //Checks supporter expiration times
         {
             if (SupporterExpTimersActive < 1)
@@ -33,7 +125,6 @@ namespace Kaguya.Core.Command_Handler
                 timer.Elapsed += Supporter_Expiration_Timer_Elapsed;
                 timer.AutoReset = true;
                 SupporterExpTimersActive++;
-                return Task.CompletedTask;
             }
             return Task.CompletedTask;
         }
