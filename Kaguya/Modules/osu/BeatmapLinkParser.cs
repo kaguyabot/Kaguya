@@ -1,16 +1,16 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using Kaguya.Core;
+using Kaguya.Core.Embed;
+using Kaguya.Core.UserAccounts;
 using Newtonsoft.Json;
 using OppaiSharp;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Diagnostics;
-using Kaguya.Core;
-using Kaguya.Core.Embed;
-using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.osu
 {
@@ -23,6 +23,10 @@ namespace Kaguya.Modules.osu
 
         public async Task LinkParserMethod(SocketMessage s, KaguyaEmbedBuilder embed, SocketCommandContext context)
         {
+            var account = UserAccounts.GetAccount(context.User);
+            account.CommandRateLimit++;
+            if (account.IsBlacklisted)
+                return;
             stopWatch.Start();
             string link = $"{s}";
             string mapID = link.Split('/').Last(); //Gets the map's ID from the link.

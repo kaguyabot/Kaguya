@@ -3,6 +3,24 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.26
+
+- This update features a long awaited feature: The Kaguya Ratelimit!
+    - Kaguya now has a global command rate limit of 3 commands every 5 seconds. Anything in
+    excess will result in a "ratelimit strike".
+    - Upon receiving a ratelimit strike, Kaguya will DM you letting you know that you are
+    abusing the ratelimit and have been temporarily blacklisted from the bot.
+    - The ratelimit strikes each have an increasingly long blacklist duration, depending on 
+    how many strikes you have.
+        - First strike: 60 seconds
+        - Second strike: 10 minutes
+        - Third strike: 60 minutes
+        - Fourth strike: 12 hours
+        - Fifth strike: Permanent (900,000 days), points and EXP reset to zero.
+    - The ratelimit applies to all commands globally.
+- osu! beatmap linkage now no longer works if the user's account is blacklisted.
+- osu! beatmap linkage is now treated as a command and will apply to the ratelimit.
+
 Version 1.25.1
 
 - Gambling stats are now logged in the console.

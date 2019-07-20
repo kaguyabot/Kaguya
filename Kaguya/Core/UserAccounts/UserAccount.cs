@@ -13,7 +13,8 @@ namespace Kaguya.Core.UserAccounts
         public int Rep { get; set; }
         public int KaguyaWarnings { get; set; }
         public int NBombUsesThisHour { get; set; }
-        public int RatelimitStrikes { get; set; }
+        public int CommandRateLimit { get; set; }
+        public int RatelimitStrikes { get; set; } //Normal command rate limit strikes
         public List<string> RecentlyUsedCommands { get; set; }
         public int GamblingBadLuckStreak { get; set; }
         public bool IsSupporter
@@ -23,6 +24,7 @@ namespace Kaguya.Core.UserAccounts
                 return (KaguyaSupporterExpiration - DateTime.Now).TotalSeconds > 0;
             }
         }
+        public DateTime TemporaryBlacklistExpiration { get; set; }
         public DateTime LastReceivedEXP { get; set; }
         public DateTime LastReceivedTimelyPoints { get; set; }
         public DateTime LastGivenRep { get; set; }
@@ -51,14 +53,13 @@ namespace Kaguya.Core.UserAccounts
 
         public UserAccount(ulong id)
         {
+            Username = "";
             ID = id;
             Points = 0;
             EXP = 0;
             Diamonds = 0;
             Rep = 0;
-            LifetimeGambleWins = 0;
-            LifetimeGambleLosses = 0;
-            LifetimeEliteRolls = 0;
+            CommandRateLimit = 0;
             KaguyaWarnings = 0;
             OsuUsername = null;
             IsBlacklisted = false;
