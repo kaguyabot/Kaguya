@@ -83,8 +83,7 @@ namespace Kaguya.Core.Command_Handler
                     {
                         string timeout = "60 minutes";
                         embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
-                        $"Please slow down with your command usage. You have been blacklisted for {timeout}." +
-                        $"\n**If you continue to breach Kaguya's **");
+                        $"Please slow down with your command usage. You have been blacklisted for {timeout}.");
                         account.IsBlacklisted = true;
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(3600);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
@@ -96,7 +95,7 @@ namespace Kaguya.Core.Command_Handler
                         string timeout = "12 hours";
                         embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
                         $"Please slow down with your command usage. You have been blacklisted for {timeout}." +
-                        $"\n**If you continue to breach the rate limit, you will be permanently blacklisted.**");
+                        $"\n**If you continue to breach the rate limit (3 commands within 5 seconds), you will be permanently blacklisted.**");
                         account.IsBlacklisted = true;
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(43200);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
