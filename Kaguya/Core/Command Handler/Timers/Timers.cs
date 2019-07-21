@@ -30,7 +30,7 @@ namespace Kaguya.Core.Command_Handler
         {
             if(RateLimitTimersActive < 1)
             {
-                Timer timer = new Timer(5000); //Milliseconds at which to reset the rate limit (5 seconds)
+                Timer timer = new Timer(4250); //Milliseconds at which to reset the rate limit (4.25 seconds)
                 timer.Enabled = true;
                 timer.Elapsed += RateLimit_Reset_Timer_Elapsed;
                 RateLimitTimersActive++;
@@ -40,6 +40,7 @@ namespace Kaguya.Core.Command_Handler
 
         private void RateLimit_Reset_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            Logger logger = new Logger();
             var accounts = Global.UserAccounts;
             embed.WithTitle($"⚠️ Kaguya Rate Limit Advisory ⚠️");
 
@@ -49,12 +50,22 @@ namespace Kaguya.Core.Command_Handler
                 //and the expiration is finished, unblacklist them.
 
                 if(account.RatelimitStrikes > 0 && account.RatelimitStrikes < 5 && 
-                    (account.TemporaryBlacklistExpiration - DateTime.Now).TotalSeconds < 0)
+                    (account.TemporaryBlacklistExpiration - DateTime.Now).TotalSeconds < 0 && account.IsBlacklisted)
                 {
                     account.IsBlacklisted = false;
+                    logger.ConsoleStatusAdvisory($"User {account.Username} " +
+                        $"(ID: {account.ID}) has been unblacklisted after being ratelimited.");
                 }
 
-                if(account.CommandRateLimit >= 3) //If someone has used at least 3 commands in 5 seconds, add a strike.
+                if(account.RatelimitStrikes > 0 && account.RatelimitStrikes < 5 &&
+                    (DateTime.Now - account.TemporaryBlacklistExpiration).TotalDays > 30)
+                {
+                    account.RatelimitStrikes = 0;
+                    logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has " +
+                        $"had their ratelimit strikes reset due to not ratelimiting for the last 30 days.");
+                }
+
+                if (account.CommandRateLimit >= 3) //If someone has used at least 3 commands in 5 seconds, add a strike.
                 {
                     account.RatelimitStrikes++;
                     if(account.RatelimitStrikes == 1)
@@ -64,42 +75,50 @@ namespace Kaguya.Core.Command_Handler
                         $"Please slow down with your command usage. You have been blacklisted for {timeout}");
                         account.IsBlacklisted = true;
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(60);
-                        Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build()); 
+                        Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
                         // ^ Try to DM them and let them know they're blacklisted ^
+                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been temporarily blacklisted " +
+                            $"for {timeout}");
                     }
 
                     if(account.RatelimitStrikes == 2)
                     {
-                        string timeout = "10 minutes";
+                        string timeout = "10 minutes.";
                         embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
                         $"Please slow down with your command usage. You have been blacklisted for {timeout}");
                         account.IsBlacklisted = true;
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(600);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
                         // ^ Try to DM them and let them know they're blacklisted ^
+                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been temporarily blacklisted " +
+                            $"for {timeout}");
                     }
 
                     if (account.RatelimitStrikes == 3)
                     {
-                        string timeout = "60 minutes";
+                        string timeout = "60 minutes.";
                         embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
                         $"Please slow down with your command usage. You have been blacklisted for {timeout}.");
                         account.IsBlacklisted = true;
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(3600);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
                         // ^ Try to DM them and let them know they're blacklisted ^
+                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been temporarily blacklisted " +
+                            $"for {timeout}");
                     }
 
                     if (account.RatelimitStrikes == 4)
                     {
-                        string timeout = "12 hours";
+                        string timeout = "12 hours.";
                         embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
                         $"Please slow down with your command usage. You have been blacklisted for {timeout}." +
-                        $"\n**If you continue to breach the rate limit (3 commands within 5 seconds), you will be permanently blacklisted.**");
+                        $"\n**If you continue to breach the rate limit (3 commands within 4.25 seconds), you will be permanently blacklisted.**");
                         account.IsBlacklisted = true;
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(43200);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
                         // ^ Try to DM them and let them know they're blacklisted ^
+                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been temporarily blacklisted " +
+                            $"for {timeout}");
                     }
 
                     if(account.RatelimitStrikes == 5)
@@ -109,6 +128,8 @@ namespace Kaguya.Core.Command_Handler
                         account.Points = 0;
                         account.EXP = 0;
                         account.TemporaryBlacklistExpiration += TimeSpan.FromDays(900000); //Perma blacklist
+                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been " +
+                            $"permanently blacklisted due to receiving 5 ratelimit strikes.");
                     }
                 }
                 account.CommandRateLimit = 0;

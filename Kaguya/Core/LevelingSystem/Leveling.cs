@@ -24,11 +24,13 @@ namespace Kaguya.Core.LevelingSystem
                     return;
 
                 uint oldLevel = userAccount.LevelNumber;
+
                 Random random = new Random();
                 uint newExp = (uint)random.Next(5, 8);
+
                 userAccount.EXP += newExp;
                 userAccount.LastReceivedEXP = DateTime.Now;
-                UserAccounts.UserAccounts.SaveAccounts();
+
                 uint newLevel = userAccount.LevelNumber;
                 Server guild = Servers.GetServer(channel.Guild);
                 if (oldLevel != userAccount.LevelNumber && guild.MessageAnnouncements == true)

@@ -104,8 +104,6 @@ namespace Kaguya.Modules.Owner_Only
             totalWarnings++; //Adds a global Kaguya warning to the user's account.
             userAccount.KaguyaWarnings = totalWarnings;
 
-            UserAccounts.SaveAccounts();
-
             var dmChannel = await user.GetOrCreateDMChannelAsync();
 
             embed.WithTitle($"⚠️ Kaguya Global Warning");
@@ -130,8 +128,6 @@ namespace Kaguya.Modules.Owner_Only
                 userAccount.EXP = 0;
                 userAccount.Points = 0;
                 userAccount.Rep = 0;
-
-                UserAccounts.SaveAccounts();
 
                 embed.WithTitle($"⚠️ Kaguya Blacklist ⚠️");
                 embed.WithDescription($"You have been blacklisted from Kaguya due to receiving too many global warnings from a Kaguya Administrator." +
@@ -167,7 +163,6 @@ namespace Kaguya.Modules.Owner_Only
                 var user = _client.GetUser(ID);
                 var userAccount = UserAccounts.GetAccount(ID);
                 userAccount.IsBlacklisted = false;
-                UserAccounts.SaveAccounts();
 
                 description += $"\n`{user.Username}` has been `unblacklisted`.";
                 i++;
@@ -201,8 +196,6 @@ namespace Kaguya.Modules.Owner_Only
                 userAccount.Points = 0;
                 userAccount.IsBlacklisted = true;
 
-                UserAccounts.SaveAccounts();
-
                 blacklist += $"\n**`{discordUser}` has been `blacklisted`.**";
                 logger.ConsoleCriticalAdvisory($"{discordUser} has been permanently blacklisted.");
             }
@@ -223,7 +216,6 @@ namespace Kaguya.Modules.Owner_Only
             {
                 var userAccount = UserAccounts.GetAccount(Context.User);
                 userAccount.Points += points;
-                UserAccounts.SaveAccounts();
                 embed.WithTitle("Adding Points");
                 embed.WithDescription($"{user.Mention} has been awarded {points} points.");
                 await BE();
@@ -232,7 +224,6 @@ namespace Kaguya.Modules.Owner_Only
             {
                 var userAccount = UserAccounts.GetAccount((SocketUser)user);
                 userAccount.Points += points;
-                UserAccounts.SaveAccounts();
                 embed.WithTitle("Adding Points");
                 embed.WithDescription($"{user.Mention} has been awarded {points} points.");
                 await BE();
@@ -251,7 +242,6 @@ namespace Kaguya.Modules.Owner_Only
         {
             var userAccount = UserAccounts.GetAccount(user as SocketUser);
             userAccount.Points += 2000;
-            UserAccounts.SaveAccounts();
 
             var dmChannel = await user.GetOrCreateDMChannelAsync();
             await dmChannel.SendMessageAsync($"Hello, you reported a bug that led to a fix! As a reward, `2,000 Kaguya Points` have been added to your account. Thank you for your contribution, and " +
@@ -275,7 +265,7 @@ namespace Kaguya.Modules.Owner_Only
                 i++;
                 account.Points = (uint)(account.Points + bonus);
             }
-            UserAccounts.SaveAccounts();
+
             embed.WithTitle("Points Awarded");
             embed.WithDescription($"{Context.User.Mention} has awarded `{bonus.ToString("N0")}` points to `{i.ToString("N0")}` users!");
             embed.SetColor(EmbedColor.GOLD);
@@ -310,7 +300,6 @@ namespace Kaguya.Modules.Owner_Only
             else if (exp < 0)
                 account.EXP -= (uint)exp;
 
-            UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{Context.User.Mention} has gained {exp} EXP.");
             await BE();
@@ -328,7 +317,6 @@ namespace Kaguya.Modules.Owner_Only
             else if (exp < 0)
                 account.EXP -= (uint)exp;
 
-            UserAccounts.SaveAccounts();
             embed.WithTitle("Adding Experience Points");
             embed.WithDescription($"{user.Mention} has gained {exp} EXP.");
             await BE();

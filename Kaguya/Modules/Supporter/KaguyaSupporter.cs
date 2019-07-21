@@ -32,7 +32,6 @@ namespace Kaguya.Modules.Supporter
                 {
                     userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(30);
                     userAccount.Diamonds += 600;
-                    UserAccounts.SaveAccounts();
                     thirtyDayKeys.Remove(thirtyDayKey);
                     File.WriteAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/30DayKeys.txt", thirtyDayKeys);
 
@@ -61,7 +60,6 @@ namespace Kaguya.Modules.Supporter
                 {
                     userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(60);
                     userAccount.Diamonds += 1200;
-                    UserAccounts.SaveAccounts();
                     thirtyDayKeys.Remove(sixtyDayKey);
                     File.WriteAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/60DayKeys.txt", thirtyDayKeys);
 
@@ -90,7 +88,6 @@ namespace Kaguya.Modules.Supporter
                 {
                     userAccount.KaguyaSupporterExpiration = DateTime.Now.AddDays(90);
                     userAccount.Diamonds += 1800;
-                    UserAccounts.SaveAccounts();
                     thirtyDayKeys.Remove(ninetyDayKey);
                     File.WriteAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/90DayKeys.txt", thirtyDayKeys);
 

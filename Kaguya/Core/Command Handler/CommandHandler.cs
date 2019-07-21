@@ -108,7 +108,6 @@ namespace Kaguya
                 if (userAccount.RecentlyUsedCommands.Count > 10)
                     userAccount.RecentlyUsedCommands.RemoveAt(0);
                 userAccount.CommandRateLimit++;
-                UserAccounts.SaveAccounts();
             }
 
             if (!result.IsSuccess)

@@ -52,7 +52,6 @@ namespace Kaguya.Modules.NSFW
             {
                 userAccount.NBombUsesThisHour = 5;
                 userAccount.NBombCooldownReset = DateTime.Now + TimeSpan.FromMinutes(60);
-                UserAccounts.SaveAccounts();
             }
 
             if (!isSupporter && userAccount.NBombUsesThisHour <= 0)
@@ -68,7 +67,6 @@ namespace Kaguya.Modules.NSFW
             if (!isSupporter)
             {
                 userAccount.NBombUsesThisHour -= 1;
-                UserAccounts.SaveAccounts();
             }
 
             for (int i = 0; i < 5; i++)

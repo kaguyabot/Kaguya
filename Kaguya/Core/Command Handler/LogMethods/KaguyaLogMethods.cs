@@ -81,10 +81,11 @@ namespace Kaguya.Core.CommandHandler
         {
             if (Global.ShardsLoggedIn == Global.ShardsToLogIn)
             {
-                Console.WriteLine("\nAccounts loaded.");
+                Console.WriteLine("\nAttempting to load accounts...");
                 Global.UserAccounts = DataStorage2.LoadUserAccounts("Resources/accounts.json").ToList();
-                Console.WriteLine("\nServers loaded.");
+                Console.WriteLine("Accounts loaded. \nAttempting to load servers...");
                 Global.Servers = DataStorage2.LoadServers("Resources/servers.json").ToList();
+                Console.WriteLine("Servers loaded.\n");
             }
         }
 

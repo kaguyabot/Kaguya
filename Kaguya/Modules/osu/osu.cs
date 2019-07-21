@@ -145,7 +145,6 @@ namespace Kaguya.Modules
                 //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
                 return;
             }
-            UserAccounts.SaveAccounts();
 
             embed.WithTitle("osu! Username Set");
             embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed from `{oldUsername}` to `{userAccount.OsuUsername}`.**");

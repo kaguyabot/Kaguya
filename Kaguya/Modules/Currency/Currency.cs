@@ -58,17 +58,22 @@ namespace Kaguya.Modules
                 await BE();
                 return;
             }
+
             if (difference.TotalHours < 6) //Difference of now compared to when user last upvoted Kaguya on DBL.
                 critical = rand.Next(100) < 12;
+
             if (supporterTime.TotalSeconds > 0)
                 critical = rand.Next(100) < 12;
+
             if (difference.TotalHours < 12 && supporterTime.TotalSeconds > 0)
                 critical = rand.Next(100) < 24;
+
             if(critical) { bonus *= 3.50; }
+
             userAccount.Points += (uint)bonus;
             userAccount.TotalCurrencyAwarded += (int)bonus;
             userAccount.LastReceivedTimelyPoints = DateTime.Now;
-            UserAccounts.SaveAccounts();
+
             embed.WithTitle("Timely Points");
             if (critical)
                 embed.WithDescription($"{Context.User.Mention} it's a critical hit! {Context.User.Username} has received `{bonus}` points! Claim again in {timeout}h.");
@@ -110,8 +115,6 @@ namespace Kaguya.Modules
                 userAccount.Points += (uint)(diamonds * 100);
                 userAccount.TotalCurrencyAwarded += (diamonds * 100);
                 userAccount.Diamonds -= (uint)diamonds;
-
-                UserAccounts.SaveAccounts();
 
                 embed.WithDescription($"{Context.User.Mention} **Successfully converted " +
                     $"<a:KaguyaDiamonds:581562698228301876>`{diamonds.ToString("N0")}` into `{(diamonds * 100).ToString("N0")}` points.**");
@@ -188,14 +191,12 @@ namespace Kaguya.Modules
                 logger.ConsoleGuildAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Gambled: {pointsGambled} - Points Won: {pointsWonLost} - Luck: {j}");
                 uAccount.GambleHistory.Add($"\n🔵 Roll: `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
                     $"Points Won: `{pointsWonLost.ToString("N0")}` - `{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
-                UserAccounts.SaveAccounts();
             }
             else
             {
                 logger.ConsoleGuildAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Lost: {pointsWonLost} - Luck: {j}");
                 uAccount.GambleHistory.Add($"\n🔴 Roll: `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
                     $"Points Lost: `{pointsWonLost.ToString("N0")}` - `{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
-                UserAccounts.SaveAccounts();
             }
         }
 
@@ -440,7 +441,6 @@ namespace Kaguya.Modules
                 embed.SetColor(EmbedColor.GOLD);
                 await BE();
             }
-            UserAccounts.SaveAccounts();
         }
 
         [Command("history")]
@@ -506,7 +506,6 @@ namespace Kaguya.Modules
             await BE();
 
             userAccount.Points += bonus;
-            UserAccounts.SaveAccounts();
         }
 
         internal static bool CanReceiveTimelyPoints(UserAccount user, int timeout)

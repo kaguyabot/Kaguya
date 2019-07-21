@@ -35,7 +35,6 @@ namespace Kaguya.Modules
                 userAccounts.Add(allAccs);
             }
 
-            UserAccounts.SaveAccounts();
             var users10 = userAccounts.OrderByDescending(u => u.EXP).Take(10);
             embed.WithTitle("Server EXP Leaderboard");
             int i = 1;
@@ -81,7 +80,6 @@ namespace Kaguya.Modules
             {
                 userAccount.Rep++;
                 commandUserAcc.LastGivenRep = DateTime.Now;
-                UserAccounts.SaveAccounts();
                 Console.WriteLine($"{Context.User.Username}#{Context.User.Discriminator} has given +1 rep to {userAccount.Username}");
                 embed.WithTitle("+Rep Author");
                 embed.WithDescription("**Successfully gave +1 rep to my creator** uwu.");
@@ -116,7 +114,6 @@ namespace Kaguya.Modules
             {
                 targetAccount.Rep++;
                 userAccount.LastGivenRep = DateTime.Now;
-                UserAccounts.SaveAccounts();
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} Successfully gave rep to {user.Mention}!**");
                 await BE();

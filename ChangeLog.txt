@@ -3,6 +3,13 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.26.1
+
+- The ratelimit has been adjusted to 3 commands every 4.25 seconds (was 5 seconds).
+- Performance/stability increases (account data is now saved every 5 seconds instead of multiple times per second).
+- If a user has previously been ratelimited, but does not exceed the rate limit for thirty days,
+    their ratelimit strikes will be reset.
+
 Version 1.26
 
 - This update features a long awaited feature: The Kaguya Ratelimit!
