@@ -6,6 +6,11 @@ Changelog:
 Version 1.26.2
 
 - $profile's "Total Currency Awarded" is now accurately updated through gamble wins.
+- Active Kaguya supporters have a more lenient rate limit of 5 commands every 4.25 seconds.
+- Users must now verify that they are 18 years old before they may view Kaguya's NSFW content.
+    - Verification is achieved by replying with "I confirm." when prompted.
+    - Verification only happens once. Once the user is verified, they will never have to verify again.
+- Kaguya is now on 2 shards.
 
 Version 1.26.1
 

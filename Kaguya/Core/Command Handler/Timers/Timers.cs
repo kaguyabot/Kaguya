@@ -65,7 +65,8 @@ namespace Kaguya.Core.Command_Handler
                         $"had their ratelimit strikes reset due to not ratelimiting for the last 30 days.");
                 }
 
-                if (account.CommandRateLimit >= 3) //If someone has used at least 3 commands in 4.25 seconds, add a strike.
+                if ((!account.IsSupporter && account.CommandRateLimit >= 3) || 
+                    (account.IsSupporter && account.CommandRateLimit >= 5)) //If someone has used at least 3 commands in 4.25 seconds, add a strike.
                 {
                     account.RatelimitStrikes++;
                     if(account.RatelimitStrikes == 1)

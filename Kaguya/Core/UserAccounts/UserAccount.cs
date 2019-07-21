@@ -15,6 +15,7 @@ namespace Kaguya.Core.UserAccounts
         public int NBombUsesThisHour { get; set; }
         public int CommandRateLimit { get; set; }
         public int RatelimitStrikes { get; set; } //Normal command rate limit strikes
+        public string NSFWAgeVerified { get; set; }
         public List<string> RecentlyUsedCommands { get; set; }
         public int GamblingBadLuckStreak { get; set; }
         public bool IsSupporter
@@ -61,6 +62,7 @@ namespace Kaguya.Core.UserAccounts
             Rep = 0;
             CommandRateLimit = 0;
             KaguyaWarnings = 0;
+            NSFWAgeVerified = "false";
             OsuUsername = null;
             IsBlacklisted = false;
             LifetimeGambleWins = 0;

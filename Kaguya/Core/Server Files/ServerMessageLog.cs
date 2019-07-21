@@ -12,7 +12,7 @@ namespace Kaguya.Core.Server_Files
         public ServerMessageLog(ulong id)
         {
             ID = id;
-            ServerName = Global.client.GetGuild(id).Name;
+            ServerName = "";
             LastFiveHundredMessages = new List<string>();
         }
 
