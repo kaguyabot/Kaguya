@@ -3,6 +3,10 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.26.2
+
+- $profile's "Total Currency Awarded" is now accurately updated through gamble wins.
+
 Version 1.26.1
 
 - The ratelimit has been adjusted to 3 commands every 4.25 seconds (was 5 seconds).
