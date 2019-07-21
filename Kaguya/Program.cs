@@ -33,7 +33,7 @@ namespace Kaguya
 
             try
             {
-                int shards = 1; //SET NUMBER OF SHARDS HERE!!
+                int shards = 2; //SET NUMBER OF SHARDS HERE!!
 
                 Global.ShardsToLogIn = shards;
 
@@ -119,7 +119,6 @@ namespace Kaguya
         {
             ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = Global.client.GetUser(ID).MutualGuilds;
-            var announceChannel = Global.client.GetGuild(546880579057221644).GetChannel(546880579552018433); //#kaguya-general in the support server.
 
             int memberCount = 0;
             int textChannelCount = 0;
@@ -154,22 +153,6 @@ namespace Kaguya
                 Global.TotalTextChannels += textChannelCount;
                 Global.TotalVoiceChannels += voiceChannelCount;
                 Global.ShardsLoggedIn++;
-
-                embed.WithTitle("Kaguya Shard Advisory");
-                embed.WithDescription($"Kaguya Shard {shard.ShardId} logged in. " +
-                    $"Servicing {mutualGuilds.Count} guilds and {memberCount} members.");
-                if(Config.bot.BotUserID == "538910393918160916") //This is so the dev bot won't announce when debugging.
-                {
-                    try
-                    {
-                        (announceChannel as SocketTextChannel).SendMessageAsync(embed: embed.Build());
-                    }
-                    catch (Exception e)
-                    {
-                        Logger logger = new Logger();
-                        logger.ConsoleCriticalAdvisory($"Failed to announce shard status in chat for shard {shard.ShardId}: {e.Message}");
-                    }
-                }
             }
 
             Console.WriteLine("\nShards Logged In: " + Global.ShardsLoggedIn);

@@ -301,7 +301,7 @@ namespace Kaguya.Modules
                 if(critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
-                userAccount.TotalCurrencyAwarded += points;
+                userAccount.TotalCurrencyAwarded += (int)(points * multiplier);
                 GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 if (critical)
@@ -321,7 +321,6 @@ namespace Kaguya.Modules
             {
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
-                userAccount.TotalCurrencyAwarded += points;
                 userAccount.TotalCurrencyGambled += points;
 
                 int luck = userAccount.GamblingBadLuckStreak;
@@ -335,6 +334,7 @@ namespace Kaguya.Modules
                 if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
+                userAccount.TotalCurrencyAwarded += (int)(points * multiplier);
                 GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 if (critical)
@@ -351,7 +351,6 @@ namespace Kaguya.Modules
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
-                userAccount.TotalCurrencyAwarded += points;
                 userAccount.TotalCurrencyGambled += points;
 
                 int luck = userAccount.GamblingBadLuckStreak;
@@ -366,6 +365,7 @@ namespace Kaguya.Modules
                 if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
+                userAccount.TotalCurrencyAwarded += (int)(points * multiplier);
                 GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 if (critical)
@@ -383,7 +383,6 @@ namespace Kaguya.Modules
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
-                userAccount.TotalCurrencyAwarded += points;
                 userAccount.TotalCurrencyGambled += points;
 
                 int luck = userAccount.GamblingBadLuckStreak;
@@ -397,6 +396,7 @@ namespace Kaguya.Modules
                 if (critical) { multiplier *= 2.50; }
 
                 userAccount.Points += (uint)(points * multiplier);
+                userAccount.TotalCurrencyAwarded += (int)(points * multiplier);
                 GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 if (critical)
@@ -414,7 +414,6 @@ namespace Kaguya.Modules
                 userAccount.LifetimeGambleWins++;
                 userAccount.LifetimeGambles++;
                 userAccount.LifetimeEliteRolls++;
-                userAccount.TotalCurrencyAwarded += points;
                 userAccount.TotalCurrencyGambled += points;
 
                 int luck = userAccount.GamblingBadLuckStreak;
@@ -432,6 +431,7 @@ namespace Kaguya.Modules
                     embed.WithTitle($"{sirenEmote} Gambling Winner: Perfect Roll! {sirenEmote}");
 
                 userAccount.Points += (uint)(points * multiplier);
+                userAccount.TotalCurrencyAwarded += (int)(points * multiplier);
                 GambleHistory(userAccount, roll, points, (int)(points * multiplier), luck);
 
                 embed.WithDescription($"**{user.Mention} rolled `{roll}` and won `{(points * multiplier).ToString("N0")}` points, `{multiplier}x` their bet!**\n" +
@@ -519,6 +519,5 @@ namespace Kaguya.Modules
             var difference = DateTime.Now - user.LastReceivedWeeklyPoints;
             return difference.TotalHours > timeout;
         }
-
     }
 }

@@ -14,8 +14,8 @@ namespace Kaguya.Core
             Console.ForegroundColor = ConsoleColor.White;
 
             string cmd = context.Message.Content.Split(' ').First();
-            Console.WriteLine($"\nUser: [{context.User.Username}#{context.User.Discriminator}] Command: [{cmd}]" +
-                $"\nGuild: [{context.Guild.Name} | {context.Guild.Id}] " +
+            Console.WriteLine($"\nUser: [{context.User.Username}#{context.User.Discriminator} | ID: {context.User.Id}] | Command: [{cmd}] | Shard: [{Global.client.GetShardIdFor(context.Guild)}]" +
+                $"\nGuild: [{context.Guild.Name} | {context.Guild.Id}]  " +
                 $"Channel: [#{context.Channel.Name} | {context.Channel.Id}]" +
                 $"\nTime: [{DateTime.Now}] | Executed After: [{timeSpan.ToString("N0")} milliseconds]" +
                 $"\nMessage: [{context.Message.Content}]");

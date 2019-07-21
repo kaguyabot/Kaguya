@@ -61,11 +61,12 @@ namespace Kaguya.Core.Command_Handler
                     (DateTime.Now - account.TemporaryBlacklistExpiration).TotalDays > 30)
                 {
                     account.RatelimitStrikes = 0;
-                    logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has " +
+                    logger.ConsoleStatusAdvisory($"User {Global.client.GetUser(account.ID).Username} (ID: {account.ID}) has " +
                         $"had their ratelimit strikes reset due to not ratelimiting for the last 30 days.");
                 }
 
-                if (account.CommandRateLimit >= 3) //If someone has used at least 3 commands in 5 seconds, add a strike.
+                if ((!account.IsSupporter && account.CommandRateLimit >= 3) || 
+                    (account.IsSupporter && account.CommandRateLimit >= 5)) //If someone has used at least 3 commands in 4.25 seconds, add a strike.
                 {
                     account.RatelimitStrikes++;
                     if(account.RatelimitStrikes == 1)
@@ -77,7 +78,7 @@ namespace Kaguya.Core.Command_Handler
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(60);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
                         // ^ Try to DM them and let them know they're blacklisted ^
-                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been temporarily blacklisted " +
+                        logger.ConsoleStatusAdvisory($"User {Global.client.GetUser(account.ID).Username} (ID: {account.ID}) has been temporarily blacklisted " +
                             $"for {timeout}");
                     }
 
@@ -90,7 +91,7 @@ namespace Kaguya.Core.Command_Handler
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(600);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
                         // ^ Try to DM them and let them know they're blacklisted ^
-                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been temporarily blacklisted " +
+                        logger.ConsoleStatusAdvisory($"User {Global.client.GetUser(account.ID).Username} (ID: {account.ID}) has been temporarily blacklisted " +
                             $"for {timeout}");
                     }
 
@@ -103,7 +104,7 @@ namespace Kaguya.Core.Command_Handler
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(3600);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
                         // ^ Try to DM them and let them know they're blacklisted ^
-                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been temporarily blacklisted " +
+                        logger.ConsoleStatusAdvisory($"User {Global.client.GetUser(account.ID).Username} (ID: {account.ID}) has been temporarily blacklisted " +
                             $"for {timeout}");
                     }
 
@@ -117,7 +118,7 @@ namespace Kaguya.Core.Command_Handler
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(43200);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
                         // ^ Try to DM them and let them know they're blacklisted ^
-                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been temporarily blacklisted " +
+                        logger.ConsoleStatusAdvisory($"User {Global.client.GetUser(account.ID).Username} (ID: {account.ID}) has been temporarily blacklisted " +
                             $"for {timeout}");
                     }
 
@@ -128,7 +129,7 @@ namespace Kaguya.Core.Command_Handler
                         account.Points = 0;
                         account.EXP = 0;
                         account.TemporaryBlacklistExpiration += TimeSpan.FromDays(900000); //Perma blacklist
-                        logger.ConsoleStatusAdvisory($"User {account.Username} (ID: {account.ID}) has been " +
+                        logger.ConsoleStatusAdvisory($"User {Global.client.GetUser(account.ID).Username} (ID: {account.ID}) has been " +
                             $"permanently blacklisted due to receiving 5 ratelimit strikes.");
                     }
                 }
