@@ -437,12 +437,13 @@ namespace Kaguya.Core.Command_Handler
         int messageCacheTimersActive = 0;
         int gameRotationTimersActive = 0;
         int resourcesBackupTimersActive = 0;
+        int messageReceivedTimersActive = 0;
 
         public Task MessageCacheTimer(DiscordSocketClient _client)
         {
-            if (messageCacheTimersActive < Global.ShardsToLogIn)
+            if (messageCacheTimersActive < 1)
             {
-                Timer timer = new Timer(3000); //2 Seconds
+                Timer timer = new Timer(10000); //10 Seconds
                 timer.Elapsed += Message_Cache_Timer_Elapsed;
                 timer.AutoReset = true;
                 timer.Enabled = true;
@@ -453,14 +454,14 @@ namespace Kaguya.Core.Command_Handler
         }
 
 
-        private void Message_Cache_Timer_Elapsed(object sender, ElapsedEventArgs e) //Saves the log every 2 seconds.
+        private void Message_Cache_Timer_Elapsed(object sender, ElapsedEventArgs e) //Saves the log every 10 seconds.
         {
             ServerMessageLogs.SaveServerLogging();
         }
 
         public Task GameTimer(DiscordSocketClient _client)
         {
-            if (gameTimersActive < Global.ShardsToLogIn)
+            if (gameTimersActive < 1)
             {
                 Timer timer = new Timer(300000); //5 minutes
                 timer.Elapsed += Game_Timer_Elapsed;
@@ -476,30 +477,31 @@ namespace Kaguya.Core.Command_Handler
 
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (gameRotationTimersActive < Global.ShardsToLogIn)
-            {
-                var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
+            var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
 
-                string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
+            string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
             $"Servicing {Global.TotalGuildCount.ToString("N0")} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
-                $"{Utilities.GetAlert("VERSION")}"};
-                displayIndex++;
-                if (displayIndex >= games.Length)
-                {
-                    displayIndex = 0;
-                }
-
-                _client.SetGameAsync(games[displayIndex]);
-                logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
+            $"{Utilities.GetAlert("VERSION")}"};
+            displayIndex++;
+            if (displayIndex >= games.Length)
+            {
+                displayIndex = 0;
             }
+
+            _client.SetGameAsync(games[displayIndex]);
+            logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
         }
 
         public Task VerifyMessageReceived(DiscordSocketClient _client)
         {
-            Timer timer = new Timer(120000); //Every 120 seconds, make sure the bot is seeing messages. If it hasn't seen a message in 120 seconds, restart!
-            timer.Elapsed += Verify_Message_Received_Elapsed;
-            timer.AutoReset = true;
-            timer.Enabled = true;
+            if (messageReceivedTimersActive < 1)
+            {
+                messageReceivedTimersActive++;
+                Timer timer = new Timer(120000); //Every 120 seconds, make sure the bot is seeing messages. If it hasn't seen a message in 120 seconds, restart!
+                timer.Elapsed += Verify_Message_Received_Elapsed;
+                timer.AutoReset = true;
+                timer.Enabled = true;
+            }
             return Task.CompletedTask;
         }
 

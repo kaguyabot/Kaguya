@@ -156,7 +156,6 @@ namespace Kaguya
             }
 
             Console.WriteLine("\nShards Logged In: " + Global.ShardsLoggedIn);
-
             return Task.CompletedTask;
         }
     }
