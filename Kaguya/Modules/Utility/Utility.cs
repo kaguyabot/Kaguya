@@ -76,7 +76,7 @@ namespace Kaguya.Modules.Utility
             embed.AddField($"Shard Stats",
                 $"Version: **`{Utilities.GetAlert("VERSION")}`**" +
                 $"\nCurrent Shard: **`{shard}/{Global.ShardsLoggedIn}`**" +
-                $"\nGuilds: **`{_client.Guilds.Count.ToString("N0")}`**" +
+                $"\nGuilds: **`{_client.GetShard(_client.GetShardIdFor(Context.Guild)).Guilds.Count.ToString("N0")}`**" +
                 $"\nText Channels: **`{textChannels.ToString("N0")}`**" +
                 $"\nVoice Channels: **`{voiceChannels.ToString("N0")}`**");
 
