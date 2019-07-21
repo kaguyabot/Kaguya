@@ -39,11 +39,11 @@ namespace Kaguya.Core.CommandHandler
             Console.WriteLine("\nRetrieving bot from DBL API...");
             try
             {
-                if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1250) //1250 is around how many guilds the bot should be in.
+                if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1200) //1200 is around how many guilds the bot should be in.
                 {
                     IDblSelfBot me = await dblAPI.GetMeAsync();
                     Console.WriteLine("Pushing stats to DBL API...");
-                    await me.UpdateStatsAsync(mutualGuilds.Count());
+                    await me.UpdateStatsAsync(Global.TotalGuildCount);
                     Console.WriteLine("Success.");
                 }
             }
@@ -54,7 +54,7 @@ namespace Kaguya.Core.CommandHandler
 
             _ = new Dictionary<string, string>
             {
-                { "server_count", $"{mutualGuilds.Count()}" }
+                { "server_count", $"{Global.TotalGuildCount}" }
             };
 
             int i = 0;
@@ -68,9 +68,9 @@ namespace Kaguya.Core.CommandHandler
             
             Console.ForegroundColor = ConsoleColor.White;
             LoadKaguyaData(); //Loads all user accounts and servers into memory.
+            Console.WriteLine("\nKaguya Music Service Started.");
             await _lavaShardClient.StartAsync(Global.client); //Initializes the music service.
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("\nKaguya Music Service Started.");
             Console.WriteLine("\nBegin Logging.\n");
             Console.WriteLine("--------------------------------------------");
         }
