@@ -43,7 +43,7 @@ namespace Kaguya.Core.CommandHandler
                 {
                     IDblSelfBot me = await dblAPI.GetMeAsync();
                     Console.WriteLine("Pushing stats to DBL API...");
-                    await me.UpdateStatsAsync(mutualGuilds.Count());
+                    await me.UpdateStatsAsync(Global.TotalGuildCount);
                     Console.WriteLine("Success.");
                 }
             }
