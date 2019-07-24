@@ -13,15 +13,3 @@ My goal for the Kaguya project is for Kaguya to be one of the top general purpos
 # Features and Commands
 
 ![Kaguya's Full Command List](https://i.imgur.com/7InZfeB.png)
-
-# Coming soon
-
-## Administration
-#### More automatic moderation, server spam protection, server raid protection.
-
-## Utility
-#### Giveaway functionality, ability to disable certain command sets (NSFW for example).
-
-## EXP/Currency
-#### Full-fledge profiles for users through a $profile command.
-
