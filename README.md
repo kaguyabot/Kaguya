@@ -12,7 +12,7 @@ My goal for the Kaguya project is for Kaguya to be one of the top general purpos
 
 # Features and Commands
 
-![Kaguya's Full Command List + Features](https://i.imgur.com/ZreRC1X.jpg)
+![Kaguya's Full Command List](https://i.imgur.com/7InZfeB.png)
 
 # Coming soon
 
