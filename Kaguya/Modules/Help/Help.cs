@@ -1051,6 +1051,7 @@ namespace Kaguya.Modules.Help
                     "\nAll commands in category: Help" +
                     "\n" +
                     $"\n{cmdPrefix}bug" +
+                    $"\n{cmdPrefix}cooldowns" +
                     $"\n{cmdPrefix}help [h]" +
                     $"\n{cmdPrefix}helpdm [hdm]" +
                     $"\n{cmdPrefix}invite" +
@@ -1205,14 +1206,16 @@ namespace Kaguya.Modules.Help
             bool repA = repCD.TotalSeconds > 86400;
             bool upvoteA = upvoteCD.TotalSeconds > 86400;
 
-            string nbombAvailable = $"Available in `{0 - nbombCD.Hours}h {nbombCD.Minutes}m {nbombCD.Seconds}s`";
+            string nbombAvailable = $"NSFW: Available in `{0 - nbombCD.Hours}h {nbombCD.Minutes}m {nbombCD.Seconds}s`";
             string timelyAvailable = $"Available in `{23 - timelyCD.Hours}h {59 - timelyCD.Minutes}m {59 - timelyCD.Seconds}s`";
             string weeklyAvailable = $"Available in `{6 - weeklyCD.Days}d {23 - weeklyCD.Hours}h {59 - weeklyCD.Minutes}m {59 - weeklyCD.Seconds}s`";
             string repAvailable = $"Available in `{23 - repCD.Hours}h {59 - repCD.Minutes}m {59 - repCD.Seconds}s`";
             string upvoteAvailable = $"Available in `{11 - upvoteCD.Hours}h {59 - upvoteCD.Minutes}m {59 - upvoteCD.Seconds}s`";
 
             if (nbombA)
-                nbombAvailable = "`Available!`";
+                nbombAvailable = "NSFW: `Available!`";
+            if (userAccount.NSFWAgeVerified == "false")
+                nbombAvailable = "";
             if (timelyA)
                 timelyAvailable = "`Available!`";
             if (weeklyA)
@@ -1223,7 +1226,7 @@ namespace Kaguya.Modules.Help
                 upvoteAvailable = "`Available!`";
 
             embed.WithTitle($"Cooldowns for {Context.User.Username}");
-            embed.WithDescription($"NSFW: {nbombAvailable}" +
+            embed.WithDescription($"{nbombAvailable}" +
                 $"\nTimely Points: {timelyAvailable}" +
                 $"\nWeekly Points: {weeklyAvailable}" +
                 $"\nVote Rewards: {upvoteAvailable}" +

@@ -632,7 +632,6 @@ namespace Kaguya.Modules.Administration
                     logger.ConsoleGuildAdvisory("I failed to execute the unmute timer.");
                 }
             }
-
         }
 
         [Command("mute")]

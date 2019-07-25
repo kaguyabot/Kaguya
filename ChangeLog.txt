@@ -3,6 +3,11 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.27.1
+
+- $cooldowns added to the $help command list.
+- Cooldowns will now only show your "NSFW" cooldown if you have previously verified that you want to see NSFW content.
+
 Version 1.27
 
 - Updated the message that owners see when they add Kaguya to their server.
