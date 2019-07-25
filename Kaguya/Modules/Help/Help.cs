@@ -417,6 +417,13 @@ namespace Kaguya.Modules.Help
                         $"\nSyntax `<Required parameter>, [Optional parameter]`: " +
                         $"\n`{cmdPrefix}mute [time {{<Num>s<Num>m<Num>h<Num>d}}] <list of users {{IDs, Username, or Mention}}>`");
                     await BE(); break;
+                case "unmute":
+                    embed.WithTitle($"Help: Un-Muting Users | `{cmdPrefix}unmute`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Mute Members, Manage Roles**" +
+                        $"\n" +
+                        $"\nUnmutes a user. This removes the \"kaguya-mute\" role from the user, if they have it." +
+                        $"\nSyntax: `{cmdPrefix}unmute <user>`.");
+                    await BE(); break;
                 case "shadowban":
                     embed.WithTitle($"Help: Shadowbanning Users | `{cmdPrefix}shadowban`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
@@ -876,6 +883,10 @@ namespace Kaguya.Modules.Help
                         $"Note: You must use this command in the support server!");
                     embed.WithFooter($"Use the {cmdPrefix}invite command for a link to the support server if you need one!");
                     await BE(); break;
+                case "cooldowns":
+                    embed.WithTitle($"Help: Kaguya Cooldowns | `{cmdPrefix}cooldowns`");
+                    embed.WithDescription($"{Context.User.Mention} Displays all concurrent cooldowns for Kaguya and whether or not they are off cooldown.");
+                    await BE(); break;
                 case "owner":
                     embed.WithTitle($"Help: Owner Command List | `{cmdPrefix}owner`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
@@ -1170,6 +1181,54 @@ namespace Kaguya.Modules.Help
 
             embed.WithTitle("Owner Commands");
             embed.WithDescription(commands);
+            await BE();
+        }
+
+        [Command("cooldowns")]
+        public async Task ShowCooldowns()
+        {
+            var userAccount = UserAccounts.GetAccount(Context.User);
+
+            //Future cooldown reset datetimes are always before DateTime.Now
+
+            var nbombCD = userAccount.NBombCooldownReset - DateTime.Now;
+            var timelyCD = DateTime.Now - userAccount.LastReceivedTimelyPoints;
+            var weeklyCD = DateTime.Now - userAccount.LastReceivedWeeklyPoints;
+            var repCD = DateTime.Now - userAccount.LastGivenRep;
+            var upvoteCD = DateTime.Now - userAccount.LastUpvotedKaguya;
+
+            //A = Available
+
+            bool nbombA = nbombCD.TotalSeconds < 0;
+            bool timelyA = timelyCD.TotalSeconds > 86400; //One day
+            bool weeklyA = weeklyCD.TotalSeconds > 604800; //One week
+            bool repA = repCD.TotalSeconds > 86400;
+            bool upvoteA = upvoteCD.TotalSeconds > 86400;
+
+            string nbombAvailable = $"Available in `{0 - nbombCD.Hours}h {nbombCD.Minutes}m {nbombCD.Seconds}s`";
+            string timelyAvailable = $"Available in `{23 - timelyCD.Hours}h {59 - timelyCD.Minutes}m {59 - timelyCD.Seconds}s`";
+            string weeklyAvailable = $"Available in `{6 - weeklyCD.Days}d {23 - weeklyCD.Hours}h {59 - weeklyCD.Minutes}m {59 - weeklyCD.Seconds}s`";
+            string repAvailable = $"Available in `{23 - repCD.Hours}h {59 - repCD.Minutes}m {59 - repCD.Seconds}s`";
+            string upvoteAvailable = $"Available in `{12 - upvoteCD.Hours}h {59 - upvoteCD.Minutes}m {59 - upvoteCD.Seconds}s`";
+
+            if (nbombA)
+                nbombAvailable = "`Available!`";
+            if (timelyA)
+                timelyAvailable = "`Available!`";
+            if (weeklyA)
+                weeklyAvailable = "`Available!`";
+            if (repA)
+                repAvailable = "`Available!`";
+            if (upvoteA)
+                upvoteAvailable = "`Available!`";
+
+            embed.WithTitle($"Cooldowns for {Context.User.Username}");
+            embed.WithDescription($"NSFW: {nbombAvailable}" +
+                $"\nTimely Points: {timelyAvailable}" +
+                $"\nWeekly Points: {weeklyAvailable}" +
+                $"\nVote Rewards: {upvoteAvailable}" +
+                $"\nRep Point: {repAvailable}");
+
             await BE();
         }
 

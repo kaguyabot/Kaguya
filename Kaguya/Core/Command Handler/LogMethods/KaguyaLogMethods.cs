@@ -29,22 +29,22 @@ namespace Kaguya.Core.CommandHandler
         public async Task OnReady(DiscordSocketClient client)
         {
             Config.bot.RecentVoteClaimAttempts = 0; //Resets rate limit for DBL API.
-            Console.WriteLine("\nRecent voteclaim attempts reset to 0.");
+            Console.WriteLine("Recent voteclaim attempts reset to 0.");
 
             _ = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = client.GetUser(ID).MutualGuilds;
 
             AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
 
-            Console.WriteLine("\nRetrieving bot from DBL API...");
+            Console.WriteLine("Retrieving bot from DBL API...");
             try
             {
                 if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1200) //1200 is around how many guilds the bot should be in.
                 {
                     IDblSelfBot me = await dblAPI.GetMeAsync();
-                    Console.WriteLine("Pushing stats to DBL API...");
+                    Console.WriteLine("\nPushing stats to DBL API...");
                     await me.UpdateStatsAsync(Global.TotalGuildCount);
-                    Console.WriteLine("Success.");
+                    Console.WriteLine("Success.\n");
                 }
             }
             catch (Exception e)
@@ -68,10 +68,10 @@ namespace Kaguya.Core.CommandHandler
             
             Console.ForegroundColor = ConsoleColor.White;
             LoadKaguyaData(); //Loads all user accounts and servers into memory.
-            Console.WriteLine("\nKaguya Music Service Started.");
-            await _lavaShardClient.StartAsync(Global.client); //Initializes the music service.
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("\nBegin Logging.\n");
+            await _lavaShardClient.StartAsync(Global.client); //Initializes the music service.
+            Console.WriteLine($"Kaguya Music Service Started. [Shard {client.ShardId}]");
+            logger.ConsoleStatusAdvisory($"ALL KAGUYA SHARDS LOGGED IN SUCCESSFULLY!");
             Console.WriteLine("--------------------------------------------");
         }
 
@@ -116,6 +116,11 @@ namespace Kaguya.Core.CommandHandler
         {
             logger.ConsoleGuildConnectionAdvisory(guild, "Joined new guild");
 
+            Global.TotalGuildCount++;
+            Global.TotalMemberCount += guild.MemberCount;
+            Global.TotalTextChannels += guild.TextChannels.Count;
+            Global.TotalVoiceChannels += guild.VoiceChannels.Count;
+
             var cmdPrefix = Servers.GetServer(guild).commandPrefix;
             var owner = guild.Owner;
             var channels = guild.Channels;
@@ -126,21 +131,25 @@ namespace Kaguya.Core.CommandHandler
                 $"in-depth customizable logging, leveling/currency systems, osu! related commands, and more! Before we continue please read the following statement from my creator as it contains very " +
                 $"helpful information on how to use me!" +
                 $"\n" +
-                $"\nGreetings, **The very first thing you should do as the server owner is move Kaguya's role to the highest position in your role list. Else, the bot may not work for your server!!** " +
-                $"Second, the first command `({cmdPrefix}exp)` for example, may be very slow, as Kaguya has to update all channel permissions to allow for her use in your server. Do not make any changes " +
-                $"to these permissions. " +
-                $"Next, I recommend you check out the `{cmdPrefix}help` and `{cmdPrefix}helpdm` commands before continuing. If you have any troubles using Kaguya, resort to these commands!" +
-                $"\nIn addition, Kaguya's default prefix is `$`. If you have another bot that uses `$`, don't worry as her prefix is fully customizable (up to three characters). In chat, tag Kaguya (`@Kaguya#2708`) " +
-                $"and type `prefix <new prefix>` to edit her prefix. This way, you won't accidentally change the prefix of another bot that also uses the `$` symbol. If you ever wish to reset your prefix " +
-                $"back to the default, tag Kaguya and type `prefix` with nothing else." +
-                $"\nExamples of how to edit and reset the prefix: " +
-                $"\n`@Kaguya#2708 prefix k!` (<-- Sets prefix to `k!`)" +
-                $"\n`@Kaguya#2708 prefix` (<-- Prefix has been reset from `<old prefix>` to `$`)" +
+                $"\nHello, thank you for choosing Kaguya! Below are some steps on what you need to know in order to get started." +
                 $"\n" +
-                $"\nFinally, if you wish to report a bug, please go to the Kaguya github page (found through `{cmdPrefix}helpdm`) and create an issue." +
-                $"\nYou may also let me know in Kaguya's dedicated support server: https://discord.gg/aumCJhr" +
+                $"\n1. Ensure Kaguya has the `Administrator` permission at all times." +
+                $"\n2. Move Kaguya's role to the highest spot that you feel comfortable in the hierarchy. This is to ensure all administrative operations " +
+                $"run as smoothly as possible. Kaguya cannot action users if their role is above Kaguya's." +
+                $"\n3. Kaguya's command usage currently has a rate limit of 3 commands every 4.25 seconds. Exceeding this ratelimit will result in a " +
+                $"temporary blacklist that gets longer for each breach. Please don't spam her commands!" +
+                $"\n4. Kaguya's prefix is totally customizable up to 3 characters. **The default prefix is `$`.** " +
+                $"To change the prefix for your server, simply type `$prefix <new prefix>`, or mention Kaguya if you have another bot that uses `$`. " +
+                $"\n5. All commands have very detailed help commands. If you ever wonder how something works, do `$h <command>`. Example: `$h shadowban`" +
+                $"\n6. Kaguya features very, very powerful administrative tools. Features include `antiraid`, `masskicking`, `massbanning`, " +
+                $"`filtered phrases (dynamic/wildcard)`, `dynamic warning/punishment systems` and many more." +
+                $"\n7. Use the `$help` command to see all commands based on category." +
+                $"\n8. If you find that you need help with anything, don't understand something, find a bug, have a suggestion, or just want to express your love for Kaguya, please join " +
+                $"the dedicated Kaguya Support Discord. I am extremely active here and can usually reply within a few minutes if I'm online. (Look for Stage#0001)" +
                 $"\n" +
-                $"\nThank you, and enjoy!");
+                $"\nThank you, and enjoy!" +
+                $"\n" +
+                $"\nKaguya Support: https://discord.gg/aumCJhr");
 
             var server = Servers.GetServer(guild);
 
@@ -158,9 +167,9 @@ namespace Kaguya.Core.CommandHandler
                         logger.ConsoleStatusAdvisory($"Could not overwrite permissions for #{channel.Name} in guild \"{channel.Guild.Name}\"");
                         logger.ConsoleCriticalAdvisory(exception, $"Guild {guild.Name} has been blacklisted.");
 
-                        await guild.Owner.SendMessageAsync($"**This server has been blacklisted because I was unable to alter text channel permissions." +
-                            $"\nPlease contact Stage#0001 in my support server (https://discord.gg/aumCJhr) to be unblacklisted!**");
-                        server.IsBlacklisted = true;
+                        await guild.Owner.SendMessageAsync($"{guild.Owner.Mention} **I am missing the permissions required to operate in this guild. " +
+                            $"I have exited the server.**");
+                        await guild.LeaveAsync();
                         break;
                     }
                 }
@@ -173,6 +182,10 @@ namespace Kaguya.Core.CommandHandler
 
         public Task LeftGuild(SocketGuild guild)
         {
+            Global.TotalGuildCount--;
+            Global.TotalMemberCount -= guild.MemberCount;
+            Global.TotalTextChannels -= guild.TextChannels.Count;
+            Global.TotalVoiceChannels -= guild.TextChannels.Count;
             ServerMessageLogs.RemoveLog(guild.Id);
             logger.ConsoleGuildConnectionAdvisory(guild, "Disconnected from guild.");
             return Task.CompletedTask;

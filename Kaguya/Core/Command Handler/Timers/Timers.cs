@@ -40,6 +40,8 @@ namespace Kaguya.Core.Command_Handler
 
         private void RateLimit_Reset_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (Global.UserAccounts == null)
+                return;
             Logger logger = new Logger();
             var accounts = Global.UserAccounts;
             embed.WithTitle($"⚠️ Kaguya Rate Limit Advisory ⚠️");
@@ -521,6 +523,7 @@ namespace Kaguya.Core.Command_Handler
         {
             if (resourcesBackupTimersActive < 1)
             {
+                resourcesBackupTimersActive++;
                 Timer timer = new Timer(300000); //Every 5 minutes, backup the resources folder.
                 timer.Elapsed += Resources_Backup_Elapsed;
                 timer.AutoReset = true;
