@@ -1209,7 +1209,7 @@ namespace Kaguya.Modules.Help
             string timelyAvailable = $"Available in `{23 - timelyCD.Hours}h {59 - timelyCD.Minutes}m {59 - timelyCD.Seconds}s`";
             string weeklyAvailable = $"Available in `{6 - weeklyCD.Days}d {23 - weeklyCD.Hours}h {59 - weeklyCD.Minutes}m {59 - weeklyCD.Seconds}s`";
             string repAvailable = $"Available in `{23 - repCD.Hours}h {59 - repCD.Minutes}m {59 - repCD.Seconds}s`";
-            string upvoteAvailable = $"Available in `{12 - upvoteCD.Hours}h {59 - upvoteCD.Minutes}m {59 - upvoteCD.Seconds}s`";
+            string upvoteAvailable = $"Available in `{11 - upvoteCD.Hours}h {59 - upvoteCD.Minutes}m {59 - upvoteCD.Seconds}s`";
 
             if (nbombA)
                 nbombAvailable = "`Available!`";
