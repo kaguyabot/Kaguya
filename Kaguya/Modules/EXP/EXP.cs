@@ -71,10 +71,12 @@ namespace Kaguya.Modules
             if (difference.TotalHours < timeout)
             {
                 embed.WithTitle("Rep");
-                embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.TotalMinutes)}m {(int)(60 - difference.Seconds)}s " +
-                    $"before you can give rep again!**");
+                embed.WithDescription($"{Context.User.Mention} you must wait `{(int)(23 - difference.Hours)}h " +
+                    $"{(int)(59 - difference.Minutes)}m {(int)(59 - difference.Seconds)}s` " +
+                    $"before you can give rep again!");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
+                return;
             }
             else
             {
@@ -82,7 +84,7 @@ namespace Kaguya.Modules
                 commandUserAcc.LastGivenRep = DateTime.Now;
                 Console.WriteLine($"{Context.User.Username}#{Context.User.Discriminator} has given +1 rep to {userAccount.Username}");
                 embed.WithTitle("+Rep Author");
-                embed.WithDescription("**Successfully gave +1 rep to my creator** uwu.");
+                embed.WithDescription("Successfully gave +1 rep to my creator uwu.");
                 await BE();
             }
         }
@@ -96,11 +98,11 @@ namespace Kaguya.Modules
             if (difference.TotalHours < timeout)
             {
                 embed.WithTitle("Rep");
-                embed.WithDescription($"**{Context.User.Mention} you must wait {(int)(24 - difference.TotalHours)}h {(int)(60 - difference.Minutes)}m {(int)(60 - difference.Seconds)} " +
-                    $"before you can give rep again!**");
+                embed.WithDescription($"{Context.User.Mention} you must wait `{(int)(23 - difference.Hours)}h {(int)(59 - difference.Minutes)}m {(int)(60 - difference.Seconds)}s` " +
+                    $"before you can give rep again!");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
-                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, $"User must wait {(int)(24 - difference.TotalHours)} more hours before awarding more reputation."); return;
+                return;
             }
             if (userAccount == targetAccount)
             {
@@ -108,7 +110,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"**{Context.User.Mention} You may not rep yourself!**");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
-                //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "User attempted to rep themselves."); return;
+                return;
             }
             else
             {
@@ -117,7 +119,7 @@ namespace Kaguya.Modules
                 embed.WithTitle("Rep");
                 embed.WithDescription($"**{Context.User.Mention} Successfully gave rep to {user.Mention}!**");
                 await BE();
-                // logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds);
+                return;
             }
         }
 

@@ -3,6 +3,16 @@ Welcome to the Kaguya ChangeLog.
 
 Changelog:
 
+Version 1.27
+
+- Updated the message that owners see when they add Kaguya to their server.
+- Fixed a bug where the resources folder was being backed up too frequently.
+- Fixed a bug where the concurrent number of guilds/members/text channels/voice channels was not being properly updated.
+- $points will now display the same way as $exp (with surrounding `tick marks` and a comma when needed.)
+- $cooldowns command added - displays all available cooldowns and their statuses. (NSFW, Timely/Weekly points, etc.)
+- Kaguya will now leave a server that doesn't give her administrator instead of blacklisting it.
+- 
+
 Version 1.26.2
 
 - $profile's "Total Currency Awarded" is now accurately updated through gamble wins.

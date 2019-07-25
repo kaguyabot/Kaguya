@@ -30,7 +30,7 @@ namespace Kaguya.Modules
                 user = Context.User as IGuildUser;
             var account = UserAccounts.GetAccount(user as SocketUser);
             embed.WithTitle("Points");
-            embed.WithDescription($"{user.Mention} has {account.Points} points.");
+            embed.WithDescription($"{user.Mention} has `{account.Points.ToString("N0")}` points.");
             await BE();
         }
 
