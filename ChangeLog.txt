@@ -11,7 +11,6 @@ Version 1.27
 - $points will now display the same way as $exp (with surrounding `tick marks` and a comma when needed.)
 - $cooldowns command added - displays all available cooldowns and their statuses. (NSFW, Timely/Weekly points, etc.)
 - Kaguya will now leave a server that doesn't give her administrator instead of blacklisting it.
-- 
 
 Version 1.26.2
 
