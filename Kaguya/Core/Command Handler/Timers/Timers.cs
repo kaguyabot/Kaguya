@@ -30,7 +30,7 @@ namespace Kaguya.Core.Command_Handler
         {
             if(RateLimitTimersActive < 1)
             {
-                Timer timer = new Timer(4250); //Milliseconds at which to reset the rate limit (4.25 seconds)
+                Timer timer = new Timer(3900); //Milliseconds at which to reset the rate limit (3.90 seconds)
                 timer.Enabled = true;
                 timer.Elapsed += RateLimit_Reset_Timer_Elapsed;
                 RateLimitTimersActive++;
@@ -60,11 +60,11 @@ namespace Kaguya.Core.Command_Handler
                 }
 
                 if(account.RatelimitStrikes > 0 && account.RatelimitStrikes < 5 &&
-                    (DateTime.Now - account.TemporaryBlacklistExpiration).TotalDays > 30)
+                    (DateTime.Now - account.TemporaryBlacklistExpiration).TotalDays > 14)
                 {
                     account.RatelimitStrikes = 0;
                     logger.ConsoleStatusAdvisory($"User {Global.client.GetUser(account.ID).Username} (ID: {account.ID}) has " +
-                        $"had their ratelimit strikes reset due to not ratelimiting for the last 30 days.");
+                        $"had their ratelimit strikes reset due to not ratelimiting for the last 14 days.");
                 }
 
                 if ((!account.IsSupporter && account.CommandRateLimit >= 3) || 
@@ -115,7 +115,7 @@ namespace Kaguya.Core.Command_Handler
                         string timeout = "12 hours.";
                         embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
                         $"Please slow down with your command usage. You have been blacklisted for {timeout}." +
-                        $"\n**If you continue to breach the rate limit (3 commands within 4.25 seconds), you will be permanently blacklisted.**");
+                        $"\n**If you continue to breach the rate limit (3 commands within 3.90 seconds), you will be permanently blacklisted.**");
                         account.IsBlacklisted = true;
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(43200);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());

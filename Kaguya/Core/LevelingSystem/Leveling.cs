@@ -20,13 +20,16 @@ namespace Kaguya.Core.LevelingSystem
                 if (!CanReceiveExperience(userAccount, RNGTimeout.Next(110, 130)))
                     return;
 
-                if (Servers.GetServer(user.Guild).IsBlacklisted == true)
+                if (Servers.GetServer(user.Guild).IsBlacklisted)
+                    return;
+
+                if (userAccount.IsBlacklisted)
                     return;
 
                 uint oldLevel = userAccount.LevelNumber;
 
                 Random random = new Random();
-                uint newExp = (uint)random.Next(5, 8);
+                uint newExp = (uint)random.Next(5, 8); //EXP RATE. THIS AFFECTS ALL USERS GLOBALLY!!
 
                 userAccount.EXP += newExp;
                 userAccount.LastReceivedEXP = DateTime.Now;
@@ -38,14 +41,24 @@ namespace Kaguya.Core.LevelingSystem
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.WithDescription($"**{user.Nickname} [{user.Username}#{user.Discriminator}] just leveled up!**" +
                         $"\nLevel: {userAccount.LevelNumber.ToString("N0")} | EXP: {userAccount.EXP.ToString("N0")}");
+
+                    if (guild.MessageAnnouncements == false)
+                        goto Log;
+
                     if(guild.LogLevelUpAnnouncements == 0)
                         await channel.SendMessageAsync("", false, embed.Build());
-                    else if(guild.LogLevelUpAnnouncements != 0) //If the server has a specified channel for level up announcements, send it there instead of in the chat the user leveled up in.
+
+                    else if(guild.LogLevelUpAnnouncements != 0)
+                        //If the server has a specified channel for level up announcements, 
+                        //send it there instead of in the chat the user leveled up in.
                     {
                         var textChannel = Global.client.GetChannel(guild.LogLevelUpAnnouncements);
                         await (textChannel as ITextChannel).SendMessageAsync("", false, embed.Build());
                     }
-                    logger.ConsoleGuildAdvisory(channel.Guild, $"User {user.Username}#{user.Discriminator} leveled up to level {userAccount.LevelNumber}.");
+
+                    Log:
+                    logger.ConsoleGuildAdvisory(channel.Guild, 
+                        $"User {user.Username}#{user.Discriminator} leveled up to level {userAccount.LevelNumber}.");
                 }
                 else return;
             }

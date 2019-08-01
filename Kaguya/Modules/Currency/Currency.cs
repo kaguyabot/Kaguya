@@ -11,12 +11,15 @@ using Kaguya.Core.Command_Handler.EmbedHandlers;
 using Kaguya.Core.Embed;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 using Kaguya.Core;
+using System.Collections.Generic;
+using Discord.Addons.Interactive;
 
 namespace Kaguya.Modules
 {
-    public class Currency : ModuleBase<ShardedCommandContext>
+    public class Currency : InteractiveBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
+        private readonly Logger logger = new Logger();
 
         public async Task BE() //Method to build and send an embedded message.
         {
@@ -56,6 +59,7 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{Context.User.Mention} It's only been `{formattedTime}` since you've used `{cmdPrefix}timely`!" +
                     $" Please wait until `{timeout} hours` have passed to receive more timely points.");
                 await BE();
+                logger.ConsoleStatusAdvisory("User is unable to receive timely points at this time.");
                 return;
             }
 
@@ -120,6 +124,7 @@ namespace Kaguya.Modules
                     $"<a:KaguyaDiamonds:581562698228301876>`{diamonds.ToString("N0")}` into `{(diamonds * 100).ToString("N0")}` points.**");
                 embed.WithFooter($"New Totals - Diamonds: {userAccount.Diamonds.ToString("N0")} Points: {userAccount.Points.ToString("N0")}");
                 await BE();
+                logger.ConsoleStatusAdvisory($"User successfully converted {diamonds} into points.");
             }
             else
             {
@@ -165,6 +170,9 @@ namespace Kaguya.Modules
                 embed.WithDescription($"{Context.User.Mention} **Has decided to redistribute their points balance to everyone in the server!**");
                 embed.WithFooter($"{memberCount} members have been awarded {distributedPoints} points thanks to {Context.User.Username}. How generous!");
                 embed.SetColor(EmbedColor.GOLD);
+
+                logger.ConsoleStatusAdvisory("User successfully redistributed all of their points.");
+
                 await BE();
             }
         }
@@ -188,13 +196,13 @@ namespace Kaguya.Modules
 
             if (winner)
             {
-                logger.ConsoleGuildAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Gambled: {pointsGambled} - Points Won: {pointsWonLost} - Luck: {j}");
+                logger.ConsoleInformationAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Gambled: {pointsGambled} - Points Won: {pointsWonLost} - Luck: {j}");
                 uAccount.GambleHistory.Add($"\n🔵 Roll: `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
                     $"Points Won: `{pointsWonLost.ToString("N0")}` - `{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
             }
             else
             {
-                logger.ConsoleGuildAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Lost: {pointsWonLost} - Luck: {j}");
+                logger.ConsoleInformationAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Lost: {pointsWonLost} - Luck: {j}");
                 uAccount.GambleHistory.Add($"\n🔴 Roll: `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
                     $"Points Lost: `{pointsWonLost.ToString("N0")}` - `{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
             }
@@ -213,16 +221,18 @@ namespace Kaguya.Modules
                 embed.WithTitle("Gambling: Insufficient Points!");
                 embed.WithDescription($"{user.Mention} you have an insufficient amount of points!" +
                     $"\nThe maximum amount you may gamble is {userAccount.Points}.");
+                embed.SetColor(EmbedColor.RED);
                 await BE();
-                logger.ConsoleGuildAdvisory($"User does not have enough points to gamble the requested amount.");
+                logger.ConsoleInformationAdvisory($"User does not have enough points to gamble the requested amount.");
                 return;
             }
             if (points < 1)
             {
                 embed.WithTitle("Gambling: Too Few Points!");
                 embed.WithDescription($"{user.Mention} You may not gamble less than one point!");
+                embed.SetColor(EmbedColor.RED);
                 await BE();
-                logger.ConsoleGuildAdvisory($"User may not gamble less than one point.");
+                logger.ConsoleInformationAdvisory($"User may not gamble less than one point.");
                 return;
             }
             if (points > 25000 && !((userAccount.KaguyaSupporterExpiration - DateTime.Now).TotalSeconds > 0))
@@ -230,8 +240,9 @@ namespace Kaguya.Modules
                 embed.WithTitle("Gambling: Too Many Points!");
                 embed.WithDescription($"**{user.Mention} you are attempting to gamble too many points!" +
                     $"\nThe maximum amount you may gamble is `25,000` points.**");
+                embed.SetColor(EmbedColor.RED);
                 await BE();
-                logger.ConsoleGuildAdvisory("User attempted to gamble too many points.");
+                logger.ConsoleInformationAdvisory("User attempted to gamble too many points.");
                 return;
             }
 
@@ -488,7 +499,7 @@ namespace Kaguya.Modules
                     $" Please wait until `7 days` have passed to receive your weekly bonus.");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
-                logger.ConsoleCommandLog(Context, CommandError.UnmetPrecondition, "User has not waited for their weekly points cooldown to reset.");
+                logger.ConsoleInformationAdvisory($"User {Context.User} has not waited for their weekly points cooldown to reset.");
                 return;
             }
 
@@ -497,15 +508,108 @@ namespace Kaguya.Modules
             if (critical)
             {
                 bonus = (uint)(bonus * multiplier);
-                embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points! It's a critical hit!!**");
+                embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus.ToString("N0")}` points! It's a critical hit!!**");
+                logger.ConsoleInformationAdvisory("User successfully claimed weekly points. Critical hit.");
             }
             else
             {
-                embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus}` points!**");
+                embed.WithDescription($"**{Context.User.Mention} has received their weekly bonus of `{bonus.ToString("N0")}` points!**");
+                logger.ConsoleStatusAdvisory("User successfully claimed weekly points. Non critical.");
             }
             await BE();
 
             userAccount.Points += bonus;
+        }
+
+        [Command("quickdraw")]
+        [Alias("qd")]
+        public async Task CurrencyRaid(int points)
+        {
+            var userAccount = UserAccounts.GetAccount(Context.User);
+
+            if(points > 25000)
+            {
+                embed.WithDescription($"{Context.User.Mention} You may not bet more than 25,000 points.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if (points < 50)
+            {
+                embed.WithDescription($"{Context.User.Mention} You may not bet less than 50 points.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            if(userAccount.Points < points)
+            {
+                embed.WithDescription($"You are attempting to bet too many points.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            Random rand = new Random();
+            double kaguyaDraw = rand.NextDouble();
+            double userDraw = rand.NextDouble();
+
+            bool critical = rand.Next(101) < 8; //8% Critical chance.
+            double multiplier = 1.80;
+
+            if(userDraw > kaguyaDraw)
+            {
+                userAccount.Points -= (uint)points;
+
+                userAccount.TotalCurrencyLost += points;
+                embed.WithDescription($"🔫 **You lost!** - {Context.User.Mention} " +
+                    $"has lost `{points.ToString("N0")}` points" +
+                    $"\n" +
+                    $"\nKaguya's Time: `{kaguyaDraw.ToString("N3")}` seconds" +
+                    $"\n{Context.User.Username}'s Time: `{userDraw.ToString("N3")}` seconds");
+                embed.WithFooter($"Better luck next time! - Points Balance: {userAccount.Points.ToString("N0")}");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+
+                logger.ConsoleInformationAdvisory($"User {Context.User} - Quickdraw: Loser");
+            }
+
+            if (kaguyaDraw > userDraw)
+            {
+                string critText = "";
+                if (critical)
+                {
+                    multiplier *= 2.25; //Puts total bonus at around 4x what they bet
+                    critText += " It's a critical hit!!";
+                }
+
+                int award = (int)(points * multiplier);
+                userAccount.Points += (uint)award;
+                userAccount.TotalCurrencyAwarded += award;
+
+                embed.WithDescription($"🔫 **You won!{critText}** - {Context.User.Mention} " +
+                    $"has won `{award.ToString("N0")}` points" +
+                    $"\n" +
+                    $"\nKaguya's Time: `{kaguyaDraw.ToString("N3")}` seconds" + 
+                    $"\n{Context.User.Username}'s Time: `{userDraw.ToString("N3")}` seconds");
+                embed.WithFooter($"Aced! - Points Balance: {userAccount.Points.ToString("N0")}");
+                embed.SetColor(EmbedColor.GREEN);
+                await BE();
+                logger.ConsoleStatusAdvisory($"User {Context.User} - Quickdraw: Winner{critText}");
+            }
+
+            if(userDraw == kaguyaDraw)
+            {
+                embed.WithDescription($"🔫 **It's a draw!!** - {Context.User.Mention}" +
+                    $"\n" +
+                    $"\nKaguya's Time: `{kaguyaDraw.ToString("N3")}` seconds" +
+                    $"\n{Context.User.Username}'s Time: `{userDraw.ToString("N3")}` seconds");
+                embed.WithFooter($"What are the chances?! - Points Balance: {userAccount.Points.ToString("N0")}");
+                embed.SetColor(EmbedColor.GOLD);
+                await BE();
+                logger.ConsoleStatusAdvisory($"User {Context.User} - Quickdraw: Tie");
+            }
         }
 
         internal static bool CanReceiveTimelyPoints(UserAccount user, int timeout)

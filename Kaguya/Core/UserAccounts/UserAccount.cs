@@ -14,7 +14,7 @@ namespace Kaguya.Core.UserAccounts
         public int KaguyaWarnings { get; set; }
         public int NBombUsesThisHour { get; set; }
         public int CommandRateLimit { get; set; }
-        public int RatelimitStrikes { get; set; } //Normal command rate limit strikes
+        public int RatelimitStrikes { get; set; }
         public string NSFWAgeVerified { get; set; }
         public List<string> RecentlyUsedCommands { get; set; }
         public int GamblingBadLuckStreak { get; set; }
@@ -37,7 +37,7 @@ namespace Kaguya.Core.UserAccounts
         {
             get
             {
-                return (uint)Math.Sqrt(EXP / 8 + -8);
+                return (uint)Math.Sqrt(EXP / 8 + -8); //DON'T TOUCH - THIS AFFECTS ALL LEVELS GLOBALLY!!
             }
         }
         

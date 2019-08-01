@@ -495,7 +495,7 @@ namespace Kaguya.Modules.Administration
             if (!roles.Contains(muteRole))
             {
                 await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
-                logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                logger.ConsoleInformationAdvisory("Mute role not found, so I created it.");
 
                 embed.WithDescription($"**{Context.User.Mention} I needed to create the mute role for first time setup! Please retry this command.**");
                 embed.SetColor(EmbedColor.VIOLET);
@@ -547,7 +547,7 @@ namespace Kaguya.Modules.Administration
                 }
             }
             if(i > 0)
-                logger.ConsoleGuildAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
+                logger.ConsoleInformationAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
 
             foreach (var user in users)
             {
@@ -629,7 +629,7 @@ namespace Kaguya.Modules.Administration
                 }
                 else
                 {
-                    logger.ConsoleGuildAdvisory("I failed to execute the unmute timer.");
+                    logger.ConsoleInformationAdvisory("I failed to execute the unmute timer.");
                 }
             }
         }
@@ -654,7 +654,7 @@ namespace Kaguya.Modules.Administration
                 await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
                 embed.WithDescription($"**{Context.User.Mention} I didn't find my mute role, so I created it. Please try again!**");
                 await BE();
-                logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                logger.ConsoleInformationAdvisory("Mute role not found, so I created it.");
                 return;
             }
 
@@ -677,7 +677,7 @@ namespace Kaguya.Modules.Administration
                 }
             }
             if (i > 0)
-                logger.ConsoleGuildAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
+                logger.ConsoleInformationAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
 
             foreach (var user in users)
             {
@@ -709,7 +709,7 @@ namespace Kaguya.Modules.Administration
                 await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
                 embed.WithDescription($"**{Context.User.Mention} I didn't find my mute role, so I created it. Please try again!**");
                 await BE();
-                logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                logger.ConsoleInformationAdvisory("Mute role not found, so I created it.");
                 return;
             }
 
@@ -732,7 +732,7 @@ namespace Kaguya.Modules.Administration
                 }
             }
             if (i > 0)
-                logger.ConsoleGuildAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
+                logger.ConsoleInformationAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
 
             await user.AddRoleAsync(muteRole);
             embed.WithDescription($"{Context.User.Mention} User `{user}` has been muted.");
@@ -1038,7 +1038,7 @@ namespace Kaguya.Modules.Administration
             }
 
             stopWatch.Stop();
-            logger.ConsoleGuildAdvisory($"{i} Users massbanned in guild {Context.Guild.Name}.");
+            logger.ConsoleInformationAdvisory($"{i} Users massbanned in guild {Context.Guild.Name}.");
         }
 
         [Command("kick")] 

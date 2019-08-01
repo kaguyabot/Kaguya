@@ -5,7 +5,6 @@ using Discord.WebSocket;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
 using Kaguya.Core.CommandHandler;
-using Kaguya.Core.Embed;
 using Kaguya.Modules.Music;
 using Kaguya.Modules.Utility;
 using Microsoft.Extensions.DependencyInjection;
@@ -84,7 +83,6 @@ namespace Kaguya
 
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
                     await _client.LoginAsync(TokenType.Bot, Config.bot.Token);
-
                     await _client.StartAsync();
 
                     await Task.Delay(-1);
@@ -92,7 +90,8 @@ namespace Kaguya
             }
             catch (Discord.Net.HttpException)
             {
-                Console.WriteLine("You have an invalid bot token. Edit /Resources/config.json and supply the proper token.");
+                Logger logger = new Logger();
+                logger.ConsoleCriticalAdvisory("You have an invalid bot token. Edit /Resources/config.json and supply the proper token.");
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
                 Environment.Exit(0);
@@ -142,12 +141,12 @@ namespace Kaguya
                 }
             }
 
-            Console.WriteLine($"\nKaguya shard {shard.ShardId} cleared for takeoff! Servicing {mutualGuilds.Count.ToString("N0")} guilds and {memberCount.ToString("N0")} members!");
+            Logger logger = new Logger();
+            logger.ConsoleShardAdvisory($"Kaguya shard {shard.ShardId} cleared for takeoff! " +
+                $"Servicing {mutualGuilds.Count.ToString("N0")} guilds and {memberCount.ToString("N0")} members!");
 
             if((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMinutes < 30)
             {
-                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
-
                 Global.TotalGuildCount += mutualGuilds.Count;
                 Global.TotalMemberCount += memberCount;
                 Global.TotalTextChannels += textChannelCount;
@@ -155,7 +154,6 @@ namespace Kaguya
                 Global.ShardsLoggedIn++;
             }
 
-            Console.WriteLine("\nShards Logged In: " + Global.ShardsLoggedIn);
             return Task.CompletedTask;
         }
     }

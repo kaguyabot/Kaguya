@@ -28,11 +28,47 @@ namespace Kaguya.Modules.Utility
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
+        [Command("changelog")]
+        public async Task KaguyaChangelog()
+        {
+            string directory = Directory.GetCurrentDirectory();
+            string filePath = Path.GetFullPath(Path.Combine(directory, @"..\..\..\ChangeLog.txt")); //Nav 3 folders up.
+            string description = "";
+
+            using(StreamReader reader = new StreamReader(filePath))
+            {
+                while (true)
+                {
+                    var line = reader.ReadLine();
+                    if (line.Contains(Utilities.GetAlert("OLDVERSION")))
+                    {
+                        reader.Dispose();
+                        break;
+                    }
+                    if (line.Contains("Changelog"))
+                        continue;
+
+                    string newLine = line.Replace("-", $"{Environment.NewLine}-");
+
+                    if(description.Count() >= 1800)
+                    {
+                        description += "\n\nThis changelog is longer than what I can display. " +
+                            "View the rest in the Kaguya Support server!";
+                        break;
+                    }
+                    description += newLine;
+                }
+
+                embed.WithTitle($"Kaguya Changelog: {Utilities.GetAlert("VERSION")}");
+                embed.WithDescription($"```{description}```");
+                embed.SetColor(EmbedColor.BLUE);
+                await BE();
+            }
+        }
+
         [Command("ping")]
         public async Task Ping()
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             embed.WithTitle("Pong! 🏓");
             embed.WithDescription($"\n📡 Discord Latency: {Global.client.Latency}ms");
             await ReplyAsync(embed: embed.Build());

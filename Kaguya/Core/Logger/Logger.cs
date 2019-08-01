@@ -162,8 +162,8 @@ namespace Kaguya.Core
                 $"\nTime: [{DateTime.Now}]");
         }
 
-        /// <summary>Console logging event for when Kaguya changes a text channel's permissions.</summary>
-        public void ConsoleGuildAdvisory(string message)
+        /// <summary>Displays a blue information message in the console.</summary>
+        public void ConsoleInformationAdvisory(string message)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"\nINFORMATION:" +
@@ -217,5 +217,12 @@ namespace Kaguya.Core
                 $"\nMessage: [\"{msg}\"]");
         }
 
+        public void ConsoleShardAdvisory(string msg)
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine($"\nKaguya Shard Advisory:" +
+                $"\nMessage: [\"{msg}\"]");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
     }
 }

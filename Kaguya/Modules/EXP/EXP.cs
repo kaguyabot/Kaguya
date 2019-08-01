@@ -139,18 +139,18 @@ namespace Kaguya.Modules
             if(user is null)
                 user = Context.User as IGuildUser;
 
-            var account = UserAccounts.GetAccount(user as SocketUser);
-            embed.WithTitle("Experience Points");
-            embed.WithDescription($"{user.Mention} has `{account.EXP.ToString("N0")}` EXP.");
-            await BE();
-        }
+            var account = UserAccounts.GetAccount((SocketUser)user);
+            var futureEXP = 8 * (Math.Pow(account.LevelNumber + 1, 2) + 8);
+            var expRemaining = 8 * (Math.Pow(account.LevelNumber + 1, 2) + 8) - account.EXP;
 
-        [Command("level")] //exp
-        public async Task Level()
-        {
-            var account = UserAccounts.GetAccount(Context.User);
-            embed.WithTitle("Level");
-            embed.WithDescription($"{Context.User.Mention} you are level: {account.LevelNumber}");
+            TimeSpan time = TimeSpan.FromSeconds(expRemaining * 120 / 6.5);
+
+            embed.WithTitle("Experience Points");
+            embed.WithDescription($"{user.Mention} is level `{account.LevelNumber}` and has " +
+                $"`{account.EXP.ToString("N0")} / {futureEXP.ToString("N0")}` EXP." +
+                $"\nEXP Needed for `Level {account.LevelNumber + 1}: " +
+                $"{expRemaining.ToString("N0")}`" +
+                $"\nETA: `{time.ToString(@"dd\d\ hh\h\ mm\m\ ss\s\")} of active chatting`");
             await BE();
         }
 

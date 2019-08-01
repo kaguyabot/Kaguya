@@ -1,7 +1,30 @@
-Welcome to the Kaguya ChangeLog.
+Welcome to the Kaguya Changelog.
 
+Note: Don't write "Changelog" in the actual changelog notes, this will mess up
+the $Changelog command. Write "changelog" instead.
 
 Changelog:
+
+Version 1.28
+
+- $level command deleted. This command has been merged into $exp.
+- $exp now displays how much EXP you need to reach the next level, and an approximate time frame to reach that goal.
+- $weekly will now have comma seperated numbers.
+- $quickdraw [$qd] command added! A new currency game that you can play with Kaguya.
+    - You and Kaguya will pull out your pistols and fire at each other as fast as you can!
+    - All times are recorded. Whoever is fastest wins!
+    - You may bet up to 25,000 points (unlimited for supporters)
+    - If you win, you will be rewarded 1.8x your bet.
+        - If you win with a critical hit (8% chance), you will be awarded ~4.05x your bet.
+    - There is no bad luck prevention with this game.
+- More stuff is now logged in the console.
+- Ratelimit adjusted to 3 commands every 3.9 seconds (was 4.25)
+- Time to reset ratelimit strikes reduced from 30 days to 14 days without hitting the ratelimit.
+- Kaguya will now restart herself if the total guild count is lower than expected.
+- Cleaned up the logging that occurs on startup.
+- $changelog command added. View all of the new features at any time!
+- Most command errors now return a red colored embed (was pink).
+- $voteclaim now has an alias of $vc
 
 Version 1.27.1
 

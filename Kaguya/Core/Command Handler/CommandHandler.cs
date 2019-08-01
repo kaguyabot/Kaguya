@@ -1,9 +1,11 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core;
 using Kaguya.Core.Command_Handler;
 using Kaguya.Core.Command_Handler.LogMethods;
 using Kaguya.Core.CommandHandler;
+using Kaguya.Core.Embed;
 using Kaguya.Core.LevelingSystem;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
@@ -14,9 +16,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using Kaguya.Core.Embed;
 using Victoria;
-using Discord;
 
 #pragma warning disable
 
@@ -120,30 +120,35 @@ namespace Kaguya
                         var cmdPrefix = Servers.GetServer(context.Guild).commandPrefix;
                         embed.WithDescription("**Error: I need a different set of information than what you've given me!**");
                         embed.WithFooter($"Use {cmdPrefix}h <command> to see the proper usage.");
+                        embed.SetColor(EmbedColor.RED);
                         await context.Channel.SendMessageAsync(embed: embed.Build());
                         consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "User attempted to use invalid parameters for a command.");
                         break;
                     case CommandError.ParseFailed:
                         embed.WithDescription("**Error: I failed to parse a specified value!**");
                         embed.WithFooter($"You may be using text instead of a number. Review {guild.commandPrefix}h <command> for the proper usage!");
+                        embed.SetColor(EmbedColor.RED);
                         await context.Channel.SendMessageAsync(embed: embed.Build());
                         consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Failed to parse given value specified in command.");
                         break;
                     case CommandError.UnmetPrecondition:
                         embed.WithDescription($"**Error: {result.ErrorReason}**");
                         embed.WithFooter("Review $h <command> for the proper usage!");
+                        embed.SetColor(EmbedColor.RED);
                         await context.Channel.SendMessageAsync(embed: embed.Build());
                         consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, $"{result.ErrorReason}");
                         break;
                     case CommandError.MultipleMatches:
                         embed.WithDescription("**Error: I found multiple matches for the task you were trying to execute!**");
                         embed.WithFooter($"Review {guild.commandPrefix}h <command> for the proper usage! I can only do one thing at a time!");
+                        embed.SetColor(EmbedColor.RED);
                         await context.Channel.SendMessageAsync(embed: embed.Build());
                         consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Multiple matches found.");
                         break;
                     default:
                         embed.WithDescription("**Error: I failed to execute this command for an unknown reason.**");
                         embed.WithFooter($"Error reason: {result.ErrorReason}");
+                        embed.SetColor(EmbedColor.RED);
                         await context.Channel.SendMessageAsync(embed: embed.Build());
                         consoleLogger.ConsoleCommandLog(context, CommandError.Unsuccessful, $"{result.ErrorReason}");
                         break;

@@ -12,6 +12,7 @@ using DiscordBotsList.Api.Objects;
 using System.Collections.Generic;
 using Victoria;
 using Kaguya.Core.Embed;
+using System.Reflection;
 
 namespace Kaguya.Core.CommandHandler
 {
@@ -29,27 +30,35 @@ namespace Kaguya.Core.CommandHandler
         public async Task OnReady(DiscordSocketClient client)
         {
             Config.bot.RecentVoteClaimAttempts = 0; //Resets rate limit for DBL API.
-            Console.WriteLine("Recent voteclaim attempts reset to 0.");
 
             _ = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = client.GetUser(ID).MutualGuilds;
 
-            AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
-
-            Console.WriteLine("Retrieving bot from DBL API...");
-            try
+            if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1875) 
+                //1875 is around how many guilds the bot should be in.
             {
-                if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1200) //1200 is around how many guilds the bot should be in.
+                try
                 {
+                    logger.ConsoleStatusAdvisory("Retrieving bot from DBL API...");
+                    AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
                     IDblSelfBot me = await dblAPI.GetMeAsync();
-                    Console.WriteLine("\nPushing stats to DBL API...");
+                    logger.ConsoleStatusAdvisory("Pushing stats to DBL API...");
                     await me.UpdateStatsAsync(Global.TotalGuildCount);
-                    Console.WriteLine("Success.\n");
+                    logger.ConsoleStatusAdvisory("Successfully pushed total guild count to DBL.");
+                }
+                catch (Exception e)
+                {
+                    logger.ConsoleCriticalAdvisory($"Failed to update Kaguya's DBL Stats (Is this bot on DBL?): {e.Message}");
                 }
             }
-            catch (Exception e)
+
+            else if(Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount < 1875 && Config.bot.BotUserID == "538910393918160916")
             {
-                logger.ConsoleCriticalAdvisory($"Failed to retrieve DBLAPI information: {e.Message}");
+                //Restarts the bot if the total guild count is lower than expected.
+
+                var filePath = Assembly.GetExecutingAssembly().Location;
+                Process.Start(filePath);
+                Environment.Exit(0);
             }
 
             _ = new Dictionary<string, string>
@@ -66,13 +75,16 @@ namespace Kaguya.Core.CommandHandler
                 }
             }
             
-            Console.ForegroundColor = ConsoleColor.White;
             LoadKaguyaData(); //Loads all user accounts and servers into memory.
-            Console.ForegroundColor = ConsoleColor.White;
             await _lavaShardClient.StartAsync(Global.client); //Initializes the music service.
-            Console.WriteLine($"Kaguya Music Service Started. [Shard {client.ShardId}]");
-            logger.ConsoleStatusAdvisory($"ALL KAGUYA SHARDS LOGGED IN SUCCESSFULLY!");
-            Console.WriteLine("--------------------------------------------");
+            logger.ConsoleMusicLogNoUser($"Kaguya Music Service Started. [Shard {client.ShardId}]");
+            if (Global.ShardsLoggedIn == Global.ShardsToLogIn)
+            {
+                logger.ConsoleShardAdvisory($"ALL KAGUYA SHARDS LOGGED IN SUCCESSFULLY!");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("\nBEGIN LOGGING" +
+                    "\n--------------------------------------------");
+            }
         }
 
         #pragma warning disable IDE1006 //Disable warnings for naming styles
@@ -81,11 +93,12 @@ namespace Kaguya.Core.CommandHandler
         {
             if (Global.ShardsLoggedIn == Global.ShardsToLogIn)
             {
-                Console.WriteLine("\nAttempting to load accounts...");
+                Logger logger = new Logger();
+                logger.ConsoleStatusAdvisory("Attempting to load accounts...");
                 Global.UserAccounts = DataStorage2.LoadUserAccounts("Resources/accounts.json").ToList();
-                Console.WriteLine("Accounts loaded. \nAttempting to load servers...");
+                logger.ConsoleStatusAdvisory("Accounts loaded. Loading servers...");
                 Global.Servers = DataStorage2.LoadServers("Resources/servers.json").ToList();
-                Console.WriteLine("Servers loaded.\n");
+                logger.ConsoleStatusAdvisory("Servers loaded.");
             }
         }
 
@@ -212,7 +225,6 @@ namespace Kaguya.Core.CommandHandler
                         {
                             logger.ConsoleCriticalAdvisory($"Failed to cache message for {guild.Name} with ID: {guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 195!");
                             ServerMessageLogs.DeleteLog(guild);
-                            ServerMessageLogs.SaveServerLogging();
                             return Task.CompletedTask;
                         }
                     }

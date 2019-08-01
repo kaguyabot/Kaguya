@@ -132,7 +132,7 @@ namespace Kaguya.Modules.Utility
                     }
                     catch (Exception e)
                     {
-                        logger.ConsoleGuildAdvisory($"Failed to auto assign role {roles.FirstOrDefault(x => x.Id == roleID)} " +
+                        logger.ConsoleInformationAdvisory($"Failed to auto assign role {roles.FirstOrDefault(x => x.Id == roleID)} " +
                             $"to user {user} in guild {user.Guild}" +
                             $"\nException: {e.Message}");
                     }

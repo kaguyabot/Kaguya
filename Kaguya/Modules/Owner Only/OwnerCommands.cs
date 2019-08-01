@@ -41,7 +41,7 @@ namespace Kaguya.Modules.Owner_Only
             foreach(var user in order)
             {
                 i++;
-                description += $"\n**#{i}.** `{user.Username}` - Points: `{user.Points.ToString("N0")}`";
+                description += $"\n```#{i}. {user.Username} - Points: {user.Points.ToString("N0")}```";
             }
 
             embed.WithTitle($"Kaguya Global Points Leaderboard");
