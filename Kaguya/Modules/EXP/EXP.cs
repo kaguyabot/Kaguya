@@ -150,7 +150,7 @@ namespace Kaguya.Modules
                 $"`{account.EXP.ToString("N0")} / {futureEXP.ToString("N0")}` EXP." +
                 $"\nEXP Needed for `Level {account.LevelNumber + 1}: " +
                 $"{expRemaining.ToString("N0")}`" +
-                $"\nETA: `{time.ToString(@"dd\d\ hh\h\ mm\m\ ss\s\")} of active chatting`");
+                $"\nETA: `{time.ToString(@"dd\d\ hh\h\ mm\m\ ss\s")} of active chatting`");
             await BE();
         }
 
