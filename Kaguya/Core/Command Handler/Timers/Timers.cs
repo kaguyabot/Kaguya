@@ -4,6 +4,7 @@ using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using System;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,6 +24,42 @@ namespace Kaguya.Core.Command_Handler
         {
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
         }
+
+        //private int ProcessCPUTimersActive = 0;
+
+        //public Task ProcessCPUTimer(DiscordSocketClient client)
+        //{
+        //    if(ProcessCPUTimersActive < 1)
+        //    {
+        //        Timer timer = new Timer(30000); //30 seconds
+        //        timer.Enabled = true;
+        //        timer.Elapsed += Process_CPU_Timer_Elapsed;
+        //        ProcessCPUTimersActive++;
+        //    }
+        //    return Task.CompletedTask;
+        //}
+
+        //private void Process_CPU_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        //{
+        //    Process kaguya = Process.GetProcessesByName("Kaguya")[0];
+
+        //    var cpu = new PerformanceCounter("Process", "% Processor Time", kaguya.ProcessName, true);
+        //    var ram = new PerformanceCounter("Process", "Private Bytes", kaguya.ProcessName, true);
+
+        //    // Getting first initial values
+        //    cpu.NextValue();
+        //    ram.NextValue();
+
+        //    dynamic result = new ExpandoObject();
+
+        //    // If system has multiple cores, that should be taken into account
+        //    result.CPU = Math.Round(cpu.NextValue() / Environment.ProcessorCount, 2);
+        //    // Returns number of MB consumed by application
+        //    result.RAM = Math.Round(ram.NextValue() / 1024 / 1024, 2);
+
+        //    Console.WriteLine($"CPU Usage: {result.CPU}%" +
+        //        $"\nRAM: {result.RAM}MB");
+        //}
 
         private int RateLimitTimersActive = 0;
 
@@ -138,6 +175,7 @@ namespace Kaguya.Core.Command_Handler
                 account.CommandRateLimit = 0;
             }
             UserAccounts.UserAccounts.SaveAccounts();
+            Servers.SaveServers();
         }
 
         public Task SupporterExpirationTimer(DiscordSocketClient client) //Checks supporter expiration times
@@ -202,7 +240,7 @@ namespace Kaguya.Core.Command_Handler
                 var seconds = server.AntiRaidSeconds;
                 var punishment = server.AntiRaidPunishment;
                 server.AntiRaidList.Add(user.Id);
-                Servers.SaveServers();
+                
 
                 if (!AntiRaidActive((user as SocketGuildUser).Guild))
                     return Task.CompletedTask;
@@ -273,7 +311,7 @@ namespace Kaguya.Core.Command_Handler
                     }
 
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 case "kick":
                     string kickedUsers = "";
@@ -319,7 +357,7 @@ namespace Kaguya.Core.Command_Handler
                         await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
                     }
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 case "shadowban":
                     string shadowbannedUsers = "";
@@ -368,7 +406,7 @@ namespace Kaguya.Core.Command_Handler
                         await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
                     }
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 case "ban":
                     string bannedUsers = "";
@@ -414,7 +452,7 @@ namespace Kaguya.Core.Command_Handler
                         await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
                     }
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 default:
                     break;

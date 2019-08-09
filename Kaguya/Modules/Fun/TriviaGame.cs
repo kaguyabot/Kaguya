@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord.Addons.Interactive;
 using Discord.Commands;
 using Kaguya.Core.Embed;
-using Discord.Addons.Interactive;
+using System.Threading.Tasks;
 
 namespace Kaguya.Modules.Fun
 {
-    [Group("trivia")]
     public class TriviaGame : InteractiveBase<SocketCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
@@ -19,5 +13,6 @@ namespace Kaguya.Modules.Fun
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
+
     }
 }

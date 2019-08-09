@@ -1,18 +1,18 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
 using Discord.Commands;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Kaguya.Core.Server_Files;
-using Discord;
-using Kaguya.Modules.osu;
-using System.Diagnostics;
+using Discord.WebSocket;
 using DiscordBotsList.Api;
 using DiscordBotsList.Api.Objects;
-using System.Collections.Generic;
-using Victoria;
 using Kaguya.Core.Embed;
+using Kaguya.Core.Server_Files;
+using Kaguya.Modules.osu;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using Victoria;
 
 namespace Kaguya.Core.CommandHandler
 {
@@ -190,7 +190,7 @@ namespace Kaguya.Core.CommandHandler
 
             server.ID = guild.Id;
             server.ServerName = guild.Name;
-            Servers.SaveServers();
+            
         }
 
         public Task LeftGuild(SocketGuild guild)
@@ -247,7 +247,7 @@ namespace Kaguya.Core.CommandHandler
 
             foreach (string loggedMessage in currentLog.LastFiveHundredMessages)
             {
-                if (loggedMessage.Contains(msg.Id.ToString()))
+                if (loggedMessage.Contains(msg.Id.ToString()) && !currentServer.IsPurgingMessages)
                 {
                     var text = loggedMessage.Split('℀');
                     EmbedBuilder embed = new EmbedBuilder();
@@ -352,7 +352,7 @@ namespace Kaguya.Core.CommandHandler
             embed.WithColor(Violet);
             await logChannel.SendMessageAsync("", false, embed.Build());
 
-            Servers.SaveServers();
+            
         }
 
         public async Task LoggingUserUnShadowbanned(SocketUser user, SocketGuild server)

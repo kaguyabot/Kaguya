@@ -517,7 +517,6 @@ namespace Kaguya.Modules
                 logger.ConsoleStatusAdvisory("User successfully claimed weekly points. Non critical.");
             }
             await BE();
-
             userAccount.Points += bonus;
         }
 
@@ -527,7 +526,7 @@ namespace Kaguya.Modules
         {
             var userAccount = UserAccounts.GetAccount(Context.User);
 
-            if(points > 25000)
+            if(points > 25000 && !userAccount.IsSupporter)
             {
                 embed.WithDescription($"{Context.User.Mention} You may not bet more than 25,000 points.");
                 embed.SetColor(EmbedColor.RED);
@@ -551,18 +550,24 @@ namespace Kaguya.Modules
                 return;
             }
 
+            userAccount.TotalCurrencyGambled += points;
+
             Random rand = new Random();
             double kaguyaDraw = rand.NextDouble();
             double userDraw = rand.NextDouble();
 
             bool critical = rand.Next(101) < 8; //8% Critical chance.
+            if (userAccount.IsSupporter || userAccount.IsBenefitingFromUpvote)
+                critical = rand.Next(101) < 16; //16% chance if supporter.
+            if (userAccount.IsSupporter && userAccount.IsBenefitingFromUpvote)
+                critical = rand.Next(101) < 32; //32% chance if supporter + has recently upvoted.
             double multiplier = 1.80;
 
             if(userDraw > kaguyaDraw)
             {
                 userAccount.Points -= (uint)points;
-
                 userAccount.TotalCurrencyLost += points;
+
                 embed.WithDescription($"🔫 **You lost!** - {Context.User.Mention} " +
                     $"has lost `{points.ToString("N0")}` points" +
                     $"\n" +

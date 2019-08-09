@@ -3,15 +3,15 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
+using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
-using System.Linq;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Kaguya.Core.Embed;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Help
@@ -90,13 +90,13 @@ namespace Kaguya.Modules.Help
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}toggleannouncements`");
                     await BE(); break;
-                case "bug":
+                case "bugreport":
                     embed.WithTitle($"Help: Bug Report | `{cmdPrefix}bug`");
                     embed.WithDescription($"{Context.User.Mention} Allows you to report a bug directly to the support server's `#bugs` channel so that my creator can take a look at what's wrong (and hopefully fix it)! " +
                         $"Please use this feature whenever you feel something is wrong with Kaguya, but don't overdo it! Messages that are spammy, violate the Discord TOS, or are abusive/deragotory in nature will " +
                         $"result in a `permanent blacklist` from all of Kaguya. A bug report that leads to something getting fixed will result in `+2000 Kaguya points` added to your account on the next patch as a thank you!" +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}bug <message>`");
+                        $"\nSyntax: `{cmdPrefix}bugreport <message>`");
                     await BE(); break;
                 case "kaguyawarn":
                     embed.WithTitle($"Help: Global Warnings | `{cmdPrefix}kaguyawarn`");
@@ -1070,7 +1070,7 @@ namespace Kaguya.Modules.Help
             string help = "```css" +
                     "\nAll commands in category: Help" +
                     "\n" +
-                    $"\n{cmdPrefix}bug" +
+                    $"\n{cmdPrefix}bugreport" +
                     $"\n{cmdPrefix}cooldowns" +
                     $"\n{cmdPrefix}help [h]" +
                     $"\n{cmdPrefix}helpdm [hdm]" +
@@ -1316,7 +1316,7 @@ namespace Kaguya.Modules.Help
                 $"\nKaguya Support Server: https://discord.gg/aumCJhr (This is also a good place to see what's coming soon and get notified when new updates come out :D)");
         }
 
-        [Command("bug")]
+        [Command("bugreport")]
         public async Task BugReport([Remainder]string report)
         {
             var bugChannel = Global.client.GetChannel(547448889620299826); //Kaguya support server #bugs channel.
@@ -1373,7 +1373,7 @@ namespace Kaguya.Modules.Help
                     {
                         userAccount.LastUpvotedKaguya = DateTime.Now;
                         userAccount.Points += 500;
-                        userAccount.NBombUsesThisHour = 5;
+                        userAccount.NBombUsesThisHour += 5;
 
                         embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points`, `2x critical hit rate` " +
                             $"and `cooldown resets` have been applied.");
