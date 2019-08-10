@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
@@ -38,7 +39,7 @@ namespace Kaguya.Core.LevelingSystem
                 Server guild = Servers.GetServer(channel.Guild);
                 if (oldLevel != userAccount.LevelNumber && guild.MessageAnnouncements == true)
                 {
-                    EmbedBuilder embed = new EmbedBuilder();
+                    KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
                     embed.WithDescription($"**{user.Nickname} [{user.Username}#{user.Discriminator}] just leveled up!**" +
                         $"\nLevel: {userAccount.LevelNumber.ToString("N0")} | EXP: {userAccount.EXP.ToString("N0")}");
 
