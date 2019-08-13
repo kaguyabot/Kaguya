@@ -316,7 +316,7 @@ namespace Kaguya.Core.CommandHandler
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();
             embed.WithTitle("User Left");
-            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\n`User ID: {user.Id}`");
+            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}`");
             embed.WithThumbnailUrl("https://i.imgur.com/624oxi8.png");
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(Red);
