@@ -15,6 +15,8 @@ Version 1.29
     emotion command (think $hug or $baka).
 - If you voteclaim, you are given 5 additional $n bomb uses for the hour.
     This means that if you had 3 $n bomb uses, you will now have 8 instead of 5.
+- Fixed a typo with the $slap command.
+- Fixed some grammatical errors in the DM that users get when they $redeem a supporter key.
 
 Version 1.28
 

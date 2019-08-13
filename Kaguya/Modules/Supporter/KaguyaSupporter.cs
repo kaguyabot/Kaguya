@@ -9,6 +9,7 @@ using Kaguya.Core.UserAccounts;
 using Discord;
 using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
+using Kaguya.Core;
 
 namespace Kaguya.Modules.Supporter
 {
@@ -17,6 +18,7 @@ namespace Kaguya.Modules.Supporter
         [Command("redeem")]
         public async Task KeyRedeem([Remainder]string key)
         {
+            Logger logger = new Logger();
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
 
             List<string> thirtyDayKeys = File.ReadAllLines($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/GitHub/Kaguya/30DayKeys.txt").ToList();
@@ -37,7 +39,7 @@ namespace Kaguya.Modules.Supporter
 
                     await GlobalCommandResponses.CreateSuccessfulRedemption(Context, thirtyDayKey,
                         "Successfully Redeemed Supporter Tag!",
-                        "Thank you so much for supporting the Kaguya Project! **`30 Days`** of Kaguya Supporter time have been added to your account.",
+                        "Thank you so much for supporting the Kaguya Project! **`30 Days`** of Kaguya Supporter time and **`600 Kaguya Diamonds`** have been added to your account.",
                         "The key you have just redeemed is no longer redeemable.");
 
                     var dmOwnerChannel = await stage.GetOrCreateDMChannelAsync();
@@ -47,9 +49,9 @@ namespace Kaguya.Modules.Supporter
                         await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is `{key}`");
                         await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(30, 1.12, guild.commandPrefix.ToLower()));
                     }
-                    catch
+                    catch (Exception e)
                     {
-                        //
+                        logger.ConsoleCriticalAdvisory(e.Message);
                     }
                 }
             }
@@ -75,9 +77,9 @@ namespace Kaguya.Modules.Supporter
                         await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is `{key}`");
                         await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(60, 2.25   , guild.commandPrefix.ToLower()));
                     }
-                    catch
+                    catch (Exception e)
                     {
-                        //
+                        logger.ConsoleCriticalAdvisory(e.Message);
                     }
                 }
             }
@@ -103,9 +105,9 @@ namespace Kaguya.Modules.Supporter
                         await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is `{key}`");
                         await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(90, 3.10, guild.commandPrefix.ToLower()));
                     }
-                    catch
+                    catch (Exception e)
                     {
-                        //
+                        logger.ConsoleCriticalAdvisory(e.Message);
                     }
                 }
             }
@@ -115,11 +117,11 @@ namespace Kaguya.Modules.Supporter
         {
             return new KaguyaEmbedBuilder()
                 .WithTitle("Kaguya Supporter Tag Redemption")
-                .WithDescription($"Thanks so much for redeeming a {days} days Supporter Tag! You help keep me running for {servertime} days.\n\n * *Here's what to do next**:" +
+                .WithDescription($"Thanks so much for redeeming a {days} day Supporter Tag! You help keep me running for `{servertime} days!`\n\n **Here's what to do next**:" +
                 $"\n - Most of your perks are already active, but if you want the cool Supporter role in my wonderful support Discord server, follow these instructions." +
                 $"\n\n - Use the  `{prefix}invite` command to get a link to my support server." +
-                $"\n - Once inside, use the {prefix}sync command in the `#bot-commands` chat." +
-                $"\n - There you go!You now have the supporter role." +
+                $"\n - Once inside, use the `$sync` command in the `#bot-commands` chat." +
+                $"\n - There you go! You now have the supporter role." +
                 $"\n\nWhen your supporter tag expires, you will receive a notification from me." +
                 $"\n\nThanks so much for your support!!").Build();
         }
