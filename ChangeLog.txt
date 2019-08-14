@@ -17,6 +17,7 @@ Version 1.29
     This means that if you had 3 $n bomb uses, you will now have 8 instead of 5.
 - Fixed a typo with the $slap command.
 - Fixed some grammatical errors in the DM that users get when they $redeem a supporter key.
+- The "I confirm" message for the NSFW age verification no longer has a length of time in which you must verify. (Was 20 seconds)
 
 Version 1.28
 
