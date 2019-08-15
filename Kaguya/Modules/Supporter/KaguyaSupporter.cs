@@ -53,6 +53,7 @@ namespace Kaguya.Modules.Supporter
                     {
                         logger.ConsoleCriticalAdvisory(e.Message);
                     }
+                    return;
                 }
             }
 
@@ -74,13 +75,14 @@ namespace Kaguya.Modules.Supporter
                     var dmUserChannel = await Context.User.GetOrCreateDMChannelAsync();
                     try
                     {
-                        await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is `{key}`");
+                        await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 60 days!\nKey used for this tag is `{key}`");
                         await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(60, 2.25   , guild.commandPrefix.ToLower()));
                     }
                     catch (Exception e)
                     {
                         logger.ConsoleCriticalAdvisory(e.Message);
                     }
+                    return;
                 }
             }
 
@@ -102,13 +104,14 @@ namespace Kaguya.Modules.Supporter
                     var dmUserChannel = await Context.User.GetOrCreateDMChannelAsync();
                     try
                     {
-                        await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is `{key}`");
+                        await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 90 days!\nKey used for this tag is `{key}`");
                         await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(90, 3.10, guild.commandPrefix.ToLower()));
                     }
                     catch (Exception e)
                     {
                         logger.ConsoleCriticalAdvisory(e.Message);
                     }
+                    return;
                 }
             }
         }

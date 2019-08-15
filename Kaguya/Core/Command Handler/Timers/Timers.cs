@@ -25,42 +25,6 @@ namespace Kaguya.Core.Command_Handler
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
         }
 
-        //private int ProcessCPUTimersActive = 0;
-
-        //public Task ProcessCPUTimer(DiscordSocketClient client)
-        //{
-        //    if(ProcessCPUTimersActive < 1)
-        //    {
-        //        Timer timer = new Timer(30000); //30 seconds
-        //        timer.Enabled = true;
-        //        timer.Elapsed += Process_CPU_Timer_Elapsed;
-        //        ProcessCPUTimersActive++;
-        //    }
-        //    return Task.CompletedTask;
-        //}
-
-        //private void Process_CPU_Timer_Elapsed(object sender, ElapsedEventArgs e)
-        //{
-        //    Process kaguya = Process.GetProcessesByName("Kaguya")[0];
-
-        //    var cpu = new PerformanceCounter("Process", "% Processor Time", kaguya.ProcessName, true);
-        //    var ram = new PerformanceCounter("Process", "Private Bytes", kaguya.ProcessName, true);
-
-        //    // Getting first initial values
-        //    cpu.NextValue();
-        //    ram.NextValue();
-
-        //    dynamic result = new ExpandoObject();
-
-        //    // If system has multiple cores, that should be taken into account
-        //    result.CPU = Math.Round(cpu.NextValue() / Environment.ProcessorCount, 2);
-        //    // Returns number of MB consumed by application
-        //    result.RAM = Math.Round(ram.NextValue() / 1024 / 1024, 2);
-
-        //    Console.WriteLine($"CPU Usage: {result.CPU}%" +
-        //        $"\nRAM: {result.RAM}MB");
-        //}
-
         private int RateLimitTimersActive = 0;
 
         public Task RateLimitResetTimer(DiscordSocketClient client)
@@ -517,19 +481,26 @@ namespace Kaguya.Core.Command_Handler
 
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
-
-            string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
-            $"Servicing {Global.TotalGuildCount.ToString("N0")} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
-            $"{Utilities.GetAlert("VERSION")}"};
-            displayIndex++;
-            if (displayIndex >= games.Length)
+            try
             {
-                displayIndex = 0;
-            }
+                var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
 
-            _client.SetGameAsync(games[displayIndex]);
-            logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
+                string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
+                $"Servicing {Global.client.Guilds.Count} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
+                $"{Utilities.GetAlert("VERSION")}"};
+                displayIndex++;
+                if (displayIndex >= games.Length)
+                {
+                    displayIndex = 0;
+                }
+
+                _client.SetGameAsync(games[displayIndex]);
+                logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
+            }
+            catch(Exception ex)
+            {
+                logger.ConsoleCriticalAdvisory(ex.Message);
+            }
         }
 
         public Task VerifyMessageReceived(DiscordSocketClient _client)

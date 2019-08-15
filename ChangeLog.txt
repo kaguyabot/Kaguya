@@ -18,6 +18,8 @@ Version 1.29
 - Fixed a typo with the $slap command.
 - Fixed some grammatical errors in the DM that users get when they $redeem a supporter key.
 - The "I confirm" message for the NSFW age verification no longer has a length of time in which you must verify. (Was 20 seconds)
+- Fixed a bug with a 30/60 day supporter key redemption where it would successfully redeem but also throw an error into chat.
+- Removed the days number in the ETA for $exp.
 
 Version 1.28
 
