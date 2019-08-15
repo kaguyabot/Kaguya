@@ -25,6 +25,14 @@ namespace Kaguya.Core.UserAccounts
                 return (KaguyaSupporterExpiration - DateTime.Now).TotalSeconds > 0;
             }
         }
+        public bool IsBenefitingFromUpvote
+        {
+            get
+            {
+                return (DateTime.Now - LastUpvotedKaguya).TotalSeconds > 0 && 
+                    (DateTime.Now - LastUpvotedKaguya).TotalSeconds < 43200; //12 hours
+            }
+        }
         public DateTime TemporaryBlacklistExpiration { get; set; }
         public DateTime LastReceivedEXP { get; set; }
         public DateTime LastReceivedTimelyPoints { get; set; }

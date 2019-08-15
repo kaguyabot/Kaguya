@@ -10,6 +10,7 @@ using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -27,6 +28,14 @@ namespace Kaguya.Modules.Owner_Only
         public async Task BE() //Method to build and send an embedded message.
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
+        }
+
+        [RequireOwner]
+        [Command("setgame")]
+        public async Task SetGame(string game)
+        {
+            await Global.client.SetGameAsync(game);
+            await ReplyAsync($"{Context.User.Mention} New game has been set.");
         }
 
         [RequireOwner]
@@ -61,7 +70,7 @@ namespace Kaguya.Modules.Owner_Only
                 var guild = Servers.GetServer(ID);
                 var server = _client.GetGuild(ID);
                 guild.IsBlacklisted = true;
-                Servers.SaveServers();
+                
                 description += $"\n{server.Name} has been blacklisted!";
             }
             embed.WithTitle("Server Blacklist");
@@ -82,7 +91,7 @@ namespace Kaguya.Modules.Owner_Only
                 var guild = Servers.GetServer(ID);
                 var server = _client.GetGuild(ID);
                 guild.IsBlacklisted = false;
-                Servers.SaveServers();
+                
                 description += $"\n{server.Name} has been un-blacklisted!";
             }
 
@@ -288,6 +297,22 @@ namespace Kaguya.Modules.Owner_Only
             await BE();
         }
 
+        [Command("weeklyreset")] //currency
+        [RequireOwner]
+        public async Task WeeklyReset()
+        {
+            var accounts = UserAccounts.GetAllAccounts();
+            foreach (var account in accounts)
+            {
+                var difference = DateTime.Now.AddHours(-168);
+                account.LastReceivedWeeklyPoints = difference;
+            }
+            embed.WithTitle("Weekly Reset");
+            embed.WithDescription($"**{Context.User.Mention} Weekly points for `{accounts.Count}` users have been reset!**");
+
+            await BE();
+        }
+
         [Command("expadd")] //exp
         [Alias("addexp")]
         [RequireOwner]
@@ -341,9 +366,11 @@ namespace Kaguya.Modules.Owner_Only
                 $"\n{cmdPrefix}restart" +
                 $"\n{cmdPrefix}serverblacklist [sbl]" +
                 $"\n{cmdPrefix}serverunblacklist [subl]" +
+                $"\n{cmdPrefix}setgame" +
                 $"\n{cmdPrefix}timelyreset" +
                 $"\n{cmdPrefix}userblacklist [ubl]" +
                 $"\n{cmdPrefix}userunblacklist [uubl]" +
+                $"\n{cmdPrefix}weeklyreset" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 "\n```";
@@ -400,12 +427,18 @@ namespace Kaguya.Modules.Owner_Only
             Environment.Exit(0);
         }
 
-        [Command("kill")]
+        [Command("kill", RunMode = RunMode.Async)]
         [RequireOwner]
         public async Task Kill()
         {
+            ServerMessageLogs.SaveServerLogging();
+            Servers.SaveServers();
+            UserAccounts.SaveAccounts();
+
             embed.WithDescription($"**{Context.User.Mention} Exiting...**");
-            await BE(); logger.ConsoleCriticalAdvisory("Exiting!!");
+            await BE();
+
+            logger.ConsoleCriticalAdvisory("Exiting!!");
             Environment.Exit(0);
         }
     }

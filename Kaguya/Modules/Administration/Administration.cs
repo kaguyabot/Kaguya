@@ -151,7 +151,7 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
-            Servers.SaveServers();
+            
 
             embed.WithDescription($"Awesome! Here's what I've got so far: " +
                 $"\n" +
@@ -190,25 +190,25 @@ namespace Kaguya.Modules.Administration
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "mute";
-                    Servers.SaveServers();
+                    
                     break;
                 case "kick":
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "kick";
-                    Servers.SaveServers();
+                    
                     break;
                 case "shadowban":
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "shadowban";
-                    Servers.SaveServers();
+                    
                     break;
                 case "ban":
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "ban";
-                    Servers.SaveServers();
+                    
                     break;
                 default:
                     break;
@@ -246,7 +246,7 @@ namespace Kaguya.Modules.Administration
             server.AntiRaid = false;
             server.AntiRaidList.Clear();
             server.LogAntiRaids = 0;
-            Servers.SaveServers();
+            
 
             embed.WithTitle("Anti-Raid Disabled");
             embed.WithDescription($"I have disabled Anti-Raid protections for this server.");
@@ -316,7 +316,7 @@ namespace Kaguya.Modules.Administration
                     Console.WriteLine("Mute: " + warnNums[3]);
 
                 }
-                Servers.SaveServers();
+                
             }
         }
 
@@ -359,7 +359,7 @@ namespace Kaguya.Modules.Administration
             }
 
             server.WarnActions.Add(warnAction.ToLower(), warnNum);
-            Servers.SaveServers();
+            
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 "Warn Settings Changed",
@@ -578,7 +578,7 @@ namespace Kaguya.Modules.Administration
                         d1 = " day";
 
                     server.MutedMembers.Add(user.Id.ToString(), timeSpan.Duration().ToString());
-                    Servers.SaveServers();
+                    
                     TimeSpanDuration = timeSpan.Duration();
                     await user.AddRoleAsync(muteRole);
 
@@ -623,7 +623,7 @@ namespace Kaguya.Modules.Administration
 
                     user.RemoveRoleAsync(muteRole); //Removes mute role from user.
                     mutedMembers.Remove(ID.ToString()); //Removes muted member from the dictionary.
-                    Servers.SaveServers();
+                    
 
                     logger.ConsoleTimerElapsed($"User [{user.Username}#{user.Discriminator} | {user.Id}] has been unmuted.");
                 }
@@ -758,7 +758,7 @@ namespace Kaguya.Modules.Administration
             {
                 await user.RemoveRoleAsync(muteRole);
                 mutedMembers.Remove(user.Id.ToString());
-                Servers.SaveServers();
+                
                 i++; logger.ConsoleGuildAdvisory(Context.Guild, "User unmuted.");
             }
 
@@ -778,7 +778,7 @@ namespace Kaguya.Modules.Administration
 
             var server = Servers.GetServer(Context.Guild);
             server.FilteredWords.Add(phrase);
-            Servers.SaveServers();
+            
 
             embed.WithTitle("Filtered word added");
             embed.WithDescription($"**{Context.User.Mention} Successfully added specified word to the filter.**");
@@ -798,7 +798,7 @@ namespace Kaguya.Modules.Administration
 
             var server = Servers.GetServer(Context.Guild);
             server.FilteredWords.Remove(phrase);
-            Servers.SaveServers();
+            
 
             embed.WithTitle("Filtered word added");
             embed.WithDescription($"**{Context.User.Mention} Successfully removed specified word from the filter.**");
@@ -845,7 +845,7 @@ namespace Kaguya.Modules.Administration
             }
 
             server.FilteredWords.Clear();
-            Servers.SaveServers();
+            
 
             embed.WithTitle("Cleared Filter");
             embed.WithDescription($"All filtered words for **{Context.Guild.Name}** have been successfully removed!");
@@ -1151,7 +1151,7 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
-            if(!(amount <= 100))
+            if(amount > 100)
             {
                 await GlobalCommandResponses.CreateCommandError(Context,
                     stopWatch.ElapsedMilliseconds,
@@ -1162,11 +1162,15 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
+            var server = Servers.GetServer(Context.Guild);
+            server.IsPurgingMessages = true;
+
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
             var m = await ReplyAsync($"Clearing of messages completed. This message will be deleted in 3 seconds.");
             await Task.Delay(3000);
             await m.DeleteAsync();
+            server.IsPurgingMessages = false;
         }
 
         [Command("shadowban")]

@@ -37,6 +37,7 @@ namespace Kaguya.Core.Server_Files
         public bool IsBlacklisted { get; set; }
         public string MostRecentBanReason { get; set; }
         public string MostRecentShadowbanReason { get; set; }
+        public bool IsPurgingMessages { get; set; }
         public Server(ulong id)
         {
             ID = id;
@@ -56,6 +57,7 @@ namespace Kaguya.Core.Server_Files
             AntiRaidCount = 0;
             AntiRaidPunishment = null;
             IsBlacklisted = false;
+            IsPurgingMessages = false;
         }
     }
 }

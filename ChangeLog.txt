@@ -5,6 +5,22 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
+Version 1.29
+
+- $quickdraw will now benefit from critical hit bonuses if the user is a supporter, 
+    or if the user has recently upvoted. (16% chance if upvoted or is an active supporter, 
+    32% if upvoted and supported).
+- $quickdraw will now let supporters bet an unlimited amount of points.
+- $bug has been renamed to $bugreport. This was because users were consistently confusing this for an 
+    emotion command (think $hug or $baka).
+- If you voteclaim, you are given 5 additional $n bomb uses for the hour.
+    This means that if you had 3 $n bomb uses, you will now have 8 instead of 5.
+- Fixed a typo with the $slap command.
+- Fixed some grammatical errors in the DM that users get when they $redeem a supporter key.
+- The "I confirm" message for the NSFW age verification no longer has a length of time in which you must verify. (Was 20 seconds)
+- Fixed a bug with a 30/60 day supporter key redemption where it would successfully redeem but also throw an error into chat.
+- Removed the days number in the ETA for $exp.
+
 Version 1.28
 
 - $level command deleted. This command has been merged into $exp.

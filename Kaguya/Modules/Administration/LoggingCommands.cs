@@ -34,91 +34,91 @@ namespace Kaguya.Modules.Administration
             {
                 case "deletedmessages":
                     server.LogDeletedMessages = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Deleted Messages` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "updatedmessages":
                     server.LogUpdatedMessages = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Edited Messages` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "userjoins":
                     server.LogWhenUserJoins = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `User Joins` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "userleaves":
                     server.LogWhenUserLeaves = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `User Leaves` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "bans":
                     server.LogBans = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Bans` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "unbans":
                     server.LogUnbans = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Unbans` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "changestologsettings":
                     server.LogChangesToLogSettings = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `changes to log settings` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "filteredphrases":
                     server.LogWhenUserSaysFilteredPhrase = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `Filtered Phrases` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "userconnectstovoice":
                     server.LogWhenUserConnectsToVoiceChannel = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `user connected to voice` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "userdisconnectsfromvoice":
                     server.LogWhenUserDisconnectsFromVoiceChannel = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages for `user disconnected from voice` will be sent in channel {channel.Name}");
                     await BE();
                      break;
                 case "levelannouncements":
                     server.LogLevelUpAnnouncements = logChannelID;
-                    Servers.SaveServers();
+                    
                     await GlobalCommandResponses.CreateCommandResponse(Context,
                         "Log Channel Set",
                         $"{Context.User.Mention} All log messages for `level announcements` will be sent in channel {channel.Name}");
                     break;
                 case "shadowbans":
                     server.LogShadowbans = logChannelID;
-                    Servers.SaveServers();
+                    
                     await GlobalCommandResponses.CreateCommandResponse(Context,
                         "Log Channel Set",
                         $"{Context.User.Mention} All log messages for `shadowbans` will be sent in channel {channel.Name}");
                     break;
                 case "unshadowbans":
                     server.LogUnShadowbans = logChannelID;
-                    Servers.SaveServers();
+                    
                     await GlobalCommandResponses.CreateCommandResponse(Context,
                         "Log Channel Set",
                         $"{Context.User.Mention} All log messages for `un-shadowbans` will be sent in channel {channel.Name}");
@@ -137,7 +137,7 @@ namespace Kaguya.Modules.Administration
                     server.LogLevelUpAnnouncements = logChannelID;
                     server.LogShadowbans = logChannelID;
                     server.LogUnShadowbans = logChannelID;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} All log messages will be sent in channel {channel.Name}");
                     await BE();
@@ -163,91 +163,91 @@ namespace Kaguya.Modules.Administration
             {
                 case "deletedmessages":
                     server.LogDeletedMessages = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Deleted Messages` have been disabled");
                     await BE();
                      break;
                 case "updatedmessages":
                     server.LogUpdatedMessages = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Updated Messages` have been disabled");
                     await BE();
                      break;
                 case "userjoins":
                     server.LogWhenUserJoins = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `User Joins` have been disabled");
                     await BE();
                      break;
                 case "userleaves":
                     server.LogWhenUserLeaves = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `User Leaves` have been disabled");
                     await BE();
                      break;
                 case "bans":
                     server.LogBans = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Bans` have been disabled");
                     await BE();
                      break;
                 case "unbans":
                     server.LogUnbans = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Unbans` have been disabled");
                     await BE();
                      break;
                 case "changestologsettings":
                     server.LogChangesToLogSettings = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `changes to log settings` have been disabled");
                     await BE();
                      break;
                 case "filteredphrases":
                     server.LogWhenUserSaysFilteredPhrase = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `Filtered Phrases` have been disabled");
                     await BE();
                      break;
                 case "userconnectstovoice":
                     server.LogWhenUserConnectsToVoiceChannel = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `user connects to voice` have been disabled");
                     await BE();
                      break;
                 case "userdisconnectsfromvoice":
                     server.LogWhenUserDisconnectsFromVoiceChannel = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Set");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `user disconnects from voice` have been disabled");
                     await BE();
                      break;
                 case "levelannouncements":
                     server.LogLevelUpAnnouncements = 0;
-                    Servers.SaveServers();
+                    
                     await GlobalCommandResponses.CreateCommandResponse(Context,
                         "Log Channel Set",
                         $"{Context.User.Mention} Log messages for `level announcements` have been disabled.");
                     break;
                 case "shadowbans":
                     server.LogShadowbans = 0;
-                    Servers.SaveServers();
+                    
                     await GlobalCommandResponses.CreateCommandResponse(Context,
                         "Log Channel Set",
                         $"{Context.User.Mention} Log messages for `shadowbans` have been disabled.");
                     break;
                 case "unshadowbans":
                     server.LogUnShadowbans = 0;
-                    Servers.SaveServers();
+                    
                     await GlobalCommandResponses.CreateCommandResponse(Context,
                         "Log Channel Set",
                         $"{Context.User.Mention} Log messages for `un-shadowbans` have been disabled.");
@@ -266,7 +266,7 @@ namespace Kaguya.Modules.Administration
                     server.LogLevelUpAnnouncements = 0;
                     server.LogShadowbans = 0;
                     server.LogUnShadowbans = 0;
-                    Servers.SaveServers();
+                    
                     embed.WithTitle("Log Channel Reset");
                     embed.WithDescription($"{Context.User.Mention} Log messages for `everything` have been disabled.");
                     await BE();

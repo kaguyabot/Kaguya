@@ -4,6 +4,7 @@ using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using System;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -138,6 +139,7 @@ namespace Kaguya.Core.Command_Handler
                 account.CommandRateLimit = 0;
             }
             UserAccounts.UserAccounts.SaveAccounts();
+            Servers.SaveServers();
         }
 
         public Task SupporterExpirationTimer(DiscordSocketClient client) //Checks supporter expiration times
@@ -202,8 +204,7 @@ namespace Kaguya.Core.Command_Handler
                 var seconds = server.AntiRaidSeconds;
                 var punishment = server.AntiRaidPunishment;
                 server.AntiRaidList.Add(user.Id);
-                Servers.SaveServers();
-
+                
                 if (!AntiRaidActive((user as SocketGuildUser).Guild))
                     return Task.CompletedTask;
 
@@ -273,7 +274,7 @@ namespace Kaguya.Core.Command_Handler
                     }
 
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 case "kick":
                     string kickedUsers = "";
@@ -319,7 +320,7 @@ namespace Kaguya.Core.Command_Handler
                         await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
                     }
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 case "shadowban":
                     string shadowbannedUsers = "";
@@ -368,7 +369,7 @@ namespace Kaguya.Core.Command_Handler
                         await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
                     }
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 case "ban":
                     string bannedUsers = "";
@@ -414,7 +415,7 @@ namespace Kaguya.Core.Command_Handler
                         await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
                     }
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 default:
                     break;
@@ -479,19 +480,26 @@ namespace Kaguya.Core.Command_Handler
 
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
-
-            string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
-            $"Servicing {Global.TotalGuildCount.ToString("N0")} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
-            $"{Utilities.GetAlert("VERSION")}"};
-            displayIndex++;
-            if (displayIndex >= games.Length)
+            try
             {
-                displayIndex = 0;
-            }
+                var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
 
-            _client.SetGameAsync(games[displayIndex]);
-            logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
+                string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
+                $"Servicing {Global.client.Guilds.Count} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
+                $"{Utilities.GetAlert("VERSION")}"};
+                displayIndex++;
+                if (displayIndex >= games.Length)
+                {
+                    displayIndex = 0;
+                }
+
+                _client.SetGameAsync(games[displayIndex]);
+                logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
+            }
+            catch(Exception ex)
+            {
+                logger.ConsoleCriticalAdvisory(ex.Message);
+            }
         }
 
         public Task VerifyMessageReceived(DiscordSocketClient _client)
