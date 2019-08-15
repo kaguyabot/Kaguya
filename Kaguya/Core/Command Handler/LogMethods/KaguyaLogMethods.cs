@@ -190,7 +190,6 @@ namespace Kaguya.Core.CommandHandler
 
             server.ID = guild.Id;
             server.ServerName = guild.Name;
-            
         }
 
         public Task LeftGuild(SocketGuild guild)
@@ -351,8 +350,6 @@ namespace Kaguya.Core.CommandHandler
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(Violet);
             await logChannel.SendMessageAsync("", false, embed.Build());
-
-            
         }
 
         public async Task LoggingUserUnShadowbanned(SocketUser user, SocketGuild server)

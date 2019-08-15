@@ -563,7 +563,9 @@ namespace Kaguya.Modules
                 critical = rand.Next(101) < 32; //32% chance if supporter + has recently upvoted.
             double multiplier = 1.80;
 
-            if(userDraw > kaguyaDraw)
+            userAccount.TotalCurrencyGambled += points;
+
+            if (userDraw > kaguyaDraw)
             {
                 userAccount.Points -= (uint)points;
                 userAccount.TotalCurrencyLost += points;

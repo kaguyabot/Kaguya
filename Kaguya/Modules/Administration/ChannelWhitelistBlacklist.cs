@@ -33,7 +33,6 @@ namespace Kaguya.Modules.Administration
 
             blacklist.Add(channel.Id);
             whitelist.Clear();
-            
 
             embed.WithTitle($"Channel Blacklist");
             embed.WithDescription($"{Context.User.Mention} I have blacklisted the channel #`{channel.Name}`.");
@@ -52,7 +51,6 @@ namespace Kaguya.Modules.Administration
 
             whitelist.Add(channel.Id);
             blacklist.Clear();
-            
 
             embed.WithTitle($"Channel Whitelist");
             embed.WithDescription($"I have whitelisted the channel `#{channel.Name}`");
@@ -78,7 +76,6 @@ namespace Kaguya.Modules.Administration
 
             blacklist.Remove(channel.Id);
             
-
             if (blacklist.Count < 1)
             {
                 embed.WithTitle($"Error: Channel Un-Blacklist");
@@ -89,7 +86,6 @@ namespace Kaguya.Modules.Administration
             else if (blacklist.Count == 1)
             {
                 blacklist.Clear();
-                
 
                 embed.WithTitle($"Channel Un-Blacklisted");
                 embed.WithDescription($"This was the last channel in the blacklist, so the blacklist has been lifted!");
@@ -105,7 +101,6 @@ namespace Kaguya.Modules.Administration
                 await BE();
 
                 blacklist.Remove(channel.Id);
-                
             }
         }
 
@@ -127,7 +122,6 @@ namespace Kaguya.Modules.Administration
             if (whitelist.Count == 1)
             {
                 whitelist.Clear();
-                
 
                 embed.WithTitle($"Channel Un-Whitelist");
                 embed.WithDescription($"This was the last channel in the whitelist, so the whitelist has been lifted!");
@@ -150,7 +144,6 @@ namespace Kaguya.Modules.Administration
                 await BE();
 
                 whitelist.Remove(channel.Id);
-                
             }
         }
 

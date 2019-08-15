@@ -182,7 +182,6 @@ namespace Kaguya.Modules.Utility
             }
 
             server.commandPrefix = prefix;
-            
 
             embed.WithTitle("Change Command Prefix: Success!");
             embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");

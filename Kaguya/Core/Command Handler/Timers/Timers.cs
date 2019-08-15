@@ -205,7 +205,6 @@ namespace Kaguya.Core.Command_Handler
                 var punishment = server.AntiRaidPunishment;
                 server.AntiRaidList.Add(user.Id);
                 
-
                 if (!AntiRaidActive((user as SocketGuildUser).Guild))
                     return Task.CompletedTask;
 
