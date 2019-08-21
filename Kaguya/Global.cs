@@ -20,6 +20,8 @@ namespace Kaguya
         public static int TotalVoiceChannels { get; set; }
         public static int ShardsToLogIn { get; set; }
         public static int ShardsLoggedIn { get; set; }
+        public static double cpuUsage { get; set; }
+        public static double ramUsage { get; set; }
         public static string[] stillsCollection = Directory.GetFiles($"{Directory.GetCurrentDirectory()}/Hentai/Stills");
         public static string[] gifsCollection = Directory.GetFiles($"{Directory.GetCurrentDirectory()}/Hentai/Gifs");
     }

@@ -25,6 +25,42 @@ namespace Kaguya.Core.Command_Handler
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
         }
 
+        private int ProcessCPUTimersActive = 0;
+
+        public Task ProcessCPUTimer(DiscordSocketClient client)
+        {
+            if (ProcessCPUTimersActive < 1)
+            {
+                Timer timer = new Timer(30000); //30 seconds
+                timer.Enabled = true;
+                timer.Elapsed += Process_CPU_Timer_Elapsed;
+                ProcessCPUTimersActive++;
+            }
+            return Task.CompletedTask;
+        }
+
+        private void Process_CPU_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Process kaguya = Process.GetProcessesByName("Kaguya")[0];
+
+            var cpu = new PerformanceCounter("Process", "% Processor Time", kaguya.ProcessName, true);
+            var ram = new PerformanceCounter("Process", "Private Bytes", kaguya.ProcessName, true);
+
+            // Getting first initial values
+            cpu.NextValue();
+            ram.NextValue();
+
+            dynamic result = new ExpandoObject();
+
+            // If system has multiple cores, that should be taken into account
+            result.CPU = Math.Round(cpu.NextValue() / Environment.ProcessorCount, 3);
+            // Returns number of MB consumed by application
+            result.RAM = Math.Round(ram.NextValue() / 1024 / 1024, 3);
+
+            Global.cpuUsage = result.CPU;
+            Global.ramUsage = result.RAM;
+        }
+
         private int RateLimitTimersActive = 0;
 
         public Task RateLimitResetTimer(DiscordSocketClient client)

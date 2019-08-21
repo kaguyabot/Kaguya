@@ -5,6 +5,11 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
+Version 1.30
+
+- $stats will now show the process's CPU usage as well as the RAM usage.
+
+
 Version 1.29
 
 - $quickdraw will now benefit from critical hit bonuses if the user is a supporter, 
