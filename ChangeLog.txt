@@ -8,7 +8,12 @@ Changelog:
 Version 1.30
 
 - $stats will now show the process's CPU usage as well as the RAM usage.
-
+- $quickdraw has had the winning multiplier reduced to 1.70x your bet (was 1.80x)
+- $quickdraw critical hit chance has been reduced:
+    - Regular: 2% (was 8%)
+    - Supporter or has upvoted within the last 12 hours: 4% (was 16%)
+    - Supporter and has upvoted: 6% (was 32%)
+- $quickdraw critical bonus multiplier has been changed to 2.89x (was 4.05x)
 
 Version 1.29
 

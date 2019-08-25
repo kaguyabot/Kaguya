@@ -128,7 +128,7 @@ namespace Kaguya.Modules.Help
                         $"\nCritical Rewards:" +
                         $"\n" +
                         $"\nRolls: `5% chance that the multiplier of your bet is multiplied by 2.5x`" +
-                        $"\nQuickdraw: `8% chance that you will receive ~4.05x your bet.`" +
+                        $"\nQuickdraw: `2% chance that you will receive ~2.89x your bet.`" +
                         $"\nTimely: `6% chance that the value of your reward is multiplied by 3.5x`" +
                         $"\nWeekly: `8% chance that the value of your reward will be multiplied by 3.5x`" +
                         $"\n" +

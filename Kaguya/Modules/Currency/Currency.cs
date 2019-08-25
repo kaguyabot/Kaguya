@@ -556,12 +556,12 @@ namespace Kaguya.Modules
             double kaguyaDraw = rand.NextDouble();
             double userDraw = rand.NextDouble();
 
-            bool critical = rand.Next(101) < 8; //8% Critical chance.
+            bool critical = rand.Next(101) < 2; //2% Critical chance.
             if (userAccount.IsSupporter || userAccount.IsBenefitingFromUpvote)
-                critical = rand.Next(101) < 16; //16% chance if supporter.
+                critical = rand.Next(101) < 4; //4% chance if supporter.
             if (userAccount.IsSupporter && userAccount.IsBenefitingFromUpvote)
-                critical = rand.Next(101) < 32; //32% chance if supporter + has recently upvoted.
-            double multiplier = 1.80;
+                critical = rand.Next(101) < 6; //6% chance if supporter + has recently upvoted.
+            double multiplier = 1.70;
 
             userAccount.TotalCurrencyGambled += points;
 
@@ -587,7 +587,7 @@ namespace Kaguya.Modules
                 string critText = "";
                 if (critical)
                 {
-                    multiplier *= 2.25; //Puts total bonus at around 4x what they bet
+                    multiplier *= 1.70; //Puts total bonus at around 2.89x what they bet
                     critText += " It's a critical hit!!";
                 }
 
