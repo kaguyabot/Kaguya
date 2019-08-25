@@ -14,6 +14,17 @@ Version 1.30
     - Supporter or has upvoted within the last 12 hours: 4% (was 16%)
     - Supporter and has upvoted: 6% (was 32%)
 - $quickdraw critical bonus multiplier has been changed to 2.89x (was 4.05x)
+- Fixed a bug with $timely where only users who upvoted within the last 6 hours 
+    would get the double critical chance (was supposed to be 12 hours)
+- Fixed a bug with $timely where users who are an upvoter or active supporter would 
+    receive a -2% critical hit bonus compared to the default.
+- Timely critical hit chances have been adjusted:
+    - Crtical base: 14% (was 14%, just writing here for reference)
+    - If upvoted or is an active supporter: 22% (was 12%)
+    - If upvoted and supporter: 30% (was 24%)
+- Fixed a bug with the timely critical rewards where all criticals were -1% from
+    what they should have been.
+
 
 Version 1.29
 

@@ -35,6 +35,8 @@ namespace Kaguya.Modules.Help
             var users = UserAccounts.GetAllAccounts();
             var count = users.Count;
             var userRankings = users.OrderByDescending(x => x.EXP).Take(count);
+            string badges = "\nBadges: ";
+
             int i = 1;
 
             foreach(var acc in userRankings)
@@ -44,6 +46,13 @@ namespace Kaguya.Modules.Help
                 else
                     break;
             }
+
+            if (account.IsSupporter)
+                badges += "<:SupporterBadge:607891992801837057>";
+            if (i == 1)
+                badges += " <:Rank1EXP:607891992793579539>";
+            if (account.TotalCurrencyGambled > 10000000)
+                badges += " 🎲";
 
             System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
             string monthName = mfi.GetMonthName(user.CreatedAt.Month).ToString();
@@ -59,7 +68,8 @@ namespace Kaguya.Modules.Help
                 $"\nRep: `{account.Rep.ToString("N0")}`" +
                 $"\nLevel: `{account.LevelNumber.ToString("N0")}`" +
                 $"\n<a:KaguyaDiamonds:581562698228301876>: `{account.Diamonds.ToString("N0")}`" +
-                $"\nEXP Rank: `#{i.ToString("N0")}/{count.ToString("N0")}`", false);
+                $"\nEXP Rank: `#{i.ToString("N0")}/{count.ToString("N0")}`" +
+                $"{badges}", false);
             embed.AddField("Currency Data",
                 $"\nTotal Points Awarded: `{account.TotalCurrencyAwarded.ToString("N0")}`" +
                 $"\nTotal Points Lost: `{account.TotalCurrencyLost.ToString("N0")}`" +

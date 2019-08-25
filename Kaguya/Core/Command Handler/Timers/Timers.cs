@@ -55,7 +55,7 @@ namespace Kaguya.Core.Command_Handler
             // If system has multiple cores, that should be taken into account
             result.CPU = Math.Round(cpu.NextValue() / Environment.ProcessorCount, 3);
             // Returns number of MB consumed by application
-            result.RAM = Math.Round(ram.NextValue() / 1024 / 1024, 3);
+            result.RAM = Math.Round(ram.NextValue() / 1024 / 1024, 2);
 
             Global.cpuUsage = result.CPU;
             Global.ramUsage = result.RAM;

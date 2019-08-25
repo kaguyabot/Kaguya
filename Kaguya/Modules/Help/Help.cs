@@ -129,7 +129,7 @@ namespace Kaguya.Modules.Help
                         $"\n" +
                         $"\nRolls: `5% chance that the multiplier of your bet is multiplied by 2.5x`" +
                         $"\nQuickdraw: `2% chance that you will receive ~2.89x your bet.`" +
-                        $"\nTimely: `6% chance that the value of your reward is multiplied by 3.5x`" +
+                        $"\nTimely: `14% chance that the value of your reward is multiplied by 3.5x`" +
                         $"\nWeekly: `8% chance that the value of your reward will be multiplied by 3.5x`" +
                         $"\n" +
                         $"\nIf you have successfully used `{cmdPrefix}voteclaim` within the last 12 hours, these percentages are doubled.");

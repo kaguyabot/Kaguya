@@ -48,9 +48,8 @@ namespace Kaguya.Modules
             timeout = command.TimelyHours;
             bonus = command.TimelyPoints;
             Random rand = new Random();
-            bool critical = rand.Next(100) < 14;
+            bool critical = rand.Next(101) < 14;
             var difference = DateTime.Now - userAccount.LastReceivedTimelyPoints;
-            var supporterTime = userAccount.KaguyaSupporterExpiration - DateTime.Now;
 
             if (!CanReceiveTimelyPoints(userAccount, (int)timeout))
             {
@@ -63,14 +62,11 @@ namespace Kaguya.Modules
                 return;
             }
 
-            if (difference.TotalHours < 6) //Difference of now compared to when user last upvoted Kaguya on DBL.
-                critical = rand.Next(100) < 12;
+            if (difference.TotalHours < 12 || userAccount.IsSupporter) //Difference of now compared to when user last upvoted Kaguya on DBL.
+                critical = rand.Next(101) < 22;
 
-            if (supporterTime.TotalSeconds > 0)
-                critical = rand.Next(100) < 12;
-
-            if (difference.TotalHours < 12 && supporterTime.TotalSeconds > 0)
-                critical = rand.Next(100) < 24;
+            if (difference.TotalHours < 12 && userAccount.IsSupporter)
+                critical = rand.Next(101) < 30;
 
             if(critical) { bonus *= 3.50; }
 
@@ -474,20 +470,16 @@ namespace Kaguya.Modules
         {
             UserAccount userAccount = UserAccounts.GetAccount(Context.User);
             Logger logger = new Logger();
-            var supporterTime = userAccount.KaguyaSupporterExpiration - DateTime.Now;
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
             Random crit = new Random();
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             var multiplier = 3.50;
-            bool critical = crit.Next(100) < 8; //8% chance of weekly being a critical roll
+            bool critical = crit.Next(100) < 8; //8% chance of weekly being a critical hit
 
-            if (difference.TotalHours < 12)
-                critical = crit.Next(100) < 12; //16% if they've upvoted Kaguya within the last 12 hours.
+            if (difference.TotalHours < 12 || userAccount.IsSupporter)
+                critical = crit.Next(100) < 12; //12% if they've upvoted Kaguya within the last 12 hours or they are a supporter.
 
-            if (supporterTime.TotalSeconds > 0)
-                critical = crit.Next(100) < 12;
-
-            if (supporterTime.TotalSeconds > 0 && difference.TotalHours < 12)
+            if (difference.TotalHours < 12 && userAccount.IsSupporter) //24% critical chance if upvoted and supporter.
                 critical = crit.Next(100) < 24;
 
             if (!CanReceiveWeeklyPoints(userAccount, timeout))
@@ -558,7 +550,7 @@ namespace Kaguya.Modules
 
             bool critical = rand.Next(101) < 2; //2% Critical chance.
             if (userAccount.IsSupporter || userAccount.IsBenefitingFromUpvote)
-                critical = rand.Next(101) < 4; //4% chance if supporter.
+                critical = rand.Next(101) < 4; //4% chance if supporter or has recently upvoted.
             if (userAccount.IsSupporter && userAccount.IsBenefitingFromUpvote)
                 critical = rand.Next(101) < 6; //6% chance if supporter + has recently upvoted.
             double multiplier = 1.70;
