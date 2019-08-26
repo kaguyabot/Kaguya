@@ -225,7 +225,7 @@ namespace Kaguya.Modules
             }
             else if(!winner)
             {
-                logger.ConsoleInformationAdvisory($"Quickdraw: Loser - User {uAccount.ID} | {uAccfount.Username}" +
+                logger.ConsoleInformationAdvisory($"Quickdraw: Loser - User {uAccount.ID} | {uAccount.Username}" +
                     $" - Points Lost: {pointsGambled.ToString("N0")}" +
                     $" - Kaguya Time: {KRoll.ToString("N3")}s - User Time: {URoll.ToString("N3")}s");
                 uAccount.GambleHistory.Add($"\n🔴 `QD:` `KTime: {KRoll.ToString("N3")}s` - `UTime: {URoll.ToString("N3")}s` - " +
@@ -274,7 +274,7 @@ namespace Kaguya.Modules
             if (points > 500000 && userAccount.IsSupporter)
             {
                 embed.WithDescription($"{Context.User.Mention} You are attempting to bet too many points " +
-                    $"(must be less than 500,000).");
+                    $"(must be less than or equal to 500,000).");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
                 return;
@@ -567,7 +567,7 @@ namespace Kaguya.Modules
             if(points > 500000 && userAccount.IsSupporter)
             {
                 embed.WithDescription($"{Context.User.Mention} You are attempting to bet too many points " +
-                    $"(must be less than 500,000).");
+                    $"(must be less than or equal to 500,000).");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
                 return;
