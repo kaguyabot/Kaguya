@@ -13,7 +13,7 @@ Version 1.30
     - Regular: 2% (was 8%)
     - Supporter or has upvoted within the last 12 hours: 4% (was 16%)
     - Supporter and has upvoted: 6% (was 32%)
-- $quickdraw critical bonus multiplier has been changed to 2.89x (was 4.05x)
+- $quickdraw critical bonus multiplier has been changed to 2.40x (was 4.05x)
 - Fixed a bug with $timely where only users who upvoted within the last 6 hours 
     would get the double critical chance (was supposed to be 12 hours)
 - Fixed a bug with $timely where users who are an upvoter or active supporter would 
@@ -25,6 +25,7 @@ Version 1.30
 - Fixed a bug with the timely critical rewards where all criticals were -1% from
     what they should have been.
 - $gamblehistory will now show statistics for your $quickdraw results.
+- $gr and $qd now have a max gamble limit of 500,000 points if the user is a supporter.
 
 
 

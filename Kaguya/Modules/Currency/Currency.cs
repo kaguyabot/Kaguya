@@ -225,7 +225,7 @@ namespace Kaguya.Modules
             }
             else if(!winner)
             {
-                logger.ConsoleInformationAdvisory($"Quickdraw: Loser - User {uAccount.ID} | {uAccount.Username}" +
+                logger.ConsoleInformationAdvisory($"Quickdraw: Loser - User {uAccount.ID} | {uAccfount.Username}" +
                     $" - Points Lost: {pointsGambled.ToString("N0")}" +
                     $" - Kaguya Time: {KRoll.ToString("N3")}s - User Time: {URoll.ToString("N3")}s");
                 uAccount.GambleHistory.Add($"\n🔴 `QD:` `KTime: {KRoll.ToString("N3")}s` - `UTime: {URoll.ToString("N3")}s` - " +
@@ -261,7 +261,7 @@ namespace Kaguya.Modules
                 logger.ConsoleInformationAdvisory($"User may not gamble less than one point.");
                 return;
             }
-            if (points > 25000 && !((userAccount.KaguyaSupporterExpiration - DateTime.Now).TotalSeconds > 0))
+            if (points > 25000 && !userAccount.IsSupporter)
             {
                 embed.WithTitle("Gambling: Too Many Points!");
                 embed.WithDescription($"**{user.Mention} you are attempting to gamble too many points!" +
@@ -269,6 +269,14 @@ namespace Kaguya.Modules
                 embed.SetColor(EmbedColor.RED);
                 await BE();
                 logger.ConsoleInformationAdvisory("User attempted to gamble too many points.");
+                return;
+            }
+            if (points > 500000 && userAccount.IsSupporter)
+            {
+                embed.WithDescription($"{Context.User.Mention} You are attempting to bet too many points " +
+                    $"(must be less than 500,000).");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
                 return;
             }
 
@@ -556,6 +564,15 @@ namespace Kaguya.Modules
                 return;
             }
 
+            if(points > 500000 && userAccount.IsSupporter)
+            {
+                embed.WithDescription($"{Context.User.Mention} You are attempting to bet too many points " +
+                    $"(must be less than 500,000).");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
             if (points < 50)
             {
                 embed.WithDescription($"{Context.User.Mention} You may not bet less than 50 points.");
@@ -609,7 +626,7 @@ namespace Kaguya.Modules
                 string critText = "";
                 if (critical)
                 {
-                    multiplier *= 1.70; //Puts total bonus at around 2.89x what they bet
+                    multiplier = 2.40; //Puts total bonus at around 2.89x what they bet
                     critText += " It's a critical hit!!";
                 }
 
