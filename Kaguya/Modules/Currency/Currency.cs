@@ -173,7 +173,8 @@ namespace Kaguya.Modules
             }
         }
 
-        private void GambleHistory(UserAccount uAccount, int roll, int pointsGambled, int pointsWonLost, int luck, bool winner = true)
+        private void GambleHistory(UserAccount uAccount, int roll, 
+            int pointsGambled, int pointsWonLost, int luck, bool winner = true)
         {
             Logger logger = new Logger();
 
@@ -193,14 +194,43 @@ namespace Kaguya.Modules
             if (winner)
             {
                 logger.ConsoleInformationAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Gambled: {pointsGambled} - Points Won: {pointsWonLost} - Luck: {j}");
-                uAccount.GambleHistory.Add($"\n🔵 Roll: `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
+                uAccount.GambleHistory.Add($"\n🔵 `Roll:` `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
                     $"Points Won: `{pointsWonLost.ToString("N0")}` - `{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
             }
             else
             {
                 logger.ConsoleInformationAdvisory($"Gambling: User {uAccount.Username} - Roll: {roll} - Points Lost: {pointsWonLost} - Luck: {j}");
-                uAccount.GambleHistory.Add($"\n🔴 Roll: `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
+                uAccount.GambleHistory.Add($"\n🔴 `Roll:` `{roll}` - Points Gambled: `{pointsGambled.ToString("N0")}` - " +
                     $"Points Lost: `{pointsWonLost.ToString("N0")}` - `{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
+            }
+        }
+
+        private void QuickdrawHistory(UserAccount uAccount, double KRoll, 
+            double URoll, int pointsGambled, int reward, bool winner,
+            bool critical)
+        {
+            Logger logger = new Logger();
+
+            if (uAccount.GambleHistory.Count >= 10)
+                uAccount.GambleHistory.RemoveAt(0);
+
+            if(winner)
+            {
+                logger.ConsoleInformationAdvisory($"Quickdraw: Winner - User {uAccount.ID} | {uAccount.Username}" +
+                    $" - Points Gambled: {pointsGambled.ToString("N0")} - Points Won: {reward.ToString("N0")}" +
+                    $" - Kaguya Time: {KRoll.ToString("N3")}s - User Time: {URoll.ToString("N3")}s - Critical: {critical}");
+                uAccount.GambleHistory.Add($"\n🔵 `QD:` `KTime: {KRoll.ToString("N3")}s` - `UTime: {URoll.ToString("N3")}s` - " +
+                    $"Pts: `{pointsGambled.ToString("N0")}` - Pts Awarded: `{reward.ToString("N0")}` - " +
+                    $"`{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
+            }
+            else if(!winner)
+            {
+                logger.ConsoleInformationAdvisory($"Quickdraw: Loser - User {uAccount.ID} | {uAccount.Username}" +
+                    $" - Points Lost: {pointsGambled.ToString("N0")}" +
+                    $" - Kaguya Time: {KRoll.ToString("N3")}s - User Time: {URoll.ToString("N3")}s");
+                uAccount.GambleHistory.Add($"\n🔴 `QD:` `KTime: {KRoll.ToString("N3")}s` - `UTime: {URoll.ToString("N3")}s` - " +
+                    $"Pts: `{pointsGambled.ToString("N0")}` - " +
+                    $"`{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
             }
         }
 
@@ -553,7 +583,7 @@ namespace Kaguya.Modules
                 critical = rand.Next(101) < 4; //4% chance if supporter or has recently upvoted.
             if (userAccount.IsSupporter && userAccount.IsBenefitingFromUpvote)
                 critical = rand.Next(101) < 6; //6% chance if supporter + has recently upvoted.
-            double multiplier = 1.70;
+            double multiplier = 1.75;
 
             userAccount.TotalCurrencyGambled += points;
 
@@ -571,7 +601,7 @@ namespace Kaguya.Modules
                 embed.SetColor(EmbedColor.RED);
                 await BE();
 
-                logger.ConsoleInformationAdvisory($"User {Context.User} - Quickdraw: Loser");
+                QuickdrawHistory(userAccount, kaguyaDraw, userDraw, points, 0, false, critical);
             }
 
             if (kaguyaDraw > userDraw)
@@ -595,7 +625,8 @@ namespace Kaguya.Modules
                 embed.WithFooter($"Aced! - Points Balance: {userAccount.Points.ToString("N0")}");
                 embed.SetColor(EmbedColor.GREEN);
                 await BE();
-                logger.ConsoleStatusAdvisory($"User {Context.User} - Quickdraw: Winner{critText}");
+
+                QuickdrawHistory(userAccount, kaguyaDraw, userDraw, points, award, true, critical);
             }
 
             if(userDraw == kaguyaDraw)
