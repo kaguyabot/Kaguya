@@ -206,8 +206,7 @@ namespace Kaguya.Modules
         }
 
         private void QuickdrawHistory(UserAccount uAccount, double KRoll, 
-            double URoll, int pointsGambled, int reward, bool winner,
-            bool critical)
+            double URoll, int pointsGambled, int reward, bool winner)
         {
             Logger logger = new Logger();
 
@@ -218,7 +217,7 @@ namespace Kaguya.Modules
             {
                 logger.ConsoleInformationAdvisory($"Quickdraw: Winner - User {uAccount.ID} | {uAccount.Username}" +
                     $" - Points Gambled: {pointsGambled.ToString("N0")} - Points Won: {reward.ToString("N0")}" +
-                    $" - Kaguya Time: {KRoll.ToString("N3")}s - User Time: {URoll.ToString("N3")}s - Critical: {critical}");
+                    $" - Kaguya Time: {KRoll.ToString("N3")}s - User Time: {URoll.ToString("N3")}s");
                 uAccount.GambleHistory.Add($"\n🔵 `QD:` `KTime: {KRoll.ToString("N3")}s` - `UTime: {URoll.ToString("N3")}s` - " +
                     $"Pts: `{pointsGambled.ToString("N0")}` - Pts Awarded: `{reward.ToString("N0")}` - " +
                     $"`{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}`");
@@ -595,12 +594,7 @@ namespace Kaguya.Modules
             double kaguyaDraw = rand.NextDouble();
             double userDraw = rand.NextDouble();
 
-            bool critical = rand.Next(101) < 2; //2% Critical chance.
-            if (userAccount.IsSupporter || userAccount.IsBenefitingFromUpvote)
-                critical = rand.Next(101) < 4; //4% chance if supporter or has recently upvoted.
-            if (userAccount.IsSupporter && userAccount.IsBenefitingFromUpvote)
-                critical = rand.Next(101) < 6; //6% chance if supporter + has recently upvoted.
-            double multiplier = 1.75;
+            double multiplier = 1.9;
 
             userAccount.TotalCurrencyGambled += points;
 
@@ -618,23 +612,16 @@ namespace Kaguya.Modules
                 embed.SetColor(EmbedColor.RED);
                 await BE();
 
-                QuickdrawHistory(userAccount, kaguyaDraw, userDraw, points, 0, false, critical);
+                QuickdrawHistory(userAccount, kaguyaDraw, userDraw, points, 0, false);
             }
 
             if (kaguyaDraw > userDraw)
             {
-                string critText = "";
-                if (critical)
-                {
-                    multiplier = 2.40; //Puts total bonus at around 2.89x what they bet
-                    critText += " It's a critical hit!!";
-                }
-
                 int award = (int)(points * multiplier);
                 userAccount.Points += (uint)award;
                 userAccount.TotalCurrencyAwarded += award;
 
-                embed.WithDescription($"🔫 **You won!{critText}** - {Context.User.Mention} " +
+                embed.WithDescription($"🔫 **You won!** - {Context.User.Mention} " +
                     $"has won `{award.ToString("N0")}` points" +
                     $"\n" +
                     $"\nKaguya's Time: `{kaguyaDraw.ToString("N3")}` seconds" + 
@@ -643,7 +630,7 @@ namespace Kaguya.Modules
                 embed.SetColor(EmbedColor.GREEN);
                 await BE();
 
-                QuickdrawHistory(userAccount, kaguyaDraw, userDraw, points, award, true, critical);
+                QuickdrawHistory(userAccount, kaguyaDraw, userDraw, points, award, true);
             }
 
             if(userDraw == kaguyaDraw)

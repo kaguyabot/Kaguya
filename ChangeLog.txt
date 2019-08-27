@@ -9,7 +9,8 @@ Version 1.31
 
 - Fixed a bug with $weekly where all critical chances were -1% from what they should have been.
 - Added a lot of help commands that were missing for owner specific commands.
-- 
+- Critical hits removed from $quickdraw
+- $quickdraw winning return is now 1.90x your bet (was 1.7x)
 
 Version 1.30
 
