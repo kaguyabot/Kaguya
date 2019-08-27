@@ -386,6 +386,14 @@ namespace Kaguya.Modules.Help
                         "your reward by `3.50x`." +
                         $"\nSyntax: `{cmdPrefix}weekly`");
                     await BE(); break;
+                case "weeklyreset":
+                    embed.WithTitle($"Help: Weekly Reset | `{cmdPrefix}weeklyreset`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nResets the weekly cooldown for every user in the Kaguya database." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}weeklyreset`");
+                    await BE(); break;
                 case "clear":
                 case "purge":
                 case "c":
@@ -752,7 +760,9 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Timely Reset | `{cmdPrefix}timelyreset`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
-                        $"\nAllows a bot owner to reset the {cmdPrefix}timely cooldown for every user in the Kaguya database.");
+                        $"\nAllows a bot owner to reset the {cmdPrefix}timely cooldown for every user in the Kaguya database." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}timelyreset`");
                     await BE(); break;
                 case "filteradd":
                 case "fa":
@@ -912,8 +922,32 @@ namespace Kaguya.Modules.Help
                         $"\n" +
                         $"\nOwner only command that displays all other owner only commands.");
                     await BE(); break;
+                case "kill":
+                    embed.WithTitle($"Help: Kill | `{cmdPrefix}kill`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nShuts down the bot and terminates the Kaguya process, taking it down for all users." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}kill`");
+                    await BE(); break;
+                case "restart":
+                    embed.WithTitle($"Help: Restart | `{cmdPrefix}restart`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nRemotely restarts the bot. The Kaguya process opens another instance of itself right before " +
+                        $"terminating the current instance." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}restart`");
+                    await BE(); break;
+                case "setgame":
+                    embed.WithTitle($"Help: Setgame | `{cmdPrefix}setgame`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nChanges Kaguya's \"Currently Playing\" game to whatever is specified. This will last until " +
+                        $"the next \"game\" in the rotation takes presedence (~15 minutes).");
+                    await BE(); break;
                 default:
-                    embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
+                    embed.WithDescription($"**{Context.User.Mention} \"{cmdPrefix}{command}\" is not a valid command.**");
                     await BE();
                     break;
             }

@@ -512,13 +512,13 @@ namespace Kaguya.Modules
             Random crit = new Random();
             var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
             var multiplier = 3.50;
-            bool critical = crit.Next(100) < 8; //8% chance of weekly being a critical hit
+            bool critical = crit.Next(101) < 8; //8% chance of weekly being a critical hit
 
             if (difference.TotalHours < 12 || userAccount.IsSupporter)
-                critical = crit.Next(100) < 12; //12% if they've upvoted Kaguya within the last 12 hours or they are a supporter.
+                critical = crit.Next(101) < 12; //12% if they've upvoted Kaguya within the last 12 hours or they are a supporter.
 
             if (difference.TotalHours < 12 && userAccount.IsSupporter) //24% critical chance if upvoted and supporter.
-                critical = crit.Next(100) < 24;
+                critical = crit.Next(101) < 24;
 
             if (!CanReceiveWeeklyPoints(userAccount, timeout))
             {

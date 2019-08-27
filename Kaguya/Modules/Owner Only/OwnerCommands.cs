@@ -354,7 +354,7 @@ namespace Kaguya.Modules.Owner_Only
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
 
             string commands = "```css" +
-                "\nAll commands in category: Administration" +
+                "\nAll commands in category: Owner" +
                 "\n" +
                 $"\n{cmdPrefix}bugaward" +
                 $"\n{cmdPrefix}expadd [addexp]" +

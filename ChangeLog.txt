@@ -5,6 +5,12 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
+Version 1.31
+
+- Fixed a bug with $weekly where all critical chances were -1% from what they should have been.
+- Added a lot of help commands that were missing for owner specific commands.
+- 
+
 Version 1.30
 
 - $stats will now show the process's CPU usage as well as the RAM usage.
