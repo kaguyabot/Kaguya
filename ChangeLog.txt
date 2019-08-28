@@ -12,7 +12,7 @@ Version 1.31
 - Critical hits removed from $quickdraw
 - $quickdraw winning return is now 1.90x your bet (was 1.7x)
 - Some music commands will now show the thumbnail of the video/song when executing these commands.
-
+- Added in an (experimental) $m lyrics command. It probably doesn't work with youtube videos though. Supporter only.
 
 Version 1.30
 

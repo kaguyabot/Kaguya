@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Victoria;
 using Victoria.Entities;
 using Kaguya.Core.Embed;
+using Kaguya.Core.UserAccounts;
 
 namespace Kaguya.Modules.Music
 {
@@ -30,6 +31,8 @@ namespace Kaguya.Modules.Music
 
         public async Task<Embed> JoinOrPlayAsync(SocketGuildUser user, ISocketMessageChannel textChannel, ulong guildId, string query = null)
         {
+            UserAccount userAccount = new UserAccount(user.Id);
+
             //Check If User Is Connected To Voice Cahnnel.
             if (user.VoiceChannel == null)
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Join/Play", "You must first join a voice channel!");
@@ -63,6 +66,10 @@ namespace Kaguya.Modules.Music
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"I wasn't able to find anything for {query}.");
                 if (search.LoadType == LoadType.LoadFailed && query != null)
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"I failed to load {query}.");
+                if (search.LoadType == LoadType.PlaylistLoaded && !userAccount.IsSupporter)
+                    return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", 
+                        "You must be a supporter to load playlists!", 
+                        "More information may be found through the `supporter` command.");
                 
                 //Get the first track from the search results.
                 //TODO: Add a 1-5 list for the user to pick from. (Like Fredboat)
@@ -324,6 +331,38 @@ namespace Kaguya.Modules.Music
             catch (Exception e)
             {
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Queue Jump", e.Message);
+            }
+        }
+
+        public async Task<Embed> Lyrics(ulong guildID) //Experimental
+        {
+            try
+            {
+                var player = _lavaShardClient.GetPlayer(guildID);
+                var track = player.CurrentTrack;
+
+                if (player == null)
+                {
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Lyrics",
+                        "There is no currently active player.", "Use the `m leave` command while in a voice channel. " +
+                        "If the issue persists, please join my support server and ask for help.");
+                }
+
+                string lyrics = await track.FetchLyricsAsync();
+
+                if(lyrics == null)
+                {
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Lyrics <a:crabPls:588362913379516442>",
+                        $"No lyrics are available for \n{track.Author} - {track.Title}");
+                }
+
+                return await StaticMusicEmbedHandler.CreateMusicEmbed($"Music Lyrics <a:Banger:588362912905822208>",
+                    $"Here are the lyrics to {track.Title}: {lyrics}");
+            }
+            catch(Exception e)
+            {
+                return await StaticMusicEmbedHandler.CreateErrorEmbed("Exception", $"{e.Message}",
+                    "If this is unexpected, please join my support server and ask for help.");
             }
         }
     }
