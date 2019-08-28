@@ -35,7 +35,7 @@ namespace Kaguya.Core.CommandHandler
         /// <param name="description">Description of the embedded message.</param>
         /// <param name="footer">Optional footer to include at the bottom of the embed.</param>
         /// <returns></returns>
-        public static async Task<Discord.Embed> CreateMusicEmbed(string title, string description, string footer = null)
+        public static async Task<Discord.Embed> CreateMusicEmbed(string title, string description, string footer = null, string thumbnailURL = null)
         {
             Logger logger = new Logger();
             logger.ConsoleMusicLogNoUser($"{description}");
@@ -43,6 +43,7 @@ namespace Kaguya.Core.CommandHandler
                 .WithTitle(title)
                 .WithDescription(description)
                 .WithFooter(footer)
+                .WithThumbnailUrl(thumbnailURL)
                 .WithColor(0, 255, 255).Build())); //Light Blue
             return embed;
         }

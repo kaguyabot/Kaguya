@@ -1,5 +1,6 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using Kaguya.Core.Attributes;
 using System.Threading.Tasks;
 
 namespace Kaguya.Modules.Music
@@ -44,5 +45,10 @@ namespace Kaguya.Modules.Music
         [Command("Jump")]
         public async Task Jump(int jumpNum)
             => await ReplyAsync("", false, await musicService.Jump(Context.Guild.Id, jumpNum));
+
+        [RequireSupporter]
+        [Command("Lyrics")]
+        public async Task Lyrics()
+            => await ReplyAsync("", false, await musicService.Lyrics(Context.Guild.Id));
     }
 }
