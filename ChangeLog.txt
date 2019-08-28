@@ -18,6 +18,10 @@ Version 1.31
 - $quickdraw winning return is now 1.90x your bet (was 1.7x)
 - Some music commands will now show the thumbnail of the video/song when executing these commands.
 - Added in an (experimental) $m lyrics command. It probably doesn't work with youtube videos though. Supporter only.
+- $m volume has been tweaked to allow for an adjustment:
+    - "$m volume -25" Will set the player's volume to 25 below what it currently is.
+    - "$m volume +15" Will set the player's volume to 15 above what it just was.
+    - These adjustments may not send the player's volume below zero or above 200.
 
 Version 1.30
 

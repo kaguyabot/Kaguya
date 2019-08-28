@@ -52,7 +52,7 @@ namespace Kaguya.Core.CommandHandler
         {
             var embed = await Task.Run(() => new EmbedBuilder()
                 .WithTitle($"Error Source: {source}")
-                .WithDescription($"**Error: {error}**")
+                .WithDescription($"Error: {error}")
                 .WithFooter(footer)
                 .WithColor(Color.Red).Build());
             return embed;

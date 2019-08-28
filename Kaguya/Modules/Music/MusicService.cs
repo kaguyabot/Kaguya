@@ -259,23 +259,83 @@ namespace Kaguya.Modules.Music
             }
         }
 
-        public async Task<Embed> VolumeAsync(ulong guildId, int volume)
+        public async Task<Embed> VolumeAsync(ulong guildId, string result)
         {
-            if (volume > 200 || volume < 0)
+            if(int.TryParse(result, out int volume))
             {
-                return await StaticMusicEmbedHandler.CreateErrorEmbed($"🔊 Music Volume", $"Volume must be between 0 and 200.");
+                if (volume > 200)
+                {
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed($"🔊 Music Volume", $"Volume must not be above 200.");
+                }
+                try
+                {
+                    if (volume < 0) //The volume is negative
+                    {
+                        var lavaPlayer = _lavaShardClient.GetPlayer(guildId);
+                        var curVolume = lavaPlayer.CurrentVolume;
+
+                        if(curVolume + volume < 0) //We add because volume is negative.
+                        {
+                            /*If the volume is less than zero, let's set it to zero
+                            because the user may want to quickly mute the track.*/
+
+                            return await StaticMusicEmbedHandler.CreateMusicEmbed($"🔊 Music Volume",
+                                $"Player volume set to 0.");
+                        }
+
+                        await lavaPlayer.SetVolumeAsync(curVolume + volume);
+
+                        //We don't add a negative sign below because the number does it for us.
+
+                        logger.ConsoleMusicLogNoUser($"Player Volume adjusted by: {volume}.");
+                        return await StaticMusicEmbedHandler.CreateBasicEmbed($"🔊 Music Volume", $"Volume has been adjusted by {volume}.",
+                            $"New Volume: {lavaPlayer.CurrentVolume}");
+                    }
+                    else if (result.Contains('+'))
+                    {
+                        string newValue = result.Split('+').Last();
+                        if (int.TryParse(newValue, out int newVolume))
+                        {
+                            var newPlayer = _lavaShardClient.GetPlayer(guildId);
+                            int curVolume = newPlayer.CurrentVolume;
+
+                            if (curVolume + newVolume > 200)
+                            {
+                                return await StaticMusicEmbedHandler.CreateErrorEmbed("Invalid Volume Adjustment",
+                                    $"The requested adjustment would put the total volume above 200. Volume adjustments " +
+                                    $"may not send the player's volume above 200.");
+                            }
+
+                            await newPlayer.SetVolumeAsync(curVolume + newVolume);
+                            logger.ConsoleMusicLogNoUser($"Bot Volume adjusted by: +{newVolume}.");
+                            return await StaticMusicEmbedHandler.CreateBasicEmbed($"🔊 Music Volume",
+                                $"Volume has been adjusted by +{newVolume}.", $"New Volume: {newPlayer.CurrentVolume}");
+
+                        }
+                        else
+                        {
+                            return await StaticMusicEmbedHandler.CreateErrorEmbed($"Invalid Volume",
+                            "The value specified is invalid.");
+                        }
+                    }
+                    else
+                    {
+                        var player = _lavaShardClient.GetPlayer(guildId);
+                        await player.SetVolumeAsync(volume);
+                        logger.ConsoleMusicLogNoUser($"Bot Volume set to: {volume}.");
+                        return await StaticMusicEmbedHandler.CreateBasicEmbed($"🔊 Music Volume", $"Volume has been set to {volume}.");
+                    }
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Volume",
+                        $"{ex.Message}", "Please contact Stage in the support server if this is a recurring issue.");
+                }
             }
-            try
+            else
             {
-                var player = _lavaShardClient.GetPlayer(guildId);
-                await player.SetVolumeAsync(volume);
-                logger.ConsoleMusicLogNoUser($"Bot Volume set to: {volume}.");
-                return await StaticMusicEmbedHandler.CreateBasicEmbed($"🔊 Music Volume", $"Volume has been set to {volume}.");
-            }
-            catch (InvalidOperationException ex)
-            {
-                return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Volume", 
-                    $"{ex.Message}", "Please contact Stage in the support server if this is a recurring issue.");
+                return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Volume",
+                    "The requested volume is invalid.");
             }
         }
 

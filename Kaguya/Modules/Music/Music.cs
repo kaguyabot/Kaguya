@@ -31,7 +31,7 @@ namespace Kaguya.Modules.Music
             => await ReplyAsync("", false, await musicService.SkipTrackAsync(Context.Guild.Id, Context.Guild.Name));
 
         [Command("volume")]
-        public async Task Volume(int volume)
+        public async Task Volume(string volume)
             => await ReplyAsync("", false, await musicService.VolumeAsync(Context.Guild.Id, volume));
 
         [Command("Pause")]
