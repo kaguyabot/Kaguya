@@ -31,7 +31,7 @@ namespace Kaguya.Core.Command_Handler
         {
             if (ProcessCPUTimersActive < 1)
             {
-                Timer timer = new Timer(30000); //30 seconds
+                Timer timer = new Timer(2000); //30 seconds
                 timer.Enabled = true;
                 timer.Elapsed += Process_CPU_Timer_Elapsed;
                 ProcessCPUTimersActive++;
@@ -53,7 +53,7 @@ namespace Kaguya.Core.Command_Handler
             dynamic result = new ExpandoObject();
 
             // If system has multiple cores, that should be taken into account
-            result.CPU = Math.Round(cpu.NextValue() / Environment.ProcessorCount, 3);
+            result.CPU = Math.Round(cpu.NextValue() / Environment.ProcessorCount, 2);
             // Returns number of MB consumed by application
             result.RAM = Math.Round(ram.NextValue() / 1024 / 1024, 2);
 

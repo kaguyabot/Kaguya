@@ -583,7 +583,8 @@ namespace Kaguya.Modules
 
             if(userAccount.Points < points)
             {
-                embed.WithDescription($"You are attempting to bet too many points.");
+                embed.WithDescription($"You do not have enough points to preform this action.");
+                embed.WithFooter($"You have {userAccount.Points.ToString("N0")} points.");
                 embed.SetColor(EmbedColor.RED);
                 await BE();
                 return;
@@ -602,12 +603,18 @@ namespace Kaguya.Modules
                 critical = rand.Next(101) < 6; //6% chance if supporter + has recently upvoted.
             double multiplier = 1.75;
 
-            userAccount.TotalCurrencyGambled += points;
+            if(userAccount.QuickdrawWinnings > userAccount.QuickdrawLosses)
+            {
+                kaguyaDraw -= 0.10; //10% increase chance of loss
+                if (kaguyaDraw < 0.00)
+                    kaguyaDraw = 0.00;
+            }
 
             if (userDraw > kaguyaDraw)
             {
                 userAccount.Points -= (uint)points;
                 userAccount.TotalCurrencyLost += points;
+                userAccount.QuickdrawLosses++;
 
                 embed.WithDescription($"🔫 **You lost!** - {Context.User.Mention} " +
                     $"has lost `{points.ToString("N0")}` points" +
@@ -626,13 +633,14 @@ namespace Kaguya.Modules
                 string critText = "";
                 if (critical)
                 {
-                    multiplier = 2.40; //Puts total bonus at around 2.89x what they bet
+                    multiplier = 2.40; //Puts total bonus at around 2.40x what they bet
                     critText += " It's a critical hit!!";
                 }
 
                 int award = (int)(points * multiplier);
                 userAccount.Points += (uint)award;
                 userAccount.TotalCurrencyAwarded += award;
+                userAccount.QuickdrawWinnings++;
 
                 embed.WithDescription($"🔫 **You won!{critText}** - {Context.User.Mention} " +
                     $"has won `{award.ToString("N0")}` points" +

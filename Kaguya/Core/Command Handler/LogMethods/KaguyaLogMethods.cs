@@ -52,7 +52,8 @@ namespace Kaguya.Core.CommandHandler
                 }
             }
 
-            else if(Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount < 1875 && Config.bot.BotUserID == "538910393918160916")
+            else if(Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount < 1875 
+                && Config.bot.BotUserID == "538910393918160916")
             {
                 //Restarts the bot if the total guild count is lower than expected.
 
@@ -76,7 +77,16 @@ namespace Kaguya.Core.CommandHandler
             }
             
             LoadKaguyaData(); //Loads all user accounts and servers into memory.
-            await _lavaShardClient.StartAsync(Global.client); //Initializes the music service.
+
+            var lavaConfig = new Configuration //Configuration for _lavaShardClient.StartAsync();
+            {
+                DefaultVolume = 100,
+                AutoDisconnect = true,
+                SelfDeaf = true,
+                InactivityTimeout = TimeSpan.FromSeconds(300)
+            };
+
+            await _lavaShardClient.StartAsync(Global.client, lavaConfig); //Initializes the music service.
             logger.ConsoleMusicLogNoUser($"Kaguya Music Service Started. [Shard {client.ShardId}]");
             if (Global.ShardsLoggedIn == Global.ShardsToLogIn)
             {

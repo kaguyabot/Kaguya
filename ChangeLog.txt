@@ -9,7 +9,11 @@ Version 1.31
 
 - Fixed a bug with $weekly where all critical chances were -1% from what they should have been.
 - Added a lot of help commands that were missing for owner specific commands.
-- 
+- Added a default configuration to the music player:
+    - Default volume: 100
+    - AutoDisconnect (After everyone leaves): true,
+    - Self Deafen: true,
+    - Kaguya will now wait 5 minutes before auto-disconnecting.
 
 Version 1.30
 

@@ -112,6 +112,8 @@ namespace Kaguya
                         .AddSingleton<CommandService>()
                         .AddSingleton<CommandHandler>()
                         .AddSingleton<InteractiveService>()
+                        .AddSingleton<LavaRestClient>()
+                        .AddSingleton<LavaShardClient>()
                         .BuildServiceProvider();
         }
 

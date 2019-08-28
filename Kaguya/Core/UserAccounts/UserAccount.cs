@@ -18,6 +18,8 @@ namespace Kaguya.Core.UserAccounts
         public string NSFWAgeVerified { get; set; }
         public List<string> RecentlyUsedCommands { get; set; }
         public int GamblingBadLuckStreak { get; set; }
+        public int QuickdrawWinnings { get; set; }
+        public int QuickdrawLosses { get; set; }
         public bool IsSupporter
         {
             get
