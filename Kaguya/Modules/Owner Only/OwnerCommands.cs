@@ -9,6 +9,7 @@ using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -28,6 +29,35 @@ namespace Kaguya.Modules.Owner_Only
         public async Task BE() //Method to build and send an embedded message.
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
+        }
+
+        [RequireOwner]
+        [Command("scrape", RunMode = RunMode.Async)]
+        public async Task ScrapeUsernames()
+        {
+            List<UserAccount> userAccounts = Global.UserAccounts;
+            Logger logger = new Logger();
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
+            foreach(var account in userAccounts)
+            {
+                if (account.Username == "" || account.Username == null)
+                {
+                    try
+                    {
+                        var user = Global.client.GetUser(account.ID);
+                        account.Username = user.Username;
+                        logger.ConsoleInformationAdvisory($"Username adjusted for user {account.ID}: " +
+                            $"New name in file: {account.Username} | Time: {sw.ElapsedMilliseconds.ToString("N0")}ms");
+                    }
+                    catch(Exception e)
+                    {
+                        logger.ConsoleCriticalAdvisory($"{e.Message}");
+                    }
+                }
+            }
         }
 
         [RequireOwner]

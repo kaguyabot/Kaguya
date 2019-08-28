@@ -871,7 +871,8 @@ namespace Kaguya.Modules.Help
                         $"\n**Queue:** Displays Kaguya's playlist. Add more songs to the queue with the play command. `{cmdPrefix}m queue`" +
                         $"\n**Resume:** If Kaguya's music player is paused, she will resume playing music. `{cmdPrefix}m resume`" +
                         $"\n**Skip:** Skips the current song. `{cmdPrefix}m skip`" +
-                        $"\n**Volume:** Sets the volume to a value between 0-200. `{cmdPrefix}m volume <0-200>`" +
+                        $"\n**Volume:** Sets the volume to a value between 0-200. This " +
+                        $"also allows for a volume adjustment: `{cmdPrefix}m volume <0-200>` `{cmdPrefix}m volume <+/- {{number}}>`" +
                         $"\n**Jump:** Jump to a specific position in the queue, skipping all songs before it in one go.`{cmdPrefix}m jump <jumpNum>`");
                     await BE(); break;
                 case "invite":
