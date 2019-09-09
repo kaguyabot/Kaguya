@@ -72,7 +72,8 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Warning Options | `{cmdPrefix}warnoptions`");
                     embed.WithDescription($"{Context.User.Mention} Displays available ways to punish users through my warning system." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}warnoptions`"); break;
+                        $"\nSyntax: `{cmdPrefix}warnoptions`");
+                    await BE(); break;
                 case "warnpunishments":
                 case "wp":
                     embed.WithTitle($"Help: Warning Configuration | `{cmdPrefix}warnpunishments`, `{cmdPrefix}wp`");

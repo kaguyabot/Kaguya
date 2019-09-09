@@ -22,6 +22,7 @@ Version 1.31
     - "$m volume -25" Will set the player's volume to 25 below what it currently is.
     - "$m volume +15" Will set the player's volume to 15 above what it just was.
     - These adjustments may not send the player's volume below zero or above 200.
+- Fixed a bug with "$h wo" where the embedded message would not get sent to the chat.
 
 Version 1.30
 

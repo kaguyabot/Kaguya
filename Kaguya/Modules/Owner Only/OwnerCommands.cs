@@ -61,6 +61,22 @@ namespace Kaguya.Modules.Owner_Only
         }
 
         [RequireOwner]
+        [Command("largestservers")]
+        public async Task LargestServers()
+        {
+            string largestGuilds = "";
+            foreach(var guild in Global.client.Guilds)
+            {
+                if(guild.MemberCount >= 5000)
+                    largestGuilds += $"Guild: {guild.Name} | Members: {guild.MemberCount.ToString("N0")}";
+            }
+
+            embed.WithTitle("Guilds with over 5,000 Members");
+            embed.WithDescription($"{largestGuilds}");
+            await BE();
+        }
+
+        [RequireOwner]
         [Command("setgame")]
         public async Task SetGame(string game)
         {
