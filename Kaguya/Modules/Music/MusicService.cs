@@ -111,7 +111,6 @@ namespace Kaguya.Modules.Music
 
             if (player.Queue.Count < 1 && !player.IsPlaying)
             {
-                await player.VoiceChannel.DisconnectAsync();
                 return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", "There are no more items left in the queue, so I have stopped playing! ");
             }
 

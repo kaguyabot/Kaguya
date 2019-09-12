@@ -9,11 +9,11 @@ lavalink:
     password: "youshallnotpass"
     sources:
       youtube: true
-      bandcamp: true
-      soundcloud: true
-      twitch: true
-      vimeo: true
-      mixer: true
+      bandcamp: false
+      soundcloud: false
+      twitch: false
+      vimeo: false
+      mixer: false
       http: true
       local: false # Set to true to play local files
     bufferDurationMs: 400
