@@ -5,6 +5,11 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
+Version 1.31.1
+
+- When a music queue empties, Kaguya will no longer automatically leave the voice channel.
+- (Attempted to) fix a bug where the audio queue would not continue, and instead stop after one song was completed.
+
 Version 1.31
 
 - Fixed a bug with $weekly where all critical chances were -1% from what they should have been.
