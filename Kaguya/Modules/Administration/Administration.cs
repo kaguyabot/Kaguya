@@ -258,19 +258,58 @@ namespace Kaguya.Modules.Administration
         [Alias("w")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.Administrator)]
-        public async Task WarnMembers([Remainder]List<SocketGuildUser> users)
+        public async Task WarnMembers(List<SocketGuildUser> users, string reason = "No reason specified.")
         {
             var server = Servers.GetServer(Context.Guild);
             var warnActions = server.WarnActions;
             var warnedMembers = server.WarnedMembers;
+            var warnReasonDictionary = server.WarnReasons;
 
             foreach (var user in users)
             {
                 var userID = user.Id;
                 int i = 0;
+
+                List<string> warnReasonList = new List<string>();
+                Dictionary<ulong, string> administratorTimeStampDictionary = new Dictionary<ulong, string>();
+                Dictionary<Dictionary<ulong, string>, List<string>> fullAdminDictionary = new Dictionary<Dictionary<ulong, string>, List<string>>();
+
+                /*
+                 * What these dictionaries are designed to do is log the 
+                 * user who is being warned with how many warnings in one dictionary,
+                 * then, in a seperate dictionary, log the moderator/admin who warned 
+                 * the user, along with the reason they gave for the warning.
+                 */
+
+                warnReasonList.Add(reason);
+
+                administratorTimeStampDictionary.Add(Context.User.Id, "Test");
+
+                /*
+                 * administratorTimeStampDictionary logs the ID of the administrator 
+                 * who warned the user as well as a very detailed timestamp of when 
+                 * the warning occurred.
+                 */
+
+                fullAdminDictionary.Add(administratorTimeStampDictionary, warnReasonList);
+
+                /*
+                * fullAdminDictionary logs administratorTimeStampDictionary
+                * and the list of warn reasons.
+                */
+
+                warnReasonDictionary.Add(userID, fullAdminDictionary);
+
+                /*
+                 * This final dictionary combines all other dictionaries together 
+                 * into one "mega-dictionary" that contains all warned users, 
+                 * the administrator who warned them, the time at which they were warned,
+                 * and the reason for why they were warned.
+                 */
+                    
                 warnedMembers.TryGetValue(userID, out int userWarnings); //Gets the user's total warnings
                 userWarnings++; //Increments the user's warnings by 1.
-                
+
                 if (warnedMembers.ContainsKey(userID)) //If it exists in the dictionary, remove and replace it.
                 {
                     warnedMembers.Remove(userID);
@@ -279,10 +318,27 @@ namespace Kaguya.Modules.Administration
                 var dmChannel = await user.GetOrCreateDMChannelAsync();
 
                 EmbedBuilder embed2 = new EmbedBuilder();
+
+                /*
+                 *  We insert the tick marks for formatting purposes.
+                 *  If they exist in the warn reason, we remove them.
+                 */
+
+                reason.Insert(0, "`");
+                reason.Insert(reason.IndexOf(reason.Last()), "`");
+
+                if(reason.Contains('`'))
+                {
+                    reason = reason.Replace("`", "");
+                }
+
                 embed2.WithTitle("⚠️ Warning Received");
-                embed2.WithDescription($"You have received a warning from `{Context.User}` in the server `{Context.Guild.Name}`.");
+                embed2.WithDescription($"You have received a warning from `{Context.User}` in the server `{Context.Guild.Name}`." +
+                    $"\n" +
+                    $"\nReason: `{reason}`");
                 embed2.WithFooter($"You currently have {userWarnings} warnings.");
                 embed2.WithColor(111, 22, 255); //Violet, have to use this because of "embed2"
+
                 await dmChannel.SendMessageAsync(embed: embed2.Build());
 
                 warnedMembers.Add(userID, userWarnings);
@@ -309,14 +365,7 @@ namespace Kaguya.Modules.Administration
                         await ShadowBan(user);
                     else if (userWarnings >= warnNums[0] && warnNums[0] != 0)
                         await Ban(user);
-
-                    Console.WriteLine("Ban: " + warnNums[0]);
-                    Console.WriteLine("Shadowban: " + warnNums[1]);
-                    Console.WriteLine("Kick: " + warnNums[2]);
-                    Console.WriteLine("Mute: " + warnNums[3]);
-
                 }
-                
             }
         }
 
@@ -486,7 +535,7 @@ namespace Kaguya.Modules.Administration
         public async Task Mute(string timeout, [Remainder]List<SocketGuildUser> users)
         {
             var server = Servers.GetServer(Context.Guild);
-            var cmdPrefix = server.commandPrefix;
+            var cmdPrefix = server.CommandPrefix;
             var roles = Context.Guild.Roles;
             var channels = Context.Guild.Channels;
 
@@ -643,7 +692,7 @@ namespace Kaguya.Modules.Administration
         public async Task MuteMembers([Remainder]List<SocketGuildUser> users)
         {
             var server = Servers.GetServer(Context.Guild);
-            var cmdPrefix = server.commandPrefix;
+            var cmdPrefix = server.CommandPrefix;
             var roles = Context.Guild.Roles;
             var channels = Context.Guild.Channels;
 
@@ -698,7 +747,7 @@ namespace Kaguya.Modules.Administration
         public async Task Mute(IGuildUser user)
         {
             var server = Servers.GetServer(Context.Guild);
-            var cmdPrefix = server.commandPrefix;
+            var cmdPrefix = server.CommandPrefix;
             var roles = Context.Guild.Roles;
             var channels = Context.Guild.Channels;
 
@@ -774,7 +823,7 @@ namespace Kaguya.Modules.Administration
         public async Task FilterAdd([Remainder]string phrase) //Adds a word to the server word/phrase filter
         {
             stopWatch.Start();
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var server = Servers.GetServer(Context.Guild);
             server.FilteredWords.Add(phrase);
@@ -794,7 +843,7 @@ namespace Kaguya.Modules.Administration
         public async Task FilterRemove([Remainder]string phrase)
         {
             stopWatch.Start();
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var server = Servers.GetServer(Context.Guild);
             server.FilteredWords.Remove(phrase);

@@ -144,7 +144,7 @@ namespace Kaguya.Core.CommandHandler
             Global.TotalTextChannels += guild.TextChannels.Count;
             Global.TotalVoiceChannels += guild.VoiceChannels.Count;
 
-            var cmdPrefix = Servers.GetServer(guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(guild).CommandPrefix;
             var owner = guild.Owner;
             var channels = guild.Channels;
             var kID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);

@@ -33,7 +33,7 @@ namespace Kaguya.Modules.osu
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             if (num.ToString().Count() > 2)
             {
@@ -228,7 +228,7 @@ namespace Kaguya.Modules.osu
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             if (num.ToString().Count() > 3)
             {

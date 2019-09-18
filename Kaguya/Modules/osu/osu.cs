@@ -29,7 +29,7 @@ namespace Kaguya.Modules
         [Command("osu")]
         public async Task osuProfile([Remainder]string player = null)
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
             string osuapikey = Config.bot.OsuApiKey;
             string jsonProfile;
 
@@ -156,7 +156,7 @@ namespace Kaguya.Modules
         [Alias("r")]
         public async Task osuRecent(string player = null)
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
             string osuapikey = Config.bot.OsuApiKey;
 
             if (player == null || player == "")

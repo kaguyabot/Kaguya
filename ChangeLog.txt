@@ -5,6 +5,17 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
+Version 1.32
+
+- $warn now takes in an optional reason as a parameter. If no reason is specified with the warning,
+    it will default to "No reason specified."
+    - Note: The warn reason is DM'd to users.
+
+Version 1.31.1
+
+- Kaguya will no longer automatically disconnect as soon as a queue has finished.
+- Kaguya will now successfully automatically play all songs in a playlist, instead of completely stopping after the first song in the queue.
+
 Version 1.31
 
 - Fixed a bug with $weekly where all critical chances were -1% from what they should have been.

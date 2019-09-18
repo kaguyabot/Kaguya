@@ -397,7 +397,7 @@ namespace Kaguya.Modules.Owner_Only
         [RequireOwner]
         public async Task OwnerOnlyCommands()
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             string commands = "```css" +
                 "\nAll commands in category: Owner" +

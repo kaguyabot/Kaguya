@@ -144,7 +144,7 @@ namespace Kaguya.Modules.Utility
         public async Task ToggleAnnouncements()
         {
             Server guild = Servers.GetServer(Context.Guild);
-            var cmdPrefix = guild.commandPrefix;
+            var cmdPrefix = guild.CommandPrefix;
             if (guild.MessageAnnouncements == true)
             {
                 guild.MessageAnnouncements = false;
@@ -171,10 +171,10 @@ namespace Kaguya.Modules.Utility
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task AlterPrefix(string prefix = "$")
         {
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var server = Servers.GetServer(Context.Guild);
-            var oldPrefix = server.commandPrefix;
+            var oldPrefix = server.CommandPrefix;
 
             if(prefix.Length > 3)
             {
@@ -186,10 +186,10 @@ namespace Kaguya.Modules.Utility
                 return;
             }
 
-            server.commandPrefix = prefix;
+            server.CommandPrefix = prefix;
 
             embed.WithTitle("Change Command Prefix: Success!");
-            embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");
+            embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.CommandPrefix}`.");
             embed.WithFooter($"If you ever forget the prefix, tag me and type \"prefix\"!");
             await BE();
         }
@@ -197,7 +197,7 @@ namespace Kaguya.Modules.Utility
         [Command("author")] //utility
         public async Task Author()
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var author = UserAccounts.GetAuthor();
 

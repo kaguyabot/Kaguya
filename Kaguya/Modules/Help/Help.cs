@@ -30,7 +30,7 @@ namespace Kaguya.Modules.Help
         public async Task HelpCommand([Remainder]string command)
         {
 
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             switch (command.ToLower())
             {
@@ -960,7 +960,7 @@ namespace Kaguya.Modules.Help
         public async Task HelpCommand()
         {
 
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             PaginatedMessage message = new PaginatedMessage();
 
@@ -1218,7 +1218,7 @@ namespace Kaguya.Modules.Help
         [RequireOwner]
         public async Task OwnerCommands()
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             string commands = "```css" +
                 "\nAll commands in category: Owner Only" +
@@ -1339,7 +1339,7 @@ namespace Kaguya.Modules.Help
         [Alias("hdm")]
         public async Task HelpDM()
         {
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             embed.WithTitle("Help");
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
@@ -1378,7 +1378,7 @@ namespace Kaguya.Modules.Help
             embed.WithTitle("Discord Bot List Voting");
             embed.WithDescription($"Show Kaguya some love and give her an upvote! https://discordbots.org/bot/538910393918160916/vote" +
                 $"\nUsers that upvote receive a `2x` critical hit percentage for the next `12 hours` and `500` Kaguya points! Users may vote every 12 hours!");
-            embed.WithFooter($"Thanks for showing your support! Use {Servers.GetServer(Context.Guild).commandPrefix}voteclaim to claim your reward!");
+            embed.WithFooter($"Thanks for showing your support! Use {Servers.GetServer(Context.Guild).CommandPrefix}voteclaim to claim your reward!");
 
             await BE();
         }
@@ -1436,7 +1436,7 @@ namespace Kaguya.Modules.Help
         public async Task SupporterInfo()
         {
             Stopwatch stopWatch = new Stopwatch();
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 "Kaguya Supporter",
