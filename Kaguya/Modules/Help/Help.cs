@@ -83,6 +83,18 @@ namespace Kaguya.Modules.Help
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}warnpunishments`");
                     await BE(); break;
+                case "inspect":
+                    embed.WithTitle($"Help: User Inspection | `{cmdPrefix}inspect`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
+                        $"\n" +
+                        $"\nDisplays all previous punishments for a user. This includes warns, kicks, and bans, as well as their " +
+                        $"reason for being punished, who punished them, and the time at which they were punished. If a user is banned/shadowbanned/etc. " +
+                        $"as a result of being warned a certain number of times, this will not be displayed. Kicks and bans are also only displayed " +
+                        $"if the user was punished through my commands." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}inspect <user>`");
+                    embed.WithFooter("This command only displays punishments made after Kaguya V1.32");
+                    await BE(); break;
                 case "toggleannouncements":
                     embed.WithTitle($"Help: Toggle Announcements | `{cmdPrefix}toggleannouncements`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -982,6 +994,7 @@ namespace Kaguya.Modules.Help
                         $"\n{cmdPrefix}filterclear [clearfilter]" +
                         $"\n{cmdPrefix}filterremove [fr]" +
                         $"\n{cmdPrefix}filterview [fv]" +
+                        $"\n{cmdPrefix}inspect" +
                         $"\n{cmdPrefix}kaguyaexit" +
                         $"\n{cmdPrefix}kick [k]" +
                         $"\n{cmdPrefix}logtypes [loglist]" +

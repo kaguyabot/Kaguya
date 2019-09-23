@@ -263,50 +263,36 @@ namespace Kaguya.Modules.Administration
             var server = Servers.GetServer(Context.Guild);
             var warnActions = server.WarnActions;
             var warnedMembers = server.WarnedMembers;
-            var warnReasonDictionary = server.WarnReasons;
+            var punishmentHistoryDictionary = server.PunishmentHistory;
 
             foreach (var user in users)
             {
                 var userID = user.Id;
                 int i = 0;
 
-                List<string> warnReasonList = new List<string>();
-                Dictionary<ulong, string> administratorTimeStampDictionary = new Dictionary<ulong, string>();
-                Dictionary<Dictionary<ulong, string>, List<string>> fullAdminDictionary = new Dictionary<Dictionary<ulong, string>, List<string>>();
-
                 /*
-                 * What these dictionaries are designed to do is log the 
-                 * user who is being warned with how many warnings in one dictionary,
-                 * then, in a seperate dictionary, log the moderator/admin who warned 
-                 * the user, along with the reason they gave for the warning.
-                 */
+                    *  We insert the tick marks for formatting purposes.
+                    *  If they exist in the warn reason, we remove them.
+                    */
 
-                warnReasonList.Add(reason);
+                reason.Insert(0, "`");
+                reason.Insert(reason.IndexOf(reason.Last()), "`");
 
-                administratorTimeStampDictionary.Add(Context.User.Id, "Test");
+                if (reason.Contains('`'))
+                {
+                    reason = reason.Replace("`", "");
+                }
 
-                /*
-                 * administratorTimeStampDictionary logs the ID of the administrator 
-                 * who warned the user as well as a very detailed timestamp of when 
-                 * the warning occurred.
-                 */
+                if (!punishmentHistoryDictionary.TryGetValue(userID, out List<string> punishmentHistoryList)) //Gets the current punishments for the user.
+                {
+                    punishmentHistoryList = new List<string>();
+                }
 
-                fullAdminDictionary.Add(administratorTimeStampDictionary, warnReasonList);
+                if (punishmentHistoryDictionary.ContainsKey(userID))
+                {
+                    punishmentHistoryDictionary.Remove(userID);
+                }
 
-                /*
-                * fullAdminDictionary logs administratorTimeStampDictionary
-                * and the list of warn reasons.
-                */
-
-                warnReasonDictionary.Add(userID, fullAdminDictionary);
-
-                /*
-                 * This final dictionary combines all other dictionaries together 
-                 * into one "mega-dictionary" that contains all warned users, 
-                 * the administrator who warned them, the time at which they were warned,
-                 * and the reason for why they were warned.
-                 */
-                    
                 warnedMembers.TryGetValue(userID, out int userWarnings); //Gets the user's total warnings
                 userWarnings++; //Increments the user's warnings by 1.
 
@@ -315,22 +301,12 @@ namespace Kaguya.Modules.Administration
                     warnedMembers.Remove(userID);
                 }
 
+                punishmentHistoryList.Add($"[Warning #{userWarnings}]: {reason} - Punished by: {Context.User} - Time: {DateTime.Now}\n\n");
+                punishmentHistoryDictionary.Add(user.Id, punishmentHistoryList);
+
                 var dmChannel = await user.GetOrCreateDMChannelAsync();
 
                 EmbedBuilder embed2 = new EmbedBuilder();
-
-                /*
-                 *  We insert the tick marks for formatting purposes.
-                 *  If they exist in the warn reason, we remove them.
-                 */
-
-                reason.Insert(0, "`");
-                reason.Insert(reason.IndexOf(reason.Last()), "`");
-
-                if(reason.Contains('`'))
-                {
-                    reason = reason.Replace("`", "");
-                }
 
                 embed2.WithTitle("⚠️ Warning Received");
                 embed2.WithDescription($"You have received a warning from `{Context.User}` in the server `{Context.Guild.Name}`." +
@@ -342,10 +318,12 @@ namespace Kaguya.Modules.Administration
                 await dmChannel.SendMessageAsync(embed: embed2.Build());
 
                 warnedMembers.Add(userID, userWarnings);
+
                 embed.WithDescription($"{Context.User.Mention} **User `{users.ElementAt(i)}` has been warned.**");
                 embed.WithFooter($"User now has {userWarnings} warning(s).");
                 embed.SetColor(EmbedColor.VIOLET);
                 await ReplyAsync(embed: embed.Build());
+
                 i++;
 
                 if (warnActions.Values.Contains(userWarnings)) //If a user has the same amount of warnings (or more) as a warnaction, do stuff.
@@ -366,6 +344,35 @@ namespace Kaguya.Modules.Administration
                     else if (userWarnings >= warnNums[0] && warnNums[0] != 0)
                         await Ban(user);
                 }
+            }
+        }
+
+        [Command("inspect")]
+        [RequireUserPermission(GuildPermission.BanMembers)]
+        public async Task InspectUser(IGuildUser user)
+        {
+            var server = Servers.GetServer(Context.Guild);
+            
+            if(server.PunishmentHistory.TryGetValue(user.Id, out List<string> pastPunishments))
+            {
+                string punishments = string.Empty;
+                
+                foreach(var item in pastPunishments)
+                    punishments += item;
+
+                embed.WithTitle($"{Context.Guild} Punishment History");
+                embed.WithDescription($"Punishment History for {user.Mention}:" +
+                    $"\n" +
+                    $"\n{punishments}");
+                embed.SetColor(EmbedColor.BLUE);
+                await BE();
+            }
+            else
+            {
+                embed.WithTitle($"{Context.Guild} Punishment History");
+                embed.WithDescription($"I wasn't able to find any punishments for {user.Mention}");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
             }
         }
 
@@ -1011,6 +1018,7 @@ namespace Kaguya.Modules.Administration
         {
             Console.WriteLine(reason);
             var sOwnerID = Context.Guild.Owner.Id;
+            var server = Servers.GetServer(Context.Guild);
 
             if(user.Id == Context.User.Id)
             {
@@ -1024,6 +1032,20 @@ namespace Kaguya.Modules.Administration
             }
             else if (user.Id != sOwnerID)
             {
+                var punishmentHistoryDictionary = server.PunishmentHistory;
+                if (punishmentHistoryDictionary.ContainsKey(user.Id))
+                {
+                    server.PunishmentHistory.Remove(user.Id);
+                }
+
+                if (!server.PunishmentHistory.TryGetValue(user.Id, out List<string> punishments))
+                {
+                    punishments = new List<string>();
+                }
+
+                punishments.Add($"[Ban]: {reason} - Punished by: {Context.User} - Time: {DateTime.Now}\n\n");
+                server.PunishmentHistory.Add(user.Id, punishments);
+
                 await user.BanAsync();
                 embed.WithTitle($"User Banned");
                 embed.WithDescription($"{Context.User.Mention} has banned `{user}`.");
@@ -1094,38 +1116,34 @@ namespace Kaguya.Modules.Administration
         [Alias("k")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
-        public async Task Kick(IGuildUser user, string reason = "No reason provided.")
+        public async Task Kick(IGuildUser user, [Remainder]string reason = "No reason provided.")
         {
-            var sOwner = Context.Guild.Owner;
+            var server = Servers.GetServer(Context.Guild);
 
-            if (user.Id != sOwner.Id)
+            if (user.Id == Context.User.Id)
             {
-                if (reason != "No reason provided.")
-                {
-                    await user.KickAsync(reason);
-                    embed.WithTitle($"User Kicked");
-                    embed.WithDescription($"`{Context.User}` has kicked `{user}` with reason: \"{reason}\"");
-                    await BE();
-                }
-                else
-                {
-                    await user.KickAsync(reason);
-                    embed.WithTitle($"User Kicked");
-                    embed.WithDescription($"`{Context.User}` has kicked `{user}` without a specified reason.");
-                    await BE();
-                }
-            }
-
-            else if (user.Id == Context.User.Id)
-            {
-                embed.WithDescription($"**{Context.User.Mention} You may not ban yourself!**");
+                embed.WithDescription($"**{Context.User.Mention} You may not kick yourself!**");
                 await BE();
             }
-            else if (user.Id == sOwner.Id)
+
+            var punishmentHistoryDictionary = server.PunishmentHistory;
+            if (punishmentHistoryDictionary.ContainsKey(user.Id))
             {
-                embed.WithDescription($"**{Context.User.Mention} I cannot ban the server owner!**");
-                await BE();
+                server.PunishmentHistory.Remove(user.Id);
             }
+
+            if (!server.PunishmentHistory.TryGetValue(user.Id, out List<string> punishments))
+            {
+                punishments = new List<string>();
+            }
+
+            punishments.Add($"[Kick]: {reason} - Punished by: {Context.User} - Time: {DateTime.Now}\n\n");
+            server.PunishmentHistory.Add(user.Id, punishments);
+
+            await user.KickAsync(reason);
+            embed.WithTitle($"User Kicked");
+            embed.WithDescription($"`{Context.User}` has kicked `{user}` with reason: \"{reason}\"");
+            await BE();
         }
 
         [Command("masskick")] 

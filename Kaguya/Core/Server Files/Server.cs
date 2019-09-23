@@ -11,8 +11,7 @@ namespace Kaguya.Core.Server_Files
         public Dictionary<string, string> MutedMembers { get; set; }
         public Dictionary<string, int> WarnActions { get; set; }
         public Dictionary<ulong, int> WarnedMembers { get; set; }
-        //TODO: REWORK THIS DICTIONARY, IT DOES NOT WORK!!!
-        public Dictionary<ulong, Dictionary<Dictionary<ulong, string>, List<string>>> WarnReasons { get; set; } //List of reasons for being warned, per warned user.
+        public Dictionary<ulong, List<string>> PunishmentHistory { get; set; } //List of reasons for being warned, per warned user.
         public bool AntiRaid { get; set; }
         public string AntiRaidPunishment { get; set; }
         public int AntiRaidSeconds { get; set; }
@@ -49,7 +48,7 @@ namespace Kaguya.Core.Server_Files
             MutedMembers = new Dictionary<string, string>();
             WarnedMembers = new Dictionary<ulong, int>();
             WarnActions = new Dictionary<string, int>();
-            WarnReasons = new Dictionary<ulong, Dictionary<Dictionary<ulong, string>, List<string>>>();
+            PunishmentHistory = new Dictionary<ulong, List<string>>();
             BlacklistedChannels = new List<ulong>();
             WhitelistedChannels = new List<ulong>();
             FilteredWords = new List<string>();

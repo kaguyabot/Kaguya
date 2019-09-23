@@ -10,6 +10,12 @@ Version 1.32
 - $warn now takes in an optional reason as a parameter. If no reason is specified with the warning,
     it will default to "No reason specified."
     - Note: The warn reason is DM'd to users.
+- Fixed a bug with $kick where the entire reason would not be saved (only the first word).
+- NEW COMMAND: $inspect
+    - $inspect allows moderators (anyone with the ban members permission) to view a list of 
+        past punishments for users in the server. This will display all reasons for warnings, kicks, 
+        and/or bans, up to 15 results. This ONLY works if you warn/kick/ban the user with Kaguya 
+        using $kick/$ban, NOT through Discord itself.
 
 Version 1.31.1
 
