@@ -136,48 +136,31 @@ namespace Kaguya.Modules
                 }
             }
 
-            string jsonRecent;
+            var playerRecentObject = new OsuRecentBuilder(player).Execute()[0];
 
-            using (WebClient client = new WebClient())
+            if (playerRecentObject.user_id == null)
             {
-                jsonRecent = client.DownloadString($"https://osu.ppy.sh/api/get_user_recent?k={Config.bot.OsuApiKey}&u=" + player);
-            }
-            if (jsonRecent == "[]")
-            {
-                string jsonUserData;
-                using (WebClient client = new WebClient())
-                {
-                    jsonUserData = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={Config.bot.OsuApiKey}&u=" + player);
-                }
+                var userProfileObject = new OsuUserBuilder(player).Execute();
 
-                var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(jsonUserData)[0];
                 embed.WithAuthor(author =>
                 {
                     author
-                        .WithName("" + mapUserNameObject.username + " hasn't got any recent plays")
-                        .WithIconUrl("https://a.ppy.sh/" + mapUserNameObject.user_id);
+                        .WithName("" + userProfileObject.username + " hasn't got any recent plays")
+                        .WithIconUrl("https://a.ppy.sh/" + userProfileObject.user_id);
                 });
                 await BE();
             }
             else
             {
-                var playerRecentObject = new OsuRecentBuilder(player).Execute()[0];
+                var userProfileObject = new OsuUserBuilder(player).Execute();
 
-                string NormalUserName = "";
-                using (WebClient client = new WebClient())
-                {
-                    NormalUserName = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={Config.bot.OsuApiKey}&u=" + player);
-                }
-
-                if(NormalUserName == "[]")
+                if (userProfileObject.user_id == null)
                 {
                     embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
                     await BE();
                     embed.SetColor(EmbedColor.RED);
                     return;
                 }
-
-                var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
 
                 string playerRecentString = $"▸ **{playerRecentObject.rankemote}{playerRecentObject.string_mods}** ▸ **[{playerRecentObject.beatmap.title} [{playerRecentObject.beatmap.version}]](https://osu.ppy.sh/b/{playerRecentObject.beatmap_id})** by **{playerRecentObject.beatmap.artist}**\n" +
                     $"▸ **☆{playerRecentObject.beatmap.difficultyrating.ToString("F")}** ▸ **{playerRecentObject.accuracy.ToString("F")}%**\n" +
@@ -189,12 +172,12 @@ namespace Kaguya.Modules
 
                 var difference = DateTime.UtcNow - playerRecentObject.date;
 
-                string footer = $"{mapUserNameObject.username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
+                string footer = $"{userProfileObject.username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
 
                 embed.WithAuthor(author =>
                 {
                     author
-                        .WithName($"Most Recent osu! Standard Play for " + mapUserNameObject.username)
+                        .WithName($"Most Recent osu! Standard Play for " + userProfileObject.username)
                         .WithIconUrl("https://a.ppy.sh/" + playerRecentObject.user_id);
                 });
                 embed.WithDescription($"{playerRecentString}");
