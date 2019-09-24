@@ -14,7 +14,7 @@ namespace Kaguya.Core.Osu.Builder
         private readonly StringBuilder BaseUrl = new StringBuilder();
         private string GeneratedUrl;
 
-        public OsuRecentBuilder(string userid, int mode = 0, int limit = 5)
+        public OsuRecentBuilder(string userid, int mode = 0, int limit = 1)
         {
             BaseUrl.Append($"https://osu.ppy.sh/api/get_user_recent?k={Config.bot.OsuApiKey}");
 
