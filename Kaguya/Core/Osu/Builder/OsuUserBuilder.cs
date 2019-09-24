@@ -1,9 +1,7 @@
 ﻿using Kaguya.Core.Osu.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Kaguya.Core.Osu.Builder
 {
@@ -11,6 +9,14 @@ namespace Kaguya.Core.Osu.Builder
     {
         public string UserId; // u
         public int Mode; // m
+
+        public OsuUserBuilder(string user, int mode = 0)
+        {
+            UserId = user;
+            Mode = mode;
+
+            Execute();
+        }
 
         public OsuUserModel Execute()
         {
@@ -23,7 +29,7 @@ namespace Kaguya.Core.Osu.Builder
         {
             foreach (var item in userArray)
             {
-                //If processing needed, fill this in.
+                item.difference = DateTime.Now - item.join_date;
             }
 
             var userList = userArray.ToList();
