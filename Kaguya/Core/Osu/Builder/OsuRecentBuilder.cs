@@ -54,6 +54,9 @@ namespace Kaguya.Core.Osu.Builder
                 //Get string for mods
                 item.string_mods = OsuMisc.ModeNames(item.enabled_mods);
 
+                //Fill in Emote of Grade
+                item.rankemote = OsuMisc.OsuGrade(item.rank);
+
                 //Get Beatmap of recent play
                 string mapRecent = "";
                 using (WebClient client = new WebClient())
