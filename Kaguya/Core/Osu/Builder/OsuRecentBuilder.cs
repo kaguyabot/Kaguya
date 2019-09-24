@@ -1,4 +1,5 @@
 ﻿using Kaguya.Core.Osu.Models;
+using Newtonsoft.Json;
 using OppaiSharp;
 using System.Collections.Generic;
 using System.IO;
@@ -59,6 +60,14 @@ namespace Kaguya.Core.Osu.Builder
                     item.string_mods = "NM";
                 }
 
+                //Get Beatmap of recent play
+                string mapRecent = "";
+                using (WebClient client = new WebClient())
+                {
+                    mapRecent = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={Config.bot.OsuApiKey}&b={item.beatmap_id}");
+                }
+                item.beatmap = JsonConvert.DeserializeObject<OsuBeatmapModel[]>(mapRecent)[0];
+
                 //PPv2
                 byte[] data = new WebClient().DownloadData($"https://osu.ppy.sh/osu/{item.beatmap_id}");
                 var beatmapData = Beatmap.Read(new StreamReader(new MemoryStream(data, false)));
@@ -66,6 +75,10 @@ namespace Kaguya.Core.Osu.Builder
 
                 item.pp = new PPv2(new PPv2Parameters(beatmapData, diff, new Accuracy(item.count300, item.count100, item.count50, item.countmiss).Value(), item.countmiss, item.maxcombo, (Mods)item.enabled_mods)).Total;
                 item.fullcombopp = new PPv2(new PPv2Parameters(beatmapData, diff, accuracy: (item.accuracy / 100), mods: (Mods)item.enabled_mods)).Total;
+
+                //Get Beatmap completion rate and total count of hit notes 
+                item.counttotal = (item.count300 + item.count100 + item.count50 + item.countmiss);
+                item.completion = (item.counttotal / beatmapData.Objects.Count()) * 100;
             }
 
             return array;
