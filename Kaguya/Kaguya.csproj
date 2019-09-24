@@ -301,6 +301,13 @@
     <Compile Include="Core\LevelingSystem\Leveling.cs" />
     <Compile Include="Core\Data Storage\DataStorage.cs" />
     <Compile Include="Core\Logger\Logger.cs" />
+    <Compile Include="Core\Osu\Builder\OsuBaseBuilder.cs" />
+    <Compile Include="Core\Osu\Models\OsuBaseModel.cs" />
+    <Compile Include="Core\Osu\Models\OsuBeatmapModel.cs" />
+    <Compile Include="Core\Osu\Models\OsuScoreableModel.cs" />
+    <Compile Include="Core\Osu\OsuMisc.cs" />
+    <Compile Include="Core\Osu\Models\OsuRecentModel.cs" />
+    <Compile Include="Core\Osu\Builder\OsuRecentBuilder.cs" />
     <Compile Include="Core\Server Files\Server.cs" />
     <Compile Include="Core\Server Files\ServerMessageLog.cs" />
     <Compile Include="Core\Server Files\ServerMessageLogs.cs" />
