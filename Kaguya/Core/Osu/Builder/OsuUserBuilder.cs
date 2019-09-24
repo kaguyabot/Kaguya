@@ -23,7 +23,7 @@ namespace Kaguya.Core.Osu.Builder
         {
             foreach (var item in userArray)
             {
-                //Need processing
+                //If processing needed, fill this in.
             }
 
             var userList = userArray.ToList();
