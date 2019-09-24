@@ -159,7 +159,6 @@ namespace Kaguya.Modules
         public async Task osuRecent(string player = null)
         {
             string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            string osuapikey = Config.bot.OsuApiKey;
 
             if (player == null || player == "")
             {
@@ -176,14 +175,14 @@ namespace Kaguya.Modules
 
             using (WebClient client = new WebClient())
             {
-                jsonRecent = client.DownloadString($"https://osu.ppy.sh/api/get_user_recent?k={osuapikey}&u=" + player);
+                jsonRecent = client.DownloadString($"https://osu.ppy.sh/api/get_user_recent?k={Config.bot.OsuApiKey}&u=" + player);
             }
             if (jsonRecent == "[]")
             {
                 string jsonUserData;
                 using (WebClient client = new WebClient())
                 {
-                    jsonUserData = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u=" + player);
+                    jsonUserData = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={Config.bot.OsuApiKey}&u=" + player);
                 }
 
                 var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(jsonUserData)[0];
@@ -197,68 +196,12 @@ namespace Kaguya.Modules
             }
             else
             {
-                var playerRecentObject = JsonConvert.DeserializeObject<dynamic>(jsonRecent)[0];
-                string mapID = playerRecentObject.beatmap_id;
-
-                string mapRecent = "";
-                using (WebClient client = new WebClient())
-                {
-                    mapRecent = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={osuapikey}&b={mapID}");
-                }
-                var mapRecentObject = JsonConvert.DeserializeObject<dynamic>(mapRecent)[0];
-
-                string mapTitle = mapRecentObject.title;
-                string difficulty = mapRecentObject.version;
-                string score = playerRecentObject.score;
-                double maxCombo = playerRecentObject.maxcombo;
-                string artist = mapRecentObject.artist;
-                double count50 = playerRecentObject.count50;
-                double count100 = playerRecentObject.count100;
-                double count300 = playerRecentObject.count300;
-                double countMiss = playerRecentObject.countmiss;
-                string fullCombo = playerRecentObject.perfect;
-                if (fullCombo == "1")
-                    fullCombo = " **Full Combo!**";
-                else fullCombo = null;
-                string mods = playerRecentObject.enabled_mods;
-                double maxPossibleCombo = mapRecentObject.max_combo;
-                var modnum = playerRecentObject.enabled_mods;
-                mods = ((AllMods)modnum).ToString().Replace(",", "");
-                mods = mods.Replace(" ", "");
-                mods = mods.Replace("NM", "");
-                string date = playerRecentObject.date;
-                double starRating = mapRecentObject.difficultyrating;
-                double accuracy = 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
-                string grade = playerRecentObject.rank;
-
-                //Emote codes for grade icons
-
-                switch (grade)
-                {
-                    case "XH":
-                        grade = "<:XH:553119188089176074>"; break;
-                    case "X":
-                        grade = "<:X_:553119217109565470>"; break;
-                    case "SH":
-                        grade = "<:SH:553119233463025691>"; break;
-                    case "S":
-                        grade = "<:S_:553119252329267240>"; break;
-                    case "A":
-                        grade = "<:A_:553119274256826406>"; break;
-                    case "B":
-                        grade = "<:B_:553119304925577228>"; break;
-                    case "C":
-                        grade = "<:C_:553119325565878272>"; break;
-                    case "D":
-                        grade = "<:D_:553119338035675138>"; break;
-                    case "F":
-                        grade = "<:F_:557297028263051288>"; break;
-                }
+                var playerRecentObject = new OsuRecentBuilder(player).Execute()[0];
 
                 string NormalUserName = "";
                 using (WebClient client = new WebClient())
                 {
-                    NormalUserName = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u=" + player);
+                    NormalUserName = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={Config.bot.OsuApiKey}&u=" + player);
                 }
 
                 if(NormalUserName == "[]")
@@ -271,51 +214,15 @@ namespace Kaguya.Modules
 
                 var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
 
-                //PPv2
+                string playerRecentString = $"▸ **{playerRecentObject.rankemote}{playerRecentObject.string_mods}** ▸ **[{playerRecentObject.beatmap.title} [{playerRecentObject.beatmap.version}]](https://osu.ppy.sh/b/{playerRecentObject.beatmap_id})** by **{playerRecentObject.beatmap.artist}**\n" +
+                    $"▸ **☆{playerRecentObject.beatmap.difficultyrating.ToString("F")}** ▸ **{playerRecentObject.accuracy.ToString("F")}%**\n" +
+                    $"▸ **Combo:** `{playerRecentObject.maxcombo.ToString("N0")}x / {playerRecentObject.beatmap.max_combo.ToString("N0")}x`\n" +
+                    $"▸ [300 / 100 / 50 / X]: `[{playerRecentObject.count300} / {playerRecentObject.count100} / {playerRecentObject.count50} / {playerRecentObject.countmiss}]`\n" +
+                    $"▸ **Map Completion:** `{playerRecentObject.completion}%`\n" +
+                    $"▸ **Full Combo Percentage:** `{((playerRecentObject.maxcombo / playerRecentObject.beatmap.max_combo) * 100).ToString("N2")}%`\n" +
+                    $"▸ **PP for FC**: `{playerRecentObject.fullcombopp.ToString("N0")}pp`";
 
-                byte[] data = new WebClient().DownloadData($"https://osu.ppy.sh/osu/{mapID}");
-                var stream = new MemoryStream(data, false);
-                var reader = new StreamReader(stream);
-                var enabledMods = Mods.NoMod;
-
-                if (mods.Contains("EZ"))
-                    enabledMods |= Mods.Easy;
-                if (mods.Contains("HD"))
-                    enabledMods |= Mods.Hidden;
-                if (mods.Contains("HR"))
-                    enabledMods |= Mods.Hardrock;
-                if (mods.Contains("FL"))
-                    enabledMods |= Mods.Flashlight;
-                if (mods.Contains("DT") || mods.Contains("NC"))
-                    enabledMods |= Mods.DoubleTime;
-                if (mods.Contains("NF"))
-                    enabledMods |= Mods.NoFail;
-                if (mods.Contains("HT"))
-                    enabledMods |= Mods.HalfTime;
-
-                var beatmap = Beatmap.Read(reader);
-                var diff = new DiffCalc().Calc(beatmap, mods: enabledMods);
-                var fullComboPP = new PPv2(new PPv2Parameters(beatmap, diff, accuracy: (accuracy / 100), mods: enabledMods));
-
-                //PPv2 End
-
-                string plus = "+";
-
-                var objectsEncountered = (count300 + count100 + count50 + countMiss);
-                var mapCompletion = ((objectsEncountered / beatmap.Objects.Count()) * 100).ToString("N2");
-
-                if (plus == "+" && mods == "")
-                    plus = "";
-                mods = mods.Replace("576", "NC");
-                string playerRecentString = $"▸ **{grade}{plus}{mods}** ▸ **[{mapTitle} [{difficulty}]](https://osu.ppy.sh/b/{mapID})** by **{artist}**\n" +
-                    $"▸ **☆{starRating.ToString("F")}** ▸ **{accuracy.ToString("F")}%**\n" +
-                    $"▸ **Combo:** `{maxCombo.ToString("N0")}x / {maxPossibleCombo.ToString("N0")}x`\n" +
-                    $"▸ [300 / 100 / 50 / X]: `[{count300} / {count100} / {count50} / {countMiss}]`\n" +
-                    $"▸ **Map Completion:** `{mapCompletion}%`\n" +
-                    $"▸ **Full Combo Percentage:** `{((maxCombo / maxPossibleCombo) * 100).ToString("N2")}%`\n" +
-                    $"▸ **PP for FC**: `{fullComboPP.Total.ToString("N0")}pp`";
-
-                var difference = DateTime.UtcNow - (DateTime)playerRecentObject.date;
+                var difference = DateTime.UtcNow - playerRecentObject.date;
 
                 string footer = $"{mapUserNameObject.username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
 
@@ -329,29 +236,6 @@ namespace Kaguya.Modules
                 embed.WithFooter(footer);
                 await BE();
             }
-        }
-
-        [Command("rn")]
-        public async Task osuNewRecent(string player = null)
-        {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
-            string osuapikey = Config.bot.OsuApiKey;
-
-            if (player == null || player == "")
-            {
-                player = UserAccounts.GetAccount(Context.User).OsuUsername;
-                if (player == null || player == "")
-                {
-                    embed.WithTitle("osu! Recent");
-                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
-                    await BE(); return;
-                }
-            }
-
-            string jsonRecent;
-
-            var RecentData = new OsuRecentBuilder(player).Execute();
-
         }
 
         [Flags]

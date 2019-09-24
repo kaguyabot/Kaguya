@@ -54,12 +54,6 @@ namespace Kaguya.Core.Osu.Builder
                 //Get string for mods
                 item.string_mods = OsuMisc.ModeNames(item.enabled_mods);
 
-                //Set NM string if no mods are enabled
-                if (item.enabled_mods == 0)
-                {
-                    item.string_mods = "NM";
-                }
-
                 //Get Beatmap of recent play
                 string mapRecent = "";
                 using (WebClient client = new WebClient())
