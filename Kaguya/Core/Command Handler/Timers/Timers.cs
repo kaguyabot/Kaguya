@@ -4,6 +4,7 @@ using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using System;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,13 +25,49 @@ namespace Kaguya.Core.Command_Handler
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
         }
 
+        private int ProcessCPUTimersActive = 0;
+
+        public Task ProcessCPUTimer(DiscordSocketClient client)
+        {
+            if (ProcessCPUTimersActive < 1)
+            {
+                Timer timer = new Timer(2000); //30 seconds
+                timer.Enabled = true;
+                timer.Elapsed += Process_CPU_Timer_Elapsed;
+                ProcessCPUTimersActive++;
+            }
+            return Task.CompletedTask;
+        }
+
+        private void Process_CPU_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Process kaguya = Process.GetProcessesByName("Kaguya")[0];
+
+            var cpu = new PerformanceCounter("Process", "% Processor Time", kaguya.ProcessName, true);
+            var ram = new PerformanceCounter("Process", "Private Bytes", kaguya.ProcessName, true);
+
+            // Getting first initial values
+            cpu.NextValue();
+            ram.NextValue();
+
+            dynamic result = new ExpandoObject();
+
+            // If system has multiple cores, that should be taken into account
+            result.CPU = Math.Round(cpu.NextValue() / Environment.ProcessorCount, 2);
+            // Returns number of MB consumed by application
+            result.RAM = Math.Round(ram.NextValue() / 1024 / 1024, 2);
+
+            Global.cpuUsage = result.CPU;
+            Global.ramUsage = result.RAM;
+        }
+
         private int RateLimitTimersActive = 0;
 
         public Task RateLimitResetTimer(DiscordSocketClient client)
         {
             if(RateLimitTimersActive < 1)
             {
-                Timer timer = new Timer(4250); //Milliseconds at which to reset the rate limit (4.25 seconds)
+                Timer timer = new Timer(3900); //Milliseconds at which to reset the rate limit (3.90 seconds)
                 timer.Enabled = true;
                 timer.Elapsed += RateLimit_Reset_Timer_Elapsed;
                 RateLimitTimersActive++;
@@ -60,11 +97,11 @@ namespace Kaguya.Core.Command_Handler
                 }
 
                 if(account.RatelimitStrikes > 0 && account.RatelimitStrikes < 5 &&
-                    (DateTime.Now - account.TemporaryBlacklistExpiration).TotalDays > 30)
+                    (DateTime.Now - account.TemporaryBlacklistExpiration).TotalDays > 14)
                 {
                     account.RatelimitStrikes = 0;
                     logger.ConsoleStatusAdvisory($"User {Global.client.GetUser(account.ID).Username} (ID: {account.ID}) has " +
-                        $"had their ratelimit strikes reset due to not ratelimiting for the last 30 days.");
+                        $"had their ratelimit strikes reset due to not ratelimiting for the last 14 days.");
                 }
 
                 if ((!account.IsSupporter && account.CommandRateLimit >= 3) || 
@@ -115,7 +152,7 @@ namespace Kaguya.Core.Command_Handler
                         string timeout = "12 hours.";
                         embed.WithDescription($"You are being rate limited and have been temporarily blacklisted. " +
                         $"Please slow down with your command usage. You have been blacklisted for {timeout}." +
-                        $"\n**If you continue to breach the rate limit (3 commands within 4.25 seconds), you will be permanently blacklisted.**");
+                        $"\n**If you continue to breach the rate limit (3 commands within 3.90 seconds), you will be permanently blacklisted.**");
                         account.IsBlacklisted = true;
                         account.TemporaryBlacklistExpiration = DateTime.Now + TimeSpan.FromSeconds(43200);
                         Global.client.GetUser(account.ID).SendMessageAsync(embed: embed.Build());
@@ -138,6 +175,7 @@ namespace Kaguya.Core.Command_Handler
                 account.CommandRateLimit = 0;
             }
             UserAccounts.UserAccounts.SaveAccounts();
+            Servers.SaveServers();
         }
 
         public Task SupporterExpirationTimer(DiscordSocketClient client) //Checks supporter expiration times
@@ -202,8 +240,7 @@ namespace Kaguya.Core.Command_Handler
                 var seconds = server.AntiRaidSeconds;
                 var punishment = server.AntiRaidPunishment;
                 server.AntiRaidList.Add(user.Id);
-                Servers.SaveServers();
-
+                
                 if (!AntiRaidActive((user as SocketGuildUser).Guild))
                     return Task.CompletedTask;
 
@@ -273,7 +310,7 @@ namespace Kaguya.Core.Command_Handler
                     }
 
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 case "kick":
                     string kickedUsers = "";
@@ -319,7 +356,7 @@ namespace Kaguya.Core.Command_Handler
                         await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
                     }
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 case "shadowban":
                     string shadowbannedUsers = "";
@@ -368,7 +405,7 @@ namespace Kaguya.Core.Command_Handler
                         await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
                     }
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 case "ban":
                     string bannedUsers = "";
@@ -414,7 +451,7 @@ namespace Kaguya.Core.Command_Handler
                         await (_client.GetChannel(server.LogAntiRaids) as ISocketMessageChannel).SendMessageAsync(embed: embed.Build());
                     }
                     server.AntiRaidList.Clear();
-                    Servers.SaveServers();
+                    
                     break;
                 default:
                     break;
@@ -479,19 +516,26 @@ namespace Kaguya.Core.Command_Handler
 
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
-
-            string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
-            $"Servicing {Global.TotalGuildCount.ToString("N0")} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
-            $"{Utilities.GetAlert("VERSION")}"};
-            displayIndex++;
-            if (displayIndex >= games.Length)
+            try
             {
-                displayIndex = 0;
-            }
+                var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
 
-            _client.SetGameAsync(games[displayIndex]);
-            logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
+                string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
+                $"Servicing {Global.client.Guilds.Count} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
+                $"{Utilities.GetAlert("VERSION")}"};
+                displayIndex++;
+                if (displayIndex >= games.Length)
+                {
+                    displayIndex = 0;
+                }
+
+                _client.SetGameAsync(games[displayIndex]);
+                logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
+            }
+            catch(Exception ex)
+            {
+                logger.ConsoleCriticalAdvisory(ex.Message);
+            }
         }
 
         public Task VerifyMessageReceived(DiscordSocketClient _client)

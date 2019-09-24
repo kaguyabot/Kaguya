@@ -14,15 +14,25 @@ namespace Kaguya.Core.UserAccounts
         public int KaguyaWarnings { get; set; }
         public int NBombUsesThisHour { get; set; }
         public int CommandRateLimit { get; set; }
-        public int RatelimitStrikes { get; set; } //Normal command rate limit strikes
+        public int RatelimitStrikes { get; set; }
         public string NSFWAgeVerified { get; set; }
         public List<string> RecentlyUsedCommands { get; set; }
         public int GamblingBadLuckStreak { get; set; }
+        public int QuickdrawWinnings { get; set; }
+        public int QuickdrawLosses { get; set; }
         public bool IsSupporter
         {
             get
             {
                 return (KaguyaSupporterExpiration - DateTime.Now).TotalSeconds > 0;
+            }
+        }
+        public bool IsBenefitingFromUpvote
+        {
+            get
+            {
+                return (DateTime.Now - LastUpvotedKaguya).TotalSeconds > 0 && 
+                    (DateTime.Now - LastUpvotedKaguya).TotalSeconds < 43200; //12 hours
             }
         }
         public DateTime TemporaryBlacklistExpiration { get; set; }
@@ -37,7 +47,7 @@ namespace Kaguya.Core.UserAccounts
         {
             get
             {
-                return (uint)Math.Sqrt(EXP / 8 + -8);
+                return (uint)Math.Sqrt(EXP / 8 + -8); //DON'T TOUCH - THIS AFFECTS ALL LEVELS GLOBALLY!!
             }
         }
         

@@ -151,7 +151,7 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
-            Servers.SaveServers();
+            
 
             embed.WithDescription($"Awesome! Here's what I've got so far: " +
                 $"\n" +
@@ -190,25 +190,25 @@ namespace Kaguya.Modules.Administration
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "mute";
-                    Servers.SaveServers();
+                    
                     break;
                 case "kick":
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "kick";
-                    Servers.SaveServers();
+                    
                     break;
                 case "shadowban":
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "shadowban";
-                    Servers.SaveServers();
+                    
                     break;
                 case "ban":
                     server.AntiRaid = true;
                     server.AntiRaidSeconds = secondsResult;
                     server.AntiRaidPunishment = "ban";
-                    Servers.SaveServers();
+                    
                     break;
                 default:
                     break;
@@ -246,7 +246,7 @@ namespace Kaguya.Modules.Administration
             server.AntiRaid = false;
             server.AntiRaidList.Clear();
             server.LogAntiRaids = 0;
-            Servers.SaveServers();
+            
 
             embed.WithTitle("Anti-Raid Disabled");
             embed.WithDescription($"I have disabled Anti-Raid protections for this server.");
@@ -258,38 +258,72 @@ namespace Kaguya.Modules.Administration
         [Alias("w")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.Administrator)]
-        public async Task WarnMembers([Remainder]List<SocketGuildUser> users)
+        public async Task WarnMembers(List<SocketGuildUser> users, string reason = "No reason specified.")
         {
             var server = Servers.GetServer(Context.Guild);
             var warnActions = server.WarnActions;
             var warnedMembers = server.WarnedMembers;
+            var punishmentHistoryDictionary = server.PunishmentHistory;
 
             foreach (var user in users)
             {
                 var userID = user.Id;
                 int i = 0;
+
+                /*
+                    *  We insert the tick marks for formatting purposes.
+                    *  If they exist in the warn reason, we remove them.
+                    */
+
+                reason.Insert(0, "`");
+                reason.Insert(reason.IndexOf(reason.Last()), "`");
+
+                if (reason.Contains('`'))
+                {
+                    reason = reason.Replace("`", "");
+                }
+
+                if (!punishmentHistoryDictionary.TryGetValue(userID, out List<string> punishmentHistoryList)) //Gets the current punishments for the user.
+                {
+                    punishmentHistoryList = new List<string>();
+                }
+
+                if (punishmentHistoryDictionary.ContainsKey(userID))
+                {
+                    punishmentHistoryDictionary.Remove(userID);
+                }
+
                 warnedMembers.TryGetValue(userID, out int userWarnings); //Gets the user's total warnings
                 userWarnings++; //Increments the user's warnings by 1.
-                
+
                 if (warnedMembers.ContainsKey(userID)) //If it exists in the dictionary, remove and replace it.
                 {
                     warnedMembers.Remove(userID);
                 }
 
+                punishmentHistoryList.Add($"[Warning #{userWarnings}]: {reason} - Punished by: {Context.User} - Time: {DateTime.Now}\n\n");
+                punishmentHistoryDictionary.Add(user.Id, punishmentHistoryList);
+
                 var dmChannel = await user.GetOrCreateDMChannelAsync();
 
                 EmbedBuilder embed2 = new EmbedBuilder();
+
                 embed2.WithTitle("⚠️ Warning Received");
-                embed2.WithDescription($"You have received a warning from `{Context.User}` in the server `{Context.Guild.Name}`.");
+                embed2.WithDescription($"You have received a warning from `{Context.User}` in the server `{Context.Guild.Name}`." +
+                    $"\n" +
+                    $"\nReason: `{reason}`");
                 embed2.WithFooter($"You currently have {userWarnings} warnings.");
                 embed2.WithColor(111, 22, 255); //Violet, have to use this because of "embed2"
+
                 await dmChannel.SendMessageAsync(embed: embed2.Build());
 
                 warnedMembers.Add(userID, userWarnings);
+
                 embed.WithDescription($"{Context.User.Mention} **User `{users.ElementAt(i)}` has been warned.**");
                 embed.WithFooter($"User now has {userWarnings} warning(s).");
                 embed.SetColor(EmbedColor.VIOLET);
                 await ReplyAsync(embed: embed.Build());
+
                 i++;
 
                 if (warnActions.Values.Contains(userWarnings)) //If a user has the same amount of warnings (or more) as a warnaction, do stuff.
@@ -309,14 +343,36 @@ namespace Kaguya.Modules.Administration
                         await ShadowBan(user);
                     else if (userWarnings >= warnNums[0] && warnNums[0] != 0)
                         await Ban(user);
-
-                    Console.WriteLine("Ban: " + warnNums[0]);
-                    Console.WriteLine("Shadowban: " + warnNums[1]);
-                    Console.WriteLine("Kick: " + warnNums[2]);
-                    Console.WriteLine("Mute: " + warnNums[3]);
-
                 }
-                Servers.SaveServers();
+            }
+        }
+
+        [Command("inspect")]
+        [RequireUserPermission(GuildPermission.BanMembers)]
+        public async Task InspectUser(IGuildUser user)
+        {
+            var server = Servers.GetServer(Context.Guild);
+            
+            if(server.PunishmentHistory.TryGetValue(user.Id, out List<string> pastPunishments))
+            {
+                string punishments = string.Empty;
+                
+                foreach(var item in pastPunishments)
+                    punishments += item;
+
+                embed.WithTitle($"{Context.Guild} Punishment History");
+                embed.WithDescription($"Punishment History for {user.Mention}:" +
+                    $"\n" +
+                    $"\n{punishments}");
+                embed.SetColor(EmbedColor.BLUE);
+                await BE();
+            }
+            else
+            {
+                embed.WithTitle($"{Context.Guild} Punishment History");
+                embed.WithDescription($"I wasn't able to find any punishments for {user.Mention}");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
             }
         }
 
@@ -359,7 +415,7 @@ namespace Kaguya.Modules.Administration
             }
 
             server.WarnActions.Add(warnAction.ToLower(), warnNum);
-            Servers.SaveServers();
+            
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 "Warn Settings Changed",
@@ -486,7 +542,7 @@ namespace Kaguya.Modules.Administration
         public async Task Mute(string timeout, [Remainder]List<SocketGuildUser> users)
         {
             var server = Servers.GetServer(Context.Guild);
-            var cmdPrefix = server.commandPrefix;
+            var cmdPrefix = server.CommandPrefix;
             var roles = Context.Guild.Roles;
             var channels = Context.Guild.Channels;
 
@@ -495,7 +551,7 @@ namespace Kaguya.Modules.Administration
             if (!roles.Contains(muteRole))
             {
                 await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
-                logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                logger.ConsoleInformationAdvisory("Mute role not found, so I created it.");
 
                 embed.WithDescription($"**{Context.User.Mention} I needed to create the mute role for first time setup! Please retry this command.**");
                 embed.SetColor(EmbedColor.VIOLET);
@@ -547,7 +603,7 @@ namespace Kaguya.Modules.Administration
                 }
             }
             if(i > 0)
-                logger.ConsoleGuildAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
+                logger.ConsoleInformationAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
 
             foreach (var user in users)
             {
@@ -578,7 +634,7 @@ namespace Kaguya.Modules.Administration
                         d1 = " day";
 
                     server.MutedMembers.Add(user.Id.ToString(), timeSpan.Duration().ToString());
-                    Servers.SaveServers();
+                    
                     TimeSpanDuration = timeSpan.Duration();
                     await user.AddRoleAsync(muteRole);
 
@@ -623,13 +679,13 @@ namespace Kaguya.Modules.Administration
 
                     user.RemoveRoleAsync(muteRole); //Removes mute role from user.
                     mutedMembers.Remove(ID.ToString()); //Removes muted member from the dictionary.
-                    Servers.SaveServers();
+                    
 
                     logger.ConsoleTimerElapsed($"User [{user.Username}#{user.Discriminator} | {user.Id}] has been unmuted.");
                 }
                 else
                 {
-                    logger.ConsoleGuildAdvisory("I failed to execute the unmute timer.");
+                    logger.ConsoleInformationAdvisory("I failed to execute the unmute timer.");
                 }
             }
         }
@@ -643,7 +699,7 @@ namespace Kaguya.Modules.Administration
         public async Task MuteMembers([Remainder]List<SocketGuildUser> users)
         {
             var server = Servers.GetServer(Context.Guild);
-            var cmdPrefix = server.commandPrefix;
+            var cmdPrefix = server.CommandPrefix;
             var roles = Context.Guild.Roles;
             var channels = Context.Guild.Channels;
 
@@ -654,7 +710,7 @@ namespace Kaguya.Modules.Administration
                 await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
                 embed.WithDescription($"**{Context.User.Mention} I didn't find my mute role, so I created it. Please try again!**");
                 await BE();
-                logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                logger.ConsoleInformationAdvisory("Mute role not found, so I created it.");
                 return;
             }
 
@@ -677,7 +733,7 @@ namespace Kaguya.Modules.Administration
                 }
             }
             if (i > 0)
-                logger.ConsoleGuildAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
+                logger.ConsoleInformationAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
 
             foreach (var user in users)
             {
@@ -698,7 +754,7 @@ namespace Kaguya.Modules.Administration
         public async Task Mute(IGuildUser user)
         {
             var server = Servers.GetServer(Context.Guild);
-            var cmdPrefix = server.commandPrefix;
+            var cmdPrefix = server.CommandPrefix;
             var roles = Context.Guild.Roles;
             var channels = Context.Guild.Channels;
 
@@ -709,7 +765,7 @@ namespace Kaguya.Modules.Administration
                 await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
                 embed.WithDescription($"**{Context.User.Mention} I didn't find my mute role, so I created it. Please try again!**");
                 await BE();
-                logger.ConsoleGuildAdvisory("Mute role not found, so I created it.");
+                logger.ConsoleInformationAdvisory("Mute role not found, so I created it.");
                 return;
             }
 
@@ -732,7 +788,7 @@ namespace Kaguya.Modules.Administration
                 }
             }
             if (i > 0)
-                logger.ConsoleGuildAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
+                logger.ConsoleInformationAdvisory($"{i} channels had their permissions updated for a newly created mute role.");
 
             await user.AddRoleAsync(muteRole);
             embed.WithDescription($"{Context.User.Mention} User `{user}` has been muted.");
@@ -758,7 +814,7 @@ namespace Kaguya.Modules.Administration
             {
                 await user.RemoveRoleAsync(muteRole);
                 mutedMembers.Remove(user.Id.ToString());
-                Servers.SaveServers();
+                
                 i++; logger.ConsoleGuildAdvisory(Context.Guild, "User unmuted.");
             }
 
@@ -774,11 +830,11 @@ namespace Kaguya.Modules.Administration
         public async Task FilterAdd([Remainder]string phrase) //Adds a word to the server word/phrase filter
         {
             stopWatch.Start();
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var server = Servers.GetServer(Context.Guild);
             server.FilteredWords.Add(phrase);
-            Servers.SaveServers();
+            
 
             embed.WithTitle("Filtered word added");
             embed.WithDescription($"**{Context.User.Mention} Successfully added specified word to the filter.**");
@@ -794,11 +850,11 @@ namespace Kaguya.Modules.Administration
         public async Task FilterRemove([Remainder]string phrase)
         {
             stopWatch.Start();
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var server = Servers.GetServer(Context.Guild);
             server.FilteredWords.Remove(phrase);
-            Servers.SaveServers();
+            
 
             embed.WithTitle("Filtered word added");
             embed.WithDescription($"**{Context.User.Mention} Successfully removed specified word from the filter.**");
@@ -845,7 +901,7 @@ namespace Kaguya.Modules.Administration
             }
 
             server.FilteredWords.Clear();
-            Servers.SaveServers();
+            
 
             embed.WithTitle("Cleared Filter");
             embed.WithDescription($"All filtered words for **{Context.Guild.Name}** have been successfully removed!");
@@ -962,6 +1018,7 @@ namespace Kaguya.Modules.Administration
         {
             Console.WriteLine(reason);
             var sOwnerID = Context.Guild.Owner.Id;
+            var server = Servers.GetServer(Context.Guild);
 
             if(user.Id == Context.User.Id)
             {
@@ -975,6 +1032,20 @@ namespace Kaguya.Modules.Administration
             }
             else if (user.Id != sOwnerID)
             {
+                var punishmentHistoryDictionary = server.PunishmentHistory;
+                if (punishmentHistoryDictionary.ContainsKey(user.Id))
+                {
+                    server.PunishmentHistory.Remove(user.Id);
+                }
+
+                if (!server.PunishmentHistory.TryGetValue(user.Id, out List<string> punishments))
+                {
+                    punishments = new List<string>();
+                }
+
+                punishments.Add($"[Ban]: {reason} - Punished by: {Context.User} - Time: {DateTime.Now}\n\n");
+                server.PunishmentHistory.Add(user.Id, punishments);
+
                 await user.BanAsync();
                 embed.WithTitle($"User Banned");
                 embed.WithDescription($"{Context.User.Mention} has banned `{user}`.");
@@ -1038,45 +1109,41 @@ namespace Kaguya.Modules.Administration
             }
 
             stopWatch.Stop();
-            logger.ConsoleGuildAdvisory($"{i} Users massbanned in guild {Context.Guild.Name}.");
+            logger.ConsoleInformationAdvisory($"{i} Users massbanned in guild {Context.Guild.Name}.");
         }
 
         [Command("kick")] 
         [Alias("k")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
-        public async Task Kick(IGuildUser user, string reason = "No reason provided.")
+        public async Task Kick(IGuildUser user, [Remainder]string reason = "No reason provided.")
         {
-            var sOwner = Context.Guild.Owner;
+            var server = Servers.GetServer(Context.Guild);
 
-            if (user.Id != sOwner.Id)
+            if (user.Id == Context.User.Id)
             {
-                if (reason != "No reason provided.")
-                {
-                    await user.KickAsync(reason);
-                    embed.WithTitle($"User Kicked");
-                    embed.WithDescription($"`{Context.User}` has kicked `{user}` with reason: \"{reason}\"");
-                    await BE();
-                }
-                else
-                {
-                    await user.KickAsync(reason);
-                    embed.WithTitle($"User Kicked");
-                    embed.WithDescription($"`{Context.User}` has kicked `{user}` without a specified reason.");
-                    await BE();
-                }
-            }
-
-            else if (user.Id == Context.User.Id)
-            {
-                embed.WithDescription($"**{Context.User.Mention} You may not ban yourself!**");
+                embed.WithDescription($"**{Context.User.Mention} You may not kick yourself!**");
                 await BE();
             }
-            else if (user.Id == sOwner.Id)
+
+            var punishmentHistoryDictionary = server.PunishmentHistory;
+            if (punishmentHistoryDictionary.ContainsKey(user.Id))
             {
-                embed.WithDescription($"**{Context.User.Mention} I cannot ban the server owner!**");
-                await BE();
+                server.PunishmentHistory.Remove(user.Id);
             }
+
+            if (!server.PunishmentHistory.TryGetValue(user.Id, out List<string> punishments))
+            {
+                punishments = new List<string>();
+            }
+
+            punishments.Add($"[Kick]: {reason} - Punished by: {Context.User} - Time: {DateTime.Now}\n\n");
+            server.PunishmentHistory.Add(user.Id, punishments);
+
+            await user.KickAsync(reason);
+            embed.WithTitle($"User Kicked");
+            embed.WithDescription($"`{Context.User}` has kicked `{user}` with reason: \"{reason}\"");
+            await BE();
         }
 
         [Command("masskick")] 
@@ -1151,7 +1218,7 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
-            if(!(amount <= 100))
+            if(amount > 100)
             {
                 await GlobalCommandResponses.CreateCommandError(Context,
                     stopWatch.ElapsedMilliseconds,
@@ -1162,11 +1229,15 @@ namespace Kaguya.Modules.Administration
                 return;
             }
 
+            var server = Servers.GetServer(Context.Guild);
+            server.IsPurgingMessages = true;
+
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
             var m = await ReplyAsync($"Clearing of messages completed. This message will be deleted in 3 seconds.");
             await Task.Delay(3000);
             await m.DeleteAsync();
+            server.IsPurgingMessages = false;
         }
 
         [Command("shadowban")]

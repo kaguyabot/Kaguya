@@ -38,7 +38,7 @@ namespace Kaguya.Modules.NSFW
                     $"that you are 18 years of age, please reply with \"I confirm.\" (without quotation marks).");
 
                 var message = await ReplyAsync(embed: embed.Build());
-                var response = await NextMessageAsync(timeout: TimeSpan.FromSeconds(20));
+                var response = await NextMessageAsync();
 
                 if (!response.Content.ToLower().Contains("i confirm"))
                 {
@@ -66,7 +66,7 @@ namespace Kaguya.Modules.NSFW
         {
             var userAccount = UserAccounts.GetAccount(Context.User);
             var difference = userAccount.NBombCooldownReset - DateTime.Now;
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
             bool isSupporter = userAccount.IsSupporter;
             Logger logger = new Logger();
             Random rand = new Random();
@@ -78,7 +78,7 @@ namespace Kaguya.Modules.NSFW
                     $"that you are 18 years of age, please reply with \"I confirm.\" (without quotation marks).");
 
                 var message = await ReplyAsync(embed: embed.Build());
-                var response = await NextMessageAsync(timeout: TimeSpan.FromSeconds(20));
+                var response = await NextMessageAsync();
 
                 if (!response.Content.ToLower().Contains("i confirm"))
                 {
@@ -142,7 +142,7 @@ namespace Kaguya.Modules.NSFW
                     $"that you are 18 years of age, please reply with \"I confirm.\" (without quotation marks).");
 
                 var message = await ReplyAsync(embed: embed.Build());
-                var response = await NextMessageAsync(timeout: TimeSpan.FromSeconds(20));
+                var response = await NextMessageAsync();
 
                 if (!response.Content.ToLower().Contains("i confirm"))
                 {

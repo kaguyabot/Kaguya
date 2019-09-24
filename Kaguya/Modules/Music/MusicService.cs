@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Victoria;
 using Victoria.Entities;
 using Kaguya.Core.Embed;
+using Kaguya.Core.UserAccounts;
 
 namespace Kaguya.Modules.Music
 {
@@ -30,6 +31,8 @@ namespace Kaguya.Modules.Music
 
         public async Task<Embed> JoinOrPlayAsync(SocketGuildUser user, ISocketMessageChannel textChannel, ulong guildId, string query = null)
         {
+            UserAccount userAccount = new UserAccount(user.Id);
+
             //Check If User Is Connected To Voice Cahnnel.
             if (user.VoiceChannel == null)
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Join/Play", "You must first join a voice channel!");
@@ -63,6 +66,10 @@ namespace Kaguya.Modules.Music
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"I wasn't able to find anything for {query}.");
                 if (search.LoadType == LoadType.LoadFailed && query != null)
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"I failed to load {query}.");
+                if (search.LoadType == LoadType.PlaylistLoaded && !userAccount.IsSupporter)
+                    return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", 
+                        "You must be a supporter to load playlists!", 
+                        "More information may be found through the `supporter` command.");
                 
                 //Get the first track from the search results.
                 //TODO: Add a 1-5 list for the user to pick from. (Like Fredboat)
@@ -72,7 +79,8 @@ namespace Kaguya.Modules.Music
                 if (player.CurrentTrack != null && player.IsPlaying || player.IsPaused)
                 {
                     player.Queue.Enqueue(track);
-                    return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"🎵 {track.Title} has been added to queue.");
+                    string thumbnailURL = await track.FetchThumbnailAsync();
+                    return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"🎵 {track.Title} has been added to queue.", thumbnailURL: thumbnailURL);
                 }
                 //Player was not playing anything, so lets play the requested track.
                 await player.PlayAsync(track);
@@ -83,7 +91,7 @@ namespace Kaguya.Modules.Music
                         await player.SkipAsync();
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", $"This song is longer than 10 minutes, therefore it cannot be played!");
                 }
-                return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"Now Playing: {track.Title}\nUrl: {track.Uri}");
+                return await StaticMusicEmbedHandler.CreateMusicEmbed("Music", $"Now Playing: {track.Title}\nUrl: {track.Uri}", thumbnailURL: await track.FetchThumbnailAsync());
             }
             //If after all the checks we did, something still goes wrong. Tell the user about it so they can report it back to us.
             catch (Exception e)
@@ -98,13 +106,13 @@ namespace Kaguya.Modules.Music
             {
                 await player.VoiceChannel.DisconnectAsync();
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Continuation", "I have failed to continue the queue! If you believe this is an error, " +
-                    $"please contact `Stage#0001` in my support server! Use `{Servers.GetServer(player.TextChannel.Guild as SocketGuild).commandPrefix}hdm` for an invite!");
+                    $"please contact `Stage#0001` in my support server! Use `{Servers.GetServer(player.TextChannel.Guild as SocketGuild).CommandPrefix}hdm` for an invite!");
             }
 
             if (player.Queue.Count < 1 && !player.IsPlaying)
             {
                 await player.VoiceChannel.DisconnectAsync();
-                return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", "There are no more items left in the queue, so I have stopped playing!");
+                return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", "There are no more items left in the queue, so I have stopped playing! ");
             }
 
             if (player.Queue.TryDequeue(out var item) && item is LavaTrack nextTrack)
@@ -112,7 +120,8 @@ namespace Kaguya.Modules.Music
                 if (player.VoiceChannel == null)
                     await Global.lavaShardClient.ConnectAsync(summoner.VoiceChannel);
                 await player.PlayAsync(nextTrack);
-                return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", $"Finished playing: {track.Title}\nNow playing: {nextTrack.Title}");
+                return await StaticMusicEmbedHandler.CreateMusicEmbed("🎵 Music", 
+                    $"Finished playing: {track.Title}\nNow playing: {nextTrack.Title}", thumbnailURL: await nextTrack.FetchThumbnailAsync());
             }
 
             return await StaticMusicEmbedHandler.CreateErrorEmbed("Music", "I failed to finish playing the requested track for an unknown reason. " +
@@ -164,7 +173,8 @@ namespace Kaguya.Modules.Music
                 /* Get The Player and make sure it isn't null. */
                 var player = _lavaShardClient.GetPlayer(guildId);
                 if (player == null)
-                    return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId).commandPrefix}h m` for proper usage.");
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", 
+                        $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId).CommandPrefix}h m` for proper usage.");
 
                 if (player.IsPlaying)
                 {
@@ -172,7 +182,8 @@ namespace Kaguya.Modules.Music
                         In this situation we simply return an embed that displays the current track instead. */
                     if (player.Queue.Count < 1 && player.CurrentTrack != null)
                     {
-                        return await StaticMusicEmbedHandler.CreateBasicEmbed($"🎵 Now Playing: {player.CurrentTrack.Title}", "There are no other items in the queue.");
+                        return await StaticMusicEmbedHandler.CreateBasicEmbed($"🎵 Now Playing: {player.CurrentTrack.Title}", 
+                            "There are no other items in the queue.");
                     }
                     else
                     {
@@ -185,12 +196,14 @@ namespace Kaguya.Modules.Music
                             if (trackNum == 2) { descriptionBuilder.Append($"`#{trackNum}`: [{track.Title}]({track.Uri})\n"); trackNum++; }
                             else { descriptionBuilder.Append($"`#{trackNum}`: [{track.Title}]({track.Uri})\n"); trackNum++; }
                         }
-                        return await StaticMusicEmbedHandler.CreateBasicEmbed("🎵 Music Queue", $"`Now Playing`: [{player.CurrentTrack.Title}]({player.CurrentTrack.Uri})\n{descriptionBuilder.ToString()}");
+                        return await StaticMusicEmbedHandler.CreateBasicEmbed("🎵 Music Queue", 
+                            $"`Now Playing`: [{player.CurrentTrack.Title}]({player.CurrentTrack.Uri})\n{descriptionBuilder.ToString()}");
                     }
                 }
                 else
                 {
-                    return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", "Player doesn't seem to be playing anything right now. If this is an error, Please contact Stage in the Kaguya support server.");
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", 
+                        "Player doesn't seem to be playing anything right now. If this is an error, Please contact Stage in the Kaguya support server.");
                 }
             }
             catch (Exception ex)
@@ -202,14 +215,15 @@ namespace Kaguya.Modules.Music
 
         public async Task<Embed> SkipTrackAsync(ulong guildId, string serverName)
         {
-            var cmdPrefix = Servers.GetServer(guildId).commandPrefix;
+            var cmdPrefix = Servers.GetServer(guildId).CommandPrefix;
 
             try
             {
                 var player = _lavaShardClient.GetPlayer(guildId);
                 /* Check if the player exists */
                 if (player == null)
-                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Skip", $"Could not aquire player.\nAre you using the bot right now? Check `{cmdPrefix}h m` for information on Kaguya's music service.");
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("⏩ Music Skip", 
+                        $"Could not aquire player.\nAre you using the bot right now? Check `{cmdPrefix}h m` for information on Kaguya's Music Service.");
                 if (player.Queue.Count == 0 && player.IsPlaying == true)
                 {
                     await player.StopAsync();
@@ -245,22 +259,83 @@ namespace Kaguya.Modules.Music
             }
         }
 
-        public async Task<Embed> VolumeAsync(ulong guildId, int volume)
+        public async Task<Embed> VolumeAsync(ulong guildId, string result)
         {
-            if (volume > 200 || volume < 0)
+            if(int.TryParse(result, out int volume))
             {
-                return await StaticMusicEmbedHandler.CreateErrorEmbed($"🔊 Music Volume", $"Volume must be between 0 and 200.");
+                if (volume > 200)
+                {
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed($"🔊 Music Volume", $"Volume must not be above 200.");
+                }
+                try
+                {
+                    if (volume < 0) //The volume is negative
+                    {
+                        var lavaPlayer = _lavaShardClient.GetPlayer(guildId);
+                        var curVolume = lavaPlayer.CurrentVolume;
+
+                        if(curVolume + volume < 0) //We add because volume is negative.
+                        {
+                            /*If the volume is less than zero, let's set it to zero
+                            because the user may want to quickly mute the track.*/
+
+                            return await StaticMusicEmbedHandler.CreateMusicEmbed($"🔊 Music Volume",
+                                $"Player volume set to 0.");
+                        }
+
+                        await lavaPlayer.SetVolumeAsync(curVolume + volume);
+
+                        //We don't add a negative sign below because the number does it for us.
+
+                        logger.ConsoleMusicLogNoUser($"Player Volume adjusted by: {volume}.");
+                        return await StaticMusicEmbedHandler.CreateBasicEmbed($"🔊 Music Volume", $"Volume has been adjusted by {volume}.",
+                            $"New Volume: {lavaPlayer.CurrentVolume}");
+                    }
+                    else if (result.Contains('+'))
+                    {
+                        string newValue = result.Split('+').Last();
+                        if (int.TryParse(newValue, out int newVolume))
+                        {
+                            var newPlayer = _lavaShardClient.GetPlayer(guildId);
+                            int curVolume = newPlayer.CurrentVolume;
+
+                            if (curVolume + newVolume > 200)
+                            {
+                                return await StaticMusicEmbedHandler.CreateErrorEmbed("Invalid Volume Adjustment",
+                                    $"The requested adjustment would put the total volume above 200. Volume adjustments " +
+                                    $"may not send the player's volume above 200.");
+                            }
+
+                            await newPlayer.SetVolumeAsync(curVolume + newVolume);
+                            logger.ConsoleMusicLogNoUser($"Bot Volume adjusted by: +{newVolume}.");
+                            return await StaticMusicEmbedHandler.CreateBasicEmbed($"🔊 Music Volume",
+                                $"Volume has been adjusted by +{newVolume}.", $"New Volume: {newPlayer.CurrentVolume}");
+
+                        }
+                        else
+                        {
+                            return await StaticMusicEmbedHandler.CreateErrorEmbed($"Invalid Volume",
+                            "The value specified is invalid.");
+                        }
+                    }
+                    else
+                    {
+                        var player = _lavaShardClient.GetPlayer(guildId);
+                        await player.SetVolumeAsync(volume);
+                        logger.ConsoleMusicLogNoUser($"Bot Volume set to: {volume}.");
+                        return await StaticMusicEmbedHandler.CreateBasicEmbed($"🔊 Music Volume", $"Volume has been set to {volume}.");
+                    }
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Volume",
+                        $"{ex.Message}", "Please contact Stage in the support server if this is a recurring issue.");
+                }
             }
-            try
+            else
             {
-                var player = _lavaShardClient.GetPlayer(guildId);
-                await player.SetVolumeAsync(volume);
-                logger.ConsoleMusicLogNoUser($"Bot Volume set to: {volume}.");
-                return await StaticMusicEmbedHandler.CreateBasicEmbed($"🔊 Music Volume", $"Volume has been set to {volume}.");
-            }
-            catch (InvalidOperationException ex)
-            {
-                return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Volume", $"{ex.Message}", "Please contact Stage in the support server if this is a recurring issue.");
+                return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Volume",
+                    "The requested volume is invalid.");
             }
         }
 
@@ -316,6 +391,38 @@ namespace Kaguya.Modules.Music
             catch (Exception e)
             {
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Queue Jump", e.Message);
+            }
+        }
+
+        public async Task<Embed> Lyrics(ulong guildID) //Experimental
+        {
+            try
+            {
+                var player = _lavaShardClient.GetPlayer(guildID);
+                var track = player.CurrentTrack;
+
+                if (player == null)
+                {
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Lyrics",
+                        "There is no currently active player.", "Use the `m leave` command while in a voice channel. " +
+                        "If the issue persists, please join my support server and ask for help.");
+                }
+
+                string lyrics = await track.FetchLyricsAsync();
+
+                if(lyrics == null)
+                {
+                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Lyrics <a:crabPls:588362913379516442>",
+                        $"No lyrics are available for \n{track.Author} - {track.Title}");
+                }
+
+                return await StaticMusicEmbedHandler.CreateMusicEmbed($"Music Lyrics <a:Banger:588362912905822208>",
+                    $"Here are the lyrics to {track.Title}: {lyrics}");
+            }
+            catch(Exception e)
+            {
+                return await StaticMusicEmbedHandler.CreateErrorEmbed("Exception", $"{e.Message}",
+                    "If this is unexpected, please join my support server and ask for help.");
             }
         }
     }

@@ -98,7 +98,7 @@ namespace Kaguya.Modules.Fun
         public async Task Slap(string target)
         {
             var gif = await nekoClient.Action_v3.SlapGif();
-            embed.WithTitle($"{Context.User.Username} slaped {target}!");
+            embed.WithTitle($"{Context.User.Username} slapped {target}!");
             embed.WithImageUrl(gif.ImageUrl);
             await BE();
         }
@@ -107,7 +107,7 @@ namespace Kaguya.Modules.Fun
         public async Task Slap(IGuildUser target)
         {
             var gif = await nekoClient.Action_v3.SlapGif();
-            embed.WithTitle($"{Context.User.Username} slaped {target.Username}!");
+            embed.WithTitle($"{Context.User.Username} slapped {target.Username}!");
             embed.WithImageUrl(gif.ImageUrl);
             await BE();
         }

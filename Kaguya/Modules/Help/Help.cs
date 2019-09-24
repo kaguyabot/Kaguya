@@ -3,15 +3,15 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core.Command_Handler.EmbedHandlers;
+using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
-using System.Linq;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Kaguya.Core.Embed;
 using EmbedType = Kaguya.Core.Embed.EmbedColor;
 
 namespace Kaguya.Modules.Help
@@ -30,7 +30,7 @@ namespace Kaguya.Modules.Help
         public async Task HelpCommand([Remainder]string command)
         {
 
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             switch (command.ToLower())
             {
@@ -72,7 +72,8 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Warning Options | `{cmdPrefix}warnoptions`");
                     embed.WithDescription($"{Context.User.Mention} Displays available ways to punish users through my warning system." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}warnoptions`"); break;
+                        $"\nSyntax: `{cmdPrefix}warnoptions`");
+                    await BE(); break;
                 case "warnpunishments":
                 case "wp":
                     embed.WithTitle($"Help: Warning Configuration | `{cmdPrefix}warnpunishments`, `{cmdPrefix}wp`");
@@ -82,6 +83,18 @@ namespace Kaguya.Modules.Help
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}warnpunishments`");
                     await BE(); break;
+                case "inspect":
+                    embed.WithTitle($"Help: User Inspection | `{cmdPrefix}inspect`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
+                        $"\n" +
+                        $"\nDisplays all previous punishments for a user. This includes warns, kicks, and bans, as well as their " +
+                        $"reason for being punished, who punished them, and the time at which they were punished. If a user is banned/shadowbanned/etc. " +
+                        $"as a result of being warned a certain number of times, this will not be displayed. Kicks and bans are also only displayed " +
+                        $"if the user was punished through my commands." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}inspect <user>`");
+                    embed.WithFooter("This command only displays punishments made after Kaguya V1.32");
+                    await BE(); break;
                 case "toggleannouncements":
                     embed.WithTitle($"Help: Toggle Announcements | `{cmdPrefix}toggleannouncements`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -90,13 +103,13 @@ namespace Kaguya.Modules.Help
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}toggleannouncements`");
                     await BE(); break;
-                case "bug":
+                case "bugreport":
                     embed.WithTitle($"Help: Bug Report | `{cmdPrefix}bug`");
                     embed.WithDescription($"{Context.User.Mention} Allows you to report a bug directly to the support server's `#bugs` channel so that my creator can take a look at what's wrong (and hopefully fix it)! " +
                         $"Please use this feature whenever you feel something is wrong with Kaguya, but don't overdo it! Messages that are spammy, violate the Discord TOS, or are abusive/deragotory in nature will " +
                         $"result in a `permanent blacklist` from all of Kaguya. A bug report that leads to something getting fixed will result in `+2000 Kaguya points` added to your account on the next patch as a thank you!" +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}bug <message>`");
+                        $"\nSyntax: `{cmdPrefix}bugreport <message>`");
                     await BE(); break;
                 case "kaguyawarn":
                     embed.WithTitle($"Help: Global Warnings | `{cmdPrefix}kaguyawarn`");
@@ -115,6 +128,7 @@ namespace Kaguya.Modules.Help
                     embed.WithFooter($"Use \"{cmdPrefix}h voteclaim\" to find out what the rewards for upvoting are!");
                     await BE(); break;
                 case "voteclaim":
+                case "vc":
                     embed.WithTitle($"Help: Claiming Voting Rewards | `{cmdPrefix}voteclaim`");
                     embed.WithDescription($"{Context.User.Mention} Use this command after voting (see `{cmdPrefix}h vote`) to have some rewards applied to your Kaguya account!" +
                         $"\nRewards: `2x critical hit chance for 12 hours` and `500 Kaguya Points`! You may ask \"well, what's a critical?\" I have a help command for that! Use `{cmdPrefix}h critical` to find out more!");
@@ -127,7 +141,8 @@ namespace Kaguya.Modules.Help
                         $"\nCritical Rewards:" +
                         $"\n" +
                         $"\nRolls: `5% chance that the multiplier of your bet is multiplied by 2.5x`" +
-                        $"\nTimely: `6% chance that the value of your reward is multiplied by 3.5x`" +
+                        $"\nQuickdraw: `2% chance that you will receive ~2.89x your bet.`" +
+                        $"\nTimely: `14% chance that the value of your reward is multiplied by 3.5x`" +
                         $"\nWeekly: `8% chance that the value of your reward will be multiplied by 3.5x`" +
                         $"\n" +
                         $"\nIf you have successfully used `{cmdPrefix}voteclaim` within the last 12 hours, these percentages are doubled.");
@@ -135,8 +150,9 @@ namespace Kaguya.Modules.Help
                 case "exp":
                     embed.WithTitle($"Help: EXP | `{cmdPrefix}exp`");
                     embed.WithDescription($"\n{Context.User.Mention} Syntax: `{cmdPrefix}exp`." +
-                        $"\nReturns the value of experience points the user has in their account." +
-                        $"\nSyntax: `{cmdPrefix}exp`");
+                        $"\nReturns the value of experience points the user has in their account, as well as their level. " +
+                        $"Use this command with no parameters to return one's own information." +
+                        $"\nSyntax: `{cmdPrefix}exp`, `{cmdPrefix}exp <user>`");
                     await BE(); break;
                 case "expadd":
                 case "addexp":
@@ -163,10 +179,6 @@ namespace Kaguya.Modules.Help
                     embed.WithDescription($"**Permissions Required: Administrator, Bot Owner**" +
                         $"\n{Context.User.Mention} Adds points to the specified user's kaguya account. The number of points you are adding must be a positive whole number." +
                         $"\nSyntax: `{cmdPrefix}pointsadd <number of points to add> <User {{ID, Name, Mention}}>`.");
-                    await BE(); break;
-                case "level":
-                    embed.WithTitle($"Help: Level | `{cmdPrefix}level`");
-                    embed.WithDescription($"{Context.User.Mention} Displays your current Kaguya level!");
                     await BE(); break;
                 case "stats":
                     embed.WithTitle($"Help: Stats | `{cmdPrefix}stats`");
@@ -387,6 +399,14 @@ namespace Kaguya.Modules.Help
                         "your reward by `3.50x`." +
                         $"\nSyntax: `{cmdPrefix}weekly`");
                     await BE(); break;
+                case "weeklyreset":
+                    embed.WithTitle($"Help: Weekly Reset | `{cmdPrefix}weeklyreset`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nResets the weekly cooldown for every user in the Kaguya database." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}weeklyreset`");
+                    await BE(); break;
                 case "clear":
                 case "purge":
                 case "c":
@@ -601,6 +621,22 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Gambling History | `{cmdPrefix}history`, `{cmdPrefix}gh`");
                     embed.WithDescription($"{Context.User.Mention} Allows any user to see their 10 most recent Kaguya gambles.");
                     await BE(); break;
+                case "quickdraw":
+                case "qd":
+                    embed.WithTitle($"Help: Quickdraw Game | `{cmdPrefix}quickdraw`, `{cmdPrefix}qd`");
+                    embed.WithDescription($"{Context.User.Mention} Quickdraw is a game of speed: " +
+                        $"you and I will face off in a quickdraw battle to see who can pull out their pistol the " +
+                        $"fastest, over a wager of course." +
+                        $"\n" +
+                        $"\nThe winner is whoever was fastest, all times are recorded down to the one-thousandth of a second." +
+                        $"\n" +
+                        $"\nIf you lose, you lose `100%` of your points." +
+                        $"\nIf you win, you win `1.80x` of whatever you bet." +
+                        $"\nIn the rare event that you strike a critical hit on a win, you will be awarded `~4.05x` your bet." +
+                        $"\nThis game's `critical hit rate` is `8%`." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}qd <points>`");
+                    await BE(); break;
                 case "kaguyaexit":
                     embed.WithTitle($"Help: Kaguya Exit! | `{cmdPrefix}kaguyaexit`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
@@ -737,7 +773,9 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Timely Reset | `{cmdPrefix}timelyreset`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
-                        $"\nAllows a bot owner to reset the {cmdPrefix}timely cooldown for every user in the Kaguya database.");
+                        $"\nAllows a bot owner to reset the {cmdPrefix}timely cooldown for every user in the Kaguya database." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}timelyreset`");
                     await BE(); break;
                 case "filteradd":
                 case "fa":
@@ -846,7 +884,8 @@ namespace Kaguya.Modules.Help
                         $"\n**Queue:** Displays Kaguya's playlist. Add more songs to the queue with the play command. `{cmdPrefix}m queue`" +
                         $"\n**Resume:** If Kaguya's music player is paused, she will resume playing music. `{cmdPrefix}m resume`" +
                         $"\n**Skip:** Skips the current song. `{cmdPrefix}m skip`" +
-                        $"\n**Volume:** Sets the volume to a value between 0-200. `{cmdPrefix}m volume <0-200>`" +
+                        $"\n**Volume:** Sets the volume to a value between 0-200. This " +
+                        $"also allows for a volume adjustment: `{cmdPrefix}m volume <0-200>` `{cmdPrefix}m volume <+/- {{number}}>`" +
                         $"\n**Jump:** Jump to a specific position in the queue, skipping all songs before it in one go.`{cmdPrefix}m jump <jumpNum>`");
                     await BE(); break;
                 case "invite":
@@ -887,14 +926,42 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Kaguya Cooldowns | `{cmdPrefix}cooldowns`");
                     embed.WithDescription($"{Context.User.Mention} Displays all concurrent cooldowns for Kaguya and whether or not they are off cooldown.");
                     await BE(); break;
+                case "changelog":
+                    embed.WithTitle($"Help: Kaguya Changelog | `{cmdPrefix}changelog`");
+                    embed.WithDescription($"{Context.User.Mention} This command displays the most recent version's patch notes.");
+                    await BE(); break;
                 case "owner":
                     embed.WithTitle($"Help: Owner Command List | `{cmdPrefix}owner`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
                         $"\n" +
                         $"\nOwner only command that displays all other owner only commands.");
                     await BE(); break;
+                case "kill":
+                    embed.WithTitle($"Help: Kill | `{cmdPrefix}kill`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nShuts down the bot and terminates the Kaguya process, taking it down for all users." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}kill`");
+                    await BE(); break;
+                case "restart":
+                    embed.WithTitle($"Help: Restart | `{cmdPrefix}restart`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nRemotely restarts the bot. The Kaguya process opens another instance of itself right before " +
+                        $"terminating the current instance." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}restart`");
+                    await BE(); break;
+                case "setgame":
+                    embed.WithTitle($"Help: Setgame | `{cmdPrefix}setgame`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Bot Owner**" +
+                        $"\n" +
+                        $"\nChanges Kaguya's \"Currently Playing\" game to whatever is specified. This will last until " +
+                        $"the next \"game\" in the rotation takes presedence (~15 minutes).");
+                    await BE(); break;
                 default:
-                    embed.WithDescription($"**{Context.User.Mention} \"{command}\" is not a valid command.**");
+                    embed.WithDescription($"**{Context.User.Mention} \"{cmdPrefix}{command}\" is not a valid command.**");
                     await BE();
                     break;
             }
@@ -905,7 +972,7 @@ namespace Kaguya.Modules.Help
         public async Task HelpCommand()
         {
 
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             PaginatedMessage message = new PaginatedMessage();
 
@@ -927,6 +994,7 @@ namespace Kaguya.Modules.Help
                         $"\n{cmdPrefix}filterclear [clearfilter]" +
                         $"\n{cmdPrefix}filterremove [fr]" +
                         $"\n{cmdPrefix}filterview [fv]" +
+                        $"\n{cmdPrefix}inspect" +
                         $"\n{cmdPrefix}kaguyaexit" +
                         $"\n{cmdPrefix}kick [k]" +
                         $"\n{cmdPrefix}logtypes [loglist]" +
@@ -953,7 +1021,6 @@ namespace Kaguya.Modules.Help
                     "\nAll commands in category: Experience Points" +
                     "\n" +
                     $"\n{cmdPrefix}exp" +
-                    $"\n{cmdPrefix}level" +
                     $"\n{cmdPrefix}globalexplb [gexplb]" +
                     $"\n{cmdPrefix}rep" +
                     $"\n{cmdPrefix}repauthor [rep author]" +
@@ -970,6 +1037,7 @@ namespace Kaguya.Modules.Help
                 $"\n{cmdPrefix}history [gh]" +
                 $"\n{cmdPrefix}masspointsdistribute" +
                 $"\n{cmdPrefix}points" +
+                $"\n{cmdPrefix}quickdraw [qd]" +
                 $"\n{cmdPrefix}roll [gr]" +
                 $"\n{cmdPrefix}timely [t]" +
                 $"\n{cmdPrefix}weekly" +
@@ -985,6 +1053,7 @@ namespace Kaguya.Modules.Help
                 $"\n{cmdPrefix}autoassignremove [aar]" +
                 $"\n{cmdPrefix}autoassignclear [aac]" +
                 $"\n{cmdPrefix}autoassignview [aav]" +
+                $"\n{cmdPrefix}changelog" +
                 $"\n{cmdPrefix}createtextchannel [ctc]" +
                 $"\n{cmdPrefix}createvoicechannel [cvc]" +
                 $"\n{cmdPrefix}deletetextchannel [dtc]" +
@@ -1050,7 +1119,7 @@ namespace Kaguya.Modules.Help
             string help = "```css" +
                     "\nAll commands in category: Help" +
                     "\n" +
-                    $"\n{cmdPrefix}bug" +
+                    $"\n{cmdPrefix}bugreport" +
                     $"\n{cmdPrefix}cooldowns" +
                     $"\n{cmdPrefix}help [h]" +
                     $"\n{cmdPrefix}helpdm [hdm]" +
@@ -1059,7 +1128,7 @@ namespace Kaguya.Modules.Help
                     $"\n{cmdPrefix}redeem" +
                     $"\n{cmdPrefix}supporter" +
                     $"\n{cmdPrefix}vote" +
-                    $"\n{cmdPrefix}voteclaim" +
+                    $"\n{cmdPrefix}voteclaim [vc]" +
                     $"\n" +
                     $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                     $"\n```";
@@ -1162,7 +1231,7 @@ namespace Kaguya.Modules.Help
         [RequireOwner]
         public async Task OwnerCommands()
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             string commands = "```css" +
                 "\nAll commands in category: Owner Only" +
@@ -1271,7 +1340,7 @@ namespace Kaguya.Modules.Help
             var dmChannel = await Context.User.GetOrCreateDMChannelAsync();
 
             embed.WithDescription($"Here's a link to my support server: https://discord.gg/aumCJhr" +
-                $"\nHere's a link that you can use to add me to your server: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847");
+                $"\nHere's a link that you can use to add me to your server: https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=8");
             embed.SetColor(EmbedType.PINK);
             await dmChannel.SendMessageAsync(embed: embed.Build());
 
@@ -1283,7 +1352,7 @@ namespace Kaguya.Modules.Help
         [Alias("hdm")]
         public async Task HelpDM()
         {
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             embed.WithTitle("Help");
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
@@ -1291,12 +1360,12 @@ namespace Kaguya.Modules.Help
             await BE();
             await Context.User.SendMessageAsync($"Need the commands list? Type `{cmdPrefix}h` to see a scrollable list of categories with all of their commands." +
                 $"\nType `{cmdPrefix}h <command name>` for more information on how to use the command and a detailed description of what it does." +
-                $"\nAdd me to your server with this link!: <https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=2146958847>" +
+                $"\nAdd me to your server with this link!: <https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=8>" +
                 $"\nWant to keep track of all the changes? Feel free to check out the Kaguya GitHub page!: <https://github.com/stageosu/Kaguya>" +
                 $"\nKaguya Support Server: https://discord.gg/aumCJhr (This is also a good place to see what's coming soon and get notified when new updates come out :D)");
         }
 
-        [Command("bug")]
+        [Command("bugreport")]
         public async Task BugReport([Remainder]string report)
         {
             var bugChannel = Global.client.GetChannel(547448889620299826); //Kaguya support server #bugs channel.
@@ -1322,12 +1391,13 @@ namespace Kaguya.Modules.Help
             embed.WithTitle("Discord Bot List Voting");
             embed.WithDescription($"Show Kaguya some love and give her an upvote! https://discordbots.org/bot/538910393918160916/vote" +
                 $"\nUsers that upvote receive a `2x` critical hit percentage for the next `12 hours` and `500` Kaguya points! Users may vote every 12 hours!");
-            embed.WithFooter($"Thanks for showing your support! Use {Servers.GetServer(Context.Guild).commandPrefix}voteclaim to claim your reward!");
+            embed.WithFooter($"Thanks for showing your support! Use {Servers.GetServer(Context.Guild).CommandPrefix}voteclaim to claim your reward!");
 
             await BE();
         }
 
         [Command("voteclaim")]
+        [Alias("vc")]
         public async Task VoteClaim()
         {
             if (Config.bot.RecentVoteClaimAttempts <= 50)
@@ -1352,7 +1422,7 @@ namespace Kaguya.Modules.Help
                     {
                         userAccount.LastUpvotedKaguya = DateTime.Now;
                         userAccount.Points += 500;
-                        userAccount.NBombUsesThisHour = 5;
+                        userAccount.NBombUsesThisHour += 5;
 
                         embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points`, `2x critical hit rate` " +
                             $"and `cooldown resets` have been applied.");
@@ -1379,7 +1449,7 @@ namespace Kaguya.Modules.Help
         public async Task SupporterInfo()
         {
             Stopwatch stopWatch = new Stopwatch();
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 "Kaguya Supporter",

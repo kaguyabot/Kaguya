@@ -28,11 +28,47 @@ namespace Kaguya.Modules.Utility
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
+        [Command("changelog")]
+        public async Task KaguyaChangelog()
+        {
+            string directory = Directory.GetCurrentDirectory();
+            string filePath = Path.GetFullPath(Path.Combine(directory, @"..\..\..\ChangeLog.txt")); //Nav 3 folders up.
+            string description = "";
+
+            using(StreamReader reader = new StreamReader(filePath))
+            {
+                while (true)
+                {
+                    var line = reader.ReadLine();
+                    if (line.Contains(Utilities.GetAlert("OLDVERSION")))
+                    {
+                        reader.Dispose();
+                        break;
+                    }
+                    if (line.Contains("Changelog"))
+                        continue;
+
+                    string newLine = line.Replace("-", $"{Environment.NewLine}-");
+
+                    if(description.Count() >= 1800)
+                    {
+                        description += "\n\nThis changelog is longer than what I can display. " +
+                            "View the rest in the Kaguya Support server!";
+                        break;
+                    }
+                    description += newLine;
+                }
+
+                embed.WithTitle($"Kaguya Changelog: {Utilities.GetAlert("VERSION")}");
+                embed.WithDescription($"```{description}```");
+                embed.SetColor(EmbedColor.BLUE);
+                await BE();
+            }
+        }
+
         [Command("ping")]
         public async Task Ping()
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             embed.WithTitle("Pong! 🏓");
             embed.WithDescription($"\n📡 Discord Latency: {Global.client.Latency}ms");
             await ReplyAsync(embed: embed.Build());
@@ -49,6 +85,8 @@ namespace Kaguya.Modules.Utility
             uint totalDiamonds = 0;
             uint totalSupporters = 0;
             double totalGambles = 0;
+            double cpuUsage = Global.cpuUsage;
+            double ramUsage = Global.ramUsage;
 
             foreach (var guild in _client.Guilds)
             {
@@ -87,7 +125,10 @@ namespace Kaguya.Modules.Utility
              $"\nGuilds: **`{Global.TotalGuildCount.ToString("N0")}`**" +
              $"\nMembers: **`{Global.TotalMemberCount.ToString("N0")}`**" +
              $"\nText Channels: **`{Global.TotalTextChannels.ToString("N0")}`**" +
-             $"\nVoice Channels: **`{Global.TotalVoiceChannels.ToString("N0")}`**");
+             $"\nVoice Channels: **`{Global.TotalVoiceChannels.ToString("N0")}`**" +
+             $"\nCPU Usage: **`{Global.cpuUsage.ToString("N2")}%`**" +
+             $"\nRAM Usage: **`{Global.ramUsage.ToString("N2")}MB`**" +
+             $"\n");
 
             embed.AddField($"User Stats",
                 $"Registered Users: **`{Global.UserAccounts.Count.ToString("N0")}`**" +
@@ -103,7 +144,7 @@ namespace Kaguya.Modules.Utility
         public async Task ToggleAnnouncements()
         {
             Server guild = Servers.GetServer(Context.Guild);
-            var cmdPrefix = guild.commandPrefix;
+            var cmdPrefix = guild.CommandPrefix;
             if (guild.MessageAnnouncements == true)
             {
                 guild.MessageAnnouncements = false;
@@ -130,10 +171,10 @@ namespace Kaguya.Modules.Utility
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task AlterPrefix(string prefix = "$")
         {
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var server = Servers.GetServer(Context.Guild);
-            var oldPrefix = server.commandPrefix;
+            var oldPrefix = server.CommandPrefix;
 
             if(prefix.Length > 3)
             {
@@ -145,11 +186,10 @@ namespace Kaguya.Modules.Utility
                 return;
             }
 
-            server.commandPrefix = prefix;
-            Servers.SaveServers();
+            server.CommandPrefix = prefix;
 
             embed.WithTitle("Change Command Prefix: Success!");
-            embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");
+            embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.CommandPrefix}`.");
             embed.WithFooter($"If you ever forget the prefix, tag me and type \"prefix\"!");
             await BE();
         }
@@ -157,7 +197,7 @@ namespace Kaguya.Modules.Utility
         [Command("author")] //utility
         public async Task Author()
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var author = UserAccounts.GetAuthor();
 

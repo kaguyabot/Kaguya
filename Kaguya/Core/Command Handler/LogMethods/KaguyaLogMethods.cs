@@ -1,17 +1,18 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
 using Discord.Commands;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Kaguya.Core.Server_Files;
-using Discord;
-using Kaguya.Modules.osu;
-using System.Diagnostics;
+using Discord.WebSocket;
 using DiscordBotsList.Api;
 using DiscordBotsList.Api.Objects;
-using System.Collections.Generic;
-using Victoria;
 using Kaguya.Core.Embed;
+using Kaguya.Core.Server_Files;
+using Kaguya.Modules.osu;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Victoria;
 
 namespace Kaguya.Core.CommandHandler
 {
@@ -29,27 +30,36 @@ namespace Kaguya.Core.CommandHandler
         public async Task OnReady(DiscordSocketClient client)
         {
             Config.bot.RecentVoteClaimAttempts = 0; //Resets rate limit for DBL API.
-            Console.WriteLine("Recent voteclaim attempts reset to 0.");
 
             _ = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = client.GetUser(ID).MutualGuilds;
 
-            AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
-
-            Console.WriteLine("Retrieving bot from DBL API...");
-            try
+            if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1875) 
+                //1875 is around how many guilds the bot should be in.
             {
-                if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1200) //1200 is around how many guilds the bot should be in.
+                try
                 {
+                    logger.ConsoleStatusAdvisory("Retrieving bot from DBL API...");
+                    AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
                     IDblSelfBot me = await dblAPI.GetMeAsync();
-                    Console.WriteLine("\nPushing stats to DBL API...");
+                    logger.ConsoleStatusAdvisory("Pushing stats to DBL API...");
                     await me.UpdateStatsAsync(Global.TotalGuildCount);
-                    Console.WriteLine("Success.\n");
+                    logger.ConsoleStatusAdvisory("Successfully pushed total guild count to DBL.");
+                }
+                catch (Exception e)
+                {
+                    logger.ConsoleCriticalAdvisory($"Failed to update Kaguya's DBL Stats (Is this bot on DBL?): {e.Message}");
                 }
             }
-            catch (Exception e)
+
+            else if(Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount < 1875 
+                && Config.bot.BotUserID == "538910393918160916")
             {
-                logger.ConsoleCriticalAdvisory($"Failed to retrieve DBLAPI information: {e.Message}");
+                //Restarts the bot if the total guild count is lower than expected.
+
+                var filePath = Assembly.GetExecutingAssembly().Location;
+                Process.Start(filePath);
+                Environment.Exit(0);
             }
 
             _ = new Dictionary<string, string>
@@ -66,13 +76,25 @@ namespace Kaguya.Core.CommandHandler
                 }
             }
             
-            Console.ForegroundColor = ConsoleColor.White;
             LoadKaguyaData(); //Loads all user accounts and servers into memory.
-            Console.ForegroundColor = ConsoleColor.White;
-            await _lavaShardClient.StartAsync(Global.client); //Initializes the music service.
-            Console.WriteLine($"Kaguya Music Service Started. [Shard {client.ShardId}]");
-            logger.ConsoleStatusAdvisory($"ALL KAGUYA SHARDS LOGGED IN SUCCESSFULLY!");
-            Console.WriteLine("--------------------------------------------");
+
+            var lavaConfig = new Configuration //Configuration for _lavaShardClient.StartAsync();
+            {
+                DefaultVolume = 100,
+                AutoDisconnect = true,
+                SelfDeaf = true,
+                InactivityTimeout = TimeSpan.FromSeconds(300)
+            };
+
+            await _lavaShardClient.StartAsync(Global.client, lavaConfig); //Initializes the music service.
+            logger.ConsoleMusicLogNoUser($"Kaguya Music Service Started. [Shard {client.ShardId}]");
+            if (Global.ShardsLoggedIn == Global.ShardsToLogIn)
+            {
+                logger.ConsoleShardAdvisory($"ALL KAGUYA SHARDS LOGGED IN SUCCESSFULLY!");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("\nBEGIN LOGGING" +
+                    "\n--------------------------------------------");
+            }
         }
 
         #pragma warning disable IDE1006 //Disable warnings for naming styles
@@ -81,11 +103,12 @@ namespace Kaguya.Core.CommandHandler
         {
             if (Global.ShardsLoggedIn == Global.ShardsToLogIn)
             {
-                Console.WriteLine("\nAttempting to load accounts...");
+                Logger logger = new Logger();
+                logger.ConsoleStatusAdvisory("Attempting to load accounts...");
                 Global.UserAccounts = DataStorage2.LoadUserAccounts("Resources/accounts.json").ToList();
-                Console.WriteLine("Accounts loaded. \nAttempting to load servers...");
+                logger.ConsoleStatusAdvisory("Accounts loaded. Loading servers...");
                 Global.Servers = DataStorage2.LoadServers("Resources/servers.json").ToList();
-                Console.WriteLine("Servers loaded.\n");
+                logger.ConsoleStatusAdvisory("Servers loaded.");
             }
         }
 
@@ -121,7 +144,7 @@ namespace Kaguya.Core.CommandHandler
             Global.TotalTextChannels += guild.TextChannels.Count;
             Global.TotalVoiceChannels += guild.VoiceChannels.Count;
 
-            var cmdPrefix = Servers.GetServer(guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(guild).CommandPrefix;
             var owner = guild.Owner;
             var channels = guild.Channels;
             var kID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
@@ -177,7 +200,6 @@ namespace Kaguya.Core.CommandHandler
 
             server.ID = guild.Id;
             server.ServerName = guild.Name;
-            Servers.SaveServers();
         }
 
         public Task LeftGuild(SocketGuild guild)
@@ -212,7 +234,6 @@ namespace Kaguya.Core.CommandHandler
                         {
                             logger.ConsoleCriticalAdvisory($"Failed to cache message for {guild.Name} with ID: {guild.Id}! [REMOVING!!!] Thrown from KaguyaLogMethods.cs line 195!");
                             ServerMessageLogs.DeleteLog(guild);
-                            ServerMessageLogs.SaveServerLogging();
                             return Task.CompletedTask;
                         }
                     }
@@ -235,7 +256,7 @@ namespace Kaguya.Core.CommandHandler
 
             foreach (string loggedMessage in currentLog.LastFiveHundredMessages)
             {
-                if (loggedMessage.Contains(msg.Id.ToString()))
+                if (loggedMessage.Contains(msg.Id.ToString()) && !currentServer.IsPurgingMessages)
                 {
                     var text = loggedMessage.Split('℀');
                     EmbedBuilder embed = new EmbedBuilder();
@@ -304,7 +325,7 @@ namespace Kaguya.Core.CommandHandler
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();
             embed.WithTitle("User Left");
-            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\n`User ID: {user.Id}`");
+            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}`");
             embed.WithThumbnailUrl("https://i.imgur.com/624oxi8.png");
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(Red);
@@ -339,8 +360,6 @@ namespace Kaguya.Core.CommandHandler
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(Violet);
             await logChannel.SendMessageAsync("", false, embed.Build());
-
-            Servers.SaveServers();
         }
 
         public async Task LoggingUserUnShadowbanned(SocketUser user, SocketGuild server)

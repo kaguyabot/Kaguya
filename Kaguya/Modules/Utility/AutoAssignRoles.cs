@@ -34,7 +34,7 @@ namespace Kaguya.Modules.Utility
             if (!guild.AutoAssignedRoles.Contains(role.Id))
             {
                 guild.AutoAssignedRoles.Add(role.Id);
-                Servers.SaveServers();
+                
                 embed.WithTitle($"Auto Assign Role");
                 embed.WithDescription($"New role added to automatically assigned roles: {role.Mention}");
                 embed.WithFooter("This will be assigned to users as soon as they join the server.");
@@ -61,7 +61,7 @@ namespace Kaguya.Modules.Utility
             if (guild.AutoAssignedRoles.Contains(role.Id))
             {
                 guild.AutoAssignedRoles.Remove(role.Id);
-                Servers.SaveServers();
+                
                 embed.WithTitle($"Auto Assign Role");
                 embed.WithDescription($"Role removed from list of auto assigned roles: {role.Mention}");
                 await BE();
@@ -85,7 +85,7 @@ namespace Kaguya.Modules.Utility
             var guild = Servers.GetServer(Context.Guild);
 
             guild.AutoAssignedRoles.Clear();
-            Servers.SaveServers();
+            
             embed.WithTitle($"Auto Assign Role");
             embed.WithDescription($"The list of auto assigned roles has been cleared.");
             embed.SetColor(EmbedColor.VIOLET);
@@ -132,7 +132,7 @@ namespace Kaguya.Modules.Utility
                     }
                     catch (Exception e)
                     {
-                        logger.ConsoleGuildAdvisory($"Failed to auto assign role {roles.FirstOrDefault(x => x.Id == roleID)} " +
+                        logger.ConsoleInformationAdvisory($"Failed to auto assign role {roles.FirstOrDefault(x => x.Id == roleID)} " +
                             $"to user {user} in guild {user.Guild}" +
                             $"\nException: {e.Message}");
                     }

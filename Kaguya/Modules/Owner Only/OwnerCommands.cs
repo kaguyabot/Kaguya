@@ -9,7 +9,9 @@ using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -30,6 +32,59 @@ namespace Kaguya.Modules.Owner_Only
         }
 
         [RequireOwner]
+        [Command("scrape", RunMode = RunMode.Async)]
+        public async Task ScrapeUsernames()
+        {
+            List<UserAccount> userAccounts = Global.UserAccounts;
+            Logger logger = new Logger();
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
+            foreach(var account in userAccounts)
+            {
+                if (account.Username == "" || account.Username == null)
+                {
+                    try
+                    {
+                        var user = Global.client.GetUser(account.ID);
+                        account.Username = user.Username;
+                        logger.ConsoleInformationAdvisory($"Username adjusted for user {account.ID}: " +
+                            $"New name in file: {account.Username} | Time: {sw.ElapsedMilliseconds.ToString("N0")}ms");
+                    }
+                    catch(Exception e)
+                    {
+                        logger.ConsoleCriticalAdvisory($"{e.Message}");
+                    }
+                }
+            }
+        }
+
+        [RequireOwner]
+        [Command("largestservers")]
+        public async Task LargestServers()
+        {
+            string largestGuilds = "";
+            foreach(var guild in Global.client.Guilds)
+            {
+                if(guild.MemberCount >= 5000)
+                    largestGuilds += $"Guild: {guild.Name} | Members: {guild.MemberCount.ToString("N0")}";
+            }
+
+            embed.WithTitle("Guilds with over 5,000 Members");
+            embed.WithDescription($"{largestGuilds}");
+            await BE();
+        }
+
+        [RequireOwner]
+        [Command("setgame")]
+        public async Task SetGame(string game)
+        {
+            await Global.client.SetGameAsync(game);
+            await ReplyAsync($"{Context.User.Mention} New game has been set.");
+        }
+
+        [RequireOwner]
         [Command("pointslb")]
         public async Task PointsLeaderboard()
         {
@@ -41,7 +96,7 @@ namespace Kaguya.Modules.Owner_Only
             foreach(var user in order)
             {
                 i++;
-                description += $"\n**#{i}.** `{user.Username}` - Points: `{user.Points.ToString("N0")}`";
+                description += $"\n```#{i}. {user.Username} - Points: {user.Points.ToString("N0")}```";
             }
 
             embed.WithTitle($"Kaguya Global Points Leaderboard");
@@ -61,7 +116,7 @@ namespace Kaguya.Modules.Owner_Only
                 var guild = Servers.GetServer(ID);
                 var server = _client.GetGuild(ID);
                 guild.IsBlacklisted = true;
-                Servers.SaveServers();
+                
                 description += $"\n{server.Name} has been blacklisted!";
             }
             embed.WithTitle("Server Blacklist");
@@ -82,7 +137,7 @@ namespace Kaguya.Modules.Owner_Only
                 var guild = Servers.GetServer(ID);
                 var server = _client.GetGuild(ID);
                 guild.IsBlacklisted = false;
-                Servers.SaveServers();
+                
                 description += $"\n{server.Name} has been un-blacklisted!";
             }
 
@@ -288,6 +343,22 @@ namespace Kaguya.Modules.Owner_Only
             await BE();
         }
 
+        [Command("weeklyreset")] //currency
+        [RequireOwner]
+        public async Task WeeklyReset()
+        {
+            var accounts = UserAccounts.GetAllAccounts();
+            foreach (var account in accounts)
+            {
+                var difference = DateTime.Now.AddHours(-168);
+                account.LastReceivedWeeklyPoints = difference;
+            }
+            embed.WithTitle("Weekly Reset");
+            embed.WithDescription($"**{Context.User.Mention} Weekly points for `{accounts.Count}` users have been reset!**");
+
+            await BE();
+        }
+
         [Command("expadd")] //exp
         [Alias("addexp")]
         [RequireOwner]
@@ -326,10 +397,10 @@ namespace Kaguya.Modules.Owner_Only
         [RequireOwner]
         public async Task OwnerOnlyCommands()
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             string commands = "```css" +
-                "\nAll commands in category: Administration" +
+                "\nAll commands in category: Owner" +
                 "\n" +
                 $"\n{cmdPrefix}bugaward" +
                 $"\n{cmdPrefix}expadd [addexp]" +
@@ -341,9 +412,11 @@ namespace Kaguya.Modules.Owner_Only
                 $"\n{cmdPrefix}restart" +
                 $"\n{cmdPrefix}serverblacklist [sbl]" +
                 $"\n{cmdPrefix}serverunblacklist [subl]" +
+                $"\n{cmdPrefix}setgame" +
                 $"\n{cmdPrefix}timelyreset" +
                 $"\n{cmdPrefix}userblacklist [ubl]" +
                 $"\n{cmdPrefix}userunblacklist [uubl]" +
+                $"\n{cmdPrefix}weeklyreset" +
                 $"\n" +
                 $"\nType {cmdPrefix}h <command> for more information on a specific command." +
                 "\n```";
@@ -400,12 +473,18 @@ namespace Kaguya.Modules.Owner_Only
             Environment.Exit(0);
         }
 
-        [Command("kill")]
+        [Command("kill", RunMode = RunMode.Async)]
         [RequireOwner]
         public async Task Kill()
         {
+            ServerMessageLogs.SaveServerLogging();
+            Servers.SaveServers();
+            UserAccounts.SaveAccounts();
+
             embed.WithDescription($"**{Context.User.Mention} Exiting...**");
-            await BE(); logger.ConsoleCriticalAdvisory("Exiting!!");
+            await BE();
+
+            logger.ConsoleCriticalAdvisory("Exiting!!");
             Environment.Exit(0);
         }
     }
