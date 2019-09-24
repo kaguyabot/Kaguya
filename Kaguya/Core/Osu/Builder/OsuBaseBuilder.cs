@@ -4,7 +4,7 @@ using System.Net;
 
 namespace Kaguya.Core.Osu.Builder
 {
-    public abstract class OsuJsonBaseBuilder<T> where T : OsuBaseModel
+    public abstract class OsuBaseBuilder<T> where T : OsuBaseModel
     {
         protected T[] ExecuteJson(string url)
         {

@@ -1,6 +1,8 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Core.Embed;
+using Kaguya.Core.Osu;
+using Kaguya.Core.Osu.Builder;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
 using Newtonsoft.Json;
@@ -327,6 +329,29 @@ namespace Kaguya.Modules
                 embed.WithFooter(footer);
                 await BE();
             }
+        }
+
+        [Command("rn")]
+        public async Task osuNewRecent(string player = null)
+        {
+            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string osuapikey = Config.bot.OsuApiKey;
+
+            if (player == null || player == "")
+            {
+                player = UserAccounts.GetAccount(Context.User).OsuUsername;
+                if (player == null || player == "")
+                {
+                    embed.WithTitle("osu! Recent");
+                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{cmdPrefix}osuset`!**");
+                    await BE(); return;
+                }
+            }
+
+            string jsonRecent;
+
+            var RecentData = new OsuRecentBuilder(player).Execute();
+
         }
 
         [Flags]

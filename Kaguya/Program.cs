@@ -33,7 +33,7 @@ namespace Kaguya
 
             try
             {
-                int shards = 2; //SET NUMBER OF SHARDS HERE!!
+                int shards = 1; //SET NUMBER OF SHARDS HERE!!
 
                 Global.ShardsToLogIn = shards;
 

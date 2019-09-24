@@ -1,31 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Kaguya.Core.Osu
+﻿namespace Kaguya.Core.Osu
 {
     public static class OsuMisc
     {
-        public enum AllMods
+        public static string ModeNames(int modnumber)
         {
-            NM = 0,
-            NF = (1 << 0),
-            EZ = (1 << 1),
-            //TouchDevice = (1 << 2),
-            HD = (1 << 3),
-            HR = (1 << 4),
-            SD = (1 << 5),
-            DT = (1 << 6),
-            //Relax = (1 << 7),
-            HT = (1 << 8),
-            NC = (1 << 9), // Only set along with DoubleTime. i.e: NC only gives 576
-            FL = (1 << 10),
-            // Autoplay = (1 << 11),
-            SO = (1 << 12),
-            // Relax2 = (1 << 13),  // Autopilot
-            PF = (1 << 14),
+            string modString;
+            if (modnumber > 0)
+            {
+                modString = "+";
+            }
+            else
+            {
+                modString = "";
+            }
+
+            if (isBitSet(modnumber, 0))
+                modString += "NF";
+            if (isBitSet(modnumber, 1))
+                modString += "EZ";
+            if (isBitSet(modnumber, 8))
+                modString += "HT";
+            if (isBitSet(modnumber, 3))
+                modString += "HD";
+            if (isBitSet(modnumber, 4))
+                modString += "HR";
+            if (isBitSet(modnumber, 6) && !isBitSet(modnumber, 9))
+                modString += "DT";
+            if (isBitSet(modnumber, 9))
+                modString += "NC";
+            if (isBitSet(modnumber, 10))
+                modString += "FL";
+            if (isBitSet(modnumber, 5))
+                modString += "SD";
+            if (isBitSet(modnumber, 14))
+                modString += "PF";
+            if (isBitSet(modnumber, 7))
+                modString += "RX";
+            if (isBitSet(modnumber, 11))
+                modString += "AT";
+            if (isBitSet(modnumber, 12))
+                modString += "SO";
+            return modString;
+
+            static bool isBitSet(int mods, int pos) =>
+                (mods & (1 << pos)) != 0;
         }
 
         public static string OsuGrade(string grade)
@@ -52,9 +70,9 @@ namespace Kaguya.Core.Osu
             return "";
         }
 
-        public static string OsuAccuracy(int count50, int count100, int count300, int countMiss)
+        public static double OsuAccuracy(int count50, int count100, int count300, int countMiss)
         {
-            return (100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)))).ToString("F");
+            return 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
         }
     }
 }
