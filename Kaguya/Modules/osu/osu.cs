@@ -5,12 +5,7 @@ using Kaguya.Core.Osu;
 using Kaguya.Core.Osu.Builder;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
-using Newtonsoft.Json;
-using OppaiSharp;
 using System;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
@@ -49,9 +44,10 @@ namespace Kaguya.Modules
             }
             player = player.Replace(' ', '_');
 
+            //Getting user profile object.
             var userProfileObject = new OsuUserBuilder(player).Execute();
 
-            if (userProfileObject.user_id == null)
+            if (userProfileObject == null)
             {
                 embed.WithDescription($"**{Context.User.Mention} I couldn't download information for the specified user!**");
                 embed.WithFooter($"If this persists, please contact Stage#0001. Error code: OAPI_RETURN_NULL");
@@ -60,7 +56,6 @@ namespace Kaguya.Modules
             }
 
             //Build rich embed and send to Discord
-
             embed.WithAuthor(author =>
             {
                 author.Url = $"https://osu.ppy.sh/u/{userProfileObject.user_id}";
@@ -93,21 +88,16 @@ namespace Kaguya.Modules
             username = username.Replace(" ", "_");
             userAccount.OsuUsername = username;
 
-            string jsonProfile;
+            //Getting user profile object.
+            var playerRecentObject = new OsuUserBuilder(username).Execute();
 
-            using (WebClient client = new WebClient())
-            {
-                jsonProfile = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={Config.bot.OsuApiKey}&u={username}"); //Downloads user data
-            }
-
-            if(jsonProfile == "[]")
+            if (playerRecentObject == null)
             {
                 userAccount.OsuUsername = oldUsername;
                 embed.WithDescription($"{Context.User.Mention} **ERROR: This username does not match a valid osu! username!**");
                 embed.WithFooter($"I have kept your osu! username as {oldUsername}. If you believe this is a mistake, contact Stage#0001.");
                 await BE();
                 embed.SetColor(EmbedColor.RED);
-                //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
                 return;
             }
 
@@ -136,10 +126,12 @@ namespace Kaguya.Modules
                 }
             }
 
+            //Getting recent object.
             var playerRecentObject = new OsuRecentBuilder(player).Execute()[0];
 
             if (playerRecentObject.user_id == null)
             {
+                //Getting user profile object.
                 var userProfileObject = new OsuUserBuilder(player).Execute();
 
                 embed.WithAuthor(author =>
@@ -152,6 +144,7 @@ namespace Kaguya.Modules
             }
             else
             {
+                //Getting user profile object.
                 var userProfileObject = new OsuUserBuilder(player).Execute();
 
                 if (userProfileObject.user_id == null)
