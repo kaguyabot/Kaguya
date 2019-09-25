@@ -14,8 +14,6 @@ namespace Kaguya.Core.Osu.Builder
         {
             UserId = user;
             Mode = mode;
-
-            Execute();
         }
 
         public OsuUserModel Execute()

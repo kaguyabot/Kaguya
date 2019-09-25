@@ -40,8 +40,6 @@ namespace Kaguya.Core.Osu.Builder
             UserId = userid;
             Mode = mode;
             Limit = limit;
-
-            Execute();
         }
 
         public List<OsuRecentModel> Execute()
