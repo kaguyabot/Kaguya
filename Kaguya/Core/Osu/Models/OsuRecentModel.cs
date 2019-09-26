@@ -20,7 +20,5 @@ namespace Kaguya.Core.Osu.Models
         public double fullcombopp { get; set; }
         public DateTime date { get; set; }
         public OsuBeatmapModel beatmap { get; set; }
-
-
     }
 }
