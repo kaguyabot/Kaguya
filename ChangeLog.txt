@@ -16,6 +16,13 @@ Version 1.32
         past punishments for users in the server. This will display all reasons for warnings, kicks, 
         and/or bans, up to 15 results. This ONLY works if you warn/kick/ban the user with Kaguya 
         using $kick/$ban, NOT through Discord itself.
+- Refactored the osu! module's code which should improve performance. (@CakeAndBanana)
+- If a user gets banned, but wasn't banned through Kaguya, the ban reason will default to 
+    "No reason specified." Instead of "``" .
+    (If you want ban reasons to show in the log, they must be banned with Kaguya!)
+- Guild names will now be properly stored when Kaguya joins a new guild.
+- Same for usernames ^
+- Total command count is now logged for all servers.
 
 Version 1.31.1
 

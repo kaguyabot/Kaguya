@@ -185,10 +185,10 @@ namespace Kaguya.Core.CommandHandler
                         await channel.AddPermissionOverwriteAsync(kaguya, OverwritePermissions.AllowAll(channel));
                         logger.ConsoleGuildAdvisory(guild, channel, $"Kaguya has been granted permissions for channel #{channel.Name}");
                     }
-                    catch (Exception exception)
+                    catch (Exception e)
                     {
                         logger.ConsoleStatusAdvisory($"Could not overwrite permissions for #{channel.Name} in guild \"{channel.Guild.Name}\"");
-                        logger.ConsoleCriticalAdvisory(exception, $"Guild {guild.Name} has been blacklisted.");
+                        logger.ConsoleCriticalAdvisory(e, $"I have disconnected from {guild.Name} (I did not have the Administrator permission).");
 
                         await guild.Owner.SendMessageAsync($"{guild.Owner.Mention} **I am missing the permissions required to operate in this guild. " +
                             $"I have exited the server.**");
@@ -303,15 +303,19 @@ namespace Kaguya.Core.CommandHandler
         {
             IGuild server = (user as IGuildUser).Guild;
             Server currentServer = Servers.GetServer((SocketGuild)server);
+
             ulong loggingChannelID = currentServer.LogWhenUserJoins;
             if (loggingChannelID == 0) return;
+
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();
+
             embed.WithTitle("User Joined");
             embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}`\nAccount Created: `{user.CreatedAt}`");
             embed.WithThumbnailUrl("https://i.imgur.com/LXiUKgF.png");
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(SkyBlue);
+
             await logChannel.SendMessageAsync("", false, embed.Build());
             logger.ConsoleGuildConnectionAdvisory(user.Guild, "User joined guild");
         }
@@ -320,27 +324,41 @@ namespace Kaguya.Core.CommandHandler
         {
             IGuild server = (user as IGuildUser).Guild;
             Server currentServer = Servers.GetServer((SocketGuild)server);
+
             ulong loggingChannelID = currentServer.LogWhenUserLeaves;
             if (loggingChannelID == 0) return;
+
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();
+
             embed.WithTitle("User Left");
             embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}`");
             embed.WithThumbnailUrl("https://i.imgur.com/624oxi8.png");
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(Red);
+
             await logChannel.SendMessageAsync("", false, embed.Build());
         }
 
         public async Task LoggingUserBanned(SocketUser user, SocketGuild server)
         {
             Server currentServer = Servers.GetServer(server);
+
             ulong loggingChannelID = currentServer.LogBans;
             if (loggingChannelID == 0) return;
+
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();
+
+            string banReason = currentServer.MostRecentBanReason;
+
+            if(banReason == null)
+            {
+                banReason = "No reason specified.";
+            }
+
             embed.WithTitle("User Banned");
-            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}` \nReason: `{currentServer.MostRecentBanReason}`");
+            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}` \nReason: `{banReason}`");
             embed.WithThumbnailUrl("https://i.imgur.com/TKAMjoi.png");
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(Violet);

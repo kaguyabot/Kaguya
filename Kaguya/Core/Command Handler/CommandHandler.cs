@@ -38,7 +38,6 @@ namespace Kaguya
             _services = services;
             _client = services.GetRequiredService<DiscordShardedClient>();
             _commands = services.GetRequiredService<CommandService>();
-
             _client.MessageReceived += HandleCommandAsync;
         }
 
@@ -105,9 +104,12 @@ namespace Kaguya
             {
                 consoleLogger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
                 userAccount.RecentlyUsedCommands.Add(msg.Content.ToLower());
+
                 if (userAccount.RecentlyUsedCommands.Count > 10)
                     userAccount.RecentlyUsedCommands.RemoveAt(0);
+
                 userAccount.CommandRateLimit++;
+                guild.TotalCommandCount++;
             }
 
             if (!result.IsSuccess)

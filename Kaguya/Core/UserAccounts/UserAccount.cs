@@ -64,7 +64,7 @@ namespace Kaguya.Core.UserAccounts
 
         public UserAccount(ulong id)
         {
-            Username = "";
+            Username = Global.client.GetUser(id).Username;
             ID = id;
             Points = 0;
             EXP = 0;

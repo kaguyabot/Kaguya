@@ -16,6 +16,7 @@ namespace Kaguya.Core.Server_Files
         public string AntiRaidPunishment { get; set; }
         public int AntiRaidSeconds { get; set; }
         public int AntiRaidCount { get; set; }
+        public int TotalCommandCount { get; set; }
         public List<ulong> AntiRaidList { get; set; }
         public List<string> FilteredWords { get; set; }
         public List<ulong> AutoAssignedRoles { get; set; }
@@ -42,7 +43,7 @@ namespace Kaguya.Core.Server_Files
         public Server(ulong id)
         {
             ID = id;
-            ServerName = "";
+            ServerName = Global.client.GetGuild(id).Name;
             CommandPrefix = "$";
             MessageAnnouncements = true;
             MutedMembers = new Dictionary<string, string>();
@@ -55,6 +56,7 @@ namespace Kaguya.Core.Server_Files
             AutoAssignedRoles = new List<ulong>();
             AntiRaidList = new List<ulong>();
             AntiRaid = false;
+            TotalCommandCount = 0;
             AntiRaidSeconds = 0;
             AntiRaidCount = 0;
             AntiRaidPunishment = null;
