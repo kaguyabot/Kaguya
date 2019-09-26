@@ -1,5 +1,13 @@
 ﻿namespace Kaguya.Core.Osu
 {
+    public enum OsuRequest
+    {
+        User,
+        BestPerformance,
+        RecentPlayed,
+    }
+
+
     public static class OsuMisc
     {
         public static string ModeNames(int modnumber)

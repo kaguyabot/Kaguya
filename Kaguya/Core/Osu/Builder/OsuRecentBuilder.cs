@@ -11,34 +11,40 @@ namespace Kaguya.Core.Osu.Builder
 {
     public class OsuRecentBuilder : OsuBaseBuilder<OsuRecentModel>
     {
-        private readonly StringBuilder BaseUrl = new StringBuilder();
-        private string GeneratedUrl;
+        public string UserId; // u
+        public int Mode; // m
+        public int Limit; // limit
+
+        public override string Build(StringBuilder urlBuilder)
+        {
+            if (!string.IsNullOrEmpty(UserId))
+            {
+                urlBuilder.Append("&u=").Append(UserId);
+            }
+
+            if (!string.IsNullOrEmpty(Mode.ToString()))
+            {
+                urlBuilder.Append("&m=").Append(Mode);
+            }
+
+            if (!string.IsNullOrEmpty(Limit.ToString()))
+            {
+                urlBuilder.Append("&limit=").Append(Limit);
+            }
+
+            return urlBuilder.ToString();
+        }
 
         public OsuRecentBuilder(string userid, int mode = 0, int limit = 1)
         {
-            BaseUrl.Append($"https://osu.ppy.sh/api/get_user_recent?k={Config.bot.OsuApiKey}");
-
-            if (!string.IsNullOrEmpty(userid))
-            {
-                BaseUrl.Append("&u=").Append(userid);
-            }
-
-            if (!string.IsNullOrEmpty(mode.ToString()))
-            {
-                BaseUrl.Append("&m=").Append(mode);
-            }
-
-            if (!string.IsNullOrEmpty(limit.ToString()))
-            {
-                BaseUrl.Append("&limit=").Append(limit);
-            }
-
-            GeneratedUrl = BaseUrl.ToString();
+            UserId = userid;
+            Mode = mode;
+            Limit = limit;
         }
 
         public List<OsuRecentModel> Execute()
         {
-            var recentArray = ExecuteJson(GeneratedUrl);
+            var recentArray = ExecuteJson(OsuRequest.RecentPlayed);
             recentArray = ProcessJson(recentArray);
 
             return recentArray.ToList();

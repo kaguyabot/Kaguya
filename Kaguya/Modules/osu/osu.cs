@@ -5,12 +5,7 @@ using Kaguya.Core.Osu;
 using Kaguya.Core.Osu.Builder;
 using Kaguya.Core.Server_Files;
 using Kaguya.Core.UserAccounts;
-using Newtonsoft.Json;
-using OppaiSharp;
 using System;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
@@ -47,15 +42,12 @@ namespace Kaguya.Modules
                     return;
                 }
             }
-
             player = player.Replace(' ', '_');
 
-            using (WebClient client = new WebClient())
-            {
-                jsonProfile = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={osuapikey}&u={player}"); //Downloads user data
-            }
+            //Getting user profile object.
+            var userProfileObject = new OsuUserBuilder(player).Execute();
 
-            if(jsonProfile == "[]")
+            if (userProfileObject == null)
             {
                 embed.WithDescription($"**{Context.User.Mention} I couldn't download information for the specified user!**");
                 embed.WithFooter($"If this persists, please contact Stage#0001. Error code: OAPI_RETURN_NULL");
@@ -63,59 +55,25 @@ namespace Kaguya.Modules
                 return;
             }
 
-            var userProfileObject = JsonConvert.DeserializeObject<dynamic>(jsonProfile)[0];
-
-            string userID = userProfileObject.user_id;
-            string username = userProfileObject.username;
-            DateTime joinDate = userProfileObject.join_date;
-            uint count300 = userProfileObject.count300;
-            uint count100 = userProfileObject.count100;
-            uint count50 = userProfileObject.count50;
-            int playcount = userProfileObject.playcount;
-            ulong rankedScore = userProfileObject.ranked_score;
-            int globalRank = userProfileObject.pp_rank; //Player's global rank
-            double pp = userProfileObject.pp_raw; //Will display zero pp for inactive users
-            double level = userProfileObject.level;
-            double accuracy = userProfileObject.accuracy; //Total overall accuracy
-            int countSS = userProfileObject.count_rank_ss; //Count SS's
-            int countSSH = userProfileObject.count_rank_ssh; //Count Silver SS's
-            int countS = userProfileObject.count_rank_s; //S's
-            int countSH = userProfileObject.count_rank_sh; //Silver S's
-            int countA = userProfileObject.count_rank_a;
-            string country = userProfileObject.country; //Player's Country
-            int totalSecondsPlayed = userProfileObject.total_seconds_played; //Playtime in seconds
-            int countryRank = userProfileObject.pp_country_rank;
-
-            var difference = DateTime.Now - joinDate;
-
-            //Emote codes for grading letters
-
-            string gradeSSH = "<:XH:553119188089176074>";
-            string gradeSS = "<:X_:553119217109565470>";
-            string gradeSH = "<:SH:553119233463025691>";
-            string gradeS = "<:S_:553119252329267240>";
-            string gradeA = "<:A_:553119274256826406>";
-
             //Build rich embed and send to Discord
-
             embed.WithAuthor(author =>
             {
-                author.Url = $"https://osu.ppy.sh/u/{userID}";
-                author.Name = $"osu! Profile For {username}";
+                author.Url = $"https://osu.ppy.sh/u/{userProfileObject.user_id}";
+                author.Name = $"osu! Profile For {userProfileObject.username}";
             });
-            embed.AddField($"Performance: {pp.ToString("N2")}pp" +
-                $"\nGlobal Rank: #{globalRank.ToString("N0")}" +
-                $"\n{country} Rank: #{countryRank.ToString("N0")}",
-                $"▸ **Total Ranked Score:** `{rankedScore.ToString("N0")}` points" +
-                $"\n▸ **Average Hit Accuracy: ** `{(accuracy / 100).ToString("P")}`" +
-                $"\n▸ **Play Time:** `{totalSecondsPlayed / 3600}` Hours - That's over `{totalSecondsPlayed / 86400} Days`!" +
-                $"\n▸ **Total Play Count:** `{playcount.ToString("N0")}` plays" +
-                $"\n▸ **Current Level:** `{level.ToString("N0")}` ~ `{(int)((level - (int)level) * 100)}% to level {(int)level + 1}`!" +
-                $"\n▸ **Total Circles Clicked:** `{(count300 + count100 + count50).ToString("N0")}`" +
-                $"\n▸ {gradeSSH} ~ `{countSSH}` {gradeSS} ~ `{countSS}` {gradeSH} ~ `{countSH}` {gradeS} ~ `{countS}` {gradeA} ~ `{countA}`" +
-                $"\n▸ **{username} joined `{difference.TotalDays.ToString("N0")} days, {difference.Hours} hours, and {difference.Minutes} minutes ago.`**" +
-                $"\n**`That's over {(difference.TotalDays / 31).ToString("N0")} months!`**");
-            embed.WithThumbnailUrl($"https://a.ppy.sh/{userID}");
+            embed.AddField($"Performance: {userProfileObject.pp_raw.ToString("N2")}pp" +
+                $"\nGlobal Rank: #{userProfileObject.pp_rank.ToString("N0")}" +
+                $"\n{userProfileObject.country} Rank: #{userProfileObject.pp_country_rank.ToString("N0")}",
+                $"▸ **Total Ranked Score:** `{userProfileObject.ranked_score.ToString("N0")}` points" +
+                $"\n▸ **Average Hit Accuracy: ** `{(userProfileObject.accuracy / 100).ToString("P")}`" +
+                $"\n▸ **Play Time:** `{userProfileObject.total_seconds_played / 3600}` Hours - That's over `{userProfileObject.total_seconds_played / 86400} Days`!" +
+                $"\n▸ **Total Play Count:** `{userProfileObject.playcount.ToString("N0")}` plays" +
+                $"\n▸ **Current Level:** `{userProfileObject.level.ToString("N0")}` ~ `{(int)((userProfileObject.level - (int)userProfileObject.level) * 100)}% to level {(int)userProfileObject.level + 1}`!" +
+                $"\n▸ **Total Circles Clicked:** `{(userProfileObject.count300 + userProfileObject.count100 + userProfileObject.count50).ToString("N0")}`" +
+                $"\n▸ {OsuMisc.OsuGrade("ssh")} ~ `{userProfileObject.count_rank_ssh}` {OsuMisc.OsuGrade("ss")} ~ `{userProfileObject.count_rank_ss}` {OsuMisc.OsuGrade("sh")} ~ `{userProfileObject.count_rank_sh}` {OsuMisc.OsuGrade("s")} ~ `{userProfileObject.count_rank_s}` {OsuMisc.OsuGrade("a")} ~ `{userProfileObject.count_rank_a}`" +
+                $"\n▸ **{userProfileObject.username} joined `{userProfileObject.difference.TotalDays.ToString("N0")} days, {userProfileObject.difference.Hours} hours, and {userProfileObject.difference.Minutes} minutes ago.`**" +
+                $"\n**`That's over {(userProfileObject.difference.TotalDays / 31).ToString("N0")} months!`**");
+            embed.WithThumbnailUrl($"https://a.ppy.sh/{userProfileObject.user_id}");
             embed.WithFooter($"Stats accurate as of {DateTime.Now}");
             await BE();
         }
@@ -130,21 +88,16 @@ namespace Kaguya.Modules
             username = username.Replace(" ", "_");
             userAccount.OsuUsername = username;
 
-            string jsonProfile;
+            //Getting user profile object.
+            var playerRecentObject = new OsuUserBuilder(username).Execute();
 
-            using (WebClient client = new WebClient())
-            {
-                jsonProfile = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={Config.bot.OsuApiKey}&u={username}"); //Downloads user data
-            }
-
-            if(jsonProfile == "[]")
+            if (playerRecentObject == null)
             {
                 userAccount.OsuUsername = oldUsername;
                 embed.WithDescription($"{Context.User.Mention} **ERROR: This username does not match a valid osu! username!**");
                 embed.WithFooter($"I have kept your osu! username as {oldUsername}. If you believe this is a mistake, contact Stage#0001.");
                 await BE();
                 embed.SetColor(EmbedColor.RED);
-                //logger.ConsoleCommandLog(Context, stopWatch.ElapsedMilliseconds, CommandError.Unsuccessful, "osu! API did not return any data for the given username."); ERROR HANDLER HERE
                 return;
             }
 
@@ -173,48 +126,34 @@ namespace Kaguya.Modules
                 }
             }
 
-            string jsonRecent;
+            //Getting recent object.
+            var playerRecentObject = new OsuRecentBuilder(player).Execute()[0];
 
-            using (WebClient client = new WebClient())
+            if (playerRecentObject.user_id == null)
             {
-                jsonRecent = client.DownloadString($"https://osu.ppy.sh/api/get_user_recent?k={Config.bot.OsuApiKey}&u=" + player);
-            }
-            if (jsonRecent == "[]")
-            {
-                string jsonUserData;
-                using (WebClient client = new WebClient())
-                {
-                    jsonUserData = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={Config.bot.OsuApiKey}&u=" + player);
-                }
+                //Getting user profile object.
+                var userProfileObject = new OsuUserBuilder(player).Execute();
 
-                var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(jsonUserData)[0];
                 embed.WithAuthor(author =>
                 {
                     author
-                        .WithName("" + mapUserNameObject.username + " hasn't got any recent plays")
-                        .WithIconUrl("https://a.ppy.sh/" + mapUserNameObject.user_id);
+                        .WithName("" + userProfileObject.username + " hasn't got any recent plays")
+                        .WithIconUrl("https://a.ppy.sh/" + userProfileObject.user_id);
                 });
                 await BE();
             }
             else
             {
-                var playerRecentObject = new OsuRecentBuilder(player).Execute()[0];
+                //Getting user profile object.
+                var userProfileObject = new OsuUserBuilder(player).Execute();
 
-                string NormalUserName = "";
-                using (WebClient client = new WebClient())
-                {
-                    NormalUserName = client.DownloadString($"https://osu.ppy.sh/api/get_user?k={Config.bot.OsuApiKey}&u=" + player);
-                }
-
-                if(NormalUserName == "[]")
+                if (userProfileObject.user_id == null)
                 {
                     embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
                     await BE();
                     embed.SetColor(EmbedColor.RED);
                     return;
                 }
-
-                var mapUserNameObject = JsonConvert.DeserializeObject<dynamic>(NormalUserName)[0];
 
                 string playerRecentString = $"▸ **{playerRecentObject.rankemote}{playerRecentObject.string_mods}** ▸ **[{playerRecentObject.beatmap.title} [{playerRecentObject.beatmap.version}]](https://osu.ppy.sh/b/{playerRecentObject.beatmap_id})** by **{playerRecentObject.beatmap.artist}**\n" +
                     $"▸ **☆{playerRecentObject.beatmap.difficultyrating.ToString("F")}** ▸ **{playerRecentObject.accuracy.ToString("F")}%**\n" +
@@ -226,12 +165,12 @@ namespace Kaguya.Modules
 
                 var difference = DateTime.UtcNow - playerRecentObject.date;
 
-                string footer = $"{mapUserNameObject.username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
+                string footer = $"{userProfileObject.username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
 
                 embed.WithAuthor(author =>
                 {
                     author
-                        .WithName($"Most Recent osu! Standard Play for " + mapUserNameObject.username)
+                        .WithName($"Most Recent osu! Standard Play for " + userProfileObject.username)
                         .WithIconUrl("https://a.ppy.sh/" + playerRecentObject.user_id);
                 });
                 embed.WithDescription($"{playerRecentString}");
