@@ -70,7 +70,7 @@ namespace Kaguya.Modules
                 $"\n▸ **Total Play Count:** `{userProfileObject.playcount.ToString("N0")}` plays" +
                 $"\n▸ **Current Level:** `{userProfileObject.level.ToString("N0")}` ~ `{(int)((userProfileObject.level - (int)userProfileObject.level) * 100)}% to level {(int)userProfileObject.level + 1}`!" +
                 $"\n▸ **Total Circles Clicked:** `{(userProfileObject.count300 + userProfileObject.count100 + userProfileObject.count50).ToString("N0")}`" +
-                $"\n▸ {OsuMisc.OsuGrade("ssh")} ~ `{userProfileObject.count_rank_ssh}` {OsuMisc.OsuGrade("ss")} ~ `{userProfileObject.count_rank_ss}` {OsuMisc.OsuGrade("sh")} ~ `{userProfileObject.count_rank_sh}` {OsuMisc.OsuGrade("s")} ~ `{userProfileObject.count_rank_s}` {OsuMisc.OsuGrade("a")} ~ `{userProfileObject.count_rank_a}`" +
+                $"\n▸ {OsuMisc.OsuGrade("XH")} ~ `{userProfileObject.count_rank_ssh}` {OsuMisc.OsuGrade("X")} ~ `{userProfileObject.count_rank_ss}` {OsuMisc.OsuGrade("SH")} ~ `{userProfileObject.count_rank_sh}` {OsuMisc.OsuGrade("S")} ~ `{userProfileObject.count_rank_s}` {OsuMisc.OsuGrade("A")} ~ `{userProfileObject.count_rank_a}`" +
                 $"\n▸ **{userProfileObject.username} joined `{userProfileObject.difference.TotalDays.ToString("N0")} days, {userProfileObject.difference.Hours} hours, and {userProfileObject.difference.Minutes} minutes ago.`**" +
                 $"\n**`That's over {(userProfileObject.difference.TotalDays / 31).ToString("N0")} months!`**");
             embed.WithThumbnailUrl($"https://a.ppy.sh/{userProfileObject.user_id}");
@@ -127,51 +127,78 @@ namespace Kaguya.Modules
             }
 
             //Getting recent object.
-            var playerRecentObject = new OsuRecentBuilder(player).Execute()[0];
+            var playerRecentObjectList = new OsuRecentBuilder(player).Execute();
 
-            if (playerRecentObject.user_id == null)
+            if (playerRecentObjectList.Count == 0)
             {
                 //Getting user profile object.
                 var userProfileObject = new OsuUserBuilder(player).Execute();
-
-                embed.WithAuthor(author =>
-                {
-                    author
-                        .WithName("" + userProfileObject.username + " hasn't got any recent plays")
-                        .WithIconUrl("https://a.ppy.sh/" + userProfileObject.user_id);
-                });
-                await BE();
-            }
-            else
-            {
-                //Getting user profile object.
-                var userProfileObject = new OsuUserBuilder(player).Execute();
-
-                if (userProfileObject.user_id == null)
+                
+                //If user is null send no download data error, else send no recently plays found.
+                if (userProfileObject == null)
                 {
                     embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
                     await BE();
                     embed.SetColor(EmbedColor.RED);
-                    return;
+                }
+                else
+                {
+                    embed.WithAuthor(author =>
+                    {
+                        author
+                            .WithName("" + userProfileObject.username + " hasn't got any recent plays")
+                            .WithIconUrl("https://a.ppy.sh/" + userProfileObject.user_id);
+                    });
+                    await BE();
+                }
+            }
+            else
+            {
+                string playerRecentString = "";
+                DateTime date = new DateTime();
+                int totalcount = playerRecentObjectList.Count;
+
+                foreach (var playerRecentObject in playerRecentObjectList)
+                {
+                    playerRecentString += $"▸ **{playerRecentObject.rankemote}{playerRecentObject.string_mods}** ▸ **[{playerRecentObject.beatmap.title} [{playerRecentObject.beatmap.version}]](https://osu.ppy.sh/b/{playerRecentObject.beatmap_id})** by **{playerRecentObject.beatmap.artist}**\n" +
+                        $"▸ **☆{playerRecentObject.beatmap.difficultyrating.ToString("F")}** ▸ **{playerRecentObject.accuracy.ToString("F")}%**\n" +
+                        $"▸ **Combo:** `{playerRecentObject.maxcombo.ToString("N0")}x / {playerRecentObject.beatmap.max_combo.ToString("N0")}x`\n" +
+                        $"▸ [300 / 100 / 50 / X]: `[{playerRecentObject.count300} / {playerRecentObject.count100} / {playerRecentObject.count50} / {playerRecentObject.countmiss}]`\n" +
+                        $"▸ **Map Completion:** `{playerRecentObject.completion}%`\n" +
+                        $"▸ **Full Combo Percentage:** `{((playerRecentObject.maxcombo / playerRecentObject.beatmap.max_combo) * 100).ToString("N2")}%`\n";
+
+                    if (playerRecentObject == playerRecentObjectList[totalcount - 1])
+                    {
+                        playerRecentString += $"▸ **PP for FC**: `{playerRecentObject.fullcombopp.ToString("N0")}pp`";
+                    }
+                    else
+                    {
+                        playerRecentString += $"▸ **PP for FC**: `{playerRecentObject.fullcombopp.ToString("N0")}pp`\n";
+                    }
+
+                    date = playerRecentObject.date;
                 }
 
-                string playerRecentString = $"▸ **{playerRecentObject.rankemote}{playerRecentObject.string_mods}** ▸ **[{playerRecentObject.beatmap.title} [{playerRecentObject.beatmap.version}]](https://osu.ppy.sh/b/{playerRecentObject.beatmap_id})** by **{playerRecentObject.beatmap.artist}**\n" +
-                    $"▸ **☆{playerRecentObject.beatmap.difficultyrating.ToString("F")}** ▸ **{playerRecentObject.accuracy.ToString("F")}%**\n" +
-                    $"▸ **Combo:** `{playerRecentObject.maxcombo.ToString("N0")}x / {playerRecentObject.beatmap.max_combo.ToString("N0")}x`\n" +
-                    $"▸ [300 / 100 / 50 / X]: `[{playerRecentObject.count300} / {playerRecentObject.count100} / {playerRecentObject.count50} / {playerRecentObject.countmiss}]`\n" +
-                    $"▸ **Map Completion:** `{playerRecentObject.completion}%`\n" +
-                    $"▸ **Full Combo Percentage:** `{((playerRecentObject.maxcombo / playerRecentObject.beatmap.max_combo) * 100).ToString("N2")}%`\n" +
-                    $"▸ **PP for FC**: `{playerRecentObject.fullcombopp.ToString("N0")}pp`";
+                //Getting user profile object.
+                var userProfileObject = new OsuUserBuilder(player).Execute();
 
-                var difference = DateTime.UtcNow - playerRecentObject.date;
+                string footer = "";
+                var difference = DateTime.UtcNow - date;
 
-                string footer = $"{userProfileObject.username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
+                if (playerRecentObjectList.Count > 1)
+                {
+                    footer = $"{userProfileObject.username} performed this plays {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
+                }
+                else
+                {
+                    footer = $"{userProfileObject.username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.";
+                }
 
                 embed.WithAuthor(author =>
                 {
                     author
                         .WithName($"Most Recent osu! Standard Play for " + userProfileObject.username)
-                        .WithIconUrl("https://a.ppy.sh/" + playerRecentObject.user_id);
+                        .WithIconUrl("https://a.ppy.sh/" + userProfileObject.user_id);
                 });
                 embed.WithDescription($"{playerRecentString}");
                 embed.WithFooter(footer);
