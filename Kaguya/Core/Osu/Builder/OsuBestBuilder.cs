@@ -1,6 +1,5 @@
 ﻿using Kaguya.Core.Osu.Models;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -41,19 +40,28 @@ namespace Kaguya.Core.Osu.Builder
             Limit = limit;
         }
 
-        public List<OsuBestModel> Execute()
+        public List<OsuBestModel> Execute(bool specific = false)
         {
-            var recentArray = ExecuteJson(OsuRequest.BestPerformance);
-            recentArray = ProcessJson(recentArray);
+            var bestArray = ExecuteJson(OsuRequest.BestPerformance);
+            if (specific)
+                bestArray = ProcessJson(bestArray, specific);
+            else
+                bestArray = ProcessJson(bestArray);
 
-            return recentArray.ToList();
+            return bestArray.ToList();
         }
 
-        private OsuBestModel[] ProcessJson(OsuBestModel[] array)
+        private OsuBestModel[] ProcessJson(OsuBestModel[] array, bool specific = false)
         {
             int i = 1;
             foreach (var item in array)
             {
+                if (specific && Limit != i)
+                {
+                    i++;
+                    continue;
+                }
+
                 //Sets playnumber of this play.
                 item.play_number = i;
 
