@@ -147,11 +147,11 @@ namespace Kaguya.Core.Osu
             }
             if (hour == 1)
             {
-                timestamp += $"{hour} hour ";
+                timestamp += $"and {hour} hour ";
             }
             if (hour > 1)
             {
-                timestamp += $"{hour} hours ";
+                timestamp += $"and {hour} hours ";
             }
 
             return timestamp;
