@@ -84,5 +84,4 @@ namespace Kaguya.Core.UserAccounts
             GambleHistory = new List<string>();
         }
     }
-
 }
