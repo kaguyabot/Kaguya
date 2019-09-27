@@ -258,7 +258,6 @@ namespace Kaguya.Core.Command_Handler
 
         private async Task Anti_Raid_Timer_Elapsed(object sender, ElapsedEventArgs e, Server server, SocketGuildUser user)
         {
-            
             var userIDs = server.AntiRaidList;
             var guild = _client.GetGuild(server.ID);
             var roles = guild.Roles;
@@ -507,7 +506,7 @@ namespace Kaguya.Core.Command_Handler
             return Task.CompletedTask;
         }
 
-        int displayIndex = 0;
+        int index = 0;
 
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -516,16 +515,16 @@ namespace Kaguya.Core.Command_Handler
                 var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
 
                 string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
-                $"Servicing {Global.client.Guilds.Count} guilds", $"Serving {Global.client.Guilds.Count.ToString("N0")} users",
+                $"Servicing {Global.client.Guilds.Count} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
                 $"{Utilities.GetAlert("VERSION")}"};
-                displayIndex++;
-                if (displayIndex >= games.Length)
+                index++;
+                if (index >= games.Length)
                 {
-                    displayIndex = 0;
+                    index = 0;
                 }
 
-                _client.SetGameAsync(games[displayIndex]);
-                logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
+                _client.SetGameAsync(games[index]);
+                logger.ConsoleTimerElapsed($"Game updated to \"{games[index]}\"");
             }
             catch(Exception ex)
             {
