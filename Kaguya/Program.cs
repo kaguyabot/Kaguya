@@ -150,7 +150,6 @@ namespace Kaguya
 
             if((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMinutes < 30)
             {
-                Global.TotalGuildCount += mutualGuilds.Count;
                 Global.TotalMemberCount += memberCount;
                 Global.TotalTextChannels += textChannelCount;
                 Global.TotalVoiceChannels += voiceChannelCount;

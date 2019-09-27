@@ -85,7 +85,6 @@ namespace Kaguya.Modules.Utility
             uint totalDiamonds = 0;
             uint totalSupporters = 0;
             double totalGambles = 0;
-            double cpuUsage = Global.cpuUsage;
             double ramUsage = Global.ramUsage;
 
             foreach (var guild in _client.Guilds)
@@ -122,11 +121,10 @@ namespace Kaguya.Modules.Utility
 
             embed.AddField($"Global Stats",
              $"Uptime: **`{timeDiff.Days.ToString("N0")} days, {timeDiff.Hours} hours, {timeDiff.Minutes} minutes {timeDiff.Seconds} seconds`**" +
-             $"\nGuilds: **`{Global.TotalGuildCount.ToString("N0")}`**" +
+             $"\nGuilds: **`{Global.client.Guilds.Count.ToString("N0")}`**" +
              $"\nMembers: **`{Global.TotalMemberCount.ToString("N0")}`**" +
              $"\nText Channels: **`{Global.TotalTextChannels.ToString("N0")}`**" +
              $"\nVoice Channels: **`{Global.TotalVoiceChannels.ToString("N0")}`**" +
-             $"\nCPU Usage: **`{Global.cpuUsage.ToString("N2")}%`**" +
              $"\nRAM Usage: **`{Global.ramUsage.ToString("N2")}MB`**" +
              $"\n");
 

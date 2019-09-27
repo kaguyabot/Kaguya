@@ -34,7 +34,7 @@ namespace Kaguya.Core.CommandHandler
             _ = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = client.GetUser(ID).MutualGuilds;
 
-            if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1875) 
+            if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.client.Guilds.Count > 1900) 
                 //1875 is around how many guilds the bot should be in.
             {
                 try
@@ -43,7 +43,7 @@ namespace Kaguya.Core.CommandHandler
                     AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
                     IDblSelfBot me = await dblAPI.GetMeAsync();
                     logger.ConsoleStatusAdvisory("Pushing stats to DBL API...");
-                    await me.UpdateStatsAsync(Global.TotalGuildCount);
+                    await me.UpdateStatsAsync(Global.client.Guilds.Count);
                     logger.ConsoleStatusAdvisory("Successfully pushed total guild count to DBL.");
                 }
                 catch (Exception e)
@@ -52,19 +52,19 @@ namespace Kaguya.Core.CommandHandler
                 }
             }
 
-            else if(Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount < 1875 
-                && Config.bot.BotUserID == "538910393918160916")
-            {
+        else if(Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.client.Guilds.Count < 1900 
+            && Config.bot.BotUserID == "538910393918160916")
+             {
                 //Restarts the bot if the total guild count is lower than expected.
 
                 var filePath = Assembly.GetExecutingAssembly().Location;
                 Process.Start(filePath);
                 Environment.Exit(0);
-            }
+             }
 
             _ = new Dictionary<string, string>
             {
-                { "server_count", $"{Global.TotalGuildCount}" }
+                { "server_count", $"{Global.client.Guilds.Count}" }
             };
 
             int i = 0;
@@ -139,7 +139,6 @@ namespace Kaguya.Core.CommandHandler
         {
             logger.ConsoleGuildConnectionAdvisory(guild, "Joined new guild");
 
-            Global.TotalGuildCount++;
             Global.TotalMemberCount += guild.MemberCount;
             Global.TotalTextChannels += guild.TextChannels.Count;
             Global.TotalVoiceChannels += guild.VoiceChannels.Count;
@@ -204,7 +203,6 @@ namespace Kaguya.Core.CommandHandler
 
         public Task LeftGuild(SocketGuild guild)
         {
-            Global.TotalGuildCount--;
             Global.TotalMemberCount -= guild.MemberCount;
             Global.TotalTextChannels -= guild.TextChannels.Count;
             Global.TotalVoiceChannels -= guild.TextChannels.Count;

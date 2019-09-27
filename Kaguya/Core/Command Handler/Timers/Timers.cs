@@ -25,43 +25,45 @@ namespace Kaguya.Core.Command_Handler
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
         }
 
-        private int ProcessCPUTimersActive = 0;
+        private int ProcessRAMTimersActive = 0;
+        private int RateLimitTimersActive = 0;
+        private int SupporterExpTimersActive = 0;
+        private int gameTimersActive = 0; //Prevents more than one timer being active at a time, per shard.
+        private int messageCacheTimersActive = 0;
+        private int gameRotationTimersActive = 0;
+        private int resourcesBackupTimersActive = 0;
+        private int messageReceivedTimersActive = 0;
 
         public Task ProcessCPUTimer(DiscordSocketClient client)
         {
-            if (ProcessCPUTimersActive < 1)
+            if (ProcessRAMTimersActive < 1)
             {
                 Timer timer = new Timer(2000); //30 seconds
                 timer.Enabled = true;
-                timer.Elapsed += Process_CPU_Timer_Elapsed;
-                ProcessCPUTimersActive++;
+                timer.Elapsed += Process_RAM_Timer_Elapsed;
+                ProcessRAMTimersActive++;
             }
             return Task.CompletedTask;
         }
 
-        private void Process_CPU_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void Process_RAM_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Process kaguya = Process.GetProcessesByName("Kaguya")[0];
 
-            var cpu = new PerformanceCounter("Process", "% Processor Time", kaguya.ProcessName, true);
             var ram = new PerformanceCounter("Process", "Private Bytes", kaguya.ProcessName, true);
 
             // Getting first initial values
-            cpu.NextValue();
             ram.NextValue();
 
             dynamic result = new ExpandoObject();
 
             // If system has multiple cores, that should be taken into account
-            result.CPU = Math.Round(cpu.NextValue() / Environment.ProcessorCount, 2);
             // Returns number of MB consumed by application
             result.RAM = Math.Round(ram.NextValue() / 1024 / 1024, 2);
 
-            Global.cpuUsage = result.CPU;
             Global.ramUsage = result.RAM;
         }
 
-        private int RateLimitTimersActive = 0;
 
         public Task RateLimitResetTimer(DiscordSocketClient client)
         {
@@ -191,7 +193,6 @@ namespace Kaguya.Core.Command_Handler
             return Task.CompletedTask;
         }
 
-        private int SupporterExpTimersActive = 0;
 
         private async void Supporter_Expiration_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -472,12 +473,6 @@ namespace Kaguya.Core.Command_Handler
             Config.bot.RecentVoteClaimAttempts = 0;
         }
 
-        int gameTimersActive = 0; //Prevents more than one timer being active at a time, per shard.
-        int messageCacheTimersActive = 0;
-        int gameRotationTimersActive = 0;
-        int resourcesBackupTimersActive = 0;
-        int messageReceivedTimersActive = 0;
-
         public Task MessageCacheTimer(DiscordSocketClient _client)
         {
             if (messageCacheTimersActive < 1)
@@ -521,7 +516,7 @@ namespace Kaguya.Core.Command_Handler
                 var botID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
 
                 string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
-                $"Servicing {Global.client.Guilds.Count} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
+                $"Servicing {Global.client.Guilds.Count} guilds", $"Serving {Global.client.Guilds.Count.ToString("N0")} users",
                 $"{Utilities.GetAlert("VERSION")}"};
                 displayIndex++;
                 if (displayIndex >= games.Length)

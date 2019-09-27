@@ -23,6 +23,7 @@ Version 1.32
 - Guild names will now be properly stored when Kaguya joins a new guild.
 - Same for usernames ^
 - Total command count is now logged for all servers.
+- $stats no longer shows the bot's CPU usage (it was consistently wrong).
 
 Version 1.31.1
 
