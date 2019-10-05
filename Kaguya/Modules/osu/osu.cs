@@ -205,26 +205,5 @@ namespace Kaguya.Modules
                 await BE();
             }
         }
-
-        [Flags]
-        public enum AllMods
-        {
-            NM = 0,
-            NF = (1 << 0),
-            EZ = (1 << 1),
-            //TouchDevice = (1 << 2),
-            HD = (1 << 3),
-            HR = (1 << 4),
-            SD = (1 << 5),
-            DT = (1 << 6),
-            //Relax = (1 << 7),
-            HT = (1 << 8),
-            NC = (1 << 9), // Only set along with DoubleTime. i.e: NC only gives 576
-            FL = (1 << 10),
-            // Autoplay = (1 << 11),
-            SO = (1 << 12),
-            // Relax2 = (1 << 13),  // Autopilot
-            PF = (1 << 14),
-        }
     }
 }
