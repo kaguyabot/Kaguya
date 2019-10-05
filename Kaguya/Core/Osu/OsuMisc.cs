@@ -1,4 +1,6 @@
-﻿namespace Kaguya.Core.Osu
+﻿using System;
+
+namespace Kaguya.Core.Osu
 {
     public enum OsuRequest
     {
@@ -83,6 +85,76 @@
         public static double OsuAccuracy(int count50, int count100, int count300, int countMiss)
         {
             return 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
+        }
+
+        public static string ToTimeAgo(TimeSpan time)
+        {
+            var timestamp = "";
+            var year = 0;
+            var month = 0;
+            var day = time.Days;
+            var hour = time.Hours;
+
+            if (day >= 30)
+            {
+                while (true)
+                {
+                    month++;
+                    day -= 30;
+                    if (day < 30)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (month >= 12)
+            {
+                while (true)
+                {
+                    month++;
+                    month -= 12;
+                    if (month < 12)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (year > 1)
+            {
+                timestamp += $"{year} years ";
+            }
+            if (year == 1)
+            {
+                timestamp += $"{year} year ";
+            }
+            if (month > 1)
+            {
+                timestamp += $"{month} months ";
+            }
+            if (month == 1)
+            {
+                timestamp += $"{month} month ";
+            }
+            if (day > 1)
+            {
+                timestamp += $"{day} days and ";
+            }
+            if (day == 1)
+            {
+                timestamp += $"{day} day and ";
+            }
+            if (hour == 1)
+            {
+                timestamp += $"and {hour} hour ";
+            }
+            if (hour > 1)
+            {
+                timestamp += $"and {hour} hours ";
+            }
+
+            return timestamp;
         }
     }
 }
