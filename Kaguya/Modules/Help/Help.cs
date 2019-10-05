@@ -539,9 +539,9 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: osu! Top | `{cmdPrefix}osutop`");
                     embed.WithDescription($"\n" +
                         $"\n{Context.User.Mention} Displays the specified amount of top osu! plays for a given player with other relevant information." +
-                        $"\nThe number of requested plays to display may not be more than 10." +
+                        $"\nThe number of requested plays to display may not be more than 7." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 8 \"Smelly sushi\"`");
+                        $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 7 Smelly sushi`");
                     await BE(); break;
                 case "osutop -n":
                     embed.WithTitle($"Help: osu! Top Extension: -n | `{cmdPrefix}osutop -n`");

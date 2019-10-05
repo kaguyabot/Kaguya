@@ -16,6 +16,7 @@ namespace Kaguya.Core.UserAccounts
         public int CommandRateLimit { get; set; }
         public int RatelimitStrikes { get; set; }
         public string NSFWAgeVerified { get; set; }
+        public List<Dictionary<string, double>> Reminders { get; set; }
         public List<string> RecentlyUsedCommands { get; set; }
         public int GamblingBadLuckStreak { get; set; }
         public int QuickdrawWinnings { get; set; }
@@ -80,6 +81,7 @@ namespace Kaguya.Core.UserAccounts
             LifetimeGambles = 0;
             LifetimeEliteRolls = 0;
             RatelimitStrikes = 0;
+            Reminders = new List<Dictionary<string, double>>();
             RecentlyUsedCommands = new List<string>();
             GambleHistory = new List<string>();
         }

@@ -33,7 +33,7 @@ namespace Kaguya.Modules.osu
 
             if (num < 1 || num > 7)
             {
-                embed.WithDescription($"{Context.User.Mention} **ERROR: Number for top plays must be between 1 and 10!** ");
+                embed.WithDescription($"{Context.User.Mention} **ERROR: Number for top plays must be between 1 and 7!** ");
                 await BE(); return;
             }
 

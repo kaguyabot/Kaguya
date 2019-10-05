@@ -8,7 +8,7 @@ namespace Kaguya.Core.Server_Files
         public string ServerName { get; set; }
         public string CommandPrefix { get; set; }
         public bool MessageAnnouncements { get; set; }
-        public Dictionary<string, string> MutedMembers { get; set; }
+        public Dictionary<ulong, double> MutedMembers { get; set; } //<userID, mute duration> 
         public Dictionary<string, int> WarnActions { get; set; }
         public Dictionary<ulong, int> WarnedMembers { get; set; }
         public Dictionary<ulong, List<string>> PunishmentHistory { get; set; } //List of reasons for being warned, per warned user.
@@ -46,7 +46,7 @@ namespace Kaguya.Core.Server_Files
             ServerName = ""; //Global.client.GetGuild(id).Name;
             CommandPrefix = "$";
             MessageAnnouncements = true;
-            MutedMembers = new Dictionary<string, string>();
+            MutedMembers = new Dictionary<ulong, double>();
             WarnedMembers = new Dictionary<ulong, int>();
             WarnActions = new Dictionary<string, int>();
             PunishmentHistory = new Dictionary<ulong, List<string>>();

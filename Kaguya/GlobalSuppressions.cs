@@ -9,4 +9,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:Kaguya.Modules.osu.osuGroup.osuTopSpecific(System.Int32,System.String)~System.Threading.Tasks.Task")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0052:Remove unread private members", Justification = "<Pending>", Scope = "member", Target = "~F:Kaguya.Core.CommandHandler.KaguyaLogMethods.stopWatch")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "type", Target = "~T:Kaguya.Modules.osu.osuMapFeed")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>", Scope = "member", Target = "~F:Kaguya.Core.Command_Handler.Timers.gameRotationTimersActive")]
 

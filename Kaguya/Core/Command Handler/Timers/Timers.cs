@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
@@ -34,11 +35,110 @@ namespace Kaguya.Core.Command_Handler
         private int resourcesBackupTimersActive = 0;
         private int messageReceivedTimersActive = 0;
 
+        public Task RemindTimer(DiscordSocketClient client)
+        {
+            Timer timer = new Timer(5000); //5.00 seconds
+            timer.Enabled = true;
+            timer.Elapsed += (sender, e) => Remind_Timer_Elapsed(sender, e, client);
+            return Task.CompletedTask;
+        }
+
+        private async void Remind_Timer_Elapsed(object sender, ElapsedEventArgs e, DiscordSocketClient client)
+        {
+            var users = UserAccounts.UserAccounts.GetAllAccounts();
+
+            foreach(var user in users)
+            {
+                if(user.Reminders != null)
+                {
+                    foreach(var item in user.Reminders.ToList())
+                    {
+                        var remindTime = item.Values.FirstOrDefault();
+                        if(DateTime.Now.ToOADate() > remindTime)
+                        {
+                            var socketUser = client.GetUser(user.ID);
+
+                            try
+                            {
+                                embed.WithTitle("⚠ Kaguya Reminder");
+                                embed.WithDescription($"`{item.Keys.FirstOrDefault()}`");
+                                embed.SetColor(EmbedColor.BLUE);
+
+                                await socketUser.SendMessageAsync(embed: embed.Build());
+                            }
+                            catch (NullReferenceException ex)
+                            {
+                                user.Reminders.Remove(item);
+                                logger.ConsoleCriticalAdvisory(ex, $"User {socketUser} requested a reminder, but their DMs are disabled, " +
+                                    $"meaning I cannot send them their reminder.");
+                                break;
+                            }
+
+                            logger.ConsoleInformationAdvisory($"User {socketUser} has been successfully reminded to " +
+                                    $"\"{item.Keys.FirstOrDefault()}\"");
+                            user.Reminders.Remove(item);
+                        }
+                    }
+                }
+            }
+        }
+
+        public Task UnMuteTimer(DiscordSocketClient client)
+        {
+            Timer timer = new Timer(2500); //2.50 seconds
+            timer.Enabled = true;
+            timer.Elapsed += (sender, e) => UnMute_Timer_Elapsed(sender, e, client);
+            return Task.CompletedTask;
+        }
+
+        private void UnMute_Timer_Elapsed(object sender, ElapsedEventArgs e, DiscordSocketClient client)
+        {
+            var guilds = Servers.GetAllServers();
+
+            foreach (var guild in guilds)
+            {
+                var socketGuild = client.GetGuild(guild.ID);
+                var mutedMembers = guild.MutedMembers;
+
+                if(mutedMembers != null)
+                {
+                    try
+                    {
+                        var muteRole = socketGuild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
+
+                        foreach (var member in mutedMembers.ToList())
+                        {
+                            if (mutedMembers.TryGetValue(member.Key, out double time))
+                            {
+                                if (DateTime.Now.ToOADate() > time)
+                                {
+                                    SocketGuildUser user = socketGuild.GetUser(member.Key);
+
+                                    user.RemoveRoleAsync(muteRole); //Removes mute role from user.
+                                    mutedMembers.Remove(user.Id); //Removes muted member from the dictionary.
+
+                                    logger.ConsoleTimerElapsed($"User [{user.Username}#{user.Discriminator} | {user.Id}] has been unmuted.");
+                                }
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    catch(NullReferenceException ex)
+                    {
+                        logger.ConsoleCriticalAdvisory($"NullReferenceException handled for unmuting a user inside of guild {socketGuild.Name}.");
+                    }
+                }
+            }
+        }
+
         public Task ProcessCPUTimer(DiscordSocketClient client)
         {
             if (ProcessRAMTimersActive < 1)
             {
-                Timer timer = new Timer(2000); //30 seconds
+                Timer timer = new Timer(2000); //20 seconds
                 timer.Enabled = true;
                 timer.Elapsed += Process_RAM_Timer_Elapsed;
                 ProcessRAMTimersActive++;

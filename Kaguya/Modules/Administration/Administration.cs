@@ -633,59 +633,30 @@ namespace Kaguya.Modules.Administration
                     if (day == 1)
                         d1 = " day";
 
-                    server.MutedMembers.Add(user.Id.ToString(), timeSpan.Duration().ToString());
-                    
-                    TimeSpanDuration = timeSpan.Duration();
-                    await user.AddRoleAsync(muteRole);
-
-                    //Unmute Timer Start
-
-                    Timer timer = new Timer(timeSpan.TotalMilliseconds)
+                    if(s1 == null && m1 == null && h1 == null && d1 == null)
                     {
-                        Enabled = true,
-                        AutoReset = false
-                    };
-                    timer.Elapsed += UnMute_User_Async_Elapsed;
+                        embed.WithDescription($"{Context.User.Mention} You must specify a time of at least `1s` to mute users for.");
+                        embed.SetColor(EmbedColor.RED);
+                        await BE();
+                        logger.ConsoleGuildAdvisory(Context.Guild, $"Moderator attempted to mute user for less than 1 second.");
+                        return;
+                    }
 
-                    //Unmute Timer End
+                    double unMuteTime = DateTime.Now.AddSeconds(timeSpan.TotalSeconds).ToOADate();
+                    server.MutedMembers.Add(user.Id, unMuteTime);
+                    
+                    await user.AddRoleAsync(muteRole);
 
                     embed.WithDescription($"{Context.User.Mention} User `{user.Username}#{user.Discriminator}` " +
                         $"has been muted for `{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1}`");
                     embed.SetColor(EmbedColor.VIOLET);
                     await BE();
-                    logger.ConsoleGuildAdvisory(Context.Guild, $"User muted for {timeout}.");
+                    logger.ConsoleGuildAdvisory(Context.Guild, $"User {user} muted for {timeout}.");
                 }
                 catch (System.ArgumentException)
                 {
-                    server.MutedMembers.Remove($"{Context.User.Id}");
+                    server.MutedMembers.Remove(Context.User.Id);
                     goto MuteRetry;
-                }
-            }
-        }
-
-        private TimeSpan TimeSpanDuration { get; set; }
-
-        private void UnMute_User_Async_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            var mutedMembers = Servers.GetServer(Context.Guild).MutedMembers;
-            var muteRole = _client.GetGuild(Context.Guild.Id).Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
-
-            foreach (var member in mutedMembers.ToList())
-            {
-                if (member.Value.Contains(TimeSpanDuration.ToString()))
-                {
-                    var result = ulong.TryParse(member.Key, out ulong ID);
-                    var user = _client.GetGuild(Context.Guild.Id).GetUser(ID);
-
-                    user.RemoveRoleAsync(muteRole); //Removes mute role from user.
-                    mutedMembers.Remove(ID.ToString()); //Removes muted member from the dictionary.
-                    
-
-                    logger.ConsoleTimerElapsed($"User [{user.Username}#{user.Discriminator} | {user.Id}] has been unmuted.");
-                }
-                else
-                {
-                    logger.ConsoleInformationAdvisory("I failed to execute the unmute timer.");
                 }
             }
         }
@@ -813,7 +784,7 @@ namespace Kaguya.Modules.Administration
             foreach(var user in users)
             {
                 await user.RemoveRoleAsync(muteRole);
-                mutedMembers.Remove(user.Id.ToString());
+                mutedMembers.Remove(user.Id);
                 
                 i++; logger.ConsoleGuildAdvisory(Context.Guild, "User unmuted.");
             }
