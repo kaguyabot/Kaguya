@@ -108,13 +108,13 @@ namespace Kaguya
         private ServiceProvider ConfigureServices(DiscordSocketConfig config)
         {
             return new ServiceCollection()
-                        .AddSingleton(new DiscordShardedClient(config))
-                        .AddSingleton<CommandService>()
-                        .AddSingleton<CommandHandler>()
-                        .AddSingleton<InteractiveService>()
-                        .AddSingleton<LavaRestClient>()
-                        .AddSingleton<LavaShardClient>()
-                        .BuildServiceProvider();
+                    .AddSingleton(new DiscordShardedClient(config))
+                    .AddSingleton<CommandService>()
+                    .AddSingleton<CommandHandler>()
+                    .AddSingleton<InteractiveService>()
+                    .AddSingleton<LavaRestClient>()
+                    .AddSingleton<LavaShardClient>()
+                    .BuildServiceProvider();
         }
 
         private Task ReadyAsync(DiscordSocketClient shard)

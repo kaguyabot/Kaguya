@@ -86,8 +86,8 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BotListAPI, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BotListAPI.3.4.0\lib\netstandard2.0\BotListAPI.dll</HintPath>
+    <Reference Include="BotListAPI, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BotListAPI.4.0.0\lib\netstandard2.0\BotListAPI.dll</HintPath>
     </Reference>
     <Reference Include="Discord.Addons.Interactive, Version=2.0.3.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Discord.Addons.PassiveInteractive.2.0.4\lib\netstandard2.0\Discord.Addons.Interactive.dll</HintPath>
