@@ -61,6 +61,8 @@ namespace Kaguya
                     _client.ShardReady += timers.SupporterExpirationTimer;
                     _client.ShardReady += timers.RateLimitResetTimer;
                     _client.ShardReady += timers.ProcessCPUTimer;
+                    _client.ShardReady += timers.UnMuteTimer;
+                    _client.ShardReady += timers.RemindTimer;
 
                     _client.MessageReceived += logger.osuLinkParser;
                     _client.JoinedGuild += logger.JoinedNewGuild;
@@ -108,13 +110,13 @@ namespace Kaguya
         private ServiceProvider ConfigureServices(DiscordSocketConfig config)
         {
             return new ServiceCollection()
-                        .AddSingleton(new DiscordShardedClient(config))
-                        .AddSingleton<CommandService>()
-                        .AddSingleton<CommandHandler>()
-                        .AddSingleton<InteractiveService>()
-                        .AddSingleton<LavaRestClient>()
-                        .AddSingleton<LavaShardClient>()
-                        .BuildServiceProvider();
+                    .AddSingleton(new DiscordShardedClient(config))
+                    .AddSingleton<CommandService>()
+                    .AddSingleton<CommandHandler>()
+                    .AddSingleton<InteractiveService>()
+                    .AddSingleton<LavaRestClient>()
+                    .AddSingleton<LavaShardClient>()
+                    .BuildServiceProvider();
         }
 
         private Task ReadyAsync(DiscordSocketClient shard)
@@ -150,7 +152,6 @@ namespace Kaguya
 
             if((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMinutes < 30)
             {
-                Global.TotalGuildCount += mutualGuilds.Count;
                 Global.TotalMemberCount += memberCount;
                 Global.TotalTextChannels += textChannelCount;
                 Global.TotalVoiceChannels += voiceChannelCount;

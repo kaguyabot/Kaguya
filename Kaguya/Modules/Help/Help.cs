@@ -30,7 +30,7 @@ namespace Kaguya.Modules.Help
         public async Task HelpCommand([Remainder]string command)
         {
 
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             switch (command.ToLower())
             {
@@ -61,11 +61,22 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Warn | `{cmdPrefix}warn`, `{cmdPrefix}w`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
                         $"\n" +
-                        $"\nWarns a user. This will add a (currently non-revocable) warning to a user (typically for a rule violation of some sort)." +
+                        $"\nWarns a user. This will add a warning to a user (typically for a rule violation of some sort)." +
                         $"\nThe user will know they have been warned when this command is executed (they will be DM'd with who warned them)." +
                         $"\nIf a user reaches a certain number of warnings required to trigger a \"punishment\", they will be punished according to the server's `{cmdPrefix}warnset` configuration." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}warn <user {{ID, Name, Mention}}>`");
+                    await BE(); break;
+                case "warnremove":
+                    embed.WithTitle($"Help: Warn Remove | `{cmdPrefix}warnremove`");
+                    embed.WithDescription($"{Context.User.Mention} Permissions Required: **Ban Members**" +
+                        $"\n" +
+                        $"\nRemoves a warning from a user. This command takes an `index` as an argument. If you use the `{cmdPrefix}inspect` command " +
+                        $"on a user, it will show all of their warnings, as well as what index the warning is: \"[Warning #..]\". This command reduces " +
+                        $"the total amount of logged warnings as well, so if the server's warning punishment scheme is set to, say, ban members after three warnings, " +
+                        $"and the user you are removing the warning from previously had two warnings, they will not be banned on the next warning." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}warnremove <user> <index>`");
                     await BE(); break;
                 case "warnoptions":
                 case "wo":
@@ -82,6 +93,30 @@ namespace Kaguya.Modules.Help
                         $"\nDisplays what punishments have been set for the server and at how many warnings they will be triggered." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}warnpunishments`");
+                    await BE(); break;
+                case "inspect":
+                    embed.WithTitle($"Help: User Inspection | `{cmdPrefix}inspect`");
+                    embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
+                        $"\n" +
+                        $"\nDisplays all previous punishments for a user. This includes warns, kicks, and bans, as well as their " +
+                        $"reason for being punished, who punished them, and the time at which they were punished. If a user is banned/shadowbanned/etc. " +
+                        $"as a result of being warned a certain number of times, this will not be displayed. Kicks and bans are also only displayed " +
+                        $"if the user was punished through my commands." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}inspect <user>`");
+                    embed.WithFooter("This command only displays punishments made after Kaguya V1.32");
+                    await BE(); break;
+                case "remindme":
+                    embed.WithTitle($"Help: Remind Me | `{cmdPrefix}remindme`");
+                    embed.WithDescription($"{Context.User.Mention} This command lets you tell me to remind you to do something!\n" +
+                        $"\nWant me to remind you to walk your dog in 30 minutes?" +
+                        $"\nUse `{cmdPrefix}remindme 30m Walk my dog.`\n" +
+                        $"\nNeed to send your mom a birthday card in 5 days, 22 hours, 18 minutes, and 35 seconds?" +
+                        $"\nUse `{cmdPrefix}remindme 5d22h18m35s Send mom a birthday card.`" +
+                        $"\n\n" +
+                        $"\nAfter the specified time, I will send you a DM (if your DMs are open) reminding you to do whatever task you specified." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}remindme <time[#d#h#m#s]> <text>`");
                     await BE(); break;
                 case "toggleannouncements":
                     embed.WithTitle($"Help: Toggle Announcements | `{cmdPrefix}toggleannouncements`");
@@ -527,9 +562,9 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: osu! Top | `{cmdPrefix}osutop`");
                     embed.WithDescription($"\n" +
                         $"\n{Context.User.Mention} Displays the specified amount of top osu! plays for a given player with other relevant information." +
-                        $"\nThe number of requested plays to display may not be more than 10." +
+                        $"\nThe number of requested plays to display may not be more than 7." +
                         $"\n" +
-                        $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 8 \"Smelly sushi\"`");
+                        $"\nSyntax: `{cmdPrefix}osutop 5 Stage` | `{cmdPrefix}osutop 7 Smelly sushi`");
                     await BE(); break;
                 case "osutop -n":
                     embed.WithTitle($"Help: osu! Top Extension: -n | `{cmdPrefix}osutop -n`");
@@ -960,7 +995,7 @@ namespace Kaguya.Modules.Help
         public async Task HelpCommand()
         {
 
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             PaginatedMessage message = new PaginatedMessage();
 
@@ -982,6 +1017,7 @@ namespace Kaguya.Modules.Help
                         $"\n{cmdPrefix}filterclear [clearfilter]" +
                         $"\n{cmdPrefix}filterremove [fr]" +
                         $"\n{cmdPrefix}filterview [fv]" +
+                        $"\n{cmdPrefix}inspect" +
                         $"\n{cmdPrefix}kaguyaexit" +
                         $"\n{cmdPrefix}kick [k]" +
                         $"\n{cmdPrefix}logtypes [loglist]" +
@@ -1218,7 +1254,7 @@ namespace Kaguya.Modules.Help
         [RequireOwner]
         public async Task OwnerCommands()
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             string commands = "```css" +
                 "\nAll commands in category: Owner Only" +
@@ -1339,7 +1375,7 @@ namespace Kaguya.Modules.Help
         [Alias("hdm")]
         public async Task HelpDM()
         {
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             embed.WithTitle("Help");
             embed.WithDescription($"{Context.User.Mention} Help is on the way, check your DM!");
@@ -1378,7 +1414,7 @@ namespace Kaguya.Modules.Help
             embed.WithTitle("Discord Bot List Voting");
             embed.WithDescription($"Show Kaguya some love and give her an upvote! https://discordbots.org/bot/538910393918160916/vote" +
                 $"\nUsers that upvote receive a `2x` critical hit percentage for the next `12 hours` and `500` Kaguya points! Users may vote every 12 hours!");
-            embed.WithFooter($"Thanks for showing your support! Use {Servers.GetServer(Context.Guild).commandPrefix}voteclaim to claim your reward!");
+            embed.WithFooter($"Thanks for showing your support! Use {Servers.GetServer(Context.Guild).CommandPrefix}voteclaim to claim your reward!");
 
             await BE();
         }
@@ -1436,7 +1472,7 @@ namespace Kaguya.Modules.Help
         public async Task SupporterInfo()
         {
             Stopwatch stopWatch = new Stopwatch();
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
                 "Kaguya Supporter",

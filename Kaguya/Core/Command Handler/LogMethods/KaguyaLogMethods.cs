@@ -34,7 +34,7 @@ namespace Kaguya.Core.CommandHandler
             _ = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
             var mutualGuilds = client.GetUser(ID).MutualGuilds;
 
-            if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount > 1875) 
+            if (Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.client.Guilds.Count > 1900) 
                 //1875 is around how many guilds the bot should be in.
             {
                 try
@@ -43,7 +43,7 @@ namespace Kaguya.Core.CommandHandler
                     AuthDiscordBotListApi dblAPI = new AuthDiscordBotListApi(ID, Config.bot.DblApiKey);
                     IDblSelfBot me = await dblAPI.GetMeAsync();
                     logger.ConsoleStatusAdvisory("Pushing stats to DBL API...");
-                    await me.UpdateStatsAsync(Global.TotalGuildCount);
+                    await me.UpdateStatsAsync(Global.client.Guilds.Count);
                     logger.ConsoleStatusAdvisory("Successfully pushed total guild count to DBL.");
                 }
                 catch (Exception e)
@@ -52,19 +52,19 @@ namespace Kaguya.Core.CommandHandler
                 }
             }
 
-            else if(Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.TotalGuildCount < 1875 
-                && Config.bot.BotUserID == "538910393918160916")
-            {
+        else if(Global.ShardsLoggedIn == Global.ShardsToLogIn && Global.client.Guilds.Count < 1900 
+            && Config.bot.BotUserID == "538910393918160916")
+             {
                 //Restarts the bot if the total guild count is lower than expected.
 
                 var filePath = Assembly.GetExecutingAssembly().Location;
                 Process.Start(filePath);
                 Environment.Exit(0);
-            }
+             }
 
             _ = new Dictionary<string, string>
             {
-                { "server_count", $"{Global.TotalGuildCount}" }
+                { "server_count", $"{Global.client.Guilds.Count}" }
             };
 
             int i = 0;
@@ -139,12 +139,11 @@ namespace Kaguya.Core.CommandHandler
         {
             logger.ConsoleGuildConnectionAdvisory(guild, "Joined new guild");
 
-            Global.TotalGuildCount++;
             Global.TotalMemberCount += guild.MemberCount;
             Global.TotalTextChannels += guild.TextChannels.Count;
             Global.TotalVoiceChannels += guild.VoiceChannels.Count;
 
-            var cmdPrefix = Servers.GetServer(guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(guild).CommandPrefix;
             var owner = guild.Owner;
             var channels = guild.Channels;
             var kID = ulong.TryParse(Config.bot.BotUserID, out ulong ID);
@@ -185,10 +184,10 @@ namespace Kaguya.Core.CommandHandler
                         await channel.AddPermissionOverwriteAsync(kaguya, OverwritePermissions.AllowAll(channel));
                         logger.ConsoleGuildAdvisory(guild, channel, $"Kaguya has been granted permissions for channel #{channel.Name}");
                     }
-                    catch (Exception exception)
+                    catch (Exception e)
                     {
                         logger.ConsoleStatusAdvisory($"Could not overwrite permissions for #{channel.Name} in guild \"{channel.Guild.Name}\"");
-                        logger.ConsoleCriticalAdvisory(exception, $"Guild {guild.Name} has been blacklisted.");
+                        logger.ConsoleCriticalAdvisory(e, $"I have disconnected from {guild.Name} (I did not have the Administrator permission).");
 
                         await guild.Owner.SendMessageAsync($"{guild.Owner.Mention} **I am missing the permissions required to operate in this guild. " +
                             $"I have exited the server.**");
@@ -204,7 +203,6 @@ namespace Kaguya.Core.CommandHandler
 
         public Task LeftGuild(SocketGuild guild)
         {
-            Global.TotalGuildCount--;
             Global.TotalMemberCount -= guild.MemberCount;
             Global.TotalTextChannels -= guild.TextChannels.Count;
             Global.TotalVoiceChannels -= guild.TextChannels.Count;
@@ -303,15 +301,19 @@ namespace Kaguya.Core.CommandHandler
         {
             IGuild server = (user as IGuildUser).Guild;
             Server currentServer = Servers.GetServer((SocketGuild)server);
+
             ulong loggingChannelID = currentServer.LogWhenUserJoins;
             if (loggingChannelID == 0) return;
+
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();
+
             embed.WithTitle("User Joined");
             embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}`\nAccount Created: `{user.CreatedAt}`");
             embed.WithThumbnailUrl("https://i.imgur.com/LXiUKgF.png");
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(SkyBlue);
+
             await logChannel.SendMessageAsync("", false, embed.Build());
             logger.ConsoleGuildConnectionAdvisory(user.Guild, "User joined guild");
         }
@@ -320,27 +322,41 @@ namespace Kaguya.Core.CommandHandler
         {
             IGuild server = (user as IGuildUser).Guild;
             Server currentServer = Servers.GetServer((SocketGuild)server);
+
             ulong loggingChannelID = currentServer.LogWhenUserLeaves;
             if (loggingChannelID == 0) return;
+
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();
+
             embed.WithTitle("User Left");
             embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}`");
             embed.WithThumbnailUrl("https://i.imgur.com/624oxi8.png");
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(Red);
+
             await logChannel.SendMessageAsync("", false, embed.Build());
         }
 
         public async Task LoggingUserBanned(SocketUser user, SocketGuild server)
         {
             Server currentServer = Servers.GetServer(server);
+
             ulong loggingChannelID = currentServer.LogBans;
             if (loggingChannelID == 0) return;
+
             ISocketMessageChannel logChannel = (ISocketMessageChannel)_client.GetGuild(currentServer.ID).GetChannel(loggingChannelID);
             EmbedBuilder embed = new EmbedBuilder();
+
+            string banReason = currentServer.MostRecentBanReason;
+
+            if(banReason == null)
+            {
+                banReason = "No reason specified.";
+            }
+
             embed.WithTitle("User Banned");
-            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}` \nReason: `{currentServer.MostRecentBanReason}`");
+            embed.WithDescription($"User: `{user.Username}#{user.Discriminator}`\nUser ID: `{user.Id}` \nReason: `{banReason}`");
             embed.WithThumbnailUrl("https://i.imgur.com/TKAMjoi.png");
             embed.WithTimestamp(DateTime.Now);
             embed.WithColor(Violet);

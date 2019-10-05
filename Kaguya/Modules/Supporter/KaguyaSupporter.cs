@@ -47,7 +47,7 @@ namespace Kaguya.Modules.Supporter
                     try
                     {
                         await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 30 days!\nKey used for this tag is `{key}`");
-                        await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(30, 1.12, guild.commandPrefix.ToLower()));
+                        await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(30, 1.12, guild.CommandPrefix.ToLower()));
                     }
                     catch (Exception e)
                     {
@@ -76,7 +76,7 @@ namespace Kaguya.Modules.Supporter
                     try
                     {
                         await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 60 days!\nKey used for this tag is `{key}`");
-                        await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(60, 2.25   , guild.commandPrefix.ToLower()));
+                        await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(60, 2.25   , guild.CommandPrefix.ToLower()));
                     }
                     catch (Exception e)
                     {
@@ -105,7 +105,7 @@ namespace Kaguya.Modules.Supporter
                     try
                     {
                         await dmOwnerChannel.SendMessageAsync($"{Context.User} in {Context.Guild} has redeemed a supporter tag that's worth 90 days!\nKey used for this tag is `{key}`");
-                        await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(90, 3.10, guild.commandPrefix.ToLower()));
+                        await dmUserChannel.SendMessageAsync("", false, GetDmRedeemEmbed(90, 3.10, guild.CommandPrefix.ToLower()));
                     }
                     catch (Exception e)
                     {

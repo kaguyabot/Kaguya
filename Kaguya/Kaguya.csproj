@@ -86,8 +86,8 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BotListAPI, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BotListAPI.3.4.0\lib\netstandard2.0\BotListAPI.dll</HintPath>
+    <Reference Include="BotListAPI, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BotListAPI.4.0.0\lib\netstandard2.0\BotListAPI.dll</HintPath>
     </Reference>
     <Reference Include="Discord.Addons.Interactive, Version=2.0.3.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Discord.Addons.PassiveInteractive.2.0.4\lib\netstandard2.0\Discord.Addons.Interactive.dll</HintPath>
@@ -301,6 +301,17 @@
     <Compile Include="Core\LevelingSystem\Leveling.cs" />
     <Compile Include="Core\Data Storage\DataStorage.cs" />
     <Compile Include="Core\Logger\Logger.cs" />
+    <Compile Include="Core\Osu\Builder\OsuBaseBuilder.cs" />
+    <Compile Include="Core\Osu\Builder\OsuBestBuilder.cs" />
+    <Compile Include="Core\Osu\Builder\OsuUserBuilder.cs" />
+    <Compile Include="Core\Osu\Models\OsuBaseModel.cs" />
+    <Compile Include="Core\Osu\Models\OsuBeatmapModel.cs" />
+    <Compile Include="Core\Osu\Models\OsuBestModel.cs" />
+    <Compile Include="Core\Osu\Models\OsuScoreableModel.cs" />
+    <Compile Include="Core\Osu\Models\OsuUserModel.cs" />
+    <Compile Include="Core\Osu\OsuMisc.cs" />
+    <Compile Include="Core\Osu\Models\OsuRecentModel.cs" />
+    <Compile Include="Core\Osu\Builder\OsuRecentBuilder.cs" />
     <Compile Include="Core\Server Files\Server.cs" />
     <Compile Include="Core\Server Files\ServerMessageLog.cs" />
     <Compile Include="Core\Server Files\ServerMessageLogs.cs" />

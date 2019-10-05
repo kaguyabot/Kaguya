@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
@@ -25,43 +26,144 @@ namespace Kaguya.Core.Command_Handler
             return Servers.GetServer(guild).AntiRaidList.Count > 0;
         }
 
-        private int ProcessCPUTimersActive = 0;
+        private int ProcessRAMTimersActive = 0;
+        private int RateLimitTimersActive = 0;
+        private int SupporterExpTimersActive = 0;
+        private int gameTimersActive = 0; //Prevents more than one timer being active at a time, per shard.
+        private int messageCacheTimersActive = 0;
+        private int gameRotationTimersActive = 0;
+        private int resourcesBackupTimersActive = 0;
+        private int messageReceivedTimersActive = 0;
+
+        public Task RemindTimer(DiscordSocketClient client)
+        {
+            Timer timer = new Timer(5000); //5.00 seconds
+            timer.Enabled = true;
+            timer.Elapsed += (sender, e) => Remind_Timer_Elapsed(sender, e, client);
+            return Task.CompletedTask;
+        }
+
+        private async void Remind_Timer_Elapsed(object sender, ElapsedEventArgs e, DiscordSocketClient client)
+        {
+            var users = UserAccounts.UserAccounts.GetAllAccounts();
+
+            foreach(var user in users)
+            {
+                if(user.Reminders != null)
+                {
+                    foreach(var item in user.Reminders.ToList())
+                    {
+                        var remindTime = item.Values.FirstOrDefault();
+                        if(DateTime.Now.ToOADate() > remindTime)
+                        {
+                            var socketUser = client.GetUser(user.ID);
+
+                            try
+                            {
+                                embed.WithTitle("⚠ Kaguya Reminder");
+                                embed.WithDescription($"`{item.Keys.FirstOrDefault()}`");
+                                embed.SetColor(EmbedColor.BLUE);
+
+                                await socketUser.SendMessageAsync(embed: embed.Build());
+                            }
+                            catch (NullReferenceException ex)
+                            {
+                                user.Reminders.Remove(item);
+                                logger.ConsoleCriticalAdvisory(ex, $"User {socketUser} requested a reminder, but their DMs are disabled, " +
+                                    $"meaning I cannot send them their reminder.");
+                                break;
+                            }
+
+                            logger.ConsoleInformationAdvisory($"User {socketUser} has been successfully reminded to " +
+                                    $"\"{item.Keys.FirstOrDefault()}\"");
+                            user.Reminders.Remove(item);
+                        }
+                    }
+                }
+            }
+        }
+
+        public Task UnMuteTimer(DiscordSocketClient client)
+        {
+            Timer timer = new Timer(2500); //2.50 seconds
+            timer.Enabled = true;
+            timer.Elapsed += (sender, e) => UnMute_Timer_Elapsed(sender, e, client);
+            return Task.CompletedTask;
+        }
+
+        private void UnMute_Timer_Elapsed(object sender, ElapsedEventArgs e, DiscordSocketClient client)
+        {
+            var guilds = Servers.GetAllServers();
+
+            foreach (var guild in guilds)
+            {
+                var socketGuild = client.GetGuild(guild.ID);
+                var mutedMembers = guild.MutedMembers;
+
+                if(mutedMembers != null)
+                {
+                    try
+                    {
+                        var muteRole = socketGuild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
+
+                        foreach (var member in mutedMembers.ToList())
+                        {
+                            if (mutedMembers.TryGetValue(member.Key, out double time))
+                            {
+                                if (DateTime.Now.ToOADate() > time)
+                                {
+                                    SocketGuildUser user = socketGuild.GetUser(member.Key);
+
+                                    user.RemoveRoleAsync(muteRole); //Removes mute role from user.
+                                    mutedMembers.Remove(user.Id); //Removes muted member from the dictionary.
+
+                                    logger.ConsoleTimerElapsed($"User [{user.Username}#{user.Discriminator} | {user.Id}] has been unmuted.");
+                                }
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    catch(NullReferenceException ex)
+                    {
+                        logger.ConsoleCriticalAdvisory($"NullReferenceException handled for unmuting a user inside of guild {socketGuild.Name}.");
+                    }
+                }
+            }
+        }
 
         public Task ProcessCPUTimer(DiscordSocketClient client)
         {
-            if (ProcessCPUTimersActive < 1)
+            if (ProcessRAMTimersActive < 1)
             {
-                Timer timer = new Timer(2000); //30 seconds
+                Timer timer = new Timer(2000); //20 seconds
                 timer.Enabled = true;
-                timer.Elapsed += Process_CPU_Timer_Elapsed;
-                ProcessCPUTimersActive++;
+                timer.Elapsed += Process_RAM_Timer_Elapsed;
+                ProcessRAMTimersActive++;
             }
             return Task.CompletedTask;
         }
 
-        private void Process_CPU_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void Process_RAM_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Process kaguya = Process.GetProcessesByName("Kaguya")[0];
 
-            var cpu = new PerformanceCounter("Process", "% Processor Time", kaguya.ProcessName, true);
             var ram = new PerformanceCounter("Process", "Private Bytes", kaguya.ProcessName, true);
 
             // Getting first initial values
-            cpu.NextValue();
             ram.NextValue();
 
             dynamic result = new ExpandoObject();
 
             // If system has multiple cores, that should be taken into account
-            result.CPU = Math.Round(cpu.NextValue() / Environment.ProcessorCount, 2);
             // Returns number of MB consumed by application
             result.RAM = Math.Round(ram.NextValue() / 1024 / 1024, 2);
 
-            Global.cpuUsage = result.CPU;
             Global.ramUsage = result.RAM;
         }
 
-        private int RateLimitTimersActive = 0;
 
         public Task RateLimitResetTimer(DiscordSocketClient client)
         {
@@ -191,7 +293,6 @@ namespace Kaguya.Core.Command_Handler
             return Task.CompletedTask;
         }
 
-        private int SupporterExpTimersActive = 0;
 
         private async void Supporter_Expiration_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -257,7 +358,6 @@ namespace Kaguya.Core.Command_Handler
 
         private async Task Anti_Raid_Timer_Elapsed(object sender, ElapsedEventArgs e, Server server, SocketGuildUser user)
         {
-            
             var userIDs = server.AntiRaidList;
             var guild = _client.GetGuild(server.ID);
             var roles = guild.Roles;
@@ -472,12 +572,6 @@ namespace Kaguya.Core.Command_Handler
             Config.bot.RecentVoteClaimAttempts = 0;
         }
 
-        int gameTimersActive = 0; //Prevents more than one timer being active at a time, per shard.
-        int messageCacheTimersActive = 0;
-        int gameRotationTimersActive = 0;
-        int resourcesBackupTimersActive = 0;
-        int messageReceivedTimersActive = 0;
-
         public Task MessageCacheTimer(DiscordSocketClient _client)
         {
             if (messageCacheTimersActive < 1)
@@ -512,7 +606,7 @@ namespace Kaguya.Core.Command_Handler
             return Task.CompletedTask;
         }
 
-        int displayIndex = 0;
+        int index = 0;
 
         private void Game_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -523,14 +617,14 @@ namespace Kaguya.Core.Command_Handler
                 string[] games = { "Support Server: aumCJhr", "$help | @Kaguya#2708 help",
                 $"Servicing {Global.client.Guilds.Count} guilds", $"Serving {Global.TotalMemberCount.ToString("N0")} users",
                 $"{Utilities.GetAlert("VERSION")}"};
-                displayIndex++;
-                if (displayIndex >= games.Length)
+                index++;
+                if (index >= games.Length)
                 {
-                    displayIndex = 0;
+                    index = 0;
                 }
 
-                _client.SetGameAsync(games[displayIndex]);
-                logger.ConsoleTimerElapsed($"Game updated to \"{games[displayIndex]}\"");
+                _client.SetGameAsync(games[index]);
+                logger.ConsoleTimerElapsed($"Game updated to \"{games[index]}\"");
             }
             catch(Exception ex)
             {

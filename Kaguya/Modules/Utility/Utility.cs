@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EmbedColor = Kaguya.Core.Embed.EmbedColor;
 
@@ -26,6 +27,82 @@ namespace Kaguya.Modules.Utility
         public async Task BE() //Method to build and send an embedded message.
         {
             await Context.Channel.SendMessageAsync(embed: embed.Build());
+        }
+
+        [Command("remindme")]
+        public async Task RemindMe(string time, [Remainder]string text)
+        {
+            var user = UserAccounts.GetAccount(Context.User);
+            var regex = new Regex("/([0-9])*s|([0-9])*m|([0-9])*h|([0-9])*d/g");
+
+            Regex[] regexs = {
+            new Regex("(([0-9])*s)"),
+            new Regex("(([0-9])*m)"),
+            new Regex("(([0-9])*h)"),
+            new Regex("(([0-9])*d)") };
+
+            var s = regexs[0].Match(time).Value;
+            var m = regexs[1].Match(time).Value;
+            var h = regexs[2].Match(time).Value;
+            var d = regexs[3].Match(time).Value;
+
+            var seconds = s.Split('s').First();
+            var minutes = m.Split('m').First();
+            var hours = h.Split('h').First();
+            var days = d.Split('d').First();
+
+            int.TryParse(seconds, out int sec);
+            int.TryParse(minutes, out int min);
+            int.TryParse(hours, out int hour);
+            int.TryParse(days, out int day);
+
+            TimeSpan timeSpan = new TimeSpan(day, hour, min, sec);
+
+            string s1 = " seconds";
+            string m1 = " minutes";
+            string h1 = " hours";
+            string d1 = " days";
+
+            if (sec < 1)
+                s1 = null;
+            if (min < 1)
+                m1 = null;
+            if (hour < 1)
+                h1 = null;
+            if (day < 1)
+                d1 = null;
+
+            if (sec == 1)
+                s1 = " second";
+            if (min == 1)
+                m1 = " minute";
+            if (hour == 1)
+                h1 = " hour";
+            if (day == 1)
+                d1 = " day";
+
+            if (s1 == null && m1 == null && h1 == null && d1 == null)
+            {
+                embed.WithDescription($"{Context.User.Mention} You must specify a time of at least `1s` for me to remind you for.");
+                embed.SetColor(EmbedColor.RED);
+                await BE();
+                return;
+            }
+
+            double remindTime = DateTime.Now.AddSeconds(timeSpan.TotalSeconds).ToOADate();
+
+            Dictionary<string, double> reminderDictionary = new Dictionary<string, double>();
+            reminderDictionary.Add(text, remindTime);
+            user.Reminders.Add(reminderDictionary);
+
+            embed.WithDescription($"{Context.User.Mention} I will remind you to `{text}` " +
+                $"in `{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1}`");
+            embed.WithFooter($"Note: You must have DMs open to server members (at least for this server), " +
+                $"or else your reminder will not be delivered!!");
+            embed.SetColor(EmbedColor.BLUE);
+            await BE();
+            logger.ConsoleGuildAdvisory(Context.Guild, $"User has requested to be reminded in " +
+                $"{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1} to \"{text}\"");
         }
 
         [Command("changelog")]
@@ -85,7 +162,6 @@ namespace Kaguya.Modules.Utility
             uint totalDiamonds = 0;
             uint totalSupporters = 0;
             double totalGambles = 0;
-            double cpuUsage = Global.cpuUsage;
             double ramUsage = Global.ramUsage;
 
             foreach (var guild in _client.Guilds)
@@ -122,11 +198,10 @@ namespace Kaguya.Modules.Utility
 
             embed.AddField($"Global Stats",
              $"Uptime: **`{timeDiff.Days.ToString("N0")} days, {timeDiff.Hours} hours, {timeDiff.Minutes} minutes {timeDiff.Seconds} seconds`**" +
-             $"\nGuilds: **`{Global.TotalGuildCount.ToString("N0")}`**" +
+             $"\nGuilds: **`{Global.client.Guilds.Count.ToString("N0")}`**" +
              $"\nMembers: **`{Global.TotalMemberCount.ToString("N0")}`**" +
              $"\nText Channels: **`{Global.TotalTextChannels.ToString("N0")}`**" +
              $"\nVoice Channels: **`{Global.TotalVoiceChannels.ToString("N0")}`**" +
-             $"\nCPU Usage: **`{Global.cpuUsage.ToString("N2")}%`**" +
              $"\nRAM Usage: **`{Global.ramUsage.ToString("N2")}MB`**" +
              $"\n");
 
@@ -144,7 +219,7 @@ namespace Kaguya.Modules.Utility
         public async Task ToggleAnnouncements()
         {
             Server guild = Servers.GetServer(Context.Guild);
-            var cmdPrefix = guild.commandPrefix;
+            var cmdPrefix = guild.CommandPrefix;
             if (guild.MessageAnnouncements == true)
             {
                 guild.MessageAnnouncements = false;
@@ -171,10 +246,10 @@ namespace Kaguya.Modules.Utility
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task AlterPrefix(string prefix = "$")
         {
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var server = Servers.GetServer(Context.Guild);
-            var oldPrefix = server.commandPrefix;
+            var oldPrefix = server.CommandPrefix;
 
             if(prefix.Length > 3)
             {
@@ -186,10 +261,10 @@ namespace Kaguya.Modules.Utility
                 return;
             }
 
-            server.commandPrefix = prefix;
+            server.CommandPrefix = prefix;
 
             embed.WithTitle("Change Command Prefix: Success!");
-            embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.commandPrefix}`.");
+            embed.WithDescription($"The command prefix has been changed from `{oldPrefix}` to `{server.CommandPrefix}`.");
             embed.WithFooter($"If you ever forget the prefix, tag me and type \"prefix\"!");
             await BE();
         }
@@ -197,7 +272,7 @@ namespace Kaguya.Modules.Utility
         [Command("author")] //utility
         public async Task Author()
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             var author = UserAccounts.GetAuthor();
 

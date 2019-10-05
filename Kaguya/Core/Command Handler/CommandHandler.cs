@@ -38,7 +38,6 @@ namespace Kaguya
             _services = services;
             _client = services.GetRequiredService<DiscordShardedClient>();
             _commands = services.GetRequiredService<CommandService>();
-
             _client.MessageReceived += HandleCommandAsync;
         }
 
@@ -92,7 +91,7 @@ namespace Kaguya
 
             int argPos = 0;
 
-            if (!msg.HasStringPrefix(guild.commandPrefix.ToLower(), ref argPos) && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
+            if (!msg.HasStringPrefix(guild.CommandPrefix.ToLower(), ref argPos) && !msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
                 return;
 
             var embed = new KaguyaEmbedBuilder();
@@ -105,9 +104,12 @@ namespace Kaguya
             {
                 consoleLogger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
                 userAccount.RecentlyUsedCommands.Add(msg.Content.ToLower());
+
                 if (userAccount.RecentlyUsedCommands.Count > 10)
                     userAccount.RecentlyUsedCommands.RemoveAt(0);
+
                 userAccount.CommandRateLimit++;
+                guild.TotalCommandCount++;
             }
 
             if (!result.IsSuccess)
@@ -117,7 +119,7 @@ namespace Kaguya
                     case CommandError.UnknownCommand:
                         break;
                     case CommandError.BadArgCount:
-                        var cmdPrefix = Servers.GetServer(context.Guild).commandPrefix;
+                        var cmdPrefix = Servers.GetServer(context.Guild).CommandPrefix;
                         embed.WithDescription("**Error: I need a different set of information than what you've given me!**");
                         embed.WithFooter($"Use {cmdPrefix}h <command> to see the proper usage.");
                         embed.SetColor(EmbedColor.RED);
@@ -126,7 +128,7 @@ namespace Kaguya
                         break;
                     case CommandError.ParseFailed:
                         embed.WithDescription("**Error: I failed to parse a specified value!**");
-                        embed.WithFooter($"You may be using text instead of a number. Review {guild.commandPrefix}h <command> for the proper usage!");
+                        embed.WithFooter($"You may be using text instead of a number. Review {guild.CommandPrefix}h <command> for the proper usage!");
                         embed.SetColor(EmbedColor.RED);
                         await context.Channel.SendMessageAsync(embed: embed.Build());
                         consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Failed to parse given value specified in command.");
@@ -140,7 +142,7 @@ namespace Kaguya
                         break;
                     case CommandError.MultipleMatches:
                         embed.WithDescription("**Error: I found multiple matches for the task you were trying to execute!**");
-                        embed.WithFooter($"Review {guild.commandPrefix}h <command> for the proper usage! I can only do one thing at a time!");
+                        embed.WithFooter($"Review {guild.CommandPrefix}h <command> for the proper usage! I can only do one thing at a time!");
                         embed.SetColor(EmbedColor.RED);
                         await context.Channel.SendMessageAsync(embed: embed.Build());
                         consoleLogger.ConsoleCommandLog(context, CommandError.BadArgCount, "Multiple matches found.");

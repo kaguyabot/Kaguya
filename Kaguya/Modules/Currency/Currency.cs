@@ -43,7 +43,7 @@ namespace Kaguya.Modules
         {
             Command command = Commands.GetCommand();
             var userAccount = UserAccounts.GetAccount(Context.User);
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             timeout = command.TimelyHours;
             bonus = command.TimelyPoints;
@@ -87,7 +87,7 @@ namespace Kaguya.Modules
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
             var userAccount = UserAccounts.GetAccount(Context.User);
             var diamonds = userAccount.Diamonds;
             stopWatch.Stop();
@@ -509,7 +509,7 @@ namespace Kaguya.Modules
             Logger logger = new Logger();
             var difference = DateTime.Now - userAccount.LastUpvotedKaguya;
             Random crit = new Random();
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
             var multiplier = 3.50;
             bool critical = crit.Next(101) < 8; //8% chance of weekly being a critical hit
 

@@ -106,7 +106,7 @@ namespace Kaguya.Modules.Music
             {
                 await player.VoiceChannel.DisconnectAsync();
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Continuation", "I have failed to continue the queue! If you believe this is an error, " +
-                    $"please contact `Stage#0001` in my support server! Use `{Servers.GetServer(player.TextChannel.Guild as SocketGuild).commandPrefix}hdm` for an invite!");
+                    $"please contact `Stage#0001` in my support server! Use `{Servers.GetServer(player.TextChannel.Guild as SocketGuild).CommandPrefix}hdm` for an invite!");
             }
 
             if (player.Queue.Count < 1 && !player.IsPlaying)
@@ -173,7 +173,7 @@ namespace Kaguya.Modules.Music
                 var player = _lavaShardClient.GetPlayer(guildId);
                 if (player == null)
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("🎵 Music Queue", 
-                        $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId).commandPrefix}h m` for proper usage.");
+                        $"Could not aquire music player.\nAre you using the music service right now? See `{Servers.GetServer(guildId).CommandPrefix}h m` for proper usage.");
 
                 if (player.IsPlaying)
                 {
@@ -214,7 +214,7 @@ namespace Kaguya.Modules.Music
 
         public async Task<Embed> SkipTrackAsync(ulong guildId, string serverName)
         {
-            var cmdPrefix = Servers.GetServer(guildId).commandPrefix;
+            var cmdPrefix = Servers.GetServer(guildId).CommandPrefix;
 
             try
             {

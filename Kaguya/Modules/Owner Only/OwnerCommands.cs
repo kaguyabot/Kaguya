@@ -36,10 +36,14 @@ namespace Kaguya.Modules.Owner_Only
         public async Task ScrapeUsernames()
         {
             List<UserAccount> userAccounts = Global.UserAccounts;
+            List<Server> servers = Global.Servers;
             Logger logger = new Logger();
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
+
+            int i = 0;
+            int j = 0;
 
             foreach(var account in userAccounts)
             {
@@ -47,17 +51,38 @@ namespace Kaguya.Modules.Owner_Only
                 {
                     try
                     {
-                        var user = Global.client.GetUser(account.ID);
-                        account.Username = user.Username;
+                        account.Username = Global.client.GetUser(account.ID).Username;
                         logger.ConsoleInformationAdvisory($"Username adjusted for user {account.ID}: " +
                             $"New name in file: {account.Username} | Time: {sw.ElapsedMilliseconds.ToString("N0")}ms");
                     }
                     catch(Exception e)
                     {
                         logger.ConsoleCriticalAdvisory($"{e.Message}");
+                        i++;
                     }
                 }
             }
+
+            logger.ConsoleInformationAdvisory($"All users refreshed. {i} users no longer are observed by the bot.");
+
+            foreach(var server in servers)
+            {
+                if(server.ServerName == "" || server.ServerName == null)
+                {
+                    try
+                    {
+                        server.ServerName = Global.client.GetGuild(server.ID).Name;
+                        logger.ConsoleInformationAdvisory($"Server name adjusted for server {server.ID}: " +
+                            $"New name in file: {server.ServerName} | Time: {sw.ElapsedMilliseconds.ToString("N0")}ms");
+                    }
+                    catch(Exception e)
+                    {
+                        logger.ConsoleCriticalAdvisory($"{e.Message}");
+                        j++;
+                    }
+                }
+            }
+            logger.ConsoleInformationAdvisory($"All servers refreshed. {j} servers no longer are observed by the bot.");
         }
 
         [RequireOwner]
@@ -397,7 +422,7 @@ namespace Kaguya.Modules.Owner_Only
         [RequireOwner]
         public async Task OwnerOnlyCommands()
         {
-            string cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             string commands = "```css" +
                 "\nAll commands in category: Owner" +

@@ -133,7 +133,7 @@ namespace Kaguya.Modules.osu
                 embed.WithDescription(
                     $"**{mapTitle} [{difficulty}]** by **{artist}**" +
                     $"\n" +
-                    $"\n<:total_length:567812515346513932> **Total Length:** {lengthValue} <:bpm:567813349820071937> **BPM:** {bpm.ToString("N0")}" +
+                    $"\n<:total_length:630131957598126120> **Total Length:** {lengthValue} <:bpm:630131958046785563> **BPM:** {bpm.ToString("N0")}" +
                     $"\n**Star Rating:** `{starRating.ToString("N2")} ☆` **Maximum Combo:** `{maxCombo.ToString("N0")}x`" +
                     $"\n**Download:** [[Beatmap]](https://osu.ppy.sh/beatmapsets/{beatmapSetID}/download)" +
                     $"[(without video)](https://osu.ppy.sh/d/{beatmapSetID}n)" +
@@ -168,8 +168,8 @@ namespace Kaguya.Modules.osu
             });
             embed.WithDescription($"**{mapTitle} [{difficulty}]** by **{artist}**" +
                 $"\n" +
-                $"\n<:total_length:567812515346513932> **Total Length:** {lengthValue} <:bpm:567813349820071937> **BPM:** {bpm.ToString("N0")}" +
-                $"\n**Star Rating:** `{starRating.ToString("N2")} ☆` **Maximum Combo:** `{maxCombo}x`" +
+                $"\n<:total_length:630131957598126120> **Total Length:** {lengthValue} <:bpm:630131958046785563> **BPM:** {bpm.ToString("N0")}" +
+                $"\n**Star Rating:** `{starRating.ToString("N2")} ☆` **Maximum Combo:** `{maxCombo.ToString("N0")}x`" +
                 $"\n**Download:** [[Beatmap]](https://osu.ppy.sh/beatmapsets/{beatmapSetID}/download)" +
                 $"[(without video)](https://osu.ppy.sh/d/{beatmapSetID}n) [[Bloodcat Mirror]](https://bloodcat.com/osu/s/{beatmapSetID})" +
                 $"\n" +

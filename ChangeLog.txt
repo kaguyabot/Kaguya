@@ -5,10 +5,14 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
+Version 1.32
+
+This update is really freakin big. All info found here: https://pastebin.com/A96txN4m
+
 Version 1.31.1
 
-- When a music queue empties, Kaguya will no longer automatically leave the voice channel.
-- (Attempted to) fix a bug where the audio queue would not continue, and instead stop after one song was completed.
+- Kaguya will no longer automatically disconnect as soon as a queue has finished.
+- Kaguya will now successfully automatically play all songs in a playlist, instead of completely stopping after the first song in the queue.
 
 Version 1.31
 

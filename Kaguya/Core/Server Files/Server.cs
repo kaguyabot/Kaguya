@@ -6,15 +6,17 @@ namespace Kaguya.Core.Server_Files
     {
         public ulong ID { get; set; }
         public string ServerName { get; set; }
-        public string commandPrefix { get; set; }
+        public string CommandPrefix { get; set; }
         public bool MessageAnnouncements { get; set; }
-        public Dictionary<string, string> MutedMembers { get; set; }
+        public Dictionary<ulong, double> MutedMembers { get; set; } //<userID, mute duration> 
         public Dictionary<string, int> WarnActions { get; set; }
         public Dictionary<ulong, int> WarnedMembers { get; set; }
+        public Dictionary<ulong, List<string>> PunishmentHistory { get; set; } //List of reasons for being warned, per warned user.
         public bool AntiRaid { get; set; }
         public string AntiRaidPunishment { get; set; }
         public int AntiRaidSeconds { get; set; }
         public int AntiRaidCount { get; set; }
+        public int TotalCommandCount { get; set; }
         public List<ulong> AntiRaidList { get; set; }
         public List<string> FilteredWords { get; set; }
         public List<ulong> AutoAssignedRoles { get; set; }
@@ -42,17 +44,19 @@ namespace Kaguya.Core.Server_Files
         {
             ID = id;
             ServerName = "";
-            commandPrefix = "$";
+            CommandPrefix = "$";
             MessageAnnouncements = true;
-            MutedMembers = new Dictionary<string, string>();
+            MutedMembers = new Dictionary<ulong, double>();
             WarnedMembers = new Dictionary<ulong, int>();
             WarnActions = new Dictionary<string, int>();
+            PunishmentHistory = new Dictionary<ulong, List<string>>();
             BlacklistedChannels = new List<ulong>();
             WhitelistedChannels = new List<ulong>();
             FilteredWords = new List<string>();
             AutoAssignedRoles = new List<ulong>();
             AntiRaidList = new List<ulong>();
             AntiRaid = false;
+            TotalCommandCount = 0;
             AntiRaidSeconds = 0;
             AntiRaidCount = 0;
             AntiRaidPunishment = null;

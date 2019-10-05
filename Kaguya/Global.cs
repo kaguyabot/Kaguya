@@ -14,13 +14,11 @@ namespace Kaguya
         public static LavaRestClient lavaRestClient = new LavaRestClient();
         public static List<UserAccount> UserAccounts { get; set; }
         public static List<Server> Servers { get; set; }
-        public static int TotalGuildCount { get; set; }
         public static int TotalMemberCount { get; set; }
         public static int TotalTextChannels { get; set; }
         public static int TotalVoiceChannels { get; set; }
         public static int ShardsToLogIn { get; set; }
         public static int ShardsLoggedIn { get; set; }
-        public static double cpuUsage { get; set; }
         public static double ramUsage { get; set; }
         public static string[] stillsCollection = Directory.GetFiles($"{Directory.GetCurrentDirectory()}/Hentai/Stills");
         public static string[] gifsCollection = Directory.GetFiles($"{Directory.GetCurrentDirectory()}/Hentai/Gifs");

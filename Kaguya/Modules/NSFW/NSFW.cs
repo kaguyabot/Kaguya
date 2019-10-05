@@ -66,7 +66,7 @@ namespace Kaguya.Modules.NSFW
         {
             var userAccount = UserAccounts.GetAccount(Context.User);
             var difference = userAccount.NBombCooldownReset - DateTime.Now;
-            var cmdPrefix = Servers.GetServer(Context.Guild).commandPrefix;
+            var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
             bool isSupporter = userAccount.IsSupporter;
             Logger logger = new Logger();
             Random rand = new Random();
