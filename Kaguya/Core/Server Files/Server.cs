@@ -43,7 +43,7 @@ namespace Kaguya.Core.Server_Files
         public Server(ulong id)
         {
             ID = id;
-            ServerName = ""; //Global.client.GetGuild(id).Name;
+            ServerName = "";
             CommandPrefix = "$";
             MessageAnnouncements = true;
             MutedMembers = new Dictionary<ulong, double>();

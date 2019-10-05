@@ -17,9 +17,17 @@ NEW COMMAND: $remindme
         past punishments for users in the server. This will display all reasons for warnings, kicks, 
         and/or bans, up to 15 results. This ONLY works if you warn/kick/ban the user with Kaguya 
         using $kick/$ban, NOT through Discord itself.
+- NEW COMMAND: $warnremove
+    - $warnremove allows server moderators (anyone with the ban members permission) to remove
+        a warning for a user. If you say $warnremove Stage 3, it will remove Stage's third warning,
+        as listed with the $inspect command. $inspect should be used before $warnremove to ensures
+        you are removing the right warning. This command will also reduce the total amount of warnings
+        this user has, so if they get warned again, they will be punished appropriately based on the 
+        server's warn punishment configuration.
 - $warn now takes in an optional reason as a parameter. If no reason is specified with the warning,
     it will default to "No reason specified."
     - Note: The warn reason is DM'd to users.
+- $warn no longer takes in a list of users as an argument. Just one user at a time.
 - Fixed a bug with $kick where the entire reason would not be saved (only the first word).
 - Refactored the osu! module's code which should improve performance. (@CakeAndBanana)
 - If a user gets banned, but wasn't banned through Kaguya, the ban reason will default to 

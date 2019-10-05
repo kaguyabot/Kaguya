@@ -61,11 +61,22 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Warn | `{cmdPrefix}warn`, `{cmdPrefix}w`");
                     embed.WithDescription($"{Context.User.Mention} Permissions Required: **Kick Members**" +
                         $"\n" +
-                        $"\nWarns a user. This will add a (currently non-revocable) warning to a user (typically for a rule violation of some sort)." +
+                        $"\nWarns a user. This will add a warning to a user (typically for a rule violation of some sort)." +
                         $"\nThe user will know they have been warned when this command is executed (they will be DM'd with who warned them)." +
                         $"\nIf a user reaches a certain number of warnings required to trigger a \"punishment\", they will be punished according to the server's `{cmdPrefix}warnset` configuration." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}warn <user {{ID, Name, Mention}}>`");
+                    await BE(); break;
+                case "warnremove":
+                    embed.WithTitle($"Help: Warn Remove | `{cmdPrefix}warnremove`");
+                    embed.WithDescription($"{Context.User.Mention} Permissions Required: **Ban Members**" +
+                        $"\n" +
+                        $"\nRemoves a warning from a user. This command takes an `index` as an argument. If you use the `{cmdPrefix}inspect` command " +
+                        $"on a user, it will show all of their warnings, as well as what index the warning is: \"[Warning #..]\". This command reduces " +
+                        $"the total amount of logged warnings as well, so if the server's warning punishment scheme is set to, say, ban members after three warnings, " +
+                        $"and the user you are removing the warning from previously had two warnings, they will not be banned on the next warning." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}warnremove <user> <index>`");
                     await BE(); break;
                 case "warnoptions":
                 case "wo":
@@ -94,6 +105,18 @@ namespace Kaguya.Modules.Help
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}inspect <user>`");
                     embed.WithFooter("This command only displays punishments made after Kaguya V1.32");
+                    await BE(); break;
+                case "remindme":
+                    embed.WithTitle($"Help: Remind Me | `{cmdPrefix}remindme`");
+                    embed.WithDescription($"{Context.User.Mention} This command lets you tell me to remind you to do something!\n" +
+                        $"\nWant me to remind you to walk your dog in 30 minutes?" +
+                        $"\nUse `{cmdPrefix}remindme 30m Walk my dog.`\n" +
+                        $"\nNeed to send your mom a birthday card in 5 days, 22 hours, 18 minutes, and 35 seconds?" +
+                        $"\nUse `{cmdPrefix}remindme 5d22h18m35s Send mom a birthday card.`" +
+                        $"\n\n" +
+                        $"\nAfter the specified time, I will send you a DM (if your DMs are open) reminding you to do whatever task you specified." +
+                        $"\n" +
+                        $"\nSyntax: `{cmdPrefix}remindme <time[#d#h#m#s]> <text>`");
                     await BE(); break;
                 case "toggleannouncements":
                     embed.WithTitle($"Help: Toggle Announcements | `{cmdPrefix}toggleannouncements`");
