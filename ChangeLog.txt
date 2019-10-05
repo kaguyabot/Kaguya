@@ -7,41 +7,7 @@ Changelog:
 
 Version 1.32
 
-NEW COMMAND: $remindme
-- $remindme allows users to setup reminders for themselves. After a specified time,
-    Kaguya will DM you reminding you to do whatever it is you requested!
-    - Syntax: $remindme <time[#d#h#m#s]> <text>
-    - Example: $remindme 2d18h5m Send my mom a birthday text.
-- NEW COMMAND: $inspect
-    - $inspect allows moderators (anyone with the ban members permission) to view a list of 
-        past punishments for users in the server. This will display all reasons for warnings, kicks, 
-        and/or bans, up to 15 results. This ONLY works if you warn/kick/ban the user with Kaguya 
-        using $kick/$ban, NOT through Discord itself.
-- NEW COMMAND: $warnremove
-    - $warnremove allows server moderators (anyone with the ban members permission) to remove
-        a warning for a user. If you say $warnremove Stage 3, it will remove Stage's third warning,
-        as listed with the $inspect command. $inspect should be used before $warnremove to ensures
-        you are removing the right warning. This command will also reduce the total amount of warnings
-        this user has, so if they get warned again, they will be punished appropriately based on the 
-        server's warn punishment configuration.
-- $warn now takes in an optional reason as a parameter. If no reason is specified with the warning,
-    it will default to "No reason specified."
-    - Note: The warn reason is DM'd to users.
-- $warn no longer takes in a list of users as an argument. Just one user at a time.
-- Fixed a bug with $kick where the entire reason would not be saved (only the first word).
-- Refactored the osu! module's code which should improve performance. (@CakeAndBanana)
-- If a user gets banned, but wasn't banned through Kaguya, the ban reason will default to 
-    "No reason specified." Instead of "``" .
-    (If you want ban reasons to show in the log, they must be banned with Kaguya!)
-- Guild names will now be properly stored when Kaguya joins a new guild.
-- Same for usernames ^
-- Total command count is now logged for all servers.
-- $stats no longer shows the bot's CPU usage (it was consistently wrong).
-- $osutop will now show how long ago the play was made (requested by Mr. Giroux#1784)
-- $osutop is now limited to 7 requests at a time (was 10).
-- Fixed some missing emotes in the osu! beatmap link parser.
-- Fixed a bug where users who were muted with a set duration would never be unmuted. 
-    (Unmute times are now accurate to 2.5 seconds)
+This update is really freakin big. All info found here: https://pastebin.com/A96txN4m
 
 Version 1.31.1
 
