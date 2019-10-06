@@ -156,7 +156,6 @@ namespace Kaguya.Modules
             {
                 string playerRecentString = "";
                 DateTime date = new DateTime();
-                int totalcount = playerRecentObjectList.Count;
 
                 foreach (var playerRecentObject in playerRecentObjectList)
                 {
@@ -167,7 +166,7 @@ namespace Kaguya.Modules
                         $"▸ **Map Completion:** `{playerRecentObject.completion}%`\n" +
                         $"▸ **Full Combo Percentage:** `{(((double)playerRecentObject.maxcombo / (double)playerRecentObject.beatmap.max_combo) * 100).ToString("N2")}%`\n";
 
-                    if (playerRecentObject == playerRecentObjectList[totalcount - 1])
+                    if (playerRecentObject == playerRecentObjectList[playerRecentObjectList.Count - 1])
                     {
                         playerRecentString += $"▸ **PP for FC**: `{playerRecentObject.fullcombopp.ToString("N0")}pp`";
                     }
