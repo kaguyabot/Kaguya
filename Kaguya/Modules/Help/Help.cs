@@ -1036,6 +1036,7 @@ namespace Kaguya.Modules.Help
                         $"\n{cmdPrefix}warnset [ws]" +
                         $"\n{cmdPrefix}warnoptions [wo]" +
                         $"\n{cmdPrefix}warnpunishments [wp]" +
+                        $"\n{cmdPrefix}warnremove" +
                         $"\n{cmdPrefix}whitelist [wl]" +
                         $"\n" +
                         $"\nType {cmdPrefix}h <command> for more information on a specific command." +
@@ -1083,6 +1084,7 @@ namespace Kaguya.Modules.Help
                 $"\n{cmdPrefix}deletevoicechannel [dvc]" +
                 $"\n{cmdPrefix}inrole" +
                 $"\n{cmdPrefix}prefix" +
+                $"\n{cmdPrefix}remindme" +
                 $"\n{cmdPrefix}stats" +
                 $"\n{cmdPrefix}toggleannouncements" +
                 $"\n" +
