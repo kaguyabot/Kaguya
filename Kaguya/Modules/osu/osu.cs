@@ -165,7 +165,7 @@ namespace Kaguya.Modules
                         $"▸ **Combo:** `{playerRecentObject.maxcombo.ToString("N0")}x / {playerRecentObject.beatmap.max_combo.ToString("N0")}x`\n" +
                         $"▸ [300 / 100 / 50 / X]: `[{playerRecentObject.count300} / {playerRecentObject.count100} / {playerRecentObject.count50} / {playerRecentObject.countmiss}]`\n" +
                         $"▸ **Map Completion:** `{playerRecentObject.completion}%`\n" +
-                        $"▸ **Full Combo Percentage:** `{((playerRecentObject.maxcombo / playerRecentObject.beatmap.max_combo) * 100).ToString("N2")}%`\n";
+                        $"▸ **Full Combo Percentage:** `{(((double)playerRecentObject.maxcombo / (double)playerRecentObject.beatmap.max_combo) * 100).ToString("N2")}%`\n";
 
                     if (playerRecentObject == playerRecentObjectList[totalcount - 1])
                     {
