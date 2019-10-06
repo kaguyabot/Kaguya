@@ -139,11 +139,11 @@ namespace Kaguya.Core.Osu
             }
             if (day > 1)
             {
-                timestamp += $"{day} days and ";
+                timestamp += $"{day} days ";
             }
             if (day == 1)
             {
-                timestamp += $"{day} day and ";
+                timestamp += $"{day} day ";
             }
             if (hour == 1)
             {
