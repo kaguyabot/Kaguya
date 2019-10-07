@@ -74,7 +74,7 @@ namespace Kaguya
             if (guild.IsBlacklisted) { return; }
 
             if (guild.BlacklistedChannels.Contains(msg.Channel.Id) && !((msg.Author as IGuildUser).GuildPermissions.Administrator)) { return; }
-            else if(!guild.WhitelistedChannels.Contains(msg.Channel.Id) && guild.WhitelistedChannels.Count > 0 && !((msg.Author as IGuildUser).GuildPermissions.Administrator)) { return; }
+            else if (!guild.WhitelistedChannels.Contains(msg.Channel.Id) && guild.WhitelistedChannels.Count > 0 && !((msg.Author as IGuildUser).GuildPermissions.Administrator)) { return; }
 
             var context = new ShardedCommandContext(_client, msg);
 
@@ -100,8 +100,11 @@ namespace Kaguya
             var result = await _commands.ExecuteAsync(context, argPos, _services);
             stopWatch.Stop();
 
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
+                string filePath = $"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.csv";
+                File.AppendAllText(filePath, $"{s.Content},User: {s.Author},Time: {DateTime.Now.ToLongTimeString()}\n");
+
                 consoleLogger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
                 userAccount.RecentlyUsedCommands.Add(msg.Content.ToLower());
 
@@ -156,14 +159,8 @@ namespace Kaguya
                         break;
                 }
 
-                string filePath = $"{Directory.GetCurrentDirectory()}/Logs/FailedCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
-                File.AppendAllText(filePath, $"{s.Content} - User: {s.Author} - Time: {DateTime.Now.ToLongTimeString()}\n");
-            }
-
-            if (result.IsSuccess)
-            {
-                string filePath = $"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
-                File.AppendAllText(filePath, $"{s.Content} - User: {s.Author} - Time: {DateTime.Now.ToLongTimeString()}\n");
+                string filePath = $"{Directory.GetCurrentDirectory()}/Logs/FailedCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.csv";
+                File.AppendAllText(filePath, $"{s.Content},User: {s.Author},Time: {DateTime.Now.ToLongTimeString()}\n");
             }
         }
     }

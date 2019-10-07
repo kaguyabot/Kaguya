@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Core.Server_Files;
 using Kaguya.Core.Embed;
-using NekosSharp;
 using Discord.Addons.Interactive;
-using EmbedType = Kaguya.Core.Embed.EmbedColor;
 using System.Collections.Generic;
 
 namespace Kaguya.Modules.Fun

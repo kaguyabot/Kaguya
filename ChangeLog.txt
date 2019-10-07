@@ -5,9 +5,13 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
+Version 1.33
+
+- Successful and Unsuccessful command logs are now formated as a CSV.
+
 Version 1.32
 
-This update is really freakin big. All info found here: https://pastebin.com/A96txN4m
+- This update is really freakin big. All info found here: https://pastebin.com/A96txN4m
 
 Version 1.31.1
 
