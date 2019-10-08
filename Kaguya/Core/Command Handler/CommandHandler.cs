@@ -103,7 +103,7 @@ namespace Kaguya
             if (result.IsSuccess)
             {
                 string filePath = $"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.csv";
-                File.AppendAllText(filePath, $"{s.Content},User: {s.Author},Time: {DateTime.Now.ToLongTimeString()}\n");
+                File.AppendAllText(filePath, $"{s.Content},User: {s.Author},Time: {DateTime.Now.ToLongTimeString()},Date:{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year},Server Count:{_client.Guilds.Count}\n");
 
                 consoleLogger.ConsoleCommandLog(context, stopWatch.ElapsedMilliseconds);
                 userAccount.RecentlyUsedCommands.Add(msg.Content.ToLower());
@@ -160,7 +160,7 @@ namespace Kaguya
                 }
 
                 string filePath = $"{Directory.GetCurrentDirectory()}/Logs/FailedCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.csv";
-                File.AppendAllText(filePath, $"{s.Content},User: {s.Author},Time: {DateTime.Now.ToLongTimeString()}\n");
+                File.AppendAllText(filePath, $"{s.Content},User: {s.Author},Time: {DateTime.Now.ToLongTimeString()},Date:{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year},Server Count:{_client.Guilds.Count}\n");
             }
         }
     }

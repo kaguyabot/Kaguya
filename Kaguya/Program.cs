@@ -130,27 +130,16 @@ namespace Kaguya
 
             foreach(var guild in mutualGuilds)
             {
-                for (int j = 0; j <= guild.MemberCount; j++)
-                {
-                    memberCount++;
-                }
-
-                for (int k = 0; k < guild.TextChannels.Count; k++)
-                {
-                    textChannelCount++;
-                }
-
-                for (int l = 0; l < guild.VoiceChannels.Count; l++)
-                {
-                    voiceChannelCount++;
-                }
+                memberCount += guild.MemberCount;
+                textChannelCount += guild.TextChannels.Count;
+                voiceChannelCount += guild.VoiceChannels.Count;
             }
 
             Logger logger = new Logger();
             logger.ConsoleShardAdvisory($"Kaguya shard {shard.ShardId} cleared for takeoff! " +
                 $"Servicing {mutualGuilds.Count.ToString("N0")} guilds and {memberCount.ToString("N0")} members!");
 
-            if((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMinutes < 30)
+            if((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMinutes < 3)
             {
                 Global.TotalMemberCount += memberCount;
                 Global.TotalTextChannels += textChannelCount;
