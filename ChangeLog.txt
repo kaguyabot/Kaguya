@@ -5,9 +5,11 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
-Version 1.33
+Version 1.32.1
 
 - Successful and Unsuccessful command logs are now formated as a CSV.
+- Disabled $remindme command temporarily.
+- Made the unmute timer much more stable.
 
 Version 1.32
 

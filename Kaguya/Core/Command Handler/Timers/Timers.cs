@@ -35,53 +35,53 @@ namespace Kaguya.Core.Command_Handler
         private int resourcesBackupTimersActive = 0;
         private int messageReceivedTimersActive = 0;
 
-        public Task RemindTimer(DiscordSocketClient client)
-        {
-            Timer timer = new Timer(5000); //5.00 seconds
-            timer.Enabled = true;
-            timer.Elapsed += (sender, e) => Remind_Timer_Elapsed(sender, e, client);
-            return Task.CompletedTask;
-        }
+        //public Task RemindTimer(DiscordSocketClient client)
+        //{
+        //    Timer timer = new Timer(5000); //5.00 seconds
+        //    timer.Enabled = true;
+        //    timer.Elapsed += (sender, e) => Remind_Timer_Elapsed(sender, e, client);
+        //    return Task.CompletedTask;
+        //}
 
-        private async void Remind_Timer_Elapsed(object sender, ElapsedEventArgs e, DiscordSocketClient client)
-        {
-            var users = UserAccounts.UserAccounts.GetAllAccounts();
+        //private async void Remind_Timer_Elapsed(object sender, ElapsedEventArgs e, DiscordSocketClient client)
+        //{
+        //    var users = UserAccounts.UserAccounts.GetAllAccounts();
 
-            foreach(var user in users)
-            {
-                if(user.Reminders != null)
-                {
-                    foreach(var item in user.Reminders.ToList())
-                    {
-                        var remindTime = item.Values.FirstOrDefault();
-                        if(DateTime.Now.ToOADate() > remindTime)
-                        {
-                            var socketUser = client.GetUser(user.ID);
+        //    foreach(var user in users)
+        //    {
+        //        if(user.Reminders != null)
+        //        {
+        //            foreach(var item in user.Reminders.ToList())
+        //            {
+        //                var remindTime = item.Values.FirstOrDefault();
+        //                if(DateTime.Now.ToOADate() > remindTime)
+        //                {
+        //                    var socketUser = client.GetUser(user.ID);
 
-                            try
-                            {
-                                embed.WithTitle("⚠ Kaguya Reminder");
-                                embed.WithDescription($"`{item.Keys.FirstOrDefault()}`");
-                                embed.SetColor(EmbedColor.BLUE);
+        //                    try
+        //                    {
+        //                        embed.WithTitle("⚠ Kaguya Reminder");
+        //                        embed.WithDescription($"`{item.Keys.FirstOrDefault()}`");
+        //                        embed.SetColor(EmbedColor.BLUE);
 
-                                await socketUser.SendMessageAsync(embed: embed.Build());
-                            }
-                            catch (NullReferenceException ex)
-                            {
-                                user.Reminders.Remove(item);
-                                logger.ConsoleCriticalAdvisory(ex, $"User {socketUser} requested a reminder, but their DMs are disabled, " +
-                                    $"meaning I cannot send them their reminder.");
-                                break;
-                            }
+        //                        await socketUser.SendMessageAsync(embed: embed.Build());
+        //                    }
+        //                    catch (NullReferenceException ex)
+        //                    {
+        //                        user.Reminders.Remove(item);
+        //                        logger.ConsoleCriticalAdvisory(ex, $"User {socketUser} requested a reminder, but their DMs are disabled, " +
+        //                            $"meaning I cannot send them their reminder.");
+        //                        break;
+        //                    }
 
-                            logger.ConsoleInformationAdvisory($"User {socketUser} has been successfully reminded to " +
-                                    $"\"{item.Keys.FirstOrDefault()}\"");
-                            user.Reminders.Remove(item);
-                        }
-                    }
-                }
-            }
-        }
+        //                    logger.ConsoleInformationAdvisory($"User {socketUser} has been successfully reminded to " +
+        //                            $"\"{item.Keys.FirstOrDefault()}\"");
+        //                    user.Reminders.Remove(item);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         public Task UnMuteTimer(DiscordSocketClient client)
         {
@@ -100,7 +100,7 @@ namespace Kaguya.Core.Command_Handler
                 var socketGuild = client.GetGuild(guild.ID);
                 var mutedMembers = guild.MutedMembers;
 
-                if(mutedMembers != null)
+                if(mutedMembers != null && socketGuild != null)
                 {
                     try
                     {

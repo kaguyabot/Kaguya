@@ -32,77 +32,80 @@ namespace Kaguya.Modules.Utility
         [Command("remindme")]
         public async Task RemindMe(string time, [Remainder]string text)
         {
-            var user = UserAccounts.GetAccount(Context.User);
-            var regex = new Regex("/([0-9])*s|([0-9])*m|([0-9])*h|([0-9])*d/g");
+            //var user = UserAccounts.GetAccount(Context.User);
+            //var regex = new Regex("/([0-9])*s|([0-9])*m|([0-9])*h|([0-9])*d/g");
 
-            Regex[] regexs = {
-            new Regex("(([0-9])*s)"),
-            new Regex("(([0-9])*m)"),
-            new Regex("(([0-9])*h)"),
-            new Regex("(([0-9])*d)") };
+            //Regex[] regexs = {
+            //new Regex("(([0-9])*s)"),
+            //new Regex("(([0-9])*m)"),
+            //new Regex("(([0-9])*h)"),
+            //new Regex("(([0-9])*d)") };
 
-            var s = regexs[0].Match(time).Value;
-            var m = regexs[1].Match(time).Value;
-            var h = regexs[2].Match(time).Value;
-            var d = regexs[3].Match(time).Value;
+            //var s = regexs[0].Match(time).Value;
+            //var m = regexs[1].Match(time).Value;
+            //var h = regexs[2].Match(time).Value;
+            //var d = regexs[3].Match(time).Value;
 
-            var seconds = s.Split('s').First();
-            var minutes = m.Split('m').First();
-            var hours = h.Split('h').First();
-            var days = d.Split('d').First();
+            //var seconds = s.Split('s').First();
+            //var minutes = m.Split('m').First();
+            //var hours = h.Split('h').First();
+            //var days = d.Split('d').First();
 
-            int.TryParse(seconds, out int sec);
-            int.TryParse(minutes, out int min);
-            int.TryParse(hours, out int hour);
-            int.TryParse(days, out int day);
+            //int.TryParse(seconds, out int sec);
+            //int.TryParse(minutes, out int min);
+            //int.TryParse(hours, out int hour);
+            //int.TryParse(days, out int day);
 
-            TimeSpan timeSpan = new TimeSpan(day, hour, min, sec);
+            //TimeSpan timeSpan = new TimeSpan(day, hour, min, sec);
 
-            string s1 = " seconds";
-            string m1 = " minutes";
-            string h1 = " hours";
-            string d1 = " days";
+            //string s1 = " seconds";
+            //string m1 = " minutes";
+            //string h1 = " hours";
+            //string d1 = " days";
 
-            if (sec < 1)
-                s1 = null;
-            if (min < 1)
-                m1 = null;
-            if (hour < 1)
-                h1 = null;
-            if (day < 1)
-                d1 = null;
+            //if (sec < 1)
+            //    s1 = null;
+            //if (min < 1)
+            //    m1 = null;
+            //if (hour < 1)
+            //    h1 = null;
+            //if (day < 1)
+            //    d1 = null;
 
-            if (sec == 1)
-                s1 = " second";
-            if (min == 1)
-                m1 = " minute";
-            if (hour == 1)
-                h1 = " hour";
-            if (day == 1)
-                d1 = " day";
+            //if (sec == 1)
+            //    s1 = " second";
+            //if (min == 1)
+            //    m1 = " minute";
+            //if (hour == 1)
+            //    h1 = " hour";
+            //if (day == 1)
+            //    d1 = " day";
 
-            if (s1 == null && m1 == null && h1 == null && d1 == null)
-            {
-                embed.WithDescription($"{Context.User.Mention} You must specify a time of at least `1s` for me to remind you for.");
-                embed.SetColor(EmbedColor.RED);
-                await BE();
-                return;
-            }
+            //if (s1 == null && m1 == null && h1 == null && d1 == null)
+            //{
+            //    embed.WithDescription($"{Context.User.Mention} You must specify a time of at least `1s` for me to remind you for.");
+            //    embed.SetColor(EmbedColor.RED);
+            //    await BE();
+            //    return;
+            //}
 
-            double remindTime = DateTime.Now.AddSeconds(timeSpan.TotalSeconds).ToOADate();
+            //double remindTime = DateTime.Now.AddSeconds(timeSpan.TotalSeconds).ToOADate();
 
-            Dictionary<string, double> reminderDictionary = new Dictionary<string, double>();
-            reminderDictionary.Add(text, remindTime);
-            user.Reminders.Add(reminderDictionary);
+            //Dictionary<string, double> reminderDictionary = new Dictionary<string, double>();
+            //reminderDictionary.Add(text, remindTime);
+            //user.Reminders.Add(reminderDictionary);
 
-            embed.WithDescription($"{Context.User.Mention} I will remind you to `{text}` " +
-                $"in `{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1}`");
-            embed.WithFooter($"Note: You must have DMs open to server members (at least for this server), " +
-                $"or else your reminder will not be delivered!!");
-            embed.SetColor(EmbedColor.BLUE);
+            //embed.WithDescription($"{Context.User.Mention} I will remind you to `{text}` " +
+            //    $"in `{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1}`");
+            //embed.WithFooter($"Note: You must have DMs open to server members (at least for this server), " +
+            //    $"or else your reminder will not be delivered!!");
+            //embed.SetColor(EmbedColor.BLUE);
+            //await BE();
+            //logger.ConsoleGuildAdvisory(Context.Guild, $"User has requested to be reminded in " +
+            //    $"{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1} to \"{text}\"");
+
+            embed.WithDescription($"{Context.User.Mention} My apologies, but this command has been temporarily disabled due to a stability issues.");
             await BE();
-            logger.ConsoleGuildAdvisory(Context.Guild, $"User has requested to be reminded in " +
-                $"{days}{d1} {hours}{h1} {minutes}{m1} {seconds}{s1} to \"{text}\"");
         }
 
         [Command("changelog")]
