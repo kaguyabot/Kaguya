@@ -185,7 +185,7 @@ namespace Kaguya.Modules.Utility
                 $"\nID: `146092837723832320`");
 
             embed.AddField("Command Stats",
-                $"Commands Run Today: **`{File.ReadAllLines($"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt").Count().ToString("N0")}`**");
+                $"Commands Run Today: **`{File.ReadAllLines($"{Directory.GetCurrentDirectory()}/Logs/SuccessfulCommandLogs/KaguyaLogger_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.csv").Count().ToString("N0")}`**");
 
             embed.AddField($"Shard Stats",
                 $"Version: **`{Utilities.GetAlert("VERSION")}`**" +

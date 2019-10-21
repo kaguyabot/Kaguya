@@ -47,14 +47,14 @@ namespace Kaguya.Core.Command_Handler
         {
             var users = UserAccounts.UserAccounts.GetAllAccounts();
 
-            foreach(var user in users)
+            foreach (var user in users)
             {
-                if(user.Reminders != null)
+                if (user.Reminders != null)
                 {
-                    foreach(var item in user.Reminders.ToList())
+                    foreach (var item in user.Reminders.ToList())
                     {
                         var remindTime = item.Values.FirstOrDefault();
-                        if(DateTime.Now.ToOADate() > remindTime)
+                        if (DateTime.Now.ToOADate() > remindTime)
                         {
                             var socketUser = client.GetUser(user.ID);
 
@@ -100,7 +100,7 @@ namespace Kaguya.Core.Command_Handler
                 var socketGuild = client.GetGuild(guild.ID);
                 var mutedMembers = guild.MutedMembers;
 
-                if(mutedMembers != null)
+                if(mutedMembers != null && socketGuild != null)
                 {
                     try
                     {
