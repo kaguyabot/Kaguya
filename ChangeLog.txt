@@ -5,6 +5,10 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
+Version 1.32.3
+
+- *Actually* re-enabled the $remindme command.
+
 Version 1.32.2
 
 - Fixed $stats and $changelog.

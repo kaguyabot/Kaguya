@@ -62,7 +62,7 @@ namespace Kaguya
                     _client.ShardReady += timers.RateLimitResetTimer;
                     _client.ShardReady += timers.ProcessCPUTimer;
                     _client.ShardReady += timers.UnMuteTimer;
-                    //_client.ShardReady += timers.RemindTimer;
+                    _client.ShardReady += timers.RemindTimer;
 
                     _client.MessageReceived += logger.osuLinkParser;
                     _client.JoinedGuild += logger.JoinedNewGuild;
