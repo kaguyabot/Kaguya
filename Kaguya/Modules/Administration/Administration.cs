@@ -516,7 +516,7 @@ namespace Kaguya.Modules.Administration
         [Command("assignrole")]
         [Alias("ar")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
-        [RequireBotPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task AssignRole(string roleName, [Remainder]List<SocketGuildUser> users)
         {
             var roles = Context.Guild.Roles;
@@ -537,7 +537,7 @@ namespace Kaguya.Modules.Administration
         [Command("removerole")]
         [Alias("rr")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
-        [RequireBotPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task RemoveRole(string roleName, [Remainder]List<SocketGuildUser> users)
         {
             var roles = Context.Guild.Roles;

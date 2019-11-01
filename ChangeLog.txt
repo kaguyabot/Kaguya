@@ -5,6 +5,16 @@ the $Changelog command. Write "changelog" instead.
 
 Changelog:
 
+Version 1.33
+
+- Altered $nsfw to be more resource friendly.
+- NSFW command cooldowns may no longer be reset by voting, and the NSFW commands have been reworked.
+    - 1 NSFW image is earned every 2hrs 40m (9 per day).
+    - When $n bomb is used, 3 images are consumed out of your "image stock" so to speak.
+    - When the $n and $n gif commands are used, 1 image is consumed.
+- Updated a few help commands, and fixed some ones that were wrong or misleading.
+- Removed useless $m lyrics command.
+
 Version 1.32.3
 
 - *Actually* re-enabled the $remindme command.

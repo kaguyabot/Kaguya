@@ -489,21 +489,23 @@ namespace Kaguya.Modules.Help
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Ban Members**" +
                         $"\n" +
                         $"\nBans an individual member from the server." +
-                        $"\nSyntax: `{cmdPrefix}ban @User#0000`.");
+                        $"\nSyntax: `{cmdPrefix}ban <User>`.");
                     await BE(); break;
                 case "massban":
                     embed.WithTitle($"Help: Mass Banning of Users | `{cmdPrefix}massban`");
                     embed.WithDescription($"**{Context.User.Mention} Permissions Required: Administrator**" +
                         $"\n" +
-                        $"\nTakes a list of mentioned users and permanently bans them simultaneously." +
-                        $"\nSyntax: `{cmdPrefix}massban @mentioneduser#0001 @otheruser#0002 @smellysushi#2623 [...]`");
+                        $"\nTakes a list of mentioned users and permanently bans them simultaneously. This could be one or multiple users, " +
+                        $"and you only separate users by spaces." +
+                        $"\nSyntax: `{cmdPrefix}massban <User> [...]`");
                     await BE(); break;
                 case "masskick":
                     embed.WithTitle($"Help: Mass Kicking of Users | `{cmdPrefix}masskick`");
                     embed.WithDescription($"**{Context.User.Mention} Permissions Required: Administrator**" +
                         $"\n" +
-                        $"\nTakes a list of mentioned users and kicks them simultaneously." +
-                        $"\nSyntax: `{cmdPrefix}masskick @bullyHunter#0001 @stinkysushi#0002 @smellysushi#2623 [...]`");
+                        $"\nTakes a list of mentioned users and kicks them simultaneously. This could be one or multiple users, " +
+                        $"and you only separate users by spaces." +
+                        $"\nSyntax: `{cmdPrefix}masskick <User> [...]`");
                     await BE(); break;
                 case "removeallroles":
                 case "rar":
@@ -511,25 +513,27 @@ namespace Kaguya.Modules.Help
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
                         "\n" +
                         "\nRemoves all roles from the specified user." +
-                        $"\nSyntax: `{cmdPrefix}removeallroles @User#0000`.");
+                        $"\nSyntax: `{cmdPrefix}removeallroles <User>`.");
                     await BE(); break;
                 case "removerole":
                 case "rr":
                     embed.WithTitle($"Help: Removing Roles | `{cmdPrefix}removerole`, `{cmdPrefix}rr`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
                         "\n" +
-                        "\nRemoves the role from the specified user(s). This may be a list of users!" +
-                        $"\nSyntax: `{cmdPrefix}removerole <role> <@User#0000>`." +
-                        $"\nSyntax: `{cmdPrefix}rr <role> <Name / ID / @User#0000> [any subsequent users]`");
+                        "\nRemoves the role from a list of users. This could be one or multiple users, " +
+                        $"and you only separate users by spaces." +
+                        $"\nSyntax: `{cmdPrefix}removerole <role> <User> [...]`." +
+                        $"\nSyntax: `{cmdPrefix}rr <role> <User> [...]`");
                     await BE(); break;
-                case "addrole":
+                case "assignrole":
                 case "ar":
-                    embed.WithTitle($"Help: Adding Roles | `{cmdPrefix}addrole`, `{cmdPrefix}ar`");
+                    embed.WithTitle($"Help: Adding Roles | `{cmdPrefix}assignrole`, `{cmdPrefix}ar`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Manage Roles**" +
                         "\n" +
-                        "\nAdds the role to the specified user(s)." +
-                        $"\nSyntax: `{cmdPrefix}addrole @User#0000`." +
-                        $"\nSyntax: `{cmdPrefix}ar <Name> <ID> <@Name#0000> <20945832042384>`");
+                        "\nAdds the specified role to a list of users. This could be one or multiple users, " +
+                        $"and you only separate users by spaces." +
+                        $"\nSyntax: `{cmdPrefix}assignrole <Role> <User> [...]`." +
+                        $"\nSyntax: `{cmdPrefix}ar <Role> <User> [...]`");
                     await BE(); break;
                 case "deleterole":
                 case "dr":
@@ -679,9 +683,9 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Channel Whitelisting | `{cmdPrefix}channelwhitelist`, `{cmdPrefix}cwl`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
-                        $"\nAllows a server administrator to whitelist a channel (or multiple, subsequent channels). Whitelisted " +
+                        $"\nAllows a server administrator to whitelist a channel. Whitelisted " +
                         $"channels are the only channels that Kaguya will respond to commands from. Using this command clears " +
-                        $"any blacklisted channels this server has specified, so keep that in mind. Administrators are immune to whitelists." +
+                        $"any blacklisted channels this server has specified, so keep that in mind. Server administrators bypass whitelists." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}channelwhitelist #<channel>`" +
                         $"\nSyntax: `{cmdPrefix}cwl <channel-name/ID>`");
@@ -693,7 +697,7 @@ namespace Kaguya.Modules.Help
                         $"\n" +
                         $"\nAllows a server administrator to blacklist a channel (or multiple, subsequent channels). Blacklisted " +
                         $"channels are channels that Kaguya will not respond to. Use of this command clears any whitelisted channels " +
-                        $"in the server. Administrators are immune to blacklists." +
+                        $"in the server. Server administrators bypass blacklists." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}channelblacklist #<channel>`" +
                         $"\nSyntax: `{cmdPrefix}cbl <channel-name/ID>`");
@@ -703,7 +707,7 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Channel Un-Blacklisting | `{cmdPrefix}channelunblacklist`, `{cmdPrefix}cubl`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
-                        $"\nAllows a server administrator to un-blacklist a channel (or multiple, subsequent channels). Blacklisted " +
+                        $"\nAllows a server administrator to un-blacklist a channel. Blacklisted " +
                         $"channels are channels that Kaguya will not respond to. Use this command to re-allow command execution in the specified channel." +
                         $"\n" +
                         $"\nSyntax: `{cmdPrefix}channelunblacklist #<channel>`" +
@@ -714,7 +718,7 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: Channel Un-Whitelisting | `{cmdPrefix}channelunwhitelist`, `{cmdPrefix}cuwl`");
                     embed.WithDescription($"{Context.User.Mention} **Permissions Required: Administrator**" +
                         $"\n" +
-                        $"\nAllows a server administrator to un-whitelist a channel (or multiple, subsequent channels). Whitelisted " +
+                        $"\nAllows a server administrator to un-whitelist a channel. Whitelisted " +
                         $"channels are channels that Kaguya will isolate for command responses. Use of this command revokes Kaguya's " +
                         $"ability to send messages in the specified channel. " +
                         $"\n" +
@@ -894,8 +898,12 @@ namespace Kaguya.Modules.Help
                     embed.WithTitle($"Help: NSFW | `{cmdPrefix}n`");
                     embed.WithDescription($"{Context.User.Mention} The `{cmdPrefix}n` command will post a 2D image (no real people) in an NSFW channel with the specified tag." +
                         $"\nWhen using the `{cmdPrefix}n` command, you may also append an optional modifier to the end like so: `{cmdPrefix}n <modifier>`." +
-                        $"\nNSFW Modifiers: `{cmdPrefix}n <bomb (Sends 5 images at once), gif>` (Select one).");
-                    embed.WithFooter($"{cmdPrefix}n bomb usage is limited to 5 uses per hour for non-supporters.");
+                        $"\nNSFW Modifiers: `{cmdPrefix}n <bomb (Sends 3 images at once), gif>` (Select one)." +
+                        $"\n" +
+                        $"\n**Note:** As of V1.32.4, one image is \"earned\" every 2h 40m. " +
+                        $"`{cmdPrefix}n` and `{cmdPrefix}n gif` each consume one image out of this \"stockpile\". " +
+                        $"`{cmdPrefix}n bomb` consumes 3 images, and may only be used if you have accrued at least 3 images.");
+                    embed.WithFooter($"All NSFW command usage is limited to 9 total images per day for non-supporters.");
                     await BE(); break;
                 case "m":
                     embed.WithTitle($"Help: Music Commands | `{cmdPrefix}m <modifier>`");
@@ -1286,7 +1294,7 @@ namespace Kaguya.Modules.Help
 
             //Future cooldown reset datetimes are always before DateTime.Now
 
-            var nbombCD = userAccount.NBombCooldownReset - DateTime.Now;
+            var nbombCD = userAccount.NSFWCooldownReset - DateTime.Now;
             var timelyCD = DateTime.Now - userAccount.LastReceivedTimelyPoints;
             var weeklyCD = DateTime.Now - userAccount.LastReceivedWeeklyPoints;
             var repCD = DateTime.Now - userAccount.LastGivenRep;
@@ -1447,7 +1455,6 @@ namespace Kaguya.Modules.Help
                     {
                         userAccount.LastUpvotedKaguya = DateTime.Now;
                         userAccount.Points += 500;
-                        userAccount.NBombUsesThisHour += 5;
 
                         embed.WithDescription($"{Context.User.Mention} Thanks for upvoting! Your rewards of `500 Kaguya Points`, `2x critical hit rate` " +
                             $"and `cooldown resets` have been applied.");
@@ -1473,7 +1480,6 @@ namespace Kaguya.Modules.Help
         [Command("supporter")]
         public async Task SupporterInfo()
         {
-            Stopwatch stopWatch = new Stopwatch();
             string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             await GlobalCommandResponses.CreateCommandResponse(Context,
