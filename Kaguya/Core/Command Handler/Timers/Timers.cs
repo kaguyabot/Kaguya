@@ -318,7 +318,7 @@ namespace Kaguya.Core.Command_Handler
         {
             if (SupporterExpTimersActive < 1)
             {
-                Timer timer = new Timer(1800000); //30 seconds
+                Timer timer = new Timer(30000); //30 seconds
                 timer.Enabled = true;
                 timer.Elapsed += Supporter_Expiration_Timer_Elapsed;
                 timer.AutoReset = true;
@@ -335,7 +335,7 @@ namespace Kaguya.Core.Command_Handler
             foreach (var account in UserAccounts.UserAccounts.GetAllAccounts())
             {
                 var difference = DateTime.Now - account.KaguyaSupporterExpiration;
-                if (difference.TotalSeconds < 0 && !account.IsSupporter) //If the supporter tag has expired.
+                if (difference.TotalSeconds < 30 && !account.IsSupporter) //If the supporter tag has expired.
                 {
                     try
                     {
