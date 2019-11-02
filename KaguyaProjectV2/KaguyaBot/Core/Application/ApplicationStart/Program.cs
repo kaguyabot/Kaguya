@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
 {
@@ -23,13 +24,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             using (var services = ConfigureServices(config))
             {
                 var client = services.GetRequiredService<DiscordShardedClient>();
+                Config _config = Config.GetOrCreateConfig();
 
                 client.ShardReady += OnReady;
                 client.Log += LogAsync;
 
                 await services.GetRequiredService<CommandHandler>().InitializeAsync();
-
-                await client.LoginAsync(TokenType.Bot, ""/* <---- TOKEN GOES HERE*/);
+                Console.ReadLine();
+                await client.LoginAsync(TokenType.Bot, _config.Token);
                 await client.StartAsync();
 
                 await Task.Delay(-1);

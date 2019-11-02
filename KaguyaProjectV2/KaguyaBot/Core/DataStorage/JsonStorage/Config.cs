@@ -11,12 +11,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
 {
     public class Config
     {
-        string Token { get; set; }
-        string DefaultPrefix { get; set; }
-        string OsuApiKey { get; set; }
-        string TillerinoApiKey { get; set; }
-        string TopGGApiKey { get; set; }
-        string TopGGAuthorizationPassword { get; set; }
+        public string Token { get; set; }
+        public string DefaultPrefix { get; set; }
+        public string OsuApiKey { get; set; }
+        public string TillerinoApiKey { get; set; }
+        public string TopGGApiKey { get; set; }
+        public string TopGGAuthorizationPassword { get; set; }
 
         public Config()
         {
@@ -28,12 +28,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
             TopGGAuthorizationPassword = "";
         }
 
-        public static void JsonDeserialization()
+        public static Config GetOrCreateConfig()
         {
-            string filePath = $"{Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\"))}\\Release\\Resources\\config.json";
-            var json = JsonConvert.SerializeObject(filePath);
+            string json;
+
+            //Navigates a few directories up
+            string filePath = $"{Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\.."))}\\Core_Data\\Resources\\config.json";
+            if (!File.Exists(filePath))
+            {
+                Config config = new Config();
 
 
+                json = JsonConvert.SerializeObject(config);
+                File.Create(filePath);
+                File.WriteAllText(filePath, json);
+                return JsonConvert.DeserializeObject<Config>(json);
+            }
+            else
+            {
+                json = File.ReadAllText(filePath);
+                return JsonConvert.DeserializeObject<Config>(json);
+            }
         }
     }
 }
