@@ -16,6 +16,7 @@
   <ItemGroup>
     <Folder Include="KaguyaBot\Core\Commands\Administration\" />
     <Folder Include="KaguyaBot\Core\DataStorage\MySQL Data\" />
+    <Folder Include="KaguyaBot\Core\Interfaces\" />
   </ItemGroup>
 
 </Project>
