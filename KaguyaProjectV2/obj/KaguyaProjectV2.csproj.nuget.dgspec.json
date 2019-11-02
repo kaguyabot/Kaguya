@@ -43,6 +43,10 @@
       "frameworks": {
         "netcoreapp2.2": {
           "dependencies": {
+            "Discord.Addons.Interactive": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
             "Discord.Net": {
               "target": "Package",
               "version": "[2.1.1, )"
