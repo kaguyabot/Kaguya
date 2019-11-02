@@ -10,10 +10,12 @@
   <ItemGroup>
     <PackageReference Include="Discord.Addons.Interactive" Version="1.0.1" />
     <PackageReference Include="Discord.Net" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="KaguyaBot\Core\Commands\Administration\" />
+    <Folder Include="KaguyaBot\Core\DataStorage\MySQL Data\" />
   </ItemGroup>
 
 </Project>
