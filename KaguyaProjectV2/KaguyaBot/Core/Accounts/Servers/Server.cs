@@ -38,7 +38,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Accounts.Servers
         int LogVoiceChannelDisconnections { get; set; }
         int LogLevelAnnouncements { get; set; }
         int LogAntiraids { get; set; }
+        int LogKaguyaUptime { get; set; }
         bool IsBlacklisted { get; set; }
+        bool AutoWarnOnBlacklistedPhrase { get; set; }
 
         public Server()
         {
@@ -69,7 +71,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Accounts.Servers
             LogVoiceChannelDisconnections = 0;
             LogLevelAnnouncements = 0;
             LogAntiraids = 0;
+            LogKaguyaUptime = 0;
             IsBlacklisted = false;
+            AutoWarnOnBlacklistedPhrase = false;
         }
     }
 }
