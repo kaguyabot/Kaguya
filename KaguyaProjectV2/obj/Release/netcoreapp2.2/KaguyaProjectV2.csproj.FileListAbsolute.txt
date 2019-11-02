@@ -8,3 +8,4 @@ C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2
 C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2\KaguyaProjectV2.AssemblyInfo.cs
 C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2\KaguyaProjectV2.dll
 C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2\KaguyaProjectV2.pdb
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2\KaguyaProjectV2.csprojAssemblyReference.cache

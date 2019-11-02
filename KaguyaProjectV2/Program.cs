@@ -8,7 +8,6 @@ namespace KaguyaProjectV2
         {
             Console.WriteLine("Hello World!");
             Console.ReadLine();
-            //xDDD
         }
     }
 }

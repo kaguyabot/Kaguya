@@ -43,6 +43,10 @@
       "frameworks": {
         "netcoreapp2.2": {
           "dependencies": {
+            "Discord.Net": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
             "Microsoft.NETCore.App": {
               "suppressParent": "All",
               "target": "Package",
