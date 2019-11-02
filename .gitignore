@@ -35,6 +35,5 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
-KaguyaProjectV2/.vs/KaguyaProjectV2/v16/.suo
 KaguyaProjectV2/Core_Data/Resources
 
