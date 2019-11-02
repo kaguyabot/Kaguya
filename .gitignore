@@ -352,4 +352,5 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 KaguyaProjectV2/Core_Data/Resources
+KaguyaProjectV2/.vs/
 
