@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
                 model = new ConfigModel();
             }
 
-            var json = JsonConvert.SerializeObject(model);
+            var json = JsonConvert.SerializeObject(model, Formatting.Indented);
             using (var writer = File.CreateText(filepath))
             {
                 await writer.WriteAsync(json);
