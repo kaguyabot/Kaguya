@@ -38,7 +38,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
             {
                 Config config = new Config();
 
-
                 json = JsonConvert.SerializeObject(config);
                 File.Create(filePath);
                 File.WriteAllText(filePath, json);
