@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             using (var services = ConfigureServices(config))
             {
                 var client = services.GetRequiredService<DiscordShardedClient>();
-                Config _config = Config.GetOrCreateConfig();
+                var _config = await Config.GetOrCreateConfigAsync();
 
                 client.ShardReady += OnReady;
                 client.Log += LogAsync;
