@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
         {
             var config = new DiscordSocketConfig
             {
-                TotalShards = 1
+                TotalShards = 2
             };
 
             using (var services = ConfigureServices(config))
