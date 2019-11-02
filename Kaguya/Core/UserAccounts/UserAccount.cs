@@ -12,7 +12,7 @@ namespace Kaguya.Core.UserAccounts
         public uint Diamonds { get; set; }
         public int Rep { get; set; }
         public int KaguyaWarnings { get; set; }
-        public int NBombUsesThisHour { get; set; }
+        public int NSFWUsesThisDay { get; set; }
         public int CommandRateLimit { get; set; }
         public int RatelimitStrikes { get; set; }
         public string NSFWAgeVerified { get; set; }
@@ -43,7 +43,7 @@ namespace Kaguya.Core.UserAccounts
         public DateTime LastReceivedWeeklyPoints { get; set; }
         public DateTime LastUpvotedKaguya { get; set; }
         public DateTime KaguyaSupporterExpiration { get; set; }
-        public DateTime NBombCooldownReset { get; set; }
+        public DateTime NSFWCooldownReset { get; set; }
         public uint LevelNumber
         {
             get
@@ -74,6 +74,7 @@ namespace Kaguya.Core.UserAccounts
             CommandRateLimit = 0;
             KaguyaWarnings = 0;
             NSFWAgeVerified = "false";
+            NSFWUsesThisDay = 0;
             OsuUsername = null;
             IsBlacklisted = false;
             LifetimeGambleWins = 0;

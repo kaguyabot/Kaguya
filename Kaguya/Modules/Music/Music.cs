@@ -28,7 +28,7 @@ namespace Kaguya.Modules.Music
 
         [Command("skip")]
         public async Task SkipTrack()
-            => await ReplyAsync("", false, await musicService.SkipTrackAsync(Context.Guild.Id, Context.Guild.Name));
+            => await ReplyAsync("", false, await musicService.SkipTrackAsync(Context.Guild.Id));
 
         [Command("volume")]
         public async Task Volume(string volume)
@@ -46,9 +46,8 @@ namespace Kaguya.Modules.Music
         public async Task Jump(int jumpNum)
             => await ReplyAsync("", false, await musicService.Jump(Context.Guild.Id, jumpNum));
 
-        [RequireSupporter]
-        [Command("Lyrics")]
-        public async Task Lyrics()
-            => await ReplyAsync("", false, await musicService.Lyrics(Context.Guild.Id));
+        //[Command("Prioritize")]
+        //public async Task Prioritize(int priorityNum)
+        //    => await ReplyAsync("", false, await musicService.Prioritize(Context.Guild.Id, priorityNum));
     }
 }

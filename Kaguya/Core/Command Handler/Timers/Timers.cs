@@ -3,7 +3,6 @@ using Discord.WebSocket;
 using Kaguya.Core.Embed;
 using Kaguya.Core.Server_Files;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
@@ -34,12 +33,47 @@ namespace Kaguya.Core.Command_Handler
         private int gameRotationTimersActive = 0;
         private int resourcesBackupTimersActive = 0;
         private int messageReceivedTimersActive = 0;
+        private int remindTimersActive = 0;
+        private int nsfwImageAddTimersActive = 0;
+
+        public Task NSFWImageTimer(DiscordSocketClient client)
+        {
+            if(nsfwImageAddTimersActive < 1)
+            {
+                Timer timer = new Timer(9600000); //2hrs 40m
+                timer.Enabled = true;
+                timer.Elapsed += NSFW_Image_Timer_Elapsed;
+            }
+            nsfwImageAddTimersActive++;
+            return Task.CompletedTask;
+        }
+
+        private void NSFW_Image_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var users = UserAccounts.UserAccounts.GetAllAccounts();
+            int i = 0;
+
+            foreach(var user in users)
+            {
+                if(user.NSFWUsesThisDay < 12)
+                {
+                    user.NSFWUsesThisDay++;
+                    i++;
+                }
+            }
+
+            logger.ConsoleTimerElapsed($"{i} users have had their NSFW uses increased by 1 for the day.");
+        }
 
         public Task RemindTimer(DiscordSocketClient client)
         {
-            Timer timer = new Timer(5000); //5.00 seconds
-            timer.Enabled = true;
-            timer.Elapsed += (sender, e) => Remind_Timer_Elapsed(sender, e, client);
+            if(remindTimersActive < 1)
+            {
+                Timer timer = new Timer(5000); //5.00 seconds
+                timer.Enabled = true;
+                timer.Elapsed += (sender, e) => Remind_Timer_Elapsed(sender, e, client);
+                remindTimersActive++;
+            }
             return Task.CompletedTask;
         }
 
@@ -284,7 +318,7 @@ namespace Kaguya.Core.Command_Handler
         {
             if (SupporterExpTimersActive < 1)
             {
-                Timer timer = new Timer(1800000); //30 seconds
+                Timer timer = new Timer(30000); //30 seconds
                 timer.Enabled = true;
                 timer.Elapsed += Supporter_Expiration_Timer_Elapsed;
                 timer.AutoReset = true;
@@ -301,7 +335,7 @@ namespace Kaguya.Core.Command_Handler
             foreach (var account in UserAccounts.UserAccounts.GetAllAccounts())
             {
                 var difference = DateTime.Now - account.KaguyaSupporterExpiration;
-                if (difference.TotalMinutes < 30 && !account.IsSupporter) //If the supporter tag has expired within 30 minutes
+                if (difference.TotalSeconds < 30 && !account.IsSupporter) //If the supporter tag has expired.
                 {
                     try
                     {
@@ -320,7 +354,7 @@ namespace Kaguya.Core.Command_Handler
                         var dmChannel = await user.GetOrCreateDMChannelAsync();
                         await dmChannel.SendMessageAsync(embed: embed.Build());
 
-                        logger.ConsoleStatusAdvisory($"{account.Username}'s supporter role has been removed (if they had one) and they have been notified.");
+                        logger.ConsoleStatusAdvisory($"{account.Username}'s supporter role has been removed (if they had one) and they have been notified of their supporter expiration.");
                     }
                     catch (Exception ex) //Continue here
                     {

@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Victoria;
 using Victoria.Entities;
-using Kaguya.Core.Embed;
 using Kaguya.Core.UserAccounts;
 
 namespace Kaguya.Modules.Music
@@ -212,7 +211,7 @@ namespace Kaguya.Modules.Music
 
         }
 
-        public async Task<Embed> SkipTrackAsync(ulong guildId, string serverName)
+        public async Task<Embed> SkipTrackAsync(ulong guildId)
         {
             var cmdPrefix = Servers.GetServer(guildId).CommandPrefix;
 
@@ -221,8 +220,11 @@ namespace Kaguya.Modules.Music
                 var player = _lavaShardClient.GetPlayer(guildId);
                 /* Check if the player exists */
                 if (player == null)
+                {
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("⏩ Music Skip", 
                         $"Could not aquire player.\nAre you using the bot right now? Check `{cmdPrefix}h m` for information on Kaguya's Music Service.");
+                }
+                    
                 if (player.Queue.Count == 0 && player.IsPlaying == true)
                 {
                     await player.StopAsync();
@@ -377,7 +379,6 @@ namespace Kaguya.Modules.Music
                     return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Queue Jump", $"You are attempting to jump to a spot in the queue that doesn't exist!" +
                         $"\nSee what is available to jump to with the `queue` command.");
                 }
-
                 else
                 {
                     for(int i = 0; i < jumpNum; i++)
@@ -390,38 +391,6 @@ namespace Kaguya.Modules.Music
             catch (Exception e)
             {
                 return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Queue Jump", e.Message);
-            }
-        }
-
-        public async Task<Embed> Lyrics(ulong guildID) //Experimental
-        {
-            try
-            {
-                var player = _lavaShardClient.GetPlayer(guildID);
-                var track = player.CurrentTrack;
-
-                if (player == null)
-                {
-                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Lyrics",
-                        "There is no currently active player.", "Use the `m leave` command while in a voice channel. " +
-                        "If the issue persists, please join my support server and ask for help.");
-                }
-
-                string lyrics = await track.FetchLyricsAsync();
-
-                if(lyrics == null)
-                {
-                    return await StaticMusicEmbedHandler.CreateErrorEmbed("Music Lyrics <a:crabPls:588362913379516442>",
-                        $"No lyrics are available for \n{track.Author} - {track.Title}");
-                }
-
-                return await StaticMusicEmbedHandler.CreateMusicEmbed($"Music Lyrics <a:Banger:588362912905822208>",
-                    $"Here are the lyrics to {track.Title}: {lyrics}");
-            }
-            catch(Exception e)
-            {
-                return await StaticMusicEmbedHandler.CreateErrorEmbed("Exception", $"{e.Message}",
-                    "If this is unexpected, please join my support server and ask for help.");
             }
         }
     }

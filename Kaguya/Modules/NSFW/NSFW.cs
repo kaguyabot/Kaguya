@@ -30,6 +30,9 @@ namespace Kaguya.Modules.NSFW
             Random rand = new Random();
             var imageCollection = Global.stillsCollection;
             var userAccount = UserAccounts.GetAccount(Context.User);
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
+            bool isSupporter = userAccount.IsSupporter;
+            Logger logger = new Logger();
 
             if (userAccount.NSFWAgeVerified == "false")
             {
@@ -57,6 +60,21 @@ namespace Kaguya.Modules.NSFW
                     await message.DeleteAsync();
                 }
             }
+
+            if (!isSupporter && userAccount.NSFWUsesThisDay < 1)
+            {
+                logger.ConsoleStatusAdvisory($"User {Context.User.Username} is out of NSFW command uses for today.");
+                embed.WithDescription($"{Context.User.Mention} You are out of NSFW command uses for today." +
+                    $"\nSupporters have unlimited NSFW command usage. Use {cmdPrefix}supporter for more information.");
+                await BE();
+                return;
+            }
+
+            if (!isSupporter)
+            {
+                userAccount.NSFWUsesThisDay -= 1;
+            }
+
             await Context.Channel.SendFileAsync(imageCollection[rand.Next(imageCollection.Length)]);
         }
 
@@ -65,7 +83,7 @@ namespace Kaguya.Modules.NSFW
         public async Task NSFWBomb()
         {
             var userAccount = UserAccounts.GetAccount(Context.User);
-            var difference = userAccount.NBombCooldownReset - DateTime.Now;
+            var difference = userAccount.NSFWCooldownReset - DateTime.Now;
             var cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
             bool isSupporter = userAccount.IsSupporter;
             Logger logger = new Logger();
@@ -98,28 +116,21 @@ namespace Kaguya.Modules.NSFW
                 }
             }
 
-            if (difference.TotalSeconds < 0)
+            if (!isSupporter && userAccount.NSFWUsesThisDay < 3)
             {
-                userAccount.NBombUsesThisHour = 5;
-                userAccount.NBombCooldownReset = DateTime.Now + TimeSpan.FromMinutes(60);
-            }
-
-            if (!isSupporter && userAccount.NBombUsesThisHour <= 0)
-            {
-                logger.ConsoleStatusAdvisory($"User {Context.User.Username} is out of \"$n bomb\" uses for this hour.");
-                embed.WithDescription($"{Context.User.Mention} You are out of `{cmdPrefix}n bomb` uses for this hour." +
-                    $"\nTo reset the cooldown, use `{cmdPrefix}vote` followed by `{cmdPrefix}voteclaim`.");
-                embed.WithFooter($"Supporters have no cooldown. For more information, use {cmdPrefix}supporter");
+                logger.ConsoleStatusAdvisory($"User {Context.User.Username} is out of NSFW command uses for today.");
+                embed.WithDescription($"{Context.User.Mention} You are out of NSFW command uses for today." +
+                    $"\nSupporters have unlimited NSFW command usage. Use {cmdPrefix}supporter for more information.");
                 await BE();
                 return;
             }
 
             if (!isSupporter)
             {
-                userAccount.NBombUsesThisHour -= 1;
+                userAccount.NSFWUsesThisDay -= 3;
             }
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 3; i++)
             {
                 var imageCollection = Global.stillsCollection;
                 await Context.Channel.SendFileAsync(imageCollection[rand.Next(imageCollection.Length)]);
@@ -134,6 +145,9 @@ namespace Kaguya.Modules.NSFW
             var imageCollection = Global.gifsCollection;
             var gif = imageCollection[rand.Next(imageCollection.Length)];
             var userAccount = UserAccounts.GetAccount(Context.User);
+            bool isSupporter = userAccount.IsSupporter;
+            Logger logger = new Logger();
+            string cmdPrefix = Servers.GetServer(Context.Guild).CommandPrefix;
 
             if (userAccount.NSFWAgeVerified == "false")
             {
@@ -160,6 +174,20 @@ namespace Kaguya.Modules.NSFW
                     await BE();
                     await message.DeleteAsync();
                 }
+            }
+
+            if (!isSupporter && userAccount.NSFWUsesThisDay < 1)
+            {
+                logger.ConsoleStatusAdvisory($"User {Context.User.Username} is out of NSFW command uses for today.");
+                embed.WithDescription($"{Context.User.Mention} You are out of NSFW command uses for today." +
+                    $"\nSupporters have unlimited NSFW command usage. Use {cmdPrefix}supporter for more information.");
+                await BE();
+                return;
+            }
+
+            if (!isSupporter)
+            {
+                userAccount.NSFWUsesThisDay -= 1;
             }
 
             await Context.Channel.SendFileAsync(gif);
