@@ -3,11 +3,11 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Discord;
-using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
+namespace KaguyaProjectV2.KaguyaBot.Core
 {
     class Program
     {
@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
                 TotalShards = 2
             };
 
-            using (var services = ConfigureServices(config))
+            using (var services = new SetupServices().ConfigureServices(config))
             {
                 var client = services.GetRequiredService<DiscordShardedClient>();
                 var _config = await Config.GetOrCreateConfigAsync();
@@ -36,15 +36,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
 
                 await Task.Delay(-1);
             }
-        }
-
-        private ServiceProvider ConfigureServices(DiscordSocketConfig config)
-        {
-            return new ServiceCollection()
-                .AddSingleton(new DiscordShardedClient(config))
-                .AddSingleton<CommandService>()
-                .AddSingleton<CommandHandler>()
-                .BuildServiceProvider();
         }
 
         private async Task OnReady(DiscordSocketClient _client)

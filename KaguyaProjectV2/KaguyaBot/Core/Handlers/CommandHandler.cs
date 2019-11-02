@@ -25,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
 
         public async Task InitializeAsync()
         {
-            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+            await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
         }
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
