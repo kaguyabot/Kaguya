@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KaguyaProjectV2
+namespace KaguyaProjectV2.KaguyaBot.Core
 {
     class Program
     {
