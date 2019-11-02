@@ -1,0 +1,10 @@
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\bin\Release\netcoreapp2.2\KaguyaProjectV2.deps.json
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\bin\Release\netcoreapp2.2\KaguyaProjectV2.runtimeconfig.json
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\bin\Release\netcoreapp2.2\KaguyaProjectV2.runtimeconfig.dev.json
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\bin\Release\netcoreapp2.2\KaguyaProjectV2.dll
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\bin\Release\netcoreapp2.2\KaguyaProjectV2.pdb
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2\KaguyaProjectV2.csproj.CoreCompileInputs.cache
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2\KaguyaProjectV2.AssemblyInfoInputs.cache
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2\KaguyaProjectV2.AssemblyInfo.cs
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2\KaguyaProjectV2.dll
+C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\obj\Release\netcoreapp2.2\KaguyaProjectV2.pdb
