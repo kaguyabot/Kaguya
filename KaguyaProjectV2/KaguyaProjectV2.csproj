@@ -28,7 +28,6 @@
     <Folder Include="KaguyaBot\Core\Commands\NSFW\" />
     <Folder Include="KaguyaBot\Core\Interfaces\" />
     <Folder Include="KaguyaBot\Core\Attributes\" />
-    <Folder Include="KaguyaBot\DataStorage\DbData\Context\" />
   </ItemGroup>
 
 </Project>
