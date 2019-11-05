@@ -26,9 +26,7 @@
     <Folder Include="KaguyaBot\Core\Commands\Supporter\" />
     <Folder Include="KaguyaBot\Core\Commands\Owner Only\" />
     <Folder Include="KaguyaBot\Core\Commands\NSFW\" />
-    <Folder Include="KaguyaBot\Core\Interfaces\" />
     <Folder Include="KaguyaBot\Core\Attributes\" />
-    <Folder Include="KaguyaBot\Core\Logger\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 

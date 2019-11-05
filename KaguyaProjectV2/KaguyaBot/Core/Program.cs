@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Discord;
@@ -30,7 +29,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 client.Log += LogAsync;
 
                 await services.GetRequiredService<CommandHandler>().InitializeAsync();
-                Console.ReadLine();
                 await client.LoginAsync(TokenType.Bot, _config.Token);
                 await client.StartAsync();
 
@@ -43,9 +41,5 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             Console.WriteLine("Shard ready!");
         }
 
-        private async Task LogAsync(LogMessage msg)
-        {
-            Console.WriteLine(msg);
-        }
     }
 }

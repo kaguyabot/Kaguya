@@ -74,6 +74,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
         }
     }
 
+    public enum LogLevel
+    {
+        DEBUG,
+        INFO,
+        WARN,
+        ERROR,
+        FATAL
+    }
+
     #region Model
     public class ConfigModel
     {
