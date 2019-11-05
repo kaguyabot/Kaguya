@@ -14,21 +14,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         static void Main(string[] args)
         => new Program().MainAsync().GetAwaiter().GetResult();
 
+        private DiscordShardedClient client;
+
         public async Task MainAsync()
         {
             var config = new DiscordSocketConfig
             {
                 TotalShards = 2
             };
+            SetupKaguya();
 
             using (var services = new SetupServices().ConfigureServices(config))
             {
-                var client = services.GetRequiredService<DiscordShardedClient>();
+                client = services.GetRequiredService<DiscordShardedClient>();
                 var _config = await Config.GetOrCreateConfigAsync();
 
                 client.ShardReady += OnReady;
                 client.Log += LogAsync;
-
+                Console.WriteLine(KaguyaBot.DataStorage.DbData.Queries.TestQueries.TestConnection());
                 await services.GetRequiredService<CommandHandler>().InitializeAsync();
                 Console.ReadLine();
                 await client.LoginAsync(TokenType.Bot, _config.Token);
@@ -36,6 +39,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                 await Task.Delay(-1);
             }
+        }
+        public void SetupKaguya()
+        {
+            _ = new KaguyaBot.DataStorage.DbData.Context.Init();
         }
 
         private async Task OnReady(DiscordSocketClient _client)
