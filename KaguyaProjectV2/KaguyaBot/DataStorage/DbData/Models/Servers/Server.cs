@@ -8,9 +8,6 @@ using System.Text;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Accounts.Servers
 {
-
-
-
     public class Server
     {
         string Name { get; set; }
