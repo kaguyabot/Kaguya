@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="KaguyaBot\Core\Commands\Administration\" />
     <Folder Include="KaguyaBot\Core\Commands\Currency\" />
     <Folder Include="KaguyaBot\Core\Commands\EXP\" />
     <Folder Include="KaguyaBot\Core\Commands\Fun\" />
