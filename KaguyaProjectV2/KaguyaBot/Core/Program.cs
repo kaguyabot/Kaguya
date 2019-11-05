@@ -29,7 +29,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 var _config = await Config.GetOrCreateConfigAsync();
 
                 client.ShardReady += OnReady;
-                client.Log += LogAsync;
                 Console.WriteLine(KaguyaBot.DataStorage.DbData.Queries.TestQueries.TestConnection());
                 await services.GetRequiredService<CommandHandler>().InitializeAsync();
                 await client.LoginAsync(TokenType.Bot, _config.Token);
