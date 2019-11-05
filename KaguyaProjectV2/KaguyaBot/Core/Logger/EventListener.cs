@@ -22,9 +22,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Logger
 
             _client.ChannelCreated += (SocketChannel channel) => 
                 Logger.Log($"Channel Created [Name: #{(channel as SocketGuildChannel).Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel).Guild}]", LogLevel.DEBUG);
-            _client.ChannelDestroyed += (SocketChannel channel) => Logger.Log($"Channel Deleted [Name: #{(channel as SocketGuildChannel).Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel).Guild}]", LogLevel.DEBUG);
+            _client.ChannelDestroyed += (SocketChannel channel) => 
+                Logger.Log($"Channel Deleted [Name: #{(channel as SocketGuildChannel).Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel).Guild}]", LogLevel.DEBUG);
             _client.ChannelUpdated += (SocketChannel channel, SocketChannel channel2) => 
-                Logger.Log($"Channel Updated [Name: #{(channel as SocketGuildChannel).Name} | New Name: #{(channel2 as SocketGuildChannel).Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel).Guild}]", LogLevel.DEBUG);
+                Logger.Log($"Channel Updated [Name: #{(channel as SocketGuildChannel).Name} | New Name: #{(channel2 as SocketGuildChannel).Name} | ID: {channel.Id} |" +
+                $" Guild: {(channel as SocketGuildChannel).Guild}]", LogLevel.DEBUG);
 
             _client.JoinedGuild += (SocketGuild guild) => Logger.Log($"Joined Guild [Name: {guild.Name} | ID: {guild.Id}]", LogLevel.INFO);
             _client.LeftGuild += (SocketGuild guild) => Logger.Log($"Left Guild [Name: {guild.Name} | ID: {guild.Id}]", LogLevel.INFO);
@@ -34,7 +36,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Logger
 
             _client.RoleCreated += (SocketRole role) => Logger.Log($"Role Created [Name: {role.Name} | ID: {role.Id} | Guild: {role.Guild}]", LogLevel.DEBUG);
             _client.RoleDeleted += (SocketRole role) => Logger.Log($"Role Deleted [Name: {role.Name} | ID: {role.Id} | Guild: {role.Guild}]", LogLevel.DEBUG);
-            _client.RoleUpdated += (SocketRole role, SocketRole role2) => Logger.Log($"Role Updated [Name: {role.Name} | New Name: {role2.Name} | ID: {role.Id} | Guild: {role.Guild}]", LogLevel.DEBUG);
+            _client.RoleUpdated += (SocketRole role, SocketRole role2) => 
+                Logger.Log($"Role Updated [Name: {role.Name} | New Name: {role2.Name} | ID: {role.Id} | Guild: {role.Guild}]", LogLevel.DEBUG);
+
+            _client.UserBanned += (SocketUser user, SocketGuild guild) => Logger.Log($"User Banned [User: {user} | ID: {user.Id} | Guild: {guild.Name}]", LogLevel.DEBUG);
+            _client.UserUnbanned += (SocketUser user, SocketGuild guild) => Logger.Log($"User Un-Banned [User: {user} | ID: {user.Id} | Guild: {guild.Name}]", LogLevel.DEBUG);
+            _client.UserJoined += (SocketGuildUser user) => Logger.Log($"User Joined Guild [User: {user} | ID: {user.Id} | Guild: {user.Guild}]", LogLevel.DEBUG);
         }
     }
 }
