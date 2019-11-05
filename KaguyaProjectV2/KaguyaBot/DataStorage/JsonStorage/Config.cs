@@ -78,6 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
     public class ConfigModel
     {
         public string Token { get; set; }
+        public int LogLevel { get; set; } = 1;
         public string DefaultPrefix { get; set; } = "$";
         public string OsuApiKey { get; set; }
         public string TopGGApiKey { get; set; }

@@ -1,8 +1,12 @@
 {
   "Token": null,
+  "LogLevel": 1,
   "DefaultPrefix": "$",
   "OsuApiKey": null,
-  "TillerinoApiKey": null,
   "TopGGApiKey": null,
-  "TopGGAuthorizationPassword": null
+  "TopGGAuthorizationPassword": null,
+  "MySQL_Username": null,
+  "MySQL_Password": null,
+  "MySQL_Server": null,
+  "MySQL_Database": null
 }
