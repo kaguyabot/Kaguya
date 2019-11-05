@@ -76,18 +76,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
 
     public enum LogLevel
     {
-        DEBUG,
-        INFO,
-        WARN,
-        ERROR,
-        FATAL
+        DEBUG = 0,
+        INFO = 1,
+        WARN = 2,
+        ERROR = 3,
+        FATAL = 4
     }
 
     #region Model
     public class ConfigModel
     {
         public string Token { get; set; }
-        public int LogLevel { get; set; } = 1;
+        public int LogLevelNumber { get; set; } = 1;
         public string DefaultPrefix { get; set; } = "$";
         public string OsuApiKey { get; set; }
         public string TopGGApiKey { get; set; }

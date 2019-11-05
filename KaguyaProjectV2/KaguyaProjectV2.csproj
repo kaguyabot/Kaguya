@@ -11,12 +11,7 @@
     <PackageReference Include="Discord.Addons.Interactive" Version="1.0.1" />
     <PackageReference Include="Discord.Net" Version="2.1.1" />
     <PackageReference Include="linq2db" Version="2.9.3" />
-    <PackageReference Include="MySql.Data" Version="8.0.18" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Parallel" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +27,7 @@
     <Folder Include="KaguyaBot\Core\Commands\Owner Only\" />
     <Folder Include="KaguyaBot\Core\Commands\NSFW\" />
     <Folder Include="KaguyaBot\Core\Attributes\" />
+    <Folder Include="KaguyaBot\Core\Interfaces\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 
