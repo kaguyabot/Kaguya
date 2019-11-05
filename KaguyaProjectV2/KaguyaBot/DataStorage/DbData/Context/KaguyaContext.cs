@@ -1,4 +1,6 @@
-﻿using LinqToDB.Configuration;
+﻿using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using LinqToDB.Configuration;
 using LinqToDB.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
     public class KaguyaSettings : ILinqToDBSettings
     {
         public IEnumerable<IDataProviderSettings> DataProviders => Enumerable.Empty<IDataProviderSettings>();
-
         public string DefaultConfiguration => "KaguyaContext";
         public string DefaultDataProvider => "MySQL";
 
@@ -27,7 +28,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
                 yield return new KaguyaContext
                 {
                     Name = "KaguyaContext",
-                    ConnectionString = "Generate connection string from config here!",
+                    ConnectionString = $"Server={GlobalProperties.MySQL_Server.Split(':').First()};Port={GlobalProperties.MySQL_Server.Split(':').Last()};" +
+                    $"Database={GlobalProperties.MySQL_Database};Uid={GlobalProperties.MySQL_Username};Pwd={GlobalProperties.MySQL_Password};charset=utf8;",
                     ProviderName = "MySql.Data.MySqlClient"
                 };
             }

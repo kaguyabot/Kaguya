@@ -23,13 +23,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Logger
             {
                 //Logs to console only if the log level is less or equally severe to what is specified in the config.
                 Console.WriteLine(contents);
+
+                if(LogFileExists())
+                    File.AppendAllText($"{logDirectory}\\{logFileName}", $"{contents}\n");
             }
 
-            //Logs to file regardless of log level.
-            if (LogFileExists())
-            {
-                File.AppendAllText($"{logDirectory}\\{logFileName}", $"{contents}\n");
-            }
             return Task.CompletedTask;
         }
 
@@ -37,6 +35,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Logger
         {
             switch (logLevel)
             {
+                case LogLevel.TRACE:
+                    return "[TRACE]:";
                 case LogLevel.DEBUG:
                     return "[DEBUG]:";
                 case LogLevel.INFO:
@@ -45,8 +45,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Logger
                     return "[WARNING]:";
                 case LogLevel.ERROR:
                     return "[ERROR]:";
-                case LogLevel.FATAL:
-                    return "[FATAL]:";
                 default: return null;
             }
         }

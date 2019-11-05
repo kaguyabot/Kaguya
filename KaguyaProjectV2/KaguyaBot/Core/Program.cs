@@ -35,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                 EventListener.Listener();
 
-                //Console.WriteLine(KaguyaBot.DataStorage.DbData.Queries.TestQueries.TestConnection());
+                Console.WriteLine(KaguyaBot.DataStorage.DbData.Queries.TestQueries.TestConnection());
 
                 await services.GetRequiredService<CommandHandler>().InitializeAsync();
                 await client.LoginAsync(TokenType.Bot, _config.Token);
@@ -55,9 +55,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void GlobalPropertySetup(ConfigModel _config)
         {
+            GlobalProperties.Client = client;
+            GlobalProperties.OsuApiKey = _config.OsuApiKey;
+            GlobalProperties.TopGGApiKey = _config.TopGGApiKey;
+            GlobalProperties.TopGGAuthorizationPassword = _config.TopGGAuthorizationPassword;
+            GlobalProperties.MySQL_Username = _config.MySQL_Username;
+            GlobalProperties.MySQL_Password = _config.MySQL_Password;
+            GlobalProperties.MySQL_Server = _config.MySQL_Server;
+            GlobalProperties.MySQL_Database = _config.MySQL_Database;
+
             //Converts int LogNum in the config file to the enum LogLevel.
             GlobalProperties.logLevel = (LogLevel)_config.LogLevelNumber;
-            GlobalProperties.client = client;
         }
     }
 }
