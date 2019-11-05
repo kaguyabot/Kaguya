@@ -1,10 +1,8 @@
-﻿using Discord.WebSocket;
-using Discord;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
+﻿using Discord;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using System;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Logger
 {
