@@ -10,12 +10,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Accounts.Servers
 {
     public class Server
     {
-        string Name { get; set; }
         uint ID { get; set; }
         string CommandPrefix { get; set; }
-        Dictionary<uint, long> MutedMembers { get; set; } //Dictionary<UserID, Duration>
+        Dictionary<uint, long> MutedUsers { get; set; } //Dictionary<UserID, Duration>
         Dictionary<int, int> WarnActions { get; set; } //Int amt of warnings, Int warnAction (perhaps use other type)
-        Dictionary<uint, int> WarnedUsers { get; set; } //Dictionary<UserID, AmtofWarnings>
+        Dictionary<uint, int> WarnedUsers { get; set; } //Dictionary<UserID, AmountofWarnings>
         Dictionary<uint, List<string>> PunishmentHistory { get; set; } //Dictionary<PunishedUserID, List<Reasons> 
                                                                         //containing all server user punishment history.
         List<string> FilteredPhrases { get; set; }
@@ -27,6 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Accounts.Servers
         int LogUserJoins { get; set; }
         int LogUserLeaves { get; set; }
         int LogBans { get; set; }
+        int LogKicks { get; set; }
         int LogUnbans { get; set; }
         int LogShadowbans { get; set; }
         int LogUnshadowbans { get; set; }
@@ -42,10 +42,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Accounts.Servers
 
         public Server()
         {
-            Name = "";
             ID = 0;
             CommandPrefix = "$";
-            MutedMembers = new Dictionary<uint, long>();
+            MutedUsers = new Dictionary<uint, long>();
             WarnActions = new Dictionary<int, int>();
             WarnedUsers = new Dictionary<uint, int>();
             PunishmentHistory = new Dictionary<uint, List<string>>();
