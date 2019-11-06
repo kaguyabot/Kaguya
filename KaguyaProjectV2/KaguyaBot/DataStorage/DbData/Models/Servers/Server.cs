@@ -21,7 +21,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Accounts.Servers
         List<string> FilteredPhrases { get; set; }
         Dictionary<uint, int> AutoAssignedRoles { get; set; } //Dictionary<RoleID, Duration> -- Duration == time before role is assigned.
         List<uint> BlacklistedChannels { get; set; }
-        List<uint> WhitelistedChannels { get; set; }
         int TotalCommandCount { get; set; }
         int LogDeletedMessages { get; set; }
         int LogUpdatedMessages { get; set; }
@@ -54,7 +53,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Accounts.Servers
             FilteredPhrases = new List<string>();
             AutoAssignedRoles = new Dictionary<uint, int>();
             BlacklistedChannels = new List<uint>();
-            WhitelistedChannels = new List<uint>();
             TotalCommandCount = 0;
             LogDeletedMessages = 0;
             LogUpdatedMessages = 0;
