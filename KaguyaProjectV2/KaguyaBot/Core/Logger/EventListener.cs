@@ -6,7 +6,7 @@ using System;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Logger
 {
-    class EventListener
+    public class EventListener
     {
         static DiscordShardedClient _client = GlobalProperties.Client;
 
