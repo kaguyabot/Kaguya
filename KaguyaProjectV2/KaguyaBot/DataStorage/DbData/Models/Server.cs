@@ -1,6 +1,10 @@
-﻿using LinqToDB.Mapping;
+﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+using LinqToDB;
+using LinqToDB.Data;
+using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -74,5 +78,40 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
         public IEnumerable<BlackListedChannels> BlackListedChannels { get; set; }
+    }
+
+    public static class Servers
+    {
+        public static IEnumerable<Server> GetAllServers()
+        {
+            using (var db = new DataConnection())
+            {
+                return db.GetTable<Server>().ToList();
+            }
+        }
+
+        public static Server GetServer(ulong Id)
+        {
+            using (var db = new DataConnection())
+            {
+                Server server = new Server();
+                
+                if(db.GetTable<Server>().Where(x => x.Id == Id).FirstOrDefault() == null)
+                {
+                    server.Id = Id;
+                    db.Insert(server, "kaguyaserver");
+                }
+
+                return db.GetTable<Server>().Where(x => x.Id == Id).FirstOrDefault();
+            }
+        }
+
+        public static void UpdateServer(Server server)
+        {
+            using (var db = new DataConnection())
+            {
+                db.InsertOrReplace<Server>(server);
+            }
+        }
     }
 }

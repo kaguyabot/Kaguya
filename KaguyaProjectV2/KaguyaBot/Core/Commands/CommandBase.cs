@@ -6,5 +6,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands
 {
     public class CommandBase
     {
+
     }
 }

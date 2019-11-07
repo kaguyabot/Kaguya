@@ -34,8 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 GlobalPropertySetup(_config);
 
                 EventListener.Listener();
-
-                Console.WriteLine(KaguyaBot.DataStorage.DbData.Queries.TestQueries.TestConnection());
+                TestDatabaseConnection();
 
                 await services.GetRequiredService<CommandHandler>().InitializeAsync();
                 await client.LoginAsync(TokenType.Bot, _config.Token);
@@ -66,6 +65,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
             //Converts int LogNum in the config file to the enum LogLevel.
             GlobalProperties.logLevel = (LogLevel)_config.LogLevelNumber;
+        }
+
+        private void TestDatabaseConnection()
+        {
+            try
+            {
+                if(KaguyaBot.DataStorage.DbData.Queries.TestQueries.TestConnection().ToString() == "True")
+                {
+                    Logger.Logger.Log("Database connection successfully established.", LogLevel.INFO);
+                }
+            }
+            catch(Exception e)
+            {
+                Logger.Logger.Log($"Failed to establish database connection. Have you properly configured your config file? \n\t{e.Message}", LogLevel.ERROR);
+            }
         }
     }
 }

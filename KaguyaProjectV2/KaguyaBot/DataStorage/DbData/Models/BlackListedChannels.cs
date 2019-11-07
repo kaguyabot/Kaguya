@@ -15,5 +15,4 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Association(ThisKey = "ServerId", OtherKey = "Id", CanBeNull = false)]
         public Server Server { get; set; }
     }
-
 }

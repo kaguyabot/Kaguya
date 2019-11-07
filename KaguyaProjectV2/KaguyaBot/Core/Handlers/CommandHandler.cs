@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using LinqToDB.Data;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
@@ -46,7 +48,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             await _commands.ExecuteAsync(context, argPos, _services);
         }
 
-        public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
+        public async Task CommandExecutedAsync(Optional<Discord.Commands.CommandInfo> command, ICommandContext context, IResult result)
         {
             // command is unspecified when there was a search failure (command not found); we don't care about these errors
             if (!command.IsSpecified)
@@ -56,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             {
                 await Logger.Logger.Log($"Command Executed [Command: {context.Message} | User: {context.User} | Channel: {context.Channel} | " +
                     $"Guild: {context.Guild}]", DataStorage.JsonStorage.LogLevel.INFO);
-                return; 
+                return;
             }
         }
     }

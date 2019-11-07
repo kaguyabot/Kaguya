@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Discord.Commands;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System.Threading.Tasks;
-using Discord.Commands;
-using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class SomeAdminCommand : ModuleBase<SocketCommandContext>
     {
-
+        [Command("test")]
+        public async Task GetOrCreateServer()
+        {
+        }
     }
 }
