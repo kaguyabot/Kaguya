@@ -1,27 +1,34 @@
 ﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using LinqToDB;
+using LinqToDB.Data;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class SomeAdminCommand : ModuleBase<SocketCommandContext>
+    public class AddFilteredPhrase : ModuleBase<SocketCommandContext>
     {
         [Command("test")]
-        public async Task GetOrCreateServer(params string[] args)
+        public async Task AddPhrase(params string[] args)
         {
             Server server = ServerQueries.GetServer(Context.Guild.Id);
-            var curFiltered = (FilteredPhrase)server.FilteredPhrases;
+            List<FilteredPhrase> allFP = ServerQueries.GetAllFilteredPhrases();
 
-            foreach(string element in args)
+            foreach (string element in args)
             {
                 FilteredPhrase fp = new FilteredPhrase
-                { 
+                {
                     ServerId = server.Id,
                     Phrase = element
                 };
 
-                ServerQueries.UpdateFilteredPhrases(fp);
+                if (!allFP.Contains(fp))
+                    ServerQueries.AddFilteredPhrase(fp);
+                else
+                    continue;
             }
         }
     }

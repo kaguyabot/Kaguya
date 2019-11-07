@@ -40,7 +40,19 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static void UpdateFilteredPhrases(FilteredPhrase fpObject)
+        public static List<FilteredPhrase> GetAllFilteredPhrases()
+        {
+            using (var db = new DataConnection())
+            {
+                return db.GetTable<FilteredPhrase>().ToList();
+            }
+        }
+
+        /// <summary>
+        /// Adds a FilteredPhrase object to the database. Duplicates are skipped automatically.
+        /// </summary>
+        /// <param name="fpObject">FilteredPhrase object to add.</param>
+        public static void AddFilteredPhrase(FilteredPhrase fpObject)
         {
             using (var db = new DataConnection())
             {
@@ -48,6 +60,22 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
+        /// <summary>
+        /// Deletes a filtered phrase object from the database.
+        /// </summary>
+        /// <param name="fpObject">FilteredPhrase object to remove.</param>
+        public static void DeleteFilteredPhrase(FilteredPhrase fpObject)
+        {
+            using (var db = new DataConnection())
+            {
+                db.Delete(fpObject);
+            }
+        }
+
+        /// <summary>
+        /// Adds a blacklisted channel object to the database.
+        /// </summary>
+        /// <param name="blObject">The BlackListedChannl object to add.</param>
         public static void UpdateBlacklistedChannels(BlackListedChannel blObject)
         {
             using (var db = new DataConnection())
