@@ -2,7 +2,7 @@
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "ServerAutoAssignedRoles")]
+    [Table(Name = "autoassignedroles")]
     public class AutoAssignedRoles
     {
         [Column(Name = "ServerId"), NotNull]

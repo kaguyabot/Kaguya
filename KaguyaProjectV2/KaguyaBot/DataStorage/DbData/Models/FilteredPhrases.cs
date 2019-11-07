@@ -2,7 +2,7 @@
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "ServerFilteredPhrases")]
+    [Table(Name = "filteredphrases")]
     public class FilteredPhrases
     {
         [Column(Name = "ServerId"), NotNull]

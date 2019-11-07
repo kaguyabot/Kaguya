@@ -2,7 +2,7 @@
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "ServerBlackListedChannels")]
+    [Table(Name = "blacklistedchannels")]
     public class BlackListedChannels
     {
         [Column(Name = "ServerId"), NotNull]

@@ -2,7 +2,7 @@
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "UserGambleHistory")]
+    [Table(Name = "gamblehistory")]
     public class GambleHistory
     {
         [Column(Name = "UserId"), NotNull]

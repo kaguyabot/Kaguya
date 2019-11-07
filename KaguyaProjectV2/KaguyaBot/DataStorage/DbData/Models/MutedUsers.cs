@@ -2,7 +2,7 @@
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "ServerMutedUsers")]
+    [Table(Name = "mutedusers")]
     public class MutedUsers
     {
         [Column(Name = "ServerId"), NotNull]
