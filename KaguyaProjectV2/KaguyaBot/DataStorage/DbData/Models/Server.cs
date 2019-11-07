@@ -112,5 +112,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
                 db.InsertOrReplace<Server>(server);
             }
         }
+
+        public static void UpdateFilteredPhrases(FilteredPhrases fpObject)
+        {
+            using (var db = new DataConnection())
+            {
+                db.Insert(fpObject);
+            }
+        }
+
+        public static void UpdateBlacklistedChannels(BlackListedChannels blObject)
+        {
+            using (var db = new DataConnection())
+            {
+                db.Insert(blObject);
+            }
+        }
     }
 }

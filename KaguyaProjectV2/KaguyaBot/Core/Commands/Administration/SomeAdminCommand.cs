@@ -1,5 +1,6 @@
 ﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -7,11 +8,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class SomeAdminCommand : ModuleBase<SocketCommandContext>
     {
         [Command("test")]
-        public async Task GetOrCreateServer()
+        public async Task GetOrCreateServer(params string[] args)
         {
-            var user = Users.GetUser(Context.User.Id);
+            Server server = Servers.GetServer(Context.Guild.Id);
+            FilteredPhrases curFiltered = (FilteredPhrases)server.FilteredPhrases;
 
-            await ReplyAsync(user.Id.ToString());
+            foreach(string element in args)
+            {
+                FilteredPhrases fp = new FilteredPhrases 
+                { 
+                    Server = server,
+                    ServerId = server.Id,
+                    Phrase = element
+                };
+
+                Servers.UpdateFilteredPhrases(fp);
+            }
         }
     }
 }

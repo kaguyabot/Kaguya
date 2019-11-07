@@ -7,8 +7,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     {
         [Column(Name = "ServerId"), NotNull]
         public ulong ServerId { get; set; }
-        [Column(Name = "Phase"), NotNull]
-        public string Phase { get; set; }
+        [Column(Name = "Phrase"), NotNull]
+        public string Phrase { get; set; }
         /// <summary>
         /// FK_KaguyaServer_FilteredPhrases
         /// </summary>
