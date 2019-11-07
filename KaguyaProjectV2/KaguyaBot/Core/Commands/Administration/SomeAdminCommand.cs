@@ -1,6 +1,6 @@
 ﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using System.Collections.Generic;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -10,19 +10,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("test")]
         public async Task GetOrCreateServer(params string[] args)
         {
-            Server server = Servers.GetServer(Context.Guild.Id);
-            FilteredPhrases curFiltered = (FilteredPhrases)server.FilteredPhrases;
+            Server server = ServerQueries.GetServer(Context.Guild.Id);
+            var curFiltered = (FilteredPhrase)server.FilteredPhrases;
 
             foreach(string element in args)
             {
-                FilteredPhrases fp = new FilteredPhrases 
+                FilteredPhrase fp = new FilteredPhrase
                 { 
-                    Server = server,
                     ServerId = server.Id,
                     Phrase = element
                 };
 
-                Servers.UpdateFilteredPhrases(fp);
+                ServerQueries.UpdateFilteredPhrases(fp);
             }
         }
     }
