@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "KaguyaServer")]
+    [Table(Name = "kaguyaserver")]
     public class Server
     {
         [PrimaryKey]

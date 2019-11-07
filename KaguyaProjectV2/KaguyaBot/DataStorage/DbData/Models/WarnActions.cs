@@ -2,7 +2,7 @@
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "ServerWarnActions")]
+    [Table(Name = "warnactions")]
     public class WarnActions
     {
         [Column(Name = "ServerId"), NotNull]
