@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord.Addons.Interactive;
+using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
                 .AddSingleton(new DiscordShardedClient(config))
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandler>()
+                .AddSingleton<InteractiveBase>()
                 .BuildServiceProvider();
         }
     }
