@@ -1,6 +1,9 @@
-﻿using LinqToDB.Mapping;
+﻿using LinqToDB;
+using LinqToDB.Data;
+using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -67,5 +70,40 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "UserId")]
         public IEnumerable<CommandHistory> CommandHistory { get; set; }
+    }
+
+    public static class Users
+    {
+        public static IEnumerable<User> GetAllUsers()
+        {
+            using (var db = new DataConnection())
+            {
+                return db.GetTable<User>().ToList();
+            }
+        }
+
+        public static User GetUser(ulong Id)
+        {
+            using (var db = new DataConnection())
+            {
+                User user = new User();
+
+                if (db.GetTable<User>().Where(x => x.Id == Id).FirstOrDefault() == null)
+                {
+                    user.Id = Id;
+                    db.Insert(user, "kaguyauser");
+                }
+
+                return db.GetTable<User>().Where(x => x.Id == Id).FirstOrDefault();
+            }
+        }
+
+        public static void UpdateUser(User user)
+        {
+            using (var db = new DataConnection())
+            {
+                db.InsertOrReplace<User>(user);
+            }
+        }
     }
 }

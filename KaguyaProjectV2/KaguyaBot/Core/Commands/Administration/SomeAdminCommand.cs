@@ -9,6 +9,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("test")]
         public async Task GetOrCreateServer()
         {
+            var user = Users.GetUser(Context.User.Id);
+
+            await ReplyAsync(user.Id.ToString());
         }
     }
 }
