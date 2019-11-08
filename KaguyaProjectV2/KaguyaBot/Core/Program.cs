@@ -28,20 +28,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
             using (var services = new SetupServices().ConfigureServices(config))
             {
-                client = services.GetRequiredService<DiscordShardedClient>();
+                try
+                {
+                    client = services.GetRequiredService<DiscordShardedClient>();
 
-                var _config = await Config.GetOrCreateConfigAsync();
+                    var _config = await Config.GetOrCreateConfigAsync();
 
-                GlobalPropertySetup(_config);
+                    GlobalPropertySetup(_config);
 
-                EventListener.Listener();
-                TestDatabaseConnection();
+                    EventListener.Listener();
+                    TestDatabaseConnection();
 
-                await services.GetRequiredService<CommandHandler>().InitializeAsync();
-                await client.LoginAsync(TokenType.Bot, _config.Token);
-                await client.StartAsync();
+                    await services.GetRequiredService<CommandHandler>().InitializeAsync();
+                    await client.LoginAsync(TokenType.Bot, _config.Token);
+                    await client.StartAsync();
 
-                await Task.Delay(-1);
+                    await Task.Delay(-1);
+                }
+                catch(Discord.Net.HttpException e)
+                {
+                    await Logger.Logger.Log($"Error when logging into Discord: " +
+                        $"Have you configured your config file? Is your token correct?", LogLevel.ERROR);
+                    Console.ReadLine();
+                }
+                
             }
         }
         public void SetupKaguya()
@@ -79,7 +89,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             }
             catch(Exception e)
             {
-                Logger.Logger.Log($"Failed to establish database connection. Have you properly configured your config file? \n\t{e.Message}", LogLevel.ERROR);
+                Logger.Logger.Log($"Failed to establish database connection. Have you properly configured your config file?", LogLevel.ERROR);
             }
         }
     }
