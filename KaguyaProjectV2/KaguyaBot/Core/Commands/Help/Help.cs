@@ -12,10 +12,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     {
         [Command("help")]
         [Alias("h")]
-        [Summary("h, help")]
-        [Remarks("Displays a list of all Kaguya commands, organized by category.")]
-        public async Task HelpCommand(string cmdString)
+        public async Task HelpCommand(string cmd)
         {
+
         }
     }
 }

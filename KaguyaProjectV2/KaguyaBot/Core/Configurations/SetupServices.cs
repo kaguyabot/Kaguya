@@ -11,9 +11,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
         {
             return new ServiceCollection()
                 .AddSingleton(new DiscordShardedClient(config))
+                .AddSingleton(new DiscordSocketClient()) //Added for InteractiveService to work
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandler>()
-                .AddSingleton<InteractiveBase>()
+                .AddSingleton<InteractiveService>()
                 .BuildServiceProvider();
         }
     }

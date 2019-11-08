@@ -16,17 +16,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="KaguyaBot\Core\Attributes\" />
     <Folder Include="KaguyaBot\Core\Commands\Currency\" />
     <Folder Include="KaguyaBot\Core\Commands\EXP\" />
     <Folder Include="KaguyaBot\Core\Commands\Fun\" />
-    <Folder Include="KaguyaBot\Core\Commands\Help\" />
     <Folder Include="KaguyaBot\Core\Commands\Music\" />
     <Folder Include="KaguyaBot\Core\Commands\osu!\" />
     <Folder Include="KaguyaBot\Core\Commands\Utility\" />
     <Folder Include="KaguyaBot\Core\Commands\Supporter\" />
     <Folder Include="KaguyaBot\Core\Commands\Owner Only\" />
     <Folder Include="KaguyaBot\Core\Commands\NSFW\" />
-    <Folder Include="KaguyaBot\Core\Interfaces\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 

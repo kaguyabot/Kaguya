@@ -2,7 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using LinqToDB.Data;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
@@ -36,9 +36,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             var message = msg as SocketUserMessage;
             if (message == null) return;
 
+            Server server = ServerQueries.GetServer((message.Channel as SocketGuildChannel).Guild.Id);
+
             int argPos = 0;
 
-            if (!(message.HasCharPrefix('$', ref argPos) ||
+            if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
                 message.Author.IsBot)
                 return;
