@@ -4,7 +4,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Logger;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -32,7 +31,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 client = services.GetRequiredService<DiscordShardedClient>();
 
                 var _config = await Config.GetOrCreateConfigAsync();
-                var _commands = await CommandStorage.GetOrCreateConfigAsync();
 
                 GlobalPropertySetup(_config);
 

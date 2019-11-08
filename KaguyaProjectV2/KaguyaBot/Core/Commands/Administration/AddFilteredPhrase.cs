@@ -2,7 +2,6 @@
 using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,14 +9,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class AddFilteredPhrase : ModuleBase<SocketCommandContext>
     {
-        static KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
-
         [Command("filteradd")]
         [Alias("fa")]
-        [Summary("fa dodohead \"big papa bear\" smuffymuffins")]
-        [Remarks("Adds one (or multiple) filtered phrases to your server's word filter.")]
+        [Summary("Adds one (or multiple) filtered phrases to your server's word filter.")]
+        [Remarks("fa dodohead \"big beachy muffins\" penguins!!")]
         public async Task AddPhrase(params string[] args)
         {
+            string s = "s";
+            if (args.Length == 1) s = "";
+
+
             Server server = ServerQueries.GetServer(Context.Guild.Id);
             List<FilteredPhrase> allFP = ServerQueries.GetAllFilteredPhrases();
 
@@ -34,6 +35,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 else
                     continue;
             }
+
+            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+            {
+                Title = "Filtered Phrase Added",
+                Description = $"Successfully added {args.Length} phrase{s} to the filter."
+            };
+
+            await ReplyAsync(embed: embed.Build());
         }
     }
 }

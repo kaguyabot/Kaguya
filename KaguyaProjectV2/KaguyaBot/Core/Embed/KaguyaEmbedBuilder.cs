@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
-using Discord;
+﻿using Discord;
 
 namespace KaguyaProjectV2.Core.Handlers
 {
@@ -25,7 +23,7 @@ namespace KaguyaProjectV2.Core.Handlers
             SetColor(type);
         }
 
-        public void SetColor(EmbedColor type = EmbedColor.PINK)
+        public void SetColor(EmbedColor type = EmbedColor.BLUE)
         {
             Color color;
             switch (type)
