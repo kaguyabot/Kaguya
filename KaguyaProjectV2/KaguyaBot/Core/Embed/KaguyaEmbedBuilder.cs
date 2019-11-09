@@ -7,7 +7,7 @@ namespace KaguyaProjectV2.Core.Handlers
         private static readonly Color RedColor = new Color(255, 0, 0);
         private static readonly Color VioletColor = new Color(111, 22, 255);
         private static readonly Color GoldColor = new Color(255, 223, 0);
-        private static readonly Color BlueColor = new Color(0, 255, 255);
+        private static readonly Color BlueColor = new Color(56, 175, 255);
         private static readonly Color PinkColor = new Color(252, 132, 255);
         private static readonly Color GreenColor = new Color(0, 204, 0);
 

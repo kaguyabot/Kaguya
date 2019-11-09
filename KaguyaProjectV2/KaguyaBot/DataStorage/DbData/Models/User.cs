@@ -1,5 +1,5 @@
-﻿using LinqToDB;
-using LinqToDB.Data;
+﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+using LinqToDB;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
@@ -45,13 +45,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "QuickdrawLosses"), Nullable]
         public int TotalQuickdrawLosses { get; set; }
         [Column(Name = "BlacklistExpiration"), Nullable]
-        public ulong BlacklistExpiration { get; set; }
+        public double BlacklistExpiration { get; set; }
         [Column(Name = "LatestEXP"), Nullable]
-        public ulong LatestEXP { get; set; }
+        public double LatestEXP { get; set; }
         [Column(Name = "LatestTimelyBonus"), Nullable]
-        public ulong LatestTimelyBonus { get; set; }
+        public double LatestTimelyBonus { get; set; }
         [Column(Name = "LatestWeeklyBonus"), Nullable]
-        public ulong LatestWeeklyBonus { get; set; }
+        public double LatestWeeklyBonus { get; set; }
         [Column(Name = "LastGivenRep"), Nullable]
         public ulong LastGivenRep { get; set; }
         [Column(Name = "UpvoteBonusExpiration"), Nullable]
@@ -76,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     {
         public static IEnumerable<User> GetAllUsers()
         {
-            using (var db = new DataConnection())
+            using (var db = new KaguyaDb())
             {
                 return db.GetTable<User>().ToList();
             }
@@ -84,7 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 
         public static User GetUser(ulong Id)
         {
-            using (var db = new DataConnection())
+            using (var db = new KaguyaDb())
             {
                 User user = new User();
 
@@ -100,9 +100,41 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 
         public static void UpdateUser(User user)
         {
-            using (var db = new DataConnection())
+            using (var db = new KaguyaDb())
             {
                 db.InsertOrReplace<User>(user);
+            }
+        }
+        
+        public static void AddCommandHistory(CommandHistory chObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.Insert(chObject);
+            }
+        }
+
+        public static void RemoveCommandHistory(CommandHistory chObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.Delete(chObject);
+            }
+        }
+
+        public static void AddGambleHistory(GambleHistory ghObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.Delete(ghObject);
+            }
+        }
+
+        public static void RemoveGambleHistory(GambleHistory ghObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.Delete(ghObject);
             }
         }
     }

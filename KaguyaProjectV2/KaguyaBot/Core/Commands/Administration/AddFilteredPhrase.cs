@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -13,14 +14,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Alias("fa")]
         [Summary("Adds one (or multiple) filtered phrases to your server's word filter.")]
         [Remarks("fa dodohead \"big beachy muffins\" penguins!!")]
+        [RequireUserPermission(GuildPermission.ManageGuild)]
+        [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task AddPhrase(params string[] args)
         {
             string s = "s";
             if (args.Length == 1) s = "";
 
-
             Server server = ServerQueries.GetServer(Context.Guild.Id);
-            List<FilteredPhrase> allFP = ServerQueries.GetAllFilteredPhrases();
+            List<FilteredPhrase> allFP = ServerQueries.GetAllFilteredPhrasesForServer(Context.Guild.Id);
 
             foreach (string element in args)
             {
