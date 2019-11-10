@@ -1,15 +1,16 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using KaguyaProjectV2.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
 {
@@ -47,7 +48,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             var context = new ShardedCommandContext(_client, message);
             await IsFilteredPhrase(context, server, message);
 
-            ExperienceHandler.AddEXP(user);
+            ExperienceHandler.AddEXP(user, context);
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
@@ -66,13 +67,38 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             if (result.IsSuccess)
             {
                 await Logger.Logger.Log($"Command Executed [Command: {context.Message} | User: {context.User} | Channel: {context.Channel} | " +
-                    $"Guild: {context.Guild}]", DataStorage.JsonStorage.LogLevel.INFO);
+                    $"Guild: {context.Guild}]", LogLevel.INFO);
                 return;
+            }
+
+            Server server = ServerQueries.GetServer(context.Guild.Id);
+
+            if(result.Error == CommandError.Unsuccessful)
+            {
+                await Logger.Logger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.TRACE);
+
+                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+                {
+                    Title = "Command Failed",
+                    Description = $"Failed to execute command `{context.Message}` \nReason: [{result.ErrorReason}]",
+                    Footer = new EmbedFooterBuilder
+                    {
+                        Text = $"Use {server.CommandPrefix}h <command> for information on how to use a command!",
+                    },
+                };
+                embed.SetColor(EmbedColor.RED);
+
+                await context.Channel.SendMessageAsync(embed: embed.Build());
             }
         }
 
         public async Task<bool> IsFilteredPhrase(ICommandContext context, Server server, IMessage message)
         {
+            var userPerms = (await context.Guild.GetUserAsync(context.User.Id)).GuildPermissions;
+
+            if (userPerms.ManageGuild)
+                return false;
+
             List<FilteredPhrase> fp = ServerQueries.GetAllFilteredPhrasesForServer(server.Id) ?? new List<FilteredPhrase>();
 
             if (fp.Count == 0) return false;
@@ -83,8 +109,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             foreach(var phrase in phrases)
             {
                 if (message.Content.ToLower().Contains(phrase.ToLower()))
+                {
                     await context.Channel.DeleteMessageAsync(message);
+                    await Logger.Logger.Log($"Filtered phrase detected: [Guild: {server.Id} | Phrase: {phrase}]", LogLevel.INFO);
                     return true;
+                }
             }
 
             return false;
