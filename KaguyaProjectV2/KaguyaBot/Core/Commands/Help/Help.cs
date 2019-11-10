@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Alias("h")]
         public async Task HelpCommand(string cmd)
         {
-
+            
         }
     }
 }

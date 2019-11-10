@@ -53,11 +53,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "LatestWeeklyBonus"), Nullable]
         public double LatestWeeklyBonus { get; set; }
         [Column(Name = "LastGivenRep"), Nullable]
-        public ulong LastGivenRep { get; set; }
+        public double LastGivenRep { get; set; }
         [Column(Name = "UpvoteBonusExpiration"), Nullable]
-        public ulong UpvoteBonusExpiration { get; set; }
+        public double UpvoteBonusExpiration { get; set; }
         [Column(Name = "KaguyaSupporterExpiration"), Nullable]
-        public ulong KaguyaSupporterExpiration { get; set; }
+        public double KaguyaSupporterExpiration { get; set; }
         [Column(Name = "IsBlacklisted"), NotNull]
         public bool IsBlacklisted { get; set; }
         /// <summary>
@@ -70,6 +70,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "UserId")]
         public IEnumerable<CommandHistory> CommandHistory { get; set; }
+
+        public bool IsSupporter
+        {
+            get
+            {
+                return KaguyaSupporterExpiration - DateTime.Now.ToOADate() > 0;
+            }
+        }
     }
 
     public static class Users
