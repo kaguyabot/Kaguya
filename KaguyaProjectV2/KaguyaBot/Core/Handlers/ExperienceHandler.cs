@@ -45,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         private static bool CanGetExperience(User user)
         {
-            if (DateTime.Now.AddSeconds(0).ToOADate() >= user.LatestEXP) //2 minutes in OA date time.
+            if (DateTime.Now.AddSeconds(-120).ToOADate() >= user.LatestEXP) //2 minutes in OA date time.
             {
                 return true;
             }
