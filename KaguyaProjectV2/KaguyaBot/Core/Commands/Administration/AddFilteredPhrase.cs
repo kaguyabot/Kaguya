@@ -53,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
-                Title = "Filtered Phrase Added",
+                Title = $"Filtered Phrase{s} Added",
                 Description = $"Successfully added {args.Length} phrase{s} to the filter."
             };
 

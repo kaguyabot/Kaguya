@@ -70,10 +70,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Deletes a filtered phrase object from the database.
+        /// Removes a filtered phrase object from the database.
         /// </summary>
         /// <param name="fpObject">FilteredPhrase object to remove.</param>
-        public static void DeleteFilteredPhrase(FilteredPhrase fpObject)
+        public static void RemoveFilteredPhrase(FilteredPhrase fpObject)
         {
             using (var db = new KaguyaDb())
             {
