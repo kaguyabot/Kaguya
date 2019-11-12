@@ -29,7 +29,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 KaguyaEmbedBuilder embed_0 = new KaguyaEmbedBuilder
                 {
-                    Title = $"Filtered Phrase Command Error",
                     Description = "Please specify at least one phrase."
                 };
                 embed_0.SetColor(EmbedColor.RED);
@@ -46,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Phrase = element
                 };
 
-                if (!allFP.Contains(fp))
+                if (allFP.Contains(fp))
                     ServerQueries.RemoveFilteredPhrase(fp);
                 else
                     continue;
