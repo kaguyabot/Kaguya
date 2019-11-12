@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [PrimaryKey]
         public ulong Id { get; set; }
         [Column(Name = "CommandPrefix"), Nullable]
-        public string CommandPrefix { get; set; }
+        public string CommandPrefix { get; set; } = "$";
         [Column(Name = "CommandCount"), NotNull]
         public int TotalCommandCount { get; set; }
         [Column(Name = "DeletedMessages"), Nullable]
