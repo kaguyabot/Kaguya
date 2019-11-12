@@ -10,6 +10,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.ImageGeneration
 {
     public class KaguyaLevelUpImage
     {
+        /*
+         * The purpose of this class is to (hopefully) create an image, from scratch,
+         * that will display various stats on a user, instead of just a plain text embed (fancy, I know).
+         */
+
         public void CreateImage()
         {
             string filePath = $"{Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\.."))}\\Resources\\Artwork";
