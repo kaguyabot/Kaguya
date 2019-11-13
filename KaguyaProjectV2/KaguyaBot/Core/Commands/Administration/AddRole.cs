@@ -12,11 +12,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     {
         [Command("addrole")]
         [Alias("ar")]
-        [Summary("Adds a role, or list of roles, to a user.")]
-        [Remarks("ar <user> <role>\nar Stage Penguins \"Twitch Streamer\" \"Bot Dev\" SpaceMonkeys ...")]
+        [Summary("Adds a singular role, or list of roles, to a user.")]
+        [Remarks("ar <user> <role> <role2> {...}\nar Stage Penguins.Space Monkeys.SomeWACKYRole {...}")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task GiveRole(IGuildUser user, params string[] args)
+        public async Task GiveRole(IGuildUser user, [Remainder]string args)
         {
             string[] roleNames = ArrayInterpreter.ReturnParams(args);
 
@@ -37,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
-                Description = $"{user} has been given {i} roles."
+                Description = $"{user.Username} has been given {i} roles."
             };
             embed.SetColor(EmbedColor.VIOLET);
 
