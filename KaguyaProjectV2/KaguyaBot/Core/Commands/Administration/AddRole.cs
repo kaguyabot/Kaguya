@@ -16,8 +16,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("ar <user> <role>\nar Stage Penguins \"Twitch Streamer\" \"Bot Dev\" SpaceMonkeys ...")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task RemovePhrase(IGuildUser user, params IRole[] args)
+        public async Task GiveRole(IGuildUser user, params string[] args)
         {
+            IRole[] roles;
+
             await user.AddRolesAsync(args);
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
