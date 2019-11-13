@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Log;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
@@ -27,11 +28,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 Users.UpdateUser(user);
 
                 double newLevel = ReturnLevel(user);
-                await Logger.Logger.Log($"User has received {exp} exp. [ID: {user.Id} | New EXP: {user.Experience.ToString("N0")}]", DataStorage.JsonStorage.LogLevel.TRACE);
+                await Logger.Log($"User has received {exp} exp. [ID: {user.Id} | New EXP: {user.Experience.ToString("N0")}]", DataStorage.JsonStorage.LogLevel.TRACE);
 
                 if(HasLeveledUp(oldLevel, newLevel))
                 {
-                    await Logger.Logger.Log($"User has leveled up. [ID: {user.Id} | Level: {newLevel} | Experience: {user.Experience}]", DataStorage.JsonStorage.LogLevel.INFO);
+                    await Logger.Log($"User has leveled up. [ID: {user.Id} | Level: {newLevel} | Experience: {user.Experience}]", DataStorage.JsonStorage.LogLevel.INFO);
                     if (levelAnnouncementChannel != null)
                     {
                         await (levelAnnouncementChannel as IMessageChannel).SendMessageAsync(embed: LevelUpEmbed(user, context));

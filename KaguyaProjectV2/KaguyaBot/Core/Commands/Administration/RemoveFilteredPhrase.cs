@@ -1,7 +1,7 @@
 ﻿using Discord;
-using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Log;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
@@ -46,16 +46,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 };
 
                 if (allFP.Contains(fp))
+                {
                     ServerQueries.RemoveFilteredPhrase(fp);
+                    await Logger.Log($"Server {server.Id} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLevel.DEBUG);
+                }
                 else
                     continue;
             }
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
-                Title = $"Filtered Phrase{s} Removed",
                 Description = $"Successfully removed {args.Length} phrase{s} from the filter."
             };
+            embed.SetColor(EmbedColor.VIOLET);
 
             await ReplyAsync(embed: embed.Build());
         }

@@ -4,6 +4,7 @@ using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Log;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using Microsoft.Extensions.DependencyInjection;
@@ -66,7 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
 
             if (result.IsSuccess)
             {
-                await Logger.Logger.Log($"Command Executed [Command: {context.Message} | User: {context.User} | Channel: {context.Channel} | " +
+                await Logger.Log($"Command Executed [Command: {context.Message} | User: {context.User} | Channel: {context.Channel} | " +
                     $"Guild: {context.Guild}]", LogLevel.INFO);
                 return;
             }
@@ -75,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
 
             if(result.Error == CommandError.Unsuccessful)
             {
-                await Logger.Logger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.TRACE);
+                await Logger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.TRACE);
 
                 KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
                 {
@@ -111,7 +112,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
                 if (message.Content.ToLower().Contains(phrase.ToLower()))
                 {
                     await context.Channel.DeleteMessageAsync(message);
-                    await Logger.Logger.Log($"Filtered phrase detected: [Guild: {server.Id} | Phrase: {phrase}]", LogLevel.INFO);
+                    await Logger.Log($"Filtered phrase detected: [Guild: {server.Id} | Phrase: {phrase}]", LogLevel.INFO);
                     return true;
                 }
             }

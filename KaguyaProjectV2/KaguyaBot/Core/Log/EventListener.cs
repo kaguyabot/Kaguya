@@ -4,7 +4,7 @@ using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using System;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Logger
+namespace KaguyaProjectV2.KaguyaBot.Core.Log
 {
     public class EventListener
     {

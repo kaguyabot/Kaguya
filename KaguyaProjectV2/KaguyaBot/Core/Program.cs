@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Logger;
+using KaguyaProjectV2.KaguyaBot.Core.Log;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 }
                 catch(Discord.Net.HttpException e)
                 {
-                    await Logger.Logger.Log($"Error when logging into Discord: " +
+                    await Logger.Log($"Error when logging into Discord: " +
                         $"Have you configured your config file? Is your token correct?", LogLevel.ERROR);
                     Console.ReadLine();
                 }
@@ -84,12 +84,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 if(KaguyaBot.DataStorage.DbData.Queries.TestQueries.TestConnection().ToString() == "True")
                 {
-                    Logger.Logger.Log("Database connection successfully established.", LogLevel.INFO);
+                    Logger.Log("Database connection successfully established.", LogLevel.INFO);
                 }
             }
             catch(Exception e)
             {
-                Logger.Logger.Log($"Failed to establish database connection. Have you properly configured your config file?", LogLevel.ERROR);
+                Logger.Log($"Failed to establish database connection. Have you properly configured your config file?", LogLevel.ERROR);
             }
         }
     }

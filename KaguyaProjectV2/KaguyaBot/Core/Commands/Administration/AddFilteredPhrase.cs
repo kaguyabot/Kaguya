@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Log;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
@@ -46,16 +47,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 };
 
                 if (!allFP.Contains(fp))
-                    ServerQueries.AddFilteredPhrase(fp);
+                {
+                    ServerQueries.AddFilteredPhrase(fp); 
+                    await Logger.Log($"Server {server.Id} has added the phrase \"{element}\" to their word filter.", DataStorage.JsonStorage.LogLevel.DEBUG);
+                }
                 else
                     continue;
             }
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
-                Title = $"Filtered Phrase{s} Added",
                 Description = $"Successfully added {args.Length} phrase{s} to the filter."
             };
+            embed.SetColor(EmbedColor.VIOLET);
 
             await ReplyAsync(embed: embed.Build());
         }
