@@ -1,9 +1,9 @@
 ﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System.Collections.Generic;
+using KaguyaProjectV2.KaguyaBot.Core.Log;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -18,13 +18,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task GiveRole(IGuildUser user, params string[] args)
         {
-            IRole[] roles;
+            string[] roleNames = ArrayInterpreter.ReturnParams(args);
 
-            await user.AddRolesAsync(args);
+            int i = 0;
+
+            foreach(string roleName in roleNames)
+            {
+                try
+                {
+                    await user.AddRoleAsync(Context.Guild.Roles.Where(x => x.Name.ToLower() == roleName.ToLower()).FirstOrDefault());
+                    i++;
+                }
+                catch (Exception ex)
+                {
+                    await Logger.Log($"Exception thrown when adding role to user through command addrole: {ex.Message}", DataStorage.JsonStorage.LogLevel.ERROR);
+                }
+            }
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
-                Description = $"{user} has been given {args.Length} roles."
+                Description = $"{user} has been given {i} roles."
             };
             embed.SetColor(EmbedColor.VIOLET);
 
