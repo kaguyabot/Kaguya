@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("filterremoveall")]
         [Alias("fra")]
         [Summary("Removes all filtered phrases from your server's word filter.")]
-        [Remarks("fr dodohead \"big beachy muffins\" penguins!!")]
+        [Remarks("fra")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task RemovePhrase()
