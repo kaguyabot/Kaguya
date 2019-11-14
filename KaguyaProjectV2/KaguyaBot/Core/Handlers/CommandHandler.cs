@@ -107,7 +107,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
         private async void HandleCommandResult(ICommandContext context, Server server, IResult result)
         {
             string cmdPrefix = server.CommandPrefix;
-            await Logger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.TRACE);
+            await Logger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.DEBUG);
 
             if (!result.IsSuccess)
             {
