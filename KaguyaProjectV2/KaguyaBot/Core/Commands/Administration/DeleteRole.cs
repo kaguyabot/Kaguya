@@ -14,8 +14,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     {
         [Command("deleterole")]
         [Alias("dr")]
-        [Summary("Deletes a role from the server (and in the process, removes said role from everyone who had it).")]
-        [Remarks("dr <role>\ndr Stage Penguins")]
+        [Summary("Deletes a role, or a list of roles, from the server. New roles are separated by periods.")]
+        [Remarks("dr <role>.<role2>.{...}\ndr Stage Penguins.Some long role.Moofins")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task RemoveRole([Remainder]string targetRole)

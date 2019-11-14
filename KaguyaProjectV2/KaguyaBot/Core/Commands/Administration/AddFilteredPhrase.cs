@@ -13,8 +13,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     {
         [Command("filteradd")]
         [Alias("fa")]
-        [Summary("Adds one (or multiple) filtered phrases to your server's word filter.")]
-        [Remarks("fa dodohead \"big beachy muffins\" penguins!!")]
+        [Summary("Adds one phrase, or a list of phrases, to your server's word filter. These are phrases that will be automatically deleted when typed in chat.")]
+        [Remarks("fa dodohead.big beachy moofins.penguins!!")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task AddPhrase(params string[] args)
@@ -29,7 +29,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 KaguyaEmbedBuilder embed_0 = new KaguyaEmbedBuilder
                 {
-                    Title = $"Filtered Phrase Command Error",
                     Description = "Please specify at least one phrase."
                 };
                 embed_0.SetColor(EmbedColor.RED);

@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\KaguyaWebBlazor.csproj": {}
+    "C:\\Users\\stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\KaguyaWebBlazor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\KaguyaWebBlazor.csproj": {
+    "C:\\Users\\stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\KaguyaWebBlazor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\KaguyaWebBlazor.csproj",
+        "projectUniqueName": "C:\\Users\\stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\KaguyaWebBlazor.csproj",
         "projectName": "KaguyaWebBlazor",
-        "projectPath": "C:\\Users\\Stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\KaguyaWebBlazor.csproj",
-        "packagesPath": "C:\\Users\\Stage\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\obj\\",
+        "projectPath": "C:\\Users\\stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\KaguyaWebBlazor.csproj",
+        "packagesPath": "C:\\Users\\stage\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\stage\\Documents\\GitHub\\Kaguya\\KaguyaWebBlazor\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Stage\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\stage\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -43,10 +43,24 @@
       "frameworks": {
         "netcoreapp3.0": {
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
