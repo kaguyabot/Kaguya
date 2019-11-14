@@ -65,6 +65,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             if (!command.IsSpecified)
                 return;
 
+            Server server = ServerQueries.GetServer(context.Guild.Id);
+
             if (result.IsSuccess)
             {
                 await Logger.Log($"Command Executed [Command: {context.Message} | User: {context.User} | Channel: {context.Channel} | " +
@@ -72,32 +74,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
                 return;
             }
 
-            Server server = ServerQueries.GetServer(context.Guild.Id);
-
-            if(result.Error == CommandError.Unsuccessful)
-            {
-                await Logger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.TRACE);
-
-                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
-                {
-                    Title = "Command Failed",
-                    Description = $"Failed to execute command `{context.Message}` \nReason: [{result.ErrorReason}]",
-                    Footer = new EmbedFooterBuilder
-                    {
-                        Text = $"Use {server.CommandPrefix}h <command> for information on how to use a command!",
-                    },
-                };
-                embed.SetColor(EmbedColor.RED);
-
-                await context.Channel.SendMessageAsync(embed: embed.Build());
-            }
+            HandleCommandResult(context, server, result);
         }
 
         public async Task<bool> IsFilteredPhrase(ICommandContext context, Server server, IMessage message)
         {
             var userPerms = (await context.Guild.GetUserAsync(context.User.Id)).GuildPermissions;
 
-            if (userPerms.ManageGuild)
+            if (userPerms.Administrator)
                 return false;
 
             List<FilteredPhrase> fp = ServerQueries.GetAllFilteredPhrasesForServer(server.Id) ?? new List<FilteredPhrase>();
@@ -118,6 +102,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             }
 
             return false;
+        }
+
+        private async void HandleCommandResult(ICommandContext context, Server server, IResult result)
+        {
+            string cmdPrefix = server.CommandPrefix;
+            await Logger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.TRACE);
+
+            if (!result.IsSuccess)
+            {
+                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+                {
+                    Title = "Command Failed",
+                    Description = $"Failed to execute command `{context.Message}` \nReason: {result.ErrorReason}",
+                    Footer = new EmbedFooterBuilder
+                    {
+                        Text = $"Use {cmdPrefix}h <command> for information on how to use a command!",
+                    },
+                };
+                embed.SetColor(EmbedColor.RED);
+
+                await context.Channel.SendMessageAsync(embed: embed.Build());
+            }
         }
     }
 }

@@ -11,12 +11,6 @@ namespace KaguyaProjectV2.KaguyaBot
         public static string[] ReturnParams(string args)
         {
             string[] newArgs = args.Split('.');
-
-            foreach(string arg in newArgs)
-            {
-                Console.WriteLine(arg);
-            }
-
             return newArgs;
         }
     }

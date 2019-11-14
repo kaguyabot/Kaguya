@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Log
 
         public static void Listener()
         {
-            _client.ShardConnected += (DiscordSocketClient client) => Logger.Log($"Shard {client.ShardId} connected.", LogLevel.DEBUG);
+            _client.ShardConnected += (DiscordSocketClient client) => Logger.Log($"Shard {client.ShardId} connected.", LogLevel.TRACE);
             _client.ShardDisconnected += (Exception ex, DiscordSocketClient client) => Logger.Log($"Shard {client.ShardId} disconnected. Exception: {ex.Message}", LogLevel.ERROR);
             _client.ShardReady += (DiscordSocketClient client) => Logger.Log($"Shard {client.ShardId} ready. Guilds: {client.Guilds.Count.ToString("N0")}", LogLevel.INFO);
             _client.ShardLatencyUpdated += (int oldLatency, int newLatency, DiscordSocketClient client) =>

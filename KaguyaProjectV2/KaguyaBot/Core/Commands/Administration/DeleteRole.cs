@@ -20,13 +20,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task RemoveRole([Remainder]string targetRole)
         {
-            var roles = Context.Guild.Roles.Where(r => r.Name.ToLower() == targetRole.ToLower()).ToList();
+            string[] roleNames = ArrayInterpreter.ReturnParams(targetRole);
+            List<IRole> roles = new List<IRole>();
+
+            foreach(string element in roleNames)
+            {
+                var rolesFound = Context.Guild.Roles.Where(r => r.Name.ToLower() == element.ToLower()).ToList();
+                foreach(var socketRole in rolesFound)
+                {
+                    roles.Add(socketRole);
+                }
+            }
+
             if (roles.Count() > 1)
             {
-                var embed = new KaguyaEmbedBuilder
+                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
                 {
-                    Title = "Role Deletion: Multiple Matching Roles",
-                    Description = $"{roles.Count()} has been given {targetRole} roles."
+                    Title = "Roles Deleted"
                 };
 
                 foreach (var role in roles)
@@ -41,7 +51,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 var role = roles.First();
                 var embed = new KaguyaEmbedBuilder
                 {
-                    Title = "Role Deletion: Success",
                     Description = $"**{Context.User.Mention} Successfully deleted role `{role.Name}`**"
                 };
                 await role.DeleteAsync();
@@ -52,9 +61,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 var embed = new KaguyaEmbedBuilder
                 {
-                    Title = "Role Deletion: Error",
                     Description = $"**{Context.User.Mention} I could not find the specified role!**"
                 };
+                embed.SetColor(EmbedColor.RED);
+
                 await ReplyAsync(embed: embed.Build());
             }
         }

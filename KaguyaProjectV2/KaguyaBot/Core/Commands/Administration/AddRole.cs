@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 }
                 catch (Exception ex)
                 {
-                    await Logger.Log($"Exception thrown when adding role to user through command addrole: {ex.Message}", DataStorage.JsonStorage.LogLevel.ERROR);
+                    await Logger.Log($"Exception thrown when adding role to user through command addrole: {ex.Message}", DataStorage.JsonStorage.LogLevel.WARN);
                 }
             }
 
