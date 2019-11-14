@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     {
         [Command("addrole")]
         [Alias("ar")]
-        [Summary("Adds a singular role, or list of roles, to a user.")]
+        [Summary("Adds a singular role, or list of roles, to a user. New roles are separated by periods.")]
         [Remarks("ar <user> <role> <role2> {...}\nar Stage Penguins.Space Monkeys.SomeWACKYRole {...}")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
