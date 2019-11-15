@@ -10,10 +10,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class AddRole : ModuleBase<ShardedCommandContext>
     {
-        [Command("addrole")]
+        [Command("AddRole")]
         [Alias("ar")]
-        [Summary("Adds a singular role, or list of roles, to a user. New roles are separated by periods.")]
-        [Remarks("ar <user> <role>.<role2> {...}\nar Stage Penguins.Space Monkeys.SomeWACKYRole")]
+        [Summary("Adds a singular role (or list of roles) to a user. New roles are separated by periods.")]
+        [Remarks("<user> <role>.<role2> {...}\nStage Penguins.Space Monkeys.SomeWACKYRole")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task GiveRole(IGuildUser user, [Remainder]string args)

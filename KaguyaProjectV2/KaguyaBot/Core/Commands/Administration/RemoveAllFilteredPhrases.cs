@@ -12,10 +12,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class RemoveAllFilteredPhrases : ModuleBase<ShardedCommandContext>
     {
-        [Command("filterremoveall")]
+        [Command("FilterRemoveAll")]
         [Alias("fra")]
         [Summary("Removes all filtered phrases from your server's word filter.")]
-        [Remarks("fra")]
+        [Remarks("")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task RemovePhrase()

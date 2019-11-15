@@ -11,10 +11,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class RemoveFilteredPhrase : ModuleBase<ShardedCommandContext>
     {
-        [Command("filterremove")]
+        [Command("FilterRemove")]
         [Alias("fr")]
         [Summary("Removes one phrase or a list of filtered phrases from your server's word filter. Words are separated by periods.")]
-        [Remarks("fr <phrase>.<phrase 2>. {...}\nfr dodohead.big beachy muffins.penguins!!")]
+        [Remarks("<phrase>.<phrase 2>.{...}\ndodohead.big beachy muffins.penguins!!")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task RemovePhrase(string args)

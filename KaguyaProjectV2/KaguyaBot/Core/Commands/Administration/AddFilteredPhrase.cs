@@ -11,10 +11,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class AddFilteredPhrase : ModuleBase<ShardedCommandContext>
     {
-        [Command("filteradd")]
+        [Command("FilterAdd")]
         [Alias("fa")]
-        [Summary("Adds one phrase, or a list of phrases, to your server's word filter. These are phrases that will be automatically deleted when typed in chat.")]
-        [Remarks("fa dodohead.big beachy moofins.penguins!!")]
+        [Summary("Adds one phrase (or a list of phrases) to your server's word filter. " +
+            "These are phrases that will automatically be deleted when typed in chat. Users with the Administrator permission are excluded from punishment.")]
+        [Remarks("dodohead.big beachy moofins.penguins!!")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task AddPhrase(params string[] args)

@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
 {
     public class CommandHandler
     {
-        private readonly CommandService _commands;
+        public static CommandService _commands;
         private readonly DiscordShardedClient _client;
         private readonly IServiceProvider _services;
 
