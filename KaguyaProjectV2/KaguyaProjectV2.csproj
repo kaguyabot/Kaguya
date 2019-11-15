@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -24,7 +24,6 @@
     <Folder Include="KaguyaBot\Core\Commands\Music\" />
     <Folder Include="KaguyaBot\Core\Commands\osu!\" />
     <Folder Include="KaguyaBot\Core\Commands\Utility\" />
-    <Folder Include="KaguyaBot\Core\Commands\Supporter\" />
     <Folder Include="KaguyaBot\Core\Commands\Owner Only\" />
     <Folder Include="KaguyaBot\Core\Commands\NSFW\" />
     <Folder Include="Resources\" />

@@ -3,6 +3,7 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
@@ -124,12 +125,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
         public static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
             cmdInfo.Preconditions
-                .Where(x => x is RequireOwnerAttribute || x is RequireUserPermissionAttribute)
+                .Where(x => x is RequireOwnerAttribute || x is RequireSupporterAttribute || x is RequireUserPermissionAttribute)
                 .Select(x =>
                 {
                     if (x is RequireOwnerAttribute)
                     {
-                        return "Bot Owner Only";
+                        return "Bot Owner";
+                    }
+
+                    if(x is RequireSupporterAttribute)
+                    {
+                        return "Kaguya Supporter";
                     }
 
                     var attr = (RequireUserPermissionAttribute)x;
@@ -138,7 +144,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                         return attr.GuildPermission.ToString();
                     }
 
-                    return attr.ChannelPermission.ToString();
+                    return null;
                 })
                 .ToArray();
     }

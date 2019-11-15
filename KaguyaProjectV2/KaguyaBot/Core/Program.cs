@@ -12,8 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 {
     class Program
     {
-        static void Main(string[] args)
-        => new Program().MainAsync().GetAwaiter().GetResult();
+        static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
         private DiscordShardedClient client;
 

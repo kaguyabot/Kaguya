@@ -1,4 +1,6 @@
-﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Log;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+using System;
 using System.Data;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
@@ -9,7 +11,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return db.Connection.State.Equals(ConnectionState.Open);
+                try
+                {
+                    return db.Connection.State.Equals(ConnectionState.Open);
+                }
+                catch(Exception e)
+                {
+                    Logger.Log($"Failed to establish database connection!! {e.Message}", Core.DataStorage.JsonStorage.LogLevel.ERROR);
+                    return false;
+                }
             }
         }
     }
