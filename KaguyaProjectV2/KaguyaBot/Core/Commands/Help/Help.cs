@@ -17,6 +17,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     {
         [Command("Help")]
         [Alias("h")]
+        [Summary("Returns the help command for a specific command if specified. If no command is specified, " +
+            "a list of commands, as well as their aliases, will be returned.")]
+        [Remarks("\n<command>")]
         public async Task HelpCommand(string cmd)
         {
             Server server = ServerQueries.GetServer(Context.Guild.Id);
@@ -80,12 +83,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             string aliases = string.Join(", ", cmdInfo.Aliases);
             string permissionNames = string.Join(", ", permissions ?? new string[] { "None" });
 
+            if (Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2") == "")
+                permissionNames = "None";
+            else
+                permissionNames = Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2");
+
             List<EmbedFieldBuilder> fieldBuilders = new List<EmbedFieldBuilder>();
 
             fieldBuilders.Add(new EmbedFieldBuilder
             {
                 Name = "Permissions Required",
-                Value = $"`{Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2")}`",
+                Value = $"`{permissionNames}`",
                 IsInline = false,
             });
 
