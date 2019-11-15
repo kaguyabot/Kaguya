@@ -1,18 +1,15 @@
-﻿using Discord.Addons.Interactive;
+﻿using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
+using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq;
-using KaguyaProjectV2.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System.Text.RegularExpressions;
-using Discord;
-using System.ComponentModel.DataAnnotations.Schema;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -22,16 +19,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Alias("h")]
         public async Task HelpCommand(string cmd)
         {
-            CommandInfo cmdInfo = await FindCommandInfo(cmd.ToLower());
-            if(cmdInfo == null) { return; }
+            Server server = ServerQueries.GetServer(Context.Guild.Id);
+            CommandInfo cmdInfo = await FindCommandInfo(cmd.ToLower(), server);
+            if (cmdInfo == null) { return; }
 
-            await ReplyAsync(embed: HelpEmbedBuilder(cmdInfo).Build());
+            await ReplyAsync(embed: HelpEmbedBuilder(cmdInfo, server).Build());
         }
 
-        private async Task<CommandInfo> FindCommandInfo(string cmd)
+        private async Task<CommandInfo> FindCommandInfo(string cmd, Server server)
         {
             CommandService cmdInfo = CommandHandler._commands;
-            Server server = ServerQueries.GetServer(Context.Guild.Id);
             KaguyaEmbedBuilder embed;
 
             List<string> allAliases = new List<string>();
@@ -76,22 +73,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             return selectedCommand;
         }
 
-        private KaguyaEmbedBuilder HelpEmbedBuilder(CommandInfo cmdInfo)
+        private KaguyaEmbedBuilder HelpEmbedBuilder(CommandInfo cmdInfo, Server server)
         {
-            List<string> permissions = new List<string>();
+            var permissions = GetCommandPermissions(cmdInfo);
 
             string aliases = string.Join(", ", cmdInfo.Aliases);
-            string permissionNames = string.Join(", ", permissions);
-
-            if (string.IsNullOrEmpty(permissionNames))
-                permissionNames = "None";
+            string permissionNames = string.Join(", ", permissions ?? new string[] { "None" });
 
             List<EmbedFieldBuilder> fieldBuilders = new List<EmbedFieldBuilder>();
 
             fieldBuilders.Add(new EmbedFieldBuilder
             {
                 Name = "Permissions Required",
-                Value = permissionNames,
+                Value = $"`{Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2")}`",
                 IsInline = false,
             });
 
@@ -104,18 +98,40 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
             fieldBuilders.Add(new EmbedFieldBuilder
             {
+                //The value of this vield is pretty hard to read, basically we add the command prefix + command name to the start of the string,
+                //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute, we add the same thing to the start of the new line.
                 Name = $"Syntax",
-                Value = $"{cmdInfo.Remarks.Split("\n")}",
+                Value = $"`{server.CommandPrefix}{aliases.Split(",")[0]} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]} ", cmdInfo.Remarks.Split("\n"))}`",
                 IsInline = false,
             });
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
-                Title = $"Help: {Regex.Replace(cmdInfo.Name, "([a-z])([A-Z])", "$1 $2")} | Names: `{aliases}`",
+                Title = $"Help: `{Regex.Replace(cmdInfo.Name, "([a-z])([A-Z])", "$1 $2")}` | Aliases: `{aliases}`",
                 Fields = fieldBuilders
             };
 
             return embed;
         }
+
+        public static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
+            cmdInfo.Preconditions
+                .Where(x => x is RequireOwnerAttribute || x is RequireUserPermissionAttribute)
+                .Select(x =>
+                {
+                    if (x is RequireOwnerAttribute)
+                    {
+                        return "Bot Owner Only";
+                    }
+
+                    var attr = (RequireUserPermissionAttribute)x;
+                    if (attr.GuildPermission != null)
+                    {
+                        return attr.GuildPermission.ToString();
+                    }
+
+                    return attr.ChannelPermission.ToString();
+                })
+                .ToArray();
     }
 }
