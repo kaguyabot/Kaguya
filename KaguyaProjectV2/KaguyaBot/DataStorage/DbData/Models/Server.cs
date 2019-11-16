@@ -42,8 +42,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogWarns { get; set; }
         [Column(Name = "Unwarns"), Nullable]
         public ulong LogUnwarns { get; set; }
-        [Column(Name = "KaguyaSettingChanges"), Nullable]
-        public ulong LogKaguyaSettingChanges { get; set; }
         [Column(Name = "VoiceChannelConnections"), Nullable]
         public ulong LogVoiceChannelConnections { get; set; }
         [Column(Name = "VoiceChannelDisconnections"), Nullable]

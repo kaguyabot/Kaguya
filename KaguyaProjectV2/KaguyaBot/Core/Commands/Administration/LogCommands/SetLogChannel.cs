@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands;
 using KaguyaProjectV2.KaguyaBot.Core.Log;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -22,11 +23,74 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.SendMessages)]
         public async Task SetChannel(string logType, IGuildChannel channel)
         {
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
-            {
-                Description = $"Successfully set logtype `{string.Join(", ", logTypes)}` to channel `#{channel.Name}`"
-            };
+            KaguyaEmbedBuilder embed;
+            List<string> logTypes = await LogService.LogSwitcher(logType, true, channel.GuildId, channel);
 
+            if(logTypes.Count == 0)
+            {
+                embed = new KaguyaEmbedBuilder
+                {
+                    Description = $"Please specify a valid log type."
+                };
+                embed.SetColor(EmbedColor.RED);
+                goto Reply;
+            }
+
+            if (logTypes.Any(x => x.Equals("all", System.StringComparison.OrdinalIgnoreCase)))
+            {
+                embed = new KaguyaEmbedBuilder
+                {
+                    Description = $"Successfully enabled all log types."
+                };
+            }
+            else
+            {
+                embed = new KaguyaEmbedBuilder
+                {
+                    Description = $"Successfully enabled logtype `{string.Join(", ", logTypes).ToUpper()}`."
+                };
+            }
+
+            Reply:
+            await ReplyAsync(embed: embed.Build());
+        }
+
+        [Command("resetlogchannel")]
+        [Alias("rlog")]
+        [Summary("Disables a list of given logtypes. All available logtypes may be displayed with the `logtypes` command.")]
+        [Remarks("<logtype>\ndeletedmessages\nwarns.unwarns.bans.unbans\ntwitchnotifications")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task ResetLogChannel(string logType)
+        { 
+            KaguyaEmbedBuilder embed;
+            List<string> logTypes = await LogService.LogSwitcher(logType, false, Context.Guild.Id);
+
+            if (logTypes.Count == 0)
+            {
+                embed = new KaguyaEmbedBuilder
+                {
+                    Description = $"Please specify a valid log type."
+                };
+                embed.SetColor(EmbedColor.RED);
+                goto Reply;
+            }
+
+            if (logTypes.Any(x => x.Equals("all", System.StringComparison.OrdinalIgnoreCase)))
+            {
+                embed = new KaguyaEmbedBuilder
+                {
+                    Description = $"Successfully disabled all log types."
+                };
+            }
+            else
+            {
+                embed = new KaguyaEmbedBuilder
+                {
+                    Description = $"Successfully disabled logtype `{string.Join(", ", logTypes).ToUpper()}`."
+                };
+            }
+
+            Reply:
             await ReplyAsync(embed: embed.Build());
         }
     }
