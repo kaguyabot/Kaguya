@@ -4,7 +4,7 @@ using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Log;
+using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using Microsoft.Extensions.DependencyInjection;

@@ -4,7 +4,7 @@ using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands;
-using KaguyaProjectV2.KaguyaBot.Core.Log;
+using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task SetChannel(string logType, IGuildChannel channel)
         {
             KaguyaEmbedBuilder embed;
-            List<string> logTypes = await LogService.LogSwitcher(logType, true, channel.GuildId, channel);
+            List<string> logTypes = await LogQuery.LogSwitcher(logType, true, channel.GuildId, channel);
 
             if(logTypes.Count == 0)
             {
@@ -63,7 +63,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task ResetLogChannel(string logType)
         { 
             KaguyaEmbedBuilder embed;
-            List<string> logTypes = await LogService.LogSwitcher(logType, false, Context.Guild.Id);
+            List<string> logTypes = await LogQuery.LogSwitcher(logType, false, Context.Guild.Id);
 
             if (logTypes.Count == 0)
             {

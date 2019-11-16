@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Log
+namespace KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService
 {
     public class ConsoleLogger
     {

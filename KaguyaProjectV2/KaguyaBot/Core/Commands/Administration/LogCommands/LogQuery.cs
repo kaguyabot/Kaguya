@@ -1,6 +1,6 @@
 ﻿using Discord;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
-using KaguyaProjectV2.KaguyaBot.Core.Log;
+using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
-    public class LogService
+    public class LogQuery
     {
         /// <summary>
         /// Performs all necessary actions that allow a server to have their logtypes enabled or disabled.
@@ -39,8 +39,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "bans": server.LogBans = channel.Id; break;
                         case "unbans": server.LogUnbans = channel.Id; break;
                         case "filteredphrases": server.LogFilteredPhrases = channel.Id; break;
-                        case "userconnectstovoice": server.LogVoiceChannelConnections = channel.Id; break;
-                        case "userdisconnectsfromvoice": server.LogVoiceChannelDisconnections = channel.Id; break;
+                        case "uservoiceconnectionupdated": server.LogVoiceChannelConnections = channel.Id; break;
                         case "levelups": server.LogLevelAnnouncements = channel.Id; break;
                         case "shadowbans": server.LogShadowbans = channel.Id; break;
                         case "unshadowbans": server.LogUnshadowbans = channel.Id; break;
@@ -63,7 +62,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogUnbans = channel.Id;
                                 server.LogFilteredPhrases = channel.Id;
                                 server.LogVoiceChannelConnections = channel.Id;
-                                server.LogVoiceChannelDisconnections = channel.Id;
                                 server.LogLevelAnnouncements = channel.Id;
                                 server.LogShadowbans = channel.Id;
                                 server.LogUnshadowbans = channel.Id;
@@ -94,7 +92,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "unbans": server.LogUnbans = 0; break;
                         case "filteredphrases": server.LogFilteredPhrases = 0; break;
                         case "userconnectstovoice": server.LogVoiceChannelConnections = 0; break;
-                        case "userdisconnectsfromvoice": server.LogVoiceChannelDisconnections = 0; break;
                         case "levelups": server.LogLevelAnnouncements = 0; break;
                         case "shadowbans": server.LogShadowbans = 0; break;
                         case "unshadowbans": server.LogUnshadowbans = 0; break;
@@ -117,7 +114,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogUnbans = 0;
                                 server.LogFilteredPhrases = 0;
                                 server.LogVoiceChannelConnections = 0;
-                                server.LogVoiceChannelDisconnections = 0;
                                 server.LogLevelAnnouncements = 0;
                                 server.LogShadowbans = 0;
                                 server.LogUnshadowbans = 0;

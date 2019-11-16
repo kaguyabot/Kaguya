@@ -1,4 +1,4 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Log;
+﻿using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using System;
 using System.Data;

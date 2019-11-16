@@ -1,14 +1,13 @@
-﻿using Discord;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using System;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Log
+namespace KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService
 {
     public class LogEventListener
     {
-        static DiscordShardedClient _client = GlobalProperties.Client;
+        static DiscordShardedClient _client = GlobalProperties.client;
 
         public static void Listener()
         {
@@ -41,6 +40,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Log
             _client.UserBanned += (SocketUser user, SocketGuild guild) => ConsoleLogger.Log($"User Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]", LogLevel.DEBUG);
             _client.UserUnbanned += (SocketUser user, SocketGuild guild) => ConsoleLogger.Log($"User Un-Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]", LogLevel.DEBUG);
             _client.UserJoined += (SocketGuildUser user) => ConsoleLogger.Log($"User Joined Guild [User: {user} | User ID: {user.Id} | Guild: {user.Guild}]", LogLevel.DEBUG);
+
+            _client.UserVoiceStateUpdated += (SocketUser user, SocketVoiceState vs1, SocketVoiceState vs2) => ConsoleLogger.Log($"User Voice State Updated: [User: {user}]", LogLevel.TRACE);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Log;
+using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
@@ -73,7 +73,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             {
                 Title = "Level Up!",
                 Description = $"{context.User.Username} just leveled up! \n[Level: {ReturnLevel(user)} | Experience Points: {user.Experience.ToString("N0")}]\nRank: [COMING SOON]",
-                ThumbnailUrl = Global.GlobalProperties.Client.GetUser(user.Id).GetAvatarUrl()
+                ThumbnailUrl = Global.GlobalProperties.client.GetUser(user.Id).GetAvatarUrl()
             };
 
             return embed.Build();
