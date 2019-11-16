@@ -21,12 +21,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Supporter
     {
         [RequireSupporter]
         [Command("React")]
-        [Summary("Takes a line of text, converts the letters/numbers into reactions, and then adds it to either " +
-            "the most recent message in chat, or the specified message. Messages must be specified by ID.")]
-        [Remarks("<text>\n<message ID> <text>")]
+        [Summary("Takes a line of text and message ID and adds a reaction to the message. If no message ID is specified, the command-invoking " +
+            "message will be the recipient of the reactions.")]
+        [Remarks("<text>\n<text> <message ID>\npog\nyoinkers 8015039698640896017")]
         [RequireBotPermission(GuildPermission.AddReactions)]
-        public async Task React([Remainder]string text)
+        public async Task React(string text, ulong msgId = 0)
         {
+            IMessage message = null;
+            if (msgId == 0)
+                message = Context.Message;
+            if (msgId != 0)
+                message = await Context.Channel.GetMessageAsync(msgId);
+
             if(text.Length > 10)
             {
                 KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
@@ -47,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Supporter
                 emojis.Add(new Emoji($"{ReturnEmoji(letter)}"));
             }
 
-            await Context.Message.AddReactionsAsync(emojis.ToArray());
+            await (message as IUserMessage).AddReactionsAsync(emojis.ToArray());
         }
 
         private static UnicodeString ReturnEmoji(char letter)
