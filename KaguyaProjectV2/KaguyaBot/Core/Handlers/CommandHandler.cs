@@ -69,8 +69,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
 
             if (result.IsSuccess)
             {
+                server.TotalCommandCount++;
                 await Logger.Log($"Command Executed [Command: {context.Message} | User: {context.User} | Channel: {context.Channel} | " +
                     $"Guild: {context.Guild}]", LogLevel.INFO);
+                ServerQueries.UpdateServer(server);
                 return;
             }
 

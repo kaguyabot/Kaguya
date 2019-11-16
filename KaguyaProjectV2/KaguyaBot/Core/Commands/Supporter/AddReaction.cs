@@ -1,19 +1,11 @@
-﻿using Discord;
+﻿using Centvrio.Emoji;
+using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Centvrio.Emoji;
-using System.Reflection;
-using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Supporter
 {

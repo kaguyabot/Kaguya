@@ -16,10 +16,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public string CommandPrefix { get; set; } = "$";
         [Column(Name = "CommandCount"), NotNull]
         public int TotalCommandCount { get; set; }
+        [Column(Name = "KaguyaServerLog"), Nullable]
+        public ulong LogKaguyaServerLog { get; set; }
         [Column(Name = "DeletedMessages"), Nullable]
         public ulong LogDeletedMessages { get; set; }
         [Column(Name = "UpdatedMessages"), Nullable]
         public ulong LogUpdatedMessages { get; set; }
+        [Column(Name = "FilteredPhrases"), Nullable]
+        public ulong LogFilteredPhrases { get; set; }
         [Column(Name = "UserJoins"), Nullable]
         public ulong LogUserJoins { get; set; }
         [Column(Name = "UserLeaves"), Nullable]
@@ -48,6 +52,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogLevelAnnouncements { get; set; }
         [Column(Name = "Antiraids"), Nullable]
         public ulong LogAntiraids { get; set; }
+        [Column(Name = "TwitchNotifications"), Nullable]
+        public ulong LogTwitchNotifications { get; set; }
+        [Column(Name = "YoutubeNotifications"), Nullable]
+        public ulong LogYouTubeNotifications { get; set; }
+        [Column(Name = "RedditNotifications"), Nullable]
+        public ulong LogRedditNotifications { get; set; }
+        [Column(Name = "TwitterNotifications"), Nullable]
+        public ulong LogTwitterNotifications { get; set; }
         [Column(Name = "IsBlacklisted"), NotNull]
         public bool IsBlacklisted { get; set; }
         [Column(Name = "AutoWarnOnBlacklistedPhrase"), NotNull]
