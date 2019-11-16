@@ -1,8 +1,5 @@
 ﻿using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using KaguyaProjectV2.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Log;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -10,29 +7,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
-    public class SetLogChannel : ModuleBase<ShardedCommandContext>
+    public class LogService
     {
-        [Command("setlogchannel")]
-        [Alias("log")]
-        [Summary("Enables a list of given logtypes, and sends the log messages to a specific channel.")]
-        [Remarks("<logtype> <channel>\ndeletedmessages #my-log-channel\nkaguyaserverlog.bans.unbans #my-admin-log-channel\ntwitchnotifications #live-streams")]
-        public async Task SetChannel(string logType, IGuildChannel channel)
+        /// <summary>
+        /// Performs all necessary actions that allow a server to have their logtypes enabled or disabled.
+        /// </summary>
+        /// <param name="args">A period separated list of logtypes to enable/disable.</param>
+        /// <param name="channel">The channel where we will be sending the log messages to.</param>
+        /// <param name="enabled">A boolean stating whether we should enable the logging or disable it.</param>
+        public static async Task<List<string>> LogSwitcher(string args, IGuildChannel channel, bool enabled)
         {
-            string[] logTypes = ArrayInterpreter.ReturnParams(logType);
-            Server server = ServerQueries.GetServer(Context.Guild.Id);
-            
-            foreach(var type in logTypes)
+            List<string> logTypes = ArrayInterpreter.ReturnParams(args).ToList();
+            Server server = ServerQueries.GetServer(channel.GuildId);
+
+            foreach (var type in logTypes.ToList())
             {
-                await Logger.Log($"Server has set log type: [ID: {Context.Guild.Id} | Type: {type.ToUpperInvariant()}]", DataStorage.JsonStorage.LogLevel.DEBUG);
+                await Logger.Log($"Server has set log type: [ID: {channel.GuildId} | Type: {type.ToUpperInvariant()}]", LogLevel.DEBUG);
                 switch (type.ToLower())
                 {
                     case "kaguyaserverlog": server.LogKaguyaServerLog = channel.Id; break;
                     case "deletedmessages": server.LogDeletedMessages = channel.Id; break;
                     case "updatedmessages": server.LogUpdatedMessages = channel.Id; break;
                     case "userjoins": server.LogUserJoins = channel.Id; break;
-                    case "userexits": server.LogUserLeaves = channel.Id; break;
+                    case "userleaves": server.LogUserLeaves = channel.Id; break;
                     case "antiraid": server.LogAntiraids = channel.Id; break;
                     case "kicks": server.LogKicks = channel.Id; break;
                     case "bans": server.LogBans = channel.Id; break;
@@ -74,17 +73,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             server.LogTwitterNotifications = channel.Id;
                         }
                         break;
+                    default: logTypes.Remove(type); break;
                 }
             }
 
             ServerQueries.UpdateServer(server);
-
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
-            {
-                Description = $"Successfully set logtype `{string.Join(", ", logTypes)}` to channel `#{channel.Name}`"
-            };
-
-            await ReplyAsync(embed: embed.Build());
+            return logTypes;
         }
     }
 }
