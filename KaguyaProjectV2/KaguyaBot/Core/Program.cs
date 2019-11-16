@@ -35,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                     GlobalPropertySetup(_config);
 
-                    EventListener.Listener();
+                    LogEventListener.Listener();
                     TestDatabaseConnection();
 
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 }
                 catch(Discord.Net.HttpException e)
                 {
-                    await Logger.Log($"Error when logging into Discord: " +
+                    await ConsoleLogger.Log($"Error when logging into Discord: " +
                         $"Have you configured your config file? Is your token correct?", LogLevel.ERROR);
                     Console.ReadLine();
                 }
@@ -83,12 +83,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 if(KaguyaBot.DataStorage.DbData.Queries.TestQueries.TestConnection().ToString() == "True")
                 {
-                    Logger.Log("Database connection successfully established.", LogLevel.INFO);
+                    ConsoleLogger.Log("Database connection successfully established.", LogLevel.INFO);
                 }
             }
             catch(Exception e)
             {
-                Logger.Log($"Failed to establish database connection. Have you properly configured your config file?", LogLevel.ERROR);
+                ConsoleLogger.Log($"Failed to establish database connection. Have you properly configured your config file?", LogLevel.ERROR);
             }
         }
     }

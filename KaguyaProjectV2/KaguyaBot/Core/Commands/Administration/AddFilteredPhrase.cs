@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (!allFP.Contains(fp))
                 {
                     ServerQueries.AddFilteredPhrase(fp); 
-                    await Logger.Log($"Server {server.Id} has added the phrase \"{element}\" to their word filter.", DataStorage.JsonStorage.LogLevel.DEBUG);
+                    await ConsoleLogger.Log($"Server {server.Id} has added the phrase \"{element}\" to their word filter.", DataStorage.JsonStorage.LogLevel.DEBUG);
                 }
                 else
                     continue;

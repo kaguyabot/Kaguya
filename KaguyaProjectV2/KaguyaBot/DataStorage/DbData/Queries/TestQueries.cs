@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 }
                 catch(Exception e)
                 {
-                    Logger.Log($"Failed to establish database connection!! {e.Message}", Core.DataStorage.JsonStorage.LogLevel.ERROR);
+                    ConsoleLogger.Log($"Failed to establish database connection!! {e.Message}", Core.DataStorage.JsonStorage.LogLevel.ERROR);
                     return false;
                 }
             }

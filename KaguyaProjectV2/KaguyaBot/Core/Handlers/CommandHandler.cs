@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             if (result.IsSuccess)
             {
                 server.TotalCommandCount++;
-                await Logger.Log($"Command Executed [Command: {context.Message} | User: {context.User} | Channel: {context.Channel} | " +
+                await ConsoleLogger.Log($"Command Executed [Command: {context.Message} | User: {context.User} | Channel: {context.Channel} | " +
                     $"Guild: {context.Guild}]", LogLevel.INFO);
                 ServerQueries.UpdateServer(server);
                 return;
@@ -98,7 +98,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
                 if (message.Content.ToLower().Contains(phrase.ToLower()))
                 {
                     await context.Channel.DeleteMessageAsync(message);
-                    await Logger.Log($"Filtered phrase detected: [Guild: {server.Id} | Phrase: {phrase}]", LogLevel.INFO);
+                    await ConsoleLogger.Log($"Filtered phrase detected: [Guild: {server.Id} | Phrase: {phrase}]", LogLevel.INFO);
                     return true;
                 }
             }
@@ -109,7 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
         private async void HandleCommandResult(ICommandContext context, Server server, IResult result)
         {
             string cmdPrefix = server.CommandPrefix;
-            await Logger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.DEBUG);
+            await ConsoleLogger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.DEBUG);
 
             if (!result.IsSuccess)
             {

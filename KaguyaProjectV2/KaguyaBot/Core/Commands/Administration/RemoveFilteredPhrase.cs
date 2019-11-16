@@ -50,7 +50,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (allFP.Contains(fp))
                 {
                     ServerQueries.RemoveFilteredPhrase(fp);
-                    await Logger.Log($"Server {server.Id} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLevel.DEBUG);
+                    await ConsoleLogger.Log($"Server {server.Id} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLevel.DEBUG);
                 }
                 else
                     continue;

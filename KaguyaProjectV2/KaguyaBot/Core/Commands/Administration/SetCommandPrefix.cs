@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             if(prefix.Length > 5)
             {
-                await Logger.Log("Command prefix was too long. Not set.", DataStorage.JsonStorage.LogLevel.DEBUG);
+                await ConsoleLogger.Log("Command prefix was too long. Not set.", DataStorage.JsonStorage.LogLevel.DEBUG);
 
                 embed.WithDescription("Your command prefix may not be longer than 5 characters.");
                 embed.SetColor(EmbedColor.RED);
