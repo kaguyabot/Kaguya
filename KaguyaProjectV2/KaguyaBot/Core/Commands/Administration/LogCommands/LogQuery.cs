@@ -31,8 +31,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                     {
                         case "modlog":
                         {
-                            if(server.IsPremium)
-                                server.ModLog = channel.Id; 
+                            if (server.IsPremium)
+                            {
+                                server.ModLog = channel.Id;
+                            }
                             break;
                         }
                         case "deletedmessages": server.LogDeletedMessages = channel.Id; break;

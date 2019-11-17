@@ -1,5 +1,7 @@
 ﻿using Discord;
+using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -9,9 +11,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     /// </summary>
     public class PremiumModerationLog
     {
-        public IGuildUser Moderator { get; set; }
-        public IGuildUser ActionRecipient { get; set; }
-        public PremiumModerationActionHandler Action { get; set; }
+        public Server Server { get; set; }
+        public SocketGuildUser Moderator { get; set; }
+        public SocketGuildUser ActionRecipient { get; set; }
+        public PremiumModerationActions Action { get; set; }
         public string Reason { get; set; }
 
         public static KaguyaEmbedBuilder ModerationLogEmbed(PremiumModerationLog log)
@@ -22,27 +25,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             
             switch (log.Action)
             {
-                case PremiumModerationActionHandler.SHADOWBAN:
+                case PremiumModerationActions.SHADOWBAN:
                     actionTitle += "Shadowbanned";
                     embedUrl = "https://i.imgur.com/86tSNSa.png";
                     break;
-                case PremiumModerationActionHandler.UNSHADOWBAN:
+                case PremiumModerationActions.UNSHADOWBAN:
                     actionTitle += "UnShadowbanned";
                     embedUrl = "https://i.imgur.com/szeC3hH.png";
                     break;
-                case PremiumModerationActionHandler.MUTE:
+                case PremiumModerationActions.MUTE:
                     actionTitle += "Muted";
                     embedUrl = "https://i.imgur.com/D1y3A7E.png";
                     break;
-                case PremiumModerationActionHandler.UNMUTE:
+                case PremiumModerationActions.UNMUTE:
                     actionTitle += "Unmuted";
                     embedUrl = "https://i.imgur.com/9x2MHFI.png";
                     break;
-                case PremiumModerationActionHandler.WARN:
+                case PremiumModerationActions.WARN:
                     actionTitle += "Warned";
                     embedUrl = "https://i.imgur.com/LZmdn9k.png";
                     break;
-                case PremiumModerationActionHandler.UNWARN:
+                case PremiumModerationActions.UNWARN:
                     actionTitle += "Unwarned";
                     embedUrl = "https://i.imgur.com/915ZT6q.png";
                     break;
@@ -50,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             return new KaguyaEmbedBuilder
             {
-                Title = actionTitle,
+                Title = actionTitle + $"`Case: #{log.Server.TotalAdminActions}`",
                 Description = $"User Actioned: `[Name: {log.ActionRecipient} | ID: {log.ActionRecipient.Id}]`\n" +
                               $"Punisher: `[Name: {log.Moderator} | ID: {log.Moderator.Id}]`\n" +
                               $"Reason: `{reason}`",
@@ -62,7 +65,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     /// <summary>
     /// An enum containing all of the premium loggable moderation actions.
     /// </summary>
-    public enum PremiumModerationActionHandler
+    public enum PremiumModerationActions
     {
         SHADOWBAN,
         MUTE,

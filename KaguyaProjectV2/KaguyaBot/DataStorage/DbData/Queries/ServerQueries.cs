@@ -140,5 +140,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 db.Delete(waObject);
             }
         }
+
+        public static void AddWarnedUser(WarnedUser wuObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.Insert(wuObject);
+            }
+        }
+
+        public static void RemoveWarnedUser(WarnedUser wuObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.Delete(wuObject);
+            }
+        }
     }
 }

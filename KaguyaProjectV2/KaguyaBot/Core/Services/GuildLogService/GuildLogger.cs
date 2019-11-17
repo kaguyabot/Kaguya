@@ -18,12 +18,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 {
     public class GuildLogger
     {
-        private static DiscordShardedClient _client = GlobalProperties.client;
+        private static readonly DiscordShardedClient _client = GlobalProperties.client;
         private static KaguyaEmbedBuilder _embed;
 
         public static async void GuildLogListener()
         {
-            //KaguyaServerLog
             _client.MessageDeleted += _client_MessageDeleted;
             _client.MessageUpdated += _client_MessageUpdated;
             _client.UserJoined += _client_UserJoined;

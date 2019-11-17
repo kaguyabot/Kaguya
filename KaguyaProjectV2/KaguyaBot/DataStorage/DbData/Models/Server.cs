@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogUnbans { get; set; }
         [Column(Name = "Kicks"), Nullable]
         public ulong LogKicks { get; set; }
-        [Column(Name = "Shadowbans"), Nullable]
+        [Column(Name = "VoiceChannelConnections"), Nullable]
         public ulong LogVoiceChannelConnections { get; set; }
         [Column(Name = "LevelAnnouncements"), Nullable]
         public ulong LogLevelAnnouncements { get; set; }
@@ -81,5 +81,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
         public IEnumerable<BlackListedChannel> BlackListedChannels { get; set; }
+        /// <summary>
+        /// FK_KaguyaServer_WarnedUsers_BackReference
+        /// </summary>
+        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        public IEnumerable<WarnedUser> WarnedUsers { get; set; }
     }
 }
