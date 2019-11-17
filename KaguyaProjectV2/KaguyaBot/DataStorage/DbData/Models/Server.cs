@@ -58,8 +58,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogTwitterNotifications { get; set; }
         [Column(Name = "IsBlacklisted"), NotNull]
         public bool IsBlacklisted { get; set; }
+        [Column(Name = "IsPremium"), NotNull]
+        public bool IsPremium { get; set; }
         [Column(Name = "AutoWarnOnBlacklistedPhrase"), NotNull]
-        public bool AutoWarnOnBlacklistedPhrase { get; set; }
+        public bool AutoWarnOnBlacklistedPhrase { get; set; } = false;
         /// <summary>
         /// FK_KaguyaServer_MutedUsers_BackReference
         /// </summary>

@@ -16,8 +16,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int Experience { get; set; }
         [Column(Name = "Points"), NotNull]
         public int Points { get; set; }
-        [Column(Name = "Diamonds"), NotNull]
-        public int Diamonds { get; set; }
+        [Column(Name = "PremiumTokens"), NotNull]
+        public int PremiumTokens { get; set; }
         [Column(Name = "Rep"), NotNull]
         public int Rep { get; set; }
         [Column(Name = "OsuId"), Nullable]
