@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             var context = new ShardedCommandContext(_client, message);
             await IsFilteredPhrase(context, server, message);
 
-            ExperienceHandler.AddEXP(user, context);
+            ExperienceHandler.AddExp(user, context);
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||

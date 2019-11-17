@@ -16,8 +16,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public string CommandPrefix { get; set; } = "$";
         [Column(Name = "CommandCount"), NotNull]
         public int TotalCommandCount { get; set; }
-        [Column(Name = "KaguyaServerLog"), Nullable]
-        public ulong LogKaguyaServerLog { get; set; }
+        [Column(Name = "TotalAdminActions"), NotNull]
+        public int TotalAdminActions { get; set; }
+        [Column(Name = "ModLog"), Nullable]
+        public ulong ModLog { get; set; }
         [Column(Name = "DeletedMessages"), Nullable]
         public ulong LogDeletedMessages { get; set; }
         [Column(Name = "UpdatedMessages"), Nullable]
@@ -35,14 +37,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "Kicks"), Nullable]
         public ulong LogKicks { get; set; }
         [Column(Name = "Shadowbans"), Nullable]
-        public ulong LogShadowbans { get; set; }
-        [Column(Name = "Unshadowbans"), Nullable]
-        public ulong LogUnshadowbans { get; set; }
-        [Column(Name = "Warns"), Nullable]
-        public ulong LogWarns { get; set; }
-        [Column(Name = "Unwarns"), Nullable]
-        public ulong LogUnwarns { get; set; }
-        [Column(Name = "VoiceChannelConnections"), Nullable]
         public ulong LogVoiceChannelConnections { get; set; }
         [Column(Name = "LevelAnnouncements"), Nullable]
         public ulong LogLevelAnnouncements { get; set; }

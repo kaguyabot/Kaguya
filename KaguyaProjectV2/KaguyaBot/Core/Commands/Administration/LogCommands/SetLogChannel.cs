@@ -1,17 +1,11 @@
-﻿using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using KaguyaProjectV2.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands;
-using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+using KaguyaProjectV2.Core.Handlers;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
     public class SetLogChannel : ModuleBase<ShardedCommandContext>
     {

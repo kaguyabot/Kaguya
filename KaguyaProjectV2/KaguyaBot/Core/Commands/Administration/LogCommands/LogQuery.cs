@@ -29,7 +29,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                     await ConsoleLogger.Log($"Server has set log type: [ID: {channel.GuildId} | Type: {type.ToUpperInvariant()}]", LogLevel.DEBUG);
                     switch (type.ToLower())
                     {
-                        case "kaguyaserverlog": server.LogKaguyaServerLog = channel.Id; break;
+                        case "modlog":
+                        {
+                            if(server.IsPremium)
+                                server.ModLog = channel.Id; 
+                            break;
+                        }
                         case "deletedmessages": server.LogDeletedMessages = channel.Id; break;
                         case "updatedmessages": server.LogUpdatedMessages = channel.Id; break;
                         case "userjoins": server.LogUserJoins = channel.Id; break;
@@ -41,17 +46,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "filteredphrases": server.LogFilteredPhrases = channel.Id; break;
                         case "uservoiceconnectionupdated": server.LogVoiceChannelConnections = channel.Id; break;
                         case "levelups": server.LogLevelAnnouncements = channel.Id; break;
-                        case "shadowbans": server.LogShadowbans = channel.Id; break;
-                        case "unshadowbans": server.LogUnshadowbans = channel.Id; break;
-                        case "warns": server.LogWarns = channel.Id; break;
-                        case "unwarns": server.LogUnwarns = channel.Id; break;
                         case "twitchnotifications": server.LogTwitchNotifications = channel.Id; break;
                         case "youtubenotifications": server.LogYouTubeNotifications = channel.Id; break;
                         case "redditnotifications": server.LogRedditNotifications = channel.Id; break;
                         case "twitternotifications": server.LogTwitterNotifications = channel.Id; break;
                         case "all":
                             {
-                                server.LogKaguyaServerLog = channel.Id;
+                                server.ModLog = channel.Id;
                                 server.LogDeletedMessages = channel.Id;
                                 server.LogUpdatedMessages = channel.Id;
                                 server.LogUserJoins = channel.Id;
@@ -63,10 +64,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogFilteredPhrases = channel.Id;
                                 server.LogVoiceChannelConnections = channel.Id;
                                 server.LogLevelAnnouncements = channel.Id;
-                                server.LogShadowbans = channel.Id;
-                                server.LogUnshadowbans = channel.Id;
-                                server.LogWarns = channel.Id;
-                                server.LogUnwarns = channel.Id;
                                 server.LogTwitchNotifications = channel.Id;
                                 server.LogYouTubeNotifications = channel.Id;
                                 server.LogRedditNotifications = channel.Id;
@@ -81,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                     await ConsoleLogger.Log($"Server has disabled log type: [ID: {guildId} | Type: {type.ToUpperInvariant()}]", LogLevel.DEBUG);
                     switch (type.ToLower())
                     {
-                        case "kaguyaserverlog": server.LogKaguyaServerLog = 0; break;
+                        case "kaguyaserverlog": server.ModLog = 0; break;
                         case "deletedmessages": server.LogDeletedMessages = 0; break;
                         case "updatedmessages": server.LogUpdatedMessages = 0; break;
                         case "userjoins": server.LogUserJoins = 0; break;
@@ -93,17 +90,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "filteredphrases": server.LogFilteredPhrases = 0; break;
                         case "userconnectstovoice": server.LogVoiceChannelConnections = 0; break;
                         case "levelups": server.LogLevelAnnouncements = 0; break;
-                        case "shadowbans": server.LogShadowbans = 0; break;
-                        case "unshadowbans": server.LogUnshadowbans = 0; break;
-                        case "warns": server.LogWarns = 0; break;
-                        case "unwarns": server.LogUnwarns = 0; break;
                         case "twitchnotifications": server.LogTwitchNotifications = 0; break;
                         case "youtubenotifications": server.LogYouTubeNotifications = 0; break;
                         case "redditnotifications": server.LogRedditNotifications = 0; break;
                         case "twitternotifications": server.LogTwitterNotifications = 0; break;
                         case "all":
                             {
-                                server.LogKaguyaServerLog = 0;
+                                server.ModLog = 0;
                                 server.LogDeletedMessages = 0;
                                 server.LogUpdatedMessages = 0;
                                 server.LogUserJoins = 0;
@@ -115,10 +108,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogFilteredPhrases = 0;
                                 server.LogVoiceChannelConnections = 0;
                                 server.LogLevelAnnouncements = 0;
-                                server.LogShadowbans = 0;
-                                server.LogUnshadowbans = 0;
-                                server.LogWarns = 0;
-                                server.LogUnwarns = 0;
                                 server.LogTwitchNotifications = 0;
                                 server.LogYouTubeNotifications = 0;
                                 server.LogRedditNotifications = 0;

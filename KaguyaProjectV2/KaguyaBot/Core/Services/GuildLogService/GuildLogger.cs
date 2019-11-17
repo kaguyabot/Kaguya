@@ -18,8 +18,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 {
     public class GuildLogger
     {
-        static DiscordShardedClient _client = GlobalProperties.client;
-        static KaguyaEmbedBuilder embed;
+        private static DiscordShardedClient _client = GlobalProperties.client;
+        private static KaguyaEmbedBuilder _embed;
 
         public static async void GuildLogListener()
         {
@@ -35,10 +35,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             //FilteredPhrase
             _client.UserVoiceStateUpdated += _client_UserVoiceStateUpdated;
             //LevelUps
-            //Shadowbans
-            //UnShadowbans
-            //Warns
-            //Unwarns
             //Twitch, youtube, reddit, twitter notifications
         }
 
@@ -87,7 +83,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                     embedURL = "https://i.imgur.com/Z4JTUBq.png";
                 }
 
-                embed = new KaguyaEmbedBuilder
+                _embed = new KaguyaEmbedBuilder
                 {
                     Title = "User Voice State Updated",
                     Description = $"User: `[Name: {arg1} | ID: {arg1.Id}]`\nOld Voice Channel: `{oldVoice}`\nNew Voice Channel: `{newVoice}`",
@@ -95,25 +91,32 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 };
             }
 
-            await _client.GetGuild(server.Id).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(embed: embed.Build());
+            await _client.GetGuild(server.Id).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(embed: _embed.Build());
         }
 
         private static async Task _client_UserUnbanned(SocketUser arg1, SocketGuild arg2)
         {
-            Server server = ServerQueries.GetServer(arg2.Id); //TODO
-
+            Server server = ServerQueries.GetServer(arg2.Id);
+            if (server.LogUnbans == 0)
+                return;
         }
 
         private static async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)
         {
-            Server server = ServerQueries.GetServer(arg2.Id); //TODO
+            Server server = ServerQueries.GetServer(arg2.Id);
+            if (server.LogBans == 0)
+                return;
+
+            
         }
 
         private static async Task _client_UserLeft(SocketGuildUser arg)
         {
             Server server = ServerQueries.GetServer(arg.Guild.Id);
+            if (server.LogUserLeaves == 0)
+                return;
 
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+            KaguyaEmbedBuilder builder = new KaguyaEmbedBuilder
             {
                 Author = new EmbedAuthorBuilder
                 {
@@ -124,14 +127,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 ThumbnailUrl = "https://i.imgur.com/1I0ayRE.png",
             };
 
-            await _client.GetGuild(server.Id).GetTextChannel(server.LogUserJoins).SendMessageAsync(embed: embed.Build());
+            await _client.GetGuild(server.Id).GetTextChannel(server.LogUserJoins).SendMessageAsync(embed: builder.Build());
         }
 
         private static async Task _client_UserJoined(SocketGuildUser arg)
         {
             Server server = ServerQueries.GetServer(arg.Guild.Id);
+            if (server.LogUserJoins == 0)
+                return;
 
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+            KaguyaEmbedBuilder builder = new KaguyaEmbedBuilder
             {
                 Author = new EmbedAuthorBuilder
                 {
@@ -142,20 +147,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 ThumbnailUrl = "https://i.imgur.com/3PsE0Ey.png",
             };
 
-            await _client.GetGuild(server.Id).GetTextChannel(server.LogUserJoins).SendMessageAsync(embed: embed.Build());
+            await _client.GetGuild(server.Id).GetTextChannel(server.LogUserJoins).SendMessageAsync(embed: builder.Build());
         }
 
         private static async Task _client_MessageUpdated(Cacheable<IMessage, ulong> arg1, SocketMessage arg2, ISocketMessageChannel arg3)
         {
+            Server server = ServerQueries.GetServer(((SocketGuildChannel)arg3).Guild.Id);
+            if (server.LogUpdatedMessages == 0)
+                return;
+
             IMessage oldMsg = arg1.Value;
             string content = oldMsg.Content;
 
             if (oldMsg.Author.IsBot) return;
             if (string.IsNullOrEmpty(content)) content = "<No previous text>";
 
-            Server server = ServerQueries.GetServer((arg3 as SocketGuildChannel).Guild.Id);
-
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+            KaguyaEmbedBuilder builder = new KaguyaEmbedBuilder
             {
                 Title = "Message Updated",
                 Description = $"User: `[Name: {oldMsg.Author} | ID: {oldMsg.Author.Id}]`\n" +
@@ -163,65 +170,62 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 ThumbnailUrl = "https://i.imgur.com/uYkjSxM.png"
             };
 
-            await _client.GetGuild(server.Id).GetTextChannel(server.LogUpdatedMessages).SendMessageAsync(embed: embed.Build());
+            await _client.GetGuild(server.Id).GetTextChannel(server.LogUpdatedMessages).SendMessageAsync(embed: builder.Build());
         }
 
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
         {
-            Server server = ServerQueries.GetServer((arg2 as SocketGuildChannel).Guild.Id);
+            Server server = ServerQueries.GetServer(((SocketGuildChannel) arg2).Guild.Id);
+            if (server.LogDeletedMessages == 0)
+                return;
 
-            if(server.LogDeletedMessages != 0)
+            IMessage message = arg1.Value;
+            if (message is null)
+                return;
+
+            KaguyaEmbedBuilder builder;
+            string content = string.IsNullOrEmpty(message.Content)
+                ? "<Message contained no text>" : $"{message.Content}";
+
+            if (message.Attachments.Count == 0)
             {
-                var message = arg1.Value;
-                if (message is null)
-                    return;
-
-                KaguyaEmbedBuilder embed;
-                string content;
-
-                if (!string.IsNullOrEmpty(message.Content))
-                    content = $"{message.Content}";
-                else
-                    content = "<Message contained no text>";
-
-                if (message.Attachments.Count == 0)
+                builder = new KaguyaEmbedBuilder
                 {
-                    embed = new KaguyaEmbedBuilder
+                    Title = "Message Deleted",
+                    Description = $"User: `[Name: {message.Author} | ID: {message.Author.Id}]`\n" +
+                                  $"Content: `{content}`\nChannel: `{message.Channel}`\nDate Created: `{message.CreatedAt}`\n",
+                    ThumbnailUrl = "https://i.imgur.com/hooIc7u.png"
+                };
+            }
+            else
+            {
+                if (server.IsPremium)
+                {
+                    builder = new KaguyaEmbedBuilder
                     {
                         Title = "Message Deleted",
                         Description = $"User: `[Name: {message.Author} | ID: {message.Author.Id}]`\n" +
-                        $"Content: `{content}`\nChannel: `{message.Channel}`\nDate Created: `{message.CreatedAt}`\n",
-                        ThumbnailUrl = "https://i.imgur.com/hooIc7u.png"
+                                      $"Content: `{content}`\nChannel: `{message.Channel}`\nDate Created: `{message.CreatedAt}`\n" +
+                                      $"Number of Attachments: `{message.Attachments.Count}`\nAttachment URL: {message.Attachments.FirstOrDefault()?.ProxyUrl}",
+                        ThumbnailUrl = "https://i.imgur.com/hooIc7u.png",
+                        ImageUrl = message.Attachments.FirstOrDefault()?.ProxyUrl
                     };
                 }
                 else
                 {
-                    if (server.IsPremium)
+                    builder = new KaguyaEmbedBuilder
                     {
-                        embed = new KaguyaEmbedBuilder
-                        {
-                            Title = "Message Deleted",
-                            Description = $"User: `[Name: {message.Author} | ID: {message.Author.Id}]`\n" +
-                            $"Content: `{content}`\nChannel: `{message.Channel}`\nDate Created: `{message.CreatedAt}`\n" +
-                            $"Number of Attachments: `{message.Attachments.Count}`\nAttachment URL: {message.Attachments.FirstOrDefault().ProxyUrl}",
-                            ThumbnailUrl = "https://i.imgur.com/hooIc7u.png",
-                            ImageUrl = message.Attachments.FirstOrDefault().ProxyUrl
-                        };
-                    }
-                    else
-                    {
-                        embed = new KaguyaEmbedBuilder
-                        {
-                            Title = "Message Deleted",
-                            Description = $"User: `[Name: {message.Author} | ID: {message.Author.Id}]`\n" +
-                            $"Content: `{content}`\nChannel: `{message.Channel}`\nDate Created: `{message.CreatedAt}`\n" +
-                            $"Number of Attachments: `{message.Attachments.Count}`",
-                            ThumbnailUrl = "https://i.imgur.com/hooIc7u.png",
-                        };
-                    }
+                        Title = "Message Deleted",
+                        Description = $"User: `[Name: {message.Author} | ID: {message.Author.Id}]`\n" +
+                                      $"Content: `{content}`\nChannel: `{message.Channel}`\nDate Created: `{message.CreatedAt}`\n" +
+                                      $"Number of Attachments: `{message.Attachments.Count}`",
+                        ThumbnailUrl = "https://i.imgur.com/hooIc7u.png",
+                    };
                 }
-               await _client.GetGuild(server.Id).GetTextChannel(server.LogDeletedMessages).SendMessageAsync(embed: embed.Build());
             }
+
+            await _client.GetGuild(server.Id).GetTextChannel(server.LogDeletedMessages)
+                .SendMessageAsync(embed: builder.Build());
         }
     }
 }

@@ -10,38 +10,40 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public static class ExperienceHandler
     {
-        public static async void AddEXP(User user, ICommandContext context)
+        public static async void AddExp(User user, ICommandContext context)
         {
             Server server = ServerQueries.GetServer(context.Guild.Id);
 
             // If the user can receive exp, give them between 5 and 8.
-            if (CanGetExperience(user))
+            if (!CanGetExperience(user))
             {
-                var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
-                double oldLevel = ReturnLevel(user);
-
-                Random r = new Random();
-                int exp = r.Next(5, 8);
-
-                user.Experience += exp;
-                user.LatestEXP = DateTime.Now.ToOADate();
-                Users.UpdateUser(user);
-
-                double newLevel = ReturnLevel(user);
-                await ConsoleLogger.Log($"User has received {exp} exp. [ID: {user.Id} | New EXP: {user.Experience.ToString("N0")}]", DataStorage.JsonStorage.LogLevel.TRACE);
-
-                if(HasLeveledUp(oldLevel, newLevel))
-                {
-                    await ConsoleLogger.Log($"User has leveled up. [ID: {user.Id} | Level: {newLevel} | Experience: {user.Experience}]", DataStorage.JsonStorage.LogLevel.INFO);
-                    if (levelAnnouncementChannel != null)
-                    {
-                        await (levelAnnouncementChannel as IMessageChannel).SendMessageAsync(embed: LevelUpEmbed(user, context));
-                        return;
-                    }
-
-                    await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, context));
-                }
+                return;
             }
+            var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
+            double oldLevel = ReturnLevel(user);
+
+            Random r = new Random();
+            int exp = r.Next(5, 8);
+
+            user.Experience += exp;
+            user.LatestEXP = DateTime.Now.ToOADate();
+            Users.UpdateUser(user);
+
+            double newLevel = ReturnLevel(user);
+            await ConsoleLogger.Log($"User has received {exp} exp. [ID: {user.Id} | New EXP: {user.Experience.ToString("N0")}]", DataStorage.JsonStorage.LogLevel.TRACE);
+
+            if (!HasLeveledUp(oldLevel, newLevel))
+            {
+                return;
+            }
+            await ConsoleLogger.Log($"User has leveled up. [ID: {user.Id} | Level: {newLevel} | Experience: {user.Experience}]", DataStorage.JsonStorage.LogLevel.INFO);
+            if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
+            {
+                await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, context));
+                return;
+            }
+
+            await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, context));
         }
 
         private static bool CanGetExperience(User user)
