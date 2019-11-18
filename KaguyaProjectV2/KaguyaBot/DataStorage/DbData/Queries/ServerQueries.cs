@@ -156,5 +156,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 db.Delete(wuObject);
             }
         }
+
+        public static List<WarnedUser> GetWarnedUser(ulong serverId, ulong userId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return db.GetTable<WarnedUser>().Where(x => x.ServerId == serverId && x.UserId == userId).ToList();
+            }
+        }
     }
 }

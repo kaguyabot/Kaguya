@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
@@ -21,18 +22,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             var config = new DiscordSocketConfig
             {
-                MessageCacheSize = 200,
+                MessageCacheSize = 500,
                 TotalShards = 2
             };
 
+            client = new DiscordShardedClient(config);
+
             SetupKaguya();
 
-            using (var services = new SetupServices().ConfigureServices(config))
+            using (var services = new SetupServices().ConfigureServices(config, client))
             {
                 try
                 {
-                    client = services.GetRequiredService<DiscordShardedClient>();
-
                     var _config = await Config.GetOrCreateConfigAsync();
 
                     GlobalPropertySetup(_config);
@@ -41,6 +42,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     GuildLogger.GuildLogListener();
 
                     TestDatabaseConnection();
+
+                    client = services.GetRequiredService<DiscordShardedClient>();
 
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
                     await client.LoginAsync(TokenType.Bot, _config.Token);

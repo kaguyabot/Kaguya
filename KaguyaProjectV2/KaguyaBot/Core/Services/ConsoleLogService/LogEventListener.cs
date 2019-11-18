@@ -1,11 +1,12 @@
-﻿using Discord;
+﻿using System;
+using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using System;
-using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService
+namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {
     public class LogEventListener
     {
@@ -20,12 +21,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService
                 ConsoleLogger.Log($"Shard {client.ShardId} latency has updated. [Old: {oldLatency}ms | New: {newLatency}ms]", LogLevel.TRACE);
 
             _client.ChannelCreated += (SocketChannel channel) =>
-                ConsoleLogger.Log($"Channel Created [Name: #{(channel as SocketGuildChannel).Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel).Guild}]", LogLevel.DEBUG);
+                ConsoleLogger.Log($"Channel Created [Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]", LogLevel.DEBUG);
             _client.ChannelDestroyed += (SocketChannel channel) =>
-                ConsoleLogger.Log($"Channel Deleted [Name: #{(channel as SocketGuildChannel).Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel).Guild}]", LogLevel.DEBUG);
+                ConsoleLogger.Log($"Channel Deleted [Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]", LogLevel.DEBUG);
             _client.ChannelUpdated += (SocketChannel channel, SocketChannel channel2) =>
-                ConsoleLogger.Log($"Channel Updated [Name: #{(channel as SocketGuildChannel).Name} | New Name: #{(channel2 as SocketGuildChannel).Name} | ID: {channel.Id} |" +
-                $" Guild: {(channel as SocketGuildChannel).Guild}]", LogLevel.TRACE);
+                ConsoleLogger.Log($"Channel Updated [Name: #{channel} | New Name: #{channel2} | ID: {channel.Id} |" +
+                $" Guild: {(channel as SocketGuildChannel)?.Guild}]", LogLevel.TRACE);
 
             _client.JoinedGuild += (SocketGuild guild) => ConsoleLogger.Log($"Joined Guild [Name: {guild.Name} | ID: {guild.Id}]", LogLevel.INFO);
             _client.LeftGuild += (SocketGuild guild) => ConsoleLogger.Log($"Left Guild [Name: {guild.Name} | ID: {guild.Id}]", LogLevel.INFO);

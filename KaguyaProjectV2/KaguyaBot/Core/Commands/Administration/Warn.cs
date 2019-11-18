@@ -21,9 +21,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                  "(via the `warnpunishments` command), the user will be actioned accordingly. Upon receiving " +
                  "a warning, the user is DM'd with who warned them, why they were warned, and what server they received the warning from.")]
         [Remarks("<user> [reason]\nSmellyPanda#1955\nRealMeanUser#0000 You can't say that here!")]
-        public async Task AddWarn(IGuildUser user, [Remainder]string reason = null)
+        [RequireUserPermission(GuildPermission.BanMembers)]
+        [RequireUserPermission(GuildPermission.KickMembers)]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task AddWarn(IGuildUser user, [Remainder] string reason = null)
         {
             Server server = ServerQueries.GetServer(Context.Guild.Id);
+            server.TotalAdminActions++;
 
             if (reason == null)
                 reason = "No reason specified.";
@@ -32,36 +38,32 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 ServerId = Context.Guild.Id,
                 UserId = user.Id,
-                Reason = reason
+                ModeratorName = Context.User.ToString(),
+                Reason = reason,
+                Date = DateTime.Now.ToOADate()
             };
 
             ServerQueries.AddWarnedUser(wu);
-            await DmWarnedUser(wu, Context);
 
-            var embed = new KaguyaEmbedBuilder
-            {
-                Description = $"Successfully warned user `{user}`.\nReason: `{reason}`"
-            };
+            await user.SendMessageAsync(embed: WarnEmbed(wu, Context).Build());
+            await ReplyAsync(embed: Reply(wu, user, Context).Build());
 
             if (server.IsPremium && server.ModLog != 0)
             {
                 var premLog = new PremiumModerationLog
                 {
                     Server = server,
-                    Moderator = (SocketGuildUser)Context.User,
-                    ActionRecipient = (SocketGuildUser)user,
+                    Moderator = (SocketGuildUser) Context.User,
+                    ActionRecipient = (SocketGuildUser) user,
+                    Reason = reason,
                     Action = PremiumModerationActions.WARN
                 };
 
                 var logChannel = GlobalProperties.client.GetGuild(server.Id).GetTextChannel(server.ModLog);
                 await logChannel.SendMessageAsync(embed: PremiumModerationLog.ModerationLogEmbed(premLog).Build());
             }
-        }
 
-        private static async Task DmWarnedUser(WarnedUser user, ICommandContext context)
-        {
-            var dmChannel = await GlobalProperties.client.GetDMChannelAsync(user.UserId);
-            await dmChannel.SendMessageAsync(embed: WarnEmbed(user, context).Build());
+            ServerQueries.UpdateServer(server);
         }
 
         private static KaguyaEmbedBuilder WarnEmbed(WarnedUser user, ICommandContext context)
@@ -71,9 +73,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Title = "⚠️ Warning Received",
                 Description = $"Warned from `[Server: {context.Guild} | ID: {context.Guild.Id}]`\n" +
                               $"Warned by: `[User: {context.User} | ID: {context.User.Id}]`\n" +
-                              $"Reason: `{user.Reason}`"
+                              $"Reason: `{user.Reason}`",
+                Footer = new EmbedFooterBuilder
+                {
+                    Text =
+                        $"You currently have {ServerQueries.GetWarnedUser(user.ServerId, user.UserId).Count} warnings."
+                }
             };
             embed.SetColor(EmbedColor.RED);
+            return embed;
+        }
+
+        private static KaguyaEmbedBuilder Reply(WarnedUser user, IGuildUser warnedUser, ICommandContext context)
+        {
+            var warnCount = ServerQueries.GetWarnedUser(user.ServerId, user.UserId).Count;
+            var embed = new KaguyaEmbedBuilder
+            {
+                Description = $"Successfully warned user `{warnedUser}`\nReason: `{user.Reason}`",
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = $"{warnedUser.Username} currently has {warnCount} warnings."
+                }
+            };
             return embed;
         }
     }

@@ -26,34 +26,34 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             switch (log.Action)
             {
                 case PremiumModerationActions.SHADOWBAN:
-                    actionTitle += "Shadowbanned";
+                    actionTitle += "Shadowbanned ";
                     embedUrl = "https://i.imgur.com/86tSNSa.png";
                     break;
                 case PremiumModerationActions.UNSHADOWBAN:
-                    actionTitle += "UnShadowbanned";
+                    actionTitle += "UnShadowbanned ";
                     embedUrl = "https://i.imgur.com/szeC3hH.png";
                     break;
                 case PremiumModerationActions.MUTE:
-                    actionTitle += "Muted";
+                    actionTitle += "Muted ";
                     embedUrl = "https://i.imgur.com/D1y3A7E.png";
                     break;
                 case PremiumModerationActions.UNMUTE:
-                    actionTitle += "Unmuted";
+                    actionTitle += "Unmuted ";
                     embedUrl = "https://i.imgur.com/9x2MHFI.png";
                     break;
                 case PremiumModerationActions.WARN:
-                    actionTitle += "Warned";
+                    actionTitle += "Warned ";
                     embedUrl = "https://i.imgur.com/LZmdn9k.png";
                     break;
                 case PremiumModerationActions.UNWARN:
-                    actionTitle += "Unwarned";
+                    actionTitle += "Unwarned ";
                     embedUrl = "https://i.imgur.com/915ZT6q.png";
                     break;
             }
 
             return new KaguyaEmbedBuilder
             {
-                Title = actionTitle + $"`Case: #{log.Server.TotalAdminActions}`",
+                Title = actionTitle + $"| `Case: #{log.Server.TotalAdminActions}`",
                 Description = $"User Actioned: `[Name: {log.ActionRecipient} | ID: {log.ActionRecipient.Id}]`\n" +
                               $"Punisher: `[Name: {log.Moderator} | ID: {log.Moderator.Id}]`\n" +
                               $"Reason: `{reason}`",
