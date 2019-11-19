@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -6,6 +7,7 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -26,14 +28,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             var warnings = ServerQueries.GetWarnedUser(Context.Guild.Id, user.Id);
             var fields = new List<EmbedFieldBuilder>();
 
-            int j = 0;
+            int j = warnings.Count;
 
-            if (j > warnings.Count && !server.IsPremium)
+            if (j > 4 && !server.IsPremium)
                 j = 4;
-            else if (j > warnings.Count && server.IsPremium)
-                j = 10;
-            else
-                j = warnings.Count;
+            if (j > 9 && server.IsPremium)
+                j = 9;
 
             if (warnings.Count == 0)
             {
@@ -62,7 +62,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Fields = fields
             };
 
-            await ReplyAsync(embed: embed.Build());
+            await ReactionReply(embed.Build());
+        }
+
+        private async Task ReactionReply(List<WarnedUser> warnings, Embed embed, int warnCount)
+        {
+            Emoji[] emojis = new Emoji[8];
+            for (int i = 0; i < 9; i++)
+            {
+                emojis[i] = new Emoji($"{i + 1}");
+            }
+
+            var callbacks = new (IEmote, Func<SocketCommandContext, SocketReaction, Task>)[warnCount];
+
+            for (int j = 0; j < warnCount; j++)
+            {
+                callbacks[j] = new (IEmote, Func<SocketCommandContext, SocketReaction, Task>) (emojis[j], (c, r) =>
+                {
+                    ServerQueries.RemoveWarnedUser(warnings.ElementAt(j));
+                    return c.Channel.SendMessageAsync(
+                            $"{r.User.Value.Mention} Successfully removed warning #{j + 1}");
+                });
+            }
+
+            await InlineReactionReplyAsync(new ReactionCallbackData("", embed).AddCallbacks(callbacks));
         }
     }
 }
