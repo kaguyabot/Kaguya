@@ -72,21 +72,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
         private async Task ReactionReply(List<WarnedUser> warnings, Embed embed, int warnCount)
         {
-
             var emojis = new Emoji[] { new Emoji("1⃣"), new Emoji("2⃣"), new Emoji("3⃣"),
                 new Emoji("4⃣"),  new Emoji("5⃣"),  new Emoji("6⃣"),  new Emoji("7⃣"),
-                new Emoji("8⃣"),  new Emoji("9⃣") };
+                new Emoji("8⃣"),  new Emoji("9⃣")
+            };
 
-            var data = new ReactionCallbackData("", embed, timeout: TimeSpan.FromSeconds(300), timeoutCallback: (c) => 
+            var data = new ReactionCallbackData("", embed, false, false, TimeSpan.FromSeconds(300), (c) => 
                 c.Channel.SendMessageAsync(embed: TimeoutEmbed()));
             var callbacks = new List<(IEmote, Func<SocketCommandContext, SocketReaction, Task>)>();
 
-            for (int j = 0; j < 9; j++)
+            for (int j = 0; j < warnCount; j++)
             {
+                int j1 = j;
                 callbacks.Add((emojis[j], (c, r) =>
                 {
-                    warnings.RemoveAt(j);
-                    return c.Channel.SendMessageAsync($"{r.User.Value.Mention} `Successfully removed warning #{j + 1}`");
+                    ServerQueries.RemoveWarnedUser(warnings.ElementAt(j1));
+                    return c.Channel.SendMessageAsync($"{r.User.Value.Mention} `Successfully removed warning #{j1 + 1}`");
                 }));
             }
 
@@ -98,7 +99,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             KaguyaEmbedBuilder timeoutEmbed = new KaguyaEmbedBuilder
             {
-                Description = $"Warn remove has timed out. (5 minutes)"
+                Description = "Warn remove has timed out. (5 minutes)"
             };
 
             timeoutEmbed.SetColor(EmbedColor.RED);
