@@ -59,7 +59,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             var embed = new KaguyaEmbedBuilder
             {
-                Fields = fields
+                Title = $"Warnings for {user}",
+                Fields = fields,
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = "Select a reaction to remove the warning."
+                }
             };
 
             await ReactionReply(warnings, embed.Build(), warnCount);
@@ -67,35 +72,36 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
         private async Task ReactionReply(List<WarnedUser> warnings, Embed embed, int warnCount)
         {
-            Emoji[] emojis = new Emoji[warnCount];
-            for (int i = 0; i < warnCount; i++)
-            {
-                emojis[i] = new Emoji($"{i + 1}");
-            }
+
+            var emojis = new Emoji[] { new Emoji("1⃣"), new Emoji("2⃣"), new Emoji("3⃣"),
+                new Emoji("4⃣"),  new Emoji("5⃣"),  new Emoji("6⃣"),  new Emoji("7⃣"),
+                new Emoji("8⃣"),  new Emoji("9⃣") };
 
             var data = new ReactionCallbackData("", embed, timeout: TimeSpan.FromSeconds(300), timeoutCallback: (c) => 
                 c.Channel.SendMessageAsync(embed: TimeoutEmbed()));
+            var callbacks = new List<(IEmote, Func<SocketCommandContext, SocketReaction, Task>)>();
 
             for (int j = 0; j < 9; j++)
             {
-                data.WithCallback(emojis[j], (c, r) =>
+                callbacks.Add((emojis[j], (c, r) =>
                 {
                     warnings.RemoveAt(j);
-                    return c.Channel.SendMessageAsync($"Successfully removed warning #{j + 1}");
-                });
+                    return c.Channel.SendMessageAsync($"{r.User.Value.Mention} `Successfully removed warning #{j + 1}`");
+                }));
             }
 
+            data.SetCallbacks(callbacks);
             await InlineReactionReplyAsync(data);
         }
 
-        private Embed TimeoutEmbed()
+        private static Embed TimeoutEmbed()
         {
             KaguyaEmbedBuilder timeoutEmbed = new KaguyaEmbedBuilder
             {
                 Description = $"Warn remove has timed out. (5 minutes)"
             };
-            timeoutEmbed.SetColor(EmbedColor.RED);
 
+            timeoutEmbed.SetColor(EmbedColor.RED);
             return timeoutEmbed.Build();
         }
     }
