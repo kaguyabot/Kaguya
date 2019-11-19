@@ -22,7 +22,7 @@ Version 2.0 is a complete rewrite of the existing program, from the ground up. V
 - MyAnimeList integration
 - Twitch, YouTube, Twitter[$], Reddit[$] integrations.
 - Dynamic DM reminders with $remindme (something that failed in V1 due to how inefficient it was)
-- Server-based EXP and level systems, which unlocks for things like role rewards to be granted to users who reach a certain server level. Everyone will start at server level 0, however.
+- Server-based EXP and level systems, which unlocks capabilities for things like role rewards to be granted to users who reach a certain server level. Everyone will start at server level 0, however.
 
 ### Self Hosting
 With V2, it is much easier to clone the bot and run with your own token (with my help), however I would like for users to notify me if they decide to do this. **I will not provide any support for users who wish to self-host using my code, and I do not condone it.** I will only provide support for users who want to support the development of the program. It is basically impossible to run this bot without my support, as you would need to create an entire database schema with many tables, configured exactly correct, just to get this bot to not crash. You cannot use this bot without a database. I will provide a script file that auto-creates the database for you if you wish to support development.
