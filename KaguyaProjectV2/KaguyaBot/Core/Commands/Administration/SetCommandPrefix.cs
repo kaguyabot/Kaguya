@@ -44,6 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Alias("prefix", "sp")]
         [Summary("Changes the command prefix to the specified text. Limited to 5 characters. Use with no arguments to reset the prefix to `$`.")]
         [Remarks("setprefix k! \nsp 12345 \nprefix")]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task SetPrefix()
         {
             Server server = ServerQueries.GetServer(Context.Guild.Id);
