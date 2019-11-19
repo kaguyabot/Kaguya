@@ -28,12 +28,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             var warnings = ServerQueries.GetWarnedUser(Context.Guild.Id, user.Id);
             var fields = new List<EmbedFieldBuilder>();
 
-            int j = warnings.Count;
+            int warnCount = warnings.Count;
 
-            if (j > 4 && !server.IsPremium)
-                j = 4;
-            if (j > 9 && server.IsPremium)
-                j = 9;
+            if (warnCount > 4 && !server.IsPremium)
+                warnCount = 4;
+            if (warnCount > 9 && server.IsPremium)
+                warnCount = 9;
 
             if (warnings.Count == 0)
             {
@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 await ReplyAsync(embed: reply.Build());
             }
 
-            for (int i = 0; i < j; i++)
+            for (int i = 0; i < warnCount; i++)
             {
                 var field = new EmbedFieldBuilder
                 {
@@ -62,30 +62,41 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Fields = fields
             };
 
-            await ReactionReply(embed.Build());
+            await ReactionReply(warnings, embed.Build(), warnCount);
         }
 
         private async Task ReactionReply(List<WarnedUser> warnings, Embed embed, int warnCount)
         {
-            Emoji[] emojis = new Emoji[8];
-            for (int i = 0; i < 9; i++)
+            Emoji[] emojis = new Emoji[warnCount];
+            for (int i = 0; i < warnCount; i++)
             {
                 emojis[i] = new Emoji($"{i + 1}");
             }
 
-            var callbacks = new (IEmote, Func<SocketCommandContext, SocketReaction, Task>)[warnCount];
+            var data = new ReactionCallbackData("", embed, timeout: TimeSpan.FromSeconds(300), timeoutCallback: (c) => 
+                c.Channel.SendMessageAsync(embed: TimeoutEmbed()));
 
-            for (int j = 0; j < warnCount; j++)
+            for (int j = 0; j < 9; j++)
             {
-                callbacks[j] = new (IEmote, Func<SocketCommandContext, SocketReaction, Task>) (emojis[j], (c, r) =>
+                data.WithCallback(emojis[j], (c, r) =>
                 {
-                    ServerQueries.RemoveWarnedUser(warnings.ElementAt(j));
-                    return c.Channel.SendMessageAsync(
-                            $"{r.User.Value.Mention} Successfully removed warning #{j + 1}");
+                    warnings.RemoveAt(j);
+                    return c.Channel.SendMessageAsync($"Successfully removed warning #{j + 1}");
                 });
             }
 
-            await InlineReactionReplyAsync(new ReactionCallbackData("", embed).AddCallbacks(callbacks));
+            await InlineReactionReplyAsync(data);
+        }
+
+        private Embed TimeoutEmbed()
+        {
+            KaguyaEmbedBuilder timeoutEmbed = new KaguyaEmbedBuilder
+            {
+                Description = $"Warn remove has timed out. (5 minutes)"
+            };
+            timeoutEmbed.SetColor(EmbedColor.RED);
+
+            return timeoutEmbed.Build();
         }
     }
 }
