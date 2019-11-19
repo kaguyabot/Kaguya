@@ -1,18 +1,13 @@
 ﻿using Discord;
-using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands;
-using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using System.Text.RegularExpressions;
+using System;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 {
@@ -46,40 +41,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             else
                 server = ServerQueries.GetServer(arg2.VoiceChannel.Guild.Id);
 
-            string oldVoice = "";
-            string newVoice = "";
+            string oldVoice = string.Empty, newVoice = string.Empty, embedURL = string.Empty;
 
             if (server.LogVoiceChannelConnections != 0)
             {
-                if(arg2.VoiceChannel is null)
+                if (arg2.VoiceChannel is null)
                 {
                     oldVoice = "No prior channel.";
                     newVoice = $"New connection to {arg3.VoiceChannel.Name}";
+                    embedURL = "https://i.imgur.com/WPtsNwD.png";
                 }
-                if(arg2.VoiceChannel != null && arg3.VoiceChannel != null)
+                if (arg2.VoiceChannel is object && arg3.VoiceChannel is object)
                 {
                     oldVoice = $"{arg2.VoiceChannel.Name}";
                     newVoice = $"{arg3.VoiceChannel.Name}";
+                    embedURL = "https://i.imgur.com/Z4JTUBq.png";
                 }
-                if(arg3.VoiceChannel is null)
+                if (arg3.VoiceChannel is null)
                 {
                     oldVoice = $"{arg2.VoiceChannel.Name}";
                     newVoice = "No new channel, user has disconnected.";
-                }
-
-                string embedURL = "";
-
-                if (oldVoice.Contains("No prior channel."))
-                {
-                    embedURL = "https://i.imgur.com/WPtsNwD.png";
-                }
-                if(newVoice.Contains("No new channel,"))
-                {
                     embedURL = "https://i.imgur.com/pAifz2P.png";
-                }
-                if(!newVoice.Contains("No new channel,") && !oldVoice.Contains("No prior channel."))
-                {
-                    embedURL = "https://i.imgur.com/Z4JTUBq.png";
                 }
 
                 _embed = new KaguyaEmbedBuilder
@@ -105,8 +87,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             Server server = ServerQueries.GetServer(arg2.Id);
             if (server.LogBans == 0)
                 return;
-
-            
         }
 
         private static async Task _client_UserLeft(SocketGuildUser arg)
