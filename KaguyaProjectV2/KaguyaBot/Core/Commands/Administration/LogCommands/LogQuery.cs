@@ -1,11 +1,11 @@
 ﻿using Discord;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
-using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {

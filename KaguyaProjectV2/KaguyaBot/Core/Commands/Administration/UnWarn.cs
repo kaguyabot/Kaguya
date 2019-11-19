@@ -16,8 +16,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     {
         [Command("unwarn")]
         [Alias("uw")]
-        [Summary("Removes a warning from a user. A list of the user's 7 most recent warnings will be displayed in chat. The " +
-                 "moderator executing this command may then choose which warning to remove, based on this index.")]
+        [Summary("Removes a warning from a user. A list of the user's 4 most recent warnings (9 if server is premium) will be displayed in chat. The " +
+                 "moderator executing this command may then choose which warnings to remove by clicking on the supplied reactions.")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
@@ -44,6 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 reply.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: reply.Build());
+                return;
             }
 
             for (int i = 0; i < warnCount; i++)
@@ -77,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 new Emoji("8⃣"),  new Emoji("9⃣")
             };
 
-            var data = new ReactionCallbackData("", embed, false, false, TimeSpan.FromSeconds(300), (c) => 
+            var data = new ReactionCallbackData("", embed, false, false, TimeSpan.FromSeconds(300), c => 
                 c.Channel.SendMessageAsync(embed: TimeoutEmbed()));
             var callbacks = new List<(IEmote, Func<SocketCommandContext, SocketReaction, Task>)>();
 

@@ -1,7 +1,7 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using System;
 using System.Data;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {

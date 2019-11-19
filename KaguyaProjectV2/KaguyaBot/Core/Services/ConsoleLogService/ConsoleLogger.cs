@@ -1,20 +1,20 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.ConsoleLogService
+namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {
     public class ConsoleLogger
     {
-        private static string logDirectory = $"{Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\.."))}\\Resources\\Logs\\Debug";
-        private static string logFileName = $"KaguyaLog_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
+        private static readonly string logDirectory = $"{Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\.."))}\\Resources\\Logs\\Debug";
+        private static readonly string logFileName = $"KaguyaLog_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
 
         public static Task Log(string message, LogLevel logLevel)
         {
-            string _logP = LogPrefix(logLevel);
-            string contents = $"{DateTime.Now.ToLongTimeString()} {_logP} {message}";
+            string logP = LogPrefix(logLevel);
+            string contents = $"{DateTime.Now.ToLongTimeString()} {logP} {message}";
 
             if (GlobalProperties.logLevel <= logLevel)
             {

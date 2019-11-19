@@ -131,25 +131,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 
         private static async Task _client_MessageUpdated(Cacheable<IMessage, ulong> arg1, SocketMessage arg2, ISocketMessageChannel arg3)
         {
-            Server server = ServerQueries.GetServer(((SocketGuildChannel)arg3).Guild.Id);
-            if (server.LogUpdatedMessages == 0)
-                return;
-
-            IMessage oldMsg = arg1.Value;
-            string content = oldMsg.Content;
-
-            if (oldMsg.Author.IsBot) return;
-            if (string.IsNullOrEmpty(content)) content = "<No previous text>";
-
-            KaguyaEmbedBuilder builder = new KaguyaEmbedBuilder
+            if (arg3 is SocketGuildChannel)
             {
-                Title = "Message Updated",
-                Description = $"User: `[Name: {oldMsg.Author} | ID: {oldMsg.Author.Id}]`\n" +
-                        $"Old Message: `{content}`\nNew Message: `{arg2.Content}`\nChannel: `{oldMsg.Channel}`\nDate Originally Created: `{oldMsg.CreatedAt}`\n",
-                ThumbnailUrl = "https://i.imgur.com/uYkjSxM.png"
-            };
+                Server server = ServerQueries.GetServer(((SocketGuildChannel)arg3).Guild.Id);
+                if (server.LogUpdatedMessages == 0)
+                    return;
 
-            await _client.GetGuild(server.Id).GetTextChannel(server.LogUpdatedMessages).SendMessageAsync(embed: builder.Build());
+                IMessage oldMsg = arg1.Value;
+                string content = oldMsg.Content;
+
+                if (oldMsg.Author.IsBot) return;
+                if (string.IsNullOrEmpty(content)) content = "<No previous text>";
+
+                KaguyaEmbedBuilder builder = new KaguyaEmbedBuilder
+                {
+                    Title = "Message Updated",
+                    Description = $"User: `[Name: {oldMsg.Author} | ID: {oldMsg.Author.Id}]`\n" +
+                                  $"Old Message: `{content}`\nNew Message: `{arg2.Content}`\nChannel: `{oldMsg.Channel}`\nDate Originally Created: `{oldMsg.CreatedAt}`\n",
+                    ThumbnailUrl = "https://i.imgur.com/uYkjSxM.png"
+                };
+
+                await _client.GetGuild(server.Id).GetTextChannel(server.LogUpdatedMessages).SendMessageAsync(embed: builder.Build());
+            }
         }
 
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
