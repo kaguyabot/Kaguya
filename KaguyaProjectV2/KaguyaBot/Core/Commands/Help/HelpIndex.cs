@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
-    public class Help : InteractiveBase<ShardedCommandContext>
+    public class HelpIndex : InteractiveBase<ShardedCommandContext>
     {
         [Command("Help")]
         [Alias("h")]
@@ -39,23 +39,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
             foreach (var command in cmdInfo.Commands)
             {
-                foreach (var alias in command.Aliases)
-                {
-                    allAliases.Add(alias.ToLower());
-                }
+                allAliases.AddRange(command.Aliases.Select(alias => alias.ToLower()));
             }
 
-            var selectedCommandByName = cmdInfo.Commands.Where(x => x.Name.ToLower() == cmd).FirstOrDefault();
-            var selectedCommandByAlias = cmdInfo.Commands.Where(x => x.Aliases.Contains(cmd)).FirstOrDefault();
+            /*We use LastOrDefault instead of FirstOrDefault
+            because there are two "help" commands with the same names, but only the
+            last one has the proper description / syntax to be displayed in chat.*/
+
+            var selectedCommandByName = cmdInfo.Commands.LastOrDefault(x => x.Name.ToLower() == cmd);
+            var selectedCommandByAlias = cmdInfo.Commands.LastOrDefault(x => x.Aliases.Contains(cmd));
 
             CommandInfo selectedCommand;
 
-            if (selectedCommandByAlias != null && selectedCommandByName == null || selectedCommandByAlias != null && selectedCommandByName != null)
+            if (selectedCommandByAlias != null && selectedCommandByName == null || selectedCommandByAlias != null)
             {
                 selectedCommand = selectedCommandByAlias;
             }
 
-            else if (selectedCommandByAlias == null && selectedCommandByName != null)
+            else if (selectedCommandByName != null)
             {
                 selectedCommand = selectedCommandByName;
             }
@@ -65,7 +66,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 embed = new KaguyaEmbedBuilder
                 {
                     Description = $"Command `{server.CommandPrefix}{cmd}` does not exist. Please ensure you are typing the name (or ailias) correctly. " +
-                $"Use `{server.CommandPrefix}help` for a list of all commands."
+                    $"Use `{server.CommandPrefix}help` for a list of all commands."
                 };
                 embed.SetColor(EmbedColor.RED);
 
@@ -84,35 +85,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             string aliases = string.Join(", ", cmdInfo.Aliases);
             string permissionNames = string.Join(", ", permissions ?? new string[] { "None" });
 
-            if (Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2") == "")
-                permissionNames = "None";
-            else
-                permissionNames = Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2");
+            permissionNames = Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2") == "" ? "None" : Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2");
 
-            List<EmbedFieldBuilder> fieldBuilders = new List<EmbedFieldBuilder>();
-
-            fieldBuilders.Add(new EmbedFieldBuilder
+            var fieldBuilders = new List<EmbedFieldBuilder>
             {
-                Name = "Permissions Required",
-                Value = $"`{permissionNames}`",
-                IsInline = false,
-            });
-
-            fieldBuilders.Add(new EmbedFieldBuilder
-            {
-                Name = "Description",
-                Value = $"{cmdInfo.Summary}",
-                IsInline = false,
-            });
-
-            fieldBuilders.Add(new EmbedFieldBuilder
-            {
-                //The value of this vield is pretty hard to read, basically we add the command prefix + command name to the start of the string,
-                //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute, we add the same thing to the start of the new line.
-                Name = $"Syntax",
-                Value = $"`{server.CommandPrefix}{aliases.Split(",")[0]} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]} ", cmdInfo.Remarks.Split("\n"))}`",
-                IsInline = false,
-            });
+                new EmbedFieldBuilder
+                {
+                    Name = "Permissions Required", Value = $"`{permissionNames}`", IsInline = false,
+                },
+                new EmbedFieldBuilder {Name = "Description", Value = $"{cmdInfo.Summary}", IsInline = false,},
+                new EmbedFieldBuilder
+                {
+                    //The value of this vield is pretty hard to read, basically we add the command prefix + command name to the start of the string,
+                    //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute, we add the same thing to the start of the new line.
+                    Name = $"Syntax",
+                    Value =
+                        $"`{server.CommandPrefix}{aliases.Split(",")[0]} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]} ", cmdInfo.Remarks.Split("\n"))}`",
+                    IsInline = false,
+                }
+            };
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
@@ -128,23 +119,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 .Where(x => x is RequireOwnerAttribute || x is RequireSupporterAttribute || x is RequireUserPermissionAttribute)
                 .Select(x =>
                 {
-                    if (x is RequireOwnerAttribute)
+                    switch (x)
                     {
-                        return "Bot Owner";
-                    }
-
-                    if(x is RequireSupporterAttribute)
-                    {
-                        return "Kaguya Supporter";
+                        case RequireOwnerAttribute _:
+                            return "Bot Owner";
+                        case RequireSupporterAttribute _:
+                            return "Kaguya Supporter";
                     }
 
                     var attr = (RequireUserPermissionAttribute)x;
-                    if (attr.GuildPermission != null)
-                    {
-                        return attr.GuildPermission.ToString();
-                    }
-
-                    return null;
+                    return attr.GuildPermission != null ? attr.GuildPermission.ToString() : null;
                 })
                 .ToArray();
     }
