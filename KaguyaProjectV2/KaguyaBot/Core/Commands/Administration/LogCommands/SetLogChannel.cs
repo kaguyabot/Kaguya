@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
     public class SetLogChannel : ModuleBase<ShardedCommandContext>
     {
+        [AdminCommand]
         [Command("setlogchannel")]
         [Alias("log")]
         [Summary("Enables a list of given logtypes and sends the log messages to a specific channel. All available logtypes may be displayed with the `logtypes` command.")]

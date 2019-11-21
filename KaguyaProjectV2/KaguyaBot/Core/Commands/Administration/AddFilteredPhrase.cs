@@ -5,12 +5,14 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class AddFilteredPhrase : ModuleBase<ShardedCommandContext>
     {
+        [AdminCommand]
         [Command("FilterAdd")]
         [Alias("fa")]
         [Summary("Adds one phrase (or a list of phrases) to your server's word filter. " +

@@ -6,12 +6,14 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class CreateRole : ModuleBase<ShardedCommandContext>
     {
+        [AdminCommand]
         [Command("CreateRole")]
         [Alias("cr")]
         [Summary("Creates a role, or a list of roles. New roles are separated by periods.")]

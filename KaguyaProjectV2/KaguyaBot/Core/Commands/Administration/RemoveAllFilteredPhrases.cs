@@ -6,11 +6,13 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class RemoveAllFilteredPhrases : ModuleBase<ShardedCommandContext>
     {
+        [AdminCommand]
         [Command("FilterRemoveAll")]
         [Alias("fra")]
         [Summary("Removes all filtered phrases from your server's word filter.")]

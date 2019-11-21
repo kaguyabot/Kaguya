@@ -11,7 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Supporter
 {
     public class AddReaction : InteractiveBase<ShardedCommandContext>
     {
-        [RequireSupporter]
+        [SupporterCommand]
         [Command("React")]
         [Summary("Takes a line of text and message ID and adds a reaction to the message. If no message ID is specified, the command-invoking " +
             "message will be the recipient of the reactions.")]

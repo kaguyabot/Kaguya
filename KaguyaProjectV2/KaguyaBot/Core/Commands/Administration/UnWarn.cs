@@ -1,23 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class UnWarn : InteractiveBase<ShardedCommandContext>
     {
+        [AdminCommand]
         [Command("unwarn")]
         [Alias("uw")]
         [Summary("Removes a warning from a user. A list of the user's 4 most recent warnings (9 if server is premium) will be displayed in chat. The " +
                  "moderator executing this command may then choose which warnings to remove by clicking on the supplied reactions.")]
+        [Remarks("<user>")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.ManageMessages)]

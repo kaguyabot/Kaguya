@@ -16,6 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
     public class HelpIndex : InteractiveBase<ShardedCommandContext>
     {
+        [HelpCommand]
         [Command("Help")]
         [Alias("h")]
         [Summary("Returns the help command for a specific command if specified. If no command is specified, " +
@@ -33,9 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         private async Task<CommandInfo> FindCommandInfo(string cmd, Server server)
         {
             CommandService cmdInfo = CommandHandler._commands;
-            KaguyaEmbedBuilder embed;
-
-            List<string> allAliases = new List<string>();
+            var allAliases = new List<string>();
 
             foreach (var command in cmdInfo.Commands)
             {
@@ -63,10 +62,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
             else
             {
-                embed = new KaguyaEmbedBuilder
+                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
                 {
                     Description = $"Command `{server.CommandPrefix}{cmd}` does not exist. Please ensure you are typing the name (or ailias) correctly. " +
-                    $"Use `{server.CommandPrefix}help` for a list of all commands."
+                                  $"Use `{server.CommandPrefix}help` for a list of all commands."
                 };
                 embed.SetColor(EmbedColor.RED);
 
@@ -78,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             return selectedCommand;
         }
 
-        private KaguyaEmbedBuilder HelpEmbedBuilder(CommandInfo cmdInfo, Server server)
+        private static KaguyaEmbedBuilder HelpEmbedBuilder(CommandInfo cmdInfo, Server server)
         {
             var permissions = GetCommandPermissions(cmdInfo);
 
@@ -116,19 +115,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
         public static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
             cmdInfo.Preconditions
-                .Where(x => x is RequireOwnerAttribute || x is RequireSupporterAttribute || x is RequireUserPermissionAttribute)
+                .Where(x => x is RequireOwnerAttribute || x is SupporterCommandAttribute || x is RequireUserPermissionAttribute)
                 .Select(x =>
                 {
                     switch (x)
                     {
                         case RequireOwnerAttribute _:
                             return "Bot Owner";
-                        case RequireSupporterAttribute _:
+                        case SupporterCommandAttribute _:
                             return "Kaguya Supporter";
                     }
 
                     var attr = (RequireUserPermissionAttribute)x;
-                    return attr.GuildPermission != null ? attr.GuildPermission.ToString() : null;
+                    return attr.GuildPermission?.ToString();
                 })
                 .ToArray();
     }

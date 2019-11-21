@@ -6,6 +6,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -15,6 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class Warn : ModuleBase<ShardedCommandContext>
     {
+        [AdminCommand]
         [Command("warn")]
         [Alias("w")]
         [Summary("Adds a warning to a user. If the server has a preconfigured warning-punishment scheme " +

@@ -13,6 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class DeleteRole : ModuleBase<ShardedCommandContext>
     {
+        [AdminCommand]
         [Command("DeleteRole")]
         [Alias("dr")]
         [Summary("Deletes a role, or a list of roles, from the server. New roles are separated by periods.")]
