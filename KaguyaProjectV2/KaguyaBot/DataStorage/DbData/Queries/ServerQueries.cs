@@ -164,5 +164,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 return db.GetTable<WarnedUser>().Where(x => x.ServerId == serverId && x.UserId == userId).ToList();
             }
         }
+
+        public static void AddTwitchChannel(TwitchChannel tcObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.Insert(tcObj);
+            }
+        }
+
+        public static void RemoveTwitchChannel(TwitchChannel tcObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.Delete(tcObj);
+            }
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
             var pages = ReturnPages();
 
-            foreach (var cmd in cmdInfo.Commands)
+            foreach (var cmd in cmdInfo.Commands.OrderBy(x => x.Name))
             {
                 int i = 0;
                 string aliases = cmd.Aliases.Where(alias => alias.ToLower() != cmd.Name.ToLower()).Aggregate("", (current, alias) => current + $"[{alias}]");

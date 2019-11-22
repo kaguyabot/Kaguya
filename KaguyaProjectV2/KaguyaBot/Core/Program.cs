@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using TwitchLib.Api;
+using TwitchLib.Api.Services.Core.FollowerService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {

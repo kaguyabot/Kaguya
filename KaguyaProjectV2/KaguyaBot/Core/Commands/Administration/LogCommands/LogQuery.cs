@@ -48,10 +48,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "filteredphrases": server.LogFilteredPhrases = channel.Id; break;
                         case "uservoiceconnectionupdated": server.LogVoiceChannelConnections = channel.Id; break;
                         case "levelups": server.LogLevelAnnouncements = channel.Id; break;
-                        case "twitchnotifications": server.LogTwitchNotifications = channel.Id; break;
-                        case "youtubenotifications": server.LogYouTubeNotifications = channel.Id; break;
-                        case "redditnotifications": server.LogRedditNotifications = channel.Id; break;
-                        case "twitternotifications": server.LogTwitterNotifications = channel.Id; break;
                         case "all":
                             {
                                 server.ModLog = channel.Id;
@@ -66,10 +62,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogFilteredPhrases = channel.Id;
                                 server.LogVoiceChannelConnections = channel.Id;
                                 server.LogLevelAnnouncements = channel.Id;
-                                server.LogTwitchNotifications = channel.Id;
-                                server.LogYouTubeNotifications = channel.Id;
-                                server.LogRedditNotifications = channel.Id;
-                                server.LogTwitterNotifications = channel.Id;
                             }
                             break;
                         default: logTypes.Remove(type); break;
@@ -92,10 +84,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "filteredphrases": server.LogFilteredPhrases = 0; break;
                         case "userconnectstovoice": server.LogVoiceChannelConnections = 0; break;
                         case "levelups": server.LogLevelAnnouncements = 0; break;
-                        case "twitchnotifications": server.LogTwitchNotifications = 0; break;
-                        case "youtubenotifications": server.LogYouTubeNotifications = 0; break;
-                        case "redditnotifications": server.LogRedditNotifications = 0; break;
-                        case "twitternotifications": server.LogTwitterNotifications = 0; break;
                         case "all":
                             {
                                 server.ModLog = 0;
@@ -110,10 +98,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogFilteredPhrases = 0;
                                 server.LogVoiceChannelConnections = 0;
                                 server.LogLevelAnnouncements = 0;
-                                server.LogTwitchNotifications = 0;
-                                server.LogYouTubeNotifications = 0;
-                                server.LogRedditNotifications = 0;
-                                server.LogTwitterNotifications = 0;
                             }
                             break;
                         default: logTypes.Remove(type); break;
