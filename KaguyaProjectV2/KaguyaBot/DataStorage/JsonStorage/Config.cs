@@ -96,6 +96,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
         public string MySQL_Password { get; set; }
         public string MySQL_Server { get; set; }
         public string MySQL_Database { get; set; }
+        public string TwitchClientId { get; set; }
+        public string TwitchAuthToken { get; set; }
     }
     #endregion
 }

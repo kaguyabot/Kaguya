@@ -16,6 +16,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
+    <PackageReference Include="TwitchLib" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +25,6 @@
     <Folder Include="KaguyaBot\Core\Commands\Fun\" />
     <Folder Include="KaguyaBot\Core\Commands\Music\" />
     <Folder Include="KaguyaBot\Core\Commands\osu!\" />
-    <Folder Include="KaguyaBot\Core\Commands\Utility\" />
     <Folder Include="KaguyaBot\Core\Commands\Owner Only\" />
     <Folder Include="KaguyaBot\Core\Commands\NSFW\" />
     <Folder Include="Resources\" />

@@ -4,12 +4,13 @@ using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using TwitchLib.Client;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {
     public class LogEventListener
     {
-        static DiscordShardedClient _client = GlobalProperties.client;
+        private static DiscordShardedClient _client = GlobalProperties.client;
 
         public static void Listener()
         {
@@ -56,6 +57,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             _client.UserJoined += (SocketGuildUser user) => ConsoleLogger.Log($"User Joined Guild [User: {user} | User ID: {user.Id} | Guild: {user.Guild}]", LogLevel.DEBUG);
 
             _client.UserVoiceStateUpdated += (SocketUser user, SocketVoiceState vs1, SocketVoiceState vs2) => ConsoleLogger.Log($"User Voice State Updated: [User: {user}]", LogLevel.TRACE);
+
+            //Twitch stuff
+
+
+
         }
     }
 }
