@@ -2,6 +2,7 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+# KaguyaBot
 /.vs/Kaguya/v16
 /Kaguya/obj/Debug
 /KaguyaProjectV2/.vs/*/
@@ -10,5 +11,9 @@
 /KaguyaProjectV2/obj
 /KaguyaProjectV2/Resources
 /Kaguya/KaguyaWebBlazor/*
+
+# Blazor
+/KaguyaWebBlazor/obj
+/KaguyaWebBlazor/obj/bin/Debug/netcoreapp3.0
 
 *.suo
