@@ -7,6 +7,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     {
         [Column(Name = "ServerId"), NotNull]
         public ulong ServerId { get; set; }
+        [Column(Name = "TextChannelId"), NotNull]
+        public ulong TextChannelId { get; set; }
         [Column(Name = "ChannelName"), NotNull]
         public string ChannelName { get; set; }
         [Column(Name = "MentionEveryone"), NotNull]
