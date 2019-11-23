@@ -8,7 +8,9 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using TwitchLib.Api;
+using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Core.FollowerService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
@@ -39,6 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     var _config = await Config.GetOrCreateConfigAsync();
 
                     GlobalPropertySetup(_config);
+                    SetupTwitch();
 
                     LogEventListener.Listener();
                     GuildLogger.GuildLogListener();
@@ -61,7 +64,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 }
             }
 
-            SetupTwitch();
         }
         public void SetupKaguya()
         {
@@ -109,6 +111,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             api = new TwitchAPI();
             api.Settings.ClientId = GlobalProperties.twitchClientId;
             api.Settings.AccessToken = GlobalProperties.twitchAuthToken;
+
+            var monitor = new LiveStreamMonitorService(api, 30);
+            monitor.OnStreamOnline += TwitchNotificationsHandler.OnStreamOnline;
 
             GlobalProperties.twitchApi = api;
         }

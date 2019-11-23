@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 
@@ -17,10 +18,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         [Remarks("<logtype> <channel>\ndeletedmessages #my-log-channel\nkaguyaserverlog.bans.unbans #my-admin-log-channel\ntwitchnotifications #live-streams")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.SendMessages)]
-        public async Task SetChannel(string logType, IGuildChannel channel)
+        public async Task SetChannel(string logType, SocketTextChannel channel)
         {
             KaguyaEmbedBuilder embed;
-            List<string> logTypes = await LogQuery.LogSwitcher(logType, true, channel.GuildId, channel);
+            List<string> logTypes = await LogQuery.LogSwitcher(logType, true, channel.Guild.Id, channel);
 
             if(logTypes.Count == 0)
             {

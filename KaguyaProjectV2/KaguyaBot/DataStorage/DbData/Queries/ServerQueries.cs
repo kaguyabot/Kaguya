@@ -165,6 +165,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
+        public static List<TwitchChannel> GetAllTwitchChannels()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return db.GetTable<TwitchChannel>().ToList();
+            }
+        }
+
         public static void AddTwitchChannel(TwitchChannel tcObj)
         {
             using (var db = new KaguyaDb())

@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
@@ -17,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         /// <param name="args">A period separated list of logtypes to enable/disable.</param>
         /// <param name="channel">The channel where we will be sending the log messages to.</param>
         /// <param name="enabled">A boolean stating whether we should enable the logging or disable it.</param>
-        public static async Task<List<string>> LogSwitcher(string args, bool enabled, ulong guildId, IGuildChannel channel = null)
+        public static async Task<List<string>> LogSwitcher(string args, bool enabled, ulong guildId, SocketTextChannel channel = null)
         {
             List<string> logTypes = ArrayInterpreter.ReturnParams(args).ToList();
             Server server = ServerQueries.GetServer(guildId);
@@ -26,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
             {
                 if (enabled)
                 {
-                    await ConsoleLogger.Log($"Server has set log type: [ID: {channel.GuildId} | Type: {type.ToUpperInvariant()}]", LogLevel.DEBUG);
+                    await ConsoleLogger.Log($"Server has set log type: [ID: {channel.Guild.Id} | Type: {type.ToUpperInvariant()}]", LogLevel.DEBUG);
                     switch (type.ToLower())
                     {
                         case "modlog":
