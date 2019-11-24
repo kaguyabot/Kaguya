@@ -49,37 +49,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
 
                 string tChannelData = $"Twitch Channel: `{tchannel.ChannelName}`\nMention everyone when announcing? `{mentionEveryone}`";
 
-                if (twitchChannels.Any(item => item.ChannelName == tchannel.ChannelName && item.TextChannelId == tchannel.TextChannelId))
+                if (twitchChannels.Any(item => item.ChannelName == tchannel.ChannelName && item.TextChannelId != tchannel.TextChannelId))
                 {
-                    string textChannelName = GlobalProperties.client.GetGuild(server.Id).GetTextChannel(tchannel.TextChannelId).Name;
-                    embed = new KaguyaEmbedBuilder
-                    {
-                        Description = $"This Twitch stream is already being monitored in `#{textChannelName}`!\n\n" +
-                                      $"Do you want me to send the notifications here instead? ✅\n" +
-                                      $"Alternatively, I can send the notifications to both channels.❔\n" +
-                                      $"If you want me to do nothing, react with ⛔ (or don't react at all).",
-                    };
-                    embed.SetColor(EmbedColor.VIOLET);
+                    await NotifsAlreadyActiveInAltChannel(twitchChannels, channel, server, tchannel);
+                    return;
+                }
 
-                    KaguyaEmbedBuilder succEmbed = NotificationEmbedBuilder(channel, tchannel, out KaguyaEmbedBuilder altEmbed, out KaguyaEmbedBuilder nothingEmbed);
-                    await InlineReactionReply(embed, tchannel, succEmbed, altEmbed, nothingEmbed);
-
+                if (twitchChannels.Any(item =>
+                    item.ChannelName == tchannel.ChannelName && item.TextChannelId == tchannel.TextChannelId))
+                {
+                    await NotifsAlreadyActiveInSameChannel(tChannelData, twitchChannels, tchannel);
                     return;
                 }
 
                 ServerQueries.AddTwitchChannel(tchannel);
 
-                string mentionString = "";
-                switch (mentionEveryone)
-                {
-                    case true:
-                        mentionString = "**I will mention everyone** when sending these notifications.";
-                        break;
-                    case false:
-                        mentionString = "**I will not mention everyone** when sending these notifications.";
-                        break;
-                }
-
+                string mentionString = MentionString(mentionEveryone);
                 embed = new KaguyaEmbedBuilder
                 {
                     Title = "Twitch Channel Configuration",
@@ -91,17 +76,98 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
             }
             catch (IndexOutOfRangeException e)
             {
-                embed = new KaguyaEmbedBuilder
-                {
-                    Description = $"Channel `{twitchChannelName}` was not found."
-                };
-                embed.SetColor(EmbedColor.RED);
-
-                await ReplyAsync(embed: embed.Build());
+                await ChannelNotFoundResponse(twitchChannelName);
             }
         }
 
-        private async Task InlineReactionReply(KaguyaEmbedBuilder embed, TwitchChannel tchannel, KaguyaEmbedBuilder succEmbed,
+        private async Task NotifsAlreadyActiveInSameChannel(string tChannelData, List<TwitchChannel> twitchChannels, TwitchChannel tchannel)
+        {
+            KaguyaEmbedBuilder embed;
+            embed = new KaguyaEmbedBuilder
+            {
+                Description =
+                    $"This stream is already being monitored here! Do you want me to replace the notifications with your new settings?"
+            };
+            embed.SetColor(EmbedColor.VIOLET);
+
+            await WhetherToUpdateSettingsResponse(tChannelData, embed, twitchChannels, tchannel);
+        }
+
+        private async Task NotifsAlreadyActiveInAltChannel(List<TwitchChannel> serverTwitchChannels, SocketTextChannel channel, Server server, TwitchChannel tchannel)
+        {
+            KaguyaEmbedBuilder embed;
+            string textChannelName = GlobalProperties.client.GetGuild(server.Id).GetTextChannel(tchannel.TextChannelId).Name;
+            embed = new KaguyaEmbedBuilder
+            {
+                Description = $"This Twitch stream is already being monitored somewhere else!\n\n" +
+                              $"Do you want me to send the notifications here instead? ✅\n" +
+                              $"Alternatively, I can send the notifications to both channels.❔\n" +
+                              $"If you want me to do nothing, react with ⛔ (or don't react at all).",
+            };
+            embed.SetColor(EmbedColor.VIOLET);
+
+            KaguyaEmbedBuilder succEmbed = NotificationEmbedBuilder(channel, tchannel, out KaguyaEmbedBuilder altEmbed,
+                out KaguyaEmbedBuilder nothingEmbed);
+            await InlineReactionReply(serverTwitchChannels, embed, tchannel, succEmbed, altEmbed, nothingEmbed);
+        }
+
+        private async Task ChannelNotFoundResponse(string twitchChannelName)
+        {
+            KaguyaEmbedBuilder embed;
+            embed = new KaguyaEmbedBuilder
+            {
+                Description = $"Channel `{twitchChannelName}` was not found."
+            };
+            embed.SetColor(EmbedColor.RED);
+
+            await ReplyAsync(embed: embed.Build());
+        }
+
+        private static string MentionString(bool mentionEveryone)
+        {
+            string mentionString = "";
+            switch (mentionEveryone)
+            {
+                case true:
+                    mentionString = "**I will mention everyone** when sending these notifications.";
+                    break;
+                case false:
+                    mentionString = "**I will not mention everyone** when sending these notifications.";
+                    break;
+            }
+
+            return mentionString;
+        }
+
+        private async Task WhetherToUpdateSettingsResponse(string tChannelData, KaguyaEmbedBuilder embed, List<TwitchChannel> twitchChannels,
+            TwitchChannel tchannel)
+        {
+            var succEmbed2 = new KaguyaEmbedBuilder
+            {
+                Description =
+                    $"Okay! I have gone ahead and updated your settings for this stream.\n\nCurrent settings: {tChannelData}"
+            };
+
+            var nothingEmbed2 = new KaguyaEmbedBuilder
+            {
+                Description = "Okay, I'll leave your notifications how they currently are."
+            };
+
+            await InlineReactionReplyAsync(new ReactionCallbackData("", embed.Build(), true, true, TimeSpan.FromSeconds(60),
+                    c =>
+                        c.Channel.SendMessageAsync("Response has timed out."))
+                .WithCallback(new Emoji("✅"), (c, r) =>
+                {
+                    ServerQueries.RemoveTwitchChannel(twitchChannels.FirstOrDefault(item =>
+                        item.ChannelName == tchannel.ChannelName &&
+                        item.TextChannelId == tchannel.TextChannelId));
+                    ServerQueries.AddTwitchChannel(tchannel);
+                    return c.Channel.SendMessageAsync(embed: succEmbed2.Build());
+                })
+                .WithCallback(new Emoji("⛔"), (c, r) => c.Channel.SendMessageAsync(embed: nothingEmbed2.Build())));
+        }
+
+        private async Task InlineReactionReply(List<TwitchChannel> serverTwitchChannels, KaguyaEmbedBuilder embed, TwitchChannel tchannel, KaguyaEmbedBuilder succEmbed,
             KaguyaEmbedBuilder altEmbed, KaguyaEmbedBuilder nothingEmbed)
         {
             await InlineReactionReplyAsync(new ReactionCallbackData("", embed.Build(), true, true, TimeSpan.FromSeconds(60),
@@ -109,7 +175,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                         c.Channel.SendMessageAsync("Response has timed out."))
                 .WithCallback(new Emoji("✅"), (c, r) =>
                 {
-                    ServerQueries.RemoveTwitchChannel(tchannel);
+                    ServerQueries.RemoveTwitchChannel(serverTwitchChannels.FirstOrDefault(x => x.ChannelName == tchannel.ChannelName));
                     ServerQueries.AddTwitchChannel(tchannel);
                     return c.Channel.SendMessageAsync(embed: succEmbed.Build());
                 })
@@ -126,12 +192,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
         {
             var succEmbed = new KaguyaEmbedBuilder
             {
-                Description = $"I will switch the notifications from `#{tchannel.ChannelName}` to `#{channel.Name}.`"
+                Description = $"I will switch the notifications from `#{GlobalProperties.client.GetGuild(tchannel.ServerId).GetTextChannel(tchannel.TextChannelId).Name}` to `#{channel.Name}`."
             };
 
             altEmbed = new KaguyaEmbedBuilder
             {
-                Description = $"I will send two notifications when`#{tchannel.ChannelName}` to `#{channel.Name}.`"
+                Description = $"Okay, I'll add new notifications to this channel too."
             };
 
             nothingEmbed = new KaguyaEmbedBuilder
