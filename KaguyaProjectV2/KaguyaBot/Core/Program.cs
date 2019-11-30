@@ -38,7 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 try
                 {
-                    var _config = await Config.GetOrCreateConfigAsync();
+                    var _config = await DataStorage.JsonStorage.Config.GetOrCreateConfigAsync();
 
                     GlobalPropertySetup(_config);
                     SetupTwitch();
@@ -76,19 +76,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void GlobalPropertySetup(ConfigModel _config)
         {
-            GlobalProperties.client = client;
-            GlobalProperties.osuApiKey = _config.OsuApiKey;
-            GlobalProperties.topGGApiKey = _config.TopGGApiKey;
-            GlobalProperties.topGGAuthorizationPassword = _config.TopGGAuthorizationPassword;
-            GlobalProperties.mySQL_Username = _config.MySQL_Username;
-            GlobalProperties.mySQL_Password = _config.MySQL_Password;
-            GlobalProperties.mySQL_Server = _config.MySQL_Server;
-            GlobalProperties.mySQL_Database = _config.MySQL_Database;
-            GlobalProperties.twitchClientId = _config.TwitchClientId;
-            GlobalProperties.twitchAuthToken = _config.TwitchAuthToken;
+            Global.Config.client = client;
+            Global.Config.osuApiKey = _config.OsuApiKey;
+            Global.Config.topGGApiKey = _config.TopGGApiKey;
+            Global.Config.topGGAuthorizationPassword = _config.TopGGAuthorizationPassword;
+            Global.Config.mySQL_Username = _config.MySQL_Username;
+            Global.Config.mySQL_Password = _config.MySQL_Password;
+            Global.Config.mySQL_Server = _config.MySQL_Server;
+            Global.Config.mySQL_Database = _config.MySQL_Database;
+            Global.Config.twitchClientId = _config.TwitchClientId;
+            Global.Config.twitchAuthToken = _config.TwitchAuthToken;
 
             //Converts int LogNum in the config file to the enum LogLevel.
-            GlobalProperties.logLevel = (LogLevel)_config.LogLevelNumber;
+            Global.Config.logLevel = (LogLevel)_config.LogLevelNumber;
         }
 
         private void TestDatabaseConnection()
@@ -109,13 +109,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private void SetupTwitch()
         {
             api = new TwitchAPI();
-            api.Settings.ClientId = GlobalProperties.twitchClientId;
-            api.Settings.AccessToken = GlobalProperties.twitchAuthToken;
+            api.Settings.ClientId = Global.Config.twitchClientId;
+            api.Settings.AccessToken = Global.Config.twitchAuthToken;
 
             var monitor = new LiveStreamMonitorService(api, 30);
             monitor.OnStreamOnline += TwitchNotificationsHandler.OnStreamOnline;
 
-            GlobalProperties.twitchApi = api;
+            Global.Config.twitchApi = api;
         }
     }
 }

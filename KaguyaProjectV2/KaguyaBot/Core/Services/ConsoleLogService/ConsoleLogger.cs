@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             string logP = LogPrefix(logLevel);
             string contents = $"{DateTime.Now.ToLongTimeString()} {logP} {message}";
 
-            if (GlobalProperties.logLevel <= logLevel)
+            if (Global.Config.logLevel <= logLevel)
             {
                 //Logs to console only if the log level is less or equally severe to what is specified in the config.
                 Console.WriteLine(contents);

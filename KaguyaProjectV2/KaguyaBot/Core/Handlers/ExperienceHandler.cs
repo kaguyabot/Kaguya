@@ -75,7 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             {
                 Title = "Level Up!",
                 Description = $"{context.User.Username} just leveled up! \n[Level: {ReturnLevel(user)} | Experience Points: {user.Experience.ToString("N0")}]\nRank: [COMING SOON]",
-                ThumbnailUrl = Global.GlobalProperties.client.GetUser(user.Id).GetAvatarUrl()
+                ThumbnailUrl = Global.Config.client.GetUser(user.Id).GetAvatarUrl()
             };
 
             return embed.Build();
