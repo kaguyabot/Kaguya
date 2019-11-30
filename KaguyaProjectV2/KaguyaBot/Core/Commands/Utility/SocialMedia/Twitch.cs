@@ -192,7 +192,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
         {
             var succEmbed = new KaguyaEmbedBuilder
             {
-                Description = $"I will switch the notifications from `#{GlobalProperties.client.GetGuild(tchannel.ServerId).GetTextChannel(tchannel.TextChannelId).Name}` to `#{channel.Name}`."
+                Description = $"I will switch the notifications to `#{channel.Name}`."
             };
 
             altEmbed = new KaguyaEmbedBuilder
