@@ -40,5 +40,18 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 }
             }
         }
+
+        /// <summary>
+        /// Takes an existing supporter key and updates it.
+        /// </summary>
+        /// <param name="key"></param>
+        public static void UpdateKey(SupporterKey oldKey, SupporterKey newKey)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.Delete(oldKey);
+                db.Insert(newKey);
+            }
+        }
     }
 }
