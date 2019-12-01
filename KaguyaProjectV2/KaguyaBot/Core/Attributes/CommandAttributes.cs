@@ -2,54 +2,56 @@
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Method)]
-    class AdminCommandAttribute : Attribute
+    internal class AdminCommandAttribute : Attribute
     {
 
     }
-    class CurrencyCommandAttribute : Attribute
+    internal class CurrencyCommandAttribute : Attribute
     {
 
     }
-    class ExpCommandAttribute : Attribute
+    internal class ExpCommandAttribute : Attribute
     {
 
     }
-    class FunCommandAttribute : Attribute
+    internal class FunCommandAttribute : Attribute
     {
 
     }
-    class HelpCommandAttribute : Attribute
+    internal class HelpCommandAttribute : Attribute
     {
 
     }
-    class MusicCommandAttribute : Attribute
+    internal class MusicCommandAttribute : Attribute
     {
 
     }
-    class NsfwCommandAttribute : Attribute
+    internal class NsfwCommandAttribute : Attribute
     {
 
     }
-    class OsuCommandAttribute : Attribute
+    internal class OsuCommandAttribute : Attribute
     {
 
     }
-    class SupporterCommandAttribute : PreconditionAttribute
+
+    internal class SupporterCommandAttribute : PreconditionAttribute
     {
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
-            var user = Users.GetUser(context.User.Id);
+            var user = UserQueries.GetUser(context.User.Id);
 
-            if (user.IsSupporter)
-                return Task.FromResult(PreconditionResult.FromSuccess());
-            return Task.FromResult(PreconditionResult.FromError("Sorry, but you must be a supporter to use this command."));
+            return Task.FromResult(user.IsSupporter ? PreconditionResult.FromSuccess() : 
+                PreconditionResult.FromError("Sorry, but you must be a supporter to use this command."));
         }
     }
-    class UtilityCommandAttribute : Attribute
+
+    internal class UtilityCommandAttribute : Attribute
     {
 
     }

@@ -2,10 +2,10 @@
 using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
-using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Supporter
 {

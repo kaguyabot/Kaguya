@@ -1,9 +1,9 @@
 ﻿using Discord;
 using Discord.Commands;
-using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             user.Experience += exp;
             user.LatestEXP = DateTime.Now.ToOADate();
-            Users.UpdateUser(user);
+            UserQueries.UpdateUser(user);
 
             double newLevel = ReturnLevel(user);
             await ConsoleLogger.Log($"User has received {exp} exp. [ID: {user.Id} | New EXP: {user.Experience.ToString("N0")}]", DataStorage.JsonStorage.LogLevel.TRACE);
@@ -75,7 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             {
                 Title = "Level Up!",
                 Description = $"{context.User.Username} just leveled up! \n[Level: {ReturnLevel(user)} | Experience Points: {user.Experience.ToString("N0")}]\nRank: [COMING SOON]",
-                ThumbnailUrl = Global.Config.client.GetUser(user.Id).GetAvatarUrl()
+                ThumbnailUrl = Global.ConfigProperties.client.GetUser(user.Id).GetAvatarUrl()
             };
 
             return embed.Build();

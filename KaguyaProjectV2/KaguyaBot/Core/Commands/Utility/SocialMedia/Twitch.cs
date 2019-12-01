@@ -4,12 +4,12 @@ using System.Linq;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System.Threading.Tasks;
 using Discord.Addons.Interactive;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
 
             Server server = ServerQueries.GetServer(Context.Guild.Id);
             var twitchChannels = ServerQueries.GetAllTwitchChannels().Where(x => x.ServerId == Context.Guild.Id).ToList();
-            var twitchApi = Config.twitchApi;
+            var twitchApi = ConfigProperties.twitchApi;
             var userIndex = await twitchApi.V5.Users.GetUserByNameAsync(twitchChannelName);
 
             if (await PremiumCheck(twitchChannels, server)) return;
@@ -96,7 +96,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
         private async Task NotifsAlreadyActiveInAltChannel(List<TwitchChannel> serverTwitchChannels, SocketTextChannel channel, Server server, TwitchChannel tchannel)
         {
             KaguyaEmbedBuilder embed;
-            string textChannelName = Config.client.GetGuild(server.Id).GetTextChannel(tchannel.TextChannelId).Name;
+            string textChannelName = ConfigProperties.client.GetGuild(server.Id).GetTextChannel(tchannel.TextChannelId).Name;
             embed = new KaguyaEmbedBuilder
             {
                 Description = $"This Twitch stream is already being monitored somewhere else!\n\n" +

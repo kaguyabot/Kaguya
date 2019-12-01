@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                Server server = db.GetTable<Server>().Where(x => x.Id == Id).FirstOrDefault();
+                Server server = db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
 
                 if (server == null)
                 {
@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     db.Insert(server, "kaguyaserver");
                 }
 
-                return db.GetTable<Server>().Where(x => x.Id == Id).FirstOrDefault();
+                return db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
             }
         }
 

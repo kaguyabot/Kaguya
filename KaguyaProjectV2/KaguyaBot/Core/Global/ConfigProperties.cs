@@ -10,7 +10,7 @@ using TwitchLib.Client;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Global
 {
-    public static class Config
+    public static class ConfigProperties
     {
         public static DiscordShardedClient client { get; set; }
         public static TwitchAPI twitchApi { get; set; }

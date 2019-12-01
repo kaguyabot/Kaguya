@@ -1,11 +1,11 @@
 ﻿using Discord;
 using Discord.Commands;
-using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("FilterAdd")]
         [Alias("fa")]
         [Summary("Adds one phrase (or a list of phrases) to your server's word filter. " +
-            "These are phrases that will automatically be deleted when typed in chat. Users with the Administrator permission are excluded from punishment.")]
+            "These are phrases that will automatically be deleted when typed in chat. UserQueries with the Administrator permission are excluded from punishment.")]
         [Remarks("dodohead.big beachy moofins.penguins!!")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         [RequireBotPermission(GuildPermission.ManageMessages)]

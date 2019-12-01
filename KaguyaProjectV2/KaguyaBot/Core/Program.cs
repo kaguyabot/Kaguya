@@ -76,19 +76,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void GlobalPropertySetup(ConfigModel _config)
         {
-            Global.Config.client = client;
-            Global.Config.osuApiKey = _config.OsuApiKey;
-            Global.Config.topGGApiKey = _config.TopGGApiKey;
-            Global.Config.topGGAuthorizationPassword = _config.TopGGAuthorizationPassword;
-            Global.Config.mySQL_Username = _config.MySQL_Username;
-            Global.Config.mySQL_Password = _config.MySQL_Password;
-            Global.Config.mySQL_Server = _config.MySQL_Server;
-            Global.Config.mySQL_Database = _config.MySQL_Database;
-            Global.Config.twitchClientId = _config.TwitchClientId;
-            Global.Config.twitchAuthToken = _config.TwitchAuthToken;
+            Global.ConfigProperties.client = client;
+            Global.ConfigProperties.osuApiKey = _config.OsuApiKey;
+            Global.ConfigProperties.topGGApiKey = _config.TopGGApiKey;
+            Global.ConfigProperties.topGGAuthorizationPassword = _config.TopGGAuthorizationPassword;
+            Global.ConfigProperties.mySQL_Username = _config.MySQL_Username;
+            Global.ConfigProperties.mySQL_Password = _config.MySQL_Password;
+            Global.ConfigProperties.mySQL_Server = _config.MySQL_Server;
+            Global.ConfigProperties.mySQL_Database = _config.MySQL_Database;
+            Global.ConfigProperties.twitchClientId = _config.TwitchClientId;
+            Global.ConfigProperties.twitchAuthToken = _config.TwitchAuthToken;
 
             //Converts int LogNum in the config file to the enum LogLevel.
-            Global.Config.logLevel = (LogLevel)_config.LogLevelNumber;
+            Global.ConfigProperties.logLevel = (LogLevel)_config.LogLevelNumber;
         }
 
         private void TestDatabaseConnection()
@@ -109,13 +109,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private void SetupTwitch()
         {
             api = new TwitchAPI();
-            api.Settings.ClientId = Global.Config.twitchClientId;
-            api.Settings.AccessToken = Global.Config.twitchAuthToken;
+            api.Settings.ClientId = Global.ConfigProperties.twitchClientId;
+            api.Settings.AccessToken = Global.ConfigProperties.twitchAuthToken;
 
             var monitor = new LiveStreamMonitorService(api, 30);
             monitor.OnStreamOnline += TwitchNotificationsHandler.OnStreamOnline;
 
-            Global.Config.twitchApi = api;
+            Global.ConfigProperties.twitchApi = api;
         }
     }
 }

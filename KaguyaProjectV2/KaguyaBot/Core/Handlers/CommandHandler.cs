@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -11,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             if (message == null || message.Author.IsBot) return;
 
             Server server = ServerQueries.GetServer((message.Channel as SocketGuildChannel).Guild.Id);
-            User user = Users.GetUser(message.Author.Id);
+            User user = UserQueries.GetUser(message.Author.Id);
 
             int argPos = 0;
 

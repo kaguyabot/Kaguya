@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
@@ -61,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Action = PremiumModerationActions.WARN
                 };
 
-                var logChannel = Config.client.GetGuild(server.Id).GetTextChannel(server.ModLog);
+                var logChannel = ConfigProperties.client.GetGuild(server.Id).GetTextChannel(server.ModLog);
                 await logChannel.SendMessageAsync(embed: PremiumModerationLog.ModerationLogEmbed(premLog).Build());
             }
 

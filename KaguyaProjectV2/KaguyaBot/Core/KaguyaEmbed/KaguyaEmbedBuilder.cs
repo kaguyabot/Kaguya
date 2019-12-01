@@ -1,15 +1,15 @@
 ﻿using Discord;
 
-namespace KaguyaProjectV2.Core.Handlers
+namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
 {
     public class KaguyaEmbedBuilder : EmbedBuilder
     {
-        private static readonly Color RedColor = new Color(255, 0, 0);
-        private static readonly Color VioletColor = new Color(111, 22, 255);
-        private static readonly Color GoldColor = new Color(255, 223, 0);
-        private static readonly Color BlueColor = new Color(56, 175, 255);
-        private static readonly Color PinkColor = new Color(252, 132, 255);
-        private static readonly Color GreenColor = new Color(0, 204, 0);
+        public static readonly Color RedColor = new Color(255, 0, 0);
+        public static readonly Color VioletColor = new Color(111, 22, 255);
+        public static readonly Color GoldColor = new Color(255, 223, 0);
+        public static readonly Color BlueColor = new Color(56, 175, 255);
+        public static readonly Color PinkColor = new Color(252, 132, 255);
+        public static readonly Color GreenColor = new Color(0, 204, 0);
 
         public EmbedColor EmbedType;
 

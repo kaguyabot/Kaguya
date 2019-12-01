@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using KaguyaProjectV2.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Linq;
@@ -8,12 +7,13 @@ using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using System.Text.RegularExpressions;
 using System;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 {
     public class GuildLogger
     {
-        private static readonly DiscordShardedClient _client = Config.client;
+        private static readonly DiscordShardedClient _client = ConfigProperties.client;
         private static KaguyaEmbedBuilder _embed;
 
         public static async void GuildLogListener()

@@ -25,7 +25,6 @@
     <Folder Include="KaguyaBot\Core\Commands\Fun\" />
     <Folder Include="KaguyaBot\Core\Commands\Music\" />
     <Folder Include="KaguyaBot\Core\Commands\osu!\" />
-    <Folder Include="KaguyaBot\Core\Commands\Owner Only\" />
     <Folder Include="KaguyaBot\Core\Commands\NSFW\" />
     <Folder Include="Resources\" />
   </ItemGroup>

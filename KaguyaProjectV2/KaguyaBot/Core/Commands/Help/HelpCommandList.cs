@@ -10,6 +10,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
@@ -30,8 +31,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new ExpCommandAttribute(), new FunCommandAttribute(), 
                 new HelpCommandAttribute(), new MusicCommandAttribute(), 
                 new NsfwCommandAttribute(), new OsuCommandAttribute(), 
-                new RequireOwnerAttribute(), new SupporterCommandAttribute(), 
-                new UtilityCommandAttribute()
+                new UtilityCommandAttribute(), new SupporterCommandAttribute(), 
+                new RequireOwnerAttribute()
             };
 
             var pages = ReturnPages();
@@ -67,7 +68,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 {
                     Text = $"Use {server.CommandPrefix}h <command> for more information on a command.\n" +
                            $"Press the square numbers and then type a number in chat to jump to a page."
-                }
+                },
+                Color = KaguyaEmbedBuilder.BlueColor
             };
 
             await PagedReplyAsync(pager, new ReactionList

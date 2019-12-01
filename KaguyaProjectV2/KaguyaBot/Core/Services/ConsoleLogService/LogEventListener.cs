@@ -10,7 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {
     public class LogEventListener
     {
-        private static DiscordShardedClient _client = Global.Config.client;
+        private static DiscordShardedClient _client = Global.ConfigProperties.client;
 
         public static void Listener()
         {
