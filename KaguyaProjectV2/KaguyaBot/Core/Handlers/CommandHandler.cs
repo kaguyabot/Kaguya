@@ -1,19 +1,18 @@
-﻿using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
+namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public class CommandHandler
     {
@@ -41,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             var message = msg as SocketUserMessage;
             if (message == null || message.Author.IsBot) return;
 
-            Server server = ServerQueries.GetServer((message.Channel as SocketGuildChannel).Guild.Id);
+            Server server = ServerQueries.GetServer(((SocketGuildChannel) message.Channel).Guild.Id);
             User user = UserQueries.GetUser(message.Author.Id);
 
             int argPos = 0;
@@ -70,8 +69,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
             if (result.IsSuccess)
             {
                 server.TotalCommandCount++;
-                await ConsoleLogger.Log($"Command Executed [Command: {context.Message} | User: {context.User} | Channel: {context.Channel} | " +
-                    $"Guild: {context.Guild}]", LogLevel.INFO);
+                await ConsoleLogger.Log("", LogLevel.INFO, context); //string is empty because the context is provided.
                 ServerQueries.UpdateServer(server);
                 return;
             }

@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -9,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
@@ -94,9 +94,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new EmbedFieldBuilder {Name = "Description", Value = $"{cmdInfo.Summary}", IsInline = false,},
                 new EmbedFieldBuilder
                 {
-                    //The value of this vield is pretty hard to read, basically we add the command prefix + command name to the start of the string,
-                    //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute, we add the same thing to the start of the new line.
-                    Name = $"Syntax",
+                    //The value of this field is pretty hard to read, basically we add the command prefix + command name to the start of the string,
+                    //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute), we add the same thing to the start of the new line.
+                    Name = "Syntax",
                     Value =
                         $"`{server.CommandPrefix}{aliases.Split(",")[0]} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]} ", cmdInfo.Remarks.Split("\n"))}`",
                     IsInline = false,

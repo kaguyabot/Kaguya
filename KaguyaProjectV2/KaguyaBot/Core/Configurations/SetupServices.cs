@@ -1,9 +1,10 @@
 ﻿using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Application.ApplicationStart
+namespace KaguyaProjectV2.KaguyaBot.Core.Configurations
 {
     public class SetupServices
     {

@@ -74,6 +74,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
         }
     }
 
+    /// <summary>
+    /// LogLevels arranged in order of importance (least to greatest importance): Trace, Debug, Info, Warn, Error.
+    /// Info should be used for commands and other general information.
+    /// </summary>
     public enum LogLevel
     {
         TRACE = 0,
