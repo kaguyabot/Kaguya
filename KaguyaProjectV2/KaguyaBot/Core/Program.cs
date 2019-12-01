@@ -9,6 +9,7 @@ using System;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Services.SupporterService;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Core.FollowerService;
@@ -54,6 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     await client.LoginAsync(TokenType.Bot, _config.Token);
                     await client.StartAsync();
 
+                    await EnableTimers(AllShardsLoggedIn(client, config));
                     await Task.Delay(-1);
                 }
                 catch(Discord.Net.HttpException e)
@@ -116,6 +118,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             monitor.OnStreamOnline += TwitchNotificationsHandler.OnStreamOnline;
 
             Global.ConfigProperties.twitchApi = api;
+        }
+
+        private async Task EnableTimers(bool shardsLoggedIn)
+        {
+            if (!shardsLoggedIn) return;
+
+            await KaguyaSuppRoleChecker.CheckRoleTimer();
+        }
+
+        private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)
+        {
+            return client.Shards.Count == config.TotalShards;
         }
     }
 }
