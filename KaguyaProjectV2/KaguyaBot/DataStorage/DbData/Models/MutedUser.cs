@@ -9,8 +9,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong ServerId { get; set; }
         [Column(Name = "UserId"), NotNull]
         public ulong UserId { get; set; }
-        [Column(Name = "Duration"), NotNull]
-        public long Duration { get; set; }
+        /// <summary>
+        /// When the mute will expire, in OADate form.
+        /// </summary>
+        [Column(Name = "ExpiresAt"), NotNull]
+        public double ExpiresAt { get; set; }
         /// <summary>
         /// FK_KaguyaServer_MutedUsers
         /// </summary>

@@ -102,6 +102,30 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             db.Delete(muObject);
         }
 
+        public static IEnumerable<MutedUser> GetAllMutedUsers()
+        {
+            using var db = new KaguyaDb();
+            return db.GetTable<MutedUser>().ToList();
+        }
+
+        public static IEnumerable<MutedUser> GetMutedUsersForServer(ulong serverId)
+        {
+            using var db = new KaguyaDb();
+            return db.GetTable<MutedUser>().ToList().Where(x => x.ServerId == serverId);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="oldObject">The object that already exists in the database.</param>
+        /// <param name="replacementObject">The new object to insert into the database.</param>
+        public static void ReplaceMutedUser(MutedUser oldObject, MutedUser replacementObject)
+        {
+            using var db = new KaguyaDb();
+            db.Delete(oldObject);
+            db.Insert(replacementObject);
+        }
+
         public static void AddWarnAction(WarnAction waObject)
         {
             using var db = new KaguyaDb();

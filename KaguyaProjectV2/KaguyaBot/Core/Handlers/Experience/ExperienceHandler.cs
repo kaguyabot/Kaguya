@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Linq;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 return;
             }
 
-            await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, context));
+            //await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, context));
         }
 
         private static bool CanGetExperience(User user)
