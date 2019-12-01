@@ -21,8 +21,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Remarks("<key>")]
         public async Task RedeemKey(string userKey)
         {
+            var user = UserQueries.GetUser(Context.User.Id);
             var server = ServerQueries.GetServer(Context.Guild.Id);
             var existingKeys = UtilityQueries.GetAllKeys();
+
             var key = existingKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0);
 
             if (key == null)
@@ -59,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully redeemed `{newKey.Length} day{s}` of Kaguya Supporter!\n" +
-                              $"Your tag will expire on: `{DateTime.FromOADate(newKey.Expiration).ToLongDateString()}`"
+                              $"Your tag will expire on: `{DateTime.FromOADate(user.SupporterExpirationDate).ToLongDateString()}`"
             };
             embed.SetColor(EmbedColor.GOLD);
 

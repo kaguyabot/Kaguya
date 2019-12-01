@@ -1,6 +1,8 @@
 ﻿using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -44,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "BlacklistExpiration"), Nullable]
         public double BlacklistExpiration { get; set; }
         [Column(Name = "LatestEXP"), Nullable]
-        public double LatestEXP { get; set; }
+        public double LatestExp { get; set; }
         [Column(Name = "LatestTimelyBonus"), Nullable]
         public double LatestTimelyBonus { get; set; }
         [Column(Name = "LatestWeeklyBonus"), Nullable]
@@ -53,10 +55,18 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public double LastGivenRep { get; set; }
         [Column(Name = "UpvoteBonusExpiration"), Nullable]
         public double UpvoteBonusExpiration { get; set; }
-        [Column(Name = "KaguyaSupporterExpiration"), Nullable]
-        public double KaguyaSupporterExpiration { get; set; }
         [Column(Name = "IsBlacklisted"), NotNull]
         public bool IsBlacklisted { get; set; }
+
+        public double SupporterExpirationDate
+        {
+            get
+            {
+                var now = DateTime.Now.ToOADate();
+                var allUserKeys = UtilityQueries.GetAllKeys().Where(x => x.UserId == Id);
+                return now + allUserKeys.Sum(key => key.Expiration - now);
+            }
+        }
         /// <summary>
         /// FK_KaguyaUser_GambleHistory_BackReference
         /// </summary>
@@ -68,6 +78,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Association(ThisKey = "Id", OtherKey = "UserId")]
         public IEnumerable<CommandHistory> CommandHistory { get; set; }
 
-        public bool IsSupporter => KaguyaSupporterExpiration - DateTime.Now.ToOADate() > 0;
+        public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
     }
 }

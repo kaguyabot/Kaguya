@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
         {
             _client.ShardConnected += (DiscordSocketClient client) => ConsoleLogger.Log($"Shard {client.ShardId} connected.", LogLevel.TRACE);
             _client.ShardDisconnected += (Exception ex, DiscordSocketClient client) => ConsoleLogger.Log($"Shard {client.ShardId} disconnected. Exception: {ex.Message}", LogLevel.ERROR);
-            _client.ShardReady += (DiscordSocketClient client) => ConsoleLogger.Log($"Shard {client.ShardId} ready. Guilds: {client.Guilds.Count.ToString("N0")}", LogLevel.INFO);
+            _client.ShardReady += (DiscordSocketClient client) => ConsoleLogger.Log($"Shard {client.ShardId} ready. Guilds: {client.Guilds.Count:N0}", LogLevel.INFO);
             _client.ShardLatencyUpdated += (int oldLatency, int newLatency, DiscordSocketClient client) =>
                 ConsoleLogger.Log($"Shard {client.ShardId} latency has updated. [Old: {oldLatency}ms | New: {newLatency}ms]", LogLevel.TRACE);
 

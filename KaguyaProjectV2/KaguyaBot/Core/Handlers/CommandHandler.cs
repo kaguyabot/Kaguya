@@ -6,6 +6,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -49,6 +50,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             await IsFilteredPhrase(context, server, message);
 
             ExperienceHandler.AddExp(user, context);
+            ServerSpecificExpHandler.AddExp(user, server, context);
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
@@ -69,7 +71,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (result.IsSuccess)
             {
                 server.TotalCommandCount++;
-                await ConsoleLogger.Log("", LogLevel.INFO, context); //string is empty because the context is provided.
+                await ConsoleLogger.Log(context, LogLevel.INFO);
                 ServerQueries.UpdateServer(server);
                 return;
             }

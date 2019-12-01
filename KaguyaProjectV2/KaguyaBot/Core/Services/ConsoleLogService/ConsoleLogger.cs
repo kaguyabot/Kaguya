@@ -20,48 +20,39 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
         /// <param name="logLevel">The severity of the message. Higher severity log messages get special coloring in the console.</param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static Task Log(string message, LogLevel logLevel, ICommandContext context = null)
+        public static Task Log(string message, LogLevel logLevel)
         {
             string logP = LogPrefix(logLevel);
             string contents = $"{DateTime.Now.ToLongTimeString()} {logP} {message}";
 
-            if (context != null)
-            {
-                int shardId = Global.ConfigProperties.client.GetShardIdFor(context.Guild);
-                contents = $"\n{DateTime.Now.ToLongTimeString()} {logP} " +
-                           $"Command: [{context.Message}]\nUser: [Name: {context.User} | ID: {context.User.Id}]\n" +
-                           $"Guild: [Name: {context.Guild} | ID: {context.Guild.Id} | Shard: {shardId}]\n" +
-                           $"Channel: [Name: {context.Channel.Name} | ID: {context.Channel.Id}]\n";
-            }
-
             if (Global.ConfigProperties.logLevel > logLevel) return Task.CompletedTask;
+            return LogFinisher(logLevel, contents);
+        }
 
-            //Logs to console only if the log level is less or equally severe to what is specified in the config.
-            SetConsoleColor(logLevel);
-            Console.WriteLine(contents);
+        public static Task Log(ICommandContext context, LogLevel logLevel)
+        {
+            string logP = LogPrefix(logLevel);
 
-            if(LogFileExists())
-                File.AppendAllText($"{LogDirectory}\\{LogFileName}", $"{contents}\n");
+            int shardId = Global.ConfigProperties.client.GetShardIdFor(context.Guild);
+            string contents = $"\n{DateTime.Now.ToLongTimeString()} {logP} " +
+                       $"Command: [{context.Message}]\nUser: [Name: {context.User} | ID: {context.User.Id}]\n" +
+                       $"Guild: [Name: {context.Guild} | ID: {context.Guild.Id} | Shard: {shardId}]\n" +
+                       $"Channel: [Name: {context.Channel.Name} | ID: {context.Channel.Id}]\n";
 
-            return Task.CompletedTask;
+            return LogFinisher(logLevel, contents);
         }
 
         private static string LogPrefix(LogLevel logLevel)
         {
-            switch (logLevel)
+            return logLevel switch
             {
-                case LogLevel.TRACE:
-                    return "[TRACE]:";
-                case LogLevel.DEBUG:
-                    return "[DEBUG]:";
-                case LogLevel.INFO:
-                    return "[INFO]:";
-                case LogLevel.WARN:
-                    return "[WARNING]:";
-                case LogLevel.ERROR:
-                    return "[ERROR]:";
-                default: return null;
-            }
+                LogLevel.TRACE => "[TRACE]:",
+                LogLevel.DEBUG => "[DEBUG]:",
+                LogLevel.INFO => "[INFO]:",
+                LogLevel.WARN => "[WARNING]:",
+                LogLevel.ERROR => "[ERROR]:",
+                _ => null
+            };
         }
 
         private static bool LogFileExists()
@@ -71,13 +62,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
                 Directory.CreateDirectory(LogDirectory);
                 return false;
             }
-            if(!File.Exists($"{LogDirectory}\\{LogFileName}"))
-            {
-                File.WriteAllText($"{LogDirectory}\\{LogFileName}", "");
-                return false;
-            }
 
-            return true;
+            if (File.Exists($"{LogDirectory}\\{LogFileName}")) return true;
+
+            File.WriteAllText($"{LogDirectory}\\{LogFileName}", "");
+            return false;
+
         }
 
         private static void SetConsoleColor(LogLevel level)
@@ -104,7 +94,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.DarkRed;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
+        }
+
+        private static Task LogFinisher(LogLevel logLevel, string contents)
+        {
+            //Logs to console only if the log level is less or equally severe to what is specified in the config.
+            SetConsoleColor(logLevel);
+            Console.WriteLine(contents);
+
+            if (LogFileExists())
+                File.AppendAllText($"{LogDirectory}\\{LogFileName}", $"{contents}\n");
+
+            return Task.CompletedTask;
         }
     }
 }

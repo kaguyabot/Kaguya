@@ -11,50 +11,41 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
     {
         public static IEnumerable<Server> GetAllServers()
         {
-            using (var db = new KaguyaDb())
-            {
-                return db.GetTable<Server>().ToList();
-            }
+            using var db = new KaguyaDb();
+            return db.GetTable<Server>().ToList();
         }
 
         public static Server GetServer(ulong Id)
         {
-            using (var db = new KaguyaDb())
+            using var db = new KaguyaDb();
+            Server server = db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
+
+            if (server != null) return db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
+
+            server = new Server
             {
-                Server server = db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
+                Id = Id
+            };
+            db.Insert(server, "kaguyaserver");
 
-                if (server == null)
-                {
-                    server = new Server();
-                    server.Id = Id;
-                    db.Insert(server, "kaguyaserver");
-                }
-
-                return db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
-            }
+            return db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
         }
 
         public static void UpdateServer(Server server)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.InsertOrReplace<Server>(server);
-            }
+            using var db = new KaguyaDb();
+            db.InsertOrReplace<Server>(server);
         }
 
         public static List<FilteredPhrase> GetAllFilteredPhrases()
         {
-            using (var db = new KaguyaDb())
-            {
-                return db.GetTable<FilteredPhrase>().ToList();
-            }
+            using var db = new KaguyaDb();
+            return db.GetTable<FilteredPhrase>().ToList();
         }
         public static List<FilteredPhrase> GetAllFilteredPhrasesForServer(ulong Id)
         {
-            using (var db = new KaguyaDb())
-            {
-                return db.GetTable<FilteredPhrase>().Where(x => x.ServerId == Id).ToList();
-            }
+            using var db = new KaguyaDb();
+            return db.GetTable<FilteredPhrase>().Where(x => x.ServerId == Id).ToList();
         }
 
         /// <summary>
@@ -63,10 +54,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <param name="fpObject">FilteredPhrase object to add.</param>
         public static void AddFilteredPhrase(FilteredPhrase fpObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Insert(fpObject);
-            }
+            using var db = new KaguyaDb();
+            db.Insert(fpObject);
         }
 
         /// <summary>
@@ -75,10 +64,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <param name="fpObject">FilteredPhrase object to remove.</param>
         public static void RemoveFilteredPhrase(FilteredPhrase fpObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Delete(fpObject);
-            }
+            using var db = new KaguyaDb();
+            db.Delete(fpObject);
         }
 
         /// <summary>
@@ -87,106 +74,93 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <param name="blObject">The BlackListedChannl object to add.</param>
         public static void UpdateBlacklistedChannels(BlackListedChannel blObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Insert(blObject);
-            }
+            using var db = new KaguyaDb();
+            db.Insert(blObject);
         }
 
         public static void AddAutoAssignedRole(AutoAssignedRole arObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Insert(arObject);
-            }
+            using var db = new KaguyaDb();
+            db.Insert(arObject);
         }
 
         public static void RemoveAutoAssignedRole(AutoAssignedRole arObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Delete(arObject);
-            }
+            using var db = new KaguyaDb();
+            db.Delete(arObject);
         }
 
         public static void AddMutedUser(MutedUser muObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Insert(muObject);
-            }
+            using var db = new KaguyaDb();
+            db.Insert(muObject);
         }
 
         public static void RemoveMutedUser(MutedUser muObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Delete(muObject);
-            }
+            using var db = new KaguyaDb();
+            db.Delete(muObject);
         }
 
         public static void AddWarnAction(WarnAction waObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Insert(waObject);
-            }
+            using var db = new KaguyaDb();
+            db.Insert(waObject);
         }
 
         public static void RemoveWarnAction(WarnAction waObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Delete(waObject);
-            }
+            using var db = new KaguyaDb();
+            db.Delete(waObject);
         }
 
         public static void AddWarnedUser(WarnedUser wuObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Insert(wuObject);
-            }
+            using var db = new KaguyaDb();
+            db.Insert(wuObject);
         }
 
         public static void RemoveWarnedUser(WarnedUser wuObject)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Delete(wuObject);
-            }
+            using var db = new KaguyaDb();
+            db.Delete(wuObject);
         }
 
         public static List<WarnedUser> GetWarnedUser(ulong serverId, ulong userId)
         {
-            using (var db = new KaguyaDb())
-            {
-                return db.GetTable<WarnedUser>().Where(x => x.ServerId == serverId && x.UserId == userId).ToList();
-            }
+            using var db = new KaguyaDb();
+            return db.GetTable<WarnedUser>().Where(x => x.ServerId == serverId && x.UserId == userId).ToList();
         }
 
         public static List<TwitchChannel> GetAllTwitchChannels()
         {
-            using (var db = new KaguyaDb())
-            {
-                return db.GetTable<TwitchChannel>().ToList();
-            }
+            using var db = new KaguyaDb();
+            return db.GetTable<TwitchChannel>().ToList();
         }
 
         public static void AddTwitchChannel(TwitchChannel tcObj)
         {
-            using (var db = new KaguyaDb())
-            {
-                db.Insert(tcObj);
-            }
+            using var db = new KaguyaDb();
+            db.Insert(tcObj);
         }
 
         public static void RemoveTwitchChannel(TwitchChannel tcObj)
         {
-            using (var db = new KaguyaDb())
+            using var db = new KaguyaDb();
+            db.Delete(tcObj);
+        }
+
+        public static void AddOrReplaceUserExp(ServerSpecificExp expObj)
+        {
+            using var db = new KaguyaDb();
+            var allExp = db.GetTable<ServerSpecificExp>().Where(x => x.ServerId == expObj.ServerId);
+
+            if (allExp.Any(x => x.UserId == expObj.UserId)) //Checks for duplicates.
             {
-                db.Delete(tcObj);
+                db.Delete(allExp.FirstOrDefault(x => x.UserId == expObj.UserId));
             }
+
+            db.Insert(expObj);
         }
     }
 }

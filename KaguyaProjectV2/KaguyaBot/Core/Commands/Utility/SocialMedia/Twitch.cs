@@ -74,7 +74,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
 
                 await ReplyAsync(embed: embed.Build());
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
                 await ChannelNotFoundResponse(twitchChannelName);
             }

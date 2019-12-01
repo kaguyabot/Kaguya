@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Timers;
-using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.SupporterService
 {
@@ -16,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.SupporterService
     {
         public static Task CheckRoleTimer()
         {
-            Timer timer = new Timer(1800000); //30 mins
+            Timer timer = new Timer(8000); //30 mins
             timer.Start();
             timer.AutoReset = true;
             timer.Elapsed += (sender, e) => 
@@ -27,9 +24,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.SupporterService
                 var supporters = UtilityQueries.GetAllKeys()
                     .Where(x => x.UserId != 0 && x.Expiration - DateTime.Now.ToOADate() > 0);
 
-                foreach (var element in supporters)
+                foreach (var supporter in supporters)
                 {
-                    SocketUser socketUser = client.GetUser(element.UserId);
+                    SocketUser socketUser = client.GetUser(supporter.UserId);
 
                     if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
                         continue;
@@ -41,7 +38,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.SupporterService
                         continue;
 
                     kaguyaSuppUser.AddRoleAsync(supporterRole);
-                    ConsoleLogger.Log($"User {socketUser} has had their supporter role given to them in the Kaguya Support server.", LogLevel.INFO);
+                    ConsoleLogger.Log($"Supporter {socketUser} has had their supporter role given to them in the Kaguya Support server.", LogLevel.INFO);
+                }
+
+                // Check for expired supporter tags.
+
+                var expiredSupporters = UtilityQueries.GetAllKeys()
+                    .Where(x => x.Expiration - DateTime.Now.ToOADate() <= 0);
+
+                foreach (var expSupporter in expiredSupporters)
+                {
+                    SocketUser socketUser = client.GetUser(expSupporter.UserId);
+                    if (socketUser == null) continue;
+
+                    if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
+                        continue;
+
+                    var supporterRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name == "Supporter");
+                    var kaguyaSuppUser = kaguyaSupportServer.GetUser(socketUser.Id);
+
+                    if (!kaguyaSuppUser.Roles.Contains(supporterRole))
+                        continue;
+
+                    kaguyaSuppUser.RemoveRoleAsync(supporterRole);
+                    ConsoleLogger.Log($"Expired supporter {socketUser} has had their supporter role removed from them in the Kaguya Support server.", LogLevel.INFO);
                 }
             };
             return Task.CompletedTask;

@@ -45,7 +45,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 }
 
                 keys.Add(key);
-
             }
 
             UtilityQueries.AddKeys(keys);
@@ -57,6 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             string s = "";
             if (amount != 1)
                 s = "s";
+
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully generated `{amount}` `{timeInDays} day` key{s}." +
