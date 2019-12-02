@@ -14,6 +14,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong Id { get; set; }
         [Column(Name = "CommandPrefix"), Nullable]
         public string CommandPrefix { get; set; } = "$";
+        [Column(Name = "Timezone"), NotNull]
+        public string Timezone { get; set; } = "America/New_York";
         [Column(Name = "CommandCount"), NotNull]
         public int TotalCommandCount { get; set; }
         [Column(Name = "TotalAdminActions"), NotNull]

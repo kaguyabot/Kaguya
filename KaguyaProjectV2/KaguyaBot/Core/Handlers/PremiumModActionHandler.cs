@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         public Server Server { get; set; }
         public SocketGuildUser Moderator { get; set; }
         public SocketGuildUser ActionRecipient { get; set; }
-        public PremiumModerationActions Action { get; set; }
+        public PremiumModActionHandler Action { get; set; }
         public string Reason { get; set; }
 
         public static KaguyaEmbedBuilder ModerationLogEmbed(PremiumModerationLog log)
@@ -25,27 +25,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             
             switch (log.Action)
             {
-                case PremiumModerationActions.SHADOWBAN:
+                case PremiumModActionHandler.SHADOWBAN:
                     actionTitle += "Shadowbanned ";
                     embedUrl = "https://i.imgur.com/86tSNSa.png";
                     break;
-                case PremiumModerationActions.UNSHADOWBAN:
+                case PremiumModActionHandler.UNSHADOWBAN:
                     actionTitle += "UnShadowbanned ";
                     embedUrl = "https://i.imgur.com/szeC3hH.png";
                     break;
-                case PremiumModerationActions.MUTE:
+                case PremiumModActionHandler.MUTE:
                     actionTitle += "Muted ";
                     embedUrl = "https://i.imgur.com/D1y3A7E.png";
                     break;
-                case PremiumModerationActions.UNMUTE:
+                case PremiumModActionHandler.UNMUTE:
                     actionTitle += "Unmuted ";
                     embedUrl = "https://i.imgur.com/9x2MHFI.png";
                     break;
-                case PremiumModerationActions.WARN:
+                case PremiumModActionHandler.WARN:
                     actionTitle += "Warned ";
                     embedUrl = "https://i.imgur.com/LZmdn9k.png";
                     break;
-                case PremiumModerationActions.UNWARN:
+                case PremiumModActionHandler.UNWARN:
                     actionTitle += "Unwarned ";
                     embedUrl = "https://i.imgur.com/915ZT6q.png";
                     break;
@@ -65,7 +65,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     /// <summary>
     /// An enum containing all of the premium loggable moderation actions.
     /// </summary>
-    public enum PremiumModerationActions
+    public enum PremiumModActionHandler
     {
         SHADOWBAN,
         MUTE,

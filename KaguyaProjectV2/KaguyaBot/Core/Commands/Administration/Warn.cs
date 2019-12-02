@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Moderator = (SocketGuildUser) Context.User,
                     ActionRecipient = (SocketGuildUser) user,
                     Reason = reason,
-                    Action = PremiumModerationActions.WARN
+                    Action = PremiumModActionHandler.WARN
                 };
 
                 var logChannel = ConfigProperties.client.GetGuild(server.Id).GetTextChannel(server.ModLog);

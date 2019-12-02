@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
@@ -16,6 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class Mute : InteractiveBase<ShardedCommandContext>
     {
+        [AdminCommand]
         [Command("Mute", RunMode = RunMode.Async)]
         [Alias("m")]
         [Summary("Mutes a user, **denying** them permission to chat in any channel, add reactions, connect to " +
@@ -28,7 +30,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task MuteUser(IGuildUser user, [Remainder] string duration = null)
         {
             var guild = Context.Guild;
-            var server = ServerQueries.GetServer(guild.Id);
 
             string muteString = "";
             if (duration != null)
