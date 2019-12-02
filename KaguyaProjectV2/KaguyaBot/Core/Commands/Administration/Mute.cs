@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
@@ -12,6 +10,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using LinqToDB.Common;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -36,8 +35,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 if (!duration.Any(x => x.Equals('s') || x.Equals('m') || x.Equals('h') || x.Equals('d')))
                 {
-                    await FormatErrorEmbedReply(server);
-                    return;
+                    throw new FormatException("You did not specify a proper mute time. \nThe proper format is" +
+                                              "`<user> <dhms>`. \nExample: `<user> 30m`");
                 }
 
                 var regex = new Regex("/([0-9])*s|([0-9])*m|([0-9])*h|([0-9])*d/g");
@@ -54,16 +53,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 var h = regexs[2].Match(duration).Value;
                 var d = regexs[3].Match(duration).Value;
 
-                if (string.IsNullOrEmpty(s) && string.IsNullOrEmpty(m) && string.IsNullOrEmpty(h) && string.IsNullOrEmpty(d))
-                {
-                    await FormatErrorEmbedReply(server);
-                    return;
-                }
-
                 var seconds = s.Split('s').First();
                 var minutes = m.Split('m').First();
                 var hours = h.Split('h').First();
                 var days = d.Split('d').First();
+
+                if (!StringIsMatch(seconds) && !StringIsMatch(minutes) && !StringIsMatch(hours) &&
+                    !StringIsMatch(days))
+                {
+                    throw new FormatException("You did not specify a proper mute time. \nThe proper format is" +
+                                              "`<user> <dhms>`. \nExample: `<user> 30m`");
+                }
 
                 int.TryParse(seconds, out int sec);
                 int.TryParse(minutes, out int min);
@@ -226,6 +226,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             await ReplyAsync(embed: formatErrorEmbed.Build());
             return;
+        }
+
+        private bool StringIsMatch(string s)
+        {
+            return !s.IsNullOrEmpty();
         }
     }
 }
