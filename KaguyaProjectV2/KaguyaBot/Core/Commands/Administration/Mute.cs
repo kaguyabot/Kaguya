@@ -150,8 +150,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             {
                                 var doNothingEmbed = new KaguyaEmbedBuilder
                                 {
-                                    Description = $"Alright, I'll do nothing and leave the user to be unmuted at " +
-                                                  $"the time specified above."
+                                    Description = "Alright, I'll leave things alone."
                                 };
 
                                 ReplyAsync(embed: doNothingEmbed.Build());
