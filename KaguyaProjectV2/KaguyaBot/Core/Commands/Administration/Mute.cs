@@ -70,22 +70,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 int.TryParse(hours, out int hour);
                 int.TryParse(days, out int day);
 
+                if (seconds.Length > 7 || minutes.Length > 7 || hours.Length > 7 || days.Length > 7)
+                {
+                    throw new ArgumentOutOfRangeException("Cannot process more than 7 digits for a given duration.", new Exception());
+                }
+
                 TimeSpan timeSpan = new TimeSpan(day, hour, min, sec);
                 double unMuteTime = DateTime.Now.Add(timeSpan).ToOADate(); // When to unmute the user, in OADate.
 
-                if (DateTime.FromOADate(unMuteTime) > DateTime.MaxValue)
-                {
-                    var timeErrorEmbed = new KaguyaEmbedBuilder
-                    {
-                        Description = "Sorry, but I can only mute users for the next eight millenia."
-                    };
-                    timeErrorEmbed.SetColor(EmbedColor.RED);
-
-                    await ReplyAsync(embed: timeErrorEmbed.Build());
-                }
-
                 muteString = $" for `{day}d {hour}h {min}m {sec}s`\n\n" +
-                             $"User will be unmuted on\n" +
+                             "User will be unmuted on\n" +
                              $"`{DateTime.FromOADate(unMuteTime).ToLongDateString()} " +
                              $"{DateTime.FromOADate(unMuteTime).ToLongTimeString()} (UTC -5:00)`";
 
@@ -142,6 +136,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                 };
 
                                 ServerQueries.ReplaceMutedUser(existingObject, extendedMuteObject);
+
                                 var extensionEmbed = new KaguyaEmbedBuilder
                                 {
                                     Description = $"Alright, I've extended their mute!"
