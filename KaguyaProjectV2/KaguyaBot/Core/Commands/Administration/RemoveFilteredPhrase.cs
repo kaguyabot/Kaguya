@@ -18,7 +18,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Summary("Removes one phrase or a list of filtered phrases from your server's word filter. Words are separated by periods.")]
         [Remarks("<phrase>.<phrase 2>.{...}\ndodohead.big beachy muffins.penguins!!")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
-        [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task RemovePhrase(string args)
         {
             string[] newArgs = ArrayInterpreter.ReturnParams(args);

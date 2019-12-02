@@ -30,6 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task MuteUser(IGuildUser user, [Remainder] string duration = null)
         {
             var guild = Context.Guild;
+            var server = ServerQueries.GetServer(Context.Guild.Id);
 
             string muteString = "";
             if (duration != null)

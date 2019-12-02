@@ -16,7 +16,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("timezone")]
         [Alias("tz")]
         [Summary("Sets the timezone for the server. The default timezone is `American/New_York`. " +
-                 "To properly setup the timezone, [find your timezone in this database.](https://en.m.wikipedia.org/wiki/List_of_tz_database_time_zones) " +
+                 "To properly setup the timezone, [find your timezone in this database.]" +
+                 "(https://en.m.wikipedia.org/wiki/List_of_tz_database_time_zones) " +
                  "Your timezone can be found under the `TZ database name` column. Configuring your timezone " +
                  "allows for consistent reporting of scheduled tasks, such as reminders and mutes for users.")]
         [Remarks("<timezone>")]

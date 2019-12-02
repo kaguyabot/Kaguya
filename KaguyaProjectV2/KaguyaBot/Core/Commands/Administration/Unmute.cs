@@ -21,6 +21,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                  "the scheduled unmute. The name of the mute role is always " +
                  "`kaguya-mute`")]
         [Remarks("<user>")]
+        [RequireUserPermission(GuildPermission.ManageRoles)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
         public async Task UnmuteUser(IGuildUser user)
         {
             var mutedObject = ServerQueries.GetMutedUsersForServer(Context.Guild.Id)

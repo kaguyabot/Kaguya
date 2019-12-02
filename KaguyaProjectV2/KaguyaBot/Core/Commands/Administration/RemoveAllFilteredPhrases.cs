@@ -18,7 +18,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Summary("Removes all filtered phrases from your server's word filter.")]
         [Remarks("")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
-        [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task RemovePhrase()
         {
             List<FilteredPhrase> allFP = ServerQueries.GetAllFilteredPhrasesForServer(Context.Guild.Id);

@@ -19,6 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             "These are phrases that will automatically be deleted when typed in chat. UserQueries with the Administrator permission are excluded from punishment.")]
         [Remarks("dodohead.big beachy moofins.penguins!!")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task AddPhrase(params string[] args)
         {
