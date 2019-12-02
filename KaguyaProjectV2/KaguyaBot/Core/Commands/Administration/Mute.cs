@@ -205,6 +205,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
 
             await user.AddRoleAsync(muteRole);
+
+            await ConsoleLogger.Log($"User muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
+                                    $"User: [Name: {user} | ID: {user.Id}]", LogLevel.DEBUG);
+
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully muted user `{user}`{muteString}"

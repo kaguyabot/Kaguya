@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class SetTimezone : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("timezone")]
+        [Command("TimeZone")]
         [Alias("tz")]
         [Summary("Sets the timezone for the server. The default timezone is `American/New_York`. " +
                  "To properly setup the timezone, [find your timezone in this database.]" +
