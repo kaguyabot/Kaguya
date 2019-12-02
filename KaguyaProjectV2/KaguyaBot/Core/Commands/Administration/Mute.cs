@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,6 +13,9 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB.Common;
+using NodaTime;
+using NodaTime.Extensions;
+using NodaTime.Text;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -32,13 +36,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             var guild = Context.Guild;
             var server = ServerQueries.GetServer(Context.Guild.Id);
 
+            var zone = DateTimeZoneProviders.Tzdb[server.Timezone];
+            
             string muteString = "";
             if (duration != null)
             {
                 if (!duration.Any(x => x.Equals('s') || x.Equals('m') || x.Equals('h') || x.Equals('d')))
                 {
-                    throw new FormatException("You did not specify a proper mute time. \nThe proper format is " +
-                                              "`<user> <dhms>`. \nExample: `<user> 30m`");
+                    throw new FormatException("You did not specify a proper mute time.\nThe proper format is " +
+                                              "`<user> <dhms>`.\nExample: `<user> 30m`");
                 }
 
                 var regex = new Regex("/([0-9])*s|([0-9])*m|([0-9])*h|([0-9])*d/g");

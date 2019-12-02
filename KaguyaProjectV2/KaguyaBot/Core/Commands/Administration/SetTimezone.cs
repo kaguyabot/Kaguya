@@ -19,13 +19,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                  "To properly setup the timezone, [find your timezone in this database.]" +
                  "(https://en.m.wikipedia.org/wiki/List_of_tz_database_time_zones) " +
                  "Your timezone can be found under the `TZ database name` column. Configuring your timezone " +
-                 "allows for consistent reporting of scheduled tasks, such as reminders and mutes for users.")]
+                 "allows for consistent reporting of scheduled tasks, such as reminders and mutes for users. " +
+                 "**The timezone is case sensitive.**")]
         [Remarks("<timezone>")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         public async Task SetZone(string tzInput)
         {
-            DateTimeZone timezone;
             var server = ServerQueries.GetServer(Context.Guild.Id);
+            DateTimeZone timezone;
 
             try
             {
@@ -33,14 +34,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
             catch (DateTimeZoneNotFoundException)
             {
-                throw new DateTimeZoneNotFoundException($"The timezone `{tzInput.ToLower()}` is invalid.\n" +
+                throw new DateTimeZoneNotFoundException($"The timezone `{tzInput}` is invalid.\n" +
                                                         $"Please review [this list of timezones]" +
                                                         $"(https://en.m.wikipedia.org/wiki/List_of_tz_database_time_zones) to find " +
                                                         $"the one that matches your preferred timezone.\n\n" +
-                                                        $"Your timezone will be under the `TZ database name` column.");
+                                                        $"Your timezone will be under the `TZ database name` column. " +
+                                                        $"Remember, timezones are case sensitive.");
             }
 
-            server.Timezone = tzInput.ToUpperInvariant();
+            server.Timezone = tzInput;
             ServerQueries.UpdateServer(server);
 
             var embed = new KaguyaEmbedBuilder
