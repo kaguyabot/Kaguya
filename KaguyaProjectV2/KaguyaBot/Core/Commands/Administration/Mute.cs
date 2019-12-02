@@ -35,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 if (!duration.Any(x => x.Equals('s') || x.Equals('m') || x.Equals('h') || x.Equals('d')))
                 {
-                    throw new FormatException("You did not specify a proper mute time. \nThe proper format is" +
+                    throw new FormatException("You did not specify a proper mute time. \nThe proper format is " +
                                               "`<user> <dhms>`. \nExample: `<user> 30m`");
                 }
 
@@ -61,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (!StringIsMatch(seconds) && !StringIsMatch(minutes) && !StringIsMatch(hours) &&
                     !StringIsMatch(days))
                 {
-                    throw new FormatException("You did not specify a proper mute time. \nThe proper format is" +
+                    throw new FormatException("You did not specify a proper mute time. \nThe proper format is " +
                                               "`<user> <dhms>`. \nExample: `<user> 30m`");
                 }
 
@@ -210,22 +210,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
 
             await ReplyAsync(embed: embed.Build());
-        }
-
-        private async Task FormatErrorEmbedReply(Server server)
-        {
-            var formatErrorEmbed = new KaguyaEmbedBuilder
-            {
-                Description = $"Please specify a duration to mute the user for.",
-                Footer = new EmbedFooterBuilder
-                {
-                    Text = $"Use \"{server.CommandPrefix}h mute\" to properly see how to use this command."
-                }
-            };
-            formatErrorEmbed.SetColor(EmbedColor.RED);
-
-            await ReplyAsync(embed: formatErrorEmbed.Build());
-            return;
         }
 
         private bool StringIsMatch(string s)
