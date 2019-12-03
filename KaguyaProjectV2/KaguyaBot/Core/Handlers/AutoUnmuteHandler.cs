@@ -22,50 +22,53 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 AutoReset = true,
                 Enabled = true
             };
-            timer.Elapsed += Unmute_Timer_Elapsed;
-            return Task.CompletedTask;
-        }
 
-        private static async void Unmute_Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            foreach (var mutedUser in ServerQueries.GetAllMutedUsers())
+            timer.Elapsed += async (sender, e) =>
             {
-                if (mutedUser.ExpiresAt < DateTime.Now.ToOADate())
+                foreach (var mutedUser in ServerQueries.GetAllMutedUsers())
                 {
-                    try
+                    if (mutedUser.ExpiresAt < DateTime.Now.ToOADate())
                     {
-                        var guild = Global.ConfigProperties.client.GetGuild(mutedUser.ServerId);
-                        var server = ServerQueries.GetServer(guild.Id);
-                        var user = Global.ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
-
-                        if (server.IsPremium)
+                        try
                         {
-                            server.TotalAdminActions++;
-                            ServerQueries.UpdateServer(server);
+                            var guild = Global.ConfigProperties.client.GetGuild(mutedUser.ServerId);
+                            var server = ServerQueries.GetServer(guild.Id);
+                            var user = Global.ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
 
-                            await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
+                            if (server.IsPremium)
                             {
-                                Server = server,
-                                Moderator = Global.ConfigProperties.client.GetGuild(server.Id).GetUser(538910393918160916),
-                                ActionRecipient = user,
-                                Action = PremiumModActionHandler.UNMUTE,
-                                Reason = "User was automatically unmuted because their timed mute has expired."
-                            });
+                                server.TotalAdminActions++;
+                                ServerQueries.UpdateServer(server);
+
+                                await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
+                                {
+                                    Server = server,
+                                    Moderator = Global.ConfigProperties.client.GetGuild(server.Id)
+                                        .GetUser(538910393918160916),
+                                    ActionRecipient = user,
+                                    Action = PremiumModActionHandler.UNMUTE,
+                                    Reason = "User was automatically unmuted because their timed mute has expired."
+                                });
+                            }
+
+                            var muteRole = guild.Roles.FirstOrDefault(x => x.Name == "kaguya-mute");
+                            await user.RemoveRoleAsync(muteRole);
+                        }
+                        catch (Exception)
+                        {
+                            var guild = Global.ConfigProperties.client.GetGuild(mutedUser.ServerId);
+                            await ConsoleLogger.Log(
+                                $"Exception handled when unmuting a user in guild [Name: {guild.Name} | ID: {guild.Id}]",
+                                LogLevel.WARN);
                         }
 
-                        var muteRole = guild.Roles.FirstOrDefault(x => x.Name == "kaguya-mute");
-                        await user.RemoveRoleAsync(muteRole);
+                        ServerQueries.RemoveMutedUser(mutedUser);
+                        await ConsoleLogger.Log($"User [ID: {mutedUser.UserId}] has been automatically unmuted.",
+                            LogLevel.DEBUG);
                     }
-                    catch (Exception)
-                    {
-                        var guild = Global.ConfigProperties.client.GetGuild(mutedUser.ServerId);
-                        await ConsoleLogger.Log($"Exception handled when unmuting a user in guild [Name: {guild.Name} | ID: {guild.Id}]", LogLevel.WARN);
-                    }
-
-                    ServerQueries.RemoveMutedUser(mutedUser);
-                    await ConsoleLogger.Log($"User [ID: {mutedUser.UserId}] has been automatically unmuted.", LogLevel.DEBUG);
                 }
-            }
+            };
+            return Task.CompletedTask;
         }
     }
 }

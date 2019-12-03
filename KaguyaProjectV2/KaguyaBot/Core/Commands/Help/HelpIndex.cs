@@ -114,12 +114,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
         public static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
             cmdInfo.Preconditions
-                .Where(x => x is RequireOwnerAttribute || x is SupporterCommandAttribute || x is RequireUserPermissionAttribute)
+                .Where(x => x is OwnerCommandAttribute || x is SupporterCommandAttribute || x is RequireUserPermissionAttribute)
                 .Select(x =>
                 {
                     switch (x)
                     {
-                        case RequireOwnerAttribute _:
+                        case OwnerCommandAttribute _:
                             return "Bot Owner";
                         case SupporterCommandAttribute _:
                             return "Kaguya Supporter";
