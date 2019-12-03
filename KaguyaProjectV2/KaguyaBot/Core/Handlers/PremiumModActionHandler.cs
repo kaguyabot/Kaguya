@@ -2,6 +2,7 @@
 using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -63,7 +64,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 ThumbnailUrl = embedUrl
             };
 
-            await Global.ConfigProperties.client.GetGuild(log.Server.Id).GetTextChannel(log.Server.ModLog)
+            await ConfigProperties.client.GetGuild(log.Server.Id).GetTextChannel(log.Server.ModLog)
                 .SendMessageAsync(embed: embed.Build());
 
             await ConsoleLogger.Log($"Premium moderation log sent for a server.", LogLevel.DEBUG);

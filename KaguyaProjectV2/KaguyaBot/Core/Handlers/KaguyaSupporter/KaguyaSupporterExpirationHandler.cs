@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
 using System.Timers;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
@@ -26,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                 {
                     if (suppKeyObject.Expiration < DateTime.Now.ToOADate() && suppKeyObject.Expiration > 1)
                     {
-                        var socketUser = Global.ConfigProperties.client.GetUser(suppKeyObject.UserId);
+                        var socketUser = ConfigProperties.client.GetUser(suppKeyObject.UserId);
 
                         try
                         {

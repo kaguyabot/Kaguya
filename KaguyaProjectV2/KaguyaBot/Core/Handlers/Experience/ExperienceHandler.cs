@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Linq;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
@@ -79,7 +80,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 Description = $"{context.User.Username} just leveled up! \n" +
                               $"[Level: {ReturnLevel(user)} | Experience Points: {user.Experience:N0}]\n" +
                               $"Rank: `#{rankIndex}/{allUsers.Count:N0}`",
-                ThumbnailUrl = Global.ConfigProperties.client.GetUser(user.Id).GetAvatarUrl()
+                ThumbnailUrl = ConfigProperties.client.GetUser(user.Id).GetAvatarUrl()
             };
 
             return embed.Build();

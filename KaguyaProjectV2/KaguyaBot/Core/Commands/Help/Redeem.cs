@@ -5,8 +5,10 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
@@ -67,6 +69,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             embed.SetColor(EmbedColor.GOLD);
 
             await ReplyAsync(embed: embed.Build());
+            await SendEmbedToBotOwner(Context, newKey);
+        }
+
+        private async Task SendEmbedToBotOwner(ICommandContext context, SupporterKey key)
+        {
+            var owner = ConfigProperties.client.GetUser(ConfigProperties.botOwnerId);
+            var fields = new List<EmbedFieldBuilder>
+            {
+                new EmbedFieldBuilder {IsInline = false, Name = "Key Properties", 
+                    Value = $"Key: `{key.Key}`\nCreated by: `{owner}`\nExpires `{DateTime.FromOADate(key.Expiration).Humanize(false)}`"}
+            };
+
+            var embed = new KaguyaEmbedBuilder
+            {
+                Description = $"User `[Name: {context.User} | ID: {context.User.Id}]` has just redeemed a " +
+                              $"Kaguya Supporter key!",
+                Fields = fields
+            };
+
+            await owner.SendMessageAsync(embed: embed.Build());
         }
     }
 }

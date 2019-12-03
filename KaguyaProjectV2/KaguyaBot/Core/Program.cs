@@ -78,19 +78,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void GlobalPropertySetup(ConfigModel _config)
         {
-            Global.ConfigProperties.client = client;
-            Global.ConfigProperties.osuApiKey = _config.OsuApiKey;
-            Global.ConfigProperties.topGGApiKey = _config.TopGGApiKey;
-            Global.ConfigProperties.topGGAuthorizationPassword = _config.TopGGAuthorizationPassword;
-            Global.ConfigProperties.mySQL_Username = _config.MySQL_Username;
-            Global.ConfigProperties.mySQL_Password = _config.MySQL_Password;
-            Global.ConfigProperties.mySQL_Server = _config.MySQL_Server;
-            Global.ConfigProperties.mySQL_Database = _config.MySQL_Database;
-            Global.ConfigProperties.twitchClientId = _config.TwitchClientId;
-            Global.ConfigProperties.twitchAuthToken = _config.TwitchAuthToken;
+            ConfigProperties.client = client;
+            ConfigProperties.botOwnerId = _config.BotOwnerId;
+            ConfigProperties.osuApiKey = _config.OsuApiKey;
+            ConfigProperties.topGGApiKey = _config.TopGGApiKey;
+            ConfigProperties.topGGAuthorizationPassword = _config.TopGGAuthorizationPassword;
+            ConfigProperties.mySQL_Username = _config.MySQL_Username;
+            ConfigProperties.mySQL_Password = _config.MySQL_Password;
+            ConfigProperties.mySQL_Server = _config.MySQL_Server;
+            ConfigProperties.mySQL_Database = _config.MySQL_Database;
+            ConfigProperties.twitchClientId = _config.TwitchClientId;
+            ConfigProperties.twitchAuthToken = _config.TwitchAuthToken;
 
             //Converts int LogNum in the config file to the enum LogLevel.
-            Global.ConfigProperties.logLevel = (LogLevel)_config.LogLevelNumber;
+            ConfigProperties.logLevel = (LogLevel)_config.LogLevelNumber;
         }
 
         private void TestDatabaseConnection()
@@ -111,13 +112,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private void SetupTwitch()
         {
             api = new TwitchAPI();
-            api.Settings.ClientId = Global.ConfigProperties.twitchClientId;
-            api.Settings.AccessToken = Global.ConfigProperties.twitchAuthToken;
+            api.Settings.ClientId = ConfigProperties.twitchClientId;
+            api.Settings.AccessToken = ConfigProperties.twitchAuthToken;
 
             var monitor = new LiveStreamMonitorService(api, 30);
             monitor.OnStreamOnline += TwitchNotificationsHandler.OnStreamOnline;
 
-            Global.ConfigProperties.twitchApi = api;
+            ConfigProperties.twitchApi = api;
         }
 
         private async Task EnableTimers(bool shardsLoggedIn)

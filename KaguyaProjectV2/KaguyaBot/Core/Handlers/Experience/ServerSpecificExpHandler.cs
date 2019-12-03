@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Discord;
 using Discord.Commands;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -108,7 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 Description = $"{context.User.Username} just leveled up! \n" +
                               $"[Server Level: {ReturnLevel(exp, user, server)} | Experience Points: {user.Experience:N0}]\n" +
                               $"Rank: #{rankIndex}/{exp.Count():N0}",
-                ThumbnailUrl = Global.ConfigProperties.client.GetUser(user.Id).GetAvatarUrl()
+                ThumbnailUrl = ConfigProperties.client.GetUser(user.Id).GetAvatarUrl()
             };
 
             return embed.Build();

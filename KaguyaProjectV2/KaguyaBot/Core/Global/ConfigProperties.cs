@@ -14,6 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
     {
         public static DiscordShardedClient client { get; set; }
         public static TwitchAPI twitchApi { get; set; }
+        public static ulong botOwnerId { get; set; }
         public static string osuApiKey { get; set; }
         public static string topGGApiKey { get; set; }
         public static string topGGAuthorizationPassword { get; set; }

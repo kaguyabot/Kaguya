@@ -91,6 +91,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
     public class ConfigModel
     {
         public string Token { get; set; }
+        public ulong BotOwnerId { get; set; }
         public int LogLevelNumber { get; set; } = 1;
         public string DefaultPrefix { get; set; } = "$";
         public string OsuApiKey { get; set; }

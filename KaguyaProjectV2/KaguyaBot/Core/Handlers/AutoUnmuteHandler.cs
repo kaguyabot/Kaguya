@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -31,9 +32,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     {
                         try
                         {
-                            var guild = Global.ConfigProperties.client.GetGuild(mutedUser.ServerId);
+                            var guild = ConfigProperties.client.GetGuild(mutedUser.ServerId);
                             var server = ServerQueries.GetServer(guild.Id);
-                            var user = Global.ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
+                            var user = ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
 
                             if (server.IsPremium)
                             {
@@ -43,7 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                 await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                                 {
                                     Server = server,
-                                    Moderator = Global.ConfigProperties.client.GetGuild(server.Id)
+                                    Moderator = ConfigProperties.client.GetGuild(server.Id)
                                         .GetUser(538910393918160916),
                                     ActionRecipient = user,
                                     Action = PremiumModActionHandler.UNMUTE,
@@ -56,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                         }
                         catch (Exception)
                         {
-                            var guild = Global.ConfigProperties.client.GetGuild(mutedUser.ServerId);
+                            var guild = ConfigProperties.client.GetGuild(mutedUser.ServerId);
                             await ConsoleLogger.Log(
                                 $"Exception handled when unmuting a user in guild [Name: {guild.Name} | ID: {guild.Id}]",
                                 LogLevel.WARN);

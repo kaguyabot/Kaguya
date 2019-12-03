@@ -25,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             string logP = LogPrefix(logLevel);
             string contents = $"{DateTime.Now.ToLongTimeString()} {logP} {message}";
 
-            if (Global.ConfigProperties.logLevel > logLevel) return Task.CompletedTask;
+            if (ConfigProperties.logLevel > logLevel) return Task.CompletedTask;
             return LogFinisher(logLevel, contents);
         }
 
@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
         {
             string logP = LogPrefix(logLevel);
 
-            int shardId = Global.ConfigProperties.client.GetShardIdFor(context.Guild);
+            int shardId = ConfigProperties.client.GetShardIdFor(context.Guild);
             string contents = $"\n{DateTime.Now.ToLongTimeString()} {logP} " +
                        $"Command: [{context.Message}]\nUser: [Name: {context.User} | ID: {context.User.Id}]\n" +
                        $"Guild: [Name: {context.Guild} | ID: {context.Guild.Id} | Shard: {shardId}]\n" +
