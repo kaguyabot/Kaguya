@@ -1,6 +1,9 @@
-﻿using Discord;
+﻿using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
@@ -17,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         public PremiumModActionHandler Action { get; set; }
         public string Reason { get; set; }
 
-        public static KaguyaEmbedBuilder ModerationLogEmbed(PremiumModerationLog log)
+        public static async Task SendModerationLog(PremiumModerationLog log)
         {
             string actionTitle = "User ";
             string embedUrl = "";
@@ -51,7 +54,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     break;
             }
 
-            return new KaguyaEmbedBuilder
+            var embed = new KaguyaEmbedBuilder
             {
                 Title = actionTitle + $"| `Case: #{log.Server.TotalAdminActions}`",
                 Description = $"User Actioned: `[Name: {log.ActionRecipient} | ID: {log.ActionRecipient.Id}]`\n" +
@@ -59,6 +62,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                               $"Reason: `{reason}`",
                 ThumbnailUrl = embedUrl
             };
+
+            await Global.ConfigProperties.client.GetGuild(log.Server.Id).GetTextChannel(log.Server.ModLog)
+                .SendMessageAsync(embed: embed.Build());
+
+            await ConsoleLogger.Log($"Premium moderation log sent for a server.", LogLevel.DEBUG);
         }
     }
 

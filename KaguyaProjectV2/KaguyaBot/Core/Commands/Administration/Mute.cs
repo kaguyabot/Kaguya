@@ -11,6 +11,11 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using Humanizer;
+using Humanizer.Configuration;
+using Humanizer.DateTimeHumanizeStrategy;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -20,15 +25,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("Mute", RunMode = RunMode.Async)]
         [Alias("m")]
         [Summary("Mutes a user, **denying** them permission to chat in any channel, add reactions, connect to " +
-                 "voice channels, speak in voice channels, and create instant invites.")]
-        [Remarks("<user>\n<user> <duration>\nPenguinUser#0000\nPenguinUser#0000 5d12h20m30s")]
+                 "voice channels, speak in voice channels, and create instant invites. Note that the displayed \"time until unmute\" " +
+                 "rounds slightly to the nearest time precision. A reason may be provided upon muting someone, but " +
+                 "only if a duration is specified before it as well. Reasons will be logged for premium servers in the " +
+                 "specified modlog channel.")]
+        [Remarks("<user>\n<user> <duration>\n<user> <duration> <reason>\nPenguinUser#0000\nPenguinUser#0000 5d12h20m30s\nPenguinUser#0000 30m Spamming in chat")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.MuteMembers)]
-        public async Task MuteUser(IGuildUser user, [Remainder] string duration = null)
+        public async Task MuteUser(IGuildUser user, string duration = null, [Remainder]string reason = null)
         {
             var guild = Context.Guild;
+            var server = ServerQueries.GetServer(guild.Id);
+
+            Configurator.DateTimeHumanizeStrategy = new PrecisionDateTimeHumanizeStrategy(1.00);
 
             string muteString = "";
             if (duration != null)
@@ -44,10 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 TimeSpan timeSpan = new TimeSpan(day, hour, min, sec);
                 double time = DateTime.Now.Add(timeSpan).ToOADate();
 
-                muteString = $" for `{day}d {hour}h {min}m {sec}s`\n\n" +
-                             "User will be unmuted on\n" +
-                             $"`{DateTime.FromOADate(time).ToLongDateString()} " +
-                             $"{DateTime.FromOADate(time).ToLongTimeString()} (UTC -5:00)`";
+                muteString = $"User will be unmuted `{DateTime.FromOADate(time).Humanize(false)}`";
 
                 var muteObject = new MutedUser
                 {
@@ -65,34 +73,41 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     {
                         var duplicateErrorEmbed = new KaguyaEmbedBuilder
                         {
-                            Description = $"User `{user}` has a currently existing mute. They are scheduled to be unmuted on " +
-                                          $"`{DateTime.FromOADate(existingObject.ExpiresAt).ToLongDateString()} " +
-                                          $"{DateTime.FromOADate(existingObject.ExpiresAt).ToLongTimeString()}`\n\n" +
-                                          $"What would you like me to do?\n\n" +
-                                          $"✅ - Replace the existing time with your specified time\n" +
-                                          $"⏱️ - Combine the existing time into a longer mute (would result in an unmute on " +
-                                          $"`{DateTime.FromOADate(existingObject.ExpiresAt + muteObject.ExpiresAt - DateTime.Now.ToOADate()).ToLongDateString()} " +
-                                          $"{DateTime.FromOADate(existingObject.ExpiresAt + muteObject.ExpiresAt - DateTime.Now.ToOADate()).ToLongTimeString()}`)\n" +
-                                          $"⛔ - Leave the existing mute alone and don't do anything."
+                            Description = $"User `{user}` has a currently existing mute. They are scheduled to be unmuted " +
+                              $"`{DateTime.FromOADate(existingObject.ExpiresAt).Humanize(false)}`\n\n" +
+                              "What would you like me to do?\n\n" +
+                              "✅ - Replace the existing time with your specified time\n" +
+                              "⏱️ - Combine the existing time into a longer mute (would result in an unmute " +
+                              $"`{DateTime.FromOADate(existingObject.ExpiresAt + muteObject.ExpiresAt - DateTime.Now.ToOADate()).Humanize(false)}\n" +
+                              "⛔ - Leave the existing mute alone and don't do anything."
                         };
 
                         await InlineReactionReplyAsync(new ReactionCallbackData("", duplicateErrorEmbed.Build(),
                                 timeout: TimeSpan.FromSeconds(60))
-                            .WithCallback(new Emoji("✅"), (c, r) =>
+                            .WithCallback(new Emoji("✅"), async (c, r) =>
                             {
                                 var replacementEmbed = new KaguyaEmbedBuilder
                                 {
                                     Description = $"Okay, I'll go ahead and replace that for you. User `{user}` will " +
-                                                  $"be unmuted at `{DateTime.FromOADate(time).ToLongDateString()} " +
-                                                  $"{DateTime.FromOADate(time).ToLongTimeString()} (UTC -5:00)`"
+                                                  $"be unmuted\n`{DateTime.FromOADate(time).Humanize(false)}`"
                                 };
 
+                                await SendModLog(server, new PremiumModerationLog
+                                {
+                                    Moderator = (SocketGuildUser)Context.User,
+                                    ActionRecipient = (SocketGuildUser)user,
+                                    Action = PremiumModActionHandler.MUTE,
+                                    Server = server,
+                                    Reason = reason
+                                });
+
+                                server.TotalAdminActions++;
+                                ServerQueries.UpdateServer(server);
                                 ServerQueries.ReplaceMutedUser(existingObject, muteObject);
 
-                                c.Channel.SendMessageAsync(embed: replacementEmbed.Build());
-                                return Task.CompletedTask;
+                                await c.Channel.SendMessageAsync(embed: replacementEmbed.Build());
                             })
-                            .WithCallback(new Emoji("⏱️"), (c, r) =>
+                            .WithCallback(new Emoji("⏱️"), async (c, r) =>
                             {
                                 MutedUser extendedMuteObject = new MutedUser
                                 {
@@ -101,15 +116,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                     ExpiresAt = existingObject.ExpiresAt + muteObject.ExpiresAt - DateTime.Now.ToOADate()
                                 };
 
-                                ServerQueries.ReplaceMutedUser(existingObject, extendedMuteObject);
+                                muteString = $"User will be unmuted `{DateTime.FromOADate(extendedMuteObject.ExpiresAt).Humanize(false)}`";
 
                                 var extensionEmbed = new KaguyaEmbedBuilder
                                 {
-                                    Description = $"Alright, I've extended their mute!"
+                                    Description = $"Alright, I've extended their mute! {muteString}"
                                 };
 
-                                ReplyAsync(embed: extensionEmbed.Build());
-                                return Task.CompletedTask;
+                                server.TotalAdminActions++;
+                                ServerQueries.UpdateServer(server);
+                                ServerQueries.ReplaceMutedUser(existingObject, extendedMuteObject);
+                                await SendModLog(server, new PremiumModerationLog
+                                {
+                                    Moderator = (SocketGuildUser)Context.User,
+                                    ActionRecipient = (SocketGuildUser)user,
+                                    Action = PremiumModActionHandler.MUTE,
+                                    Server = server,
+                                    Reason = reason
+                                });
+
+                                await ReplyAsync(embed: extensionEmbed.Build());
                             })
                             .WithCallback(new Emoji("⛔"), (c, r) =>
                             {
@@ -124,7 +150,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         return;
                     }
                 }
-
+                server.TotalAdminActions++;
+                ServerQueries.UpdateServer(server);
                 ServerQueries.AddMutedUser(muteObject);
             }
 
@@ -173,12 +200,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await ConsoleLogger.Log($"User muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
                                     $"User: [Name: {user} | ID: {user.Id}]", LogLevel.DEBUG);
 
+            await SendModLog(server, new PremiumModerationLog
+            {
+                Moderator = (SocketGuildUser)Context.User,
+                ActionRecipient = (SocketGuildUser)user,
+                Action = PremiumModActionHandler.MUTE,
+                Server = server,
+                Reason = reason
+            });
+
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"Successfully muted user `{user}`{muteString}"
+                Description = $"Successfully muted user `{user}`. {muteString}."
             };
 
             await ReplyAsync(embed: embed.Build());
+        }
+
+        private async Task SendModLog(Server server, PremiumModerationLog modlogObj)
+        {
+            if (server.IsPremium)
+            {
+                await PremiumModerationLog.SendModerationLog(modlogObj);
+            }
         }
     }
 }

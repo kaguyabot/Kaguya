@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
             {
                 foreach (var suppKeyObject in UtilityQueries.GetAllKeys())
                 {
-                    if (suppKeyObject.Expiration < DateTime.Now.ToOADate())
+                    if (suppKeyObject.Expiration < DateTime.Now.ToOADate() && suppKeyObject.Expiration > 1)
                     {
                         var socketUser = Global.ConfigProperties.client.GetUser(suppKeyObject.UserId);
 

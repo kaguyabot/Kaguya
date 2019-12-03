@@ -61,8 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Action = PremiumModActionHandler.WARN
                 };
 
-                var logChannel = ConfigProperties.client.GetGuild(server.Id).GetTextChannel(server.ModLog);
-                await logChannel.SendMessageAsync(embed: PremiumModerationLog.ModerationLogEmbed(premLog).Build());
+                await PremiumModerationLog.SendModerationLog(premLog);
             }
 
             ServerQueries.UpdateServer(server);

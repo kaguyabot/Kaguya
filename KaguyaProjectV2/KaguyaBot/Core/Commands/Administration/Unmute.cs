@@ -6,6 +6,8 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -21,18 +23,35 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("<user>")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task UnmuteUser(IGuildUser user)
+        public async Task UnmuteUser(IGuildUser user, [Remainder]string reason = null)
         {
+            var server = ServerQueries.GetServer(Context.Guild.Id);
             var mutedObject = ServerQueries.GetMutedUsersForServer(Context.Guild.Id)
                 ?.FirstOrDefault(x => x.UserId == user.Id);
 
-            if(mutedObject != null)
+            if (mutedObject != null)
+            {
+                if (server.IsPremium)
+                {
+                    server.TotalAdminActions++;
+                    ServerQueries.UpdateServer(server);
+
+                    await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
+                    {
+                        Server = server,
+                        Moderator = Context.Client.GetGuild(server.Id).GetUser(538910393918160916),
+                        ActionRecipient = (SocketGuildUser)user,
+                        Action = PremiumModActionHandler.UNMUTE,
+                        Reason = reason
+                    });
+                }
+
                 ServerQueries.RemoveMutedUser(mutedObject);
+            }
 
             try
             {
                 var muteRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
-
                 await user.RemoveRoleAsync(muteRole);
 
                 var embed = new KaguyaEmbedBuilder

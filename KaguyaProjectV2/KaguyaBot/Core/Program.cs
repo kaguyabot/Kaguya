@@ -126,7 +126,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
             await KaguyaSuppRoleHandler.CheckRoleTimer();
             await KaguyaSupporterExpirationHandler.ExpiredTagChecker();
-            await AutoUnmuteService.CheckForUnmute();
+            await AutoUnmuteHandler.CheckForUnmute();
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)
