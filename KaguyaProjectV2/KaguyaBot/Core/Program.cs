@@ -9,7 +9,6 @@ using System;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Services.SupporterService;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Core.FollowerService;
@@ -124,7 +123,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             if (!shardsLoggedIn) return;
 
-            await KaguyaSuppRoleChecker.CheckRoleTimer();
+            await KaguyaSuppRoleHandler.CheckRoleTimer();
+            await AutoUnmuteService.CheckForUnmute();
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)

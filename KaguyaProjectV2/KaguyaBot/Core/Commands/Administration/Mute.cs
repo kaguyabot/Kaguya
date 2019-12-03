@@ -1,9 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
@@ -13,9 +8,10 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB.Common;
-using NodaTime;
-using NodaTime.Extensions;
-using NodaTime.Text;
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -34,10 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task MuteUser(IGuildUser user, [Remainder] string duration = null)
         {
             var guild = Context.Guild;
-            var server = ServerQueries.GetServer(Context.Guild.Id);
 
-            var zone = DateTimeZoneProviders.Tzdb[server.Timezone];
-            
             string muteString = "";
             if (duration != null)
             {

@@ -1,15 +1,15 @@
-﻿using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Services.SupporterService
+namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
-    public static class KaguyaSuppRoleChecker
+    public static class KaguyaSuppRoleHandler
     {
         public static Task CheckRoleTimer()
         {
