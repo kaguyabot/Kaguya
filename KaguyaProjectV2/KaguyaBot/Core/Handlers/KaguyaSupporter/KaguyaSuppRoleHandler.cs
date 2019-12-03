@@ -7,7 +7,7 @@ using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
+namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
     public static class KaguyaSuppRoleHandler
     {

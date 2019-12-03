@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -47,20 +46,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var newKey = new SupporterKey
             {
                 Key = key.Key,
-                Length = key.Length,
+                LengthInSeconds = key.LengthInSeconds,
+                LengthInDays = key.LengthInDays,
+                KeyCreatorId = key.KeyCreatorId,
                 UserId = Context.User.Id,
-                Expiration = DateTime.Now.AddDays(key.Length).ToOADate()
+                Expiration = DateTime.Now.AddSeconds(key.LengthInSeconds).ToOADate()
             };
 
             UtilityQueries.UpdateKey(key, newKey);
 
-            string s = ""; //Grammar
-            if (newKey.Length != 1)
-                s = "s";
+            TimeSpan ts = RegexTimeParser.ParseToTimespan($"{newKey.LengthInSeconds}s");
 
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"Successfully redeemed `{newKey.Length} day{s}` of Kaguya Supporter!\n" +
+                Description = $"Successfully redeemed `" +
+                              $"{RegexTimeParser.FormattedTimeString(ts.Seconds, ts.Minutes, ts.Hours, ts.Days)}` " +
+                              $"of Kaguya Supporter!\n" +
                               $"Your tag will expire on: `{DateTime.FromOADate(user.SupporterExpirationDate).ToLongDateString()}`"
             };
             embed.SetColor(EmbedColor.GOLD);

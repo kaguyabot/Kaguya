@@ -10,8 +10,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     {
         [Column(Name = "Key"), NotNull]
         public string Key { get; set; }
+        [Column(Name = "LengthInSeconds"), NotNull]
+        public long LengthInSeconds { get; set; }
         [Column(Name = "LengthInDays"), NotNull]
-        public int Length { get; set; }
+        public int LengthInDays { get; set; }
+        [Column(Name = "KeyCreatorId"), NotNull]
+        public ulong KeyCreatorId { get; set; }
         [Column(Name = "ActivatedByUser"), Nullable]
         public ulong UserId { get; set; }
         /// <summary>

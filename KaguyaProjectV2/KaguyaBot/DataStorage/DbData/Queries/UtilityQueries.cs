@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using LinqToDB;
+using System.Collections.Generic;
+using System.Linq;
 // ReSharper disable UseAwaitUsing
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries

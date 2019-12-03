@@ -3,14 +3,13 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using LinqToDB.Common;
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -40,55 +39,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                               "`<user> <dhms>`.\nExample: `<user> 30m`");
                 }
 
-                var regex = new Regex("/([0-9])*s|([0-9])*m|([0-9])*h|([0-9])*d/g");
-
-                Regex[] regexs = {
-                    new Regex("(([0-9])*s)"),
-                    new Regex("(([0-9])*m)"),
-                    new Regex("(([0-9])*h)"),
-                    new Regex("(([0-9])*d)")
-                };
-
-                var s = regexs[0].Match(duration).Value;
-                var m = regexs[1].Match(duration).Value;
-                var h = regexs[2].Match(duration).Value;
-                var d = regexs[3].Match(duration).Value;
-
-                var seconds = s.Split('s').First();
-                var minutes = m.Split('m').First();
-                var hours = h.Split('h').First();
-                var days = d.Split('d').First();
-
-                if (!StringIsMatch(seconds) && !StringIsMatch(minutes) && !StringIsMatch(hours) &&
-                    !StringIsMatch(days))
-                {
-                    throw new FormatException("You did not specify a proper mute time. \nThe proper format is " +
-                                              "`<user> <dhms>`. \nExample: `<user> 30m`");
-                }
-
-                int.TryParse(seconds, out int sec);
-                int.TryParse(minutes, out int min);
-                int.TryParse(hours, out int hour);
-                int.TryParse(days, out int day);
-
-                if (seconds.Length > 7 || minutes.Length > 7 || hours.Length > 7 || days.Length > 7)
-                {
-                    throw new ArgumentOutOfRangeException("Cannot process more than 7 digits for a given duration.", new Exception());
-                }
+                RegexTimeParser.Parse(duration, out int sec, out int min, out int hour, out int day);
 
                 TimeSpan timeSpan = new TimeSpan(day, hour, min, sec);
-                double unMuteTime = DateTime.Now.Add(timeSpan).ToOADate(); // When to unmute the user, in OADate.
+                double time = DateTime.Now.Add(timeSpan).ToOADate();
 
                 muteString = $" for `{day}d {hour}h {min}m {sec}s`\n\n" +
                              "User will be unmuted on\n" +
-                             $"`{DateTime.FromOADate(unMuteTime).ToLongDateString()} " +
-                             $"{DateTime.FromOADate(unMuteTime).ToLongTimeString()} (UTC -5:00)`";
+                             $"`{DateTime.FromOADate(time).ToLongDateString()} " +
+                             $"{DateTime.FromOADate(time).ToLongTimeString()} (UTC -5:00)`";
 
                 var muteObject = new MutedUser
                 {
                     ServerId = guild.Id,
                     UserId = user.Id,
-                    ExpiresAt = unMuteTime
+                    ExpiresAt = time
                 };
 
                 if (ServerQueries.GetMutedUsersForServer(muteObject.ServerId).Any(x => x.UserId == muteObject.UserId))
@@ -118,8 +83,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                 var replacementEmbed = new KaguyaEmbedBuilder
                                 {
                                     Description = $"Okay, I'll go ahead and replace that for you. User `{user}` will " +
-                                                  $"be unmuted at `{DateTime.FromOADate(unMuteTime).ToLongDateString()} " +
-                                                  $"{DateTime.FromOADate(unMuteTime).ToLongTimeString()} (UTC -5:00)`"
+                                                  $"be unmuted at `{DateTime.FromOADate(time).ToLongDateString()} " +
+                                                  $"{DateTime.FromOADate(time).ToLongTimeString()} (UTC -5:00)`"
                                 };
 
                                 ServerQueries.ReplaceMutedUser(existingObject, muteObject);
@@ -214,11 +179,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
 
             await ReplyAsync(embed: embed.Build());
-        }
-
-        private bool StringIsMatch(string s)
-        {
-            return !s.IsNullOrEmpty();
         }
     }
 }

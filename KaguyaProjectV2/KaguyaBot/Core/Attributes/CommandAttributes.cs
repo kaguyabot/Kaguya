@@ -2,6 +2,7 @@
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System;
 using System.Threading.Tasks;
+using Discord;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
@@ -54,5 +55,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     internal class UtilityCommandAttribute : Attribute
     {
 
+    }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+    internal class OwnerCommandAttribute : PreconditionAttribute
+    {
+        public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
+        {
+            if (context.Client.TokenType == TokenType.Bot)
+                return (long)context.User.Id == (long)(await context.Client.GetApplicationInfoAsync().ConfigureAwait(false)).Owner.Id ? 
+                    PreconditionResult.FromSuccess() : PreconditionResult.FromError("Command can only be run by the owner of the bot.");
+            return PreconditionResult.FromError("RequireOwnerAttribute is not supported by this TokenType.");
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new HelpCommandAttribute(), new MusicCommandAttribute(), 
                 new NsfwCommandAttribute(), new OsuCommandAttribute(), 
                 new UtilityCommandAttribute(), new SupporterCommandAttribute(), 
-                new RequireOwnerAttribute()
+                new OwnerCommandAttribute()
             };
 
             var pages = ReturnPages();

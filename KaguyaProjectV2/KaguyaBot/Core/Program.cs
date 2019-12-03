@@ -9,6 +9,7 @@ using System;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Core.FollowerService;
@@ -124,6 +125,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             if (!shardsLoggedIn) return;
 
             await KaguyaSuppRoleHandler.CheckRoleTimer();
+            await KaguyaSupporterExpirationHandler.ExpiredTagChecker();
             await AutoUnmuteService.CheckForUnmute();
         }
 
