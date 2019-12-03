@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
-            //command is unspecified when there was a search failure(command not found); we don't care about these errors
+            //command is unspecified when there was a search failure (command not found); we don't care about these errors
             if (!command.IsSpecified)
                 return;
 
@@ -73,6 +73,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 server.TotalCommandCount++;
                 await ConsoleLogger.Log(context, LogLevel.INFO);
                 ServerQueries.UpdateServer(server);
+                UserQueries.AddCommandHistory(new CommandHistory
+                {
+                    Command = context.Message.Content,
+                    Timestamp = DateTime.Now,
+                    UserId = context.User.Id,
+                    ServerId = context.Guild.Id
+                });
                 return;
             }
 

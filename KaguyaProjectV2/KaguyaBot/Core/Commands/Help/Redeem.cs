@@ -83,7 +83,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"User `[Name: {context.User} | ID: {context.User.Id}]` has just redeemed a " +
+                Description = $"User `[Name: {context.User}` has just redeemed a " +
                               $"Kaguya Supporter key!",
                 Fields = fields
             };

@@ -72,11 +72,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "UserId")]
         public IEnumerable<GambleHistory> GambleHistory { get; set; }
-        /// <summary>
-        /// FK_KaguyaUser_CommandHistory_BackReference
-        /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "UserId")]
-        public IEnumerable<CommandHistory> CommandHistory { get; set; }
 
         public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
     }
