@@ -25,6 +25,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int TotalCommandUses { get; set; }
         [Column(Name = "NSFWImages"), Nullable]
         public int TotalNSFWImages { get; set; }
+        /// <summary>
+        /// Whenever a user uses a command, increase this by one.
+        /// The ratelimit service will check for whether the user
+        /// has too many commands allowed by the ratelimit (x cmds in y seconds).
+        /// </summary>
         [Column(Name = "ActiveRateLimit"), Nullable]
         public int ActiveRateLimit { get; set; }
         [Column(Name = "RateLimitWarnings"), Nullable]
@@ -55,8 +60,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public double LastGivenRep { get; set; }
         [Column(Name = "UpvoteBonusExpiration"), Nullable]
         public double UpvoteBonusExpiration { get; set; }
+
         [Column(Name = "IsBlacklisted"), NotNull]
-        public bool IsBlacklisted { get; set; }
+        public bool IsBlacklisted => BlacklistExpiration - DateTime.Now.ToOADate() > 0;
 
         public double SupporterExpirationDate
         {

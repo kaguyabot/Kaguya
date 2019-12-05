@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
+using KaguyaProjectV2.KaguyaBot.Core.Services;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Core.FollowerService;
@@ -28,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             var config = new DiscordSocketConfig
             {
                 MessageCacheSize = 500,
-                TotalShards = 1
+                TotalShards = 2
             };
 
             client = new DiscordShardedClient(config);
@@ -128,6 +129,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await KaguyaSuppRoleHandler.CheckRoleTimer();
             await KaguyaSupporterExpirationHandler.ExpiredTagChecker();
             await AutoUnmuteHandler.CheckForUnmute();
+            await RateLimitService.RateLimitHandler();
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)

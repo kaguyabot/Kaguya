@@ -44,6 +44,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             Server server = ServerQueries.GetServer(((SocketGuildChannel) message.Channel).Guild.Id);
             User user = UserQueries.GetUser(message.Author.Id);
 
+            if (user.IsBlacklisted) return;
+
             int argPos = 0;
 
             var context = new ShardedCommandContext(_client, message);
@@ -67,12 +69,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 return;
 
             Server server = ServerQueries.GetServer(context.Guild.Id);
+            User user = UserQueries.GetUser(context.User.Id);
 
             if (result.IsSuccess)
             {
                 server.TotalCommandCount++;
+                user.ActiveRateLimit++;
+
                 await ConsoleLogger.Log(context, LogLevel.INFO);
-                ServerQueries.UpdateServer(server);
+
                 UserQueries.AddCommandHistory(new CommandHistory
                 {
                     Command = context.Message.Content,
@@ -80,6 +85,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     UserId = context.User.Id,
                     ServerId = context.Guild.Id
                 });
+                ServerQueries.UpdateServer(server);
+                UserQueries.UpdateUser(user);
                 return;
             }
 
