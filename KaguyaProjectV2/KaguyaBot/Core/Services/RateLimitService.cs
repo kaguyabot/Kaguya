@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using Discord;
+﻿using Discord;
 using Humanizer;
-using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using NodaTime.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
+using User = KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models.User;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -20,12 +19,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static Task RateLimitHandler()
         {
-            Timer timer = new Timer(3700); //3.70 seconds
+            Timer timer = new Timer(12000); //3.70 seconds
             timer.AutoReset = true;
             timer.Enabled = true;
             timer.Elapsed += async (sender, e) =>
             {
-                foreach (var registeredUser in UserQueries.GetAllUsers())
+                var usersToBeUpdated = new List<User>();
+                var users = await UserQueries.UsersWhoHaveAnActiveRatelimit();
+                foreach (var registeredUser in users)
                 {
                     if (registeredUser.ActiveRateLimit >= 2 && !registeredUser.IsSupporter || 
                         registeredUser.ActiveRateLimit >= 4 && registeredUser.IsSupporter)
@@ -45,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                             await _user.SendMessageAsync(embed: _embed.Build());
 
                             registeredUser.BlacklistExpiration = DateTime.MaxValue.ToOADate();
-                            UserQueries.UpdateUser(registeredUser);
+                            await UserQueries.UpdateUser(registeredUser);
 
                             await ConsoleLogger.Log($"User [Name: {_user.Username} | ID: {_user.Id} | Supporter: {registeredUser.IsSupporter}] " +
                                                     "has been permanently blacklisted. Reason: Excessive Ratelimiting", LogLevel.WARN);
@@ -54,7 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                         var user = ConfigProperties.client.GetUser(registeredUser.Id);
 
-                        string[] durations = new[]
+                        string[] durations = 
                         {
                             "60s", "5m", "30m",
                             "3h", "12h", "1d",
@@ -85,9 +86,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         await ConsoleLogger.Log($"User [Name: {user.Username} | ID: {user.Id} | Supporter: {registeredUser.IsSupporter}] " +
                                                 $"has been ratelimited. Duration: {humanizedTime}", LogLevel.INFO);
                     }
-                    registeredUser.ActiveRateLimit = 0;
-                    UserQueries.UpdateUser(registeredUser);
+
+                    if (registeredUser.ActiveRateLimit > 0)
+                    {
+                        registeredUser.ActiveRateLimit = 0;
+                        usersToBeUpdated.Add(registeredUser);
+                    }
                 }
+                UserQueries.UpdateUsers(usersToBeUpdated);
             };
 
             return Task.CompletedTask;

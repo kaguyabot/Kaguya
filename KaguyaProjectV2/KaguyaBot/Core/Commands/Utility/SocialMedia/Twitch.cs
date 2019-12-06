@@ -29,8 +29,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
         {
             KaguyaEmbedBuilder embed;
 
-            Server server = ServerQueries.GetServer(Context.Guild.Id);
-            var twitchChannels = ServerQueries.GetAllTwitchChannels().Where(x => x.ServerId == Context.Guild.Id).ToList();
+            Server server = await ServerQueries.GetServer(Context.Guild.Id);
+            var twitchChannels = await ServerQueries.GetTwitchChannelsForServer(server.Id);
             var twitchApi = ConfigProperties.twitchApi;
             var userIndex = await twitchApi.V5.Users.GetUserByNameAsync(twitchChannelName);
 
@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                     return;
                 }
 
-                ServerQueries.AddTwitchChannel(tchannel);
+                await ServerQueries.AddTwitchChannel(tchannel);
 
                 string mentionString = MentionString(mentionEveryone);
                 embed = new KaguyaEmbedBuilder
@@ -156,15 +156,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
             await InlineReactionReplyAsync(new ReactionCallbackData("", embed.Build(), true, true, TimeSpan.FromSeconds(60),
                     c =>
                         c.Channel.SendMessageAsync("Response has timed out."))
-                .WithCallback(new Emoji("✅"), (c, r) =>
+                .WithCallback(new Emoji("✅"), async (c, r) =>
                 {
-                    ServerQueries.RemoveTwitchChannel(twitchChannels.FirstOrDefault(item =>
+                    await ServerQueries.RemoveTwitchChannel(twitchChannels.FirstOrDefault(item =>
                         item.ChannelName == tchannel.ChannelName &&
                         item.TextChannelId == tchannel.TextChannelId));
-                    ServerQueries.AddTwitchChannel(tchannel);
-                    return c.Channel.SendMessageAsync(embed: succEmbed2.Build());
+                    await ServerQueries.AddTwitchChannel(tchannel);
+                    await c.Channel.SendMessageAsync(embed: succEmbed2.Build());
                 })
-                .WithCallback(new Emoji("⛔"), (c, r) => c.Channel.SendMessageAsync(embed: nothingEmbed2.Build())));
+                .WithCallback(new Emoji("⛔"), async (c, r) => await c.Channel.SendMessageAsync(embed: nothingEmbed2.Build())));
         }
 
         private async Task InlineReactionReply(List<TwitchChannel> serverTwitchChannels, KaguyaEmbedBuilder embed, TwitchChannel tchannel, KaguyaEmbedBuilder succEmbed,
@@ -173,16 +173,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
             await InlineReactionReplyAsync(new ReactionCallbackData("", embed.Build(), true, true, TimeSpan.FromSeconds(60),
                     c =>
                         c.Channel.SendMessageAsync("Response has timed out."))
-                .WithCallback(new Emoji("✅"), (c, r) =>
+                .WithCallback(new Emoji("✅"), async (c, r) =>
                 {
-                    ServerQueries.RemoveTwitchChannel(serverTwitchChannels.FirstOrDefault(x => x.ChannelName == tchannel.ChannelName));
-                    ServerQueries.AddTwitchChannel(tchannel);
-                    return c.Channel.SendMessageAsync(embed: succEmbed.Build());
+                    await ServerQueries.RemoveTwitchChannel(serverTwitchChannels.FirstOrDefault(x => x.ChannelName == tchannel.ChannelName));
+                    await ServerQueries.AddTwitchChannel(tchannel);
+                    await c.Channel.SendMessageAsync(embed: succEmbed.Build());
                 })
-                .WithCallback(new Emoji("❔"), (c, r) =>
+                .WithCallback(new Emoji("❔"), async (c, r) =>
                 {
-                    ServerQueries.AddTwitchChannel(tchannel);
-                    return c.Channel.SendMessageAsync(embed: altEmbed.Build());
+                    await ServerQueries.AddTwitchChannel(tchannel);
+                    await c.Channel.SendMessageAsync(embed: altEmbed.Build());
                 })
                 .WithCallback(new Emoji("⛔"), (c, r) => c.Channel.SendMessageAsync(embed: nothingEmbed.Build())));
         }

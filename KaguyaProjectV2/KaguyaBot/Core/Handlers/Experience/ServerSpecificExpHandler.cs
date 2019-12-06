@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
@@ -16,18 +17,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
     {
         public static async void AddExp(User user, Server server, ICommandContext context)
         {
-            var serverExp = UtilityQueries.GetAllExpForServer(server).ToList();
+            IEnumerable<ServerSpecificExp> _ = await UtilityQueries.GetAllExpForServer(server);
+            IEnumerable<ServerSpecificExp> specificExps = _.ToList();
 
             // If the user can receive exp, give them between 5 and 8.
-            if (!CanGetExperience(serverExp, server, user))
+            if (!await CanGetExperience(specificExps, server, user))
             {
                 return;
             }
 
             var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
-            var userExpObj = serverExp.FirstOrDefault(x => x.UserId == user.Id);
+            var userExpObj = specificExps.FirstOrDefault(x => x.UserId == user.Id);
 
-            double oldLevel = ReturnLevel(serverExp, user, server);
+            double oldLevel = ReturnLevel(specificExps, user, server);
 
             Random r = new Random();
             int exp = r.Next(5, 8);
@@ -42,9 +44,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             expObject.Exp += exp;
             expObject.LatestExp = DateTime.Now.ToOADate();
-            ServerQueries.AddOrReplaceUserExp(expObject);
+            await ServerQueries.AddOrReplaceUserExp(expObject);
 
-            double newLevel = ReturnLevel(serverExp, user, server);
+            double newLevel = ReturnLevel(specificExps, user, server);
             await ConsoleLogger.Log($"[Server Specific Exp]: User has received {exp} exp. [ID: {user.Id} | New EXP: {userExpObj.Exp:N0}]",
                 DataStorage.JsonStorage.LogLevel.DEBUG);
 
@@ -58,14 +60,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
             {
-                await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, server, serverExp, context));
+                await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, server, specificExps, context));
                 return;
             }
 
-            await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, server, serverExp, context));
+            await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, server, specificExps, context));
         }
 
-        private static bool CanGetExperience(IEnumerable<ServerSpecificExp> serverExp, Server server, User user)
+        private static async Task<bool> CanGetExperience(IEnumerable<ServerSpecificExp> serverExp, Server server, User user)
         {
             try
             {
@@ -74,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             }
             catch (ArgumentNullException)
             {
-                ServerQueries.AddOrReplaceUserExp(new ServerSpecificExp
+                await ServerQueries.AddOrReplaceUserExp(new ServerSpecificExp
                 {
                     Exp = 0,
                     LatestExp = 0,

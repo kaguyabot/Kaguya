@@ -1,65 +1,96 @@
-﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+﻿using System;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using LinqToDB;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+
 // ReSharper disable UseAwaitUsing
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     public class UtilityQueries
     {
-        public static List<SupporterKey> GetAllKeys()
+        public static async Task AddOrReplaceKeyAsync(SupporterKey key)
         {
-            using var db = new KaguyaDb();
-            return db.GetTable<SupporterKey>().ToList();
-        }
-
-        public static void AddKey(SupporterKey key)
-        {
-            using var db = new KaguyaDb();
-            db.Insert(key);
-        }
-
-        /// <summary>
-        /// Should be used for inserting a very large amount of keys into the database.
-        /// </summary>
-        /// <param name="keys"></param>
-        public static async void AddKeys(List<SupporterKey> keys)
-        {
-            using var db = new KaguyaDb();
-            foreach (var element in keys)
+            using (var db = new KaguyaDb())
             {
-                await db.InsertAsync(element);
+                await db.InsertOrReplaceAsync(key);
+            }
+        }
+
+        public static async Task<bool> KeyExists(SupporterKey key)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from k in db.SupporterKeys
+                    where k.Key == key.Key
+                    select k != null).FirstAsync();
+            }
+        }
+
+        public static async Task AddKeys(IEnumerable<SupporterKey> keys)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(keys);
+            }
+        }
+
+        public static async Task DeleteKey(SupporterKey key)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(key);
+            }
+        }
+
+        public static async Task<IEnumerable<SupporterKey>> GetAllExpiredKeys()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from s in db.SupporterKeys
+                    where s.Expiration < DateTime.Now.ToOADate()
+                    select s).ToListAsync();
+            }
+        }
+
+        public static async Task<List<SupporterKey>> GetAllActiveKeys()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from s in db.SupporterKeys
+                    where s.Expiration > DateTime.Now.ToOADate() && s.UserId != 0
+                    select s).ToListAsync();
             }
         }
 
         /// <summary>
-        /// Takes an existing supporter key and updates it.
+        /// Returns an IEnumerable<SupporterKey> containing a collection of all keys that a user has active currently.</SupporterKey> 
         /// </summary>
-        public static void UpdateKey(SupporterKey oldKey, SupporterKey newKey)
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<SupporterKey>> GetKeysBoundToUser(ulong userId)
         {
-            using var db = new KaguyaDb();
-            db.Delete(oldKey);
-            db.Insert(newKey);
+            using (var db = new KaguyaDb())
+            {
+                return await (from k in db.SupporterKeys
+                    where k.UserId == userId
+                    select k).ToListAsync();
+            }
         }
 
-        public static void DeleteKey(SupporterKey key)
+        public static async Task<IEnumerable<ServerSpecificExp>> GetAllExpForServer(Server server)
         {
-            using var db = new KaguyaDb();
-            db.Delete(key);
-        }
-
-        public static IEnumerable<ServerSpecificExp> GetAllExp()
-        {
-            using var db = new KaguyaDb();
-            return db.GetTable<ServerSpecificExp>();
-        }
-
-        public static IEnumerable<ServerSpecificExp> GetAllExpForServer(Server server)
-        {
-            using var db = new KaguyaDb();
-            return db.GetTable<ServerSpecificExp>().Where(x => x.ServerId == server.Id).ToList();
+            using (var db = new KaguyaDb())
+            {
+                return await (from s in db.ServerExp
+                    where s.ServerId == server.Id
+                    select s).ToListAsync();
+            }
         }
     }
 }

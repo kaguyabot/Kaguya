@@ -17,13 +17,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
             Timer timer = new Timer(8000); //30 mins
             timer.Start();
             timer.AutoReset = true;
-            timer.Elapsed += (sender, e) => 
+            timer.Elapsed += async (sender, e) => 
             {
                 var client = ConfigProperties.client;
                 var kaguyaSupportServer = client.GetGuild(546880579057221644); //Kaguya Support Discord Server
 
-                var supporters = UtilityQueries.GetAllKeys()
-                    .Where(x => x.UserId != 0 && x.Expiration - DateTime.Now.ToOADate() > 0);
+                var supporters = await UtilityQueries.GetAllActiveKeys();
 
                 foreach (var supporter in supporters)
                 {
@@ -38,14 +37,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                     if (kaguyaSuppUser.Roles.Contains(supporterRole))
                         continue;
 
-                    kaguyaSuppUser.AddRoleAsync(supporterRole);
-                    ConsoleLogger.Log($"Supporter {socketUser} has had their supporter role given to them in the Kaguya Support server.", LogLevel.INFO);
+                    await kaguyaSuppUser.AddRoleAsync(supporterRole);
+                    await ConsoleLogger.Log($"Supporter {socketUser} has had their supporter role given to them in the Kaguya Support server.", LogLevel.INFO);
                 }
 
                 // Check for expired supporter tags.
 
-                var expiredSupporters = UtilityQueries.GetAllKeys()
-                    .Where(x => x.Expiration - DateTime.Now.ToOADate() <= 0);
+                var expiredSupporters = await UtilityQueries.GetAllExpiredKeys();
 
                 foreach (var expSupporter in expiredSupporters)
                 {
@@ -61,8 +59,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                     if (!kaguyaSuppUser.Roles.Contains(supporterRole))
                         continue;
 
-                    kaguyaSuppUser.RemoveRoleAsync(supporterRole);
-                    ConsoleLogger.Log($"Expired supporter {socketUser} has had their supporter role removed from them in the Kaguya Support server.", LogLevel.INFO);
+                    await kaguyaSuppUser.RemoveRoleAsync(supporterRole);
+                    await ConsoleLogger.Log($"Expired supporter {socketUser} has had their supporter role removed from them in the Kaguya Support server.", LogLevel.INFO);
                 }
             };
             return Task.CompletedTask;

@@ -6,11 +6,15 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Core.FollowerService;
@@ -72,7 +76,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("========== KaguyaBot Version 2.0 ==========");
-            Console.ForegroundColor = ConsoleColor.White;
 
             _ = new KaguyaBot.DataStorage.DbData.Context.Init();
         }

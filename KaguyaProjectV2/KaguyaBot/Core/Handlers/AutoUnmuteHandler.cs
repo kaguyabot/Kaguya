@@ -26,20 +26,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             timer.Elapsed += async (sender, e) =>
             {
-                foreach (var mutedUser in ServerQueries.GetAllMutedUsers())
+                foreach (var mutedUser in await ServerQueries.GetCurrentlyMutedUsers())
                 {
                     if (mutedUser.ExpiresAt < DateTime.Now.ToOADate())
                     {
                         try
                         {
                             var guild = ConfigProperties.client.GetGuild(mutedUser.ServerId);
-                            var server = ServerQueries.GetServer(guild.Id);
+                            var server = await ServerQueries.GetServer(guild.Id);
                             var user = ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
 
                             if (server.IsPremium)
                             {
                                 server.TotalAdminActions++;
-                                ServerQueries.UpdateServer(server);
+                                await ServerQueries.UpdateServer(server);
 
                                 await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                                 {
@@ -63,7 +63,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                 LogLevel.WARN);
                         }
 
-                        ServerQueries.RemoveMutedUser(mutedUser);
+                        await ServerQueries.RemoveMutedUser(mutedUser);
                         await ConsoleLogger.Log($"User [ID: {mutedUser.UserId}] has been automatically unmuted.",
                             LogLevel.DEBUG);
                     }

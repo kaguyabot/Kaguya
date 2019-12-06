@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         {
             var user = UserQueries.GetUser(context.User.Id);
 
-            return Task.FromResult(user.IsSupporter ? PreconditionResult.FromSuccess() : 
+            return Task.FromResult(user.Result.IsSupporter ? PreconditionResult.FromSuccess() : 
                 PreconditionResult.FromError("Sorry, but you must be a supporter to use this command."));
         }
     }

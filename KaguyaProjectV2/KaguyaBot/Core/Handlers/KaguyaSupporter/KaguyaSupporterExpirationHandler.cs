@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
     public static class KaguyaSupporterExpirationHandler
     {
-        public static async Task ExpiredTagChecker()
+        public static Task ExpiredTagChecker()
         {
             Timer timer = new Timer
             {
@@ -21,9 +21,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                 AutoReset = true
             };
 
-            timer.Elapsed += (sender, args) =>
+            timer.Elapsed += async (sender, args) =>
             {
-                foreach (var suppKeyObject in UtilityQueries.GetAllKeys())
+                foreach (var suppKeyObject in await UtilityQueries.GetAllExpiredKeys())
                 {
                     if (suppKeyObject.Expiration < DateTime.Now.ToOADate() && suppKeyObject.Expiration > 1)
                     {
@@ -46,22 +46,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                             };
                             embed.SetColor(EmbedColor.RED);
 
-                            socketUser.SendMessageAsync(embed: embed.Build());
-                            ConsoleLogger.Log($"User [Name: {socketUser} | ID: {socketUser.Id}] has been notified" +
+                            await socketUser.SendMessageAsync(embed: embed.Build());
+                            await ConsoleLogger.Log($"User [Name: {socketUser} | ID: {socketUser.Id}] has been notified" +
                                               $" in DM that their supporter tag is now expired.", LogLevel.DEBUG);
                         }
                         catch (Exception)
                         {
                             if (suppKeyObject.UserId == 0) return;
-                            ConsoleLogger.Log($"I tried to send a DM to User [Name: {socketUser?.Username ?? "USER RETURNED NULL"} " +
+                            await ConsoleLogger.Log($"I tried to send a DM to User [Name: {socketUser?.Username ?? "USER RETURNED NULL"} " +
                                               $"| ID: {socketUser?.Id}] about their expired supporter tag, " +
                                               $"but their DMs are closed.", LogLevel.DEBUG);
                         }
 
-                        UtilityQueries.DeleteKey(suppKeyObject);
+                        await UtilityQueries.DeleteKey(suppKeyObject);
                     }
                 }
             };
+            return Task.CompletedTask;
         }
     }
 }

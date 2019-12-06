@@ -23,7 +23,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int OsuId { get; set; }
         [Column(Name = "CommandUses"), Nullable]
         public int TotalCommandUses { get; set; }
-        [Column(Name = "NSFWImages"), Nullable]
+        [Column(Name = "TotalDaysSupported"), NotNull]
+        public int TotalDaysSupported { get; set; }
+        [Column(Name = "NSFWImages"), NotNull]
         public int TotalNSFWImages { get; set; }
         /// <summary>
         /// Whenever a user uses a command, increase this by one.
@@ -69,7 +71,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             get
             {
                 var now = DateTime.Now.ToOADate();
-                var allUserKeys = UtilityQueries.GetAllKeys().Where(x => x.UserId == Id);
+                var allUserKeys = UtilityQueries.GetKeysBoundToUser(Id).Result;
                 return now + allUserKeys.Sum(key => key.Expiration - now);
             }
         }

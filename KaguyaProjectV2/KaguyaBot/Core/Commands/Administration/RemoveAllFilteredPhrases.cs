@@ -20,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.ManageGuild)]
         public async Task RemovePhrase()
         {
-            List<FilteredPhrase> allFP = ServerQueries.GetAllFilteredPhrasesForServer(Context.Guild.Id);
+            List<FilteredPhrase> allFP = await ServerQueries.GetAllFilteredPhrasesForServer(Context.Guild.Id);
 
             foreach (var element in allFP)
             {

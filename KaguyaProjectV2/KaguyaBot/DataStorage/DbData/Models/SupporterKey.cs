@@ -8,6 +8,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     [Table(Name = "supporterkeys")]
     public class SupporterKey
     {
+        [PrimaryKey]
         [Column(Name = "Key"), NotNull]
         public string Key { get; set; }
         [Column(Name = "LengthInSeconds"), NotNull]

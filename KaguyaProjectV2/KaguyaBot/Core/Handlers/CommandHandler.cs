@@ -41,8 +41,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             var message = msg as SocketUserMessage;
             if (message == null || message.Author.IsBot) return;
 
-            Server server = ServerQueries.GetServer(((SocketGuildChannel) message.Channel).Guild.Id);
-            User user = UserQueries.GetUser(message.Author.Id);
+            Server server = await ServerQueries.GetServer(((SocketGuildChannel) message.Channel).Guild.Id);
+            User user = await UserQueries.GetUser(message.Author.Id);
 
             if (user.IsBlacklisted) return;
 
@@ -68,8 +68,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (!command.IsSpecified)
                 return;
 
-            Server server = ServerQueries.GetServer(context.Guild.Id);
-            User user = UserQueries.GetUser(context.User.Id);
+            Server server = await ServerQueries.GetServer(context.Guild.Id);
+            User user = await UserQueries.GetUser(context.User.Id);
 
             if (result.IsSuccess)
             {
@@ -78,15 +78,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
                 await ConsoleLogger.Log(context, LogLevel.INFO);
 
-                UserQueries.AddCommandHistory(new CommandHistory
+                await UserQueries.AddCommandHistory(new CommandHistory
                 {
                     Command = context.Message.Content,
                     Timestamp = DateTime.Now,
                     UserId = context.User.Id,
                     ServerId = context.Guild.Id
                 });
-                ServerQueries.UpdateServer(server);
-                UserQueries.UpdateUser(user);
+                await ServerQueries.UpdateServer(server);
+                await UserQueries.UpdateUser(user);
                 return;
             }
 
@@ -100,7 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (userPerms.Administrator)
                 return false;
 
-            List<FilteredPhrase> fp = ServerQueries.GetAllFilteredPhrasesForServer(server.Id) ?? new List<FilteredPhrase>();
+            List<FilteredPhrase> fp = await ServerQueries.GetAllFilteredPhrasesForServer(server.Id) ?? new List<FilteredPhrase>();
 
             if (fp.Count == 0) return false;
 

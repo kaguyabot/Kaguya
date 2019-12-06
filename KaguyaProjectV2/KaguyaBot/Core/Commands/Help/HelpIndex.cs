@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Remarks("\n<command>")]
         public async Task HelpCommand(string cmd)
         {
-            Server server = ServerQueries.GetServer(Context.Guild.Id);
+            Server server = await ServerQueries.GetServer(Context.Guild.Id);
             CommandInfo cmdInfo = await FindCommandInfo(cmd.ToLower(), server);
             if (cmdInfo == null) { return; }
 

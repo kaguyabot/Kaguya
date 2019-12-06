@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             TimeSpan timeSpan = RegexTimeParser.ParseToTimespan(duration);
             long timeInSeconds = (long)timeSpan.TotalSeconds;
 
-            var existingKeys = UtilityQueries.GetAllKeys();
+            var existingKeys = await UtilityQueries.GetAllActiveKeys();
             List<SupporterKey> keys = new List<SupporterKey>();
 
             for (int i = 0; i < amount; i++)
@@ -69,7 +69,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 await Context.User.SendFileAsync(memoryStream, $"{keys.Count} Keys.txt");
             }
 
-            UtilityQueries.AddKeys(keys);
+            await UtilityQueries.AddKeys(keys);
             await ChatReply(RegexTimeParser.FormattedTimeString(duration), amount);
         }
 

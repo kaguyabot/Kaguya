@@ -22,9 +22,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Remarks("<key>")]
         public async Task RedeemKey(string userKey)
         {
-            var user = UserQueries.GetUser(Context.User.Id);
-            var server = ServerQueries.GetServer(Context.Guild.Id);
-            var existingKeys = UtilityQueries.GetAllKeys();
+            var user = await UserQueries.GetUser(Context.User.Id);
+            var server = await ServerQueries.GetServer(Context.Guild.Id);
+            var existingKeys = await UtilityQueries.GetAllActiveKeys();
 
             var key = existingKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0);
 
@@ -55,7 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 Expiration = DateTime.Now.AddSeconds(key.LengthInSeconds).ToOADate()
             };
 
-            UtilityQueries.UpdateKey(key, newKey);
+            await UtilityQueries.AddOrReplaceKeyAsync(newKey);
 
             TimeSpan ts = RegexTimeParser.ParseToTimespan($"{newKey.LengthInSeconds}s");
 

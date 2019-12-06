@@ -25,29 +25,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.MuteMembers)]
         public async Task UnmuteUser(IGuildUser user, [Remainder]string reason = null)
         {
-            var server = ServerQueries.GetServer(Context.Guild.Id);
-            var mutedObject = ServerQueries.GetMutedUsersForServer(Context.Guild.Id)
-                ?.FirstOrDefault(x => x.UserId == user.Id);
+            var server = await ServerQueries.GetServer(Context.Guild.Id);
+            var mutedObject = await ServerQueries.GetSpecificMutedUser(user.Id, server.Id);
 
-            if (mutedObject != null)
+            if (server.IsPremium)
             {
-                if (server.IsPremium)
+                server.TotalAdminActions++;
+                await ServerQueries.UpdateServer(server);
+
+                await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                 {
-                    server.TotalAdminActions++;
-                    ServerQueries.UpdateServer(server);
-
-                    await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
-                    {
-                        Server = server,
-                        Moderator = Context.Client.GetGuild(server.Id).GetUser(538910393918160916),
-                        ActionRecipient = (SocketGuildUser)user,
-                        Action = PremiumModActionHandler.UNMUTE,
-                        Reason = reason
-                    });
-                }
-
-                ServerQueries.RemoveMutedUser(mutedObject);
+                    Server = server,
+                    Moderator = Context.Client.GetGuild(server.Id).GetUser(538910393918160916),
+                    ActionRecipient = (SocketGuildUser)user,
+                    Action = PremiumModActionHandler.UNMUTE,
+                    Reason = reason
+                });
             }
+
+            await ServerQueries.RemoveMutedUser(mutedObject);
 
             try
             {

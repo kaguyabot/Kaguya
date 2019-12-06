@@ -1,61 +1,76 @@
-﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+﻿using System;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using LinqToDB;
 using LinqToDB.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Threading.Tasks;
+using LinqToDB.SqlQuery;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     public static class ServerQueries
     {
-        public static IEnumerable<Server> GetAllServers()
+        public static async Task<Server> GetServer(ulong Id)
         {
-            using var db = new KaguyaDb();
-            return db.GetTable<Server>().ToList();
-        }
-
-        public static Server GetServer(ulong Id)
-        {
-            using var db = new KaguyaDb();
-            Server server = db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
-
-            if (server != null) return db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
-
-            server = new Server
+            using (var db = new KaguyaDb())
             {
-                Id = Id
-            };
-            db.Insert(server, "kaguyaserver");
-
-            return db.GetTable<Server>().FirstOrDefault(x => x.Id == Id);
+                return await (from s in db.Servers
+                    where s.Id == Id
+                    select s).FirstAsync();
+            }
         }
 
-        public static void UpdateServer(Server server)
+        public static async Task UpdateServer(Server server)
         {
-            using var db = new KaguyaDb();
-            db.InsertOrReplace<Server>(server);
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertOrReplaceAsync(server);
+            }
+        }
+
+        public static void UpdateServers(IEnumerable<Server> servers)
+        {
+            using (var db = new KaguyaDb())
+            {
+                var options = new BulkCopyOptions
+                {
+                    BulkCopyType = BulkCopyType.ProviderSpecific
+                };
+                db.BulkCopy(options, servers);
+            }
         }
 
         public static List<FilteredPhrase> GetAllFilteredPhrases()
         {
-            using var db = new KaguyaDb();
-            return db.GetTable<FilteredPhrase>().ToList();
+            using (var db = new KaguyaDb())
+            {
+                return db.GetTable<FilteredPhrase>().ToList();
+            }
         }
-        public static List<FilteredPhrase> GetAllFilteredPhrasesForServer(ulong Id)
+
+        public static async Task<List<FilteredPhrase>> GetAllFilteredPhrasesForServer(ulong Id)
         {
-            using var db = new KaguyaDb();
-            return db.GetTable<FilteredPhrase>().Where(x => x.ServerId == Id).ToList();
+            using (var db = new KaguyaDb())
+            {
+                return await (from f in db.FilteredPhrases
+                    where f.ServerId == Id
+                    select f).ToListAsync();
+            }
         }
 
         /// <summary>
         /// Adds a FilteredPhrase object to the database. Duplicates are skipped automatically.
         /// </summary>
         /// <param name="fpObject">FilteredPhrase object to add.</param>
-        public static void AddFilteredPhrase(FilteredPhrase fpObject)
+        public static async Task AddFilteredPhrase(FilteredPhrase fpObject)
         {
-            using var db = new KaguyaDb();
-            db.Insert(fpObject);
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(fpObject);
+            }
         }
 
         /// <summary>
@@ -64,127 +79,184 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <param name="fpObject">FilteredPhrase object to remove.</param>
         public static void RemoveFilteredPhrase(FilteredPhrase fpObject)
         {
-            using var db = new KaguyaDb();
-            db.Delete(fpObject);
+            using (var db = new KaguyaDb())
+            {
+                db.Delete(fpObject);
+            }
         }
 
         /// <summary>
         /// Adds a blacklisted channel object to the database.
         /// </summary>
         /// <param name="blObject">The BlackListedChannl object to add.</param>
-        public static void UpdateBlacklistedChannels(BlackListedChannel blObject)
+        public static async Task AddBlacklistedChannel(BlackListedChannel blObject)
         {
-            using var db = new KaguyaDb();
-            db.Insert(blObject);
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertOrReplaceAsync(blObject);
+            }
         }
 
-        public static void AddAutoAssignedRole(AutoAssignedRole arObject)
+        public static async Task AddAutoAssignedRole(AutoAssignedRole arObject)
         {
-            using var db = new KaguyaDb();
-            db.Insert(arObject);
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(arObject);
+            }
         }
 
-        public static void RemoveAutoAssignedRole(AutoAssignedRole arObject)
+        public static async Task RemoveAutoAssignedRole(AutoAssignedRole arObject)
         {
-            using var db = new KaguyaDb();
-            db.Delete(arObject);
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(arObject);
+            }
         }
 
-        public static void AddMutedUser(MutedUser muObject)
+        public static async Task<IEnumerable<MutedUser>> GetCurrentlyMutedUsers()
         {
-            using var db = new KaguyaDb();
-            db.Insert(muObject);
+            using (var db = new KaguyaDb())
+            {
+                return await (from m in db.MutedUsers
+                    where m.ExpiresAt > DateTime.Now.ToOADate()
+                    select m).ToListAsync();
+            }
         }
 
-        public static void RemoveMutedUser(MutedUser muObject)
+        public static async Task AddMutedUser(MutedUser muObject)
         {
-            using var db = new KaguyaDb();
-            db.Delete(muObject);
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(muObject);
+            }
         }
 
-        public static IEnumerable<MutedUser> GetAllMutedUsers()
+        public static async Task RemoveMutedUser(MutedUser muObject)
         {
-            using var db = new KaguyaDb();
-            return db.GetTable<MutedUser>().ToList();
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(muObject);
+            }
         }
 
-        public static IEnumerable<MutedUser> GetMutedUsersForServer(ulong serverId)
+        public static async Task<List<MutedUser>> GetMutedUsersForServer(ulong serverId)
         {
-            using var db = new KaguyaDb();
-            return db.GetTable<MutedUser>().ToList().Where(x => x.ServerId == serverId);
+            using (var db = new KaguyaDb())
+            {
+                return await (from m in db.MutedUsers
+                    where m.ServerId == serverId
+                    select m).ToListAsync();
+            }
+        }
+        /// <summary>
+        /// Returns one MutedUser object for a specific individual in a specific guild.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="serverId"></param>
+        /// <returns></returns>
+        public static async Task<MutedUser> GetSpecificMutedUser(ulong userId, ulong serverId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from m in db.MutedUsers
+                    where m.ServerId == serverId && m.UserId == userId
+                    select m).FirstAsync();
+            }
         }
 
         /// <summary>
-        /// 
+        /// Replaces an existing muted user object with an updated MutedUser object.
         /// </summary>
-        /// <param name="oldObject">The object that already exists in the database.</param>
-        /// <param name="replacementObject">The new object to insert into the database.</param>
-        public static void ReplaceMutedUser(MutedUser oldObject, MutedUser replacementObject)
+        /// <param name="muObject">The object you want to send to the database as a replacement.</param>
+        /// <returns></returns>
+        public static async Task ReplaceMutedUser(MutedUser muObject)
         {
-            using var db = new KaguyaDb();
-            db.Delete(oldObject);
-            db.Insert(replacementObject);
-        }
-
-        public static void AddWarnAction(WarnAction waObject)
-        {
-            using var db = new KaguyaDb();
-            db.Insert(waObject);
-        }
-
-        public static void RemoveWarnAction(WarnAction waObject)
-        {
-            using var db = new KaguyaDb();
-            db.Delete(waObject);
-        }
-
-        public static void AddWarnedUser(WarnedUser wuObject)
-        {
-            using var db = new KaguyaDb();
-            db.Insert(wuObject);
-        }
-
-        public static void RemoveWarnedUser(WarnedUser wuObject)
-        {
-            using var db = new KaguyaDb();
-            db.Delete(wuObject);
-        }
-
-        public static List<WarnedUser> GetWarnedUser(ulong serverId, ulong userId)
-        {
-            using var db = new KaguyaDb();
-            return db.GetTable<WarnedUser>().Where(x => x.ServerId == serverId && x.UserId == userId).ToList();
-        }
-
-        public static List<TwitchChannel> GetAllTwitchChannels()
-        {
-            using var db = new KaguyaDb();
-            return db.GetTable<TwitchChannel>().ToList();
-        }
-
-        public static void AddTwitchChannel(TwitchChannel tcObj)
-        {
-            using var db = new KaguyaDb();
-            db.Insert(tcObj);
-        }
-
-        public static void RemoveTwitchChannel(TwitchChannel tcObj)
-        {
-            using var db = new KaguyaDb();
-            db.Delete(tcObj);
-        }
-
-        public static void AddOrReplaceUserExp(ServerSpecificExp expObj)
-        {
-            using var db = new KaguyaDb();
-            var allExp = db.GetTable<ServerSpecificExp>().Where(x => x.ServerId == expObj.ServerId);
-
-            if (allExp.Any(x => x.UserId == expObj.UserId)) //Checks for duplicates.
+            using (var db = new KaguyaDb())
             {
-                db.Delete(allExp.FirstOrDefault(x => x.UserId == expObj.UserId));
+                await db.UpdateAsync(from m in db.MutedUsers
+                    where m.ServerId == muObject.ServerId &&
+                          m.UserId == muObject.UserId
+                    select m);
             }
+        }
 
-            db.Insert(expObj);
+        public static async Task AddWarnAction(WarnAction waObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(waObject);
+            }
+        }
+
+        public static async Task RemoveWarnAction(WarnAction waObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(waObject);
+            }
+        }
+
+        public static async Task AddWarnedUser(WarnedUser wuObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(wuObject);
+            }
+        }
+
+        public static async Task RemoveWarnedUser(WarnedUser wuObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(wuObject);
+            }
+        }
+
+        public static async Task<List<WarnedUser>> GetWarnedUser(ulong serverId, ulong userId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from w in db.WarnedUsers
+                    where w.ServerId == serverId && w.UserId == userId
+                    select w).ToListAsync();
+            }
+        }
+
+        public static async Task AddTwitchChannel(TwitchChannel tcObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(tcObj);
+            }
+        }
+
+        public static async Task RemoveTwitchChannel(TwitchChannel tcObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(tcObj);
+            }
+        }
+
+        public static async Task<List<TwitchChannel>> GetTwitchChannelsForServer(ulong serverId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.TwitchChannels
+                    where t.ServerId == serverId
+                    select t).ToListAsync();
+            }
+        }
+
+        public static async Task AddOrReplaceUserExp(ServerSpecificExp expObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                var exp = from e in db.ServerExp
+                    where e.ServerId == expObj.ServerId && e.UserId == expObj.UserId
+                    select e;
+                await db.InsertOrReplaceAsync(exp);
+            }
         }
     }
 }
