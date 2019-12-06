@@ -248,14 +248,50 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task AddOrReplaceUserExp(ServerExp expObj)
+        public static async Task AddServerSpecificExpForUser(ServerExp expObj)
         {
             using (var db = new KaguyaDb())
             {
-                var exp = from e in db.ServerExp
-                    where e.ServerId == expObj.ServerId && e.UserId == expObj.UserId
-                    select e;
-                await db.InsertOrReplaceAsync(exp);
+                await db.InsertAsync(expObj);
+            }
+        }
+
+        /// <summary>
+        /// Replaces the old EXP object with a new, updated one. This
+        /// will remove and replace based on the userId and serverId
+        /// properties of each object. This is used specifically for
+        /// the server-specific EXP table. This does not affect global EXP.
+        /// </summary>
+        /// <param name="oldExpObj">The object to be replaced.</param>
+        /// <param name="newExpObj">The object to insert, the updated version of oldExpObj.</param>
+        /// <returns></returns>
+        public static async Task ReplaceServerSpecificExpForUser(ServerExp oldExpObj, ServerExp newExpObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                if (oldExpObj.ServerId == newExpObj.ServerId &&
+                    oldExpObj.UserId == newExpObj.UserId)
+                {
+                    var selection =
+                        from e in db.ServerExp
+                        where e.ServerId == newExpObj.ServerId && e.UserId == newExpObj.UserId
+                        select e;
+
+                    await db.DeleteAsync(selection);
+                    await db.InsertAsync(newExpObj);
+                }
+                throw new ArgumentException("The userId and serverId properties from " +
+                                            "the parameters did not match each other's. " +
+                                            // ReSharper disable once NotResolvedInText
+                                            "Did you mix up the users?", "oldExpObj, newExpObj");
+            }
+        }
+
+        public static async Task RemoveServerSpecificExpForUser(ServerExp expObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(expObj);
             }
         }
     }

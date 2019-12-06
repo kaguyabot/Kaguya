@@ -8,9 +8,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     [Table(Name = "serverexp")]
     public class ServerExp
     {
-        [Column(Name = "ServerId"), NotNull, PrimaryKey]
+        [PrimaryKey]
+        [Column(Name = "ServerId"), NotNull]
         public ulong ServerId { get; set; }
-        [Column(Name = "UserId"), NotNull, PrimaryKey]
+        [Column(Name = "UserId"), NotNull]
         public ulong UserId { get; set; }
         [Column(Name = "Exp"), NotNull]
         public int Exp { get; set; }
