@@ -269,6 +269,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
+                if (oldExpObj == null)
+                {
+                    await db.InsertAsync(newExpObj);
+                    return;
+                }
+
                 if (oldExpObj.ServerId == newExpObj.ServerId &&
                     oldExpObj.UserId == newExpObj.UserId)
                 {
@@ -279,6 +285,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 
                     await db.DeleteAsync(selection);
                     await db.InsertAsync(newExpObj);
+                    return;
                 }
                 throw new ArgumentException("The userId and serverId properties from " +
                                             "the parameters did not match each other's. " +
