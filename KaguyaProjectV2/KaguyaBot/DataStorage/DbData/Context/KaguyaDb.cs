@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
         public ITable<GambleHistory> GambleHistories => GetTable<GambleHistory>();
         public ITable<MutedUser> MutedUsers => GetTable<MutedUser>();
         public ITable<Server> Servers => GetTable<Server>();
-        public ITable<ServerSpecificExp> ServerExp => GetTable<ServerSpecificExp>();
+        public ITable<ServerExp> ServerExp => GetTable<ServerExp>();
         public ITable<SupporterKey> SupporterKeys => GetTable<SupporterKey>();
         public ITable<TwitchChannel> TwitchChannels => GetTable<TwitchChannel>();
         public ITable<User> Users => GetTable<User>();

@@ -75,12 +75,19 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
                 return now + allUserKeys.Sum(key => key.Expiration - now);
             }
         }
+
+        public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
+
         /// <summary>
         /// FK_KaguyaUser_GambleHistory_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "UserId")]
         public IEnumerable<GambleHistory> GambleHistory { get; set; }
 
-        public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
+        /// <summary>
+        /// FK_KaguyaUser_ServerExp_BackReference
+        /// </summary>
+        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        public IEnumerable<ServerExp> ServerExp { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     [Table(Name = "warnedusers")]
     public class WarnedUser
     {
-        [Column(Name = "ServerId"), NotNull]
+        [PrimaryKey]
         public ulong ServerId { get; set; }
         [Column(Name = "UserId"), NotNull]
         public ulong UserId { get; set; }

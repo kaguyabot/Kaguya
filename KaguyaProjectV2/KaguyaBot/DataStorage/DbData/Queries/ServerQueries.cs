@@ -248,7 +248,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task AddOrReplaceUserExp(ServerSpecificExp expObj)
+        public static async Task AddOrReplaceUserExp(ServerExp expObj)
         {
             using (var db = new KaguyaDb())
             {

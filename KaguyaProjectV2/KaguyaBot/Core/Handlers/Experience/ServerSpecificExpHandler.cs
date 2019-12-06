@@ -17,8 +17,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
     {
         public static async void AddExp(User user, Server server, ICommandContext context)
         {
-            IEnumerable<ServerSpecificExp> _ = await UtilityQueries.GetAllExpForServer(server);
-            IEnumerable<ServerSpecificExp> specificExps = _.ToList();
+            IEnumerable<ServerExp> _ = await UtilityQueries.GetAllExpForServer(server);
+            IEnumerable<ServerExp> specificExps = _.ToList();
 
             // If the user can receive exp, give them between 5 and 8.
             if (!await CanGetExperience(specificExps, server, user))
@@ -34,7 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             Random r = new Random();
             int exp = r.Next(5, 8);
 
-            var expObject = new ServerSpecificExp
+            var expObject = new ServerExp
             {
                 ServerId = server.Id,
                 UserId = user.Id,
@@ -67,7 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, server, specificExps, context));
         }
 
-        private static async Task<bool> CanGetExperience(IEnumerable<ServerSpecificExp> serverExp, Server server, User user)
+        private static async Task<bool> CanGetExperience(IEnumerable<ServerExp> serverExp, Server server, User user)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             }
             catch (ArgumentNullException)
             {
-                await ServerQueries.AddOrReplaceUserExp(new ServerSpecificExp
+                await ServerQueries.AddOrReplaceUserExp(new ServerExp
                 {
                     Exp = 0,
                     LatestExp = 0,
@@ -87,7 +87,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             }
         }
 
-        private static double ReturnLevel(IEnumerable<ServerSpecificExp> serverExp, User user, Server server)
+        private static double ReturnLevel(IEnumerable<ServerExp> serverExp, User user, Server server)
         {
             double? exp = serverExp.FirstOrDefault(x => x.UserId == user.Id)?.Exp;
             if (exp != null)
@@ -100,7 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             return Math.Floor(oldLevel) < Math.Floor(newLevel);
         }
 
-        public static Embed LevelUpEmbed(User user, Server server, IEnumerable<ServerSpecificExp> serverExp, ICommandContext context)
+        public static Embed LevelUpEmbed(User user, Server server, IEnumerable<ServerExp> serverExp, ICommandContext context)
         {
             var exp = serverExp.ToList();
             var rankIndex = exp.OrderByDescending(x => x.Exp).ToList().FindIndex(x => x.UserId == user.Id) + 1;

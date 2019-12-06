@@ -86,5 +86,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
         public IEnumerable<WarnedUser> WarnedUsers { get; set; }
+        /// <summary>
+        /// FK_KaguyaServer_ServerExp_BackReference
+        /// </summary>
+        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        public IEnumerable<ServerExp> ServerExp { get; set; }
     }
 }

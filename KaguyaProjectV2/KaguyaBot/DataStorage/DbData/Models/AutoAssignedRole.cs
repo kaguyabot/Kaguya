@@ -5,12 +5,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     [Table(Name = "autoassignedroles")]
     public class AutoAssignedRole
     {
-        [Column(Name = "ServerId"), NotNull]
+        [PrimaryKey]
         public ulong ServerId { get; set; }
         [Column(Name = "RoleId"), NotNull]
         public ulong RoleId { get; set; }
-        [Column(Name = "Duration"), NotNull]
-        public long Duration { get; set; }
         /// <summary>
         /// FK_KaguyaServer_AutoAssignedRoles
         /// </summary>

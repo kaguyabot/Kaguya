@@ -93,7 +93,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         usersToBeUpdated.Add(registeredUser);
                     }
                 }
-                UserQueries.UpdateUsers(usersToBeUpdated);
+                //await UserQueries.UpdateUsers(usersToBeUpdated);
             };
 
             return Task.CompletedTask;
