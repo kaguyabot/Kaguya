@@ -17,9 +17,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await (from s in db.Servers
-                    where s.Id == Id
-                    select s).FirstAsync();
+                return await db.Servers
+                    .LoadWith(x=>x.MutedUsers)
+                    .LoadWith(x=>x.FilteredPhrases)
+                    .LoadWith(x=>x.WarnedUsers)
+                    .LoadWith(x=>x.WarnActions)
+                    .LoadWith(x=>x.MutedUsers)
+                    .LoadWith(x=>x.ServerExp)
+                    .Where(s => s.Id == Id).FirstAsync();
             }
         }
 
@@ -273,11 +278,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     oldExpObj.UserId == newExpObj.UserId)
                 {
                     var selection =
-                        from e in db.ServerExp
-                        where e.ServerId == newExpObj.ServerId && e.UserId == newExpObj.UserId
-                        select e;
+                        from c in db.ServerExp
+                        from p in db.Users.InnerJoin(pr => pr.Id == c.UserId)
+                        select c;
 
-                    await db.DeleteAsync(selection);
                     await db.InsertAsync(newExpObj);
                 }
                 throw new ArgumentException("The userId and serverId properties from " +

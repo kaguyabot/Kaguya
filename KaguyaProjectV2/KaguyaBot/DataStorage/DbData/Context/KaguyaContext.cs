@@ -1,5 +1,6 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using LinqToDB.Common;
 using LinqToDB.Configuration;
 using LinqToDB.Data;
 using System.Collections.Generic;
@@ -41,6 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
         public Init()
         {
             DataConnection.DefaultSettings = new KaguyaSettings();
+            Configuration.Linq.AllowMultipleQuery = true;
         }
     }
 }
