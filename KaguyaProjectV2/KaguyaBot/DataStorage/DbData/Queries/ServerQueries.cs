@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using LinqToDB.SqlQuery;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
@@ -15,25 +16,31 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
     {
         public static async Task<Server> GetServer(ulong Id)
         {
-            using (var db = new KaguyaDb())
-            {
-                return await db.Servers
-                    .LoadWith(x=>x.MutedUsers)
-                    .LoadWith(x=>x.FilteredPhrases)
-                    .LoadWith(x=>x.WarnedUsers)
-                    .LoadWith(x=>x.WarnActions)
-                    .LoadWith(x=>x.MutedUsers)
-                    .LoadWith(x=>x.ServerExp)
-                    .Where(s => s.Id == Id).FirstAsync();
-            }
+            return MemoryStorage.Servers.FirstOrDefault(x => x.Id == Id);
+
+            //using (var db = new KaguyaDb())
+            //{
+            //    return await db.Servers
+            //        .LoadWith(x=>x.MutedUsers)
+            //        .LoadWith(x=>x.FilteredPhrases)
+            //        .LoadWith(x=>x.WarnedUsers)
+            //        .LoadWith(x=>x.WarnActions)
+            //        .LoadWith(x=>x.MutedUsers)
+            //        .LoadWith(x=>x.ServerExp)
+            //        .Where(s => s.Id == Id).FirstAsync();
+            //}
         }
 
         public static async Task UpdateServer(Server server)
         {
-            using (var db = new KaguyaDb())
-            {
-                await db.UpdateAsync(server);
-            }
+            var oldServer = MemoryStorage.Servers.FirstOrDefault(x => x.Id == server.Id);
+
+            MemoryStorage.Servers.Remove(oldServer);
+            MemoryStorage.Servers.Add(server);
+            //using (var db = new KaguyaDb())
+            //{
+            //    await db.UpdateAsync(server);
+            //}
         }
 
         public static void UpdateServers(IEnumerable<Server> servers)
@@ -58,12 +65,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 
         public static async Task<List<FilteredPhrase>> GetAllFilteredPhrasesForServer(ulong Id)
         {
-            using (var db = new KaguyaDb())
-            {
-                return await (from f in db.FilteredPhrases
-                    where f.ServerId == Id
-                    select f).ToListAsync();
-            }
+            return MemoryStorage.Servers.FirstOrDefault(x => x.Id == Id).FilteredPhrases;
+            //using (var db = new KaguyaDb())
+            //{
+            //    return await (from f in db.FilteredPhrases
+            //        where f.ServerId == Id
+            //        select f).ToListAsync();
+            //}
         }
 
         /// <summary>

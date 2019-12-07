@@ -6,6 +6,7 @@ using LinqToDB.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -47,10 +48,19 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 
         public static async Task UpdateUsers(IEnumerable<User> users)
         {
-            using (var db = new KaguyaDb())
+            foreach (var user in users)
             {
-                await Task.Run(() => { db.BulkCopy(users); });
+                var storedUser = MemoryStorage.Users.FirstOrDefault(x => x.Id == user.Id);
+                if (!storedUser.Equals(user))
+                {
+                    MemoryStorage.Users.Remove(storedUser);
+                    MemoryStorage.Users.Add(user);
+                }
             }
+            //using (var db = new KaguyaDb())
+            //{
+
+            //}
         }
 
         public static async Task AddCommandHistory(CommandHistory chObject)

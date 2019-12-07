@@ -90,10 +90,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         };
                         embed.SetColor(EmbedColor.RED);
 
-                        await user.SendMessageAsync(embed: embed.Build());
+                        bool dm = true;
 
-                        await ConsoleLogger.Log($"User [Name: {user.Username} | ID: {user.Id} | Supporter: {registeredUser.IsSupporter}] " +
-                                                $"has been ratelimited. Duration: {humanizedTime}", LogLevel.INFO);
+                        try
+                        {
+                            await user.SendMessageAsync(embed: embed.Build());
+                        }
+                        catch (NullReferenceException)
+                        {
+                            dm = false;
+                        }
+
+                        await ConsoleLogger.Log($"User [Name: {user?.Username} | ID: {user?.Id} | Supporter: {registeredUser?.IsSupporter}] " +
+                                                $"has been ratelimited. Duration: {humanizedTime} Direct Message: {dm}", LogLevel.INFO);
                     }
 
                     if (registeredUser.ActiveRateLimit > 0)

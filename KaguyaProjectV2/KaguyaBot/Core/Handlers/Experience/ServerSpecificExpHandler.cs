@@ -19,16 +19,33 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         public static async void AddExp(User user, Server server, ICommandContext context)
         {
             // If the user can receive exp, give them between 5 and 8 exp.
-            if (!await CanGetExperience(server, user))
-            {
-                return;
-            }
 
-            var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
-            var userExpObj = server.ServerExp.FirstOrDefault(x => x.UserId == user.Id);
+            //if (!await CanGetExperience(server, user))
+            //{
+            //    return;
+            //}
 
             Random r = new Random();
             int exp = r.Next(5, 8);
+
+            var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
+
+            var userExpObj = new ServerExp();
+
+            if (server.ServerExp != null)
+            {
+                userExpObj = server.ServerExp.FirstOrDefault(x => x.UserId == user.Id);
+            }
+            else
+            {
+                userExpObj = new ServerExp
+                {
+                    ServerId = server.Id,
+                    UserId = user.Id,
+                    Exp = 0,
+                    LatestExp = 0
+                };
+            }
 
             var expObject = new ServerExp
             {
@@ -86,8 +103,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
         private static double ReturnLevel(Server server, User user)
         {
-            double? exp = server.ServerExp.FirstOrDefault(x => x.UserId == user.Id)?.Exp;
-            return exp != null ? Math.Sqrt((double) exp / 8 + -8) : 0;
+            double? exp = server.ServerExp?.FirstOrDefault(x => x.UserId == user.Id)?.Exp ?? 0;
+            return Math.Sqrt((double) exp / 8 + -8);
         }
 
         private static bool HasLeveledUp(int oldLevel, int newLevel)

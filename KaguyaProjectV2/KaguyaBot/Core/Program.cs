@@ -1,23 +1,19 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
-using KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
-using TwitchLib.Api.Services.Core.FollowerService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
@@ -30,6 +26,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         public async Task MainAsync()
         {
+            AppDomain.CurrentDomain.FirstChanceException += (sender, EventArgs) =>
+            {
+                ConsoleLogger.Log($"Exception thrown: {EventArgs.Exception}", LogLevel.ERROR);
+            };
+
             var config = new DiscordSocketConfig
             {
                 MessageCacheSize = 500,
@@ -38,16 +39,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
             client = new DiscordShardedClient(config);
 
-            SetupKaguya();
-
+            SetupKaguya(); //Checks for valid database connection
             using (var services = new SetupServices().ConfigureServices(config, client))
             {
                 try
                 {
-                    var _config = await DataStorage.JsonStorage.Config.GetOrCreateConfigAsync();
+                    var _config = await Config.GetOrCreateConfigAsync();
 
                     GlobalPropertySetup(_config);
                     SetupTwitch();
+
+                    MemoryStorage.Populate(); //Populates Memory with objects from database.
 
                     LogEventListener.Listener();
                     GuildLogger.GuildLogListener();
@@ -63,14 +65,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     await EnableTimers(AllShardsLoggedIn(client, config));
                     await Task.Delay(-1);
                 }
-                catch(Discord.Net.HttpException e)
+                catch (Discord.Net.HttpException e)
                 {
-                    await ConsoleLogger.Log($"Error when logging into Discord: " +
-                        $"Have you configured your config file? Is your token correct? Exception: {e.Message}", LogLevel.ERROR);
+                    await ConsoleLogger.Log($"Error when logging into Discord:\n" +
+                                            $"-Have you configured your config file?\n" +
+                                            $"-Is your token correct? Exception: {e.Message}", LogLevel.ERROR);
                     Console.ReadLine();
                 }
+                catch (Exception e)
+                {
+                    await ConsoleLogger.Log("Something really important broke!\n" +
+                                            $"Exception: {e.Message}", LogLevel.ERROR);
+                }
             }
-
         }
         public void SetupKaguya()
         {
@@ -102,7 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             try
             {
-                if(KaguyaBot.DataStorage.DbData.Queries.TestQueries.TestConnection().ToString() == "True")
+                if(TestQueries.TestConnection().ToString() == "True")
                 {
                     ConsoleLogger.Log("Database connection successfully established.", LogLevel.INFO);
                 }
@@ -133,6 +140,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await KaguyaSupporterExpirationHandler.Start();
             await AutoUnmuteHandler.Start();
             await RateLimitService.Start();
+            await MemoryStorage.Start();
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)
