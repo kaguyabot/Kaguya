@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
     public static class KaguyaSupporterExpirationHandler
     {
-        public static Task ExpiredTagChecker()
+        public static Task Start()
         {
             Timer timer = new Timer
             {

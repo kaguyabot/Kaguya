@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 return DateTime.Now.AddSeconds(-120).ToOADate() >=
                        server.ServerExp.FirstOrDefault(x => x.UserId == user.Id).LatestExp;
             }
-            catch (NullReferenceException)
+            catch (Exception)
             {
                 server.ServerExp.Add(new ServerExp
                 {

@@ -7,7 +7,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -17,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
     public static class RateLimitService
     {
-        public static Task RateLimitHandler()
+        public static Task Start()
         {
             Timer timer = new Timer(12000); //3.70 seconds
             timer.AutoReset = true;
@@ -26,11 +25,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             {
                 var usersToBeUpdated = new List<User>();
                 var users = await UserQueries.UsersWhoHaveAnActiveRatelimit();
+
                 foreach (var registeredUser in users)
                 {
+                    if (registeredUser.LastRatelimited < DateTime.Now.Add(TimeSpan.FromDays(31)).ToOADate())
+                    {
+                        registeredUser.RateLimitWarnings = 0;
+
+                        await ConsoleLogger.Log($"User [ID: {registeredUser.Id}] has had their Ratelimit Warnings reset " +
+                                          $"due to not being ratelimited for 30 days.", LogLevel.INFO);
+                    }
+
                     if (registeredUser.ActiveRateLimit >= 2 && !registeredUser.IsSupporter || 
                         registeredUser.ActiveRateLimit >= 4 && registeredUser.IsSupporter)
                     {
+                        registeredUser.LastRatelimited = DateTime.Now.ToOADate();
                         registeredUser.RateLimitWarnings++;
                         if (registeredUser.RateLimitWarnings > 7)
                         {
@@ -93,7 +102,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         usersToBeUpdated.Add(registeredUser);
                     }
                 }
-                //await UserQueries.UpdateUsers(usersToBeUpdated);
+                await UserQueries.UpdateUsers(usersToBeUpdated);
             };
 
             return Task.CompletedTask;

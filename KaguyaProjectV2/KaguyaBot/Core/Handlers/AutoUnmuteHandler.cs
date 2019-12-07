@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public static class AutoUnmuteHandler
     {
-        public static Task CheckForUnmute()
+        public static Task Start()
         {
             Timer timer = new Timer(5000)
             {

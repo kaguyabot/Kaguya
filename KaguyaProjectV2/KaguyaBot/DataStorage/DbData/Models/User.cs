@@ -60,6 +60,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public double LatestWeeklyBonus { get; set; }
         [Column(Name = "LastGivenRep"), Nullable]
         public double LastGivenRep { get; set; }
+        [Column(Name = "LastRatelimited"), Nullable]
+        public double LastRatelimited { get; set; }
         [Column(Name = "UpvoteBonusExpiration"), Nullable]
         public double UpvoteBonusExpiration { get; set; }
 
