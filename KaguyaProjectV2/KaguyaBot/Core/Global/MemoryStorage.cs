@@ -38,8 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
             {
                 using (var db = new KaguyaDb())
                 {
-                    var servers = db.GetTable<Server>();
-                    foreach (var server in servers)
+                    foreach (var server in db.GetTable<Server>().ToHashSet())
                     {
                         if (!Equals(Servers.Select(x => x.Id == server.Id), server))
                         {
@@ -48,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
                         }
                     }
 
-                    foreach (var user in db.GetTable<User>())
+                    foreach (var user in db.GetTable<User>().ToHashSet())
                     {
                         if (!Equals(Users.Select(x => x.Id == user.Id), user))
                         {
@@ -57,7 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
                         }
                     }
 
-                    foreach (var key in db.GetTable<SupporterKey>())
+                    foreach (var key in db.GetTable<SupporterKey>().ToHashSet())
                     {
                         if (!Equals(SupporterKeys.Select(x => x.Key == key.Key), key))
                         {
