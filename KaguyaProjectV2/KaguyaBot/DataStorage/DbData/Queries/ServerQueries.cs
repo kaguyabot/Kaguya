@@ -270,21 +270,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <param name="oldExpObj">The object to be replaced.</param>
         /// <param name="newExpObj">The object to insert, the updated version of oldExpObj.</param>
         /// <returns></returns>
-        public static async Task ReplaceServerSpecificExpForUser(ServerExp oldExpObj, ServerExp newExpObj)
+        public static async Task UpdateServerExp(ServerExp newExpObj)
         {
             using (var db = new KaguyaDb())
             {
-                Server server = await GetServer(newExpObj.ServerId);
-                var oldObj =
-                    server.ServerExp.FirstOrDefault(x => x.ServerId == oldExpObj.ServerId && x.UserId == oldExpObj.UserId);
-                server.ServerExp.Remove(oldObj);
-                server.ServerExp.Add(newExpObj);
-
-                await UpdateServer(server);
+                await db.UpdateAsync(newExpObj);
             }
         }
 
-        public static async Task RemoveServerSpecificExpForUser(ServerExp expObj)
+        public static async Task RemoveServerExp(ServerExp expObj)
         {
             using (var db = new KaguyaDb())
             {

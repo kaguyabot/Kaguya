@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             var config = new DiscordSocketConfig
             {
                 MessageCacheSize = 500,
-                TotalShards = 2
+                TotalShards = 1
             };
 
             client = new DiscordShardedClient(config);

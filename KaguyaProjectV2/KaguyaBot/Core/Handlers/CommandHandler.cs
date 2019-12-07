@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
@@ -45,14 +46,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             User user = await UserQueries.GetUser(message.Author.Id);
 
             if (user.IsBlacklisted) return;
-
-            int argPos = 0;
+            if (server.IsBlacklisted) return;
 
             var context = new ShardedCommandContext(_client, message);
             await IsFilteredPhrase(context, server, message);
 
             ExperienceHandler.AddExp(user, context);
             ServerSpecificExpHandler.AddExp(user, server, context);
+
+            int argPos = 0;
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
@@ -100,7 +102,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (userPerms.Administrator)
                 return false;
 
-            List<FilteredPhrase> fp = await ServerQueries.GetAllFilteredPhrasesForServer(server.Id) ?? new List<FilteredPhrase>();
+            List<FilteredPhrase> fp = server.FilteredPhrases ?? new List<FilteredPhrase>();
 
             if (fp.Count == 0) return false;
 

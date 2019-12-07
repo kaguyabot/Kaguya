@@ -26,7 +26,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             Server server = await ServerQueries.GetServer(Context.Guild.Id);
             CommandInfo cmdInfo = await FindCommandInfo(cmd.ToLower(), server);
             if (cmdInfo == null) { return; }
-
             await ReplyAsync(embed: HelpEmbedBuilder(cmdInfo, server).Build());
         }
 

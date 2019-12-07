@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
@@ -17,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
     {
         public static async void AddExp(User user, Server server, ICommandContext context)
         {
-            // If the user can receive exp, give them between 5 and 8.
+            // If the user can receive exp, give them between 5 and 8 exp.
             if (!await CanGetExperience(server, user))
             {
                 return;
@@ -25,8 +26,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
             var userExpObj = server.ServerExp.FirstOrDefault(x => x.UserId == user.Id);
-
-            double oldLevel = ReturnLevel(server, user);
 
             Random r = new Random();
             int exp = r.Next(5, 8);
@@ -41,38 +40,37 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             expObject.Exp += exp;
             expObject.LatestExp = DateTime.Now.ToOADate();
-            await ServerQueries.ReplaceServerSpecificExpForUser(userExpObj, expObject);
+            await ServerQueries.UpdateServerExp(expObject);
 
             double newLevel = ReturnLevel(server, user);
-            await ConsoleLogger.Log($"[Server Specific Exp]: User has received {exp} exp. [ID: {user.Id} | New EXP: {userExpObj?.Exp ?? exp:N0}]",
-                DataStorage.JsonStorage.LogLevel.DEBUG);
+            await ConsoleLogger.Log($"[Server Exp]: User has received {exp} exp. [Guild: [Name: {context.Guild.Name} | ID: {server.Id}] " +
+                                    $"User: [ID: {user.Id}] | New EXP: {expObject.Exp:N0}]", LogLevel.DEBUG);
 
-            if (!HasLeveledUp(oldLevel, newLevel))
+            double oldLevel = ReturnLevel(server, user);
+            if (HasLeveledUp((int)oldLevel, (int)newLevel))
             {
-                return;
+                await ConsoleLogger.Log($"[Server Exp]: User has leveled up! [ID: {user.Id} | Level: {newLevel} | Experience: {user.Experience}]",
+                    LogLevel.INFO);
+
+                if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
+                {
+                    await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, server, context));
+                    return;
+                }
+
+                await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, server, context));
             }
-
-            await ConsoleLogger.Log($"[Server Specific Exp]: User has leveled up! [ID: {user.Id} | Level: {newLevel} | Experience: {user.Experience}]",
-                DataStorage.JsonStorage.LogLevel.INFO);
-
-            if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
-            {
-                await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, server, context));
-                return;
-            }
-
-            await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, server, context));
-            await ServerQueries.UpdateServer(server);
         }
 
+        // ReSharper disable once PossibleNullReferenceException
         private static async Task<bool> CanGetExperience(Server server, User user)
         {
             try
             {
                 return DateTime.Now.AddSeconds(-120).ToOADate() >=
-                       server.ServerExp.FirstOrDefault(x => x.UserId == user.Id)?.LatestExp;
+                       server.ServerExp.FirstOrDefault(x => x.UserId == user.Id).LatestExp;
             }
-            catch (ArgumentNullException)
+            catch (NullReferenceException)
             {
                 server.ServerExp.Add(new ServerExp
                 {
@@ -89,14 +87,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         private static double ReturnLevel(Server server, User user)
         {
             double? exp = server.ServerExp.FirstOrDefault(x => x.UserId == user.Id)?.Exp;
-            if (exp != null)
-                return Math.Sqrt((double) exp / 8 + -8);
-            return 0;
+            return exp != null ? Math.Sqrt((double) exp / 8 + -8) : 0;
         }
 
-        private static bool HasLeveledUp(double oldLevel, double newLevel)
+        private static bool HasLeveledUp(int oldLevel, int newLevel)
         {
-            return Math.Floor(oldLevel) < Math.Floor(newLevel);
+            return oldLevel < newLevel;
         }
 
         public static Embed LevelUpEmbed(User user, Server server, ICommandContext context)
