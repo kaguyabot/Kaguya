@@ -60,36 +60,36 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// FK_KaguyaServer_MutedUsers_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
-        public List<MutedUser> MutedUsers { get; set; }
+        public IEnumerable<MutedUser> MutedUsers { get; set; }
         /// <summary>
         /// FK_KaguyaServer_WarnActions_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
-        public List<WarnAction> WarnActions { get; set; }
+        public IEnumerable<WarnAction> WarnActions { get; set; }
         /// <summary>
         /// FK_KaguyaServer_FilteredPhrases_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
-        public List<FilteredPhrase> FilteredPhrases { get; set; }
+        public IEnumerable<FilteredPhrase> FilteredPhrases { get; set; }
         /// <summary>
         /// FK_KaguyaServer_AutoAssignedRoles_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
-        public List<AutoAssignedRole> AutoAssignedRoles { get; set; }
+        public IEnumerable<AutoAssignedRole> AutoAssignedRoles { get; set; }
         /// <summary>
         /// FK_KaguyaServer_BlackListedChannels_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
-        public List<BlackListedChannel> BlackListedChannels { get; set; }
+        public IEnumerable<BlackListedChannel> BlackListedChannels { get; set; }
         /// <summary>
         /// FK_KaguyaServer_WarnedUsers_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
-        public List<WarnedUser> WarnedUsers { get; set; }
+        public IEnumerable<WarnedUser> WarnedUsers { get; set; }
         /// <summary>
         /// FK_KaguyaServer_ServerExp_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
-        public List<ServerExp> ServerExp { get; set; }
+        public IEnumerable<ServerExp> ServerExp { get; set; }
     }
 }

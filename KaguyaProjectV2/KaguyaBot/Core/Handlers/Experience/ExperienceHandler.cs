@@ -21,7 +21,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             {
                 return;
             }
-
             var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
             double oldLevel = ReturnLevel(user);
 
@@ -40,17 +39,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             {
                 return;
             }
-
             await ConsoleLogger.Log($"[Global Exp]: User has leveled up! [ID: {user.Id} | Level: {newLevel} | Experience: {user.Experience}]",
                 DataStorage.JsonStorage.LogLevel.INFO);
-
             if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
             {
                 await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, context));
                 return;
             }
 
-            await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, context));
+            //await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, context));
         }
 
         private static bool CanGetExperience(User user)

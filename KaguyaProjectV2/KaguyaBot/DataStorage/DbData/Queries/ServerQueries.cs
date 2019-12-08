@@ -33,14 +33,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 
         public static async Task UpdateServer(Server server)
         {
-            var oldServer = MemoryStorage.Servers.FirstOrDefault(x => x.Id == server.Id);
-
-            MemoryStorage.Servers.Remove(oldServer);
-            MemoryStorage.Servers.Add(server);
-            //using (var db = new KaguyaDb())
-            //{
-            //    await db.UpdateAsync(server);
-            //}
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertOrReplaceAsync(server);
+            }
         }
 
         public static void UpdateServers(IEnumerable<Server> servers)
@@ -282,7 +278,27 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                await db.UpdateAsync(newExpObj);
+                if (oldExpObj == null)
+                {
+                    await db.InsertAsync(newExpObj);
+                    return;
+                }
+
+                if (oldExpObj.ServerId == newExpObj.ServerId &&
+                    oldExpObj.UserId == newExpObj.UserId)
+                {
+                    var selection =
+                        from c in db.ServerExp
+                        from p in db.Users.InnerJoin(pr => pr.Id == c.UserId)
+                        select c;
+
+                    await db.InsertAsync(newExpObj);
+                    return;
+                }
+                throw new ArgumentException("The userId and serverId properties from " +
+                                            "the parameters did not match each other's. " +
+                                            // ReSharper disable once NotResolvedInText
+                                            "Did you mix up the users?", "oldExpObj, newExpObj");
             }
         }
 
