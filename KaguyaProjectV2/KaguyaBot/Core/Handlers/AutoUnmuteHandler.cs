@@ -30,40 +30,38 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 {
                     if (mutedUser.ExpiresAt < DateTime.Now.ToOADate())
                     {
+                        var guild = ConfigProperties.client.GetGuild(mutedUser.ServerId);
+                        var server = await ServerQueries.GetOrCreateServer(guild.Id);
+                        var user = ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
+
+                        if (server.IsPremium)
+                        {
+                            server.TotalAdminActions++;
+
+                            await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
+                            {
+                                Server = server,
+                                Moderator = ConfigProperties.client.GetGuild(server.Id)
+                                    .GetUser(538910393918160916),
+                                ActionRecipient = user,
+                                Action = PremiumModActionHandler.UNMUTE,
+                                Reason = "User was automatically unmuted because their timed mute has expired."
+                            });
+                        }
+
                         try
                         {
-                            var guild = ConfigProperties.client.GetGuild(mutedUser.ServerId);
-                            var server = await ServerQueries.GetServer(guild.Id);
-                            var user = ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
-
-                            if (server.IsPremium)
-                            {
-                                server.TotalAdminActions++;
-                                await ServerQueries.UpdateServer(server);
-
-                                await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
-                                {
-                                    Server = server,
-                                    Moderator = ConfigProperties.client.GetGuild(server.Id)
-                                        .GetUser(538910393918160916),
-                                    ActionRecipient = user,
-                                    Action = PremiumModActionHandler.UNMUTE,
-                                    Reason = "User was automatically unmuted because their timed mute has expired."
-                                });
-                            }
-
                             var muteRole = guild.Roles.FirstOrDefault(x => x.Name == "kaguya-mute");
                             await user.RemoveRoleAsync(muteRole);
                         }
                         catch (Exception)
                         {
-                            var guild = ConfigProperties.client.GetGuild(mutedUser.ServerId);
-                            await ConsoleLogger.Log(
-                                $"Exception handled when unmuting a user in guild [Name: {guild.Name} | ID: {guild.Id}]",
+                            await ConsoleLogger.Log($"Exception handled when unmuting a user in guild [Name: {guild.Name} | ID: {guild.Id}]",
                                 LogLevel.WARN);
                         }
 
                         await ServerQueries.RemoveMutedUser(mutedUser);
+                        await ServerQueries.UpdateServer(server);
                         await ConsoleLogger.Log($"User [ID: {mutedUser.UserId}] has been automatically unmuted.",
                             LogLevel.DEBUG);
                     }

@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.MuteMembers)]
         public async Task UnWarnUser(IGuildUser user)
         {
-            var server = await ServerQueries.GetServer(Context.Guild.Id);
+            var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
             var warnings = await ServerQueries.GetWarnedUser(Context.Guild.Id, user.Id);
             var fields = new List<EmbedFieldBuilder>();
 

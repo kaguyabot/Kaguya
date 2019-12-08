@@ -22,8 +22,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Remarks("<key>")]
         public async Task RedeemKey(string userKey)
         {
-            var user = await UserQueries.GetUser(Context.User.Id);
-            var server = await ServerQueries.GetServer(Context.Guild.Id);
+            var user = await UserQueries.GetOrCreateUser(Context.User.Id);
+            var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
             var existingKeys = await UtilityQueries.GetAllActiveKeys();
 
             var key = existingKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0);

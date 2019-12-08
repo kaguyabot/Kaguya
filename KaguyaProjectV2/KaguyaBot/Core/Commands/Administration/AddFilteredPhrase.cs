@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             string s = "s";
             if (args.Length == 1) s = "";
 
-            Server server = ServerQueries.GetServer(Context.Guild.Id).Result;
+            Server server = ServerQueries.GetOrCreateServer(Context.Guild.Id).Result;
             List<FilteredPhrase> allFp = await ServerQueries.GetAllFilteredPhrasesForServer(Context.Guild.Id);
 
             if(args.Length == 0)

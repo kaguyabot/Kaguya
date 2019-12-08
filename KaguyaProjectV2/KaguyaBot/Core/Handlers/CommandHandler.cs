@@ -42,8 +42,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             var message = msg as SocketUserMessage;
             if (message == null || message.Author.IsBot) return;
 
-            Server server = await ServerQueries.GetServer(((SocketGuildChannel) message.Channel).Guild.Id);
-            User user = await UserQueries.GetUser(message.Author.Id);
+            Server server = await ServerQueries.GetOrCreateServer(((SocketGuildChannel) message.Channel).Guild.Id);
+            User user = await UserQueries.GetOrCreateUser(message.Author.Id);
 
             if (user.IsBlacklisted) return;
             if (server.IsBlacklisted) return;
@@ -55,6 +55,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             ServerSpecificExpHandler.AddExp(user, server, context);
 
             int argPos = 0;
+
+            await UserQueries.UpdateUser(user);
+            await ServerQueries.UpdateServer(server);
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
@@ -70,8 +73,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (!command.IsSpecified)
                 return;
 
-            Server server = await ServerQueries.GetServer(context.Guild.Id);
-            User user = await UserQueries.GetUser(context.User.Id);
+            Server server = await ServerQueries.GetOrCreateServer(context.Guild.Id);
+            User user = await UserQueries.GetOrCreateUser(context.User.Id);
 
             if (result.IsSuccess)
             {
@@ -102,7 +105,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (userPerms.Administrator)
                 return false;
 
-            List<FilteredPhrase> fp = server.FilteredPhrases ?? new List<FilteredPhrase>();
+            List<FilteredPhrase> fp = server.FilteredPhrases.ToList() ;
 
             if (fp.Count == 0) return false;
 

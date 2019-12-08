@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
         {
             KaguyaEmbedBuilder embed;
 
-            Server server = await ServerQueries.GetServer(Context.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
             var twitchChannels = await ServerQueries.GetTwitchChannelsForServer(server.Id);
             var twitchApi = ConfigProperties.twitchApi;
             var userIndex = await twitchApi.V5.Users.GetUserByNameAsync(twitchChannelName);

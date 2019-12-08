@@ -25,8 +25,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.MuteMembers)]
         public async Task UnmuteUser(IGuildUser user, [Remainder]string reason = null)
         {
-            var server = await ServerQueries.GetServer(Context.Guild.Id);
+            var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
             var mutedObject = await ServerQueries.GetSpecificMutedUser(user.Id, server.Id);
+
+            if (mutedObject != null)
+                await ServerQueries.RemoveMutedUser(mutedObject);
 
             if (server.IsPremium)
             {
@@ -42,8 +45,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Reason = reason
                 });
             }
-
-            await ServerQueries.RemoveMutedUser(mutedObject);
 
             try
             {

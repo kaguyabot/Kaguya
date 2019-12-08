@@ -14,21 +14,22 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     public static class ServerQueries
     {
-        public static async Task<Server> GetServer(ulong Id)
+        public static async Task<Server> GetOrCreateServer(ulong Id)
         {
-            return MemoryStorage.Servers.FirstOrDefault(x => x.Id == Id);
-
-            //using (var db = new KaguyaDb())
-            //{
-            //    return await db.Servers
-            //        .LoadWith(x=>x.MutedUsers)
-            //        .LoadWith(x=>x.FilteredPhrases)
-            //        .LoadWith(x=>x.WarnedUsers)
-            //        .LoadWith(x=>x.WarnActions)
-            //        .LoadWith(x=>x.MutedUsers)
-            //        .LoadWith(x=>x.ServerExp)
-            //        .Where(s => s.Id == Id).FirstAsync();
-            //}
+            using (var db = new KaguyaDb())
+            {
+                return await db.Servers
+                    .LoadWith(x => x.MutedUsers)
+                    .LoadWith(x => x.FilteredPhrases)
+                    .LoadWith(x => x.WarnedUsers)
+                    .LoadWith(x => x.WarnActions)
+                    .LoadWith(x => x.MutedUsers)
+                    .LoadWith(x => x.ServerExp)
+                    .Where(s => s.Id == Id).FirstAsync() ?? new Server
+                    {
+                        Id = Id
+                    };
+            }
         }
 
         public static async Task UpdateServer(Server server)
@@ -61,13 +62,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 
         public static async Task<List<FilteredPhrase>> GetAllFilteredPhrasesForServer(ulong Id)
         {
-            return MemoryStorage.Servers.FirstOrDefault(x => x.Id == Id).FilteredPhrases;
-            //using (var db = new KaguyaDb())
-            //{
-            //    return await (from f in db.FilteredPhrases
-            //        where f.ServerId == Id
-            //        select f).ToListAsync();
-            //}
+            using (var db = new KaguyaDb())
+            {
+                return await (from f in db.FilteredPhrases
+                              where f.ServerId == Id
+                              select f).ToListAsync();
+            }
         }
 
         /// <summary>
@@ -127,7 +127,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 return await (from m in db.MutedUsers
-                    where m.ExpiresAt > DateTime.Now.ToOADate()
                     select m).ToListAsync();
             }
         }
@@ -167,9 +166,17 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await (from m in db.MutedUsers
-                    where m.ServerId == serverId && m.UserId == userId
-                    select m).FirstAsync();
+                return GetOrCreateServer(serverId).Result.MutedUsers.FirstOrDefault(x => x.UserId == userId);
+                //try
+                //{
+                //    return await (from m in db.MutedUsers
+                //        where m.ServerId == serverId && m.UserId == userId
+                //        select m).FirstAsync();
+                //}
+                //catch (InvalidOperationException)
+                //{
+                //    return null;
+                //}
             }
         }
 
@@ -271,34 +278,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// properties of each object. This is used specifically for
         /// the server-specific EXP table. This does not affect global EXP.
         /// </summary>
-        /// <param name="oldExpObj">The object to be replaced.</param>
         /// <param name="newExpObj">The object to insert, the updated version of oldExpObj.</param>
         /// <returns></returns>
         public static async Task UpdateServerExp(ServerExp newExpObj)
         {
             using (var db = new KaguyaDb())
             {
-                if (oldExpObj == null)
-                {
-                    await db.InsertAsync(newExpObj);
-                    return;
-                }
-
-                if (oldExpObj.ServerId == newExpObj.ServerId &&
-                    oldExpObj.UserId == newExpObj.UserId)
-                {
-                    var selection =
-                        from c in db.ServerExp
-                        from p in db.Users.InnerJoin(pr => pr.Id == c.UserId)
-                        select c;
-
-                    await db.InsertAsync(newExpObj);
-                    return;
-                }
-                throw new ArgumentException("The userId and serverId properties from " +
-                                            "the parameters did not match each other's. " +
-                                            // ReSharper disable once NotResolvedInText
-                                            "Did you mix up the users?", "oldExpObj, newExpObj");
+                await db.InsertOrReplaceAsync(newExpObj);
             }
         }
 

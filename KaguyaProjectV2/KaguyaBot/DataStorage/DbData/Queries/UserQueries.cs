@@ -12,13 +12,18 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     public static class UserQueries
     {
-        public static async Task<User> GetUser(ulong Id)
+        public static async Task<User> GetOrCreateUser(ulong Id)
         {
             using (var db = new KaguyaDb())
             {
-                return await (from u in db.Users
-                    where u.Id == Id
-                    select u).FirstAsync();
+                var user = await (from u in db.Users
+                               where u.Id == Id
+                               select u).FirstAsync() ?? new User
+                               {
+                                   Id = Id
+                               };
+
+                return user;
             }
         }
 
@@ -48,26 +53,30 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 
         public static async Task UpdateUsers(IEnumerable<User> users)
         {
-            foreach (var user in users)
+            using (var db = new KaguyaDb())
             {
-                var storedUser = MemoryStorage.Users.FirstOrDefault(x => x.Id == user.Id);
-                if (!storedUser.Equals(user))
+                foreach (var user in users)
                 {
-                    MemoryStorage.Users.Remove(storedUser);
-                    MemoryStorage.Users.Add(user);
+                    var storedUser = from u in db.Users
+                        where u.Id == user.Id
+                        select u;
+
+                    if (!storedUser.Equals(user))
+                    {
+                        await db.UpdateAsync(user);
+                    }
                 }
             }
-            //using (var db = new KaguyaDb())
-            //{
-
-            //}
         }
 
         public static async Task AddCommandHistory(CommandHistory chObject)
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertOrReplaceAsync(chObject);
+                if (!db.CommandHistories.Contains(chObject))
+                {
+                    await db.InsertAsync(chObject);
+                }
             }
         }
 

@@ -37,9 +37,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             Server server;
 
             if (arg2.VoiceChannel is null)
-                server = await ServerQueries.GetServer(arg3.VoiceChannel.Guild.Id);
+                server = await ServerQueries.GetOrCreateServer(arg3.VoiceChannel.Guild.Id);
             else
-                server = await ServerQueries.GetServer(arg2.VoiceChannel.Guild.Id);
+                server = await ServerQueries.GetOrCreateServer(arg2.VoiceChannel.Guild.Id);
 
             string oldVoice = string.Empty, newVoice = string.Empty, embedURL = string.Empty;
 
@@ -77,21 +77,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 
         private static async Task _client_UserUnbanned(SocketUser arg1, SocketGuild arg2)
         {
-            Server server = await ServerQueries.GetServer(arg2.Id);
+            Server server = await ServerQueries.GetOrCreateServer(arg2.Id);
             if (server.LogUnbans == 0)
                 return;
         }
 
         private static async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)
         {
-            Server server = await ServerQueries.GetServer(arg2.Id);
+            Server server = await ServerQueries.GetOrCreateServer(arg2.Id);
             if (server.LogBans == 0)
                 return;
         }
 
         private static async Task _client_UserLeft(SocketGuildUser arg)
         {
-            Server server = await ServerQueries.GetServer(arg.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServer(arg.Guild.Id);
             if (server.LogUserLeaves == 0)
                 return;
 
@@ -111,7 +111,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 
         private static async Task _client_UserJoined(SocketGuildUser arg)
         {
-            Server server = await ServerQueries.GetServer(arg.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServer(arg.Guild.Id);
             if (server.LogUserJoins == 0)
                 return;
 
@@ -133,7 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
         {
             if (arg3 is SocketGuildChannel)
             {
-                Server server = await ServerQueries.GetServer(((SocketGuildChannel)arg3).Guild.Id);
+                Server server = await ServerQueries.GetOrCreateServer(((SocketGuildChannel)arg3).Guild.Id);
                 if (server.LogUpdatedMessages == 0)
                     return;
 
@@ -157,7 +157,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
         {
-            Server server = await ServerQueries.GetServer(((SocketGuildChannel) arg2).Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServer(((SocketGuildChannel) arg2).Guild.Id);
             if (server.LogDeletedMessages == 0)
                 return;
 

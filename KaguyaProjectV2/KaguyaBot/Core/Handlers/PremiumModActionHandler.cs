@@ -57,9 +57,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             var embed = new KaguyaEmbedBuilder
             {
-                Title = actionTitle + $"| `Case: #{log.Server.TotalAdminActions}`",
-                Description = $"User Actioned: `[Name: {log.ActionRecipient} | ID: {log.ActionRecipient.Id}]`\n" +
-                              $"Punisher: `[Name: {log.Moderator} | ID: {log.Moderator.Id}]`\n" +
+                Title = actionTitle + $"| `Case: #{log.Server.TotalAdminActions:N0}`",
+                Description = $"Actioned: `[Name: {log.ActionRecipient} | ID: {log.ActionRecipient.Id}]`\n" +
+                              $"Actionee: `[Name: {log.Moderator} | ID: {log.Moderator.Id}]`\n" +
                               $"Reason: `{reason}`",
                 ThumbnailUrl = embedUrl
             };

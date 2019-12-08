@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         public static async Task<List<string>> LogSwitcher(string args, bool enabled, ulong guildId, SocketTextChannel channel = null)
         {
             List<string> logTypes = ArrayInterpreter.ReturnParams(args).ToList();
-            Server server = await ServerQueries.GetServer(guildId);
+            Server server = await ServerQueries.GetOrCreateServer(guildId);
 
             foreach (var type in logTypes.ToList())
             {

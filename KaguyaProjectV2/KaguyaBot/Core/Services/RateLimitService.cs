@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static Task Start()
         {
-            Timer timer = new Timer(12000); //3.70 seconds
+            Timer timer = new Timer(3700); //3.70 seconds
             timer.AutoReset = true;
             timer.Enabled = true;
             timer.Elapsed += async (sender, e) =>
@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                 foreach (var registeredUser in users)
                 {
-                    if (registeredUser.LastRatelimited < DateTime.Now.Add(TimeSpan.FromDays(31)).ToOADate())
+                    if (registeredUser.LastRatelimited < DateTime.Now.Add(TimeSpan.FromDays(-31)).ToOADate())
                     {
                         registeredUser.RateLimitWarnings = 0;
 
@@ -36,8 +36,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                                           $"due to not being ratelimited for 30 days.", LogLevel.INFO);
                     }
 
-                    if (registeredUser.ActiveRateLimit >= 2 && !registeredUser.IsSupporter || 
-                        registeredUser.ActiveRateLimit >= 4 && registeredUser.IsSupporter)
+                    if (registeredUser.ActiveRateLimit >= 4 && !registeredUser.IsSupporter || 
+                        registeredUser.ActiveRateLimit >= 6 && registeredUser.IsSupporter)
                     {
                         registeredUser.LastRatelimited = DateTime.Now.ToOADate();
                         registeredUser.RateLimitWarnings++;

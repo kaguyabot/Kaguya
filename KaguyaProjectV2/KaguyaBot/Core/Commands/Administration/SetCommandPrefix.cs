@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 return;
             }
 
-            Server server = await ServerQueries.GetServer(Context.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
             server.CommandPrefix = prefix;
             await ServerQueries.UpdateServer(server);
 
@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task SetPrefix()
         {
-            Server server = await ServerQueries.GetServer(Context.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
             server.CommandPrefix = "$";
             await ServerQueries.UpdateServer(server);
 

@@ -37,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task MuteUser(IGuildUser user, string duration = null, [Remainder]string reason = null)
         {
             var guild = Context.Guild;
-            var server = await ServerQueries.GetServer(guild.Id);
+            var server = await ServerQueries.GetOrCreateServer(guild.Id);
 
             Configurator.DateTimeHumanizeStrategy = new PrecisionDateTimeHumanizeStrategy(1.00);
 

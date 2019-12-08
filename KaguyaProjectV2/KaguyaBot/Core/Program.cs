@@ -49,8 +49,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     GlobalPropertySetup(_config);
                     SetupTwitch();
 
-                    MemoryStorage.Populate(); //Populates Memory with objects from database.
-
                     LogEventListener.Listener();
                     GuildLogger.GuildLogListener();
 
@@ -140,7 +138,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await KaguyaSupporterExpirationHandler.Start();
             await AutoUnmuteHandler.Start();
             await RateLimitService.Start();
-            await MemoryStorage.Start();
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)
