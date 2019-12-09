@@ -26,9 +26,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         public async Task MainAsync()
         {
-            AppDomain.CurrentDomain.FirstChanceException += (sender, EventArgs) =>
+            AppDomain.CurrentDomain.UnhandledException += (sender, EventArgs) =>
             {
-                ConsoleLogger.Log($"Exception thrown: {EventArgs.Exception}", LogLevel.ERROR);
+                ConsoleLogger.Log($"Unhandled Exception: {EventArgs.ExceptionObject}", LogLevel.ERROR);
             };
 
             var config = new DiscordSocketConfig

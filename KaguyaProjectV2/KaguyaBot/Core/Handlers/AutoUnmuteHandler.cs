@@ -31,6 +31,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     if (mutedUser.ExpiresAt < DateTime.Now.ToOADate())
                     {
                         var guild = ConfigProperties.client.GetGuild(mutedUser.ServerId);
+
+                        if (guild == null)
+                            goto RemoveFromDB;
+
                         var server = await ServerQueries.GetOrCreateServer(guild.Id);
                         var user = ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
 
@@ -60,8 +64,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                 LogLevel.WARN);
                         }
 
-                        await ServerQueries.RemoveMutedUser(mutedUser);
                         await ServerQueries.UpdateServer(server);
+
+                        RemoveFromDB:
+                        await ServerQueries.RemoveMutedUser(mutedUser);
                         await ConsoleLogger.Log($"User [ID: {mutedUser.UserId}] has been automatically unmuted.",
                             LogLevel.DEBUG);
                     }

@@ -77,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                               "What would you like me to do?\n\n" +
                               "✅ - Replace the existing time with your specified time\n" +
                               "⏱️ - Combine the existing time into a longer mute (would result in an unmute " +
-                              $"`{DateTime.FromOADate(existingObject.ExpiresAt + muteObject.ExpiresAt - DateTime.Now.ToOADate()).Humanize(false)}\n" +
+                              $"`{DateTime.FromOADate(existingObject.ExpiresAt + muteObject.ExpiresAt - DateTime.Now.ToOADate()).Humanize(false)}`\n" +
                               "⛔ - Leave the existing mute alone and don't do anything."
                         };
 
@@ -91,14 +91,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                                   $"be unmuted\n`{DateTime.FromOADate(time).Humanize(false)}`"
                                 };
 
-                                await SendModLog(server, new PremiumModerationLog
+                                if (server.IsPremium)
                                 {
-                                    Moderator = (SocketGuildUser)Context.User,
-                                    ActionRecipient = (SocketGuildUser)user,
-                                    Action = PremiumModActionHandler.MUTE,
-                                    Server = server,
-                                    Reason = reason
-                                });
+                                    await SendModLog(server, new PremiumModerationLog
+                                    {
+                                        Moderator = (SocketGuildUser)Context.User,
+                                        ActionRecipient = (SocketGuildUser)user,
+                                        Action = PremiumModActionHandler.MUTE,
+                                        Server = server,
+                                        Reason = reason
+                                    });
+                                }
 
                                 server.TotalAdminActions++;
                                 await ServerQueries.UpdateServer(server);

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
@@ -31,36 +32,51 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             {
                 case PremiumModActionHandler.SHADOWBAN:
                     actionTitle += "Shadowbanned ";
-                    embedUrl = "https://i.imgur.com/86tSNSa.png";
+                    embedUrl = "https://i.imgur.com/hCHifVn.png";
                     break;
                 case PremiumModActionHandler.UNSHADOWBAN:
                     actionTitle += "UnShadowbanned ";
-                    embedUrl = "https://i.imgur.com/szeC3hH.png";
+                    embedUrl = "https://i.imgur.com/NmLwYJB.png";
                     break;
                 case PremiumModActionHandler.MUTE:
                     actionTitle += "Muted ";
-                    embedUrl = "https://i.imgur.com/D1y3A7E.png";
+                    embedUrl = "https://i.imgur.com/nnc3h7D.png";
                     break;
                 case PremiumModActionHandler.UNMUTE:
                     actionTitle += "Unmuted ";
-                    embedUrl = "https://i.imgur.com/9x2MHFI.png";
+                    embedUrl = "https://i.imgur.com/eIBBSMw.png";
                     break;
                 case PremiumModActionHandler.WARN:
                     actionTitle += "Warned ";
-                    embedUrl = "https://i.imgur.com/LZmdn9k.png";
+                    embedUrl = "https://i.imgur.com/IXvCjEg.png";
                     break;
                 case PremiumModActionHandler.UNWARN:
                     actionTitle += "Unwarned ";
-                    embedUrl = "https://i.imgur.com/915ZT6q.png";
+                    embedUrl = "https://i.imgur.com/QyNpRuW.png";
                     break;
             }
 
             var embed = new KaguyaEmbedBuilder
             {
                 Title = actionTitle + $"| `Case: #{log.Server.TotalAdminActions:N0}`",
-                Description = $"Actioned: `[Name: {log.ActionRecipient} | ID: {log.ActionRecipient.Id}]`\n" +
-                              $"Actionee: `[Name: {log.Moderator} | ID: {log.Moderator.Id}]`\n" +
-                              $"Reason: `{reason}`",
+                Fields = new List<EmbedFieldBuilder>
+                {
+                    new EmbedFieldBuilder
+                    {
+                        Name = "Moderator/Admin",
+                        Value = $"`[Name: {log.Moderator} | ID: {log.Moderator.Id}]`"
+                    },
+                    new EmbedFieldBuilder
+                    {
+                        Name = "Action Recipient",
+                        Value = $"`[Name: {log.ActionRecipient} | ID: { log.ActionRecipient.Id}]`"
+                    },
+                    new EmbedFieldBuilder
+                    {
+                        Name = "Reason Given",
+                        Value = $"`{reason}`"
+                    }
+                },
                 ThumbnailUrl = embedUrl
             };
 

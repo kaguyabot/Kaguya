@@ -18,17 +18,24 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.Servers
+                bool exists = db.Servers.Any(x => x.Id == Id);
+
+                if (!exists)
+                {
+                    await db.InsertAsync(new Server
+                    {
+                        Id = Id
+                    });
+                }
+
+                return await (db.Servers
                     .LoadWith(x => x.MutedUsers)
                     .LoadWith(x => x.FilteredPhrases)
                     .LoadWith(x => x.WarnedUsers)
                     .LoadWith(x => x.WarnActions)
                     .LoadWith(x => x.MutedUsers)
                     .LoadWith(x => x.ServerExp)
-                    .Where(s => s.Id == Id).FirstAsync() ?? new Server
-                    {
-                        Id = Id
-                    };
+                    .Where(s => s.Id == Id).FirstAsync());
             }
         }
 
