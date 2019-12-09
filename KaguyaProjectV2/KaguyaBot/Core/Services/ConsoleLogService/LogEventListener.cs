@@ -60,9 +60,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             _client.UserVoiceStateUpdated += (SocketUser user, SocketVoiceState vs1, SocketVoiceState vs2) => ConsoleLogger.Log($"User Voice State Updated: [User: {user}]", LogLevel.TRACE);
 
             //Twitch stuff
-
-
-
         }
     }
 }
