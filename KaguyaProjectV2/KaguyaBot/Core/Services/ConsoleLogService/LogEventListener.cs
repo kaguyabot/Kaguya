@@ -41,6 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             _client.MessageUpdated += (Cacheable<IMessage, ulong> cache, SocketMessage msg, ISocketMessageChannel channel) =>
             {
                 if (cache.Value is null) return Task.CompletedTask;
+                if (cache.Value.Embeds != null && cache.Value.Content == msg.Content) return Task.CompletedTask;
                 ConsoleLogger.Log($"Message Updated [Author: {cache.Value.Author} | ID: {cache.Id}]", LogLevel.TRACE);
                 return Task.CompletedTask;
             };

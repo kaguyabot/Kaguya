@@ -52,6 +52,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         }
     }
 
+    internal class PremiumServerCommandAttribute : PreconditionAttribute
+    {
+        public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
+        {
+            var server = ServerQueries.GetOrCreateServer(context.Guild.Id);
+
+            return Task.FromResult(server.Result.IsPremium ? PreconditionResult.FromSuccess() :
+                PreconditionResult.FromError("Sorry, but this server must be of premium status in order to use this command."));
+        }
+    }
+
     internal class UtilityCommandAttribute : Attribute
     {
 
