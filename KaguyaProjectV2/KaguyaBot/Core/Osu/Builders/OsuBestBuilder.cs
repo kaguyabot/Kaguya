@@ -1,5 +1,4 @@
-﻿using Kaguya.Core.Osu;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Osu.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -68,13 +67,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
                 item.play_number = i;
 
                 //Calculate accuracy for osu!standard
-                item.accuracy = OsuMisc.OsuAccuracy(item.count50, item.count100, item.count300, item.countmiss);
+                item.accuracy = OsuExtension.OsuAccuracy(item.count50, item.count100, item.count300, item.countmiss);
 
                 //Get string for mods
-                item.string_mods = OsuMisc.ModeNames(item.enabled_mods);
+                item.string_mods = OsuExtension.ModeNames(item.enabled_mods);
 
                 //Fill in Emote of Grade
-                item.rankemote = OsuMisc.OsuGrade(item.rank);
+                item.rankemote = OsuExtension.OsuGrade(item.rank);
 
                 string mapBest = "";
                 using (WebClient client = new WebClient())

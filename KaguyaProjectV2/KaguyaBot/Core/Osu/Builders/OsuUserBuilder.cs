@@ -1,5 +1,4 @@
-﻿using Kaguya.Core.Osu;
-using KaguyaProjectV2.KaguyaBot.Core.Osu.Models;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Osu.Models;
 using System;
 using System.Linq;
 using System.Text;

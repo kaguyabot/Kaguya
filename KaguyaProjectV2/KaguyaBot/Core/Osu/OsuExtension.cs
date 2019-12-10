@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Kaguya.Core.Osu
+namespace KaguyaProjectV2.KaguyaBot.Core.Osu
 {
     public enum OsuRequest
     {
@@ -10,19 +12,15 @@ namespace Kaguya.Core.Osu
     }
 
 
-    public static class OsuMisc
+    public static class OsuExtension
     {
         public static string ModeNames(int modnumber)
         {
             string modString;
             if (modnumber > 0)
-            {
                 modString = "+";
-            }
             else
-            {
                 modString = "";
-            }
 
             if (isBitSet(modnumber, 0))
                 modString += "NF";
@@ -77,7 +75,7 @@ namespace Kaguya.Core.Osu
                 case "D":
                     return "<:D_:553119338035675138>";
                 case "F":
-                    return "<:F_:557297028263051288>"; 
+                    return "<:F_:557297028263051288>";
             }
             return "";
         }
