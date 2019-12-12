@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
     public class Twitch : InteractiveBase<ShardedCommandContext>
     {
         [UtilityCommand]
-        [Command("addtwitch")]
+        [Command("AddTwitch")]
         [Alias("at")]
         [Summary("Takes in a Twitch channel name, Discord text channel, and a true/false statement to enable " +
                  "logging livestream notifications for a Twitch channel. The true/false at the end of the command " +

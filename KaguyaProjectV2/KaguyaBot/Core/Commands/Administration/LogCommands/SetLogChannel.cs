@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
     public class SetLogChannel : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("setlogchannel")]
+        [Command("SetLogChannel")]
         [Alias("log")]
         [Summary("Enables a list of given logtypes and sends the log messages to a specific channel. All available logtypes may be displayed with the `logtypes` command.")]
         [Remarks("<logtype> <channel>\ndeletedmessages #my-log-channel\nkaguyaserverlog.bans.unbans #my-admin-log-channel\ntwitchnotifications #live-streams")]

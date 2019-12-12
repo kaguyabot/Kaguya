@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     public class Redeem : ModuleBase<ShardedCommandContext>
     {
         [HelpCommand]
-        [Command("redeem")]
+        [Command("Redeem")]
         [Summary("Allows a user to redeem a Kaguya Supporter key. Supporter Keys may be " +
                  "purchased [at this link](https://stageosu.selly.store/)")]
         [Remarks("<key>")]

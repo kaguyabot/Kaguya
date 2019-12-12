@@ -44,10 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
         public List<OsuBestModel> Execute(bool specific = false)
         {
             var bestArray = ExecuteJson(OsuRequest.BestPerformance);
-            if (specific)
-                bestArray = ProcessJson(bestArray, specific);
-            else
-                bestArray = ProcessJson(bestArray);
+            bestArray = specific ? ProcessJson(bestArray, specific) : ProcessJson(bestArray);
 
             return bestArray.ToList();
         }

@@ -23,7 +23,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             timer.Enabled = true;
             timer.Elapsed += async (sender, e) =>
             {
-                var usersToBeUpdated = new List<User>();
                 var users = await UserQueries.UsersWhoHaveAnActiveRatelimit();
 
                 foreach (var registeredUser in users)
@@ -41,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     {
                         registeredUser.LastRatelimited = DateTime.Now.ToOADate();
                         registeredUser.RateLimitWarnings++;
-                        if (registeredUser.RateLimitWarnings > 7)
+                        if (registeredUser.RateLimitWarnings > 7 && registeredUser.ActiveRateLimit > 0)
                         {
                             var _user = ConfigProperties.client.GetUser(registeredUser.Id);
                             
@@ -55,6 +54,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                             await _user.SendMessageAsync(embed: _embed.Build());
 
                             registeredUser.BlacklistExpiration = DateTime.MaxValue.ToOADate();
+                            registeredUser.ActiveRateLimit = 0;
                             await UserQueries.UpdateUser(registeredUser);
 
                             await ConsoleLogger.Log($"User [Name: {_user.Username} | ID: {_user.Id} | Supporter: {registeredUser.IsSupporter}] " +
@@ -108,10 +108,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     if (registeredUser.ActiveRateLimit > 0)
                     {
                         registeredUser.ActiveRateLimit = 0;
-                        usersToBeUpdated.Add(registeredUser);
+                        await UserQueries.UpdateUser(registeredUser);
                     }
                 }
-                await UserQueries.UpdateUsers(usersToBeUpdated);
             };
 
             return Task.CompletedTask;

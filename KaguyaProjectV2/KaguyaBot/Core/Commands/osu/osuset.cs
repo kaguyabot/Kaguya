@@ -3,15 +3,20 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Osu.Builders;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 {
-    [Group("osuset")]
     public class OsuSet : ModuleBase<ShardedCommandContext>
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
-        [Command()]
+        [OsuCommand]
+        [Command("osuSet")]
+        [Summary("Allows a user to store their osu! username or ID in their Kaguya account. " +
+                 "This way, users may use the other osu! commands without having to specify a " +
+                 "player, assuming they want information about themselves.")]
+        [Remarks("<username or ID>\nSomeUser\nSome user with spaces")]
         public async Task OsuSetCommand([Remainder]string username)
         {
             var playerObject = new OsuUserBuilder(username).Execute();

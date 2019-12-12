@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Summary("Returns the help command for a specific command if specified. If no command is specified, " +
             "a list of commands, as well as their aliases, will be returned.")]
         [Remarks("\n<command>")]
-        public async Task HelpCommand(string cmd)
+        public async Task HelpCommand([Remainder]string cmd)
         {
             Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
             CommandInfo cmdInfo = await FindCommandInfo(cmd.ToLower(), server);

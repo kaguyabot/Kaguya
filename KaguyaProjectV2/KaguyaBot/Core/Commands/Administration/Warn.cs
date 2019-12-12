@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class Warn : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("warn")]
+        [Command("Warn")]
         [Alias("w")]
         [Summary("Adds a warning to a user. If the server has a preconfigured warning-punishment scheme " +
                  "(via the `warnpunishments` command), the user will be actioned accordingly. Upon receiving " +
