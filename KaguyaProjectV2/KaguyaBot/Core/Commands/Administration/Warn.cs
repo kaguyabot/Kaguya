@@ -31,7 +31,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task AddWarn(IGuildUser user, [Remainder] string reason = null)
         {
             Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
-            server.TotalAdminActions++;
 
             if (reason == null)
                 reason = "No reason specified.";

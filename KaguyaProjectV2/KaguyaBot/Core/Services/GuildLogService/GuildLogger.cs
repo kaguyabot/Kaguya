@@ -161,6 +161,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             if (server.LogDeletedMessages == 0)
                 return;
 
+            if (server.IsCurrentlyPurgingMessages)
+                return;
+
             IMessage message = arg1.Value;
             if (message is null)
                 return;

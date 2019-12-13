@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using TwitchLib.Client;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
@@ -31,11 +33,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             _client.JoinedGuild += (SocketGuild guild) => ConsoleLogger.Log($"Joined Guild [Name: {guild.Name} | ID: {guild.Id}]", LogLevel.INFO);
             _client.LeftGuild += (SocketGuild guild) => ConsoleLogger.Log($"Left Guild [Name: {guild.Name} | ID: {guild.Id}]", LogLevel.INFO);
 
-            _client.MessageDeleted += (Cacheable<IMessage, ulong> cache, ISocketMessageChannel channel) =>
+            _client.MessageDeleted += async (Cacheable<IMessage, ulong> cache, ISocketMessageChannel channel) =>
             {
-                if (cache.Value is null) return Task.CompletedTask;
-                ConsoleLogger.Log($"Message Deleted [Author: {cache.Value.Author} | ID: {cache.Id}]", LogLevel.TRACE);
-                return Task.CompletedTask;
+                if (cache.Value is null) return;
+                await ConsoleLogger.Log($"Message Deleted [Author: {cache.Value.Author} | ID: {cache.Id}]", LogLevel.TRACE);
             };
 
             _client.MessageUpdated += (Cacheable<IMessage, ulong> cache, SocketMessage msg, ISocketMessageChannel channel) =>

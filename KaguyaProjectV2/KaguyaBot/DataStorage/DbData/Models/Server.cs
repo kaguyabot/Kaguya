@@ -56,6 +56,16 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public bool IsPremium { get; set; }
         [Column(Name = "AutoWarnOnBlacklistedPhrase"), NotNull]
         public bool AutoWarnOnBlacklistedPhrase { get; set; } = false;
+
+        /// <summary>
+        /// A boolean that determines whether the server is currently purging messages.
+        /// We log this so that we don't bombard log channels with messages whenever they are bulk
+        /// cleared. Instead, we use this boolean to determine whether to skip the 'Deleted Message'
+        /// log event. We log bulk-deletion of messages by checking the audit log instead. This
+        /// value is not in the database.
+        /// </summary>
+        [Column(Name = "IsCurrentlyPurgingMessages"), NotNull]
+        public bool IsCurrentlyPurgingMessages { get; set; } = false; //Not in database.
         /// <summary>
         /// FK_KaguyaServer_MutedUsers_BackReference
         /// </summary>

@@ -40,8 +40,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
                         if (server.IsPremium)
                         {
-                            server.TotalAdminActions++;
-
                             await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                             {
                                 Server = server,

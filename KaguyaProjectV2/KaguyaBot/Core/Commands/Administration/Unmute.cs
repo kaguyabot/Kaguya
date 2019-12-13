@@ -33,7 +33,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             if (server.IsPremium)
             {
-                server.TotalAdminActions++;
                 await ServerQueries.UpdateServer(server);
 
                 await PremiumModerationLog.SendModerationLog(new PremiumModerationLog

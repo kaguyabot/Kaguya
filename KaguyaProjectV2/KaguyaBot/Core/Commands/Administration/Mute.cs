@@ -103,8 +103,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                     });
                                 }
 
-                                server.TotalAdminActions++;
-                                await ServerQueries.UpdateServer(server);
                                 await ServerQueries.ReplaceMutedUser(muteObject);
 
                                 await c.Channel.SendMessageAsync(embed: replacementEmbed.Build());
@@ -125,8 +123,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                     Description = $"Alright, I've extended their mute! {muteString}"
                                 };
 
-                                server.TotalAdminActions++;
-                                await ServerQueries.UpdateServer(server);
                                 await ServerQueries.ReplaceMutedUser(extendedMuteObject);
                                 await SendModLog(server, new PremiumModerationLog
                                 {
@@ -152,8 +148,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         return;
                     }
                 }
-                server.TotalAdminActions++;
-                await ServerQueries.UpdateServer(server);
                 await ServerQueries.AddMutedUser(muteObject);
             }
 

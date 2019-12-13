@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -18,16 +19,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     {
         public Server Server { get; set; }
         public SocketGuildUser Moderator { get; set; }
+
         public SocketGuildUser ActionRecipient { get; set; }
         public PremiumModActionHandler Action { get; set; }
         public string Reason { get; set; }
 
         public static async Task SendModerationLog(PremiumModerationLog log)
         {
+            var logChannel = ConfigProperties.client.GetGuild(log.Server.Id).GetTextChannel(log.Server.ModLog);
             string actionTitle = "User ";
             string embedUrl = "";
             string reason = log.Reason ?? "None specified";
-            
+
             switch (log.Action)
             {
                 case PremiumModActionHandler.SHADOWBAN:
@@ -53,6 +56,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 case PremiumModActionHandler.UNWARN:
                     actionTitle += "Unwarned ";
                     embedUrl = "https://i.imgur.com/QyNpRuW.png";
+                    break;
+                case PremiumModActionHandler.MESSAGEPURGE:
+                    actionTitle = "Messages Bulk-Deleted ";
+                    embedUrl = "https://i.imgur.com/2uqH08b.png";
                     break;
             }
 
@@ -80,10 +87,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 ThumbnailUrl = embedUrl
             };
 
-            await ConfigProperties.client.GetGuild(log.Server.Id).GetTextChannel(log.Server.ModLog)
-                .SendMessageAsync(embed: embed.Build());
+            log.Server.TotalAdminActions++;
+            await ServerQueries.UpdateServer(log.Server);
 
-            await ConsoleLogger.Log($"Premium moderation log sent for a server.", LogLevel.DEBUG);
+            await logChannel.SendMessageAsync(embed: embed.Build());
+            await ConsoleLogger.Log($"Premium moderation log sent for server {log.Server.Id}.", LogLevel.DEBUG);
         }
     }
 
@@ -97,6 +105,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         WARN,
         UNSHADOWBAN,
         UNMUTE,
-        UNWARN
+        UNWARN,
+        MESSAGEPURGE
     }
 }

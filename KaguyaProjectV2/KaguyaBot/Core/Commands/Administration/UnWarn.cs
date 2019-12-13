@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -18,14 +20,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [AdminCommand]
         [Command("Unwarn")]
         [Alias("uw")]
-        [Summary("Removes a warning from a user. A list of the user's 4 most recent warnings (9 if server is premium) will be displayed in chat. The " +
-                 "moderator executing this command may then choose which warnings to remove by clicking on the supplied reactions.")]
-        [Remarks("<user>")]
+        [Summary("Removes a warning from a user. A list of the user's 4 most recent warnings (9 if server is premium) " +
+                 "will be displayed in chat. The moderator executing this command may then choose which warnings to " +
+                 "remove by clicking on the supplied reactions. A reason may be provided, and if the server is " +
+                 "of premium status, it will be logged.")]
+        [Remarks("<user> [reason]")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task UnWarnUser(IGuildUser user)
+        public async Task UnWarnUser(IGuildUser user, string reason = null)
         {
             var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
             var warnings = await ServerQueries.GetWarnedUser(Context.Guild.Id, user.Id);
@@ -71,10 +75,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 }
             };
 
-            await ReactionReply(warnings, embed.Build(), warnCount);
+            await ReactionReply(user, warnings, embed.Build(), warnCount, server, reason);
         }
 
-        private async Task ReactionReply(List<WarnedUser> warnings, Embed embed, int warnCount)
+        private async Task ReactionReply(IGuildUser user, List<WarnedUser> warnings, Embed embed, 
+            int warnCount, Server server, string reason)
         {
             var emojis = new Emoji[] { new Emoji("1⃣"), new Emoji("2⃣"), new Emoji("3⃣"),
                 new Emoji("4⃣"),  new Emoji("5⃣"),  new Emoji("6⃣"),  new Emoji("7⃣"),
@@ -92,6 +97,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     await ServerQueries.RemoveWarnedUser(warnings.ElementAt(j1));
                     await c.Channel.SendMessageAsync($"{r.User.Value.Mention} `Successfully removed warning #{j1 + 1}`");
+
+                    if (server.IsPremium && server.ModLog != 0)
+                    {
+                        var logChannel = ConfigProperties.client.GetChannel(server.ModLog) as SocketTextChannel;
+                        await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
+                        {
+                            Server = server,
+                            Moderator = Context.User as SocketGuildUser,
+                            ActionRecipient = user as SocketGuildUser,
+                            Action = PremiumModActionHandler.UNWARN,
+                            Reason = reason
+                        });
+                    }
                 }));
             }
 
