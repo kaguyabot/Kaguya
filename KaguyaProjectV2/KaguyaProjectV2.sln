@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KaguyaProjectV2", "KaguyaProjectV2.csproj", "{3C9C79E6-C5F3-4986-A6DA-F15025E5CAB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaguyaWebBlazor", "..\KaguyaWebBlazor\KaguyaWebBlazor.csproj", "{11F0A0B3-A0B8-481A-A118-7FC4B4677013}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KaguyaWeb", "..\KaguyaWeb\KaguyaWeb.csproj", "{76A1C946-BD09-46D7-9BF8-0BA33BEBD0A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{3C9C79E6-C5F3-4986-A6DA-F15025E5CAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C9C79E6-C5F3-4986-A6DA-F15025E5CAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C9C79E6-C5F3-4986-A6DA-F15025E5CAB5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11F0A0B3-A0B8-481A-A118-7FC4B4677013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11F0A0B3-A0B8-481A-A118-7FC4B4677013}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11F0A0B3-A0B8-481A-A118-7FC4B4677013}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11F0A0B3-A0B8-481A-A118-7FC4B4677013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76A1C946-BD09-46D7-9BF8-0BA33BEBD0A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76A1C946-BD09-46D7-9BF8-0BA33BEBD0A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76A1C946-BD09-46D7-9BF8-0BA33BEBD0A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76A1C946-BD09-46D7-9BF8-0BA33BEBD0A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
