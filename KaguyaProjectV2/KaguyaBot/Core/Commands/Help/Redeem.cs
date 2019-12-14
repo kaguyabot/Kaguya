@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Humanizer;
+using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
@@ -24,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         {
             var user = await UserQueries.GetOrCreateUser(Context.User.Id);
             var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
-            var existingKeys = await UtilityQueries.GetAllActiveKeys();
+            var existingKeys = await UtilityQueries.GetAllKeys();
 
             var key = existingKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0);
 
@@ -62,8 +63,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully redeemed `" +
-                              $"{RegexTimeParser.FormattedTimeString(ts.Seconds, ts.Minutes, ts.Hours, ts.Days)}` " +
-                              $"of Kaguya Supporter!\n" +
+                              $"{ts.Humanize(minUnit: TimeUnit.Day, maxUnit: TimeUnit.Day)}` of Kaguya Supporter!\n" +
                               $"Your tag will expire on: `{DateTime.FromOADate(user.SupporterExpirationDate).ToLongDateString()}`"
             };
             embed.SetColor(EmbedColor.GOLD);
@@ -78,12 +78,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var fields = new List<EmbedFieldBuilder>
             {
                 new EmbedFieldBuilder {IsInline = false, Name = "Key Properties", 
-                    Value = $"Key: `{key.Key}`\nCreated by: `{owner}`\nExpires `{DateTime.FromOADate(key.Expiration).Humanize(false)}`"}
+                    Value = $"Key: `{key.Key}`\nCreated by: `{owner}`\nExpires " +
+                            $"`{DateTime.FromOADate(key.Expiration).Humanize(false)}`"}
             };
 
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"User `[Name: {context.User}` has just redeemed a " +
+                Description = $"User `{context.User}` has just redeemed a " +
                               $"Kaguya Supporter key!",
                 Fields = fields
             };

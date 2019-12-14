@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                  "keys for the length of time given (in days). If no amount is " +
                  "specified, this command generates 1 key. If no length of time is given, " +
                  "we will generate a 30 day key.")]
-        [Remarks(" => One 30-day key\n<amount> <time in days>\n90 5 => Generates five 90-day keys")]
+        [Remarks(" => One 30-day key\n<amount> <time in days>\n5 90d => Generates five 90-day keys")]
         public async Task GenerateKeys(int amount, string duration)
         {
             if(amount < 1)
@@ -60,7 +60,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
                 foreach (var key in keys)
                 {
-                    writer.Write($"{key.Key} - {key.LengthInDays} days\n");
+                    writer.Write($"{key.Key}\n");
                 }
 
                 await writer.FlushAsync();

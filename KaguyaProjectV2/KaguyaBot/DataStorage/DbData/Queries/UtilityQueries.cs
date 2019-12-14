@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using LinqToDB.Data;
 
 // ReSharper disable UseAwaitUsing
 
@@ -36,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertAsync(keys);
+                db.BulkCopy(keys);
             }
         }
 
@@ -65,6 +66,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 return await (from s in db.SupporterKeys
                     where s.Expiration > DateTime.Now.ToOADate() && s.UserId != 0
                     select s).ToListAsync();
+            }
+        }
+
+        public static async Task<List<SupporterKey>> GetAllKeys()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.GetTable<SupporterKey>().ToListAsync();
             }
         }
 
