@@ -12,6 +12,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using Discord.Net;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 
@@ -63,7 +64,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     await EnableTimers(AllShardsLoggedIn(client, config));
                     await Task.Delay(-1);
                 }
-                catch (Discord.Net.HttpException e)
+                catch (HttpException e)
                 {
                     await ConsoleLogger.Log($"Error when logging into Discord:\n" +
                                             $"-Have you configured your config file?\n" +

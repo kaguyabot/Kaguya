@@ -1,0 +1,15 @@
+{
+  "Token": null,
+  "BotOwnerId": 0,
+  "LogLevelNumber": 1,
+  "DefaultPrefix": "$",
+  "OsuApiKey": null,
+  "TopGGApiKey": null,
+  "TopGGAuthorizationPassword": null,
+  "MySQL_Username": null,
+  "MySQL_Password": null,
+  "MySQL_Server": null,
+  "MySQL_Database": null,
+  "TwitchClientId": null,
+  "TwitchAuthToken": null
+}

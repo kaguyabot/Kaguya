@@ -1,0 +1,16 @@
+11:09:33 AM [ERROR]: Failed to establish database connection. Have you properly configured your config file? Exception: Object reference not set to an instance of an object.
+11:09:33 AM [ERROR]: Error when logging into Discord:
+-Have you configured your config file?
+-Is your token correct? Exception: The server responded with error 401: 401: Unauthorized
+11:10:17 AM [ERROR]: Failed to establish database connection. Have you properly configured your config file? Exception: Object reference not set to an instance of an object.
+11:10:18 AM [ERROR]: Error when logging into Discord:
+-Have you configured your config file?
+-Is your token correct? Exception: The server responded with error 401: 401: Unauthorized
+11:10:32 AM [ERROR]: Failed to establish database connection. Have you properly configured your config file? Exception: Object reference not set to an instance of an object.
+11:10:33 AM [ERROR]: Error when logging into Discord:
+-Have you configured your config file?
+-Is your token correct? Exception: The server responded with error 401: 401: Unauthorized
+11:14:04 AM [ERROR]: Failed to establish database connection. Have you properly configured your config file? Exception: Object reference not set to an instance of an object.
+11:14:04 AM [ERROR]: Error when logging into Discord:
+-Have you configured your config file?
+-Is your token correct? Exception: The server responded with error 401: 401: Unauthorized

@@ -96,11 +96,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 callbacks.Add((emojis[j], async (c, r) =>
                 {
                     await ServerQueries.RemoveWarnedUser(warnings.ElementAt(j1));
-                    await c.Channel.SendMessageAsync($"{r.User.Value.Mention} `Successfully removed warning #{j1 + 1}`");
+                    await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
+                                                     $"`Successfully removed warning #{j1 + 1}`");
 
                     if (server.IsPremium && server.ModLog != 0)
                     {
-                        var logChannel = ConfigProperties.client.GetChannel(server.ModLog) as SocketTextChannel;
+                        var logChannel = 
+                            ConfigProperties.client.GetChannel(server.ModLog) as SocketTextChannel;
+
                         await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                         {
                             Server = server,
