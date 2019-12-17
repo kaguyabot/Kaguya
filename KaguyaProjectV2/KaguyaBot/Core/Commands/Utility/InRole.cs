@@ -98,7 +98,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                     i1 = matchCount - 1;
 
                 var role = matchingRoles.ElementAt(i1);
-
+                
                 var rolePerms = matchingRoles[i].Permissions.ToList();
                 embed.Fields.Add(new EmbedFieldBuilder
                 {
@@ -138,7 +138,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         private async Task<List<PaginatedMessage.Page>> Pages(SocketGuild guild, IRole role)
         {
             var usersWithRole = guild.Users.Where(x => x.Roles.Contains(role));
-            var usersList = usersWithRole.OrderByDescending(x => x.Username).ToList();
+            var usersList = usersWithRole.OrderBy(x => x.Username).ToList();
             var totalPageCount = (usersList.Count + 24) / 25;
 
             var pages = new List<PaginatedMessage.Page>();
@@ -155,7 +155,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
                 var currentPage = pages.ElementAt(pageCount - 1);
 
-                currentPage.Description += $"{usersList.ElementAt(i)}\n";
+                currentPage.Title = $"All users with role {role.Name}";
+                currentPage.Description += $"`{usersList.ElementAt(i)} | {usersList.ElementAt(i).Id}`\n";
+
+                if (usersList.Count == 0)
+                    currentPage.Description = "`No users have the role.`";
             }
 
             return pages;

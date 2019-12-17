@@ -18,8 +18,8 @@
           "OppaiSharp": "3.2.0",
           "SixLabors.ImageSharp": "1.0.0-beta0007",
           "SixLabors.ImageSharp.Drawing": "1.0.0-beta0007",
-          "TwitchLib": "3.0.1",
-          "linq2db": "2.9.3"
+          "TwitchLib": "3.1.0",
+          "linq2db": "2.9.4"
         },
         "runtime": {
           "KaguyaProjectV2.dll": {}
@@ -613,7 +613,7 @@
           }
         }
       },
-      "linq2db/2.9.3": {
+      "linq2db/2.9.4": {
         "dependencies": {
           "System.ComponentModel.Annotations": "4.5.0",
           "System.Data.DataSetExtensions": "4.5.0",
@@ -621,8 +621,8 @@
         },
         "runtime": {
           "lib/netcoreapp2.0/linq2db.dll": {
-            "assemblyVersion": "2.9.3.0",
-            "fileVersion": "2.9.3.0"
+            "assemblyVersion": "2.9.4.0",
+            "fileVersion": "2.9.4.0"
           }
         }
       },
@@ -646,47 +646,11 @@
           }
         }
       },
-      "Microsoft.Extensions.Logging/2.0.0": {
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "2.1.1",
-          "Microsoft.Extensions.Options": "2.0.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.Logging.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.0.17205"
-          }
-        }
-      },
-      "Microsoft.Extensions.Logging.Abstractions/2.1.1": {
+      "Microsoft.Extensions.Logging.Abstractions/2.2.0": {
         "runtime": {
           "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "assemblyVersion": "2.1.1.0",
-            "fileVersion": "2.1.1.18157"
-          }
-        }
-      },
-      "Microsoft.Extensions.Options/2.0.0": {
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.0.0",
-          "Microsoft.Extensions.Primitives": "2.0.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.Options.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.0.17205"
-          }
-        }
-      },
-      "Microsoft.Extensions.Primitives/2.0.0": {
-        "dependencies": {
-          "System.Runtime.CompilerServices.Unsafe": "4.5.1"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.0.17205"
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18315"
           }
         }
       },
@@ -874,39 +838,6 @@
             "rid": "win-x86",
             "assetType": "native",
             "fileVersion": "4.6.25512.1"
-          }
-        }
-      },
-      "Serilog/2.3.0": {
-        "dependencies": {
-          "Microsoft.CSharp": "4.5.0",
-          "System.Collections": "4.3.0",
-          "System.Dynamic.Runtime": "4.0.11",
-          "System.Globalization": "4.3.0",
-          "System.Linq": "4.3.0",
-          "System.Reflection": "4.3.0",
-          "System.Reflection.Extensions": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Text.RegularExpressions": "4.3.0",
-          "System.Threading": "4.3.0"
-        },
-        "runtime": {
-          "lib/netstandard1.3/Serilog.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.3.0.0"
-          }
-        }
-      },
-      "Serilog.Extensions.Logging/2.0.2": {
-        "dependencies": {
-          "Microsoft.Extensions.Logging": "2.0.0",
-          "Serilog": "2.3.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Serilog.Extensions.Logging.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.2.0"
           }
         }
       },
@@ -1152,25 +1083,6 @@
           "Microsoft.NETCore.Platforms": "2.0.0",
           "Microsoft.NETCore.Targets": "1.1.0",
           "System.Runtime": "4.3.0"
-        }
-      },
-      "System.Dynamic.Runtime/4.0.11": {
-        "dependencies": {
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.Linq": "4.3.0",
-          "System.Linq.Expressions": "4.3.0",
-          "System.ObjectModel": "4.3.0",
-          "System.Reflection": "4.3.0",
-          "System.Reflection.Emit": "4.3.0",
-          "System.Reflection.Emit.ILGeneration": "4.3.0",
-          "System.Reflection.Primitives": "4.3.0",
-          "System.Reflection.TypeExtensions": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Threading": "4.3.0"
         }
       },
       "System.Globalization/4.3.0": {
@@ -1797,181 +1709,180 @@
           }
         }
       },
-      "TwitchLib/3.0.1": {
+      "TwitchLib/3.1.0": {
         "dependencies": {
-          "TwitchLib.Api": "3.0.0",
-          "TwitchLib.Client": "3.0.3",
-          "TwitchLib.PubSub": "3.0.2"
+          "TwitchLib.Api": "3.1.2",
+          "TwitchLib.Client": "3.1.4",
+          "TwitchLib.PubSub": "3.1.3"
         }
       },
-      "TwitchLib.Api/3.0.0": {
+      "TwitchLib.Api/3.1.2": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
-          "Serilog.Extensions.Logging": "2.0.2",
           "System.Net.Http": "4.3.3",
-          "TwitchLib.Api.Core": "1.1.0",
-          "TwitchLib.Api.Helix": "1.1.0",
-          "TwitchLib.Api.V5": "1.1.0"
+          "TwitchLib.Api.Core": "3.1.2",
+          "TwitchLib.Api.Helix": "3.1.2",
+          "TwitchLib.Api.V5": "3.1.2"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Api.dll": {
-            "assemblyVersion": "3.0.0.0",
-            "fileVersion": "3.0.0.0"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
-      "TwitchLib.Api.Core/1.1.0": {
+      "TwitchLib.Api.Core/3.1.2": {
         "dependencies": {
           "Microsoft.CSharp": "4.5.0",
-          "Microsoft.Extensions.Logging.Abstractions": "2.1.1",
-          "TwitchLib.Api.Core.Enums": "1.1.0",
-          "TwitchLib.Api.Core.Interfaces": "1.1.0",
-          "TwitchLib.Api.Core.Models": "1.1.0"
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0",
+          "TwitchLib.Api.Core.Enums": "3.1.2",
+          "TwitchLib.Api.Core.Interfaces": "3.1.2",
+          "TwitchLib.Api.Core.Models": "3.1.2"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Api.Core.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
-      "TwitchLib.Api.Core.Enums/1.1.0": {
+      "TwitchLib.Api.Core.Enums/3.1.2": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Api.Core.Enums.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
-      "TwitchLib.Api.Core.Interfaces/1.1.0": {
+      "TwitchLib.Api.Core.Interfaces/3.1.2": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
-          "TwitchLib.Api.Core.Enums": "1.1.0"
+          "TwitchLib.Api.Core.Enums": "3.1.2"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Api.Core.Interfaces.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
-      "TwitchLib.Api.Core.Models/1.1.0": {
+      "TwitchLib.Api.Core.Models/3.1.2": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
-          "TwitchLib.Api.Core.Enums": "1.1.0",
-          "TwitchLib.Api.Core.Interfaces": "1.1.0"
+          "TwitchLib.Api.Core.Enums": "3.1.2",
+          "TwitchLib.Api.Core.Interfaces": "3.1.2"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Api.Core.Models.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
-      "TwitchLib.Api.Helix/1.1.0": {
+      "TwitchLib.Api.Helix/3.1.2": {
         "dependencies": {
-          "TwitchLib.Api.Core": "1.1.0",
-          "TwitchLib.Api.Helix.Models": "1.1.0"
+          "TwitchLib.Api.Core": "3.1.2",
+          "TwitchLib.Api.Helix.Models": "3.1.2"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Api.Helix.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
-      "TwitchLib.Api.Helix.Models/1.1.0": {
+      "TwitchLib.Api.Helix.Models/3.1.2": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
-          "TwitchLib.Api.Core.Enums": "1.1.0",
-          "TwitchLib.Api.Core.Interfaces": "1.1.0"
+          "TwitchLib.Api.Core.Enums": "3.1.2",
+          "TwitchLib.Api.Core.Interfaces": "3.1.2"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Api.Helix.Models.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.0.0.0"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
-      "TwitchLib.Api.V5/1.1.0": {
+      "TwitchLib.Api.V5/3.1.2": {
         "dependencies": {
-          "TwitchLib.Api.Core": "1.1.0",
-          "TwitchLib.Api.V5.Models": "1.1.0"
+          "TwitchLib.Api.Core": "3.1.2",
+          "TwitchLib.Api.V5.Models": "3.1.2"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Api.V5.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
-      "TwitchLib.Api.V5.Models/1.1.0": {
+      "TwitchLib.Api.V5.Models/3.1.2": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
-          "TwitchLib.Api.Core.Enums": "1.1.0",
-          "TwitchLib.Api.Core.Interfaces": "1.1.0"
+          "TwitchLib.Api.Core.Enums": "3.1.2",
+          "TwitchLib.Api.Core.Interfaces": "3.1.2"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Api.V5.Models.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
-      "TwitchLib.Client/3.0.3": {
+      "TwitchLib.Client/3.1.4": {
         "dependencies": {
-          "Microsoft.Extensions.Logging.Abstractions": "2.1.1",
-          "TwitchLib.Client.Enums": "1.1.0",
-          "TwitchLib.Client.Models": "1.1.0",
-          "TwitchLib.Communication": "1.0.0"
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0",
+          "TwitchLib.Client.Enums": "3.1.4",
+          "TwitchLib.Client.Models": "3.1.4",
+          "TwitchLib.Communication": "1.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Client.dll": {
-            "assemblyVersion": "3.0.3.0",
-            "fileVersion": "3.0.3.0"
+            "assemblyVersion": "3.1.4.0",
+            "fileVersion": "3.1.4.0"
           }
         }
       },
-      "TwitchLib.Client.Enums/1.1.0": {
+      "TwitchLib.Client.Enums/3.1.4": {
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Client.Enums.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "3.1.4.0",
+            "fileVersion": "3.1.4.0"
           }
         }
       },
-      "TwitchLib.Client.Models/1.1.0": {
+      "TwitchLib.Client.Models/3.1.4": {
         "dependencies": {
-          "TwitchLib.Client.Enums": "1.1.0"
+          "TwitchLib.Client.Enums": "3.1.4"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Client.Models.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "3.1.4.0",
+            "fileVersion": "3.1.4.0"
           }
         }
       },
-      "TwitchLib.Communication/1.0.0": {
+      "TwitchLib.Communication/1.0.3": {
         "runtime": {
           "lib/netstandard2.0/TwitchLib.Communication.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
+            "assemblyVersion": "1.0.3.0",
+            "fileVersion": "1.0.3.0"
           }
         }
       },
-      "TwitchLib.PubSub/3.0.2": {
+      "TwitchLib.PubSub/3.1.3": {
         "dependencies": {
-          "Microsoft.Extensions.Logging.Abstractions": "2.1.1",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0",
           "Newtonsoft.Json": "12.0.3",
-          "TwitchLib.Communication": "1.0.0"
+          "TwitchLib.Communication": "1.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/TwitchLib.PubSub.dll": {
-            "assemblyVersion": "3.0.2.0",
-            "fileVersion": "3.0.2.0"
+            "assemblyVersion": "3.1.3.0",
+            "fileVersion": "3.1.3.0"
           }
         }
       }
@@ -2361,12 +2272,12 @@
       "path": "humanizer.core.zh-hant/2.7.9",
       "hashPath": "humanizer.core.zh-hant.2.7.9.nupkg.sha512"
     },
-    "linq2db/2.9.3": {
+    "linq2db/2.9.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-v5BGptYDDEAE4S3GJmxFGvtEx3Yq4Hp8QyRP/nlSnmvN3pG72tih3y3MdxK+VKTykEUoyctra+DxlA/EVTuCXw==",
-      "path": "linq2db/2.9.3",
-      "hashPath": "linq2db.2.9.3.nupkg.sha512"
+      "sha512": "sha512-tQanojtjC9WGAkfOb0vCz6634td+fPTznMw3fVFY3IlGT/iFrqivo3jELY9gZ0K8e6taAYORP8IAlqLMo9kirQ==",
+      "path": "linq2db/2.9.4",
+      "hashPath": "linq2db.2.9.4.nupkg.sha512"
     },
     "Microsoft.CSharp/4.5.0": {
       "type": "package",
@@ -2389,33 +2300,12 @@
       "path": "microsoft.extensions.dependencyinjection.abstractions/2.0.0",
       "hashPath": "microsoft.extensions.dependencyinjection.abstractions.2.0.0.nupkg.sha512"
     },
-    "Microsoft.Extensions.Logging/2.0.0": {
+    "Microsoft.Extensions.Logging.Abstractions/2.2.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-VP10syWV/vxYYMKgZ2eDESmUsz3gPxvBn5J6tkVN8lI4M+dF43RN8fWsEPbcAneDmZrHl3Pv23z05nmyGkJlpg==",
-      "path": "microsoft.extensions.logging/2.0.0",
-      "hashPath": "microsoft.extensions.logging.2.0.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Logging.Abstractions/2.1.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-XRzK7ZF+O6FzdfWrlFTi1Rgj2080ZDsd46vzOjadHUB0Cz5kOvDG8vI7caa5YFrsHQpcfn0DxtjS4E46N4FZsA==",
-      "path": "microsoft.extensions.logging.abstractions/2.1.1",
-      "hashPath": "microsoft.extensions.logging.abstractions.2.1.1.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Options/2.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-sAKBgjl2gWsECBLLR9K54T7/uZaP2n9GhMYHay/oOLfvpvX0+iNAlQ2NJgVE352C9Fs5CDV3VbNTK8T2aNKQFA==",
-      "path": "microsoft.extensions.options/2.0.0",
-      "hashPath": "microsoft.extensions.options.2.0.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Primitives/2.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-ukg53qNlqTrK38WA30b5qhw0GD7y3jdI9PHHASjdKyTcBHTevFM2o23tyk3pWCgAV27Bbkm+CPQ2zUe1ZOuYSA==",
-      "path": "microsoft.extensions.primitives/2.0.0",
-      "hashPath": "microsoft.extensions.primitives.2.0.0.nupkg.sha512"
+      "sha512": "sha512-9/ERS0/w8MRdWYC9Nv230+2DIYbCv+jr5JwlVyFXrNRerKN9mHShlSfCUjq2S9Wa8ORsztbe5Txz2CuA8pr2bA==",
+      "path": "microsoft.extensions.logging.abstractions/2.2.0",
+      "hashPath": "microsoft.extensions.logging.abstractions.2.2.0.nupkg.sha512"
     },
     "Microsoft.Net.Compilers.Toolset/3.1.0": {
       "type": "package",
@@ -2627,20 +2517,6 @@
       "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
       "hashPath": "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512"
     },
-    "Serilog/2.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-JJMEqTUGe/bA4OEMefGd8W6si9oStSa3CF47dIHzkRKJHqFWFOW8D2aZTOW6VIgNLY2hzruQXhvp2tX0NVkgsw==",
-      "path": "serilog/2.3.0",
-      "hashPath": "serilog.2.3.0.nupkg.sha512"
-    },
-    "Serilog.Extensions.Logging/2.0.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-PYAkzUn/VV16Es7U06BfEhNZEltnYWu0WFCM4d2lLY/dvlA7xMwFXBuGRxR0XvEBPoOxPorjhFLy9txwiMO6rg==",
-      "path": "serilog.extensions.logging/2.0.2",
-      "hashPath": "serilog.extensions.logging.2.0.2.nupkg.sha512"
-    },
     "SixLabors.Core/1.0.0-beta0008": {
       "type": "package",
       "serviceable": true,
@@ -2794,13 +2670,6 @@
       "sha512": "sha512-rswfv0f/Cqkh78rA5S8eN8Neocz234+emGCtTF3lxPY96F+mmmUen6tbn0glN6PMvlKQb9bPAY5e9u7fgPTkKw==",
       "path": "system.diagnostics.tracing/4.3.0",
       "hashPath": "system.diagnostics.tracing.4.3.0.nupkg.sha512"
-    },
-    "System.Dynamic.Runtime/4.0.11": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-db34f6LHYM0U0JpE+sOmjar27BnqTVkbLJhgfwMpTdgTigG/Hna3m2MYVwnFzGGKnEJk2UXFuoVTr8WUbU91/A==",
-      "path": "system.dynamic.runtime/4.0.11",
-      "hashPath": "system.dynamic.runtime.4.0.11.nupkg.sha512"
     },
     "System.Globalization/4.3.0": {
       "type": "package",
@@ -3208,110 +3077,110 @@
       "path": "system.xml.xpath.xmldocument/4.0.1",
       "hashPath": "system.xml.xpath.xmldocument.4.0.1.nupkg.sha512"
     },
-    "TwitchLib/3.0.1": {
+    "TwitchLib/3.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-0B5uJeBiiEwjAI4smxnYLJTQjW4I4GhB0Cx8F6D9c/3clENCgFMppLu0PRuRPe+TFzpjw9u3jJsREHBVqTVEFw==",
-      "path": "twitchlib/3.0.1",
-      "hashPath": "twitchlib.3.0.1.nupkg.sha512"
+      "sha512": "sha512-+fYCsAwDyf3EOqynSA2r485kaHU9EsQsH30DhBL4yAKrVmiPe3QrtnW4hdqvN9DE077iwyrOTzYbDfwkdWJN2Q==",
+      "path": "twitchlib/3.1.0",
+      "hashPath": "twitchlib.3.1.0.nupkg.sha512"
     },
-    "TwitchLib.Api/3.0.0": {
+    "TwitchLib.Api/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2DlnYAlIB/8pkuWNPutqZi6slWoWCsaqEsI0xbfD60muSPPAQ7o95AwlK8fPO8YJ2agyIOwL2OwKgXdz9Y0gCA==",
-      "path": "twitchlib.api/3.0.0",
-      "hashPath": "twitchlib.api.3.0.0.nupkg.sha512"
+      "sha512": "sha512-LNLwGY8pt0RN2NMdIuOIfBXK6zsUYrkasc3C62RVuqgupXScTKroZk4z1ZRUAgxWQgHKs9m8M6Hjd+EiYySyzA==",
+      "path": "twitchlib.api/3.1.2",
+      "hashPath": "twitchlib.api.3.1.2.nupkg.sha512"
     },
-    "TwitchLib.Api.Core/1.1.0": {
+    "TwitchLib.Api.Core/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2jV+BUaXWN1FG5NKKne6VEQBpBQvYC83N8HFVZ8t7QFXuAKRu2XvDm4HibNjgMe9tPzUS0/SSIrYK5elenPqkQ==",
-      "path": "twitchlib.api.core/1.1.0",
-      "hashPath": "twitchlib.api.core.1.1.0.nupkg.sha512"
+      "sha512": "sha512-K7cbT0JvZDHR2RiF2FaIWC3vgdwHNIS7s/T9g3AyXgCT4vfYPY5fez5tiq7lU72WLn+JkqPbAm2u8M4KucmnoA==",
+      "path": "twitchlib.api.core/3.1.2",
+      "hashPath": "twitchlib.api.core.3.1.2.nupkg.sha512"
     },
-    "TwitchLib.Api.Core.Enums/1.1.0": {
+    "TwitchLib.Api.Core.Enums/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-GACsW53JqssiWV0VBD5Tnv6sxzYnrOYUJUtxq26CftwKQx1m6J136I4cflPZwhOkDk/GvtmYgZUi6Jq+5MOjsA==",
-      "path": "twitchlib.api.core.enums/1.1.0",
-      "hashPath": "twitchlib.api.core.enums.1.1.0.nupkg.sha512"
+      "sha512": "sha512-pm0k6qk+woNbtqccSTGDQ9ZxPlPbDFIYjm3GM29wrs9XFlyURMgrAcHg0vDyH0wuF6hO/06YswFJuvaclBmIrw==",
+      "path": "twitchlib.api.core.enums/3.1.2",
+      "hashPath": "twitchlib.api.core.enums.3.1.2.nupkg.sha512"
     },
-    "TwitchLib.Api.Core.Interfaces/1.1.0": {
+    "TwitchLib.Api.Core.Interfaces/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-d5TkFkZZgV8lg9S7XmCigzT14SguuwmzFX0xYx+KuDpI4M5P24TsLtYlEjgxfwQajEwYAysnWDlYTCBdCMlMWg==",
-      "path": "twitchlib.api.core.interfaces/1.1.0",
-      "hashPath": "twitchlib.api.core.interfaces.1.1.0.nupkg.sha512"
+      "sha512": "sha512-bqyGUmCvIJTE4BKigJt4NMR53YGWhRs+PYTttie7BXyvdvdTRPbzt73rn5HzkX2yNENv5oeH3AQPoYWqL5u4/Q==",
+      "path": "twitchlib.api.core.interfaces/3.1.2",
+      "hashPath": "twitchlib.api.core.interfaces.3.1.2.nupkg.sha512"
     },
-    "TwitchLib.Api.Core.Models/1.1.0": {
+    "TwitchLib.Api.Core.Models/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-20u+i7iX1m5hfdWKLDF13bnoI77T21W2TPE6wySgN5dOvi/LU9LuQoC5V/1kQB4mKzS6YtEkfhMoIbgNj07/Ng==",
-      "path": "twitchlib.api.core.models/1.1.0",
-      "hashPath": "twitchlib.api.core.models.1.1.0.nupkg.sha512"
+      "sha512": "sha512-v1mD1s8wc3OA1Mf2m99uLojD1F9bkuWgMwQv0gsnt5mAVRSOXWf4JuwE9x7OcZLv+9TUrs0YX7RQR5xxfNSHmw==",
+      "path": "twitchlib.api.core.models/3.1.2",
+      "hashPath": "twitchlib.api.core.models.3.1.2.nupkg.sha512"
     },
-    "TwitchLib.Api.Helix/1.1.0": {
+    "TwitchLib.Api.Helix/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-iR5NKa4mTcfWhuNfvC+QvaTdojCQwM9ND6boZrAO7VFPKeafoc46rXDBj3nCVvmMFdG9QcIJaqKpAdvcGjv2qQ==",
-      "path": "twitchlib.api.helix/1.1.0",
-      "hashPath": "twitchlib.api.helix.1.1.0.nupkg.sha512"
+      "sha512": "sha512-yvWkY1TA0lO6+rSCS9DR2fdyIjVqv6UuxOFTgBwrJj20TLnNnn9uvCJYRJmnTKfeYpUJCUQiLJLrC0sImqRfug==",
+      "path": "twitchlib.api.helix/3.1.2",
+      "hashPath": "twitchlib.api.helix.3.1.2.nupkg.sha512"
     },
-    "TwitchLib.Api.Helix.Models/1.1.0": {
+    "TwitchLib.Api.Helix.Models/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-P0L0vnzPk0BJHHCIZBBQnsOlm4vxpIXUWUBwps2xR7ntzdp+ynFtl/OA/eSgELOSFLt6h73T6X4TrXmbJgE/Ow==",
-      "path": "twitchlib.api.helix.models/1.1.0",
-      "hashPath": "twitchlib.api.helix.models.1.1.0.nupkg.sha512"
+      "sha512": "sha512-40yWZM1rqV6cPfWEP5WMJGqFwvJQQS5xDrFm4nBamhO2tDlUHVZwFDNbSkur7lTO/DkDjR3yjPwZ2HfmBDJz7Q==",
+      "path": "twitchlib.api.helix.models/3.1.2",
+      "hashPath": "twitchlib.api.helix.models.3.1.2.nupkg.sha512"
     },
-    "TwitchLib.Api.V5/1.1.0": {
+    "TwitchLib.Api.V5/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-t0FHAGn7baqMs5kZDm5TDt0h/OMPPDNvAsSs6VozXRzmJ871u5yo/S0HSpOEryEIOmgkxkh3p4KgKTbjiy60eg==",
-      "path": "twitchlib.api.v5/1.1.0",
-      "hashPath": "twitchlib.api.v5.1.1.0.nupkg.sha512"
+      "sha512": "sha512-RRd4ZtdQTFSQbHihFLqSvtN7JDzyDXLS3QXUwBXtowCSrCIvPIic0iPoxgGovq3K/Qrzzl4GQKFcZm0CMK7vVA==",
+      "path": "twitchlib.api.v5/3.1.2",
+      "hashPath": "twitchlib.api.v5.3.1.2.nupkg.sha512"
     },
-    "TwitchLib.Api.V5.Models/1.1.0": {
+    "TwitchLib.Api.V5.Models/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ZlFEwMNHzM6/9uUlyyG0OgI9TV1DD+KZDtiLgUYjIV1H4RPRzsguccisQaRzqmPXtR9BCUWWi596gNRXsWEAzA==",
-      "path": "twitchlib.api.v5.models/1.1.0",
-      "hashPath": "twitchlib.api.v5.models.1.1.0.nupkg.sha512"
+      "sha512": "sha512-PiULEj4Pk5MFZ5emWADjIp6jJ1esdB0gUAkyQ1M0zMAjlkfsr7pD0Qiry6rFmj4x1tSi9kI+pzRX/o/rCTXetA==",
+      "path": "twitchlib.api.v5.models/3.1.2",
+      "hashPath": "twitchlib.api.v5.models.3.1.2.nupkg.sha512"
     },
-    "TwitchLib.Client/3.0.3": {
+    "TwitchLib.Client/3.1.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-CEhdpXXHJ/NMhh2D1SIwqjg8/vZEH+8vycF93Bece2uyIpeiONPl1msfIH4pYY8pA/VmTkOShXs36oZh0IrYdA==",
-      "path": "twitchlib.client/3.0.3",
-      "hashPath": "twitchlib.client.3.0.3.nupkg.sha512"
+      "sha512": "sha512-egNCZEAu0w3BTF0X29SY7andT2K5IxFp3vDAOrvHIk3OaceXMcGOy3wznfuGshFDW37HdirpUEKw7vrWqyezbQ==",
+      "path": "twitchlib.client/3.1.4",
+      "hashPath": "twitchlib.client.3.1.4.nupkg.sha512"
     },
-    "TwitchLib.Client.Enums/1.1.0": {
+    "TwitchLib.Client.Enums/3.1.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-eaVfXiNwzXNUpzYeSVf2S7HEeoo9DbVIiKJRFtjwRqOwS9mpMsmIXxGoT7vxXArMvppP1CB+vBLB1v19h9AkJw==",
-      "path": "twitchlib.client.enums/1.1.0",
-      "hashPath": "twitchlib.client.enums.1.1.0.nupkg.sha512"
+      "sha512": "sha512-TxItwSS64opA90kc5cPKdfNl/AC1YkkKJgbPux5Xsq/xKgDSCmHv9K2kficWOhbxu4X2f1AvcZZXJS7rIe24WQ==",
+      "path": "twitchlib.client.enums/3.1.4",
+      "hashPath": "twitchlib.client.enums.3.1.4.nupkg.sha512"
     },
-    "TwitchLib.Client.Models/1.1.0": {
+    "TwitchLib.Client.Models/3.1.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-YxIu1gY6JcC7iwaOFziQaJPavIodvgrFRczwU8pbGtaeGLn4RXxf1dKZuDY98m4qmR3s4jquOnacK7Mre7jXDw==",
-      "path": "twitchlib.client.models/1.1.0",
-      "hashPath": "twitchlib.client.models.1.1.0.nupkg.sha512"
+      "sha512": "sha512-Zg6GKfdG4grdvg3MfWMWYLBklc7z+SRF/Pb5Go8cQ6svlXWEblZKTC84id7dICkzo7AQvTxwJ35Fx01lRAJjTA==",
+      "path": "twitchlib.client.models/3.1.4",
+      "hashPath": "twitchlib.client.models.3.1.4.nupkg.sha512"
     },
-    "TwitchLib.Communication/1.0.0": {
+    "TwitchLib.Communication/1.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-l2VjggmiLdrjqrBlfDbpX3YhfWDy0y8ta4YHiPwsuhfzX4lbGXlxCdHIFQmyyGtCBU/ysyLKI9MBTnEbYce6qg==",
-      "path": "twitchlib.communication/1.0.0",
-      "hashPath": "twitchlib.communication.1.0.0.nupkg.sha512"
+      "sha512": "sha512-Ale1+XKfSQgCBRKQQOWjvpFlx/7Ji/uoaIpOx6QIJ3NvsfzUy5/edeFWEFftqbQegLSUCK8zVSLKOmdsHJ8bYw==",
+      "path": "twitchlib.communication/1.0.3",
+      "hashPath": "twitchlib.communication.1.0.3.nupkg.sha512"
     },
-    "TwitchLib.PubSub/3.0.2": {
+    "TwitchLib.PubSub/3.1.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-nfJWmRxV2GmjjfvZFk5lyDIW3az47wFsvz/q9vYE0wHuA0VNvewFPwPPiSotgD35gleRmClNO0IIjDBTD5I/RA==",
-      "path": "twitchlib.pubsub/3.0.2",
-      "hashPath": "twitchlib.pubsub.3.0.2.nupkg.sha512"
+      "sha512": "sha512-Wqt3Q5oQC0LipSFmH8nIw3tbEMbDgO6ePx8RUHiFl3SCWgJAbVNbuiFD2ccBRUX0AHSjtaQz/QgY5dN4lgNKfA==",
+      "path": "twitchlib.pubsub/3.1.3",
+      "hashPath": "twitchlib.pubsub.3.1.3.nupkg.sha512"
     }
   }
 }
