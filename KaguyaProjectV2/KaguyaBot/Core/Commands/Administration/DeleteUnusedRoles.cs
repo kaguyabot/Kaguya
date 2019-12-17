@@ -68,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                      "managed by integrations, therefore they cannot be deleted.";
                     }
 
-                    if (i == 0)
+                    if (i == 0 && j == 0)
                     {
                         embed = new KaguyaEmbedBuilder
                         {

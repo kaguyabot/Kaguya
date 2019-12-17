@@ -7,6 +7,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
@@ -45,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             Server server = await ServerQueries.GetOrCreateServer(((SocketGuildChannel) message.Channel).Guild.Id);
             User user = await UserQueries.GetOrCreateUser(message.Author.Id);
 
-            if (user.IsBlacklisted) return;
+            if (user.IsBlacklisted && user.Id != ConfigProperties.botOwnerId) return;
             if (server.IsBlacklisted) return;
 
             var context = new ShardedCommandContext(_client, message);

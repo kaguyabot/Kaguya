@@ -21,7 +21,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         public async Task Find([Remainder]string roleName)
         {
             var guild = Context.Guild;
-            var users = guild.Users;
             var roles = guild.Roles;
             KaguyaEmbedBuilder embed;
 
@@ -71,6 +70,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             var matchingRoles = roles.Where(x => x.Name.ToLower() == roleName.ToLower()).ToList();
             var matchCount = matchingRoles.Count;
 
+            if (matchCount > 9)
+            {
+                matchCount = 9;
+            }
+
             var emojis = new Emoji[]
             {
                 new Emoji("1⃣"), new Emoji("2⃣"), new Emoji("3⃣"),
@@ -94,12 +98,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                     i1 = matchCount - 1;
 
                 var role = matchingRoles.ElementAt(i1);
-                
                 var rolePerms = matchingRoles[i].Permissions.ToList();
+                var usersWithRole = guild.Users.Where(x => x.Roles.Contains(role));
+
                 embed.Fields.Add(new EmbedFieldBuilder
                 {
                     Name = $"Role #{i + 1}",
-                    Value = $"Exact Name: `{role.Name}`\nPermissions: `{rolePerms.Count}`\n" +
+                    Value = $"Exact Name: `{role.Name}`\nNumber of users who have the role: {usersWithRole.Count()}" +
+                            $"\nPermissions: `{rolePerms.Count}`\n" +
                             $"Created: `{role.CreatedAt.Humanize()}`\n" +
                             $"Position in role list (higher number = higher position): `{role.Position}`"
                 });
