@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
 using Discord.WebSocket;
 using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using TwitchLib.Api.Core.Extensions.System;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -139,14 +135,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         {
             var usersWithRole = guild.Users.Where(x => x.Roles.Contains(role));
             var usersList = usersWithRole.OrderBy(x => x.Username).ToList();
-            var totalPageCount = (usersList.Count + 24) / 25;
+            var count = usersList.Count;
+
+            if (count == 0)
+                count = 1;
+
+            var totalPageCount = (count + 24) / 25;
 
             var pages = new List<PaginatedMessage.Page>();
 
             for(int i = 0; i < totalPageCount; i++)
                 pages.Add(new PaginatedMessage.Page());
             
-            for (int i = 0; i < usersList.Count; i++)
+            for (int i = 0; i < count; i++)
             {
                 var pageCount = (i + 24) / 25;
 
@@ -156,10 +157,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 var currentPage = pages.ElementAt(pageCount - 1);
 
                 currentPage.Title = $"All users with role {role.Name}";
-                currentPage.Description += $"`{usersList.ElementAt(i)} | {usersList.ElementAt(i).Id}`\n";
 
                 if (usersList.Count == 0)
+                {
                     currentPage.Description = "`No users have the role.`";
+                    break;
+                }
+
+                currentPage.Description += $"`{usersList.ElementAt(i)} | {usersList.ElementAt(i).Id}`\n";
             }
 
             return pages;
