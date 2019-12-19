@@ -51,7 +51,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 x.GetUser(context.User.Id).GuildPermissions.Administrator && 
                 x.GetUser(Id) != null);
             var targets = new List<SocketGuildUser>();
-            var guilds = new List<IGuild>();
 
             int times = 0;
 
@@ -62,9 +61,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             foreach (var target in targets)
             {
-                await target.BanAsync(0, $"{context.User} used the `HyperBan` command " +
-                                          $"in guild \"{context.Guild}\"");
-                times++;
+                try
+                {
+                    await target.BanAsync(0, $"{context.User} used the `HyperBan` command " +
+                                             $"in guild \"{context.Guild}\"");
+                    times++;
+                }
+                catch (Exception)
+                {
+                    //
+                }
             }
 
             var embed = new KaguyaEmbedBuilder
