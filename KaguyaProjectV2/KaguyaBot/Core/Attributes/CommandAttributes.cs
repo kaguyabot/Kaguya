@@ -3,6 +3,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System;
 using System.Threading.Tasks;
 using Discord;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
@@ -77,6 +78,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
                 return (long)context.User.Id == (long)(await context.Client.GetApplicationInfoAsync().ConfigureAwait(false)).Owner.Id ? 
                     PreconditionResult.FromSuccess() : PreconditionResult.FromError("Command can only be run by the owner of the bot.");
             return PreconditionResult.FromError("RequireOwnerAttribute is not supported by this TokenType.");
+        }
+    }
+
+    internal class DangerousCommandAttribute : PreconditionAttribute
+    {
+        public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
+        {
+            if(((SocketGuildUser) context.User).GuildPermissions.Administrator)
+                return PreconditionResult.FromSuccess();
+            return PreconditionResult.FromError("As this is a dangerous command, the user must be an Administrator to use this command.");
         }
     }
 }

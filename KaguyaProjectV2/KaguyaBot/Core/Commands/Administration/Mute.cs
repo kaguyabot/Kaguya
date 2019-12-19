@@ -66,7 +66,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 if (ServerQueries.GetSpecificMutedUser(user.Id, server.Id) != null)
                 {
-                    MutedUser existingObject = await ServerQueries.GetSpecificMutedUser(user.Id, server.Id);
+                    MutedUser existingObject = ServerQueries.GetSpecificMutedUser(user.Id, server.Id);
 
                     if (existingObject != null)
                     {

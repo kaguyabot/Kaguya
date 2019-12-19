@@ -169,21 +169,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <param name="userId"></param>
         /// <param name="serverId"></param>
         /// <returns></returns>
-        public static async Task<MutedUser> GetSpecificMutedUser(ulong userId, ulong serverId)
+        public static MutedUser GetSpecificMutedUser(ulong userId, ulong serverId)
         {
             using (var db = new KaguyaDb())
             {
                 return GetOrCreateServer(serverId).Result.MutedUsers.FirstOrDefault(x => x.UserId == userId);
-                //try
-                //{
-                //    return await (from m in db.MutedUsers
-                //        where m.ServerId == serverId && m.UserId == userId
-                //        select m).FirstAsync();
-                //}
-                //catch (InvalidOperationException)
-                //{
-                //    return null;
-                //}
             }
         }
 

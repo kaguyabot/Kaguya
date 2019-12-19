@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     public class UtilityQueries
     {
-        public static async Task AddOrReplaceKeyAsync(SupporterKey key)
+        public static async Task AddOrReplaceSupporterKeyAsync(SupporterKey key)
         {
             using (var db = new KaguyaDb())
             {
@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<bool> KeyExists(SupporterKey key)
+        public static async Task<bool> SupporterKeyExists(SupporterKey key)
         {
             using (var db = new KaguyaDb())
             {
@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task AddKeys(IEnumerable<SupporterKey> keys)
+        public static void AddSupporterKeys(IEnumerable<SupporterKey> keys)
         {
             using (var db = new KaguyaDb())
             {
@@ -41,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task DeleteKey(SupporterKey key)
+        public static async Task DeleteSupporterKey(SupporterKey key)
         {
             using (var db = new KaguyaDb())
             {
@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<IEnumerable<SupporterKey>> GetAllExpiredKeys()
+        public static async Task<IEnumerable<SupporterKey>> GetAllExpiredSupporterKeys()
         {
             using (var db = new KaguyaDb())
             {
@@ -59,7 +59,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<List<SupporterKey>> GetAllActiveKeys()
+        public static async Task<List<SupporterKey>> GetAllActiveSupporterKeys()
         {
             using (var db = new KaguyaDb())
             {
@@ -69,7 +69,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<List<SupporterKey>> GetAllKeys()
+        public static async Task<List<SupporterKey>> GetAllSupporterKeys()
         {
             using (var db = new KaguyaDb())
             {
@@ -82,13 +82,90 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static async Task<IEnumerable<SupporterKey>> GetKeysBoundToUser(ulong userId)
+        public static async Task<IEnumerable<SupporterKey>> GetSupporterKeysBoundToUser(ulong userId)
         {
             using (var db = new KaguyaDb())
             {
                 return await (from k in db.SupporterKeys
                     where k.UserId == userId
                     select k).ToListAsync();
+            }
+        }
+
+        public static async Task AddOrReplacePremiumKeyAsync(PremiumKey key)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertOrReplaceAsync(key);
+            }
+        }
+
+        public static async Task<bool> PremiumKeyExists(PremiumKey key)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from k in db.SupporterKeys
+                              where k.Key == key.Key
+                              select k != null).FirstAsync();
+            }
+        }
+
+        public static void AddPremiumKeys(IEnumerable<PremiumKey> keys)
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.BulkCopy(keys);
+            }
+        }
+
+        public static async Task DeletePremiumKey(PremiumKey key)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(key);
+            }
+        }
+
+        public static async Task<IEnumerable<PremiumKey>> GetAllExpiredPremiumKeys()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from s in db.PremiumKeys
+                              where s.Expiration < DateTime.Now.ToOADate()
+                              select s).ToListAsync();
+            }
+        }
+
+        public static async Task<List<PremiumKey>> GetAllActivePremiumKeys()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from s in db.PremiumKeys
+                              where s.Expiration > DateTime.Now.ToOADate() && s.UserId != 0
+                              select s).ToListAsync();
+            }
+        }
+
+        public static async Task<List<PremiumKey>> GetAllPremiumKeys()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.GetTable<PremiumKey>().ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Returns an IEnumerable<PremiumKey> containing a collection of all keys that a server currently has bound to it.</SupporterKey> 
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<PremiumKey>> GetPremiumKeysBoundToServer(ulong serverId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from k in db.PremiumKeys
+                              where k.ServerId == serverId
+                              select k).ToListAsync();
             }
         }
 

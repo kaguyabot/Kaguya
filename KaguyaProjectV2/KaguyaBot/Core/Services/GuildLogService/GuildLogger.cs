@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
         private static readonly DiscordShardedClient _client = ConfigProperties.client;
         private static KaguyaEmbedBuilder _embed;
 
-        public static async void GuildLogListener()
+        public static void GuildLogListener()
         {
             _client.MessageDeleted += _client_MessageDeleted;
             _client.MessageUpdated += _client_MessageUpdated;
@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                     newVoice = $"New connection to {arg3.VoiceChannel.Name}";
                     embedURL = "https://i.imgur.com/WPtsNwD.png";
                 }
-                if (arg2.VoiceChannel is object && arg3.VoiceChannel is object)
+                if (arg2.VoiceChannel != null && arg3.VoiceChannel != null)
                 {
                     oldVoice = $"{arg2.VoiceChannel.Name}";
                     newVoice = $"{arg3.VoiceChannel.Name}";
@@ -131,9 +131,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 
         private static async Task _client_MessageUpdated(Cacheable<IMessage, ulong> arg1, SocketMessage arg2, ISocketMessageChannel arg3)
         {
-            if (arg3 is SocketGuildChannel)
+            if (arg3 is SocketGuildChannel channel)
             {
-                Server server = await ServerQueries.GetOrCreateServer(((SocketGuildChannel)arg3).Guild.Id);
+                Server server = await ServerQueries.GetOrCreateServer(channel.Guild.Id);
                 if (server.LogUpdatedMessages == 0)
                     return;
 

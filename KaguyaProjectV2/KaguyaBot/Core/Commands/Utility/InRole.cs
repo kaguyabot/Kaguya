@@ -46,12 +46,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             var matchingRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
 
-            var pages = await Pages(guild, matchingRole);
-            var pager = new PaginatedMessage
-            {
-                Pages = pages
-            };
-            pager.Color = Color.Blue;
+            var pages = Pages(guild, matchingRole);
+            var pager = new PaginatedMessage {Pages = pages, Color = Color.Blue};
 
             await PagedReplyAsync(pager, new ReactionList
             {
@@ -114,7 +110,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 {
                     var pager = new PaginatedMessage
                     {
-                        Pages = await Pages(guild, role),
+                        Pages = Pages(guild, role),
                         Color = Color.Blue
                     };
 
@@ -137,7 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             await InlineReactionReplyAsync(data);
         }
 
-        private async Task<List<PaginatedMessage.Page>> Pages(SocketGuild guild, IRole role)
+        private List<PaginatedMessage.Page> Pages(SocketGuild guild, IRole role)
         {
             var usersWithRole = guild.Users.Where(x => x.Roles.Contains(role));
             var usersList = usersWithRole.OrderBy(x => x.Username).ToList();

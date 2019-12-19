@@ -43,10 +43,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 string aliases = cmd.Aliases.Where(alias => alias.ToLower() != cmd.Name.ToLower()).Aggregate("", (current, alias) => current + $"[{alias}]");
                 foreach(var attr in attributes)
                 {
+                    string warn = "";
+                    if (cmd.Attributes.Contains(attr) && attr.GetType() == typeof(DangerousCommandAttribute))
+                        warn = @" {Dangerous Command}";
+
                     if (cmd.Attributes.Contains(attr) || cmd.Preconditions.Contains(attr))
                     {
                         pages[i]
-                            .Description += $"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}\n";
+                            .Description += $"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}{warn}\n";
                     }
 
                     i++;

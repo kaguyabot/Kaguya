@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                 var client = ConfigProperties.client;
                 var kaguyaSupportServer = client.GetGuild(546880579057221644); //Kaguya Support Discord Server
 
-                var supporters = await UtilityQueries.GetAllActiveKeys();
+                var supporters = await UtilityQueries.GetAllActiveSupporterKeys();
 
                 foreach (var supporter in supporters)
                 {
@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                     if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
                         continue;
 
-                    var supporterRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name == "Supporter");
+                    var supporterRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya supporter");
                     var kaguyaSuppUser = kaguyaSupportServer.GetUser(socketUser.Id);
 
                     if (kaguyaSuppUser.Roles.Contains(supporterRole))
@@ -43,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 
                 // Check for expired supporter tags.
 
-                var expiredSupporters = await UtilityQueries.GetAllExpiredKeys();
+                var expiredSupporters = await UtilityQueries.GetAllExpiredSupporterKeys();
 
                 foreach (var expSupporter in expiredSupporters)
                 {

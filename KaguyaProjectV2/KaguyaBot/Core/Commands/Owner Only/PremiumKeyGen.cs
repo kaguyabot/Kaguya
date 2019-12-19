@@ -12,20 +12,20 @@ using Discord;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
-    public class SupporterKeyGen : ModuleBase<ShardedCommandContext>
+    public class PremiumKeyGen : ModuleBase<ShardedCommandContext>
     {
         private static readonly Random Random = new Random();
 
         [OwnerCommand]
-        [Command("supportergen")]
-        [Summary("Generates a specified amount of Kaguya Supporter " +
+        [Command("PremiumGen")]
+        [Summary("Generates a specified amount of Kaguya Premium " +
                  "keys for the length of time given (in days). If no amount is " +
                  "specified, this command generates 1 key. If no length of time is given, " +
                  "we will generate a 30 day key.")]
-        [Remarks(" => One 30-day key\n<amount> <time in days>")]
+        [Remarks(" => One 30-day key\n5 90d => Generates five 90-day keys\n<amount> <time in days>")]
         public async Task GenerateKeys(int amount, string duration)
         {
-            if(amount < 1)
+            if (amount < 1)
                 throw new IndexOutOfRangeException("Amount parameter must be greater than one.");
 
             RegexTimeParser.Parse(duration, out int sec, out int min, out int hour, out int day);
@@ -34,11 +34,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             long timeInSeconds = (long)timeSpan.TotalSeconds;
 
             var existingKeys = await UtilityQueries.GetAllActiveSupporterKeys();
-            List<SupporterKey> keys = new List<SupporterKey>();
+            List<PremiumKey> keys = new List<PremiumKey>();
 
             for (int i = 0; i < amount; i++)
             {
-                var key = new SupporterKey
+                var key = new PremiumKey()
                 {
                     Key = RandomString(),
                     LengthInSeconds = timeInSeconds,
@@ -68,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 await Context.User.SendFileAsync(memoryStream, $"{keys.Count} Keys.txt");
             }
 
-            UtilityQueries.AddSupporterKeys(keys);
+            UtilityQueries.AddPremiumKeys(keys);
             await ChatReply(RegexTimeParser.FormattedTimeString(duration), amount);
         }
 

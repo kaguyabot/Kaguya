@@ -222,7 +222,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                 return true;
             }
 
-            if (twitchChannels.Count >= 35 && server.IsPremium)
+            if (twitchChannels.Count >= 15 && server.IsPremium)
             {
                 embed = new KaguyaEmbedBuilder
                 {

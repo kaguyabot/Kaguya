@@ -84,13 +84,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
             permissionNames = Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2") == "" ? "None" : Regex.Replace(permissionNames, "([a-z])([A-Z])", "$1 $2");
 
+            #region If the command is dangerous...
+
+            bool isDangerous = false;
+            foreach (var precondition in cmdInfo.Preconditions)
+            {
+                if (precondition.GetType() == typeof(DangerousCommandAttribute))
+                {
+                    isDangerous = true;
+                }
+            }
+
+            string warn = "";
+            if (isDangerous)
+                warn = "\n\nThis is a dangerous command.";
+
+            #endregion
+
             var fieldBuilders = new List<EmbedFieldBuilder>
             {
                 new EmbedFieldBuilder
                 {
                     Name = "Permissions Required", Value = $"`{permissionNames}`", IsInline = false,
                 },
-                new EmbedFieldBuilder {Name = "Description", Value = $"{cmdInfo.Summary}", IsInline = false,},
+                new EmbedFieldBuilder {Name = "Description", Value = $"{cmdInfo.Summary}{warn}", IsInline = false},
                 new EmbedFieldBuilder
                 {
                     //The value of this field is pretty hard to read, basically we add the command prefix + command name to the start of the string,
@@ -113,7 +130,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
         public static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
             cmdInfo.Preconditions
-                .Where(x => x is OwnerCommandAttribute || x is SupporterCommandAttribute || x is RequireUserPermissionAttribute || x is PremiumServerCommandAttribute)
+                .Where(x => x is OwnerCommandAttribute || x is SupporterCommandAttribute || 
+                            x is RequireUserPermissionAttribute || x is PremiumServerCommandAttribute)
                 .Select(x =>
                 {
                     switch (x)
@@ -123,7 +141,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                         case SupporterCommandAttribute _:
                             return "Kaguya Supporter";
                         case PremiumServerCommandAttribute _:
-                            return "Kaguya Premium (Server)";
+                            return "Kaguya Premium";
                     }
 
                     var attr = (RequireUserPermissionAttribute)x;

@@ -33,7 +33,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     Id = (ulong) id,
                     Experience = 0,
                     Points = 0,
-                    PremiumTokens = 0,
                     Rep = 0,
                     OsuId = 0,
                     TotalCommandUses = 0,

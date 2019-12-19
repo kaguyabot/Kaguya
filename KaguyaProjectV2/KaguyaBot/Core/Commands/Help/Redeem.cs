@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Humanizer;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -18,19 +19,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     {
         [HelpCommand]
         [Command("Redeem")]
-        [Summary("Allows a user to redeem a Kaguya Supporter key. Supporter Keys may be " +
+        [Summary("Allows a user to redeem a Kaguya Supporter or Kaguya Premium key. Supporter Keys may be " +
                  "purchased [at this link](https://stageosu.selly.store/)")]
         [Remarks("<key>")]
         public async Task RedeemKey(string userKey)
         {
             var user = await UserQueries.GetOrCreateUser(Context.User.Id);
             var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
-            var existingKeys = await UtilityQueries.GetAllKeys();
+            var existingSupporterKeys = await UtilityQueries.GetAllSupporterKeys();
+            var existingPremiumKeys = await UtilityQueries.GetAllPremiumKeys();
 
-            var key = existingKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0);
+            var supporterKey = existingSupporterKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0);
+            var premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0 && x.ServerId == 0);
 
-            if (key == null)
+            if (supporterKey == null && premiumKey == null)
             {
+                await Context.Message.DeleteAsync();
                 var embed0 = new KaguyaEmbedBuilder
                 {
                     Description = "Key does not exist or has already been redeemed.",
@@ -46,25 +50,64 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 return;
             }
 
-            var newKey = new SupporterKey
-            {
-                Key = key.Key,
-                LengthInSeconds = key.LengthInSeconds,
-                LengthInDays = key.LengthInDays,
-                KeyCreatorId = key.KeyCreatorId,
-                UserId = Context.User.Id,
-                Expiration = DateTime.Now.AddSeconds(key.LengthInSeconds).ToOADate()
-            };
+            IKey newKey;
+            var typeString = "";
+            double expirationDate = 0;
 
-            await UtilityQueries.AddOrReplaceKeyAsync(newKey);
+            if (supporterKey != null)
+            {
+                newKey = new SupporterKey
+                {
+                    Key = supporterKey.Key,
+                    LengthInSeconds = supporterKey.LengthInSeconds,
+                    KeyCreatorId = supporterKey.KeyCreatorId,
+                    UserId = Context.User.Id,
+                    Expiration = DateTime.Now.AddSeconds(supporterKey.LengthInSeconds).ToOADate()
+                };
+
+                typeString = "Kaguya Supporter";
+                expirationDate = user.SupporterExpirationDate;
+
+                await UtilityQueries.AddOrReplaceSupporterKeyAsync((SupporterKey) newKey);
+            }
+
+            else if (premiumKey != null)
+            {
+                newKey = new PremiumKey
+                {
+                    Key = premiumKey.Key,
+                    LengthInSeconds = premiumKey.LengthInSeconds,
+                    KeyCreatorId = premiumKey.KeyCreatorId,
+                    UserId = Context.User.Id,
+                    ServerId = Context.Guild.Id,
+                    Expiration = DateTime.Now.AddSeconds(premiumKey.LengthInSeconds).ToOADate()
+                };
+
+                typeString = "Kaguya Premium";
+                expirationDate = server.PremiumExpirationDate;
+
+                await UtilityQueries.AddOrReplacePremiumKeyAsync((PremiumKey) newKey);
+            }
+
+            #region Useless code to avoid compiler errors. -_-
+
+            else
+            {
+                // This is only here to avoid compiler errors -_-
+                newKey = new SupporterKey();
+            }
+
+            #endregion
 
             TimeSpan ts = RegexTimeParser.ParseToTimespan($"{newKey.LengthInSeconds}s");
+            expirationDate += DateTime.Now.AddSeconds(ts.TotalSeconds).ToOADate();
+            expirationDate -= DateTime.Now.ToOADate();
 
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully redeemed `" +
-                              $"{ts.Humanize(minUnit: TimeUnit.Day, maxUnit: TimeUnit.Day)}` of Kaguya Supporter!\n" +
-                              $"Your tag will expire on: `{DateTime.FromOADate(user.SupporterExpirationDate).ToLongDateString()}`"
+                              $"{ts.Humanize(minUnit: TimeUnit.Day, maxUnit: TimeUnit.Day)}` of {typeString}!\n" +
+                              $"Your subscription will expire on: `{DateTime.FromOADate(expirationDate).ToLongDateString()}`"
             };
             embed.SetColor(EmbedColor.GOLD);
 
@@ -72,24 +115,39 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             await SendEmbedToBotOwner(Context, newKey);
         }
 
-        private async Task SendEmbedToBotOwner(ICommandContext context, SupporterKey key)
+        private async Task SendEmbedToBotOwner(ICommandContext context, IKey key)
         {
             var owner = ConfigProperties.client.GetUser(ConfigProperties.botOwnerId);
             var fields = new List<EmbedFieldBuilder>
             {
-                new EmbedFieldBuilder {IsInline = false, Name = "Key Properties", 
+                new EmbedFieldBuilder {IsInline = false, Name = "Key Properties",
                     Value = $"Key: `{key.Key}`\nCreated by: `{owner}`\nExpires " +
                             $"`{DateTime.FromOADate(key.Expiration).Humanize(false)}`"}
             };
 
-            var embed = new KaguyaEmbedBuilder
+            if (key.GetType() == typeof(SupporterKey))
             {
-                Description = $"User `{context.User}` has just redeemed a " +
-                              $"Kaguya Supporter key!",
-                Fields = fields
-            };
+                var embed = new KaguyaEmbedBuilder
+                {
+                    Description = $"User `{context.User}` has just redeemed a " +
+                                  $"Kaguya Supporter key!",
+                    Fields = fields
+                };
 
-            await owner.SendMessageAsync(embed: embed.Build());
+                await owner.SendMessageAsync(embed: embed.Build());
+            }
+
+            if (key.GetType() == typeof(PremiumKey))
+            {
+                var embed = new KaguyaEmbedBuilder
+                {
+                    Description = $"User `{context.User}` has just redeemed a " +
+                                  $"Kaguya Premium key!",
+                    Fields = fields
+                };
+
+                await owner.SendMessageAsync(embed: embed.Build());
+            }
         }
     }
 }

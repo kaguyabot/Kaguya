@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task UnmuteUser(IGuildUser user, [Remainder]string reason = null)
         {
             var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
-            var mutedObject = await ServerQueries.GetSpecificMutedUser(user.Id, server.Id);
+            var mutedObject = ServerQueries.GetSpecificMutedUser(user.Id, server.Id);
 
             if (mutedObject != null)
                 await ServerQueries.RemoveMutedUser(mutedObject);

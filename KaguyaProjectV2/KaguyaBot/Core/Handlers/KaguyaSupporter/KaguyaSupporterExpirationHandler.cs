@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 
             timer.Elapsed += async (sender, args) =>
             {
-                foreach (var suppKeyObject in await UtilityQueries.GetAllExpiredKeys())
+                foreach (var suppKeyObject in await UtilityQueries.GetAllExpiredSupporterKeys())
                 {
                     if (suppKeyObject.Expiration < DateTime.Now.ToOADate() && suppKeyObject.Expiration > 1)
                     {
@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                                               $"but their DMs are closed.", LogLevel.DEBUG);
                         }
 
-                        await UtilityQueries.DeleteKey(suppKeyObject);
+                        await UtilityQueries.DeleteSupporterKey(suppKeyObject);
                     }
                 }
             };

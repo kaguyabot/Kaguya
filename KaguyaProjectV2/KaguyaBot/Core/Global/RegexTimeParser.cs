@@ -50,9 +50,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
             int.TryParse(hours, out hour);
             int.TryParse(days, out day);
 
-            if (seconds.Length > 7 || minutes.Length > 7 || hours.Length > 7 || days.Length > 7)
+            if (seconds.Length > 10 || minutes.Length > 10 || hours.Length > 8 || days.Length > 7)
             {
-                throw new ArgumentOutOfRangeException("Cannot process more than 7 digits for a given duration.",
+                throw new ArgumentOutOfRangeException("Too many digits to process.",
                     new Exception());
             }
         }

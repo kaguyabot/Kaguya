@@ -13,13 +13,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class DeleteUnusedRoles : InteractiveBase<ShardedCommandContext>
     {
+        [DangerousCommand]
         [PremiumServerCommand]
         [AdminCommand]
         [Command("DeleteUnusedRoles")]
         [Summary("Deletes all roles in the current server " +
                  "that are not currently tied to any users. If " +
                  "a role exists but no users have it, it will be " +
-                 "deleted. \n\nThis is a dangerous command.")]
+                 "deleted.")]
         [Remarks("")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageRoles)]

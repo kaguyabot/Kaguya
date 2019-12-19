@@ -6,8 +6,8 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "supporterkeys")]
-    public class SupporterKey : IKey
+    [Table(Name = "premiumkeys")]
+    public class PremiumKey : IKey
     {
         [PrimaryKey]
         [Column(Name = "Key"), NotNull]
@@ -18,6 +18,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong KeyCreatorId { get; set; }
         [Column(Name = "UserId"), Nullable]
         public ulong UserId { get; set; }
+        [Column(Name = "ServerId"), Nullable]
+        public ulong ServerId { get; set; }
         /// <summary>
         /// If this key is tied to a user, the time (as OADate) when the key expires.
         /// </summary>

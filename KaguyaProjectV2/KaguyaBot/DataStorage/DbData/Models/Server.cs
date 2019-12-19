@@ -4,6 +4,7 @@ using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -52,8 +53,18 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogTwitterNotifications { get; set; }
         [Column(Name = "IsBlacklisted"), NotNull]
         public bool IsBlacklisted { get; set; }
-        [Column(Name = "IsPremium"), NotNull]
-        public bool IsPremium { get; set; }
+        public double PremiumExpirationDate
+        {
+            get
+            {
+                var now = DateTime.Now.ToOADate();
+                var allUserKeys = UtilityQueries.GetPremiumKeysBoundToServer(Id).Result;
+                return now + allUserKeys.Sum(key => key.Expiration - now);
+            }
+        }
+
+        public bool IsPremium => PremiumExpirationDate - DateTime.Now.ToOADate() > 0;
+
         [Column(Name = "AutoWarnOnBlacklistedPhrase"), NotNull]
         public bool AutoWarnOnBlacklistedPhrase { get; set; } = false;
 
