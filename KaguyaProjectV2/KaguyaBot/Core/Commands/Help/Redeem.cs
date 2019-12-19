@@ -52,6 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
             IKey newKey;
             var typeString = "";
+            var nameSwitch = "";
             double expirationDate = 0;
 
             if (supporterKey != null)
@@ -66,6 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 };
 
                 typeString = "Kaguya Supporter";
+                nameSwitch = "Your";
                 expirationDate = user.SupporterExpirationDate;
 
                 await UtilityQueries.AddOrReplaceSupporterKeyAsync((SupporterKey) newKey);
@@ -84,6 +86,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 };
 
                 typeString = "Kaguya Premium";
+                nameSwitch = "This server's";
                 expirationDate = server.PremiumExpirationDate;
 
                 await UtilityQueries.AddOrReplacePremiumKeyAsync((PremiumKey) newKey);
@@ -103,11 +106,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             expirationDate += DateTime.Now.AddSeconds(ts.TotalSeconds).ToOADate();
             expirationDate -= DateTime.Now.ToOADate();
 
+
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully redeemed `" +
                               $"{ts.Humanize(minUnit: TimeUnit.Day, maxUnit: TimeUnit.Day)}` of {typeString}!\n" +
-                              $"Your subscription will expire on: `{DateTime.FromOADate(expirationDate).ToLongDateString()}`"
+                              $"{nameSwitch} subscription will expire on: `{DateTime.FromOADate(expirationDate).ToLongDateString()}`"
             };
             embed.SetColor(EmbedColor.GOLD);
 

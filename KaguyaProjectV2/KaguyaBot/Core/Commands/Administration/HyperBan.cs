@@ -62,8 +62,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             foreach (var target in targets)
             {
-                //await target.BanAsync(0, $"{context.User} used the `HyperBan` command " +
-                //                          $"in guild \"{context.Guild}\"");
+                await target.BanAsync(0, $"{context.User} used the `HyperBan` command " +
+                                          $"in guild \"{context.Guild}\"");
                 times++;
             }
 
