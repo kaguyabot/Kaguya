@@ -71,7 +71,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             get
             {
                 var now = DateTime.Now.ToOADate();
-                var allUserKeys = UtilityQueries.GetSupporterKeysBoundToUser(Id).Result;
+                var allUserKeys = UtilityQueries.GetSupporterKeysBoundToUserAsync(Id).Result;
                 return now + allUserKeys.Sum(key => key.Expiration - now);
             }
         }

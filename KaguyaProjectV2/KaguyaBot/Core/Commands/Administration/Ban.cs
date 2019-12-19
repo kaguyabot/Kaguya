@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class Ban : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("ban")]
+        [Command("Ban")]
         [Alias("b")]
         [Summary("Permanently bans a user, or a list of users from the server.")]
         [Remarks("<user>\n<user> {...}")]

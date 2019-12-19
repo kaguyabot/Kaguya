@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
     {
         public static async void AddExp(User user, Server server, ICommandContext context)
         {
-            IEnumerable<ServerExp> _ = await UtilityQueries.GetAllExpForServer(server);
+            IEnumerable<ServerExp> _ = await UtilityQueries.GetAllExpForServerAsync(server);
             IEnumerable<ServerExp> specificExps = _.ToList();
 
             // If the user can receive exp, give them between 5 and 8.

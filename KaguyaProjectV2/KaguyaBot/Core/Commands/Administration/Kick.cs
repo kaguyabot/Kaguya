@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class Kick : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("kick")]
+        [Command("Kick")]
         [Alias("k")]
         [Summary("Kicks a user, or a list of users, from the server.")]
         [Remarks("<user>\n<user> {...}")]

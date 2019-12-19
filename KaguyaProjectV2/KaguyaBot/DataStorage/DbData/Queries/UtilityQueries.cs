@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<bool> SupporterKeyExists(SupporterKey key)
+        public static async Task<bool> SupporterKeyExistsAsync(SupporterKey key)
         {
             using (var db = new KaguyaDb())
             {
@@ -41,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task DeleteSupporterKey(SupporterKey key)
+        public static async Task DeleteSupporterKeyAsync(SupporterKey key)
         {
             using (var db = new KaguyaDb())
             {
@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<IEnumerable<SupporterKey>> GetAllExpiredSupporterKeys()
+        public static async Task<IEnumerable<SupporterKey>> GetAllExpiredSupporterKeysAsync()
         {
             using (var db = new KaguyaDb())
             {
@@ -59,7 +59,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<List<SupporterKey>> GetAllActiveSupporterKeys()
+        public static async Task<List<SupporterKey>> GetAllActiveSupporterKeysAsync()
         {
             using (var db = new KaguyaDb())
             {
@@ -69,7 +69,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<List<SupporterKey>> GetAllSupporterKeys()
+        public static async Task<List<SupporterKey>> GetAllSupporterKeysAsync()
         {
             using (var db = new KaguyaDb())
             {
@@ -82,7 +82,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static async Task<IEnumerable<SupporterKey>> GetSupporterKeysBoundToUser(ulong userId)
+        public static async Task<IEnumerable<SupporterKey>> GetSupporterKeysBoundToUserAsync(ulong userId)
         {
             using (var db = new KaguyaDb())
             {
@@ -100,7 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<bool> PremiumKeyExists(PremiumKey key)
+        public static async Task<bool> PremiumKeyExistsAsync(PremiumKey key)
         {
             using (var db = new KaguyaDb())
             {
@@ -118,7 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task DeletePremiumKey(PremiumKey key)
+        public static async Task DeletePremiumKeyAsync(PremiumKey key)
         {
             using (var db = new KaguyaDb())
             {
@@ -126,7 +126,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<IEnumerable<PremiumKey>> GetAllExpiredPremiumKeys()
+        public static async Task<IEnumerable<PremiumKey>> GetAllExpiredPremiumKeysAsync()
         {
             using (var db = new KaguyaDb())
             {
@@ -136,7 +136,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<List<PremiumKey>> GetAllActivePremiumKeys()
+        public static async Task<List<PremiumKey>> GetAllActivePremiumKeysAsync()
         {
             using (var db = new KaguyaDb())
             {
@@ -146,7 +146,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<List<PremiumKey>> GetAllPremiumKeys()
+        public static async Task<List<PremiumKey>> GetAllPremiumKeysAsync()
         {
             using (var db = new KaguyaDb())
             {
@@ -159,7 +159,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// </summary>
         /// <param name="serverId"></param>
         /// <returns></returns>
-        public static async Task<IEnumerable<PremiumKey>> GetPremiumKeysBoundToServer(ulong serverId)
+        public static async Task<IEnumerable<PremiumKey>> GetPremiumKeysBoundToServerAsync(ulong serverId)
         {
             using (var db = new KaguyaDb())
             {
@@ -169,13 +169,52 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<IEnumerable<ServerExp>> GetAllExpForServer(Server server)
+        public static async Task<IEnumerable<ServerExp>> GetAllExpForServerAsync(Server server)
         {
             using (var db = new KaguyaDb())
             {
                 return await (from s in db.ServerExp
                     where s.ServerId == server.Id
                     select s).ToListAsync();
+            }
+        }
+
+        public static async Task<IEnumerable<Reminder>> GetAllRemindersAsync()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.Reminders.ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Gets all expired reminders.
+        /// </summary>
+        /// <param name="hasTriggered">Whether we want to return all expired reminders where the expiration DM
+        /// has already been sent out.</param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<Reminder>> GetAllExpiredRemindersAsync(bool hasTriggered)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from r in db.Reminders
+                    where r.HasTriggered == hasTriggered && r.Expiration < DateTime.Now.ToOADate()
+                    select r).ToListAsync();
+            }
+        }
+
+        public static async Task AddReminderAsync(Reminder reminder)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(reminder);
+            }
+        }
+        public static async Task DeleteReminderAsync(Reminder reminder)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(reminder);
             }
         }
     }

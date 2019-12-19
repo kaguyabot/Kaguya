@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             TimeSpan timeSpan = RegexTimeParser.ParseToTimespan(duration);
             long timeInSeconds = (long)timeSpan.TotalSeconds;
 
-            var existingKeys = await UtilityQueries.GetAllActiveSupporterKeys();
+            var existingKeys = await UtilityQueries.GetAllActiveSupporterKeysAsync();
             List<PremiumKey> keys = new List<PremiumKey>();
 
             for (int i = 0; i < amount; i++)

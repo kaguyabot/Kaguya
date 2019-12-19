@@ -26,8 +26,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         {
             var user = await UserQueries.GetOrCreateUser(Context.User.Id);
             var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
-            var existingSupporterKeys = await UtilityQueries.GetAllSupporterKeys();
-            var existingPremiumKeys = await UtilityQueries.GetAllPremiumKeys();
+            var existingSupporterKeys = await UtilityQueries.GetAllSupporterKeysAsync();
+            var existingPremiumKeys = await UtilityQueries.GetAllPremiumKeysAsync();
 
             var supporterKey = existingSupporterKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0);
             var premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0 && x.ServerId == 0);
