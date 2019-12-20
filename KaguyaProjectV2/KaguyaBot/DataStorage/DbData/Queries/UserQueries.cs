@@ -16,12 +16,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                var user = await (from u in db.Users
-                               where u.Id == Id
-                               select u).FirstAsync() ?? new User
-                               {
-                                   Id = Id
-                               };
+                User user;
+                try
+                {
+                    user = await (from u in db.Users
+                        where u.Id == Id
+                        select u).FirstAsync();
+                }
+                catch (InvalidOperationException)
+                {
+                    user = new User
+                    {
+                        Id = Id
+                    };
+                    await db.InsertAsync(user);
+                }
 
                 return user;
             }

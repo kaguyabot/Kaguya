@@ -77,6 +77,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         }
 
         public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
+        public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
+        public bool CanGetTimelyPoints => DateTime.Now.AddHours(-24).ToOADate() < LatestTimelyBonus;
+        public bool CanGetWeeklyPoints => DateTime.Now.AddHours(-24).ToOADate() < LatestWeeklyBonus;
 
         /// <summary>
         /// FK_KaguyaUser_GambleHistory_BackReference
@@ -89,5 +92,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
         public IEnumerable<ServerExp> ServerExp { get; set; }
+
+        /// <summary>
+        /// FK_KaguyaUser_Reminder_BackReference
+        /// </summary>
+        [Association(ThisKey = "Id", OtherKey = "UserId")]
     }
 }

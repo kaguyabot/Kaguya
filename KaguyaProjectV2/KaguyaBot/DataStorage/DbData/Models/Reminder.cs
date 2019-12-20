@@ -16,5 +16,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public string Text { get; set; }
         [Column(Name = "HasTriggered"), NotNull]
         public bool HasTriggered { get; set; }
+
+        /// <summary>
+        /// FK_KaguyaUser_Reminders
+        /// </summary>
+        [Association(ThisKey = "UserId", OtherKey = "Id", CanBeNull = false)]
+        public User User { get; set; }
     }
 }

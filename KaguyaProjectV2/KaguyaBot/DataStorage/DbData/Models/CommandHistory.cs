@@ -18,6 +18,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// FK_KaguyaServer_AutoAssignedRoles
         /// </summary>
         [Association(ThisKey = "UserId", OtherKey = "Id", CanBeNull = false)]
-        public User user { get; set; }
+        public User User { get; set; }
     }
 }
