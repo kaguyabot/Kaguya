@@ -19,6 +19,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int TotalCommandCount { get; set; }
         [Column(Name = "TotalAdminActions"), NotNull]
         public int TotalAdminActions { get; set; }
+        [Column(Name = "PraiseCooldown")]
+        public int PraiseCooldown { get; set; } = 24;
         [Column(Name = "ModLog"), Nullable]
         public ulong ModLog { get; set; }
         [Column(Name = "DeletedMessages"), Nullable]
@@ -112,5 +114,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
         public IEnumerable<ServerExp> ServerExp { get; set; }
+
+        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        public IEnumerable<Praise> Rep { get; set; }
     }
 }

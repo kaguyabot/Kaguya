@@ -127,5 +127,58 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     select u).ToListAsync();
             }
         }
+
+        /// <summary>
+        /// Returns all rep obtained by a user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static async Task<List<Rep>> GetRepAsync(User user)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from r in db.Rep
+                    where r.UserId == user.Id
+                    select r).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Returns all rep obtained by a user.
+        /// </summary>
+        /// <param name="Id">The Id of the user.</param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<Rep>> GetRepAsync(ulong Id)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from r in db.Rep
+                    where r.UserId == Id
+                    select r).ToListAsync();
+            }
+        }
+
+        public static async Task RemoveRepAsync(Rep repObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(repObj);
+            }
+        }
+
+        /// <summary>
+        /// Inserts a new rep object into the database. The Rep object's UserId parameter
+        /// indicates who should be given the rep point. If we're adding +1 Rep to Johnny,
+        /// we need to put Johnny's ID for this parameter.
+        /// </summary>
+        /// <param name="repObj"></param>
+        /// <returns></returns>
+        public static async Task AddRepAsync(Rep repObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(repObj);
+            }
+        }
     }
 }

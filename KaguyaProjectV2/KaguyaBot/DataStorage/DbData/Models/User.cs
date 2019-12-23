@@ -15,8 +15,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int Experience { get; set; }
         [Column(Name = "Points"), NotNull]
         public int Points { get; set; }
-        [Column(Name = "Rep"), NotNull]
-        public int Rep { get; set; }
         [Column(Name = "OsuId"), Nullable]
         public int OsuId { get; set; }
         [Column(Name = "CommandUses"), Nullable]
@@ -97,5 +95,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// FK_KaguyaUser_Reminder_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "UserId")]
+        public IEnumerable<Reminder> Reminders { get; set; }
     }
 }

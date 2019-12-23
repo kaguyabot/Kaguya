@@ -29,12 +29,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 }
 
                 return await (db.Servers
-                    .LoadWith(x => x.MutedUsers)
+                    .LoadWith(x => x.AutoAssignedRoles)
+                    .LoadWith(x => x.BlackListedChannels)
                     .LoadWith(x => x.FilteredPhrases)
+                    .LoadWith(x => x.MutedUsers)
+                    .LoadWith(x => x.ServerExp)
                     .LoadWith(x => x.WarnedUsers)
                     .LoadWith(x => x.WarnActions)
                     .LoadWith(x => x.MutedUsers)
-                    .LoadWith(x => x.ServerExp)
                     .Where(s => s.Id == Id).FirstAsync());
             }
         }
@@ -290,6 +292,42 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 await db.DeleteAsync(expObj);
+            }
+        }
+
+        public static async Task AddPraiseAsync(Praise repObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(repObj);
+            }
+        }
+
+        public static async Task RemovePraiseAsync(Praise repObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(repObj);
+            }
+        }
+
+        public static async Task<List<Praise>> GetPraiseAsync(ulong userId, ulong serverId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from r in db.Praise
+                    where r.UserId == userId && r.ServerId == serverId
+                    select r).ToListAsync();
+            }
+        }
+
+        public static async Task<double> GetLastPraiseTimeAsync(ulong userId, ulong serverId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return (from r in db.Praise.OrderByDescending(x => x.TimeGiven)
+                    where r.GivenBy == userId && r.ServerId == serverId
+                    select r).First()?.TimeGiven ?? 0;
             }
         }
     }

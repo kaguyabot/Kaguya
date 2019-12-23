@@ -131,31 +131,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     }
                     break;
                 }
-                case "rep":
-                {
-                    await ReplyAsync(embed: new KaguyaEmbedBuilder
-                    {
-                        Description = "What would you like to change the value to?"
-                    }.Build());
-
-                    var valMsg = await NextMessageAsync();
-                    if (int.TryParse(valMsg.Content, out int val))
-                    {
-                        user.Rep = val;
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Successfully updated their `rep` value."
-                        }.Build());
-                    }
-                    else
-                    {
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Failed to parse value."
-                        }.Build());
-                    }
-                    break;
-                }
                 case "osuid":
                 {
                     await ReplyAsync(embed: new KaguyaEmbedBuilder

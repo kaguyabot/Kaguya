@@ -1,48 +1,48 @@
 ﻿using Discord;
 using Discord.Commands;
+using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using Humanizer;
 // ReSharper disable PossibleNullReferenceException
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
-    public class GlobalRep : ModuleBase<ShardedCommandContext>
+    public class AddRep : ModuleBase<ShardedCommandContext>
     {
         [ExpCommand]
-        [Command("GlobalRep")]
-        [Alias("grep")]
+        [Command("Rep")]
         [Summary("Allows a user to add one rep point to another user in the server. " +
                  "This action may only be done once every 24 hours. Use without an " +
                  "argument to view your own rep.\n\n" +
                  "This rep is stored in your account and is carried with you globally. " +
-                 "The `rep` command is server-specific.")]
-        [Remarks("\n<user>")]
-        public async Task Command(IGuildUser user = null)
+                 "The `praise` command is server-specific.")]
+        [Remarks("\n<user>\n<user> <reason>")]
+        public async Task Command(IGuildUser guildUser = null, [Remainder]string reason = null)
         {
-            User curUser = await UserQueries.GetOrCreateUser(Context.User.Id);
-            
-            if (user == null)
+            User user = await UserQueries.GetOrCreateUser(Context.User.Id);
+            var rep = await UserQueries.GetRepAsync(user);
+            int repCount = rep.Count;
+
+            if (guildUser == null)
             {
                 var curRepEmbed = new KaguyaEmbedBuilder
                 {
-                    Description = $"You have `{curUser.Rep}` rep."
+                    Description = $"You have `{repCount}` rep."
                 };
                 await ReplyAsync(embed: curRepEmbed.Build());
                 return;
             }
 
-            if (!curUser.CanGiveRep)
+            if (!user.CanGiveRep)
             {
                 var denyEmbed = new KaguyaEmbedBuilder
                 {
                     Description = $"{Context.User.Mention} you must wait " +
-                                  $"`{(DateTime.FromOADate(curUser.LastGivenRep) - DateTime.Now.AddHours(-24)).Humanize()}` " +
+                                  $"`{(DateTime.FromOADate(user.LastGivenRep) - DateTime.Now.AddHours(-24)).Humanize()}` " +
                                   $"before giving rep again."
                 };
                 denyEmbed.SetColor(EmbedColor.RED);
@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 return;
             }
 
-            if (user == Context.User)
+            if (guildUser == Context.User)
             {
                 var invalidUserEmbed = new KaguyaEmbedBuilder
                 {
@@ -63,7 +63,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 return;
             }
 
-            if (user.IsBot)
+            if (guildUser.IsBot)
             {
                 var invalidUserEmbed = new KaguyaEmbedBuilder
                 {
@@ -75,8 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 return;
             }
 
-
-            User target = await UserQueries.GetOrCreateUser(user.Id);
+            User target = await UserQueries.GetOrCreateUser(guildUser.Id);
 
             if (target.IsBlacklisted)
             {
@@ -92,18 +91,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 return;
             }
 
-            target.Rep += 1;
-            curUser.LastGivenRep = DateTime.Now.ToOADate();
+            var newTargetRep = new Rep
+            {
+                UserId = guildUser.Id,
+                GivenBy = user.Id,
+                TimeGiven = DateTime.Now.ToOADate(),
+                Reason = reason ?? "No reason provided."
+            };
 
-            await UserQueries.UpdateUser(curUser);
-            await UserQueries.UpdateUser(target);
+            await UserQueries.AddRepAsync(newTargetRep);
+            user.LastGivenRep = DateTime.Now.ToOADate();
+
+            await UserQueries.UpdateUser(user);
+
+            var targetRepList = await UserQueries.GetRepAsync(target);
 
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"Successfully added one rep to `{user}`! \nYou may give rep again in `24 hours`.",
+                Description = $"Successfully added one rep to `{guildUser}`! \nYou may give rep again in `24 hours`.",
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = $"{user.Username} now has {target.Rep} rep. You have {curUser.Rep} rep."
+                    Text = $"{guildUser.Username} now has {targetRepList.Count} rep. You have {repCount} rep."
                 }
             };
             embed.SetColor(EmbedColor.GOLD);
