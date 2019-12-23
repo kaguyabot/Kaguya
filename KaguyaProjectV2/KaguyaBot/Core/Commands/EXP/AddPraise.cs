@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Humanizer;
 
@@ -34,40 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                     Description = $"You currently have `{userPraise.Count}` praise.",
                 };
 
-                if (userPraise.Count == 0)
-                {
-                    await Context.Channel.SendMessageAsync(embed: curEmbed.Build());
-                    return;
-                }
-
-                curEmbed.Description += " Would you like to see your praise history?";
-
-                using (var memoryStream = new MemoryStream())
-                {
-                    var writer = new StreamWriter(memoryStream);
-
-                    int i = 0;
-                    foreach (var praiseObj in userPraise)
-                    {
-                        i++;
-                        writer.Write($"Praise #{i}: Time: {DateTime.FromOADate(praiseObj.TimeGiven).Humanize()} [UTC] - Reason: {praiseObj.Reason}\n");
-                    }
-
-                    await writer.FlushAsync();
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-
-                    await InlineReactionReplyAsync(new ReactionCallbackData("", curEmbed.Build(), true, 
-                            true, TimeSpan.FromSeconds(30), c => c.Channel.SendMessageAsync("Praise option expired."))
-                        .AddCallBack(new Emoji("✅"), async (c, r) =>
-                        {
-                            await c.Channel.SendFileAsync(memoryStream, $"Praise history for {c.User.Username}.txt");
-                        })
-                        .AddCallBack(new Emoji("⛔"), async (c, r) =>
-                        {
-                            await c.Channel.SendMessageAsync("Okay, I won't send your history.");
-                        }));
-                }
-
+                await Context.Channel.SendMessageAsync(embed: curEmbed.Build());
                 return;
             }
 
