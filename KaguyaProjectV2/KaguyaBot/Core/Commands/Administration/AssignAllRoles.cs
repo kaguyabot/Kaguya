@@ -15,6 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class AssignAllRoles : ModuleBase<ShardedCommandContext>
     {
+        [PremiumServerCommand]
         [AdminCommand]
         [Command("AssignAllRoles", RunMode = RunMode.Async)]
         [Alias("aar")]
@@ -64,7 +65,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             if (errorRoles > 0)
             {
                 embed.Description += $"\n\nI failed to assign `{errorRoles.ToWords()}` roles. These " +
-                                     $"roles are likely managed by integrations or other bots, therefore they " +
+                                     $"roles are managed by integrations or other bots, therefore they " +
                                      $"cannot be assigned to any users.";
             }
 
