@@ -22,15 +22,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core
     {
         static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
-        private DiscordShardedClient client;
-        private static TwitchAPI api;
+        private DiscordShardedClient _client;
+        private static TwitchAPI _api;
 
         public async Task MainAsync()
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, EventArgs) =>
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
             {
-                ConsoleLogger.Log($"Unhandled Exception: {EventArgs.ExceptionObject}", LogLevel.ERROR);
+                ConsoleLogger.Log($"Unhandled Exception: {eventArgs.ExceptionObject}", LogLevel.ERROR);
             };
+            Console.SetWindowSize(185, 40);
 
             var config = new DiscordSocketConfig
             {
@@ -38,10 +39,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 TotalShards = 1
             };
 
-            client = new DiscordShardedClient(config);
+            _client = new DiscordShardedClient(config);
 
             SetupKaguya(); //Checks for valid database connection
-            using (var services = new SetupServices().ConfigureServices(config, client))
+            using (var services = new SetupServices().ConfigureServices(config, _client))
             {
                 try
                 {
@@ -55,13 +56,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                     TestDatabaseConnection();
 
-                    client = services.GetRequiredService<DiscordShardedClient>();
+                    _client = services.GetRequiredService<DiscordShardedClient>();
 
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
-                    await client.LoginAsync(TokenType.Bot, _config.Token);
-                    await client.StartAsync();
+                    await _client.LoginAsync(TokenType.Bot, _config.Token);
+                    await _client.StartAsync();
 
-                    await EnableTimers(AllShardsLoggedIn(client, config));
+                    await EnableTimers(AllShardsLoggedIn(_client, config));
                     await Task.Delay(-1);
                 }
                 catch (HttpException e)
@@ -88,7 +89,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void GlobalPropertySetup(ConfigModel _config)
         {
-            ConfigProperties.client = client;
+            ConfigProperties.client = _client;
             ConfigProperties.botOwnerId = _config.BotOwnerId;
             ConfigProperties.osuApiKey = _config.OsuApiKey;
             ConfigProperties.topGGApiKey = _config.TopGGApiKey;
@@ -121,14 +122,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void SetupTwitch()
         {
-            api = new TwitchAPI();
-            api.Settings.ClientId = ConfigProperties.twitchClientId;
-            api.Settings.AccessToken = ConfigProperties.twitchAuthToken;
+            _api = new TwitchAPI();
+            _api.Settings.ClientId = ConfigProperties.twitchClientId;
+            _api.Settings.AccessToken = ConfigProperties.twitchAuthToken;
 
-            var monitor = new LiveStreamMonitorService(api, 30);
+            var monitor = new LiveStreamMonitorService(_api, 30);
             monitor.OnStreamOnline += TwitchNotificationsHandler.OnStreamOnline;
 
-            ConfigProperties.twitchApi = api;
+            ConfigProperties.twitchApi = _api;
         }
 
         private async Task EnableTimers(bool shardsLoggedIn)

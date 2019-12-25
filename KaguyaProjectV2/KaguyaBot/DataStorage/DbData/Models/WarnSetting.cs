@@ -15,11 +15,5 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int Shadowban { get; set; }
         [Column(Name = "Ban"), NotNull]
         public int Ban { get; set; }
-        /// <summary>
-        /// FK_KaguyaServer_WarnActions
-        /// </summary>
-        [Association(ThisKey = "ServerId", OtherKey = "Id", CanBeNull = false)]
-        public Server Server { get; set; }
     }
-
 }

@@ -35,7 +35,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     .LoadWith(x => x.MutedUsers)
                     .LoadWith(x => x.ServerExp)
                     .LoadWith(x => x.WarnedUsers)
-                    .LoadWith(x => x.WarnActions)
                     .LoadWith(x => x.MutedUsers)
                     .Where(s => s.Id == Id).FirstAsync());
             }
@@ -190,6 +189,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 await db.DeleteAsync(wsObject);
+            }
+        }
+        public static async Task<WarnSetting> GetWarnConfigForServerAsync(ulong Id)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from c in db.WarnActions
+                    where c.ServerId == Id
+                    select c).FirstOrDefaultAsync();
             }
         }
 

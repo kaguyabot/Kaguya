@@ -1,10 +1,9 @@
-﻿using LinqToDB;
-using LinqToDB.Data;
+﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using LinqToDB;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -84,11 +83,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
         public IEnumerable<MutedUser> MutedUsers { get; set; }
-        /// <summary>
-        /// FK_KaguyaServer_WarnActions_BackReference
-        /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
-        public IEnumerable<WarnSetting> WarnActions { get; set; }
         /// <summary>
         /// FK_KaguyaServer_FilteredPhrases_BackReference
         /// </summary>

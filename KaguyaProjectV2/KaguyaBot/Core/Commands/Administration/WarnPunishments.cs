@@ -2,260 +2,102 @@
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
+
+// ReSharper disable PossibleNullReferenceException
+// ReSharper disable SwitchStatementMissingSomeCases
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class WarnPunishments : InteractiveBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("WarnPunishments", RunMode = RunMode.Async)]
-        [Alias("wp")]
+        [Command("WarnSettings", RunMode = RunMode.Async)]
+        [Alias("warnset", "ws")]
         [Summary("Allows a server Administrator to configure the server's warn-punishment scheme. " +
                  "Admins have the ability to configure up to `four` actions that get triggered " +
                  "when a user reaches a set amount of warnings. These four options are `mute`, " +
-                 "`kick`, `shadowban`, and `ban`")]
-        [Remarks("")]
+                 "`kick`, `shadowban`, and `ban`.\n\n" +
+                 "Configure the action by typing the name of the action followed by the amount of " +
+                 "warnings that should trigger the action, ranging from `1-99` warnings.\n\n" +
+                 "If you want to `mute` users after `3` warnings, you would type the command " +
+                 "followed by `mute 3`")]
+        [Remarks("<action> <warnings>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.MuteMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task Command()
+        public async Task Command(string action, int warnings)
         {
+            var actions = new string[] {"mute", "kick", "shadowban", "ban"};
+
+            if(actions.All(x => x.ToLower() != action))
+            {
+                var errorEmbed = new KaguyaEmbedBuilder
+                {
+                    Description = $"`{Context.Message.Content}` is not a valid action. The only valid " +
+                                  $"actions are `mute`, `kick`, `shadowban`, and `ban`."
+                };
+                errorEmbed.SetColor(EmbedColor.RED);
+
+                await ReplyAsync(embed: errorEmbed.Build());
+                return;
+            }
+
+            if (warnings < 1 || warnings > 99)
+            {
+                var numError = new KaguyaEmbedBuilder
+                {
+                    Description = "The amount of warnings must be between `1` and `99`."
+                };
+                numError.SetColor(EmbedColor.RED);
+
+                await ReplyAsync(embed: numError.Build());
+                return;
+            }
+
             var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var currentScheme = server.WarnActions.FirstOrDefault();
+            var serverActions = await ServerQueries.GetWarnConfigForServerAsync(server.Id);
+            var newSetting = new WarnSetting();
 
-            if (currentScheme == null)
+            if (serverActions != null)
             {
-                var initEmbed = new KaguyaEmbedBuilder
-                {
-                    Description = $"This server currently has no configured punishment scheme. Would " +
-                                  $"you like to set one up now?",
-                    Footer = new EmbedFooterBuilder
-                    {
-                        Text = "Clicking the check mark will begin the setup wizard. This will timeout " +
-                               "in 30 seconds."
-                    }
-                };
-                initEmbed.SetColor(EmbedColor.PINK);
-
-                var initData = new ReactionCallbackData("", initEmbed.Build(), true, true,
-                    TimeSpan.FromSeconds(30), async c =>
-                        await c.Channel.SendMessageAsync($"{Context.User.Mention} " +
-                                                         $"Punishment setup timed out."))
-                    .AddCallBack(new Emoji("✅"), async (c, r) =>
-                    {
-                        var newScheme = new WarnSetting();
-
-                        await ReplyAsync($"{Context.User.Mention} Alrighty {Context.User.Username}, let's go " +
-                                         $"ahead and set this up then! I will prompt you four times. All you have " +
-                                         $"to do is tell me how many warnings `(1-99)` you want there to be before the prompted " +
-                                         $"action is triggered. All you do is reply with the number in chat - " +
-                                         $"nothing else, otherwise it will be counted as a zero.");
-
-                        await Task.Delay(5000);
-                        await ReplyAsync("Got it? Alrighty then!");
-                        await Task.Delay(1500);
-
-                        await ReplyAsync("How many warnings before I should automatically `mute` users?");
-                        var muteMsg = await NextMessageAsync();
-                        var muteNum = muteMsg.Content.AsInteger();
-
-                        if (muteNum > 1 && muteNum < 100)
-                            newScheme.Mute = muteNum;
-
-                        await ReplyAsync($"{Context.User.Mention} Awesome! What about kicks?");
-                        var kickMsg = await NextMessageAsync();
-                        var kickNum = kickMsg.Content.AsInteger();
-
-                        if (kickNum > 1 && kickNum < 100)
-                            newScheme.Kick = kickNum;
-
-                        await ReplyAsync($"{Context.User.Mention} Doing great...how about shadowbans? If you don't " +
-                                         $"know what a shadowban is, it basically strips a user of every role they " +
-                                         $"have and disables their ability to see any channel at all. It's basically " +
-                                         $"banning them but without actually ejecting the member from the server.");
-                        var sbMsg = await NextMessageAsync();
-                        var sbNum = sbMsg.Content.AsInteger();
-
-                        if (sbNum > 1 && sbNum < 100)
-                            newScheme.Shadowban = sbNum;
-
-                        await ReplyAsync($"{Context.User.Mention} Got it. Final step...how many for bans?");
-                        var banMsg = await NextMessageAsync();
-                        var banNum = banMsg.Content.AsInteger();
-
-                        if (banNum > 1 && banNum < 100)
-                            newScheme.Ban = banNum;
-
-                        var successEmbed = new KaguyaEmbedBuilder
-                        {
-                            Description = $"Awesome! Here's what I've got:\n\n" +
-                                          $"Mutes: `{newScheme.Mute}` warnings" +
-                                          $"Kicks: `{newScheme.Kick}` warnings" +
-                                          $"Shadowbans: `{newScheme.Shadowban}` warnings" +
-                                          $"Bans: `{newScheme.Ban}` warnings\n\n" +
-                                          $"I've gone ahead and applied these settings for you. They are now in effect, " +
-                                          $"and no more action is required."
-                        };
-                        successEmbed.SetColor(EmbedColor.GOLD);
-
-                        await ReplyAsync(embed: successEmbed.Build());
-                    })
-                    .AddCallBack(new Emoji("⛔"), async (c, r) =>
-                    {
-                        await c.Channel.SendMessageAsync("Okay, we can configure this later.");
-                    });
-
-                await InlineReactionReplyAsync(initData);
+                newSetting = serverActions;
             }
-            else
+
+            switch (action.ToLower())
             {
-                var emojis = HelpfulObjects.EmojisOneThroughNine();
-
-                int muteW = currentScheme.Mute;
-                int kickW = currentScheme.Kick;
-                int shadowbanW = currentScheme.Shadowban;
-                int banW = currentScheme.Ban;
-
-                string des = $"Here's what your current punishment scheme looks like:\n\n" +
-                             $"`#1.` Mute: {(muteW.IsZero() ? "Not configured" : $"{muteW} warnings")}\n" +
-                             $"`#2.` Kick: {(kickW.IsZero() ? "Not configured" : $"{kickW} warnings")}\n" +
-                             $"`#3.` Shadowban: {(shadowbanW.IsZero() ? "Not configured" : $"{shadowbanW} warnings")}\n" +
-                             $"`#4.` Ban: {(banW.IsZero() ? "Not configured" : $"{banW} warnings")}\n\n " +
-                             $"What would you like to configure?";
-
-                var curEmbed = new KaguyaEmbedBuilder
-                {
-                    Description = des,
-                    Footer = new EmbedFooterBuilder
-                    {
-                        Text = "Click the reaction corresponding to what you want to configure."
-                    }
-                };
-
-                var curData = new ReactionCallbackData("", curEmbed.Build(), true, true,
-                    TimeSpan.FromSeconds(300),
-                    async c => { await c.Channel.SendMessageAsync("Warning configuration timed out."); });
-
-                curData.AddCallBack(emojis[0], async (c, r) => {
-                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} What would you like to have " +
-                                                           $"your new warn-threshold for `mutes` be? Just reply " +
-                                                           $"with the number (must be `1-99`).");
-                    var nextMsg = await NextMessageAsync();
-                    var nextInt = nextMsg.Content.AsInteger();
-
-                    if (nextInt != 0 && nextInt > 0 && nextInt < 100)
-                    {
-                        var newSetting = new WarnSetting
-                        {
-                            ServerId = Context.Guild.Id,
-                            Mute = nextInt,
-                            Kick = currentScheme.Kick,
-                            Shadowban = currentScheme.Shadowban,
-                            Ban = currentScheme.Ban
-                        };
-
-                        await ServerQueries.AddOrReplaceWarnSettingAsync(newSetting);
-
-                        await ReplyAsync($"{Context.User.Mention} Successfully updated your preferences!");
-                        return;
-                    }
-
-                    await ReplyAsync($"{Context.User.Mention} That input was invalid. " +
-                                     $"This operation will be cancelled.");
-                });
-                curData.AddCallBack(emojis[1], async (c, r) =>
-                {
-                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} What would you like to have " +
-                                                           $"your new warn-threshold for `kicks` be? Just reply " +
-                                                           $"with the number (must be `1-99`).");
-                    var nextMsg = await NextMessageAsync();
-                    var nextInt = nextMsg.Content.AsInteger();
-
-                    if (nextInt != 0 && nextInt > 0 && nextInt < 100)
-                    {
-                        var newSetting = new WarnSetting
-                        {
-                            ServerId = Context.Guild.Id,
-                            Mute = currentScheme.Mute,
-                            Kick = nextInt,
-                            Shadowban = currentScheme.Shadowban,
-                            Ban = currentScheme.Ban
-                        };
-
-                        await ServerQueries.AddOrReplaceWarnSettingAsync(newSetting);
-
-                        await ReplyAsync($"{Context.User.Mention} Successfully updated your preferences!");
-                        return;
-                    }
-
-                    await ReplyAsync($"{Context.User.Mention} That input was invalid. " +
-                                     $"This operation will be cancelled.");
-                });
-                curData.AddCallBack(emojis[2], async (c, r) =>
-                {
-                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} What would you like to have " +
-                                                           $"your new warn-threshold for `shadowbans` be? Just reply " +
-                                                           $"with the number (must be `1-99`).");
-                    var nextMsg = await NextMessageAsync();
-                    var nextInt = nextMsg.Content.AsInteger();
-
-                    if (nextInt != 0 && nextInt > 0 && nextInt < 100)
-                    {
-                        var newSetting = new WarnSetting
-                        {
-                            ServerId = Context.Guild.Id,
-                            Mute = currentScheme.Mute,
-                            Kick = currentScheme.Kick,
-                            Shadowban = nextInt,
-                            Ban = currentScheme.Ban
-                        };
-
-                        await ServerQueries.AddOrReplaceWarnSettingAsync(newSetting);
-
-                        await ReplyAsync($"{Context.User.Mention} Successfully updated your preferences!");
-                        return;
-                    }
-
-                    await ReplyAsync($"{Context.User.Mention} That input was invalid. " +
-                                     $"This operation will be cancelled.");
-                });
-                curData.AddCallBack(emojis[3], async (c, r) => {
-                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} What would you like to have " +
-                                                           $"your new warn-threshold for `bans` be? Just reply " +
-                                                           $"with the number (must be `1-99`).");
-                    var nextMsg = await NextMessageAsync();
-                    var nextInt = nextMsg.Content.AsInteger();
-
-                    if (nextInt != 0 && nextInt > 0 && nextInt < 100)
-                    {
-                        var newSetting = new WarnSetting
-                        {
-                            ServerId = Context.Guild.Id,
-                            Mute = currentScheme.Mute,
-                            Kick = currentScheme.Kick,
-                            Shadowban = currentScheme.Shadowban,
-                            Ban = nextInt
-                        };
-
-                        await ServerQueries.AddOrReplaceWarnSettingAsync(newSetting);
-
-                        await ReplyAsync($"{Context.User.Mention} Successfully updated your preferences!");
-                        return;
-                    }
-
-                    await ReplyAsync($"{Context.User.Mention} That input was invalid. " +
-                                     $"This operation will be cancelled.");
-                });
+                case "mute":
+                    newSetting.Mute = warnings; break;
+                case "kick":
+                    newSetting.Kick = warnings; break;
+                case "shadowban":
+                    newSetting.Shadowban = warnings; break;
+                case "ban":
+                    newSetting.Ban = warnings;
+                    break;
             }
+
+            await ServerQueries.AddOrReplaceWarnSettingAsync(newSetting);
+
+            var successEmbed = new KaguyaEmbedBuilder
+            {
+                Description = $"Successfully updated the warn triggers for " +
+                              $"`{Context.Guild.Name}`. Here's what I've got:\n\n" +
+                              $"`Mute`: After `{newSetting.Mute.ToWords()}` warnings." +
+                              $"`Kick`: After `{newSetting.Kick.ToWords()}` warnings." +
+                              $"`Shadowban`: After `{newSetting.Shadowban.ToWords()}` warnings." +
+                              $"`Ban`: After `{newSetting.Ban.ToWords()}` warnings."
+            };
+            successEmbed.SetColor(EmbedColor.PINK);
+
+            await ReplyAsync(embed: successEmbed.Build());
         }
     }
 }
