@@ -25,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands
         public async Task ShadowbanUser(SocketGuildUser user)
         {
             await ReplyAsync($"{Context.User.Mention} Executing, please wait...");
-            var roles = user.Roles.Where(x => !x.IsManaged);
+            var roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
             await user.RemoveRolesAsync(roles);
 
             foreach(var channel in Context.Guild.Channels)
