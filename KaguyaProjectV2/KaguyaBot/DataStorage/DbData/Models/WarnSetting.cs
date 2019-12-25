@@ -2,7 +2,7 @@
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "warnactions")]
+    [Table(Name = "warnsettings")]
     public class WarnSetting
     {
         [PrimaryKey]

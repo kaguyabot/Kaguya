@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class WarnPunishments : InteractiveBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("WarnSettings", RunMode = RunMode.Async)]
+        [Command("WarnSettings")]
         [Alias("warnset", "ws")]
         [Summary("Allows a server Administrator to configure the server's warn-punishment scheme. " +
                  "Admins have the ability to configure up to `four` actions that get triggered " +
@@ -26,15 +26,46 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                  "Configure the action by typing the name of the action followed by the amount of " +
                  "warnings that should trigger the action, ranging from `1-99` warnings.\n\n" +
                  "If you want to `mute` users after `3` warnings, you would type the command " +
-                 "followed by `mute 3`")]
-        [Remarks("<action> <warnings>")]
+                 "followed by `mute 3`.\n\n" +
+                 "__**To disable a trigger**__, set the number of warnings to `0`.\n" +
+                 "__**To view your current settings**__, use the command without any arguments.")]
+        [Remarks("\n<action> <warnings>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.MuteMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task Command(string action, int warnings)
+        public async Task Command(string action = null, int warnings = 0)
         {
+            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var serverActions = await ServerQueries.GetWarnConfigForServerAsync(server.Id);
+
+            if (action == null && warnings == 0)
+            {
+                if (serverActions == null)
+                {
+                    var nullErrorEmbed = new KaguyaEmbedBuilder
+                    {
+                        Description = "Nothing has been configured."
+                    };
+                    nullErrorEmbed.SetColor(EmbedColor.RED);
+
+                    await ReplyAsync(embed: nullErrorEmbed.Build());
+                    return;
+                }
+
+                var curSettingsEmbed = new KaguyaEmbedBuilder
+                {
+                    Description = $"`{Context.Guild.Name}`. Here's what I've got:\n\n" +
+                                  $"`Mute`: After `{(serverActions.Mute.IsZero() ? "N/A" : serverActions.Mute.ToString().Humanize())}` warnings.\n" +
+                                  $"`Kick`: After `{(serverActions.Kick.IsZero() ? "N/A" : serverActions.Kick.ToString().Humanize())}` warnings.\n" +
+                                  $"`Shadowban`: After `{(serverActions.Shadowban.IsZero() ? "N/A" : serverActions.Shadowban.ToString().Humanize())}` warnings.\n" +
+                                  $"`Ban`: After `{(serverActions.Ban.IsZero() ? "N/A" : serverActions.Ban.ToString().Humanize())}` warnings.\n"
+                };
+                await ReplyAsync(embed: curSettingsEmbed.Build());
+                return;
+            }
+
             var actions = new string[] {"mute", "kick", "shadowban", "ban"};
 
             if(actions.All(x => x.ToLower() != action))
@@ -50,21 +81,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 return;
             }
 
-            if (warnings < 1 || warnings > 99)
+            if (warnings < 0 || warnings > 99)
             {
                 var numError = new KaguyaEmbedBuilder
                 {
-                    Description = "The amount of warnings must be between `1` and `99`."
+                    Description = "The amount of warnings must be between `0` and `99`."
                 };
                 numError.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: numError.Build());
                 return;
             }
-
-            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var serverActions = await ServerQueries.GetWarnConfigForServerAsync(server.Id);
-            var newSetting = new WarnSetting();
+            
+            var newSetting = new WarnSetting
+            {
+                ServerId = Context.Guild.Id
+            };
 
             if (serverActions != null)
             {
@@ -90,10 +122,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 Description = $"Successfully updated the warn triggers for " +
                               $"`{Context.Guild.Name}`. Here's what I've got:\n\n" +
-                              $"`Mute`: After `{newSetting.Mute.ToWords()}` warnings." +
-                              $"`Kick`: After `{newSetting.Kick.ToWords()}` warnings." +
-                              $"`Shadowban`: After `{newSetting.Shadowban.ToWords()}` warnings." +
-                              $"`Ban`: After `{newSetting.Ban.ToWords()}` warnings."
+                              $"`Mute`: After `{(newSetting.Mute.IsZero() ? "N/A" : newSetting.Mute.ToString().Humanize())}` warnings.\n" +
+                              $"`Kick`: After `{(newSetting.Kick.IsZero() ? "N/A" : newSetting.Kick.ToString().Humanize())}` warnings.\n" +
+                              $"`Shadowban`: After `{(newSetting.Shadowban.IsZero() ? "N/A" : newSetting.Shadowban.ToString().Humanize())}` warnings.\n" +
+                              $"`Ban`: After `{(newSetting.Ban.IsZero() ? "N/A" : newSetting.Ban.ToString().Humanize())}` warnings.\n"
             };
             successEmbed.SetColor(EmbedColor.PINK);
 
