@@ -31,8 +31,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.MuteMembers)]
         public async Task UnWarnUser(IGuildUser user, string reason = null)
         {
-            var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
-            var warnings = await ServerQueries.GetWarnedUser(Context.Guild.Id, user.Id);
+            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var warnings = await ServerQueries.GetWarnedUserAsync(Context.Guild.Id, user.Id);
             var fields = new List<EmbedFieldBuilder>();
 
             int warnCount = warnings.Count;
@@ -81,10 +81,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         private async Task ReactionReply(IGuildUser user, List<WarnedUser> warnings, Embed embed, 
             int warnCount, Server server, string reason)
         {
-            var emojis = new Emoji[] { new Emoji("1⃣"), new Emoji("2⃣"), new Emoji("3⃣"),
-                new Emoji("4⃣"),  new Emoji("5⃣"),  new Emoji("6⃣"),  new Emoji("7⃣"),
-                new Emoji("8⃣"),  new Emoji("9⃣")
-            };
+            var emojis = HelpfulObjects.EmojisOneThroughNine();
 
             var data = new ReactionCallbackData("", embed, false, false, TimeSpan.FromSeconds(300), c => 
                 c.Channel.SendMessageAsync(embed: TimeoutEmbed()));
@@ -95,7 +92,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 int j1 = j;
                 callbacks.Add((emojis[j], async (c, r) =>
                 {
-                    await ServerQueries.RemoveWarnedUser(warnings.ElementAt(j1));
+                    await ServerQueries.RemoveWarnedUserAsync(warnings.ElementAt(j1));
                     await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
                                                      $"`Successfully removed warning #{j1 + 1}`");
 

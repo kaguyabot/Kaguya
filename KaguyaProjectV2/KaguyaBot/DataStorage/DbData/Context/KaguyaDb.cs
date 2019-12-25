@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
         public ITable<SupporterKey> SupporterKeys => GetTable<SupporterKey>();
         public ITable<TwitchChannel> TwitchChannels => GetTable<TwitchChannel>();
         public ITable<User> Users => GetTable<User>();
-        public ITable<WarnAction> WarnActions => GetTable<WarnAction>();
+        public ITable<WarnSetting> WarnActions => GetTable<WarnSetting>();
         public ITable<WarnedUser> WarnedUsers => GetTable<WarnedUser>();
     }
 }

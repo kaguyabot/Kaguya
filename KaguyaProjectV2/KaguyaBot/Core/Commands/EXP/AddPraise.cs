@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [Remarks("\n<user>\n<user> <reason>")]
         public async Task Command(IGuildUser user = null, [Remainder]string reason = null)
         {
-            var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
+            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var userPraise = await ServerQueries.GetPraiseAsync(Context.User.Id, server.Id);
             var lastGivenPraise = await ServerQueries.GetLastPraiseTimeAsync(Context.User.Id, Context.Guild.Id);
 

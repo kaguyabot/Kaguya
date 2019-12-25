@@ -4,6 +4,7 @@ using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -20,16 +21,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.ManageGuild)]
         public async Task RemovePhrase()
         {
-            List<FilteredPhrase> allFP = await ServerQueries.GetAllFilteredPhrasesForServer(Context.Guild.Id);
+            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var allFp = server.FilteredPhrases.ToList();
 
-            foreach (var element in allFP)
+            foreach (var element in allFp)
             {
                 ServerQueries.RemoveFilteredPhrase(element);
             }
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
-                Description = $"Successfully cleared the server's word filter. ({allFP.Count} phrases)"
+                Description = $"Successfully cleared the server's word filter. ({allFp.Count} phrases)"
             };
             embed.SetColor(EmbedColor.VIOLET);
 

@@ -88,7 +88,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// FK_KaguyaServer_WarnActions_BackReference
         /// </summary>
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
-        public IEnumerable<WarnAction> WarnActions { get; set; }
+        public IEnumerable<WarnSetting> WarnActions { get; set; }
         /// <summary>
         /// FK_KaguyaServer_FilteredPhrases_BackReference
         /// </summary>

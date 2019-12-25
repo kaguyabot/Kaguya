@@ -43,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             var message = msg as SocketUserMessage;
             if (message == null || message.Author.IsBot) return;
 
-            Server server = await ServerQueries.GetOrCreateServer(((SocketGuildChannel) message.Channel).Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
             User user = await UserQueries.GetOrCreateUser(message.Author.Id);
 
             if (user.IsBlacklisted && user.Id != ConfigProperties.botOwnerId) return;
@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             int argPos = 0;
 
             await UserQueries.UpdateUser(user);
-            await ServerQueries.UpdateServer(server);
+            await ServerQueries.UpdateServerAsync(server);
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
@@ -74,7 +74,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (!command.IsSpecified)
                 return;
 
-            Server server = await ServerQueries.GetOrCreateServer(context.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServerAsync(context.Guild.Id);
             User user = await UserQueries.GetOrCreateUser(context.User.Id);
 
             if (result.IsSuccess)
@@ -91,7 +91,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     UserId = context.User.Id,
                     ServerId = context.Guild.Id
                 });
-                await ServerQueries.UpdateServer(server);
+                await ServerQueries.UpdateServerAsync(server);
                 await UserQueries.UpdateUser(user);
                 return;
             }

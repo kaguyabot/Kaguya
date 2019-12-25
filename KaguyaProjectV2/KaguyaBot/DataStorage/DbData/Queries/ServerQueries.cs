@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     public static class ServerQueries
     {
-        public static async Task<Server> GetOrCreateServer(ulong Id)
+        public static async Task<Server> GetOrCreateServerAsync(ulong Id)
         {
             using (var db = new KaguyaDb())
             {
@@ -41,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task UpdateServer(Server server)
+        public static async Task UpdateServerAsync(Server server)
         {
             using (var db = new KaguyaDb())
             {
@@ -58,24 +58,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     BulkCopyType = BulkCopyType.ProviderSpecific
                 };
                 db.BulkCopy(options, servers);
-            }
-        }
-
-        public static List<FilteredPhrase> GetAllFilteredPhrases()
-        {
-            using (var db = new KaguyaDb())
-            {
-                return db.GetTable<FilteredPhrase>().ToList();
-            }
-        }
-
-        public static async Task<List<FilteredPhrase>> GetAllFilteredPhrasesForServer(ulong Id)
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from f in db.FilteredPhrases
-                              where f.ServerId == Id
-                              select f).ToListAsync();
             }
         }
 
@@ -175,7 +157,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return GetOrCreateServer(serverId).Result.MutedUsers.FirstOrDefault(x => x.UserId == userId);
+                return GetOrCreateServerAsync(serverId).Result.MutedUsers.FirstOrDefault(x => x.UserId == userId);
             }
         }
 
@@ -195,23 +177,23 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task AddWarnAction(WarnAction waObject)
+        public static async Task AddOrReplaceWarnSettingAsync(WarnSetting wsObject)
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertAsync(waObject);
+                await db.InsertOrReplaceAsync(wsObject);
             }
         }
 
-        public static async Task RemoveWarnAction(WarnAction waObject)
+        public static async Task RemoveWarnSettingAsync(WarnSetting wsObject)
         {
             using (var db = new KaguyaDb())
             {
-                await db.DeleteAsync(waObject);
+                await db.DeleteAsync(wsObject);
             }
         }
 
-        public static async Task AddWarnedUser(WarnedUser wuObject)
+        public static async Task AddWarnedUserAsync(WarnedUser wuObject)
         {
             using (var db = new KaguyaDb())
             {
@@ -219,7 +201,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task RemoveWarnedUser(WarnedUser wuObject)
+        public static async Task RemoveWarnedUserAsync(WarnedUser wuObject)
         {
             using (var db = new KaguyaDb())
             {
@@ -227,7 +209,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<List<WarnedUser>> GetWarnedUser(ulong serverId, ulong userId)
+        public static async Task<List<WarnedUser>> GetWarnedUserAsync(ulong serverId, ulong userId)
         {
             using (var db = new KaguyaDb())
             {
@@ -237,7 +219,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task AddTwitchChannel(TwitchChannel tcObj)
+        public static async Task AddTwitchChannelAsync(TwitchChannel tcObj)
         {
             using (var db = new KaguyaDb())
             {

@@ -3,6 +3,7 @@ using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -25,8 +26,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             string s = "s";
             if (newArgs.Length == 1) s = "";
 
-            Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
-            List<FilteredPhrase> allFp = await ServerQueries.GetAllFilteredPhrasesForServer(Context.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var allFp = server.FilteredPhrases.ToList();
 
             if (args.Length == 0)
             {

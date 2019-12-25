@@ -1,12 +1,12 @@
 ﻿using Discord;
 using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -15,9 +15,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [AdminCommand]
         [Command("FilterAdd")]
         [Alias("fa")]
-        [Summary("Adds one phrase (or a list of phrases) to your server's word filter. " +
-            "These are phrases that will automatically be deleted when typed in chat. UserQueries with the Administrator permission are excluded from punishment.")]
-        [Remarks("dodohead.big beachy moofins.penguins!!")]
+        [Summary("Adds a list of filtered phrases to your server's word filter. " +
+            "These are phrases that will automatically be deleted when typed in chat. " +
+            "Users with the `Administrator` permission automatically are ignored by this " +
+            "filter.")]
+        [Remarks("<phrase> {...}")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
@@ -26,8 +28,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             string s = "s";
             if (args.Length == 1) s = "";
 
-            Server server = ServerQueries.GetOrCreateServer(Context.Guild.Id).Result;
-            List<FilteredPhrase> allFp = await ServerQueries.GetAllFilteredPhrasesForServer(Context.Guild.Id);
+            Server server = ServerQueries.GetOrCreateServerAsync(Context.Guild.Id).Result;
+            var allFp = server.FilteredPhrases.ToList();
 
             if(args.Length == 0)
             {

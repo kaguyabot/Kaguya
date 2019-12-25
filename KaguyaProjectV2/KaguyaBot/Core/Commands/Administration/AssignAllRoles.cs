@@ -15,8 +15,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class AssignAllRoles : ModuleBase<ShardedCommandContext>
     {
-        [PremiumServerCommand]
         [AdminCommand]
+        [PremiumServerCommand]
         [Command("AssignAllRoles", RunMode = RunMode.Async)]
         [Alias("aar")]
         [Summary("Assigns every single role in the server to a user, or list of users.")]

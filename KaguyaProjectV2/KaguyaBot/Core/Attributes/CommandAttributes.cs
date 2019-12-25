@@ -57,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     {
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
-            var server = ServerQueries.GetOrCreateServer(context.Guild.Id);
+            var server = ServerQueries.GetOrCreateServerAsync(context.Guild.Id);
 
             return Task.FromResult(server.Result.IsPremium ? PreconditionResult.FromSuccess() :
                 PreconditionResult.FromError("Sorry, but this server must be of premium status in order to use this command."));

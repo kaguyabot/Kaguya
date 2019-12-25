@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Alias("h")]
         public async Task Help()
         {
-            Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var cmdInfo = CommandHandler._commands;
 
             Attribute[] attributes = new Attribute[]

@@ -35,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                         if (guild == null)
                             goto RemoveFromDB;
 
-                        var server = await ServerQueries.GetOrCreateServer(guild.Id);
+                        var server = await ServerQueries.GetOrCreateServerAsync(guild.Id);
                         var user = ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
 
                         if (server.IsPremium)
@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                 LogLevel.WARN);
                         }
 
-                        await ServerQueries.UpdateServer(server);
+                        await ServerQueries.UpdateServerAsync(server);
 
                         RemoveFromDB:
                         await ServerQueries.RemoveMutedUser(mutedUser);

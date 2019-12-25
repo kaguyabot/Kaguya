@@ -30,11 +30,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ViewAuditLog)]
         public async Task ClearMessages(int amount = 10, string reason = null)
         {
-            var server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
+            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
             KaguyaEmbedBuilder embed;
 
             server.IsCurrentlyPurgingMessages = true;
-            await ServerQueries.UpdateServer(server);
+            await ServerQueries.UpdateServerAsync(server);
 
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             messages = messages.Where(x => x.Timestamp.DateTime > DateTime.Now.AddDays(-14));
@@ -87,7 +87,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
 
             server.IsCurrentlyPurgingMessages = false;
-            await ServerQueries.UpdateServer(server);
+            await ServerQueries.UpdateServerAsync(server);
         }
     }
 }

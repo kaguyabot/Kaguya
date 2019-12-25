@@ -88,7 +88,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             };
 
             log.Server.TotalAdminActions++;
-            await ServerQueries.UpdateServer(log.Server);
+            await ServerQueries.UpdateServerAsync(log.Server);
 
             await logChannel.SendMessageAsync(embed: embed.Build());
             await ConsoleLogger.Log($"Premium moderation log sent for server {log.Server.Id}.", LogLevel.DEBUG);

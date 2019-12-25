@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
         {
             KaguyaEmbedBuilder embed;
 
-            Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var twitchChannels = await ServerQueries.GetTwitchChannelsForServer(server.Id);
             var twitchApi = ConfigProperties.twitchApi;
             var userIndex = await twitchApi.V5.Users.GetUserByNameAsync(twitchChannelName);
@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                     return;
                 }
 
-                await ServerQueries.AddTwitchChannel(tchannel);
+                await ServerQueries.AddTwitchChannelAsync(tchannel);
 
                 string mentionString = MentionString(mentionEveryone);
                 embed = new KaguyaEmbedBuilder
@@ -161,7 +161,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                     await ServerQueries.RemoveTwitchChannel(twitchChannels.FirstOrDefault(item =>
                         item.ChannelName == tchannel.ChannelName &&
                         item.TextChannelId == tchannel.TextChannelId));
-                    await ServerQueries.AddTwitchChannel(tchannel);
+                    await ServerQueries.AddTwitchChannelAsync(tchannel);
                     await c.Channel.SendMessageAsync(embed: succEmbed2.Build());
                 })
                 .WithCallback(new Emoji("⛔"), async (c, r) => await c.Channel.SendMessageAsync(embed: nothingEmbed2.Build())));
@@ -176,12 +176,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                 .WithCallback(new Emoji("✅"), async (c, r) =>
                 {
                     await ServerQueries.RemoveTwitchChannel(serverTwitchChannels.FirstOrDefault(x => x.ChannelName == tchannel.ChannelName));
-                    await ServerQueries.AddTwitchChannel(tchannel);
+                    await ServerQueries.AddTwitchChannelAsync(tchannel);
                     await c.Channel.SendMessageAsync(embed: succEmbed.Build());
                 })
                 .WithCallback(new Emoji("❔"), async (c, r) =>
                 {
-                    await ServerQueries.AddTwitchChannel(tchannel);
+                    await ServerQueries.AddTwitchChannelAsync(tchannel);
                     await c.Channel.SendMessageAsync(embed: altEmbed.Build());
                 })
                 .WithCallback(new Emoji("⛔"), (c, r) => c.Channel.SendMessageAsync(embed: nothingEmbed.Build())));

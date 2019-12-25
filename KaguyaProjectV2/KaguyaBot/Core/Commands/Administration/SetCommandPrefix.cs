@@ -31,9 +31,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 return;
             }
 
-            Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
             server.CommandPrefix = prefix;
-            await ServerQueries.UpdateServer(server);
+            await ServerQueries.UpdateServerAsync(server);
 
             embed.WithDescription($"Command prefix has been changed to `{prefix}`.");
             embed.WithFooter($"Use this command again without specifying a prefix to reset it.");
@@ -49,9 +49,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task SetPrefix()
         {
-            Server server = await ServerQueries.GetOrCreateServer(Context.Guild.Id);
+            Server server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
             server.CommandPrefix = "$";
-            await ServerQueries.UpdateServer(server);
+            await ServerQueries.UpdateServerAsync(server);
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder 
             {
