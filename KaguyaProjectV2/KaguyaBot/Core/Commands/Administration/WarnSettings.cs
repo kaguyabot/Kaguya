@@ -14,7 +14,7 @@ using Humanizer;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class WarnPunishments : InteractiveBase<ShardedCommandContext>
+    public class WarnSettings : InteractiveBase<ShardedCommandContext>
     {
         [AdminCommand]
         [Command("WarnSettings")]

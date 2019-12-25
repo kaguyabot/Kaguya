@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task UnWarnUser(IGuildUser user, string reason = null)
         {
             var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var warnings = await ServerQueries.GetWarnedUserAsync(Context.Guild.Id, user.Id);
+            var warnings = await ServerQueries.GetWarningsForUserAsync(Context.Guild.Id, user.Id);
             var fields = new List<EmbedFieldBuilder>();
 
             int warnCount = warnings.Count;

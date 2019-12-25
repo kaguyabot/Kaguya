@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -26,6 +27,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public static async Task SendModerationLog(PremiumModerationLog log)
         {
+            if (!log.Server.IsPremium)
+                return;
+
             var logChannel = ConfigProperties.client.GetGuild(log.Server.Id).GetTextChannel(log.Server.ModLog);
             string actionTitle = "User ";
             string embedUrl = "";
@@ -33,6 +37,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             switch (log.Action)
             {
+                case PremiumModActionHandler.AUTOBAN:
+                    actionTitle += "Auto-Banned ";
+                    embedUrl = "https://i.imgur.com/P6Cgm8Z.png";
+                    break;
+                case PremiumModActionHandler.AUTOKICK:
+                    actionTitle += "Auto-Kicked ";
+                    embedUrl = "https://i.imgur.com/lUjW0uu.png";
+                    break;
+                case PremiumModActionHandler.AUTOMUTE:
+                    actionTitle += "Auto-Muted ";
+                    embedUrl = "https://i.imgur.com/nnc3h7D.png";
+                    break;
+                case PremiumModActionHandler.AUTOSHADOWBAN:
+                    actionTitle += "Auto-Shadowbanned ";
+                    embedUrl = "https://i.imgur.com/hCHifVn.png";
+                    break;
                 case PremiumModActionHandler.SHADOWBAN:
                     actionTitle += "Shadowbanned ";
                     embedUrl = "https://i.imgur.com/hCHifVn.png";
@@ -100,12 +120,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     /// </summary>
     public enum PremiumModActionHandler
     {
-        SHADOWBAN,
+        AUTOBAN,
+        AUTOKICK,
+        AUTOMUTE,
+        AUTOSHADOWBAN,
+        MESSAGEPURGE,
         MUTE,
+        SHADOWBAN,
         WARN,
         UNSHADOWBAN,
         UNMUTE,
-        UNWARN,
-        MESSAGEPURGE
+        UNWARN
     }
 }

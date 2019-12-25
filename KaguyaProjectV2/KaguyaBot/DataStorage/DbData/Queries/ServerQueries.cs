@@ -217,7 +217,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<List<WarnedUser>> GetWarnedUserAsync(ulong serverId, ulong userId)
+        public static async Task<List<WarnedUser>> GetWarningsForUserAsync(ulong serverId, ulong userId)
         {
             using (var db = new KaguyaDb())
             {

@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                  "rounds slightly to the nearest time precision. A reason may be provided upon muting someone, but " +
                  "only if a duration is specified before it as well. Reasons will be logged for premium servers in the " +
                  "specified modlog channel.")]
-        [Remarks("<user>\n<user> <duration>\n<user> <duration> <reason>\nPenguinUser#0000\nPenguinUser#0000 5d12h20m30s\nPenguinUser#0000 30m Spamming in chat")]
+        [Remarks("<user> [duration] [reason]")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -38,8 +38,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             var guild = Context.Guild;
             var server = await ServerQueries.GetOrCreateServerAsync(guild.Id);
-
-            Configurator.DateTimeHumanizeStrategy = new PrecisionDateTimeHumanizeStrategy(1.00);
 
             string muteString = "";
             if (duration != null)
@@ -207,7 +205,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"Successfully muted user `{user}`. {muteString}."
+                Description = $"Successfully muted user `{user}`. {muteString}"
             };
 
             await ReplyAsync(embed: embed.Build());
@@ -219,6 +217,60 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 await PremiumModerationLog.SendModerationLog(modlogObj);
             }
+        }
+
+        /// <summary>
+        /// Does the same as mute except manually forces there to be an indefinite duration on the mute.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task AutoMute(SocketGuildUser user)
+        {
+            var guild = user.Guild;
+            var muteRole = guild.Roles.FirstOrDefault(x => x?.Name.ToLower() == "kaguya-mute");
+
+            if (muteRole == null)
+            {
+                await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
+                await ConsoleLogger.Log($"New mute role created in guild [Name: {guild.Name} | ID: {guild.Id}]",
+                    LogLevel.DEBUG);
+
+                /*
+                 * We redefine guild because the object
+                 * must now have an updated role collection
+                 * in order for this to work.
+                 */
+
+                guild = Context.Guild;
+                muteRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
+
+                var waitEmbed = new KaguyaEmbedBuilder
+                {
+                    Description = "Mute role not found, so I created one.\n" +
+                                  "Updating channel permissions. Please wait..."
+                };
+                waitEmbed.SetColor(EmbedColor.VIOLET);
+
+                await ReplyAsync(embed: waitEmbed.Build());
+
+                foreach (var channel in guild.Channels)
+                {
+                    await channel.AddPermissionOverwriteAsync(muteRole, OverwritePermissions.InheritAll);
+                    await channel.AddPermissionOverwriteAsync(muteRole, new OverwritePermissions(
+                        addReactions: PermValue.Deny, speak: PermValue.Deny,
+                        sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
+                        sendMessages: PermValue.Deny));
+
+                    await ConsoleLogger.Log($"Permission overwrite added for guild channel.\n" +
+                                            $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
+                                            $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLevel.TRACE);
+                }
+            }
+
+            await user.AddRoleAsync(muteRole);
+
+            await ConsoleLogger.Log($"User muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
+                                    $"User: [Name: {user} | ID: {user.Id}]", LogLevel.DEBUG);
         }
     }
 }
