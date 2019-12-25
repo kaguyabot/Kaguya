@@ -244,15 +244,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 guild = Context.Guild;
                 muteRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
 
-                var waitEmbed = new KaguyaEmbedBuilder
-                {
-                    Description = "Mute role not found, so I created one.\n" +
-                                  "Updating channel permissions. Please wait..."
-                };
-                waitEmbed.SetColor(EmbedColor.VIOLET);
-
-                await ReplyAsync(embed: waitEmbed.Build());
-
                 foreach (var channel in guild.Channels)
                 {
                     await channel.AddPermissionOverwriteAsync(muteRole, OverwritePermissions.InheritAll);
