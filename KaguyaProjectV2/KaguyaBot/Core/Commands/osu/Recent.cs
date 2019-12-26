@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Osu.Builders;
 using KaguyaProjectV2.KaguyaBot.Core.Osu.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
@@ -38,7 +39,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             //Getting recent object.
             var playerRecentObjectList = new OsuRecentBuilder(userProfileObject.user_id.ToString()).Execute();
 
-            if (playerRecentObjectList.Count == 0)
+            if (playerRecentObjectList.Any())
             {
                 embed.WithAuthor(author =>
                 {
@@ -58,7 +59,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 });
 
                 //Description
-                DateTime date = new DateTime();
                 foreach (var playerRecentObject in playerRecentObjectList)
                 {
                     embed.Description += $"▸ **{playerRecentObject.rankemote}{playerRecentObject.string_mods}** ▸ **[{playerRecentObject.beatmap.title} [{playerRecentObject.beatmap.version}]](https://osu.ppy.sh/b/{playerRecentObject.beatmap_id})** by **{playerRecentObject.beatmap.artist}**\n" +
@@ -72,12 +72,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                         embed.Description += $"▸ **PP for FC**: `{playerRecentObject.fullcombopp.ToString("N0")}pp`";
                     else
                         embed.Description += $"▸ **PP for FC**: `{playerRecentObject.fullcombopp.ToString("N0")}pp`\n";
-
-                    date = playerRecentObject.date;
                 }
 
                 //Footer
-                var difference = DateTime.UtcNow - date;
+                var difference = DateTime.UtcNow - playerRecentObjectList.LastOrDefault().date;
 
                 if (playerRecentObjectList.Count > 1)
                     embed.WithFooter($"{userProfileObject.username} performed this plays {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.");
