@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
         [OsuCommand]
-        [Command("osuTop")]
+        [Command("osutop")]
         [Summary("Displays the reqested amount of top plays for a player. " +
                  "If a user has their osu! username set with the `osuset` command, " +
                  "they do not need to specify a player. The command used " +

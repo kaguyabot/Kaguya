@@ -82,7 +82,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
 
                 //Get Beatmap completion rate and total count of hit notes 
                 item.counttotal = (item.count300 + item.count100 + item.count50 + item.countmiss);
-                item.completion = (item.counttotal / beatmapData.Objects.Count()) * 100;
+                item.completion = item.counttotal / (double)beatmapData.Objects.Count() * 100;
             }
 
             return array;

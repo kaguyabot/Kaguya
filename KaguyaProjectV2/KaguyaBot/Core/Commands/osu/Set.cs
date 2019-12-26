@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
         [OsuCommand]
-        [Command("osuSet")]
+        [Command("osuset")]
         [Summary("Allows a user to store their osu! username or ID in their Kaguya account. " +
                  "This way, users may use the other osu! commands without having to specify a " +
                  "player, assuming they want information about themselves.")]
