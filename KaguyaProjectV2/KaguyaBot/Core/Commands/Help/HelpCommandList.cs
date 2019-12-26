@@ -9,6 +9,7 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -62,8 +63,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 pg.Description += "```";
             }
 
-            if (Context.User.Id != 146092837723832320)
-                pages[attributes.Length] = null;
+            if (Context.User.Id != ConfigProperties.botConfig.BotOwnerId)
+                pages[attributes.Length - 1] = null;
 
             var pager = new PaginatedMessage
             {
