@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using Discord.Net;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
@@ -138,8 +137,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void InitializeEventHandlers()
         {
-            var warnHandler = new WarnHandler();
-            warnHandler.Subscribe(new Warn());
+            WarnEvent.OnWarn += WarnHandler.OnWarn;
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)

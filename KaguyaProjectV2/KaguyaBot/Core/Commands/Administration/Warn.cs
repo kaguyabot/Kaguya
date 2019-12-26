@@ -14,18 +14,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class Warn : ModuleBase<ShardedCommandContext>
     {
-        private Server _server;
-        private WarnedUser _warnedUser;
-        private ICommandContext _context;
-
-        public delegate void WarnHandler(object warn, WarnHandlerEventArgs args);
-        public event WarnHandler Warning;
-
-        protected void OnWarning(object warn, WarnHandlerEventArgs args)
-        {
-            Warning?.Invoke(warn, args);
-        }
-
         [AdminCommand]
         [Command("Warn")]
         [Alias("w")]
@@ -56,9 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
 
             await ServerQueries.AddWarnedUserAsync(wu);
-
-            var warnEventArgs = new WarnHandlerEventArgs(server, wu, Context);
-            OnWarning(this, warnEventArgs);
+            WarnEvent.Trigger(server, wu);
 
             await user.SendMessageAsync(embed: WarnEmbed(wu, Context).Build());
             await ReplyAsync(embed: Reply(wu, user).Build());
@@ -113,17 +99,5 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         }
     }
 
-    public class WarnHandlerEventArgs : EventArgs
-    {
-        public WarnHandlerEventArgs(Server server, WarnedUser warnedUser, ICommandContext context)
-        {
-            this.server = server;
-            this.warnedUser = warnedUser;
-            this.context = context;
-        }
 
-        public readonly Server server;
-        public readonly WarnedUser warnedUser;
-        public readonly ICommandContext context;
-    }
 }

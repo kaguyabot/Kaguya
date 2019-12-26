@@ -1,33 +1,19 @@
-﻿using System.Threading.Tasks;
-using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-
-// ReSharper disable VariableHidesOuterVariable
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
 {
-    public class WarnHandler
+    public static class WarnHandler
     {
-        public void Subscribe(Warn warnCommand)
+        public static async void OnWarn(object warn, WarnHandlerEventArgs args)
         {
-            warnCommand.Warning += HandleWarning;
-        }
-
-        public async void HandleWarning(object warn, WarnHandlerEventArgs args)
-        {
-            var server = args.server;
-            var warnedUser = args.warnedUser;
-            var context = args.context;
-
-            var currentSettings = await ServerQueries.GetWarnConfigForServerAsync(server.Id);
-            var currentWarnings = await ServerQueries.GetWarningsForUserAsync(server.Id, warnedUser.UserId);
+            var currentSettings = await ServerQueries.GetWarnConfigForServerAsync(args.server.Id);
+            var currentWarnings = await ServerQueries.GetWarningsForUserAsync(args.server.Id, args.warnedUser.UserId);
             var warnCount = currentWarnings.Count;
 
-            var guildUser = ConfigProperties.client.GetGuild(warnedUser.ServerId).GetUser(warnedUser.UserId);
-            var kaguya = ConfigProperties.client.GetGuild(warnedUser.ServerId).GetUser(538910393918160916);
+            var guildUser = ConfigProperties.client.GetGuild(args.warnedUser.ServerId).GetUser(args.warnedUser.UserId);
+            var kaguya = ConfigProperties.client.GetGuild(args.warnedUser.ServerId).GetUser(538910393918160916);
 
             int muteNum = currentSettings.Mute;
             int kickNum = currentSettings.Kick;
@@ -39,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 var ban = new Ban();
                 var modLog = new PremiumModerationLog
                 {
-                    Server = server,
+                    Server = args.server,
                     Moderator = kaguya,
                     ActionRecipient = guildUser,
                     Action = PremiumModActionHandler.AUTOBAN,
@@ -55,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 var shadowban = new Shadowban();
                 var modLog = new PremiumModerationLog
                 {
-                    Server = server,
+                    Server = args.server,
                     Moderator = kaguya,
                     ActionRecipient = guildUser,
                     Action = PremiumModActionHandler.AUTOSHADOWBAN,
@@ -71,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 var kick = new Kick();
                 var modLog = new PremiumModerationLog
                 {
-                    Server = server,
+                    Server = args.server,
                     Moderator = kaguya,
                     ActionRecipient = guildUser,
                     Action = PremiumModActionHandler.AUTOKICK,
@@ -87,7 +73,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 var mute = new Mute();
                 var modLog = new PremiumModerationLog
                 {
-                    Server = server,
+                    Server = args.server,
                     Moderator = kaguya,
                     ActionRecipient = guildUser,
                     Action = PremiumModActionHandler.AUTOMUTE,

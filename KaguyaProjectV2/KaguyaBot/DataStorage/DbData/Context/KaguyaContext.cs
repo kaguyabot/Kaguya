@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
                     Name = "KaguyaContext",
                     ProviderName = "MySql.Data.MySqlClient",
                     ConnectionString = $"Server={ConfigProperties.botConfig.MySQL_Server.Split(':').First()};Port={ConfigProperties.botConfig.MySQL_Server.Split(':').Last()};" +
-                    $"Database={ConfigProperties.botConfig.MySQL_Database};Uid={ConfigProperties.botConfig.MySQL_Username};Pwd={ConfigProperties.botConfig.MySQL_Password};charset=utf8;"
+                    $"Database={ConfigProperties.botConfig.MySQL_Database};Uid={ConfigProperties.botConfig.MySQL_Username};Pwd={ConfigProperties.botConfig.MySQL_Password};charset=utf8mb4;"
                 };
             }
         }
