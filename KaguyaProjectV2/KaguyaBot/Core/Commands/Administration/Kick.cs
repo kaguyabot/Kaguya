@@ -5,7 +5,9 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -53,6 +55,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
 
             await ReplyAsync(embed: embed.Build());
+        }
+
+        /// <summary>
+        /// Silently kick a user. This should only be executed by the WarnHandler class.
+        /// </summary>
+        /// <param name="user">The user to kick.</param>
+        /// <param name="reason">The reason for kicking the user.</param>
+        /// <returns></returns>
+        public async Task AutoKickUserAsync(SocketGuildUser user, string reason)
+        {
+            try
+            {
+                await user.KickAsync(reason);
+            }
+            catch (Exception e)
+            {
+                await ConsoleLogger.Log($"Attempt to auto-kick user has failed in guild " +
+                                        $"[{user.Guild.Name} | {user.Guild.Id}]. Exception: {e.Message}", LogLevel.INFO);
+            }
         }
     }
 }

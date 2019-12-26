@@ -1,5 +1,7 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
@@ -13,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             var warnCount = currentWarnings.Count;
 
             var guildUser = ConfigProperties.client.GetGuild(args.warnedUser.ServerId).GetUser(args.warnedUser.UserId);
-            var kaguya = ConfigProperties.client.GetGuild(args.warnedUser.ServerId).GetUser(538910393918160916);
+            var kaguya = ConfigProperties.client.CurrentUser;
 
             int muteNum = currentSettings.Mute;
             int kickNum = currentSettings.Kick;
@@ -31,8 +33,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                     Action = PremiumModActionHandler.AUTOBAN,
                     Reason = $"Automatic ban due to the user reaching {warnCount} warnings."
                 };
-                await ban.BanUser(guildUser);
+                await ban.AutoBanUserAsync(guildUser, "User has been automatically banned due to " + 
+                                                      $"reaching the specified warning threshold for bans " +
+                                                      $"({warnCount} warnings).");
                 await PremiumModerationLog.SendModerationLog(modLog);
+                await ConsoleLogger.Log($"User [{guildUser} | {guildUser.Id}] has been " +
+                                        $"automatically banned in guild " +
+                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLevel.DEBUG);
                 return;
             }
 
@@ -47,8 +54,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                     Action = PremiumModActionHandler.AUTOSHADOWBAN,
                     Reason = $"Automatic shadowban due to the user reaching {warnCount} warnings."
                 };
-                await shadowban.ShadowbanUser(guildUser);
+                await shadowban.AutoShadowbanUserAsync(guildUser);
                 await PremiumModerationLog.SendModerationLog(modLog);
+                await ConsoleLogger.Log($"User [{guildUser} | {guildUser.Id}] has been " +
+                                        $"automatically shadowbanned in guild " +
+                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLevel.DEBUG);
                 return;
             }
 
@@ -63,8 +73,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                     Action = PremiumModActionHandler.AUTOKICK,
                     Reason = $"Automatic kick due to the user reaching {warnCount} warnings."
                 };
-                await kick.KickUser(guildUser);
+                await kick.AutoKickUserAsync(guildUser, $"User has been automatically kicked due to " +
+                                                        $"reaching the specified warning threshold for kicks " +
+                                                        $"({warnCount} warnings).");
                 await PremiumModerationLog.SendModerationLog(modLog);
+                await ConsoleLogger.Log($"User [{guildUser} | {guildUser.Id}] has been " +
+                                        $"automatically kicked in guild " +
+                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLevel.DEBUG);
                 return;
             }
 
@@ -81,6 +96,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 };
                 await mute.AutoMute(guildUser);
                 await PremiumModerationLog.SendModerationLog(modLog);
+                await ConsoleLogger.Log($"User [{guildUser} | {guildUser.Id}] has been " +
+                                        $"automatically muted in guild " +
+                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLevel.DEBUG);
             }
         }
     }

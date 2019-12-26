@@ -19,9 +19,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     public class PremiumModerationLog
     {
         public Server Server { get; set; }
-        public SocketGuildUser Moderator { get; set; }
+        public IUser Moderator { get; set; }
 
-        public SocketGuildUser ActionRecipient { get; set; }
+        public IUser ActionRecipient { get; set; }
         public PremiumModActionHandler Action { get; set; }
         public string Reason { get; set; }
 

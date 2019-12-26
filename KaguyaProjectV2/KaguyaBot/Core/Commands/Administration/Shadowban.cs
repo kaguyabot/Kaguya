@@ -42,5 +42,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             await ReplyAsync(embed: successEmbed.Build());
         }
+
+        /// <summary>
+        /// "Silently" shadowbans a user. This version does not send any chat messages,
+        /// therefore it can be executed by the WarnHandler class. This should only be
+        /// executed by the WarnHandler.
+        /// </summary>
+        /// <param name="user">The user to shadowban.</param>
+        /// <returns></returns>
+        public async Task AutoShadowbanUserAsync(SocketGuildUser user)
+        {
+            var roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
+            await user.RemoveRolesAsync(roles);
+
+            foreach (var channel in user.Guild.Channels)
+            {
+                await channel.AddPermissionOverwriteAsync(user, OverwritePermissions.DenyAll(channel));
+            }
+        }
     }
 }

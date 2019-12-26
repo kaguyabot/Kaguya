@@ -8,6 +8,9 @@ using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using Microsoft.Extensions.Logging;
+using LogLevel = KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage.LogLevel;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -55,6 +58,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 };
             }
             await ReplyAsync(embed: embed.Build());
+        }
+
+        /// <summary>
+        /// Method to "silently" ban a user. This method is only called by the WarnHandler class.
+        /// </summary>
+        /// <param name="user">The user to ban.</param>
+        /// <param name="reason">The reason for banning the user.</param>
+        /// <returns></returns>
+        public async Task AutoBanUserAsync(SocketGuildUser user, string reason)
+        {
+            try
+            {
+                await user.BanAsync(0, reason);
+            }
+            catch (Exception e)
+            {
+                await ConsoleLogger.Log($"Attempt to auto-ban user has failed in guild " +
+                                        $"[{user.Guild.Name} | {user.Guild.Id}]. Exception: {e.Message}", LogLevel.INFO);
+            }
         }
     }
 }

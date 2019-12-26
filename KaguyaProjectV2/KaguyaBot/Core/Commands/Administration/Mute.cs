@@ -231,7 +231,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             if (muteRole == null)
             {
-                await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
+                await guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
                 await ConsoleLogger.Log($"New mute role created in guild [Name: {guild.Name} | ID: {guild.Id}]",
                     LogLevel.DEBUG);
 
@@ -241,7 +241,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                  * in order for this to work.
                  */
 
-                guild = Context.Guild;
+                guild = ConfigProperties.client.GetGuild(guild.Id);
                 muteRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
 
                 foreach (var channel in guild.Channels)
@@ -260,7 +260,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             await user.AddRoleAsync(muteRole);
 
-            await ConsoleLogger.Log($"User muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
+            await ConsoleLogger.Log($"User auto-muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
                                     $"User: [Name: {user} | ID: {user.Id}]", LogLevel.DEBUG);
         }
     }
