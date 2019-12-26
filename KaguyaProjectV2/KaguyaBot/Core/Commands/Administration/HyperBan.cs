@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -52,8 +50,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 x.GetUser(Id) != null);
             var targets = new List<SocketGuildUser>();
 
-            int times = 0;
-
             foreach(var guild in mutualGuilds)
             {
                 targets.Add(guild.Users.FirstOrDefault(x => x.Id == Id));
@@ -65,7 +61,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     await target.BanAsync(0, $"{context.User} used the `HyperBan` command " +
                                              $"in guild \"{context.Guild}\"");
-                    times++;
                 }
                 catch (Exception)
                 {
@@ -76,7 +71,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully hyperbanned `{targets.FirstOrDefault()}` from " +
-                              $"`{times.ToWords()}` servers. 😳"
+                              $"`{targets.Count().ToWords()}` servers. 😳"
             };
 
             await context.Channel.SendMessageAsync(embed: embed.Build());

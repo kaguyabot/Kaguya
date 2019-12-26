@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -22,22 +21,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task KickUser(params SocketGuildUser[] users)
         {
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
+            var listUsers = new List<SocketGuildUser>(users);
 
             int i = 0;
-            int j = 0;
 
-            foreach (var user in users)
+            foreach (var user in listUsers)
             {
                 try
                 {
                     await user.KickAsync();
                     embed.Description += $"Successfully kicked `{user}`\n";
-                    i++;
+                    listUsers.Remove(user);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     embed.Description += $"Failed to kick `{user}`\n";
-                    j++;
                 }
             }
 
@@ -45,14 +43,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 string failString = "";
 
-                if (j != 0)
-                    failString = $"\nFailed to kick `{j}` users.";
+                if (listUsers.Count != 0)
+                    failString = $"\nFailed to kick `{listUsers.Count}` users.";
 
                 embed = new KaguyaEmbedBuilder
                 {
                     Description = $"Successfully kicked `{i}` users.{failString}"
                 };
             }
+
             await ReplyAsync(embed: embed.Build());
         }
     }
