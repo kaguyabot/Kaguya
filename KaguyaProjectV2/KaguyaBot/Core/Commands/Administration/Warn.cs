@@ -1,23 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class Warn : ModuleBase<ShardedCommandContext>
     {
-        public delegate void HandleWarning(Server server, WarnedUser warnedUser, ICommandContext context);
-        public event HandleWarning OnWarning;
+        private Server _server;
+        private WarnedUser _warnedUser;
+        private ICommandContext _context;
+
+        public delegate void WarnHandler(object warn, WarnHandlerEventArgs args);
+        public event WarnHandler Warning;
+
+        protected void OnWarning(object warn, WarnHandlerEventArgs args)
+        {
+            Warning?.Invoke(warn, args);
+        }
 
         [AdminCommand]
         [Command("Warn")]
@@ -49,7 +56,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
 
             await ServerQueries.AddWarnedUserAsync(wu);
-            OnWarning?.Invoke(server, wu, Context);
+
+            var warnEventArgs = new WarnHandlerEventArgs(server, wu, Context);
+            OnWarning(this, warnEventArgs);
 
             await user.SendMessageAsync(embed: WarnEmbed(wu, Context).Build());
             await ReplyAsync(embed: Reply(wu, user).Build());
@@ -102,5 +111,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
             return embed;
         }
+    }
+
+    public class WarnHandlerEventArgs : EventArgs
+    {
+        public WarnHandlerEventArgs(Server server, WarnedUser warnedUser, ICommandContext context)
+        {
+            this.server = server;
+            this.warnedUser = warnedUser;
+            this.context = context;
+        }
+
+        public readonly Server server;
+        public readonly WarnedUser warnedUser;
+        public readonly ICommandContext context;
     }
 }

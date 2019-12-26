@@ -124,9 +124,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var owner = ConfigProperties.client.GetUser(ConfigProperties.botConfig.BotOwnerId);
             var fields = new List<EmbedFieldBuilder>
             {
-                new EmbedFieldBuilder {IsInline = false, Name = "Key Properties",
+                new EmbedFieldBuilder 
+                {
+                    IsInline = false, 
+                    Name = "Key Properties",
                     Value = $"Key: `{key.Key}`\nCreated by: `{owner}`\nExpires " +
-                            $"`{DateTime.FromOADate(key.Expiration).Humanize(false)}`"}
+                            $"`{DateTime.FromOADate(key.Expiration).Humanize(false)}`"
+                }
             };
 
             if (key.GetType() == typeof(SupporterKey))
