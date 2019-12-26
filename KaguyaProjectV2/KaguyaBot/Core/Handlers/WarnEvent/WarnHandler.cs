@@ -11,11 +11,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
 {
     public class WarnHandler
     {
-        private Warn _warn;
-        public WarnHandler()
+        public void Subscribe(Warn warnCommand)
         {
-            _warn = new Warn();
-            _warn.Warning += HandleWarning;
+            warnCommand.Warning += HandleWarning;
         }
 
         public async void HandleWarning(object warn, WarnHandlerEventArgs args)
@@ -36,7 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             int shadowbanNum = currentSettings.Shadowban;
             int banNum = currentSettings.Ban;
 
-            if (warnCount >= banNum)
+            if (warnCount == banNum)
             {
                 var ban = new Ban();
                 var modLog = new PremiumModerationLog
@@ -52,7 +50,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 return;
             }
 
-            if (warnCount >= shadowbanNum)
+            if (warnCount == shadowbanNum)
             {
                 var shadowban = new Shadowban();
                 var modLog = new PremiumModerationLog
@@ -68,7 +66,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 return;
             }
 
-            if (warnCount >= kickNum)
+            if (warnCount == kickNum)
             {
                 var kick = new Kick();
                 var modLog = new PremiumModerationLog
@@ -84,7 +82,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 return;
             }
 
-            if (warnCount >= muteNum)
+            if (warnCount == muteNum)
             {
                 var mute = new Mute();
                 var modLog = new PremiumModerationLog

@@ -139,6 +139,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private void InitializeEventHandlers()
         {
             var warnHandler = new WarnHandler();
+            warnHandler.Subscribe(new Warn());
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)

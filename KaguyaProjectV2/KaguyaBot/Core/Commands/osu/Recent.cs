@@ -15,9 +15,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
         [OsuCommand]
-        [Command("osurecent")]
-        [Summary("Osu Recent Summary?")]
-        [Remarks("<username or ID>\nSomeUser\nSome user with spaces")]
+        [Command("osuRecent")]
+        [Alias("recent", "r")]
+        [Summary("Displays the most recent osu! play for the user.")]
+        [Remarks("<username or ID> (Optional if configured with osuset already)")]
         public async Task OsuRecentCommand([Remainder]string player = null)
         {
             OsuUserModel userProfileObject = null;
@@ -30,7 +31,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 if (player == "0")
                 {
                     embed.WithTitle($"osu! Recent");
-                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{(await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
+                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! " +
+                                          $"Please specify a player or set your osu! username with " +
+                                          $"`{(await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
                     await ReplyAsync(embed: embed.Build());
                     return;
                 }
@@ -39,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             //Getting recent object.
             var playerRecentObjectList = new OsuRecentBuilder(userProfileObject.user_id.ToString()).Execute();
 
-            if (playerRecentObjectList.Any())
+            if (!playerRecentObjectList.Any())
             {
                 embed.WithAuthor(author =>
                 {
@@ -62,25 +65,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 foreach (var playerRecentObject in playerRecentObjectList)
                 {
                     embed.Description += $"▸ **{playerRecentObject.rankemote}{playerRecentObject.string_mods}** ▸ **[{playerRecentObject.beatmap.title} [{playerRecentObject.beatmap.version}]](https://osu.ppy.sh/b/{playerRecentObject.beatmap_id})** by **{playerRecentObject.beatmap.artist}**\n" +
-                        $"▸ **☆{playerRecentObject.beatmap.difficultyrating.ToString("F")}** ▸ **{playerRecentObject.accuracy.ToString("F")}%**\n" +
-                        $"▸ **Combo:** `{playerRecentObject.maxcombo.ToString("N0")}x / {playerRecentObject.beatmap.max_combo.ToString("N0")}x`\n" +
+                        $"▸ **☆{playerRecentObject.beatmap.difficultyrating:F}** ▸ **{playerRecentObject.accuracy:F}%**\n" +
+                        $"▸ **Combo:** `{playerRecentObject.maxcombo:N0}x / {playerRecentObject.beatmap.max_combo:N0}x`\n" +
                         $"▸ [300 / 100 / 50 / X]: `[{playerRecentObject.count300} / {playerRecentObject.count100} / {playerRecentObject.count50} / {playerRecentObject.countmiss}]`\n" +
                         $"▸ **Map Completion:** `{Math.Round(playerRecentObject.completion, 2)}%`\n" +
-                        $"▸ **Full Combo Percentage:** `{(((double)playerRecentObject.maxcombo / (double)playerRecentObject.beatmap.max_combo) * 100).ToString("N2")}%`\n";
+                        $"▸ **Full Combo Percentage:** `{(((double)playerRecentObject.maxcombo / (double)playerRecentObject.beatmap.max_combo) * 100):N2}%`\n";
 
-                    if (playerRecentObject == playerRecentObjectList[playerRecentObjectList.Count - 1])
-                        embed.Description += $"▸ **PP for FC**: `{playerRecentObject.fullcombopp.ToString("N0")}pp`";
+                    if (playerRecentObject == playerRecentObjectList[^1])
+                        embed.Description += $"▸ **PP for FC**: `{playerRecentObject.fullcombopp:N0}pp`";
                     else
-                        embed.Description += $"▸ **PP for FC**: `{playerRecentObject.fullcombopp.ToString("N0")}pp`\n";
+                        embed.Description += $"▸ **PP for FC**: `{playerRecentObject.fullcombopp:N0}pp`\n";
                 }
 
                 //Footer
                 var difference = DateTime.UtcNow - playerRecentObjectList.LastOrDefault().date;
 
-                if (playerRecentObjectList.Count > 1)
-                    embed.WithFooter($"{userProfileObject.username} performed this plays {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.");
-                else
-                    embed.WithFooter($"{userProfileObject.username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.");
+                embed.WithFooter(playerRecentObjectList.Count > 1
+                    ? $"{userProfileObject.username} performed this plays {(int) difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago."
+                    : $"{userProfileObject.username} performed this play {(int) difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.");
             }
 
             await ReplyAsync(embed: embed.Build());
