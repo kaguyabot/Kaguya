@@ -14,16 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
     {
         public static DiscordShardedClient client { get; set; }
         public static TwitchAPI twitchApi { get; set; }
-        public static ulong botOwnerId { get; set; }
-        public static string osuApiKey { get; set; }
-        public static string topGGApiKey { get; set; }
-        public static string topGGAuthorizationPassword { get; set; }
-        public static string mySQL_Username { get; set; }
-        public static string mySQL_Password { get; set; }
-        public static string mySQL_Server { get; set; }
-        public static string mySQL_Database { get; set; }
-        public static string twitchClientId { get; set; }
-        public static string twitchAuthToken { get; set; }
+        public static ConfigModel botConfig { get; set; }
         public static LogLevel logLevel { get; set; }
     }
 }

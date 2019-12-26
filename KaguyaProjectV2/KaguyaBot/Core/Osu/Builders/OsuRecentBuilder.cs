@@ -68,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
                 string mapRecent = "";
                 using (WebClient client = new WebClient())
                 {
-                    mapRecent = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={ConfigProperties.osuApiKey}&b={item.beatmap_id}");
+                    mapRecent = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={ConfigProperties.botConfig.OsuApiKey}&b={item.beatmap_id}");
                 }
                 item.beatmap = JsonConvert.DeserializeObject<OsuBeatmapModel[]>(mapRecent)[0];
 

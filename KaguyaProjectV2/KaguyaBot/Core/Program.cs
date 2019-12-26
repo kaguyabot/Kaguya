@@ -90,18 +90,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private void GlobalPropertySetup(ConfigModel _config)
         {
             ConfigProperties.client = _client;
-            ConfigProperties.botOwnerId = _config.BotOwnerId;
-            ConfigProperties.osuApiKey = _config.OsuApiKey;
-            ConfigProperties.topGGApiKey = _config.TopGGApiKey;
-            ConfigProperties.topGGAuthorizationPassword = _config.TopGGAuthorizationPassword;
-            ConfigProperties.mySQL_Username = _config.MySQL_Username;
-            ConfigProperties.mySQL_Password = _config.MySQL_Password;
-            ConfigProperties.mySQL_Server = _config.MySQL_Server;
-            ConfigProperties.mySQL_Database = _config.MySQL_Database;
-            ConfigProperties.twitchClientId = _config.TwitchClientId;
-            ConfigProperties.twitchAuthToken = _config.TwitchAuthToken;
-
-            //Converts int LogNum in the config file to the enum LogLevel.
+            ConfigProperties.botConfig = _config;
             ConfigProperties.logLevel = (LogLevel)_config.LogLevelNumber;
         }
 
@@ -123,8 +112,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private void SetupTwitch()
         {
             _api = new TwitchAPI();
-            _api.Settings.ClientId = ConfigProperties.twitchClientId;
-            _api.Settings.AccessToken = ConfigProperties.twitchAuthToken;
+            _api.Settings.ClientId = ConfigProperties.botConfig.TwitchClientId;
+            _api.Settings.AccessToken = ConfigProperties.botConfig.TwitchAuthToken;
 
             var monitor = new LiveStreamMonitorService(_api, 30);
             monitor.OnStreamOnline += TwitchNotificationsHandler.OnStreamOnline;
