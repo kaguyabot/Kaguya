@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             if (userProfileObject == null)
             {
                 userProfileObject = new OsuUserBuilder((await UserQueries.GetOrCreateUser(Context.User.Id)).OsuId.ToString()).Execute();
-                if (player == "0")
+                if (userProfileObject == null)
                 {
                     embed.WithTitle($"osu! Recent");
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! " +
