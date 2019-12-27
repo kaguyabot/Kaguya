@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         {
             var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var userPraise = await ServerQueries.GetPraiseAsync(Context.User.Id, server.Id);
-            var lastGivenPraise = await ServerQueries.GetLastPraiseTimeAsync(Context.User.Id, Context.Guild.Id);
+            var lastGivenPraise = ServerQueries.GetLastPraiseTime(Context.User.Id, Context.Guild.Id);
 
             if (user == null)
             {

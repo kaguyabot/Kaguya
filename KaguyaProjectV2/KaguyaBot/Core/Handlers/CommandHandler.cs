@@ -52,8 +52,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             var context = new ShardedCommandContext(_client, message);
             await IsFilteredPhrase(context, server, message);
 
-            ExperienceHandler.AddExp(user, context);
-            ServerSpecificExpHandler.AddExp(user, server, context);
+            await ExperienceHandler.AddExp(user, context);
+            await ServerSpecificExpHandler.AddExp(user, server, context);
 
             int argPos = 0;
 

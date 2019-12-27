@@ -6,13 +6,14 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
     public static class ExperienceHandler
     {
-        public static async void AddExp(User user, ICommandContext context)
+        public static async Task AddExp(User user, ICommandContext context)
         {
             Server server = await ServerQueries.GetOrCreateServerAsync(context.Guild.Id);
 

@@ -311,7 +311,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<double> GetLastPraiseTimeAsync(ulong userId, ulong serverId)
+        public static double GetLastPraiseTime(ulong userId, ulong serverId)
         {
             using (var db = new KaguyaDb())
             {

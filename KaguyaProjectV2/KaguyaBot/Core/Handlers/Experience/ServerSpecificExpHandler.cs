@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
@@ -12,15 +7,27 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.Primitives;
+using Color = SixLabors.ImageSharp.Color;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
     public class ServerSpecificExpHandler
     {
-        public static async void AddExp(User user, Server server, ICommandContext context)
+        public static async Task AddExp(User user, Server server, ICommandContext context)
         {
-            IEnumerable<ServerExp> _ = await UtilityQueries.GetAllExpForServerAsync(server);
-            List<ServerExp> specificExps = _.ToList();
+            List<ServerExp> specificExps = await UtilityQueries.GetAllExpForServerAsync(server);
 
             // If the user can receive exp, give them between 5 and 8.
             //if (!await CanGetExperience(specificExps, server, user))
@@ -81,10 +88,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 if (levelAnnouncementChannel != null && levelAnnouncementChannel is SocketTextChannel textChannel)
                 {
                     await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, server, context));
+                    await textChannel.SendFileAsync(GenerateExpImage(user, expObject), "", "Foo");
                 }
                 else
                 {
                     await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, server, context));
+                    await context.Channel.SendFileAsync(GenerateExpImage(user, expObject), "", "Foo");
                 }
             }
         }
@@ -135,6 +144,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             };
 
             return embed.Build();
+        }
+
+        public static Stream GenerateExpImage(User user, ServerExp serverExp)
+        {
+            // TODO: Change path
+            Stream streamToSaveTo = new MemoryStream();
+
+            var imagePath = @"C:\Users\Stage\Documents\GitHub\Kaguya\KaguyaProjectV2\Resources\Images\ExpTemplate1.png";
+            var fontPath = @"C:\Users\Stage\Documents\GitHub\Kaguya\KaguyaProjectV2\Resources\Fonts\BebasNeue-Regular.ttf";
+
+            var fonts = new FontCollection();
+            var bebasFont = fonts.Install(fontPath);
+            IImageEncoder encoder = new PngEncoder();
+
+            using (Image img = Image.Load(imagePath))
+            {
+                img.Mutate(x => x.DrawText(user.ToString(), new Font(bebasFont, 10f), Color.Black, PointF.Empty));
+                img.Save(streamToSaveTo, encoder);
+            }
+
+            return streamToSaveTo;
         }
     }
 }

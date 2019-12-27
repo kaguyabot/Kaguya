@@ -169,7 +169,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<IEnumerable<ServerExp>> GetAllExpForServerAsync(Server server)
+        public static async Task<List<ServerExp>> GetAllExpForServerAsync(Server server)
         {
             using (var db = new KaguyaDb())
             {

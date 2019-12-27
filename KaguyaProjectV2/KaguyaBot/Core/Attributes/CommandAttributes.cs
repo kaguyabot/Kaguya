@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+#pragma warning disable 1998
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
 {

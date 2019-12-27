@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
 using System.Timers;
 using LogLevel = KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage.LogLevel;
+#pragma warning disable 1998
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {

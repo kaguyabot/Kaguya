@@ -38,7 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     embed.Description += $"Successfully banned `{user}`\n";
                     i++;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     embed.Description += $"Failed to ban `{user}`\n";
                     j++;
