@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             Server server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var cmdInfo = CommandHandler._commands;
 
-            Attribute[] attributes = new Attribute[]
+            var attributes = new Attribute[]
             {
                 new AdminCommandAttribute(), new CurrencyCommandAttribute(),
                 new ExpCommandAttribute(), new FunCommandAttribute(), 
@@ -50,8 +50,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
                     if (cmd.Attributes.Contains(attr) || cmd.Preconditions.Contains(attr))
                     {
-                        pages[i]
-                            .Description += $"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}{warn}\n";
+                        if (!pages[i].Description.Contains($"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}{warn}\n"))
+                        {
+                            pages[i].Description += $"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}{warn}\n";
+                        }
                     }
 
                     i++;
