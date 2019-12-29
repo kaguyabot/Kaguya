@@ -14,35 +14,50 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     {
 
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
     internal class CurrencyCommandAttribute : Attribute
     {
 
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
     internal class ExpCommandAttribute : Attribute
     {
 
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
     internal class FunCommandAttribute : Attribute
     {
 
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
     internal class HelpCommandAttribute : Attribute
     {
 
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
     internal class MusicCommandAttribute : Attribute
     {
 
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
     internal class NsfwCommandAttribute : Attribute
     {
 
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
     internal class OsuCommandAttribute : Attribute
     {
 
     }
 
+    [AttributeUsage(AttributeTargets.Method)]
     internal class SupporterCommandAttribute : PreconditionAttribute
     {
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
@@ -54,6 +69,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         }
     }
 
+    [AttributeUsage(AttributeTargets.Method)]
     internal class PremiumServerCommandAttribute : PreconditionAttribute
     {
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
@@ -65,6 +81,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         }
     }
 
+    [AttributeUsage(AttributeTargets.Method)]
     internal class UtilityCommandAttribute : Attribute
     {
 
