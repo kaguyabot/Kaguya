@@ -25,6 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 }
 
                 return await (db.Servers
+                    .LoadWith(x => x.AntiRaid)
                     .LoadWith(x => x.AutoAssignedRoles)
                     .LoadWith(x => x.BlackListedChannels)
                     .LoadWith(x => x.FilteredPhrases)
@@ -334,6 +335,48 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 return (from r in db.Praise.OrderByDescending(x => x.TimeGiven)
                     where r.GivenBy == userId && r.ServerId == serverId
                     select r).First()?.TimeGiven ?? 0;
+            }
+        }
+
+        public static async Task AddAntiRaidAsync(AntiRaid arObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(arObject);
+            }
+        }
+
+        public static async Task RemoveAntiRaidAsync(AntiRaid arObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(arObject);
+            }
+        }
+
+        /// <summary>
+        /// Removes the AntiRaid object for this server from the database, if it exists.
+        /// </summary>
+        /// <param name="server"></param>
+        /// <returns></returns>
+        public static async Task RemoveAntiRaidAsync(Server server)
+        {
+            var arObject = server.AntiRaid?.ToList().FirstOrDefault();
+
+            using (var db = new KaguyaDb())
+            {
+                if (arObject != null)
+                {
+                    await db.DeleteAsync(arObject);
+                }
+            }
+        }
+
+        public static async Task UpdateAntiRaidAsync(AntiRaid arObject)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertOrReplaceAsync(arObject);
             }
         }
     }

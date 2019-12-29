@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -18,9 +18,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [AdminCommand]
         [Command("HyperBan")]
         [Summary("Permanently bans a user from this server and from **any other server " +
-                 "that the user is an `Administrator` in.** I must be present in all mutual " +
+                 "that the command executor is an `Administrator` in.** I, (Kaguya) must be present in all mutual " +
                  "servers for this to work properly.")]
-        [Remarks("<user>\n<ID>")]
+        [Remarks("<user>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task DestroyThem(IGuildUser user)

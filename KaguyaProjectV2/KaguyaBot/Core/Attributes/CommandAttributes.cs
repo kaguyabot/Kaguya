@@ -1,10 +1,9 @@
-﻿using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using System;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Threading.Tasks;
 #pragma warning disable 1998
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Attributes

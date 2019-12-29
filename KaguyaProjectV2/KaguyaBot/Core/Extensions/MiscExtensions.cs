@@ -9,7 +9,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
-    public static class Extensions
+    public static class MiscExtensions
     {
         public static bool IsZero(this int num)
         {

@@ -111,5 +111,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 
         [Association(ThisKey = "Id", OtherKey = "ServerId")]
         public IEnumerable<Praise> Rep { get; set; }
+
+        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        public IEnumerable<AntiRaid> AntiRaid { get; set; }
     }
 }
