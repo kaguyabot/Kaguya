@@ -183,7 +183,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 }
             }
 
-            await UserQueries.UpdateUser(user);
+            await UserQueries.UpdateUserAsync(user);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             int argPos = 0;
 
-            await UserQueries.UpdateUser(user);
+            await UserQueries.UpdateUserAsync(user);
             await ServerQueries.UpdateServerAsync(server);
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
@@ -92,7 +92,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     ServerId = context.Guild.Id
                 });
                 await ServerQueries.UpdateServerAsync(server);
-                await UserQueries.UpdateUser(user);
+                await UserQueries.UpdateUserAsync(user);
                 return;
             }
 

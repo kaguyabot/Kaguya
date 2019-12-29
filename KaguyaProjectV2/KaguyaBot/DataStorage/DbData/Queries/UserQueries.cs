@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<int> GetCountOfUsers()
+        public static async Task<int> GetCountOfUsersAsync()
         {
             using(var db = new KaguyaDb())
             {
@@ -44,7 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static int UserGlobalExpRank(User user)
+        public static int GetGlobalExpRankIndex(User user)
         {
             using (var db = new KaguyaDb())
             {
@@ -52,7 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task UpdateUser(User user)
+        public static async Task UpdateUserAsync(User user)
         {
             using (var db = new KaguyaDb())
             {

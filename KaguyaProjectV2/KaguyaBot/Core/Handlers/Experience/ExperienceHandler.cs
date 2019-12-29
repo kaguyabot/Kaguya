@@ -1,13 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
+using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
@@ -18,10 +18,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             Server server = await ServerQueries.GetOrCreateServerAsync(context.Guild.Id);
 
             // If the user can receive exp, give them between 5 and 8.
-            if (!CanGetExperience(user))
-            {
-                return;
-            }
+            //if (!CanGetExperience(user))
+            //{
+            //    return;
+            //}
             var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
             double oldLevel = ReturnLevel(user);
 
@@ -30,30 +30,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             user.Experience += exp;
             user.LatestExp = DateTime.Now.ToOADate();
-            await UserQueries.UpdateUser(user);
+            await UserQueries.UpdateUserAsync(user);
 
             double newLevel = ReturnLevel(user);
-            await ConsoleLogger.Log($"[Global Exp]: User has received {exp} exp. [ID: {user.Id} | New EXP: {user.Experience:N0}]",
-                DataStorage.JsonStorage.LogLevel.DEBUG);
+            await ConsoleLogger.Log($"[Global Exp]: User {user.Id} has received {exp} exp. [New Total: {user.Experience:N0} Exp]", 
+                LogLevel.DEBUG);
 
             if (!HasLeveledUp(oldLevel, newLevel))
             {
                 return;
             }
-            await ConsoleLogger.Log($"[Global Exp]: User has leveled up! [ID: {user.Id} | Level: {newLevel} | Experience: {user.Experience}]",
+            await ConsoleLogger.Log($"[Global Exp]: User {user.Id} has leveled up! [Level: {newLevel} | EXP: {user.Experience:N0}]",
                 DataStorage.JsonStorage.LogLevel.INFO);
             if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
             {
-                await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, context));
+                await textChannel.SendMessageAsync(embed: await LevelUpEmbed(user, context));
                 return;
             }
 
-            //await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, context));
+            await context.Channel.SendMessageAsync(embed: await LevelUpEmbed(user, context));
         }
 
         private static bool CanGetExperience(User user)
         {
-            return DateTime.Now.AddSeconds(-120).ToOADate() >= user.LatestExp;
+            double twoMinutesAgo = DateTime.Now.AddSeconds(-120).ToOADate();
+            return twoMinutesAgo >= user.LatestExp;
         }
 
         private static double ReturnLevel(User user)
@@ -63,24 +64,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
         private static bool HasLeveledUp(double oldLevel, double newLevel)
         {
-            if (Math.Floor(oldLevel) < Math.Floor(newLevel))
-            {
-                return true;
-            }
-            return false;
+            return Math.Floor(oldLevel) < Math.Floor(newLevel);
         }
 
-        public static Embed LevelUpEmbed(User user, ICommandContext context)
+        private static async Task<Embed> LevelUpEmbed(User user, ICommandContext context)
         {
-            var count = UserQueries.GetCountOfUsers();
-            var rankIndex = UserQueries.UserGlobalExpRank(user) + 1;
+            int count = await UserQueries.GetCountOfUsersAsync();
+            var rankNum = UserQueries.GetGlobalExpRankIndex(user) + 1;
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
                 Title = "Level Up!",
-                Description = $"{context.User.Username} just leveled up! \n" +
-                              $"[Level: {ReturnLevel(user)} | Experience Points: {user.Experience:N0}]\n" +
-                              $"Rank: `#{rankIndex}/{count:N0}`",
+                Description = $"`{context.User.Username}` just leveled up! \n" +
+                              $"Level: `{(int)ReturnLevel(user)}` | EXP: `{user.Experience:N0}`\n" +
+                              $"Rank: `#{rankNum}/{count:N0}`",
                 ThumbnailUrl = ConfigProperties.client.GetUser(user.Id).GetAvatarUrl()
             };
 

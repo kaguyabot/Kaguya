@@ -102,7 +102,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             await UserQueries.AddRepAsync(newTargetRep);
             user.LastGivenRep = DateTime.Now.ToOADate();
 
-            await UserQueries.UpdateUser(user);
+            await UserQueries.UpdateUserAsync(user);
 
             var targetRepList = await UserQueries.GetRepAsync(target);
 

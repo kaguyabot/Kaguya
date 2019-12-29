@@ -1,14 +1,10 @@
-﻿using System;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using LinqToDB;
 using LinqToDB.Data;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using LinqToDB.SqlQuery;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -285,19 +281,39 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task AddPraiseAsync(Praise repObj)
+        /// <summary>
+        /// Returns what rank the user is on the server-specific EXP "leaderboard". If they are
+        /// the highest EXP holder, this value would be 1.
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static int GetServerExpRankForUser(Server server, User user)
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertAsync(repObj);
+                return server.ServerExp.OrderByDescending(x => x.Exp).ToList().FindIndex(x => x.UserId == user.Id) + 1;
             }
         }
 
-        public static async Task RemovePraiseAsync(Praise repObj)
+        /// <summary>
+        /// Adds a new praise object to the database.
+        /// </summary>
+        /// <param name="praiseObj"></param>
+        /// <returns></returns>
+        public static async Task AddPraiseAsync(Praise praiseObj)
         {
             using (var db = new KaguyaDb())
             {
-                await db.DeleteAsync(repObj);
+                await db.InsertAsync(praiseObj);
+            }
+        }
+
+        public static async Task RemovePraiseAsync(Praise praiseObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(praiseObj);
             }
         }
 
