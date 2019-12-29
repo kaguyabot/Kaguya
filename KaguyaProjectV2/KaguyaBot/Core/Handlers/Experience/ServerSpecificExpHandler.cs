@@ -24,10 +24,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             var userExpObj = new ServerExp();
 
             // If the user can receive exp, give them between 5 and 8.
-            //if (!await CanGetExperience(specificExps, server, user))
-            //{
-            //    return;
-            //}
+            if (!await CanGetExperience(specificExps, server, user))
+            {
+                return;
+            }
 
             Random r = new Random();
             int exp = r.Next(5, 8);
