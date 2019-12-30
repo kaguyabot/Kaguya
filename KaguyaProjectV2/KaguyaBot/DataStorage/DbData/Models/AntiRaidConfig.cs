@@ -3,7 +3,7 @@
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "antiraid")]
-    public class AntiRaid
+    public class AntiRaidConfig
     {
         [PrimaryKey]
         public ulong ServerId { get; set; }

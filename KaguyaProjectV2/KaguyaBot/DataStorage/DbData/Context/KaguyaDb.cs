@@ -8,7 +8,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
     public partial class KaguyaDb : LinqToDB.Data.DataConnection
     {
         public KaguyaDb() : base("KaguyaContext") { }
-        public ITable<AntiRaid> AntiRaid => GetTable<AntiRaid>();
+        public ITable<AntiRaidConfig> AntiRaid => GetTable<AntiRaidConfig>();
         public ITable<AutoAssignedRole> AutoAssignedRoles => GetTable<AutoAssignedRole>();
         public ITable<BlackListedChannel> BlackListedChannels => GetTable<BlackListedChannel>();
         public ITable<CommandHistory> CommandHistories => GetTable<CommandHistory>();

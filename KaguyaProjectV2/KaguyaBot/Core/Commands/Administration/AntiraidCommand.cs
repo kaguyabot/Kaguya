@@ -87,7 +87,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     "or `ban`.");
             }
 
-            var ar = new AntiRaid
+            var ar = new AntiRaidConfig
             {
                 ServerId = Context.Guild.Id,
                 Users = users,

@@ -338,7 +338,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task AddAntiRaidAsync(AntiRaid arObject)
+        public static async Task AddAntiRaidAsync(AntiRaidConfig arObject)
         {
             using (var db = new KaguyaDb())
             {
@@ -346,7 +346,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task RemoveAntiRaidAsync(AntiRaid arObject)
+        public static async Task RemoveAntiRaidAsync(AntiRaidConfig arObject)
         {
             using (var db = new KaguyaDb())
             {
@@ -372,7 +372,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task UpdateAntiRaidAsync(AntiRaid arObject)
+        public static async Task UpdateAntiRaidAsync(AntiRaidConfig arObject)
         {
             using (var db = new KaguyaDb())
             {

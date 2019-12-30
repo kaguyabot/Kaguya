@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using BooruSharp.Booru;
-using BooruSharp.Search.Post;
+﻿using Discord;
 using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
 using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using NHentaiSharp.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 {
-    public class N : ModuleBase<ShardedCommandContext>
+    public class Doujin : ModuleBase<ShardedCommandContext>
     {
         [NsfwCommand]
         [Command("doujin")]
