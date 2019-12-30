@@ -35,9 +35,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     embed.Description += $"Successfully kicked `{user}`\n";
                     listUsers.Remove(user);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    embed.Description += $"Failed to kick `{user}`\n";
+                    embed.Description += $"Failed to kick `{user}` - `{e.Message}`\n";
                 }
             }
 

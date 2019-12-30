@@ -36,14 +36,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<int> GetCountOfUsersAsync()
-        {
-            using(var db = new KaguyaDb())
-            {
-                return await db.Users.CountAsync();
-            }
-        }
-
         public static int GetGlobalExpRankIndex(User user)
         {
             using (var db = new KaguyaDb())
@@ -94,6 +86,26 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 await db.DeleteAsync(chObject);
+            }
+        }
+
+        public static async Task<List<CommandHistory>> GetCommandHistoryForUserAsync(User user)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from h in db.CommandHistories
+                    where h.UserId == user.Id
+                    select h).ToListAsync();
+            }
+        }
+
+        public static async Task<List<CommandHistory>> GetCommandHistoryForUserAsync(ulong Id)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from h in db.CommandHistories
+                    where h.UserId == Id
+                    select h).ToListAsync();
             }
         }
 

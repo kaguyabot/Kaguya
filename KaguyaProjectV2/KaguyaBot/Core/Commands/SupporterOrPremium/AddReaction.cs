@@ -1,13 +1,13 @@
-﻿using Centvrio.Emoji;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Centvrio.Emoji;
 using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Supporter
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
 {
     public class AddReaction : InteractiveBase<ShardedCommandContext>
     {
@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Supporter
         [Command("React")]
         [Summary("Takes a line of text and message ID and adds a reaction to the message. If no message ID is specified, the command-invoking " +
             "message will be the recipient of the reactions.")]
-        [Remarks("<text>\n<text> <message ID>\npog\nyoinkers 8015039698640896017")]
+        [Remarks("<text>\n<text> <message ID>")]
         [RequireBotPermission(GuildPermission.AddReactions)]
         public async Task React(string text, ulong msgId = 0)
         {

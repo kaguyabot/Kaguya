@@ -217,5 +217,77 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 await db.DeleteAsync(reminder);
             }
         }
+
+        public static async Task<List<CommandHistory>> GetCommandHistoryLast24HoursAsync()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from h in db.CommandHistories
+                    where h.Timestamp >= DateTime.Now.AddHours(-24)
+                    select h).ToListAsync();
+            }
+        }
+
+        public static async Task<int> GetTotalCommandCountAsync()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.CommandHistories.CountAsync();
+            }
+        }
+
+        /// <summary>
+        /// Returns the most popular command of all time, with how many uses it has.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<Dictionary<string, int>> GetMostPopularCommandAsync()
+        {
+            using (var db = new KaguyaDb())
+            {
+                var commandQuery = (from h in db.CommandHistories
+                    group h by h.Command
+                    into grp
+                    orderby grp.Count() descending
+                    select grp.Key);
+
+                var command = await commandQuery.FirstAsync();
+                var count = await commandQuery.CountAsync();
+
+                var dic = new Dictionary<string, int>();
+                dic.Add(command, count);
+
+                return dic;
+            }
+        }
+
+        public static async Task<int> GetCountOfUsersAsync()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.Users.CountAsync();
+            }
+        }
+
+        public static int GetTotalCurrency()
+        {
+            using (var db = new KaguyaDb())
+            {
+                int currency = 0;
+                foreach (var user in db.Users)
+                {
+                    currency += user.Points;
+                }
+
+                return currency;
+            }
+        }
+
+        public static async Task<int> GetTotalGamblesAsync()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.GambleHistories.CountAsync();
+            }
+        }
     }
 }
