@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
-using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
@@ -14,6 +13,7 @@ using System;
 using System.Threading.Tasks;
 using Discord.Net;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 

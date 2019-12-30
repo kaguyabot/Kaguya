@@ -10,7 +10,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using Microsoft.Extensions.Logging;
-using LogLevel = KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage.LogLevel;
+using LogLevel = KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage.LogLevel;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {

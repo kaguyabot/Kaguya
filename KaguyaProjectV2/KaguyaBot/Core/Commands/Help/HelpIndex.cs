@@ -131,7 +131,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         public static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
             cmdInfo.Preconditions
                 .Where(x => x is OwnerCommandAttribute || x is SupporterCommandAttribute || 
-                            x is RequireUserPermissionAttribute || x is PremiumServerCommandAttribute)
+                            x is RequireUserPermissionAttribute || x is PremiumServerCommandAttribute || 
+                            x is NsfwCommandAttribute)
                 .Select(x =>
                 {
                     switch (x)
@@ -142,6 +143,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                             return "Kaguya Supporter";
                         case PremiumServerCommandAttribute _:
                             return "Kaguya Premium";
+                        case NsfwCommandAttribute _:
+                            return "Invoke from NSFW-marked channel";
                     }
 
                     var attr = (RequireUserPermissionAttribute)x;

@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -17,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 }
                 catch(Exception e)
                 {
-                    ConsoleLogger.Log($"Failed to establish database connection!! {e.Message}", Core.DataStorage.JsonStorage.LogLevel.ERROR);
+                    ConsoleLogger.Log($"Failed to establish database connection!! {e.Message}", LogLevel.ERROR);
                     return false;
                 }
             }

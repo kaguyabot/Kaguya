@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 #region This file will load all Config file data into memory for the bot to use. This file contains very important credentials.
 #endregion
 
-namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
+namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 {
     public class Config
     {
@@ -103,6 +103,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage
         public string MySQL_Database { get; set; }
         public string TwitchClientId { get; set; }
         public string TwitchAuthToken { get; set; }
+        public string DanbooruUsername { get; set; }
+        public string DanbooruApiKey { get; set; }
     }
     #endregion
 }

@@ -1,8 +1,8 @@
 ﻿using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.DataStorage.JsonStorage;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using TwitchLib.Api;
 using TwitchLib.Client;
 

@@ -45,9 +45,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    internal class NsfwCommandAttribute : Attribute
+    internal class NsfwCommandAttribute : PreconditionAttribute
     {
-
+        public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
+        {
+            if (context.Channel is SocketTextChannel guildCh)
+            {
+                if (guildCh.IsNsfw)
+                    return Task.FromResult(PreconditionResult.FromSuccess());
+            }
+            return Task.FromResult(PreconditionResult.FromError("This command may only be invoked from NSFW-marked channels."));
+        }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
