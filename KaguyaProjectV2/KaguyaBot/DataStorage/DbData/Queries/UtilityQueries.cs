@@ -290,11 +290,39 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task<bool> FishExists(int fishId)
+        public static async Task<bool> FishExistsAsync(long fishId)
         {
             using (var db = new KaguyaDb())
             {
                 return await db.Fish.AnyAsync(x => x.FishId == fishId);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether this <see cref="Fish"/> belongs to the specified <see cref="User"/>.
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static async Task<bool> FishBelongsToUserAsync(Fish fish, User user)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.Fish.AnyAsync(x => x.FishId == fish.FishId && x.UserId == user.Id);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the given fishId belongs to the specified <see cref="User"/>.
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static async Task<bool> FishBelongsToUserAsync(long fishId, User user)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.Fish.AnyAsync(x => x.FishId == fishId && x.UserId == user.Id);
             }
         }
     }

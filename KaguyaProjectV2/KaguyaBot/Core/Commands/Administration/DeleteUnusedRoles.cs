@@ -7,6 +7,7 @@ using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -44,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             await InlineReactionReplyAsync(new ReactionCallbackData("", confirmEmbed.Build(), true, true, TimeSpan.FromSeconds(60), c => 
                 c.Channel.SendMessageAsync(embed: timeoutEmbed.Build()))
-                .WithCallback(new Emoji("✅"), async (c, r) =>
+                .WithCallback(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
                 {
                     int i = 0;
                     int j = 0;

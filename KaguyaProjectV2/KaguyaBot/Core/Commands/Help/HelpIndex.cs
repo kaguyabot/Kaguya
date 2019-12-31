@@ -114,7 +114,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute), we add the same thing to the start of the new line.
                     Name = "Syntax",
                     Value =
-                        $"`{server.CommandPrefix}{aliases.Split(",")[0]} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]} ", cmdInfo.Remarks.Split("\n"))}`",
+                        $"`{server.CommandPrefix}{aliases.Split(",")[0]} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]}", cmdInfo.Remarks.Split("\n"))}`",
                     IsInline = false,
                 }
             };

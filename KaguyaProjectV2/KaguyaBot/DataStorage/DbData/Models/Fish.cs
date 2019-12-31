@@ -1,4 +1,7 @@
-﻿using LinqToDB.Mapping;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -21,6 +24,64 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int Value { get; set; }
         [Column(Name = "Sold"), NotNull]
         public bool Sold { get; set; }
+
+        public const int BAIT_COST = 20;
+        public const int SUPPORTER_BAIT_COST = BAIT_COST / 2;
+
+
+        /// <summary>
+        /// Takes the name of a fish and returns the type of it.
+        /// </summary>
+        /// <param name="name">The name of the fish (must match the Enum name)</param>
+        /// <returns></returns>
+        public static FishType GetFishTypeFromName(string name)
+        {
+            name = name.Replace(" ", "");
+            name = name.ToUpper();
+
+            try
+            {
+                return (FishType) Enum.Parse(typeof(FishType), name);
+            }
+            catch (Exception)
+            {
+                throw new InvalidEnumArgumentException($"This type of fish doesn't exist.");
+            }
+        }
+
+        
+        private static int GetTaxedFishPrice(Fish fish, double taxRate = 0.05)
+        {
+            return (int)(fish.Value * (1 - taxRate));
+        }
+
+        /// <summary>
+        /// Gets the taxed price on a fish. Returns the
+        /// amount of points the user will get for selling this fish.
+        /// </summary>
+        /// <param name="fish">The fish that we need to tax.</param>
+        /// <returns></returns>
+        public static int GetPayoutForFish(Fish fishToSell)
+        {
+            return GetTaxedFishPrice(fishToSell);
+        }
+
+        /// <summary>
+        /// Gets the total taxed payout for a collection of fish. Returns the
+        /// amount of points the user will get for selling these fish.
+        /// </summary>
+        /// <param name="fish">The fish that we need to tax.</param>
+        /// <returns></returns>
+        public static int GetPayoutForFish(List<Fish> fishToSell)
+        {
+            int payout = 0;
+            foreach (var fish in fishToSell)
+            {
+                payout += GetTaxedFishPrice(fish);
+            }
+
+            return payout;
+        }
     }
 
     public enum FishType

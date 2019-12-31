@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <param name="channel"></param>
         /// <param name="description"></param>
         /// <returns></returns>
-        public static async Task SendBasicSuccessEmbed(this ISocketMessageChannel channel, string description)
+        public static async Task SendBasicSuccessEmbedAsync(this ISocketMessageChannel channel, string description)
         {
             var embed = new KaguyaEmbedBuilder
             {
@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <param name="channel"></param>
         /// <param name="description"></param>
         /// <returns></returns>
-        public static async Task SendBasicErrorEmbed(this ISocketMessageChannel channel, string description)
+        public static async Task SendBasicErrorEmbedAsync(this ISocketMessageChannel channel, string description)
         {
             var embed = new KaguyaEmbedBuilder
             {

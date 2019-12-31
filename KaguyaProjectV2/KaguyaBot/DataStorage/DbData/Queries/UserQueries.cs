@@ -307,20 +307,85 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 
         /// <summary>
         /// Sells a <see cref="Fish"/> to the "market", then adds the value of the fish to the
-        /// <see cref="User"/>'s points balance.
+        /// <see cref="User"/>'s points balance. This action will add the points to the user's account.
         /// </summary>
         /// <param name="fish">The fish to sell.</param>
         /// <param name="user">The user to add the value of the fish to.</param>
         /// <returns></returns>
-        public static async Task SellFish(Fish fish, User user)
+        public static async Task SellFishAsync(Fish fish, User user)
         {
-            user.Points += fish.Value;
+            user.Points += Fish.GetPayoutForFish(fish);
             fish.Sold = true;
 
             using (var db = new KaguyaDb())
             {
                 await db.UpdateAsync(fish);
                 await db.UpdateAsync(user);
+            }
+        }
+
+        /// <summary>
+        /// Allows a user to sell a collection of <see cref="Fish"/> en masse.
+        /// This is typically used for selling off all fish of the same type at once.
+        /// This action will add points to the user's account.
+        /// </summary>
+        /// <param name="fishCollection">The collection of fish to sell off.</param>
+        /// <param name="taxRate">The rate at which the fish is taxed. (0.05 would be a 5% fee)</param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static async Task SellFishAsync(IEnumerable<Fish> fishCollection, User user)
+        {
+            using (var db = new KaguyaDb())
+            {
+                foreach (var fish in fishCollection)
+                {
+                    user.Points += Fish.GetPayoutForFish(fish);
+                    fish.Sold = true;
+
+                    await db.UpdateAsync(fish);
+                }
+
+                await db.UpdateAsync(user);
+            }
+        }
+
+        /// <summary>
+        /// Returns a List of Fish that belong to the user.
+        /// </summary>
+        /// <param name="user">The user who we want to get all of the fish from.</param>
+        /// <returns></returns>
+        public static async Task<List<Fish>> GetFishForUser(User user)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from f in db.Fish
+                    where f.UserId == user.Id
+                    select f).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Returns a List of Fish that belong to the user ID.
+        /// </summary>
+        /// <param name="user">The user who we want to get all of the fish from.</param>
+        /// <returns></returns>
+        public static async Task<List<Fish>> GetFishForUser(ulong userId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from f in db.Fish
+                    where f.UserId == userId
+                    select f).ToListAsync();
+            }
+        }
+
+        public static async Task<Fish> GetFishAsync(long fishId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from f in db.Fish
+                    where f.FishId == fishId
+                    select f).FirstAsync();
             }
         }
     }

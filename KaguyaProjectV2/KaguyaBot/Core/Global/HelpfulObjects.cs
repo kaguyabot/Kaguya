@@ -18,5 +18,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         }
 
         public const string KAGUYA_STORE_URL = @"https://the-kaguya-project.myshopify.com/";
+
+        /// <summary>
+        /// The default emoji with reaction replies that use a check mark.
+        /// </summary>
+        /// <returns></returns>
+        public static Emoji CheckMarkEmoji()
+        {
+            return new Emoji("✅");
+        }
+
+        /// <summary>
+        /// The "no-entry" emoji. Default "cancel" emoji reaction for reaction replies.
+        /// </summary>
+        /// <returns></returns>
+        public static Emoji NoEntryEmoji()
+        {
+            return new Emoji("⛔");
+        }
+
     }
 }

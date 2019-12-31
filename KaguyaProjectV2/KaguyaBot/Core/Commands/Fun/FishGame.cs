@@ -8,6 +8,8 @@ using System;
 using System.Threading.Tasks;
 using Discord.Addons.Interactive;
 using Humanizer;
+using Humanizer.Localisation;
+using Org.BouncyCastle.Bcpg;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
@@ -20,9 +22,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                  "the `buybait` command.\n\n" +
                  "Information:\n\n" +
                  "- You must have bait to fish. One bait costs 20 points " +
-                 "(10 for [Kaguya Supporters](https://the-kaguya-project.myshopify.com/))\n" +
+                 "(10 for [Kaguya Supporters](https://the-kaguya-project.myshopify.com/)).\n" +
                  "- You may only fish once every 15 seconds (5 seconds for supporters).\n" +
-                 "- Fish may be sold with the `sellfish` command or may be traded with `tradefish` to other users!\n\n" +
+                 "- Fish may be sold with the `sellfish` command or may be traded with `tradefish` to other users!\n" +
+                 "- View your fish collection with the `myfish` command!\n\n" +
                  "Happy fishing, and good luck catching the **Legendary `Big Kahuna`**!")]
         [Remarks("")]
         public async Task Command()
@@ -51,7 +54,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
                 var errorEmbed = new KaguyaEmbedBuilder(EmbedColor.RED)
                 {
-                    Description = $"Please wait `{ts.Humanize()}` before fishing again."
+                    Description = $"Please wait `{ts.Humanize(minUnit: TimeUnit.Second)}` before fishing again."
                 };
 
                 await ReplyAndDeleteAsync("", false, errorEmbed.Build(), TimeSpan.FromSeconds(2.5));
@@ -69,7 +72,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             double roll = r.NextDouble();
             int fishId = r.Next(1000000000);
 
-            while (await UtilityQueries.FishExists(fishId))
+            while (await UtilityQueries.FishExistsAsync(fishId))
             {
                 fishId = r.Next(1000000000);
             }
@@ -79,73 +82,73 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             switch (fishType)
             {
                 case FishType.SEAWEED:
-                    value = 5;
-                    embed.Description += $"You got `seaweed`!";
+                    value = 1;
+                    embed.Description += $"Aw man, you caught `seaweed`. Better luck next time!";
                     embed.SetColor(EmbedColor.GRAY);
                     break;
                 case FishType.PINFISH:
                     value = 15;
-                    embed.Description += $"You got a `pinfish`!";
+                    embed.Description += $"you caught a `pinfish`!";
                     embed.SetColor(EmbedColor.GRAY);
                     break;
                 case FishType.SMALL_BASS:
                     value = 25;
-                    embed.Description += $"You got a `small bass`!";
+                    embed.Description += $"you caught a `small bass`!";
                     embed.SetColor(EmbedColor.GREEN);
                     break;
                 case FishType.SMALL_SALMON:
                     value = 25;
-                    embed.Description += $"You got a `small salmon`!";
+                    embed.Description += $"you caught a `small salmon`!";
                     embed.SetColor(EmbedColor.GREEN);
                     break;
                 case FishType.CATFISH:
                     value = 75;
-                    embed.Description += $"You got a `catfish`!";
+                    embed.Description += $"you caught a `catfish`!";
                     embed.SetColor(EmbedColor.GREEN);
                     break;
                 case FishType.LARGE_BASS:
                     value = 150;
-                    embed.Description += $"Wow, you got a `large bass`!";
+                    embed.Description += $"Wow, you caught a `large bass`!";
                     embed.SetColor(EmbedColor.LIGHT_BLUE);
                     break;
                 case FishType.LARGE_SALMON:
                     value = 150;
-                    embed.Description += $"Wow, you got a `large salmon`!";
+                    embed.Description += $"Wow, you caught a `large salmon`!";
                     embed.SetColor(EmbedColor.LIGHT_BLUE);
                     break;
                 case FishType.RED_DRUM:
                     value = 200;
-                    embed.Description += $"Holy smokes, you got a `red drum`!";
+                    embed.Description += $"Holy smokes, you caught a `red drum`!";
                     embed.SetColor(EmbedColor.RED);
                     break;
                 case FishType.TRIGGERFISH:
                     value = 350;
-                    embed.Description += $"Holy smokes, you got a `triggerfish`!";
+                    embed.Description += $"Holy smokes, you caught a `triggerfish`!";
                     embed.SetColor(EmbedColor.LIGHT_PURPLE);
                     break;
                 case FishType.GIANT_SEA_BASS:
                     value = 500;
-                    embed.Description += $"No way, you got a `giant sea bass`! Nice work!";
+                    embed.Description += $"No way, you caught a `giant sea bass`! Nice work!";
                     embed.SetColor(EmbedColor.LIGHT_PURPLE);
                     break;
                 case FishType.DEVILS_HOLE_PUPFISH:
                     value = 1000;
-                    embed.Description += $"I can't believe my eyes!! You got a `devils hold pupfish`! You're crazy!";
+                    embed.Description += $"I can't believe my eyes!! you caught a `devils hold pupfish`! You're crazy!";
                     embed.SetColor(EmbedColor.VIOLET);
                     break;
                 case FishType.ORANTE_SLEEPER_RAY:
                     value = 5000;
-                    embed.Description += $"I can't believe my eyes!! You got a `orante sleeper ray`! You're crazy!";
+                    embed.Description += $"Hot diggity dog, you caught an `orante sleeper ray`! This is unbelievable!";
                     embed.SetColor(EmbedColor.ORANGE);
                     break;
                 case FishType.GIANT_SQUID:
                     value = 75000;
-                    embed.Description += $"Well butter my buttcheeks and call me a biscuit, you got the second " +
+                    embed.Description += $"Well butter my buttcheeks and call me a biscuit, you caught the second " +
                                          $"rarest fish in the sea! It's a `giant squid`!! Congratulations!";
                     embed.SetColor(EmbedColor.ORANGE);
                     break;
                 case FishType.BIG_KAHUNA:
-                    value = 10000000;
+                    value = 1000000;
                     embed.Description += $"<a:siren:429784681316220939> NO WAY! You hit the jackpot " +
                                          $"and caught the **Legendary `BIG KAHUNA`**!!!! " +
                                          $"What an incredible moment this is! <a:siren:429784681316220939>";
@@ -176,9 +179,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             await UserQueries.AddFish(fish);
             await UserQueries.UpdateUserAsync(user);
 
-            embed.Description += $"\n\nFish ID: `{fishId}`\n" +
-                                 $"Fish Value: `{value:N0}` points.\n" +
-                                 $"Bait Remaining: `{user.FishBait:N0}`";
+            if (fishType != FishType.BAIT_STOLEN)
+            {
+                embed.Description += $"\n\nFish ID: `{fishId}`\n" +
+                                     $"Fish Value: `{value:N0}` points.\n" +
+                                     $"Bait Remaining: `{user.FishBait:N0}`";
+            }
+            else
+            {
+                embed.Description += $"\nBait Remaining: `{user.FishBait:N0}`";
+            }
+           
 
             await ReplyAsync(embed: embed.Build());
         }
