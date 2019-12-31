@@ -66,15 +66,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             server = await ServerQueries.GetOrCreateServerAsync(server.Id);
             double newLevel = ReturnLevel(server, user);
-            await ConsoleLogger.Log(
+            await ConsoleLogger.LogAsync(
                 $"[Server Exp]: User {user.Id}] has received {exp} exp. [Guild: {server.Id}] " +
-                $"Total Exp: {expObject.Exp:N0}]", LogLevel.TRACE);
+                $"Total Exp: {expObject.Exp:N0}]", LogLvl.TRACE);
 
             if (HasLeveledUp((int) oldLevel, (int) newLevel))
             {
-                await ConsoleLogger.Log(
+                await ConsoleLogger.LogAsync(
                     $"[Server Exp]: [Server {server.Id} | User {user.Id}] has leveled up! [Level: {(int)newLevel} | Experience: {GetExpForUser(server, user)}]",
-                    LogLevel.INFO);
+                    LogLvl.INFO);
 
                 if (levelAnnouncementChannel != null && levelAnnouncementChannel is SocketTextChannel textChannel)
                 {

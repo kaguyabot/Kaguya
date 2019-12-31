@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using Newtonsoft.Json;
 
 #region This file will load all Config file data into memory for the bot to use. This file contains very important credentials.
@@ -10,7 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 {
     public class Config
     {
-        private static readonly string path = $"{Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\.."))}\\Resources";
+        private static readonly string path = $"{ConfigProperties.KaguyaMainFolder}\\Resources";
 
         public static async Task<ConfigModel> GetOrCreateConfigAsync()
         {
@@ -78,7 +79,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
     /// LogLevels arranged in order of importance (least to greatest importance): Trace, Debug, Info, Warn, Error.
     /// Info should be used for commands and other general information.
     /// </summary>
-    public enum LogLevel
+    public enum LogLvl
     {
         TRACE = 0,
         DEBUG = 1,

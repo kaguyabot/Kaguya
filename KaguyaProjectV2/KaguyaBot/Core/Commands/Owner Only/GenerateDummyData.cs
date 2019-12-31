@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using Microsoft.Extensions.Logging;
-using LogLevel = KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage.LogLevel;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {

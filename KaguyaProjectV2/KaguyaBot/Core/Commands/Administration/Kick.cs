@@ -71,8 +71,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
             catch (Exception e)
             {
-                await ConsoleLogger.Log($"Attempt to auto-kick user has failed in guild " +
-                                        $"[{user.Guild.Name} | {user.Guild.Id}]. Exception: {e.Message}", LogLevel.INFO);
+                await ConsoleLogger.LogAsync($"Attempt to auto-kick user has failed in guild " +
+                                        $"[{user.Guild.Name} | {user.Guild.Id}]. Exception: {e.Message}", LogLvl.INFO);
             }
         }
     }

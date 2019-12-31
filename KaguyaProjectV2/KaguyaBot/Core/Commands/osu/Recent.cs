@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             
             if (userProfileObject == null)
             {
-                userProfileObject = new OsuUserBuilder((await UserQueries.GetOrCreateUser(Context.User.Id)).OsuId.ToString()).Execute();
+                userProfileObject = new OsuUserBuilder((await UserQueries.GetOrCreateUserAsync(Context.User.Id)).OsuId.ToString()).Execute();
                 if (userProfileObject == null)
                 {
                     embed.WithTitle($"osu! Recent");

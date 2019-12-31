@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             }
 
             //Getting user profile database object and updating it.
-            var userAccount = await UserQueries.GetOrCreateUser(Context.User.Id);
+            var userAccount = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
             userAccount.OsuId = playerObject.user_id;
             await UserQueries.UpdateUserAsync(userAccount);
 

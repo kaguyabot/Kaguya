@@ -52,7 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (!allFp.Contains(fp)) continue;
 
                 ServerQueries.RemoveFilteredPhrase(fp);
-                await ConsoleLogger.Log($"Server {server.Id} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLevel.DEBUG);
+                await ConsoleLogger.LogAsync($"Server {server.Id} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder

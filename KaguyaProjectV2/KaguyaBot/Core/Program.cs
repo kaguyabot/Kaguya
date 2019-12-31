@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using Discord.Net;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using TwitchLib.Api;
@@ -28,9 +29,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         public async Task MainAsync()
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+            AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
             {
-                ConsoleLogger.Log($"Unhandled Exception: {eventArgs.ExceptionObject}", LogLevel.ERROR);
+                await ConsoleLogger.LogAsync($"Unhandled Exception: {eventArgs.ExceptionObject}", LogLvl.ERROR);
             };
             Console.SetWindowSize(185, 40);
 
@@ -55,7 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     LogEventListener.Listener();
                     GuildLogger.GuildLogListener();
 
-                    TestDatabaseConnection();
+                    await TestDatabaseConnection();
 
                     _client = services.GetRequiredService<DiscordShardedClient>();
 
@@ -65,20 +66,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                     await EnableTimers(AllShardsLoggedIn(_client, config));
                     InitializeEventHandlers();
+                   // await PopulateHentai(500);
 
                     await Task.Delay(-1);
                 }
                 catch (HttpException e)
                 {
-                    await ConsoleLogger.Log($"Error when logging into Discord:\n" +
+                    await ConsoleLogger.LogAsync($"Error when logging into Discord:\n" +
                                             $"-Have you configured your config file?\n" +
-                                            $"-Is your token correct? Exception: {e.Message}", LogLevel.ERROR);
+                                            $"-Is your token correct? Exception: {e.Message}", LogLvl.ERROR);
                     Console.ReadLine();
                 }
                 catch (Exception e)
                 {
-                    await ConsoleLogger.Log("Something really important broke!\n" +
-                                            $"Exception: {e.Message}", LogLevel.ERROR);
+                    await ConsoleLogger.LogAsync("Something really important broke!\n" +
+                                            $"Exception: {e.Message}", LogLvl.ERROR);
                 }
             }
         }
@@ -94,21 +96,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             ConfigProperties.client = _client;
             ConfigProperties.botConfig = _config;
-            ConfigProperties.logLevel = (LogLevel)_config.LogLevelNumber;
+            ConfigProperties.logLevel = (LogLvl)_config.LogLevelNumber;
         }
 
-        private void TestDatabaseConnection()
+        private async Task TestDatabaseConnection()
         {
             try
             {
                 if(TestQueries.TestConnection().ToString() == "True")
                 {
-                    ConsoleLogger.Log("Database connection successfully established.", LogLevel.INFO);
+                    await ConsoleLogger.LogAsync("Database connection successfully established.", LogLvl.INFO);
                 }
             }
             catch(Exception e)
             {
-                ConsoleLogger.Log($"Failed to establish database connection. Have you properly configured your config file? Exception: {e.Message}", LogLevel.ERROR);
+                await ConsoleLogger.LogAsync($"Failed to establish database connection. Have you properly configured your config file? Exception: {e.Message}", LogLvl.ERROR);
             }
         }
 
@@ -143,6 +145,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)
         {
             return client.Shards.Count == config.TotalShards;
+        }
+
+        private async Task PopulateHentai(int count)
+        {
+            var n = new NsfwHentai();
+            await n.LoadHentaiAsync(count, true);
         }
     }
 }

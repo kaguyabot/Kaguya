@@ -38,7 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                         continue;
 
                     await kaguyaSuppUser.AddRoleAsync(supporterRole);
-                    await ConsoleLogger.Log($"Supporter {socketUser} has had their supporter role given to them in the Kaguya Support server.", LogLevel.INFO);
+                    await ConsoleLogger.LogAsync($"Supporter {socketUser} has had their supporter role given to them in the Kaguya Support server.", LogLvl.INFO);
                 }
 
                 // Check for expired supporter tags.
@@ -60,7 +60,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                         continue;
 
                     await kaguyaSuppUser.RemoveRoleAsync(supporterRole);
-                    await ConsoleLogger.Log($"Expired supporter {socketUser} has had their supporter role removed from them in the Kaguya Support server.", LogLevel.INFO);
+                    await ConsoleLogger.LogAsync($"Expired supporter {socketUser} has had their supporter role removed from them in the Kaguya Support server.", LogLvl.INFO);
                 }
             };
             return Task.CompletedTask;

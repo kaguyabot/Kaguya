@@ -44,7 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (message == null || message.Author.IsBot) return;
 
             Server server = await ServerQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
-            User user = await UserQueries.GetOrCreateUser(message.Author.Id);
+            User user = await UserQueries.GetOrCreateUserAsync(message.Author.Id);
 
             if (user.IsBlacklisted && user.Id != ConfigProperties.botConfig.BotOwnerId) return;
             if (server.IsBlacklisted) return;
@@ -75,14 +75,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 return;
 
             Server server = await ServerQueries.GetOrCreateServerAsync(context.Guild.Id);
-            User user = await UserQueries.GetOrCreateUser(context.User.Id);
+            User user = await UserQueries.GetOrCreateUserAsync(context.User.Id);
 
             if (result.IsSuccess)
             {
                 server.TotalCommandCount++;
                 user.ActiveRateLimit++;
 
-                await ConsoleLogger.Log(context, LogLevel.INFO);
+                await ConsoleLogger.LogAsync(context, LogLvl.INFO);
 
                 await UserQueries.AddCommandHistory(new CommandHistory
                 {
@@ -118,7 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 if (message.Content.ToLower().Contains(phrase.ToLower()))
                 {
                     await context.Channel.DeleteMessageAsync(message);
-                    await ConsoleLogger.Log($"Filtered phrase detected: [Guild: {server.Id} | Phrase: {phrase}]", LogLevel.INFO);
+                    await ConsoleLogger.LogAsync($"Filtered phrase detected: [Guild: {server.Id} | Phrase: {phrase}]", LogLvl.INFO);
                     return true;
                 }
             }
@@ -129,7 +129,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         private async void HandleCommandResult(ICommandContext context, Server server, IResult result)
         {
             string cmdPrefix = server.CommandPrefix;
-            await ConsoleLogger.Log($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLevel.DEBUG);
+            await ConsoleLogger.LogAsync($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLvl.DEBUG);
 
             if (!result.IsSuccess)
             {

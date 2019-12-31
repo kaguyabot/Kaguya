@@ -9,7 +9,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {
     public class ConsoleLogger
     {
-        private static readonly string LogDirectory = $"{Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\.."))}\\Resources\\Logs\\Debug";
+        private static readonly string LogDirectory = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\Logs\\Debug";
         private static readonly string LogFileName = $"KaguyaLog_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
 
         /// <summary>
@@ -19,16 +19,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
         /// <param name="logLevel">The severity of the message. Higher severity log messages get special coloring in the console.</param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static Task Log(string message, LogLevel logLevel)
+        public static async Task LogAsync(string message, LogLvl logLevel)
         {
             string logP = LogPrefix(logLevel);
             string contents = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} {logP} {message}";
 
-            if (ConfigProperties.logLevel > logLevel) return Task.CompletedTask;
-            return LogFinisher(logLevel, contents);
+            if (ConfigProperties.logLevel > logLevel) return;
+            await LogFinisher(logLevel, contents);
         }
 
-        public static Task Log(ICommandContext context, LogLevel logLevel)
+        public static async Task LogAsync(ICommandContext context, LogLvl logLevel)
         {
             string logP = LogPrefix(logLevel);
 
@@ -38,18 +38,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
                        $"Guild: [Name: {context.Guild} | ID: {context.Guild.Id} | Shard: {shardId}]\n" +
                        $"Channel: [Name: {context.Channel.Name} | ID: {context.Channel.Id}]\n";
 
-            return LogFinisher(logLevel, contents);
+            await LogFinisher(logLevel, contents);
         }
 
-        private static string LogPrefix(LogLevel logLevel)
+        private static string LogPrefix(LogLvl logLevel)
         {
             return logLevel switch
             {
-                LogLevel.TRACE => "[TRACE]:",
-                LogLevel.DEBUG => "[DEBUG]:",
-                LogLevel.INFO => "[INFO]:",
-                LogLevel.WARN => "[WARNING]:",
-                LogLevel.ERROR => "[ERROR]:",
+                LogLvl.TRACE => "[TRACE]:",
+                LogLvl.DEBUG => "[DEBUG]:",
+                LogLvl.INFO => "[INFO]:",
+                LogLvl.WARN => "[WARNING]:",
+                LogLvl.ERROR => "[ERROR]:",
                 _ => null
             };
         }
@@ -69,27 +69,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 
         }
 
-        private static void SetConsoleColor(LogLevel level)
+        private static void SetConsoleColor(LogLvl level)
         {
             switch (level)
             {
-                case LogLevel.TRACE:
+                case LogLvl.TRACE:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     Console.BackgroundColor = ConsoleColor.Black;
                     break;
-                case LogLevel.DEBUG:
+                case LogLvl.DEBUG:
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Console.BackgroundColor = ConsoleColor.Black;
                     break;
-                case LogLevel.INFO:
+                case LogLvl.INFO:
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.BackgroundColor = ConsoleColor.Black;
                     break;
-                case LogLevel.WARN:
+                case LogLvl.WARN:
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.DarkYellow;
                     break;
-                case LogLevel.ERROR:
+                case LogLvl.ERROR:
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.DarkRed;
                     break;
@@ -98,16 +98,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             }
         }
 
-        private static Task LogFinisher(LogLevel logLevel, string contents)
+        private static async Task LogFinisher(LogLvl logLevel, string contents)
         {
             //Logs to console only if the log level is less or equally severe to what is specified in the config.
             SetConsoleColor(logLevel);
             Console.WriteLine(contents);
 
             if (LogFileExists())
-                File.AppendAllText($"{LogDirectory}\\{LogFileName}", $"{contents}\n");
-
-            return Task.CompletedTask;
+                await File.AppendAllTextAsync($"{LogDirectory}\\{LogFileName}", $"{contents}\n");
         }
     }
 }

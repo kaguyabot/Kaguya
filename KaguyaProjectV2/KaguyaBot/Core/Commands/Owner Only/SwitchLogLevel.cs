@@ -29,11 +29,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
             switch (level.ToLower())
             {
-                case "trace": ConfigProperties.logLevel = LogLevel.TRACE; break;
-                case "debug": ConfigProperties.logLevel = LogLevel.DEBUG; break;
-                case "info": ConfigProperties.logLevel = LogLevel.INFO; break;
-                case "warn": ConfigProperties.logLevel = LogLevel.WARN; break;
-                case "error": ConfigProperties.logLevel = LogLevel.ERROR; break;
+                case "trace": ConfigProperties.logLevel = LogLvl.TRACE; break;
+                case "debug": ConfigProperties.logLevel = LogLvl.DEBUG; break;
+                case "info": ConfigProperties.logLevel = LogLvl.INFO; break;
+                case "warn": ConfigProperties.logLevel = LogLvl.WARN; break;
+                case "error": ConfigProperties.logLevel = LogLvl.ERROR; break;
                 default: throw new ArgumentOutOfRangeException($"Valid logtypes are `{validSeverities}`", new Exception());
             }
 

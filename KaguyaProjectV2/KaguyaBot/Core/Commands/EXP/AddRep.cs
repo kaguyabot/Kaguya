@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [Remarks("\n<user>\n<user> <reason>")]
         public async Task Command(IGuildUser guildUser = null, [Remainder]string reason = null)
         {
-            User user = await UserQueries.GetOrCreateUser(Context.User.Id);
+            User user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
             var rep = await UserQueries.GetRepAsync(user);
             int repCount = rep.Count;
 
@@ -75,7 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 return;
             }
 
-            User target = await UserQueries.GetOrCreateUser(guildUser.Id);
+            User target = await UserQueries.GetOrCreateUserAsync(guildUser.Id);
 
             if (target.IsBlacklisted)
             {

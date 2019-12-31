@@ -289,5 +289,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 return await db.GambleHistories.CountAsync();
             }
         }
+
+        public static async Task<bool> FishExists(int fishId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.Fish.AnyAsync(x => x.FishId == fishId);
+            }
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
             {
                 if (enabled)
                 {
-                    await ConsoleLogger.Log($"Server has set log type: [ID: {channel.Guild.Id} | Type: {type.ToUpperInvariant()}]", LogLevel.DEBUG);
+                    await ConsoleLogger.LogAsync($"Server has set log type: [ID: {channel.Guild.Id} | Type: {type.ToUpperInvariant()}]", LogLvl.DEBUG);
                     switch (type.ToLower())
                     {
                         case "modlog":
@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                 }
                 else
                 {
-                    await ConsoleLogger.Log($"Server has disabled log type: [ID: {guildId} | Type: {type.ToUpperInvariant()}]", LogLevel.DEBUG);
+                    await ConsoleLogger.LogAsync($"Server has disabled log type: [ID: {guildId} | Type: {type.ToUpperInvariant()}]", LogLvl.DEBUG);
                     switch (type.ToLower())
                     {
                         case "kaguyaserverlog": server.ModLog = 0; break;

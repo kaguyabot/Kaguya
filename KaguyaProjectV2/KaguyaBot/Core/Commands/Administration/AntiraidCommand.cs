@@ -42,11 +42,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (antiraid.Any())
                 {
                     await ServerQueries.RemoveAntiRaidAsync(server);
-                    await Context.SendBasicSuccessEmbed("Successfully disabled this server's antiraid protection.");
+                    await Context.Channel.SendBasicSuccessEmbed("Successfully disabled this server's antiraid protection.");
                     return;
                 }
 
-                await Context.SendBasicErrorEmbed("This server has not setup the antiraid service, therefore " +
+                await Context.Channel.SendBasicErrorEmbed("This server has not setup the antiraid service, therefore " +
                                                     "there is nothing to disable.");
                 return;
             }
@@ -96,7 +96,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Server = server
             };
 
-            await Context.SendBasicSuccessEmbed(
+            await Context.Channel.SendBasicSuccessEmbed(
                 $"Successfully enabled the antiraid service for `{Context.Guild.Name}`.\n\n" +
                 $"I will `{action.ToUpper()}` anyone part of a raid. A raid is now defined as " +
                 $"`{users.ToWords()}` users joining within `{seconds.ToWords()}` seconds " +

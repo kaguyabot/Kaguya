@@ -154,8 +154,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             if (muteRole == null)
             {
                 await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
-                await ConsoleLogger.Log($"New mute role created in guild [Name: {guild.Name} | ID: {guild.Id}]",
-                    LogLevel.DEBUG);
+                await ConsoleLogger.LogAsync($"New mute role created in guild [Name: {guild.Name} | ID: {guild.Id}]",
+                    LogLvl.DEBUG);
 
                 /*
                  * We redefine guild because the object
@@ -183,16 +183,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
                         sendMessages: PermValue.Deny));
 
-                    await ConsoleLogger.Log($"Permission overwrite added for guild channel.\n" +
+                    await ConsoleLogger.LogAsync($"Permission overwrite added for guild channel.\n" +
                                             $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
-                                            $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLevel.TRACE);
+                                            $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
                 }
             }
 
             await user.AddRoleAsync(muteRole);
 
-            await ConsoleLogger.Log($"User muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
-                                    $"User: [Name: {user} | ID: {user.Id}]", LogLevel.DEBUG);
+            await ConsoleLogger.LogAsync($"User muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
+                                    $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
 
             await SendModLog(server, new PremiumModerationLog
             {
@@ -232,8 +232,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             if (muteRole == null)
             {
                 await guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
-                await ConsoleLogger.Log($"New mute role created in guild [Name: {guild.Name} | ID: {guild.Id}]",
-                    LogLevel.DEBUG);
+                await ConsoleLogger.LogAsync($"New mute role created in guild [Name: {guild.Name} | ID: {guild.Id}]",
+                    LogLvl.DEBUG);
 
                 /*
                  * We redefine guild because the object
@@ -252,15 +252,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
                         sendMessages: PermValue.Deny));
 
-                    await ConsoleLogger.Log($"Permission overwrite added for guild channel.\n" +
+                    await ConsoleLogger.LogAsync($"Permission overwrite added for guild channel.\n" +
                                             $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
-                                            $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLevel.TRACE);
+                                            $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
                 }
             }
 
             await user.AddRoleAsync(muteRole);
-            await ConsoleLogger.Log($"User auto-muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
-                                    $"User: [Name: {user} | ID: {user.Id}]", LogLevel.DEBUG);
+            await ConsoleLogger.LogAsync($"User auto-muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
+                                    $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
         }
     }
 }

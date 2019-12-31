@@ -9,8 +9,8 @@ using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.Logging;
-using LogLevel = KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage.LogLevel;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -74,8 +74,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
             catch (Exception e)
             {
-                await ConsoleLogger.Log($"Attempt to auto-ban user has failed in guild " +
-                                        $"[{user.Guild.Name} | {user.Guild.Id}]. Exception: {e.Message}", LogLevel.INFO);
+                await ConsoleLogger.LogAsync($"Attempt to auto-ban user has failed in guild " +
+                                        $"[{user.Guild.Name} | {user.Guild.Id}]. Exception: {e.Message}", LogLvl.INFO);
             }
         }
     }

@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 
             if (player == null || player == "")
             {
-                player = (await UserQueries.GetOrCreateUser(Context.User.Id)).OsuId.ToString();
+                player = (await UserQueries.GetOrCreateUserAsync(Context.User.Id)).OsuId.ToString();
                 if (player == "0")
                 {
                     embed.WithTitle($"osu! Top {num}");
@@ -95,7 +95,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 
             if (player == null || player == "")
             {
-                player = (await UserQueries.GetOrCreateUser(Context.User.Id)).OsuId.ToString();
+                player = (await UserQueries.GetOrCreateUserAsync(Context.User.Id)).OsuId.ToString();
                 if (player == null || player == "")
                 {
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{(await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");

@@ -58,16 +58,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                         }
                         catch (Exception)
                         {
-                            await ConsoleLogger.Log($"Exception handled when unmuting a user in guild [Name: {guild.Name} | ID: {guild.Id}]",
-                                LogLevel.WARN);
+                            await ConsoleLogger.LogAsync($"Exception handled when unmuting a user in guild [Name: {guild.Name} | ID: {guild.Id}]",
+                                LogLvl.WARN);
                         }
 
                         await ServerQueries.UpdateServerAsync(server);
 
                         RemoveFromDB:
                         await ServerQueries.RemoveMutedUser(mutedUser);
-                        await ConsoleLogger.Log($"User [ID: {mutedUser.UserId}] has been automatically unmuted.",
-                            LogLevel.DEBUG);
+                        await ConsoleLogger.LogAsync($"User [ID: {mutedUser.UserId}] has been automatically unmuted.",
+                            LogLvl.DEBUG);
                     }
                 }
             };

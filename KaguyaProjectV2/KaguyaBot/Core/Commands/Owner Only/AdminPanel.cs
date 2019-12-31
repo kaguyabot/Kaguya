@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         public async Task OwnerAdminPanel(ulong Id)
         {
             KaguyaEmbedBuilder embed;
-            var user = await UserQueries.GetOrCreateUser(Id);
+            var user = await UserQueries.GetOrCreateUserAsync(Id);
             var socketUser = ConfigProperties.client.GetUser(Id);
 
             embed = new KaguyaEmbedBuilder

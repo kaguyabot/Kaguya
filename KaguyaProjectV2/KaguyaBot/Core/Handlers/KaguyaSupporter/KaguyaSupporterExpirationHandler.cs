@@ -47,15 +47,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                             embed.SetColor(EmbedColor.RED);
 
                             await socketUser.SendMessageAsync(embed: embed.Build());
-                            await ConsoleLogger.Log($"User [Name: {socketUser} | ID: {socketUser.Id}] has been notified" +
-                                              $" in DM that their supporter tag is now expired.", LogLevel.DEBUG);
+                            await ConsoleLogger.LogAsync($"User [Name: {socketUser} | ID: {socketUser.Id}] has been notified" +
+                                              $" in DM that their supporter tag is now expired.", LogLvl.DEBUG);
                         }
                         catch (Exception)
                         {
                             if (suppKeyObject.UserId == 0) return;
-                            await ConsoleLogger.Log($"I tried to send a DM to User [Name: {socketUser?.Username ?? "USER RETURNED NULL"} " +
+                            await ConsoleLogger.LogAsync($"I tried to send a DM to User [Name: {socketUser?.Username ?? "USER RETURNED NULL"} " +
                                               $"| ID: {socketUser?.Id}] about their expired supporter tag, " +
-                                              $"but their DMs are closed.", LogLevel.DEBUG);
+                                              $"but their DMs are closed.", LogLvl.DEBUG);
                         }
 
                         await UtilityQueries.DeleteSupporterKeyAsync(suppKeyObject);

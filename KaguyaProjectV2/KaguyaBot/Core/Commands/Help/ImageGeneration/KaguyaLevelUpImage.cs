@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -17,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.ImageGeneration
 
         public void CreateImage()
         {
-            string filePath = $"{Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\.."))}\\Resources\\Artwork";
+            string filePath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\Artwork";
 
             using (Image image = Image.Load(Path.Combine(filePath, "BGTemplate.png")))
             {

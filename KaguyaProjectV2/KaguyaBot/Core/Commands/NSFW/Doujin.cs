@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
     public class Doujin : ModuleBase<ShardedCommandContext>
     {
         [NsfwCommand]
-        [Command("doujin")]
+        [Command("Doujin")]
         [Summary("Displays a random doujin in chat.")]
         [Remarks("")]
         public async Task Command()

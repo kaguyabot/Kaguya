@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
@@ -12,26 +13,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <summary>
         /// Sends a basic reply in chat with the default embed color.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="channel"></param>
         /// <param name="description"></param>
         /// <returns></returns>
-        public static async Task SendBasicSuccessEmbed(this ICommandContext context, string description)
+        public static async Task SendBasicSuccessEmbed(this ISocketMessageChannel channel, string description)
         {
             var embed = new KaguyaEmbedBuilder
             {
                 Description = description
             };
 
-            await context.Channel.SendMessageAsync(embed: embed.Build());
+            await channel.SendMessageAsync(embed: embed.Build());
         }
 
         /// <summary>
         /// Sends a basic error message in chat.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="channel"></param>
         /// <param name="description"></param>
         /// <returns></returns>
-        public static async Task SendBasicErrorEmbed(this ICommandContext context, string description)
+        public static async Task SendBasicErrorEmbed(this ISocketMessageChannel channel, string description)
         {
             var embed = new KaguyaEmbedBuilder
             {
@@ -39,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             };
             embed.SetColor(EmbedColor.RED);
 
-            await context.Channel.SendMessageAsync(embed: embed.Build());
+            await channel.SendMessageAsync(embed: embed.Build());
         }
     }
 }

@@ -69,7 +69,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     {
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
-            var user = UserQueries.GetOrCreateUser(context.User.Id);
+            var user = UserQueries.GetOrCreateUserAsync(context.User.Id);
 
             return Task.FromResult(user.Result.IsSupporter ? PreconditionResult.FromSuccess() : 
                 PreconditionResult.FromError("Sorry, but you must be a supporter to use this command."));

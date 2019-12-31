@@ -15,9 +15,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int Experience { get; set; }
         [Column(Name = "Points"), NotNull]
         public int Points { get; set; }
-        [Column(Name = "OsuId"), Nullable]
+        [Column(Name = "OsuId"), NotNull]
         public int OsuId { get; set; }
-        [Column(Name = "CommandUses"), Nullable]
+        [Column(Name = "CommandUses"), NotNull]
         public int TotalCommandUses { get; set; }
         [Column(Name = "TotalDaysSupported"), NotNull]
         public int TotalDaysSupported { get; set; }
@@ -28,37 +28,41 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// The ratelimit service will check for whether the user
         /// has too many commands allowed by the ratelimit (x cmds in y seconds).
         /// </summary>
-        [Column(Name = "ActiveRateLimit"), Nullable]
+        [Column(Name = "ActiveRateLimit"), NotNull]
         public int ActiveRateLimit { get; set; }
-        [Column(Name = "RateLimitWarnings"), Nullable]
+        [Column(Name = "RateLimitWarnings"), NotNull]
         public int RateLimitWarnings { get; set; }
-        [Column(Name = "GamblingWins"), Nullable]
+        [Column(Name = "GamblingWins"), NotNull]
         public int TotalGamblingWins { get; set; }
-        [Column(Name = "GamblingLosses"), Nullable]
+        [Column(Name = "GamblingLosses"), NotNull]
         public int TotalGamblingLosses { get; set; }
-        [Column(Name = "CurrencyAwarded"), Nullable]
+        [Column(Name = "CurrencyAwarded"), NotNull]
         public int TotalCurrencyAwarded { get; set; }
-        [Column(Name = "CurrencyLost"), Nullable]
+        [Column(Name = "CurrencyLost"), NotNull]
         public int TotalCurrencyLost { get; set; }
-        [Column(Name = "RollWins"), Nullable]
+        [Column(Name = "RollWins"), NotNull]
         public int TotalRollWins { get; set; }
-        [Column(Name = "QuickdrawWins"), Nullable]
+        [Column(Name = "QuickdrawWins"), NotNull]
         public int TotalQuickdrawWins { get; set; }
-        [Column(Name = "QuickdrawLosses"), Nullable]
+        [Column(Name = "QuickdrawLosses"), NotNull]
         public int TotalQuickdrawLosses { get; set; }
-        [Column(Name = "BlacklistExpiration"), Nullable]
+        [Column(Name = "FishBait"), NotNull]
+        public int FishBait { get; set; }
+        [Column(Name = "BlacklistExpiration"), NotNull]
         public double BlacklistExpiration { get; set; }
-        [Column(Name = "LatestEXP"), Nullable]
+        [Column(Name = "LatestEXP"), NotNull]
         public double LatestExp { get; set; }
-        [Column(Name = "LatestTimelyBonus"), Nullable]
+        [Column(Name = "LatestTimelyBonus"), NotNull]
         public double LatestTimelyBonus { get; set; }
-        [Column(Name = "LatestWeeklyBonus"), Nullable]
+        [Column(Name = "LatestWeeklyBonus"), NotNull]
         public double LatestWeeklyBonus { get; set; }
-        [Column(Name = "LastGivenRep"), Nullable]
+        [Column(Name = "LastGivenRep"), NotNull]
         public double LastGivenRep { get; set; }
-        [Column(Name = "LastRatelimited"), Nullable]
+        [Column(Name = "LastRatelimited"), NotNull]
         public double LastRatelimited { get; set; }
-        [Column(Name = "UpvoteBonusExpiration"), Nullable]
+        [Column(Name = "LastFished"), NotNull]
+        public double LastFished { get; set; }
+        [Column(Name = "UpvoteBonusExpiration"), NotNull]
         public double UpvoteBonusExpiration { get; set; }
 
         [Column(Name = "IsBlacklisted"), NotNull]

@@ -5,7 +5,8 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
 using System.Timers;
-using LogLevel = KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage.LogLevel;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+
 #pragma warning disable 1998
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
@@ -36,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     await user.SendMessageAsync(embed: embed.Build());
                     await UtilityQueries.DeleteReminderAsync(reminder);
 
-                    await ConsoleLogger.Log($"User {user} has been sent a reminder to \"{reminder.Text}\"", LogLevel.INFO);
+                    await ConsoleLogger.LogAsync($"User {user} has been sent a reminder to \"{reminder.Text}\"", LogLvl.INFO);
                 }
             };
         }

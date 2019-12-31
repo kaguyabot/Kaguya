@@ -37,9 +37,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                       $"reaching the specified warning threshold for bans " +
                                                       $"({warnCount} warnings).");
                 await PremiumModerationLog.SendModerationLog(modLog);
-                await ConsoleLogger.Log($"User [{guildUser} | {guildUser.Id}] has been " +
+                await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                         $"automatically banned in guild " +
-                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLevel.DEBUG);
+                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLvl.DEBUG);
                 return;
             }
 
@@ -56,9 +56,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 };
                 await shadowban.AutoShadowbanUserAsync(guildUser);
                 await PremiumModerationLog.SendModerationLog(modLog);
-                await ConsoleLogger.Log($"User [{guildUser} | {guildUser.Id}] has been " +
+                await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                         $"automatically shadowbanned in guild " +
-                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLevel.DEBUG);
+                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLvl.DEBUG);
                 return;
             }
 
@@ -77,9 +77,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                         $"reaching the specified warning threshold for kicks " +
                                                         $"({warnCount} warnings).");
                 await PremiumModerationLog.SendModerationLog(modLog);
-                await ConsoleLogger.Log($"User [{guildUser} | {guildUser.Id}] has been " +
+                await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                         $"automatically kicked in guild " +
-                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLevel.DEBUG);
+                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLvl.DEBUG);
                 return;
             }
 
@@ -96,9 +96,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 };
                 await mute.AutoMute(guildUser);
                 await PremiumModerationLog.SendModerationLog(modLog);
-                await ConsoleLogger.Log($"User [{guildUser} | {guildUser.Id}] has been " +
+                await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                         $"automatically muted in guild " +
-                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLevel.DEBUG);
+                                        $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLvl.DEBUG);
             }
         }
     }

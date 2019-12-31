@@ -54,7 +54,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (allFp.Contains(fp)) continue;
 
                 await ServerQueries.AddFilteredPhrase(fp); 
-                await ConsoleLogger.Log($"Server {server.Id} has added the phrase \"{element}\" to their word filter.", DataStorage.JsonStorage.LogLevel.DEBUG);
+                await ConsoleLogger.LogAsync($"Server {server.Id} has added the phrase \"{element}\" to their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder

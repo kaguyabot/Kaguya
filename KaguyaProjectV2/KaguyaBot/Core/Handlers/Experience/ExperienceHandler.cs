@@ -33,15 +33,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             await UserQueries.UpdateUserAsync(user);
 
             double newLevel = ReturnLevel(user);
-            await ConsoleLogger.Log($"[Global Exp]: User {user.Id} has received {exp} exp. [New Total: {user.Experience:N0} Exp]", 
-                LogLevel.DEBUG);
+            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.Id} has received {exp} exp. [New Total: {user.Experience:N0} Exp]", 
+                LogLvl.DEBUG);
 
             if (!HasLeveledUp(oldLevel, newLevel))
             {
                 return;
             }
-            await ConsoleLogger.Log($"[Global Exp]: User {user.Id} has leveled up! [Level: {newLevel} | EXP: {user.Experience:N0}]",
-                DataStorage.JsonStorage.LogLevel.INFO);
+            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.Id} has leveled up! [Level: {newLevel} | EXP: {user.Experience:N0}]",
+                DataStorage.JsonStorage.LogLvl.INFO);
             if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
             {
                 await textChannel.SendMessageAsync(embed: await LevelUpEmbed(user, context));

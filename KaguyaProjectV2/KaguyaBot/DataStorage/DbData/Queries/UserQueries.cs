@@ -7,12 +7,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using LinqToDB.Linq;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     public static class UserQueries
     {
-        public static async Task<User> GetOrCreateUser(ulong Id)
+        public static async Task<User> GetOrCreateUserAsync(ulong Id)
         {
             using (var db = new KaguyaDb())
             {
@@ -33,6 +36,89 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 }
 
                 return user;
+            }
+        }
+
+        /// <summary>
+        /// Inserts a new <see cref="User"/> object into the database. If the user is already there,
+        /// it will not be overwritten.
+        /// </summary>
+        /// <param name="user">The user to insert into the database.</param>
+        /// <returns></returns>
+        public static async Task InsertUserAsync(User user)
+        {
+            using (var db = new KaguyaDb())
+            {
+                if(!await db.Users.AnyAsync(x => x.Id == user.Id))
+                    await db.InsertAsync(user);
+            }
+        }
+
+        /// <summary>
+        /// Bulk-inserts users into the database. All users that are bulk copied must NOT exist in the database already.
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
+        public static async Task BulkInsertUsersAsync(List<User> users)
+        {
+            using (var db = new KaguyaDb())
+            {
+                if (!AnyUserExistsInDatabase(users))
+                {
+                    db.BulkCopy(users);
+                    await ConsoleLogger.LogAsync($"{users.Count} new users have been added to the database.", LogLvl.INFO);
+                }
+                else
+                {
+                    throw new LinqToDBException("Failed to bulk copy users. This collection contains a user that is already in the database.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="User"/> exists in the database or not based on their UserId.
+        /// </summary>
+        /// <param name="user">The user to check for. ID must not be 0.</param>
+        /// <returns></returns>
+        public static async Task<bool> UserExistsInDatabaseAsync(User user)
+        {
+            if (user.Id == 0)
+                throw new ArgumentNullException(nameof(user.Id), "The Id parameter of the User must not be zero.");
+
+            using (var db = new KaguyaDb())
+            {
+                return await db.Users.AnyAsync(x => x.Id == user.Id);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="User"/> exists in the database or not based on their UserId.
+        /// </summary>
+        /// <param name="Id">The id of the user to check for.</param>
+        /// <returns></returns>
+        public static async Task<bool> UserExistsInDatabaseAsync(ulong Id)
+        {
+            if (Id == 0)
+                throw new ArgumentNullException(nameof(Id), "The Id parameter must not be zero.");
+
+            using (var db = new KaguyaDb())
+            {
+                return await db.Users.AnyAsync(x => x.Id == Id);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether any <see cref="User"/> from the provided collection
+        /// exists in the database, based on their Id.
+        /// </summary>
+        /// <param name="users">A collection of users. If any of the users in this collection are in the
+        /// database, this function will return <code>true</code></param>
+        /// <returns></returns>
+        public static bool AnyUserExistsInDatabase(IEnumerable<User> users)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return users.Any(x => db.Users.Any(y => y.Id == x.Id));
             }
         }
 
@@ -190,6 +276,51 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 await db.InsertAsync(repObj);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new fish to the database.
+        /// </summary>
+        /// <param name="fish">The fish to add into the database.</param>
+        /// <returns></returns>
+        public static async Task AddFish(Fish fish)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(fish);
+            }
+        }
+
+        /// <summary>
+        /// Deletes a fish from the database. Don't use this if we're selling the fish.
+        /// </summary>
+        /// <param name="fish">The fish to delete from the database.</param>
+        /// <returns></returns>
+        public static async Task RemoveFish(Fish fish)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(fish);
+            }
+        }
+
+        /// <summary>
+        /// Sells a <see cref="Fish"/> to the "market", then adds the value of the fish to the
+        /// <see cref="User"/>'s points balance.
+        /// </summary>
+        /// <param name="fish">The fish to sell.</param>
+        /// <param name="user">The user to add the value of the fish to.</param>
+        /// <returns></returns>
+        public static async Task SellFish(Fish fish, User user)
+        {
+            user.Points += fish.Value;
+            fish.Sold = true;
+
+            using (var db = new KaguyaDb())
+            {
+                await db.UpdateAsync(fish);
+                await db.UpdateAsync(user);
             }
         }
     }

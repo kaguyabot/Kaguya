@@ -165,8 +165,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 return;
 
             IMessage message = arg1.Value;
-            if (message is null)
+            if (message is null || message.Author.IsBot)
                 return;
+
 
             KaguyaEmbedBuilder builder;
             string content = string.IsNullOrEmpty(message.Content)

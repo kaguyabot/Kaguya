@@ -16,5 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
                 new Emoji("8⃣"),  new Emoji("9⃣")
             };
         }
+
+        public const string KAGUYA_STORE_URL = @"https://the-kaguya-project.myshopify.com/";
     }
 }
