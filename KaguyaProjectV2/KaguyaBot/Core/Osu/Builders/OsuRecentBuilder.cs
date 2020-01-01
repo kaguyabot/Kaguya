@@ -45,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
 
         public List<OsuRecentModel> Execute()
         {
-            var recentArray = ExecuteJson(OsuRequest.RecentPlayed);
+            var recentArray = ExecuteJson(OsuRequest.RECENT_PLAYED);
             recentArray = ProcessJson(recentArray);
 
             return recentArray.ToList();

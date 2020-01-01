@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
 
         public OsuUserModel Execute()
         {
-            var userArray = ExecuteJson(OsuRequest.User);
+            var userArray = ExecuteJson(OsuRequest.USER);
             var user = ProcessJson(userArray);
             return user;
         }

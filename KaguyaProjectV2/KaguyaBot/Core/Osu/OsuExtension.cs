@@ -6,11 +6,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu
 {
     public enum OsuRequest
     {
-        User,
-        BestPerformance,
-        RecentPlayed,
+        USER,
+        BEST_PERFORMANCE,
+        RECENT_PLAYED,
     }
-
 
     public static class OsuExtension
     {
@@ -82,7 +81,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu
 
         public static double OsuAccuracy(int count50, int count100, int count300, int countMiss)
         {
-            return 100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
+            return (double)100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
         }
 
         public static string ToTimeAgo(TimeSpan time)

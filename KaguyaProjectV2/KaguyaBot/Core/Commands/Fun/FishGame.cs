@@ -65,7 +65,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"🎣 | "
+                Description = $"🎣 | {Context.User.Mention} "
             };
 
             Random r = new Random();

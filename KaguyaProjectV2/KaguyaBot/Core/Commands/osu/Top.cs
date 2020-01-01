@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 return;
             }
 
-            if (player == null || player == "")
+            if (string.IsNullOrEmpty(player))
             {
                 player = (await UserQueries.GetOrCreateUserAsync(Context.User.Id)).OsuId.ToString();
                 if (player == "0")

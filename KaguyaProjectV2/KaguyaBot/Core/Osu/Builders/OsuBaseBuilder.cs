@@ -18,13 +18,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
 
             switch (request)
             {
-                case OsuRequest.BestPerformance:
+                case OsuRequest.BEST_PERFORMANCE:
                     urlBuilder.Append("get_user_best");
                     break;
-                case OsuRequest.RecentPlayed:
+                case OsuRequest.RECENT_PLAYED:
                     urlBuilder.Append("get_user_recent");
                     break;
-                case OsuRequest.User:
+                case OsuRequest.USER:
                     urlBuilder.Append("get_user");
                     break;
             }
