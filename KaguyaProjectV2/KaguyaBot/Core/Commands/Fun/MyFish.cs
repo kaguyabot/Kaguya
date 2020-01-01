@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using System.Threading.Tasks;
-using Discord;
-using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
-    public class MyFish : ModuleBase<ShardedCommandContext>
+    public class MyFish : InteractiveBase<ShardedCommandContext>
     {
         [FunCommand]
         [Command("MyFish")]
@@ -40,15 +42,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                 // Creates a new dictionary of how many unsold fish the user has of the given type.
                 var dic = new Dictionary<FishType, int>();
                 var fishMatchingType = await UserQueries.GetUnsoldFishForUserAsync(user.Id);
+                fishMatchingType = fishMatchingType.Where(x => x.FishType == type).ToList();
 
-                if (fishMatchingType == null || fishMatchingType.Count == 0)
+                if (userFish.Count == 0)
                 {
                     ownedFishString = $"You currently don't own any fish, go catch some!";
                     goto StatsEmbed;
                 }
 
                 // We don't care about BAIT_STOLEN because it's not actually a fish.
-                if (fishMatchingType.Count != 0 && type != FishType.BAIT_STOLEN)
+                if (fishMatchingType.Count != 0)
                 {
                     dic.Add(type, fishMatchingType.Count);
                     countFishDicts.Add(dic);
@@ -87,19 +90,52 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                     {
                         Name = "Statistics",
                         Value = $"Bait stolen: `{userFish.Count(x => x.FishType == FishType.BAIT_STOLEN):N0} times`\n" +
-                                $"All-time fish count: `{userFish.Count:N0}`\n" +
+                                $"All-time fish count: `{userFish.Count(x => x.FishType != FishType.BAIT_STOLEN):N0}`\n" +
                                 $"Rarest owned fish: `{rarestFish}`\n" +
-                                $"Total fish sold: `{userFish.Count(x => x.Sold):N0}`"
+                                $"Total fish sold: `{userFish.Count(x => x.Sold && x.FishType != FishType.BAIT_STOLEN):N0}`"
                     },
                     new EmbedFieldBuilder
                     {
                         Name = "Currently Owned Fish",
                         Value = ownedFishString
                     }
+                },
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = $"React with a checkmark if you would like all of your Fish IDs DM'd to you!"
                 }
             };
 
-            await ReplyAsync(embed: embed.Build());
+            // If they don't have any fish, we don't need to show them.
+            if (rarestFish.ToLower().Contains("no fish"))
+                embed.Fields.RemoveAt(1);
+
+            await InlineReactionReplyAsync(new ReactionCallbackData("",
+                embed.Build(), true, true, TimeSpan.FromSeconds(90))
+                .AddCallBack(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        var writer = new StreamWriter(stream);
+                        foreach (var fish in userFish.Where(x => x.FishType != FishType.BAIT_STOLEN && !x.Sold))
+                        {
+                            await writer.WriteLineAsync($"Fish ID: {fish.FishId} - " +
+                                                        $"Fish Type: {fish.FishType.ToString().FirstCharToUpper()} - " +
+                                                        $"Pre-Tax Value: {fish.Value}");
+                        }
+
+                        await writer.FlushAsync();
+                        stream.Seek(0, SeekOrigin.Begin);
+
+                        await c.User.SendFileAsync(stream, $"Fish for {c.User}.txt");
+                        await c.Channel.SendBasicSuccessEmbedAsync($"{c.User.Mention} Alright, I've gone ahead " +
+                                                                   $"and DM'd you all of your fish!");
+                    }
+                })
+                .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
+                {
+                    await Context.Channel.SendBasicErrorEmbedAsync("Okay, no action will be taken.");
+                }));
         }
     }
 }

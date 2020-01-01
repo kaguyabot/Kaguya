@@ -1,4 +1,8 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Addons.Interactive;
+using Discord.Commands;
+using Humanizer;
+using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -6,11 +10,6 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
-using Discord;
-using Discord.Addons.Interactive;
-using Humanizer;
-using Humanizer.Localisation;
-using Org.BouncyCastle.Bcpg;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {

@@ -428,7 +428,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a List of Fish that belong to the user ID that have not been sold. This only returns
+        /// Returns a List of Fish that belongs to the user ID that have not been sold. This only returns
         /// actual fish, not the BAIT_STOLEN event.
         /// </summary>
         /// <param name="user">The user who we want to get all of the unsold fish from.</param>
