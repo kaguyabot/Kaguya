@@ -52,6 +52,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         
         private static int GetTaxedFishPrice(Fish fish, double taxRate = 0.05)
         {
+            if (fish.Value * taxRate < 100)
+                taxRate = 0.35;
             return (int)(fish.Value * (1 - taxRate));
         }
 
@@ -59,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// Gets the taxed price on a fish. Returns the
         /// amount of points the user will get for selling this fish.
         /// </summary>
-        /// <param name="fish">The fish that we need to tax.</param>
+        /// <param name="fishToSell">The fish that we need to tax.</param>
         /// <returns></returns>
         public static int GetPayoutForFish(Fish fishToSell)
         {

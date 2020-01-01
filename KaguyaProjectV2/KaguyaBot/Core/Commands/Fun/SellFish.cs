@@ -22,8 +22,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
     {
         [FunCommand]
         [Command("SellFish")]
-        [Summary("Allows you to sell one of your fish or all of the fish you have that are of a specific type.")]
-        [Remarks("<Fish ID>\nall <Fish Type>\n464199220\nsmall salmon")]
+        [Summary("Allows you to sell one of your fish or all of the fish you have that are of a specific type. " +
+                 "When a fish is sold, it is taxed.\n\n" +
+                 "- If a fish's taxed sell price is less than 100 points, it will be taxed at 35% of its value." +
+                 "- If a fish's taxed sell price is more than 100 points, it will be taxed at 5% of its value.\n\n" +
+                 "Use the `all` keyword by itself to sell all of your fish at once.")]
+        [Remarks("<Fish ID>\nall\nall <Fish Type>\n464199220\nsmall salmon")]
         public async Task Command(params string[] args)
         {
             long fishId = 0;
@@ -48,7 +52,37 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             {
                 fishType = $"{args[0].ToUpper()}_{args[1].ToUpper()}";
             }
-            else if (args.Length == 1)
+            else if (args.Length == 1 && args[0].ToLower() == "all")
+            {
+                var allFishToSell = await UserQueries.GetFishForUserAsync(Context.User.Id);
+                var sellAllConfirmEmbed = new KaguyaEmbedBuilder
+                {
+                    Description = $"Are you sure you wish to sell all `{allFishToSell.Count:N0}` of your fish?"
+                };
+
+                await InlineReactionReplyAsync(new ReactionCallbackData("", sellAllConfirmEmbed.Build(), true,
+                    true, TimeSpan.FromSeconds(90), async (c) =>
+                    {
+                        await c.Channel.SendBasicErrorEmbedAsync(
+                            $"Sell all fish confirmation reactions are now disabled " +
+                            $"(timed out).");
+                    })
+                    .AddCallBack(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
+                    {
+                        await UserQueries.SellFishAsync(allFishToSell, Context.User.Id);
+
+                        await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully sold all " +
+                                                                         $"`{allFishToSell.Count:N0}` fish!\n\n" +
+                                                                         $"`{Fish.GetPayoutForFish(allFishToSell):N0}` " +
+                                                                         $"points have been added to your balance.");
+                    })
+                    .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
+                    {
+                        await c.Channel.SendBasicErrorEmbedAsync("Okay, I won't take any action.");
+                    }));
+                return;
+            }
+            else if(args.Length == 1)
             {
                 fishType = args[0].ToUpper();
             }
@@ -75,7 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             if (fishType != null)
             {
                 FishType ft = Fish.GetFishTypeFromName(fishType);
-                List<Fish> fish = await UserQueries.GetFishForUser(user);
+                List<Fish> fish = await UserQueries.GetFishForUserAsync(user);
                 fish = fish.Where(x => x.FishType == ft).ToList();
 
                 if (!fish.Any())

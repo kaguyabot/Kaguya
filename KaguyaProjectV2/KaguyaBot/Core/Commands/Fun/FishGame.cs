@@ -70,11 +70,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
             Random r = new Random();
             double roll = r.NextDouble();
-            int fishId = r.Next(1000000000);
+            int fishId = r.Next(Int32.MaxValue);
 
             while (await UtilityQueries.FishExistsAsync(fishId))
             {
-                fishId = r.Next(1000000000);
+                fishId = r.Next(Int32.MaxValue);
             }
 
             var fishType = GetFishType(roll);
@@ -224,7 +224,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                 return FishType.SMALL_BASS;
             if (roll > 0.53 && roll <= 0.65)
                 return FishType.PINFISH;
-            if (roll > 0.65 && roll <= 0.80)
+            if (roll > 0.65 && roll <= 0.75)
                 return FishType.SEAWEED;
             return FishType.BAIT_STOLEN;
         }

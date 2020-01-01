@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         /// Retreives the specified <see cref="count"/> of NSFW images and whether we should loat them into memory as well.
         /// </summary>
         /// <param name="count">The number of images to retrieve.</param>
-        /// <param name="intoMemory">Whether we store these images in memory.</param>
+        /// <param name="intoFile">Whether we store these images in memory.</param>
         /// <returns></returns>
         public async Task<IEnumerable<Stream>> LoadHentaiAsync(int count, bool intoFile)
         {

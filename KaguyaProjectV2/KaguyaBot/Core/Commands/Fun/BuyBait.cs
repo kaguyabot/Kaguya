@@ -17,11 +17,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
         [Remarks("<amount>")]
         public async Task Command(int amount)
         {
+            if (amount < 1)
+            {
+                await Context.Channel.SendBasicErrorEmbedAsync("You must purchase at least 1 bait.");
+                return;
+            }
+
             var user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
             int totalCost = Fish.BAIT_COST * amount;
 
             if (user.IsSupporter)
-                totalCost = Fish.SUPPORTER_BAIT_COST;
+                totalCost = Fish.SUPPORTER_BAIT_COST * amount;
 
             if (user.Points < totalCost)
             {
