@@ -427,6 +427,22 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
+        /// <summary>
+        /// Returns a List of Fish that belong to the user ID that have not been sold. This only returns
+        /// actual fish, not the BAIT_STOLEN event.
+        /// </summary>
+        /// <param name="user">The user who we want to get all of the unsold fish from.</param>
+        /// <returns></returns>
+        public static async Task<List<Fish>> GetUnsoldFishForUserAsync(ulong userId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from f in db.Fish
+                    where f.UserId == userId && !f.Sold && f.FishType != FishType.BAIT_STOLEN
+                    select f).ToListAsync();
+            }
+        }
+
         public static async Task<Fish> GetFishAsync(long fishId)
         {
             using (var db = new KaguyaDb())

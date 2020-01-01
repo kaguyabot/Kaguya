@@ -54,7 +54,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             }
             else if (args.Length == 1 && args[0].ToLower() == "all")
             {
-                var allFishToSell = await UserQueries.GetFishForUserAsync(Context.User.Id);
+                var allFishToSell = await UserQueries.GetUnsoldFishForUserAsync(Context.User.Id);
+
+                if (allFishToSell.Count == 0)
+                {
+                    await Context.Channel.SendBasicErrorEmbedAsync("You have no fish to sell!");
+                    return;
+                }
+
                 var sellAllConfirmEmbed = new KaguyaEmbedBuilder
                 {
                     Description = $"Are you sure you wish to sell all `{allFishToSell.Count:N0}` of your fish?"

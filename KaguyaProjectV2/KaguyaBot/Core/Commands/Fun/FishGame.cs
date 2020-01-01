@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Addons.Interactive;
 using Humanizer;
 using Humanizer.Localisation;
@@ -70,11 +71,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
             Random r = new Random();
             double roll = r.NextDouble();
-            int fishId = r.Next(Int32.MaxValue);
+            int fishId = r.Next(int.MaxValue);
 
             while (await UtilityQueries.FishExistsAsync(fishId))
             {
-                fishId = r.Next(Int32.MaxValue);
+                fishId = r.Next(int.MaxValue);
             }
 
             var fishType = GetFishType(roll);
@@ -189,8 +190,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             {
                 embed.Description += $"\nBait Remaining: `{user.FishBait:N0}`";
             }
-           
 
+            embed.Footer = new EmbedFooterBuilder
+            {
+                Text = $"Use the {server.CommandPrefix}myfish command to view your fishing stats!\n" +
+                       $"The {server.CommandPrefix}tradefish and {server.CommandPrefix}sellfish commands " +
+                       $"may be used to trade and sell your fish respectively."
+            };
             await ReplyAsync(embed: embed.Build());
         }
 

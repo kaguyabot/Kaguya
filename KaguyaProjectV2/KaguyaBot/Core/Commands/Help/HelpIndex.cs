@@ -101,6 +101,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
             #endregion
 
+            string baseHelpAlias = $"{server.CommandPrefix}{aliases.Split(",")[0]}";
             var fieldBuilders = new List<EmbedFieldBuilder>
             {
                 new EmbedFieldBuilder
@@ -114,11 +115,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute), we add the same thing to the start of the new line.
                     Name = "Syntax",
                     Value =
-                        $"`{server.CommandPrefix}{aliases.Split(",")[0]} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]}", cmdInfo.Remarks.Split("\n"))}`",
+                        $"`{baseHelpAlias} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]} ", cmdInfo.Remarks.Split("\n"))}`",
                     IsInline = false,
                 }
             };
 
+            // If there's not any syntax to display, trim the end of the syntax to remove the blank space character.
+            // We only have 1 backtick because the EmbedFieldBuilder already has the first one.
+            if (cmdInfo.Remarks.Split("\n").Length == 1)
+            {
+                string fb2 = fieldBuilders[2].Value.ToString();
+                fieldBuilders[2].Value = $"{fb2.Substring(0, fb2.Length - 2)}`";
+            }
+                
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
                 Title = $"Help: `{Regex.Replace(cmdInfo.Name, "([a-z])([A-Z])", "$1 $2")}` | Aliases: `{aliases}`",
