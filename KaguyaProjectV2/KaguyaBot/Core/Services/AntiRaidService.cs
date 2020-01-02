@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static async Task Start()
         {
-            await Task.Run(async () =>
+            await Task.Run(() =>
             {
                 var client = ConfigProperties.client;
                 client.UserJoined += async u =>
