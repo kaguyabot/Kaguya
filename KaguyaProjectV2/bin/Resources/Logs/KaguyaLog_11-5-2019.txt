@@ -1,1 +1,0 @@
-12:17:06 AM [DEBUG]: Shard 1 connected.12:17:06 AM [INFO]: Shard 0 ready. Guilds: 212:17:11 AM [DEBUG]: Shard 0 connected.
