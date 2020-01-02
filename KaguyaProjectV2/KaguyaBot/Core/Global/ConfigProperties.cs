@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using TwitchLib.Api;
-using TwitchLib.Client;
 
 #pragma warning disable
 

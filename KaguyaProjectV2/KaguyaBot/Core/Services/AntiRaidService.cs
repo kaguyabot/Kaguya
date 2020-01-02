@@ -14,44 +14,47 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static async Task Start()
         {
-            var client = ConfigProperties.client;
-            client.UserJoined += async u =>
+            await Task.Run(async () =>
             {
-                var guild = u.Guild;
-                var server = await ServerQueries.GetOrCreateServerAsync(guild.Id).ConfigureAwait(false);
-                var ar = server.AntiRaid?.FirstOrDefault();
-
-                if (ar == null)
-                    return;
-
-                if (ServerTimerMethods.CachedTimers.All(x => x.Server.Id != server.Id))
+                var client = ConfigProperties.client;
+                client.UserJoined += async u =>
                 {
-                    var existingTimer = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.Id == server.Id);
-                    var newSt = new ServerTimer
+                    var guild = u.Guild;
+                    var server = await ServerQueries.GetOrCreateServerAsync(guild.Id).ConfigureAwait(false);
+                    var ar = server.AntiRaid?.FirstOrDefault();
+
+                    if (ar == null)
+                        return;
+
+                    if (ServerTimerMethods.CachedTimers.All(x => x.Server.Id != server.Id))
                     {
-                        Server = existingTimer.Server,
-                        UserIds = new HashSet<ulong>()
-                    };
+                        var existingTimer = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.Id == server.Id);
+                        var newSt = new ServerTimer
+                        {
+                            Server = existingTimer.Server,
+                            UserIds = new HashSet<ulong>()
+                        };
 
-                    ServerTimerMethods.ReplaceTimer(newSt);
-                }
-                
-                var timer = new Timer(ar.Seconds * 1000);
-                timer.Enabled = true;
-                timer.AutoReset = false;
-
-                timer.Elapsed += async (sender, args) =>
-                {
-                    var existingObj = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.Id == server.Id);
-
-                    if (existingObj.UserIds.Count >= ar.Users)
-                    {
-                        await ActionUsers(existingObj.UserIds, server.Id, ar.Action);
+                        ServerTimerMethods.ReplaceTimer(newSt);
                     }
 
-                    ServerTimerMethods.CachedTimers.Remove(existingObj);
+                    var timer = new Timer(ar.Seconds * 1000);
+                    timer.Enabled = true;
+                    timer.AutoReset = false;
+
+                    timer.Elapsed += async (sender, args) =>
+                    {
+                        var existingObj = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.Id == server.Id);
+
+                        if (existingObj.UserIds.Count >= ar.Users)
+                        {
+                            await ActionUsers(existingObj.UserIds, server.Id, ar.Action);
+                        }
+
+                        ServerTimerMethods.CachedTimers.Remove(existingObj);
+                    };
                 };
-            };
+            });
         }
 
         private static async Task ActionUsers(HashSet<ulong> userIds, ulong guildId, string action)
