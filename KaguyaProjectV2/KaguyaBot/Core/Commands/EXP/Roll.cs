@@ -1,0 +1,171 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
+{
+    public class Roll : ModuleBase<ShardedCommandContext>
+    {
+        private const int MAX_NON_SUPPORTER_BET = 50000;
+        private const int MAX_ALL_BET = 500000;
+
+        [CurrencyCommand]
+        [Command("Roll")]
+        [Summary("Allows you to bet points against a dice roll, ranging from `0-100`")]
+        [Remarks("<points>")]
+        public async Task Command(int bet)
+        {
+            if (bet < 5)
+                throw new ArgumentOutOfRangeException(nameof(bet), "Your bet must be at least `5` points.");
+
+            var user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
+
+            if (bet > MAX_NON_SUPPORTER_BET && !user.IsSupporter)
+            {
+                await Context.Channel.SendBasicErrorEmbedAsync($"Sorry, but only supporters may bet more than " +
+                                                               $"`{MAX_NON_SUPPORTER_BET:N0}` points.");
+                return;
+            }
+            if (bet > 500000 && user.IsSupporter)
+            {
+                await Context.Channel.SendBasicErrorEmbedAsync($"Sorry, but you may not bet more than " +
+                                                               $"`{MAX_ALL_BET:N0}` points.");
+                return;
+            }
+
+            if (user.Points < bet)
+            {
+                await Context.Channel.SendBasicErrorEmbedAsync($"You don't have enough points to perform this action.\n" +
+                                                               $"Current points: `{user.Points:N0}` points.");
+                return;
+            }
+
+            Random r = new Random();
+            int roll = r.Next(101);
+
+            var rollResult = GetRollResult(roll);
+            int payout = GetPayout(rollResult, bet);
+            bool winner;
+
+            var embed = new KaguyaEmbedBuilder
+            {
+                Title = $"Kaguya Betting: "
+            };
+
+            switch (rollResult)
+            {
+                case RollResult.LOSS:
+                    winner = false;
+                    embed.Title += "Loser";
+                    embed.Description = $"{Context.User.Mention} rolled `{roll}` and lost their bet of " +
+                                        $"`{bet:N0}` points! Better luck next time!";
+                    break;
+                default:
+                    winner = true;
+                    embed.Title += "Winner!";
+                    embed.Description = $"{Context.User.Mention} rolled `{roll}` and won " +
+                                        $"`{payout:N0}` points, **`{GetMultiplier(rollResult)}x`** their bet!";
+                    break;
+            }
+
+            user.Points += payout;
+            var gh = new GambleHistory
+            {
+                UserId = user.Id,
+                Action = GambleAction.BET_ROLL,
+                ActionString = GambleAction.BET_ROLL.ToString(),
+                Bet = bet,
+                Payout = payout,
+                Roll = roll,
+                Time = DateTime.Now.ToOADate(),
+                Winner = winner,
+            };
+
+            await UserQueries.UpdateUserAsync(user);
+            await UserQueries.AddGambleHistory(gh);
+            var allGh = await UserQueries.GetGambleHistoryAsync(user.Id);
+
+            var footer = new EmbedFooterBuilder
+            {
+                Text = $"New points balance: {user.Points:N0} | Lifetime Bets: {allGh.Count:N0}"
+            };
+            embed.Footer = footer;
+            embed.SetColor(GetEmbedColorBasedOnRoll(rollResult));
+
+            await ReplyAsync(embed: embed.Build());
+        }
+
+        private RollResult GetRollResult(int roll)
+        {
+            return roll switch
+            {
+                int r when roll >= 0 && roll <= 66 => RollResult.LOSS,
+                int r when roll > 66 && roll <= 78 => RollResult.LOW_WIN,
+                int r when roll > 78 && roll <= 89 => RollResult.LOW_MEDIUM_WIN,
+                int r when roll > 89 && roll <= 95 => RollResult.MEDIUM_WIN,
+                int r when roll > 95 && roll <= 99 => RollResult.HIGH_WIN,
+                int r when roll == 100 => RollResult.MAX_WIN,
+                _ => throw new ArgumentOutOfRangeException(nameof(roll), $"Roll was either below 0 or above 100.")
+            };
+        }
+
+        /// <summary>
+        /// Returns the amount of points the user wins (or loses) based on what their roll is.
+        /// </summary>
+        /// <param name="rollResult"></param>
+        /// <param name="bet">The amount of points the user bet.</param>
+        /// <returns></returns>
+        private int GetPayout(RollResult rollResult, int bet)
+        {
+            double multiplier = GetMultiplier(rollResult);
+            return (int)(bet * multiplier);
+        }
+
+        private double GetMultiplier(RollResult rollResult)
+        {
+            return rollResult switch
+            {
+                RollResult.LOSS => -1,
+                RollResult.LOW_WIN => 1.25,
+                RollResult.LOW_MEDIUM_WIN => 1.85,
+                RollResult.MEDIUM_WIN => 2.45,
+                RollResult.HIGH_WIN => 3.15,
+                RollResult.MAX_WIN => 6.50,
+                _ => throw new ArgumentOutOfRangeException(nameof(rollResult))
+            };
+        }
+
+        private EmbedColor GetEmbedColorBasedOnRoll(RollResult rollResult)
+        {
+            return rollResult switch
+            {
+                RollResult.LOSS => EmbedColor.GRAY,
+                RollResult.LOW_WIN => EmbedColor.LIGHT_BLUE,
+                RollResult.LOW_MEDIUM_WIN => EmbedColor.LIGHT_PURPLE,
+                RollResult.MEDIUM_WIN => EmbedColor.ORANGE,
+                RollResult.HIGH_WIN => EmbedColor.RED,
+                RollResult.MAX_WIN => EmbedColor.GOLD,
+                _ => throw new ArgumentOutOfRangeException(nameof(rollResult))
+            };
+        }
+    }
+
+    public enum RollResult
+    {
+        LOSS,
+        LOW_WIN,
+        LOW_MEDIUM_WIN,
+        MEDIUM_WIN,
+        HIGH_WIN,
+        MAX_WIN
+    }
+}

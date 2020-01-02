@@ -25,8 +25,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "Sold"), NotNull]
         public bool Sold { get; set; }
 
-        public const int BAIT_COST = 20;
-        public const int SUPPORTER_BAIT_COST = BAIT_COST / 2;
+        public const int BAIT_COST = 50;
+        public const int SUPPORTER_BAIT_COST = (int)(BAIT_COST * .75);
 
 
         /// <summary>

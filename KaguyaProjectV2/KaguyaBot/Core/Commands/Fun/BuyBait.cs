@@ -1,9 +1,9 @@
 ﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
@@ -11,9 +11,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
     {
         [FunCommand]
         [Command("BuyBait")]
+        [Alias("bait")]
         [Summary("Purchases bait from the baitshop. Each bait costs " +
-                 "20 points. At least one bait is required for `fishing`. " +
-                 "Supporters get 50% off!")]
+                 "50 points. At least one bait is required for `fishing`. " +
+                 "Supporters get 25% off!")]
         [Remarks("<amount>")]
         public async Task Command(int amount)
         {

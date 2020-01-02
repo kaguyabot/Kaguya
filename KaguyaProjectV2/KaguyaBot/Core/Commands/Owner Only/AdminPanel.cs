@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
+using Discord.WebSocket;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+// ReSharper disable OperatorIsCanBeUsed
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -24,11 +27,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                  "This will display all stats about the user and allows a bot owner " +
                  "to modify these values.")]
         [Remarks("")]
+        public async Task OwnerAdminPanel(IGuildUser user)
+        {
+            await AdminPanelMethod(user.Id);
+        }
+
+        [OwnerCommand]
+        [Command("ownerpanel", RunMode = RunMode.Async)]
+        [Summary("Displays a control panel based on the user ID provided. " +
+                 "This will display all stats about the user and allows a bot owner " +
+                 "to modify these values.")]
+        [Remarks("")]
         public async Task OwnerAdminPanel(ulong Id)
+        {
+            await AdminPanelMethod(Id);
+        }
+
+        private async Task AdminPanelMethod(ulong Id)
         {
             KaguyaEmbedBuilder embed;
             var user = await UserQueries.GetOrCreateUserAsync(Id);
-            var socketUser = ConfigProperties.client.GetUser(Id);
+            SocketUser socketUser = ConfigProperties.client.GetUser(Id);
 
             embed = new KaguyaEmbedBuilder
             {
@@ -37,17 +56,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             };
 
             Type t = user.GetType();
-            string[] skippedValues =
-            {
-                "total", "active", "latest", "given", "server",
-                "expiration", "black", "supporter", "history"
-            };
 
-            foreach (PropertyInfo pi in t.GetProperties())
+            foreach (PropertyInfo pi in t.GetProperties().Where(x => x.PropertyType == typeof(int) && 
+                                                                     !x.Name.ToLower().Contains("active")))
             {
-                if (skippedValues.Any(pi.Name.ToLower().Contains))
-                    continue;
-
                 string value = pi.GetValue(user, null)?.ToString() ?? "Null";
 
                 if (pi.PropertyType == typeof(double))
@@ -56,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     var dt = DateTime.FromOADate(DateTime.Now.ToOADate() - oaTime);
                     value = dt.Humanize();
 
-                    if(DateTime.Now.Year - dt.Year >= 5) //More than 5 years ago? We don't care.
+                    if (DateTime.Now.Year - dt.Year >= 5) //More than 5 years ago? We don't care.
                     {
                         value = "Null";
                     }
@@ -72,117 +84,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
             await ReplyAsync(embed: embed.Build());
 
-            await ReplyAsync(embed: new KaguyaEmbedBuilder
+            await Context.Channel.SendBasicSuccessEmbedAsync("What value would you like to modify?");
+            var query = await NextMessageAsync(true, true, TimeSpan.FromSeconds(120));
+
+            foreach (var prop in t.GetProperties())
             {
-                Description = "What value would you like to modify?"
-            }.Build());
-
-            var query = await NextMessageAsync();
-
-            switch (query.Content.ToLower())
-            {
-                case "experience":
+                if (query.Content.ToLower() == prop.Name.ToLower() && prop.CanWrite)
                 {
-                    await ReplyAsync(embed: new KaguyaEmbedBuilder
-                    {
-                        Description = "What would you like to change the value to?"
-                    }.Build());
-
+                    await Context.Channel.SendBasicSuccessEmbedAsync("What would you like to change the value to?");
                     var valMsg = await NextMessageAsync();
-                    if (int.TryParse(valMsg.Content, out int val))
-                    {
-                        user.Experience = val;
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Successfully updated their `experience` value."
-                        }.Build());
-                    }
+
+                    if(prop.PropertyType == typeof(int))
+                        prop.SetValue(user, valMsg.Content.AsInteger(), null);
                     else
                     {
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Failed to parse value."
-                        }.Build());
+                        throw new InvalidOperationException($"The object's type cannot be parsed from this string. " +
+                                                            $"Please review `AdminPanel.cs line 118`.");
                     }
-                    break;
-                }
-                case "points":
-                {
-                    await ReplyAsync(embed: new KaguyaEmbedBuilder
-                    {
-                        Description = "What would you like to change the value to?"
-                    }.Build());
 
-                    var valMsg = await NextMessageAsync();
-                    if (int.TryParse(valMsg.Content, out int val))
-                    {
-                        user.Points = val;
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Successfully updated their `points` value."
-                        }.Build());
-                    }
-                    else
-                    {
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Failed to parse value."
-                        }.Build());
-                    }
-                    break;
-                }
-                case "osuid":
-                {
-                    await ReplyAsync(embed: new KaguyaEmbedBuilder
-                    {
-                        Description = "What would you like to change the value to?"
-                    }.Build());
-
-                    var valMsg = await NextMessageAsync();
-                    if (int.TryParse(valMsg.Content, out int val))
-                    {
-                        user.OsuId = val;
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Successfully updated their `osu! Id` value."
-                        }.Build());
-                    }
-                    else
-                    {
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Failed to parse value."
-                        }.Build());
-                    }
-                    break;
-                }
-                case "ratelimitwarnings":
-                {
-                    await ReplyAsync(embed: new KaguyaEmbedBuilder
-                    {
-                        Description = "What would you like to change the value to?"
-                    }.Build());
-
-                    var valMsg = await NextMessageAsync();
-                    if (int.TryParse(valMsg.Content, out int val))
-                    {
-                        user.RateLimitWarnings = val;
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Successfully updated their `ratelimit warnings` value."
-                        }.Build());
-                    }
-                    else
-                    {
-                        await ReplyAsync(embed: new KaguyaEmbedBuilder
-                        {
-                            Description = $"Failed to parse value."
-                        }.Build());
-                    }
-                    break;
+                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully updated `{socketUser}`'s " +
+                                                                     $"`{prop.Name}` value to `{valMsg.Content}`");
                 }
             }
-
             await UserQueries.UpdateUserAsync(user);
         }
     }

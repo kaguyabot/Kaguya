@@ -19,6 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
     {
         [FunCommand]
         [Command("MyFish")]
+        [Alias("mf")]
         [Summary("Displays all of your fishing stats, including how many fish you've bought and sold!")]
         [Remarks("")]
         public async Task Command()
@@ -60,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
             foreach (var dic in countFishDicts)
             {
-                ownedFishString += $"Fish: `{dic.Keys.First().ToString().FirstCharToUpper()}` - Count: `{dic.Values.First():N0}` - " +
+                ownedFishString += $"Fish: `{dic.Keys.First().ToString()}` - Count: `{dic.Values.First():N0}` - " +
                                    $"Total Value: `{Fish.GetPayoutForFish(userFish.Where(x => x.FishType == dic.Keys.First()).ToList()):N0}` points\n";
             }
 
@@ -70,11 +71,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             try
             {
                 rarestFish = userFish
-                                 .OrderBy(x => x.FishType)
-                                 .First(x => x.Sold == false && x.FishType != FishType.BAIT_STOLEN)
-                                 .FishType
-                                 .ToString()
-                                 .FirstCharToUpper();
+                    .OrderBy(x => x.FishType)
+                    .First(x => x.Sold == false && x.FishType != FishType.BAIT_STOLEN)
+                    .FishType
+                    .ToString();
             }
             catch (Exception)
             {
@@ -120,7 +120,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                         foreach (var fish in userFish.Where(x => x.FishType != FishType.BAIT_STOLEN && !x.Sold))
                         {
                             await writer.WriteLineAsync($"Fish ID: {fish.FishId} - " +
-                                                        $"Fish Type: {fish.FishType.ToString().FirstCharToUpper()} - " +
+                                                        $"Fish Type: {fish.FishType.ToString()} - " +
                                                         $"Pre-Tax Value: {fish.Value}");
                         }
 

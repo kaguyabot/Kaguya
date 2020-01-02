@@ -199,7 +199,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertOrReplaceAsync(ghObject);
+                await db.InsertAsync(ghObject);
             }
         }
 
@@ -208,6 +208,16 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 await db.DeleteAsync(ghObject);
+            }
+        }
+
+        public static async Task<List<GambleHistory>> GetGambleHistoryAsync(ulong userId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from h in db.GambleHistories
+                              where h.UserId == userId
+                              select h).ToListAsync();
             }
         }
 
@@ -423,6 +433,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from f in db.Fish
                     where f.UserId == userId
+                    select f).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Returns a List of Fish that belong to the user ID.
+        /// </summary>
+        /// <param name="user">The user who we want to get all of the fish from.</param>
+        /// <returns></returns>
+        public static async Task<List<Fish>> GetFishForUserAsync(FishType fishType, ulong userId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from f in db.Fish
+                    where f.UserId == userId && f.FishType == fishType
                     select f).ToListAsync();
             }
         }

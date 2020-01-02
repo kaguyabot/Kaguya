@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="KaguyaBot\Core\Commands\Currency\" />
     <Folder Include="KaguyaBot\Core\Commands\Music\" />
     <Folder Include="Resources\" />
   </ItemGroup>

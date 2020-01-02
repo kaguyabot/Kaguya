@@ -22,6 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
     {
         [FunCommand]
         [Command("SellFish")]
+        [Alias("sf", "sell")]
         [Summary("Allows you to sell one of your fish or all of the fish you have that are of a specific type. " +
                  "When a fish is sold, it is taxed.\n\n" +
                  "- If a fish's taxed sell price is less than 100 points, it will be taxed at 35% of its value.\n" +
@@ -64,7 +65,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
                 var sellAllConfirmEmbed = new KaguyaEmbedBuilder
                 {
-                    Description = $"Are you sure you wish to sell all `{allFishToSell.Count:N0}` of your fish?"
+                    Description = $"{Context.User.Mention} Are you sure you want " +
+                                  $"to sell all `{allFishToSell.Count:N0}` of your fish?"
                 };
 
                 await InlineReactionReplyAsync(new ReactionCallbackData("", sellAllConfirmEmbed.Build(), true,
@@ -83,10 +85,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                                                                          $"`{Fish.GetPayoutForFish(allFishToSell):N0}` " +
                                                                          $"points have been added to your balance.");
                     })
-                    .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
-                    {
-                        await c.Channel.SendBasicErrorEmbedAsync("Okay, I won't take any action.");
-                    }));
+                    .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) => 
+                        await c.Channel.SendBasicErrorEmbedAsync("Okay, I won't take any action.")));
                 return;
             }
             else if(args.Length == 1)
@@ -155,9 +155,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                                                      $"for a payout of {payout:N0} points.", LogLvl.INFO);
                     })
                     .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
-                    {
-                        await c.Channel.SendBasicErrorEmbedAsync("Okay, no action will be taken.");
-                    }));
+                        await c.Channel.SendBasicErrorEmbedAsync("Okay, no action will be taken.")));
                 return;
             }
 
@@ -168,7 +166,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"Successfully sold your fish!\n\n" +
+                Description = $"Successfully sold your `{fishToSell.FishType.Humanize()}`!\n\n" +
                               $"Payout: `{Fish.GetPayoutForFish(fishToSell):N0}` points",
                 Footer = new EmbedFooterBuilder
                 {

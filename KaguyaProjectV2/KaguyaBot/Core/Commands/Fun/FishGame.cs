@@ -5,6 +5,7 @@ using Humanizer;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -21,10 +22,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
         [Summary("Allows you to play the fishing game! Requires one bait per play. Bait may be purchased with " +
                  "the `buybait` command.\n\n" +
                  "Information:\n\n" +
-                 "- You must have bait to fish. One bait costs 20 points " +
-                 "(10 for [Kaguya Supporters](https://the-kaguya-project.myshopify.com/)).\n" +
+                 "- You must have bait to fish. One bait costs 50 points " +
+                 "(25% off for [Kaguya Supporters](https://the-kaguya-project.myshopify.com/)).\n" +
                  "- You may only fish once every 15 seconds (5 seconds for supporters).\n" +
-                 "- Fish may be sold with the `sellfish` command or may be traded with `tradefish` to other users!\n" +
+                 "- Fish may be sold with the `sell` command!\n" +
                  "- View your fish collection with the `myfish` command!\n\n" +
                  "Happy fishing, and good luck catching the **Legendary `Big Kahuna`**!")]
         [Remarks("")]
@@ -38,7 +39,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                 var baitEmbed = new KaguyaEmbedBuilder(EmbedColor.RED)
                 {
                     Description = $"You are out of bait. Please buy more bait with the " +
-                                  $"`{server.CommandPrefix}buybait` command!"
+                                  $"`{server.CommandPrefix}buybait` command!",
+                    Footer = new EmbedFooterBuilder
+                    {
+                        Text = $"Bait costs {Fish.BAIT_COST} points ({Fish.SUPPORTER_BAIT_COST} for " +
+                               $"active [Kaguya Supporters]({HelpfulObjects.KAGUYA_STORE_URL})."
+                    }
                 };
                 await Context.Channel.SendEmbedAsync(baitEmbed);
                 return;
@@ -82,7 +88,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             switch (fishType)
             {
                 case FishType.SEAWEED:
-                    value = 1;
+                    value = 2;
                     embed.Description += $"Aw man, you caught `seaweed`. Better luck next time!";
                     embed.SetColor(EmbedColor.GRAY);
                     break;
@@ -131,8 +137,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                     embed.Description += $"No way, you caught a `giant sea bass`! Nice work!";
                     embed.SetColor(EmbedColor.LIGHT_PURPLE);
                     break;
-                case FishType.DEVILS_HOLE_PUPFISH:
+                case FishType.SMALLTOOTH_SAWFISH:
                     value = 1000;
+                    embed.Description += $"No way, you caught a `smalltooth sawfish`! Nice work!";
+                    embed.SetColor(EmbedColor.LIGHT_PURPLE);
+                    break;
+                case FishType.DEVILS_HOLE_PUPFISH:
+                    value = 2500;
                     embed.Description += $"I can't believe my eyes!! you caught a `devils hold pupfish`! You're crazy!";
                     embed.SetColor(EmbedColor.VIOLET);
                     break;
@@ -142,13 +153,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                     embed.SetColor(EmbedColor.ORANGE);
                     break;
                 case FishType.GIANT_SQUID:
-                    value = 75000;
+                    value = 25000;
                     embed.Description += $"Well butter my buttcheeks and call me a biscuit, you caught the second " +
                                          $"rarest fish in the sea! It's a `giant squid`!! Congratulations!";
                     embed.SetColor(EmbedColor.ORANGE);
                     break;
                 case FishType.BIG_KAHUNA:
-                    value = 1000000;
+                    value = 250000;
                     embed.Description += $"<a:siren:429784681316220939> NO WAY! You hit the jackpot " +
                                          $"and caught the **Legendary `BIG KAHUNA`**!!!! " +
                                          $"What an incredible moment this is! <a:siren:429784681316220939>";
@@ -181,9 +192,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
             if (fishType != FishType.BAIT_STOLEN)
             {
+                var _ = await UserQueries.GetFishForUserAsync(fishType, user.Id);
+                var fishCount = _.Count;
+                var fishString = fishType.ToString().Replace("_", " ").ToLower();
+
                 embed.Description += $"\n\nFish ID: `{fishId}`\n" +
                                      $"Fish Value: `{value:N0}` points.\n" +
-                                     $"Bait Remaining: `{user.FishBait:N0}`";
+                                     $"Bait Remaining: `{user.FishBait:N0}`\n\n" +
+                                     $"You now have `{fishCount}` `{fishString}`";
             }
             else
             {
@@ -193,8 +209,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             embed.Footer = new EmbedFooterBuilder
             {
                 Text = $"Use the {server.CommandPrefix}myfish command to view your fishing stats!\n" +
-                       $"The {server.CommandPrefix}tradefish and {server.CommandPrefix}sellfish commands " +
-                       $"may be used to trade and sell your fish respectively."
+                       $"The {server.CommandPrefix}sellfish command may be used to sell your fish."
             };
             await ReplyAsync(embed: embed.Build());
         }
