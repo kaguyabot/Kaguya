@@ -121,12 +121,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             };
 
             // If there's not any syntax to display, trim the end of the syntax to remove the blank space character.
-            // We only have 1 backtick because the EmbedFieldBuilder already has the first one.
-            if (cmdInfo.Remarks.Split("\n").Length == 1)
-            {
-                string fb2 = fieldBuilders[2].Value.ToString();
-                fieldBuilders[2].Value = $"{fb2.Substring(0, fb2.Length - 2)}`";
-            }
+            // We can't use substring because that would screw up the rest of the syntax.
+            var oldVal = fieldBuilders[2].Value.ToString().Split("\n")[0];
+            var newVal = oldVal.TrimEnd();
+            fieldBuilders[2].Value = fieldBuilders[2].Value.ToString().Replace(oldVal, newVal);
                 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
