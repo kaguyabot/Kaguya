@@ -11,30 +11,43 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 {
     public class Config
     {
-        private static readonly string path = $"{ConfigProperties.KaguyaMainFolder}\\Resources";
+        private static readonly string resourcesPath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\";
 
         public static async Task<ConfigModel> GetOrCreateConfigAsync()
         {
-            //Navigates a few directories up
-            string filePath = path + "\\config.json";
-
-            if (!Directory.Exists(path))
+            string[] directories =
             {
-                EnsurePathExists(path);
+                resourcesPath + "Logs",
+                resourcesPath + "Images",
+                resourcesPath + "Images\\Hentai",
+                resourcesPath + "Logs",
+                resourcesPath + "Logs\\Debug"
+            };
+
+            string configFilePath = resourcesPath + "config.json";
+
+            if (!Directory.Exists(resourcesPath))
+            {
+                EnsurePathExists(resourcesPath);
             }
 
-            if (!File.Exists(filePath))
+            foreach (var dir in directories)
+            {
+                EnsurePathExists(dir); // If these directories don't exist, create them.
+            }
+
+            if (!File.Exists(configFilePath))
             {
                 //Creates JSON from model.
-                return JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(filePath));
+                return JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath));
             }
             else
             {
                 //Reads config file.
-                var model = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(filePath));
+                var model = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(configFilePath));
                 if (model == null)
                 {
-                    return JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(filePath));
+                    return JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath));
                 }
                 else
                 {

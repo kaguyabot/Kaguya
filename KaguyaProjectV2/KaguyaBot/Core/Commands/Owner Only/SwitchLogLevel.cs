@@ -24,19 +24,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         public async Task SwapLogLevel(string level)
         {
             var curLog = ConfigProperties.logLevel;
-
             string validSeverities = "Trace, Debug, Info, Warn, Error";
 
-            switch (level.ToLower())
+            ConfigProperties.logLevel = level.ToLower() switch
             {
-                case "trace": ConfigProperties.logLevel = LogLvl.TRACE; break;
-                case "debug": ConfigProperties.logLevel = LogLvl.DEBUG; break;
-                case "info": ConfigProperties.logLevel = LogLvl.INFO; break;
-                case "warn": ConfigProperties.logLevel = LogLvl.WARN; break;
-                case "error": ConfigProperties.logLevel = LogLvl.ERROR; break;
-                default: throw new ArgumentOutOfRangeException($"Valid logtypes are `{validSeverities}`", new Exception());
-            }
-
+                "trace" => LogLvl.TRACE,
+                "debug" => LogLvl.DEBUG,
+                "info" => LogLvl.INFO,
+                "warn" => LogLvl.WARN,
+                "error" => LogLvl.ERROR,
+                _ => throw new ArgumentOutOfRangeException($"Valid logtypes are `{validSeverities}`", new Exception()),
+            };
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully changed LogLevel from `{curLog.Humanize()}` to `{ConfigProperties.logLevel.Humanize()}`",

@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         /// may gain access to the resources folder. This goes for any other folder in the directory. This
         /// string may also be navigated up any folders using @".." if needed.
         /// </summary>
-        public static string KaguyaMainFolder { get; } = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\.."));
+        public static string KaguyaMainFolder { get; } = Directory.GetCurrentDirectory();
 
         public static string KaguyaSupportDiscordServer { get; } = "https://discord.gg/aumCJhr";
     }

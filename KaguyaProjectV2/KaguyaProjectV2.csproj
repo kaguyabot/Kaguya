@@ -10,8 +10,14 @@
 
   <ItemGroup>
     <Compile Remove="Main\**" />
+    <Compile Remove="out\**" />
+    <Compile Remove="Resources\**" />
     <EmbeddedResource Remove="Main\**" />
+    <EmbeddedResource Remove="out\**" />
+    <EmbeddedResource Remove="Resources\**" />
     <None Remove="Main\**" />
+    <None Remove="out\**" />
+    <None Remove="Resources\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +38,6 @@
 
   <ItemGroup>
     <Folder Include="KaguyaBot\Core\Commands\Music\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>
