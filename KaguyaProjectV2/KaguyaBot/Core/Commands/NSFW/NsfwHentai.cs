@@ -14,13 +14,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 {
     public class NsfwHentai : ModuleBase<ShardedCommandContext>
     {
-        [NsfwCommand]
-        [Command("n")]
-        [Summary("Posts an NSFW image into chat.")]
-        [Remarks("")]
-        public async Task Command()
-        {
-        }
+        // [NsfwCommand]
+        // [Command("n")]
+        // [Summary("Posts an NSFW image into chat.")]
+        // [Remarks("")]
+        // public async Task Command()
+        // {
+        // }
 
         /// <summary>
         /// Retreives the specified <see cref="count"/> of NSFW images and whether we should loat them into memory as well.

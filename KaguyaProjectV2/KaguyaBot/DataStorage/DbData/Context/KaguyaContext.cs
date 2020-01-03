@@ -1,4 +1,5 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Global;
+﻿using System;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using LinqToDB.Common;
 using LinqToDB.Configuration;
 using LinqToDB.Data;

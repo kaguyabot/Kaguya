@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Main\**" />
+    <EmbeddedResource Remove="Main\**" />
+    <None Remove="Main\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BooruSharp" Version="1.4.6" />
     <PackageReference Include="Centvrio.Emoji" Version="1.1.5" />
     <PackageReference Include="Discord.Addons.PassiveInteractive" Version="2.0.4" />

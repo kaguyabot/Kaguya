@@ -16,12 +16,11 @@
           "MySql.Data": "8.0.18",
           "NHentaiSharp": "1.0.5",
           "Newtonsoft.Json": "12.0.3",
-          "NodaTime": "2.4.7",
           "OppaiSharp": "3.2.0",
           "SixLabors.ImageSharp": "1.0.0-beta0007",
           "SixLabors.ImageSharp.Drawing": "1.0.0-beta0007",
           "TwitchLib": "3.1.0",
-          "linq2db": "2.9.4"
+          "linq2db": "2.9.5"
         },
         "runtime": {
           "KaguyaProjectV2.dll": {}
@@ -623,7 +622,7 @@
           }
         }
       },
-      "linq2db/2.9.4": {
+      "linq2db/2.9.5": {
         "dependencies": {
           "System.ComponentModel.Annotations": "4.5.0",
           "System.Data.DataSetExtensions": "4.5.0",
@@ -631,8 +630,8 @@
         },
         "runtime": {
           "lib/netcoreapp2.0/linq2db.dll": {
-            "assemblyVersion": "2.9.4.0",
-            "fileVersion": "2.9.4.0"
+            "assemblyVersion": "2.9.5.0",
+            "fileVersion": "2.9.5.0"
           }
         }
       },
@@ -761,14 +760,6 @@
           "lib/net45/NHentaiSharp.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "NodaTime/2.4.7": {
-        "runtime": {
-          "lib/netstandard2.0/NodaTime.dll": {
-            "assemblyVersion": "2.4.7.0",
-            "fileVersion": "2.4.7.0"
           }
         }
       },
@@ -2300,12 +2291,12 @@
       "path": "humanizer.core.zh-hant/2.7.9",
       "hashPath": "humanizer.core.zh-hant.2.7.9.nupkg.sha512"
     },
-    "linq2db/2.9.4": {
+    "linq2db/2.9.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-tQanojtjC9WGAkfOb0vCz6634td+fPTznMw3fVFY3IlGT/iFrqivo3jELY9gZ0K8e6taAYORP8IAlqLMo9kirQ==",
-      "path": "linq2db/2.9.4",
-      "hashPath": "linq2db.2.9.4.nupkg.sha512"
+      "sha512": "sha512-qcfE3jKZFkmaBllKGy9ag6GCt4A6cmJEnva2BirjPUGerpKlf3w8PlWDYF27ZqAiJFhJLSsvzdGuH2a/2GHuGw==",
+      "path": "linq2db/2.9.5",
+      "hashPath": "linq2db.2.9.5.nupkg.sha512"
     },
     "Microsoft.CSharp/4.5.0": {
       "type": "package",
@@ -2397,13 +2388,6 @@
       "sha512": "sha512-nbB98oq4gBUri9IKNCxOfwPjPuYPxcIjxnPNBGoCTIRaR4iuZssJo2EDukCMYSheUcyanA9L/FeEYC8jmgQnnw==",
       "path": "nhentaisharp/1.0.5",
       "hashPath": "nhentaisharp.1.0.5.nupkg.sha512"
-    },
-    "NodaTime/2.4.7": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-qXOjY8467lqeOLDOZa7TmHL4jvlMDz9xcQuMXgXW7fvVXJNMx1Z6DBVozK+FMzH4eHscccfpgJmv8ua9s8mtbA==",
-      "path": "nodatime/2.4.7",
-      "hashPath": "nodatime.2.4.7.nupkg.sha512"
     },
     "OppaiSharp/3.2.0": {
       "type": "package",

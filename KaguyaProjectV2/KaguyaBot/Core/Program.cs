@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 {
     class Program
     {
-        static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
+        static void Main() => new Program().MainAsync().GetAwaiter().GetResult();
 
         private DiscordShardedClient _client;
         private static TwitchAPI _api;
@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 await ConsoleLogger.LogAsync($"Unhandled Exception: {eventArgs.ExceptionObject}", LogLvl.ERROR);
             };
-            Console.SetWindowSize(185, 40);
+            // Console.SetWindowSize(185, 40); // Disabled due to docker crashing with this enabled.
 
             var config = new DiscordSocketConfig
             {
@@ -43,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
             _client = new DiscordShardedClient(config);
 
-            SetupKaguya(); //Checks for valid database connection
+            await SetupKaguya(); //Checks for valid database connection
             using (var services = new SetupServices().ConfigureServices(config, _client))
             {
                 try
@@ -84,12 +84,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 }
             }
         }
-        public void SetupKaguya()
+        public async Task SetupKaguya()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("========== KaguyaBot Version 2.0 ==========");
 
             _ = new KaguyaBot.DataStorage.DbData.Context.Init();
+            await ConsoleLogger.LogAsync("Successfully established database connection", LogLvl.INFO);
         }
 
         private void GlobalPropertySetup(ConfigModel _config)

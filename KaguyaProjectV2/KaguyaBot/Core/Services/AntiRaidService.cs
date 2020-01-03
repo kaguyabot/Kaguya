@@ -41,7 +41,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     var timer = new Timer(ar.Seconds * 1000);
                     timer.Enabled = true;
                     timer.AutoReset = false;
-
                     timer.Elapsed += async (sender, args) =>
                     {
                         var existingObj = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.Id == server.Id);
