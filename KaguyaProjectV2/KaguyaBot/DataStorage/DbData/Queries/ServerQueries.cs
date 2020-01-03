@@ -3,8 +3,10 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using LinqToDB;
 using LinqToDB.Data;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -84,12 +86,57 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <summary>
         /// Adds a blacklisted channel object to the database.
         /// </summary>
-        /// <param name="blObject">The BlackListedChannl object to add.</param>
-        public static async Task AddBlacklistedChannel(BlackListedChannel blObject)
+        /// <param name="blObj">The BlackListedChannl object to add.</param>
+        public static async Task AddBlacklistedChannel(BlackListedChannel blObj)
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertOrReplaceAsync(blObject);
+                await db.InsertOrReplaceAsync(blObj);
+            }
+        }
+
+        /// <summary>
+        /// Inserts every element of the collection into the database.
+        /// </summary>
+        /// <param name="blObjLst"></param>
+        /// <returns></returns>
+        public static async Task AddBlacklistedChannels(IEnumerable<BlackListedChannel> blObjLst)
+        {
+            using (var db = new KaguyaDb())
+            {
+                foreach (var obj in blObjLst)
+                {
+                    await db.InsertAsync(obj);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes a blacklisted channel from the server's list of blacklisted channels.
+        /// </summary>
+        /// <param name="blObj">The blacklisted channel object to remove from the database.</param>
+        /// <returns></returns>
+        public static async Task RemoveBlacklistedChannelAsync(BlackListedChannel blObj)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(blObj);
+            }
+        }
+
+        /// <summary>
+        /// Deletes all currently blacklisted channels for a server.
+        /// </summary>
+        /// <param name="server">The server who's channel blacklist we are clearing.</param>
+        /// <returns></returns>
+        public static async Task ClearBlacklistedChannelsAsync(Server server)
+        {
+            using (var db = new KaguyaDb())
+            {
+                foreach (var channel in server.BlackListedChannels)
+                {
+                    await db.DeleteAsync(channel);
+                }
             }
         }
 
@@ -379,5 +426,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 await db.InsertOrReplaceAsync(arObject);
             }
         }
+
+        /// <summary>
+        /// Inserts the <see cref="IKaguyaQueryable"/> object into the database.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        public static async Task InsertOrReplaceAsync<T>(T arg) where T : IKaguyaQueryable
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertOrReplaceAsync(arg);
+            }
+        }
+
+
     }
 }

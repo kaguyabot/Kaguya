@@ -64,7 +64,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         /// </summary>
         /// <param name="duration">The result of the parse as a TimeSpan object.</param>
         /// <returns></returns>
-        public static TimeSpan ParseToTimespan(string duration)
+        public static TimeSpan ParseToTimespan(this string duration)
         {
             Parse(duration, out int sec, out int min, out int hour, out int day);
             return new TimeSpan(day, hour, min, sec);
