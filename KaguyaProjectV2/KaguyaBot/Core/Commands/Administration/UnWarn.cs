@@ -99,7 +99,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     if (server.IsPremium && server.ModLog != 0)
                     {
                         var logChannel = 
-                            ConfigProperties.client.GetChannel(server.ModLog) as SocketTextChannel;
+                            ConfigProperties.Client.GetChannel(server.ModLog) as SocketTextChannel;
 
                         await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                         {

@@ -95,9 +95,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void GlobalPropertySetup(ConfigModel _config)
         {
-            ConfigProperties.client = _client;
-            ConfigProperties.botConfig = _config;
-            ConfigProperties.logLevel = (LogLvl)_config.LogLevelNumber;
+            ConfigProperties.Client = _client;
+            ConfigProperties.BotConfig = _config;
+            ConfigProperties.LogLevel = (LogLvl)_config.LogLevelNumber;
         }
 
         private async Task TestDatabaseConnection()
@@ -118,13 +118,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private void SetupTwitch()
         {
             _api = new TwitchAPI();
-            _api.Settings.ClientId = ConfigProperties.botConfig.TwitchClientId;
-            _api.Settings.AccessToken = ConfigProperties.botConfig.TwitchAuthToken;
+            _api.Settings.ClientId = ConfigProperties.BotConfig.TwitchClientId;
+            _api.Settings.AccessToken = ConfigProperties.BotConfig.TwitchAuthToken;
 
             var monitor = new LiveStreamMonitorService(_api, 30);
             monitor.OnStreamOnline += TwitchNotificationsHandler.OnStreamOnline;
 
-            ConfigProperties.twitchApi = _api;
+            ConfigProperties.TwitchApi = _api;
         }
 
         private async Task EnableTimers(bool shardsLoggedIn)

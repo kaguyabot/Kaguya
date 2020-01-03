@@ -23,10 +23,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Remarks("<severity>")]
         public async Task SwapLogLevel(string level)
         {
-            var curLog = ConfigProperties.logLevel;
+            var curLog = ConfigProperties.LogLevel;
             string validSeverities = "Trace, Debug, Info, Warn, Error";
 
-            ConfigProperties.logLevel = level.ToLower() switch
+            ConfigProperties.LogLevel = level.ToLower() switch
             {
                 "trace" => LogLvl.TRACE,
                 "debug" => LogLvl.DEBUG,
@@ -37,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             };
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"Successfully changed LogLevel from `{curLog.Humanize()}` to `{ConfigProperties.logLevel.Humanize()}`",
+                Description = $"Successfully changed LogLevel from `{curLog.Humanize()}` to `{ConfigProperties.LogLevel.Humanize()}`",
                 Footer = new EmbedFooterBuilder
                 {
                     Text = $"Note: This loglevel will return back to `{curLog.Humanize()}` after a restart."

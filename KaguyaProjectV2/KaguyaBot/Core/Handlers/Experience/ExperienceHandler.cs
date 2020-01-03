@@ -78,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 Description = $"`{context.User.Username}` just leveled up! \n" +
                               $"Level: `{(int)ReturnLevel(user)}` | EXP: `{user.Experience:N0}`\n" +
                               $"Rank: `#{rankNum}/{count:N0}`",
-                ThumbnailUrl = ConfigProperties.client.GetUser(user.Id).GetAvatarUrl()
+                ThumbnailUrl = ConfigProperties.Client.GetUser(user.Id).GetAvatarUrl()
             };
 
             return embed.Build();

@@ -64,7 +64,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 pg.Description += "```";
             }
 
-            if (Context.User.Id != ConfigProperties.botConfig.BotOwnerId)
+            if (Context.User.Id != ConfigProperties.BotConfig.BotOwnerId)
                 pages[attributes.Length - 1] = null;
 
             var pager = new PaginatedMessage

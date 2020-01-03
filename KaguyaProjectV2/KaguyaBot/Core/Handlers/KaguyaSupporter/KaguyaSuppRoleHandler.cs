@@ -19,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
             timer.AutoReset = true;
             timer.Elapsed += async (sender, e) => 
             {
-                var client = ConfigProperties.client;
+                var client = ConfigProperties.Client;
                 var kaguyaSupportServer = client.GetGuild(546880579057221644); //Kaguya Support Discord Server
 
                 var supporters = await UtilityQueries.GetAllActiveSupporterKeysAsync();

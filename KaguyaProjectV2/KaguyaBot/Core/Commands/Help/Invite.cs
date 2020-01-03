@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             const string inviteUrl = "[[Invite Kaguya to your server]](https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=8)\n";
             const string discordUrl = "[[Kaguya Support Discord]](https://discord.gg/aumCJhr)\n";
 
-            if (Context.User.Id != ConfigProperties.botConfig.BotOwnerId)
+            if (Context.User.Id != ConfigProperties.BotConfig.BotOwnerId)
                 devInviteUrl = null;
 
             var embed = new KaguyaEmbedBuilder

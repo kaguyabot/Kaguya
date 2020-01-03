@@ -12,10 +12,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
 {
     public static class ConfigProperties
     {
-        public static DiscordShardedClient client { get; set; }
-        public static TwitchAPI twitchApi { get; set; }
-        public static ConfigModel botConfig { get; set; }
-        public static LogLvl logLevel { get; set; }
+        public static DiscordShardedClient Client { get; set; }
+        public static TwitchAPI TwitchApi { get; set; }
+        public static ConfigModel BotConfig { get; set; }
+        public static LogLvl LogLevel { get; set; }
 
         /// <summary>
         /// Returns the directory of the "KaguyaProjectV2" folder. By using @"KaguyaMainFolder\Resources", you

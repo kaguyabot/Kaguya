@@ -30,20 +30,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 {
                     if (mutedUser.ExpiresAt < DateTime.Now.ToOADate())
                     {
-                        var guild = ConfigProperties.client.GetGuild(mutedUser.ServerId);
+                        var guild = ConfigProperties.Client.GetGuild(mutedUser.ServerId);
 
                         if (guild == null)
                             goto RemoveFromDB;
 
                         var server = await ServerQueries.GetOrCreateServerAsync(guild.Id);
-                        var user = ConfigProperties.client.GetGuild(server.Id).GetUser(mutedUser.UserId);
+                        var user = ConfigProperties.Client.GetGuild(server.Id).GetUser(mutedUser.UserId);
 
                         if (server.IsPremium)
                         {
                             await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                             {
                                 Server = server,
-                                Moderator = ConfigProperties.client.GetGuild(server.Id)
+                                Moderator = ConfigProperties.Client.GetGuild(server.Id)
                                     .GetUser(538910393918160916),
                                 ActionRecipient = user,
                                 Action = PremiumModActionHandler.UNMUTE,

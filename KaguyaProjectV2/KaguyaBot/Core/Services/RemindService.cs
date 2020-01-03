@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                 foreach (var reminder in unTriggeredReminders)
                 {
-                    var user = ConfigProperties.client.GetUser(reminder.UserId);
+                    var user = ConfigProperties.Client.GetUser(reminder.UserId);
                     var embed = new KaguyaEmbedBuilder
                     {
                         Title = "Kaguya Reminder",

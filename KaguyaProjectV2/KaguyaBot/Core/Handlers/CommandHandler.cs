@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             Server server = await ServerQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
             User user = await UserQueries.GetOrCreateUserAsync(message.Author.Id);
 
-            if (user.IsBlacklisted && user.Id != ConfigProperties.botConfig.BotOwnerId) return;
+            if (user.IsBlacklisted && user.Id != ConfigProperties.BotConfig.BotOwnerId) return;
             if (server.IsBlacklisted) return;
 
             var context = new ShardedCommandContext(_client, message);

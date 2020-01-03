@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         registeredUser.RateLimitWarnings++;
                         if (registeredUser.RateLimitWarnings > 7 && registeredUser.ActiveRateLimit > 0)
                         {
-                            var _user = ConfigProperties.client.GetUser(registeredUser.Id);
+                            var _user = ConfigProperties.Client.GetUser(registeredUser.Id);
                             
                             var _embed = new KaguyaEmbedBuilder
                             {
@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                             return;
                         }
 
-                        var user = ConfigProperties.client.GetUser(registeredUser.Id);
+                        var user = ConfigProperties.Client.GetUser(registeredUser.Id);
 
                         string[] durations = 
                         {

@@ -121,7 +121,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
         private async Task SendEmbedToBotOwner(ICommandContext context, IKey key)
         {
-            var owner = ConfigProperties.client.GetUser(ConfigProperties.botConfig.BotOwnerId);
+            var owner = ConfigProperties.Client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
             var fields = new List<EmbedFieldBuilder>
             {
                 new EmbedFieldBuilder 

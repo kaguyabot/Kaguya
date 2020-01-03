@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 {
     public class GuildLogger
     {
-        private static readonly DiscordShardedClient _client = ConfigProperties.client;
+        private static readonly DiscordShardedClient _client = ConfigProperties.Client;
         private static KaguyaEmbedBuilder _embed;
 
         public static void GuildLogListener()

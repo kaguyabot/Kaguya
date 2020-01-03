@@ -14,8 +14,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             var currentWarnings = await ServerQueries.GetWarningsForUserAsync(args.server.Id, args.warnedUser.UserId);
             var warnCount = currentWarnings.Count;
 
-            var guildUser = ConfigProperties.client.GetGuild(args.warnedUser.ServerId).GetUser(args.warnedUser.UserId);
-            var kaguya = ConfigProperties.client.CurrentUser;
+            var guildUser = ConfigProperties.Client.GetGuild(args.warnedUser.ServerId).GetUser(args.warnedUser.UserId);
+            var kaguya = ConfigProperties.Client.CurrentUser;
 
             int muteNum = currentSettings.Mute;
             int kickNum = currentSettings.Kick;

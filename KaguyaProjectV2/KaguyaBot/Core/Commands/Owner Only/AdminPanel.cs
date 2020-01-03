@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         {
             KaguyaEmbedBuilder embed;
             var user = await UserQueries.GetOrCreateUserAsync(Id);
-            SocketUser socketUser = ConfigProperties.client.GetUser(Id);
+            SocketUser socketUser = ConfigProperties.Client.GetUser(Id);
 
             embed = new KaguyaEmbedBuilder
             {

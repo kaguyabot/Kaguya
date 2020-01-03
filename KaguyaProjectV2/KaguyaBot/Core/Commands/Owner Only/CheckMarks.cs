@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         public async Task Check(string idString)
         {
             var ids = ArrayInterpreter.ReturnParams(idString);
-            var channel = ConfigProperties.client.GetGuild(546880579057221644).GetTextChannel(546883647429410826);
+            var channel = ConfigProperties.Client.GetGuild(546880579057221644).GetTextChannel(546883647429410826);
 
             foreach (var element in ids)
             {

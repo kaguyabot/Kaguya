@@ -30,8 +30,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         /// <returns></returns>
         public async Task<IEnumerable<Stream>> LoadHentaiAsync(int count, bool intoFile)
         {
-            var userName = ConfigProperties.botConfig.DanbooruUsername;
-            var apiKey = ConfigProperties.botConfig.DanbooruApiKey;
+            var userName = ConfigProperties.BotConfig.DanbooruUsername;
+            var apiKey = ConfigProperties.BotConfig.DanbooruApiKey;
 
             var auth = new BooruAuth(userName, apiKey);
             var konachan = new Konachan(auth);

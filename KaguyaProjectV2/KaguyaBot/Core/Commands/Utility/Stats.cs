@@ -25,8 +25,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         {
             Process curProcess = Process.GetCurrentProcess();
 
-            var client = ConfigProperties.client;
-            var owner = client.GetUser(ConfigProperties.botConfig.BotOwnerId);
+            var client = ConfigProperties.Client;
+            var owner = client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
 
             var curShard = client.GetShardFor(Context.Guild);
 

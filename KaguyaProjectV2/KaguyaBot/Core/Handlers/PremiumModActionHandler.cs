@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (!log.Server.IsPremium)
                 return;
 
-            var logChannel = ConfigProperties.client.GetGuild(log.Server.Id).GetTextChannel(log.Server.ModLog);
+            var logChannel = ConfigProperties.Client.GetGuild(log.Server.Id).GetTextChannel(log.Server.ModLog);
             string actionTitle = "User ";
             string embedUrl = "";
             string reason = log.Reason ?? "None specified";

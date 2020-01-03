@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         {
             await Task.Run(() =>
             {
-                var client = ConfigProperties.client;
+                var client = ConfigProperties.Client;
                 client.UserJoined += async u =>
                 {
                     var guild = u.Guild;
@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         private static async Task ActionUsers(HashSet<ulong> userIds, ulong guildId, string action)
         {
-            var guild = ConfigProperties.client.GetGuild(guildId);
+            var guild = ConfigProperties.Client.GetGuild(guildId);
             var guildUsers = new List<SocketGuildUser>();
 
             foreach (var userId in userIds)

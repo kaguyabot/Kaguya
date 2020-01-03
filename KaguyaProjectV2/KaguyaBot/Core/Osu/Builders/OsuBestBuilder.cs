@@ -75,7 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
                 string mapBest = "";
                 using (WebClient client = new WebClient())
                 {
-                    mapBest = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={ConfigProperties.botConfig.OsuApiKey}&b={item.beatmap_id}");
+                    mapBest = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={ConfigProperties.BotConfig.OsuApiKey}&b={item.beatmap_id}");
                 }
                 item.beatmap = JsonConvert.DeserializeObject<OsuBeatmapModel[]>(mapBest)[0];
 
