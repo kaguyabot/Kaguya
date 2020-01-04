@@ -41,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             {
                 userExpObj = new ServerExp
                 {
-                    ServerId = server.Id,
+                    ServerId = server.ServerId,
                     UserId = user.Id,
                     Exp = 0,
                     LatestExp = 0
@@ -50,7 +50,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             var expObject = new ServerExp
             {
-                ServerId = server.Id,
+                ServerId = server.ServerId,
                 UserId = user.Id,
                 Exp = userExpObj?.Exp ?? 0,
                 LatestExp = 0
@@ -60,20 +60,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             expObject.Exp += exp;
             expObject.LatestExp = DateTime.Now.ToOADate();
-            await ServerQueries.UpdateServerExp(expObject);
+            await DatabaseQueries.UpdateServerExp(expObject);
 
             // We update server again below because we have to refresh the serverExp list.
 
-            server = await ServerQueries.GetOrCreateServerAsync(server.Id);
+            server = await DatabaseQueries.GetOrCreateServerAsync(server.ServerId);
             double newLevel = ReturnLevel(server, user);
             await ConsoleLogger.LogAsync(
-                $"[Server Exp]: User {user.Id}] has received {exp} exp. [Guild: {server.Id}] " +
+                $"[Server Exp]: User {user.Id}] has received {exp} exp. [Guild: {server.ServerId}] " +
                 $"Total Exp: {expObject.Exp:N0}]", LogLvl.TRACE);
 
             if (HasLeveledUp((int) oldLevel, (int) newLevel))
             {
                 await ConsoleLogger.LogAsync(
-                    $"[Server Exp]: [Server {server.Id} | User {user.Id}] has leveled up! [Level: {(int)newLevel} | Experience: {GetExpForUser(server, user)}]",
+                    $"[Server Exp]: [Server {server.ServerId} | User {user.Id}] has leveled up! [Level: {(int)newLevel} | Experience: {GetExpForUser(server, user)}]",
                     LogLvl.INFO);
 
                 if (levelAnnouncementChannel != null && levelAnnouncementChannel is SocketTextChannel textChannel)
@@ -96,11 +96,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             }
             catch (NullReferenceException)
             {
-                await ServerQueries.AddServerSpecificExpForUser(new ServerExp
+                await DatabaseQueries.AddServerSpecificExpForUser(new ServerExp
                 {
                     Exp = 0,
                     LatestExp = 0,
-                    ServerId = server.Id,
+                    ServerId = server.ServerId,
                     UserId = user.Id
                 });
                 return true;
@@ -132,7 +132,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         public static Embed LevelUpEmbed(User user, Server server, ICommandContext context)
         {
             var exp = GetExpForUser(server, user);
-            var rank = ServerQueries.GetServerExpRankForUser(server, user);
+            var rank = DatabaseQueries.GetServerExpRankForUser(server, user);
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {

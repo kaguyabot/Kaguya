@@ -9,10 +9,10 @@ using System.Linq;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "kaguyaserver")]
-    public class Server : IKaguyaQueryable<Server>, IKaguyaUnique<Server>
+    public class Server : IKaguyaQueryable<Server>, IKaguyaUnique<Server>, IServerSearchable<Server>
     {
         [PrimaryKey]
-        public ulong Id { get; set; }
+        public ulong ServerId { get; set; }
         [Column(Name = "CommandPrefix"), Nullable]
         public string CommandPrefix { get; set; } = "$";
         [Column(Name = "CommandCount"), NotNull]
@@ -60,7 +60,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             get
             {
                 var now = DateTime.Now.ToOADate();
-                var allUserKeys = UtilityQueries.GetPremiumKeysBoundToServerAsync(Id).Result;
+                var allUserKeys = UtilityQueries.GetPremiumKeysBoundToServerAsync(ServerId).Result;
                 return now + allUserKeys.Sum(key => key.Expiration - now);
             }
         }

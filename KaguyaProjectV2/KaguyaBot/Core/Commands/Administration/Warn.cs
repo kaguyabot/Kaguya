@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task AddWarn(IGuildUser user, [Remainder] string reason = null)
         {
-            Server server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
             if (reason == null)
                 reason = "No reason specified.";
@@ -43,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Date = DateTime.Now.ToOADate()
             };
 
-            await ServerQueries.AddWarnedUserAsync(wu);
+            await DatabaseQueries.AddWarnedUserAsync(wu);
             WarnEvent.Trigger(server, wu);
 
             await user.SendMessageAsync(embed: WarnEmbed(wu, Context).Build());
@@ -63,7 +63,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 await PremiumModerationLog.SendModerationLog(premLog);
             }
 
-            await ServerQueries.UpdateServerAsync(server);
+            await DatabaseQueries.UpdateServerAsync(server);
         }
 
         private static KaguyaEmbedBuilder WarnEmbed(WarnedUser user, ICommandContext context)
@@ -77,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Footer = new EmbedFooterBuilder
                 {
                     Text =
-                        $"You currently have {ServerQueries.GetWarningsForUserAsync(user.ServerId, user.UserId).Result.Count} warnings."
+                        $"You currently have {DatabaseQueries.GetWarningsForUserAsync(user.ServerId, user.UserId).Result.Count} warnings."
                 }
             };
             embed.SetColor(EmbedColor.RED);
@@ -86,7 +86,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
         private static KaguyaEmbedBuilder Reply(WarnedUser user, IGuildUser warnedUser)
         {
-            var warnCount = ServerQueries.GetWarningsForUserAsync(user.ServerId, user.UserId).Result.Count;
+            var warnCount = DatabaseQueries.GetWarningsForUserAsync(user.ServerId, user.UserId).Result.Count;
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully warned user `{warnedUser}`\nReason: `{user.Reason}`",

@@ -25,20 +25,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.MuteMembers)]
         public async Task UnmuteUser(IGuildUser user, [Remainder]string reason = null)
         {
-            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var mutedObject = ServerQueries.GetSpecificMutedUser(user.Id, server.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var mutedObject = DatabaseQueries.GetSpecificMutedUser(user.Id, server.ServerId);
 
             if (mutedObject != null)
-                await ServerQueries.RemoveMutedUser(mutedObject);
+                await DatabaseQueries.RemoveMutedUser(mutedObject);
 
             if (server.IsPremium)
             {
-                await ServerQueries.UpdateServerAsync(server);
+                await DatabaseQueries.UpdateServerAsync(server);
 
                 await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                 {
                     Server = server,
-                    Moderator = Context.Client.GetGuild(server.Id).GetUser(538910393918160916),
+                    Moderator = Context.Client.GetGuild(server.ServerId).GetUser(538910393918160916),
                     ActionRecipient = (SocketGuildUser)user,
                     Action = PremiumModActionHandler.UNMUTE,
                     Reason = reason

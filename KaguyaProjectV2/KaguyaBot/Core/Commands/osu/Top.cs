@@ -37,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 if (player == "0")
                 {
                     embed.WithTitle($"osu! Top {num}");
-                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{(await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
+                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{(await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
                     await ReplyAsync(embed: embed.Build());
                     return;
                 }
@@ -98,7 +98,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 player = (await UserQueries.GetOrCreateUserAsync(Context.User.Id)).OsuId.ToString();
                 if (player == null || player == "")
                 {
-                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{(await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
+                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{(await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
                     await ReplyAsync(embed: embed.Build());
                     return;
                 }

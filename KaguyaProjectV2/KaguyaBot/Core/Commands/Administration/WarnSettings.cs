@@ -38,8 +38,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task Command(string action = null, int warnings = 0)
         {
-            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var serverActions = await ServerQueries.GetWarnConfigForServerAsync(server.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var serverActions = await DatabaseQueries.GetWarnConfigForServerAsync(server.ServerId);
 
             if (action == null && warnings == 0)
             {
@@ -117,7 +117,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     break;
             }
 
-            await ServerQueries.AddOrReplaceWarnSettingAsync(newSetting);
+            await DatabaseQueries.AddOrReplaceWarnSettingAsync(newSetting);
 
             var successEmbed = new KaguyaEmbedBuilder
             {

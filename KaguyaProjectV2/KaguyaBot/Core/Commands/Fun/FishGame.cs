@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
         public async Task Command()
         {
             var user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
-            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
             if (user.FishBait < 1)
             {

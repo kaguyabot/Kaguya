@@ -20,15 +20,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 client.UserJoined += async u =>
                 {
                     var guild = u.Guild;
-                    var server = await ServerQueries.GetOrCreateServerAsync(guild.Id).ConfigureAwait(false);
+                    var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id).ConfigureAwait(false);
                     var ar = server.AntiRaid?.FirstOrDefault();
 
                     if (ar == null)
                         return;
 
-                    if (ServerTimerMethods.CachedTimers.All(x => x.Server.Id != server.Id))
+                    if (ServerTimerMethods.CachedTimers.All(x => x.Server.ServerId != server.ServerId))
                     {
-                        var existingTimer = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.Id == server.Id);
+                        var existingTimer = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.ServerId == server.ServerId);
                         var newSt = new ServerTimer
                         {
                             Server = existingTimer.Server,
@@ -43,11 +43,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     timer.AutoReset = false;
                     timer.Elapsed += async (sender, args) =>
                     {
-                        var existingObj = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.Id == server.Id);
+                        var existingObj = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.ServerId == server.ServerId);
 
                         if (existingObj.UserIds.Count >= ar.Users)
                         {
-                            await ActionUsers(existingObj.UserIds, server.Id, ar.Action);
+                            await ActionUsers(existingObj.UserIds, server.ServerId, ar.Action);
                         }
 
                         ServerTimerMethods.CachedTimers.Remove(existingObj);
@@ -131,7 +131,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         public static void ReplaceTimer(ServerTimer stObj)
         {
-            var existingObj = CachedTimers.FirstOrDefault(x => x.Server.Id == stObj.Server.Id);
+            var existingObj = CachedTimers.FirstOrDefault(x => x.Server.ServerId == stObj.Server.ServerId);
 
             CachedTimers.Remove(existingObj);
             CachedTimers.Add(stObj);

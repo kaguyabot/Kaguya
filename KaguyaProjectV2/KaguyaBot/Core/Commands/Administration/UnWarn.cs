@@ -31,8 +31,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.MuteMembers)]
         public async Task UnWarnUser(IGuildUser user, string reason = null)
         {
-            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var warnings = await ServerQueries.GetWarningsForUserAsync(Context.Guild.Id, user.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var warnings = await DatabaseQueries.GetWarningsForUserAsync(Context.Guild.Id, user.Id);
             var fields = new List<EmbedFieldBuilder>();
 
             int warnCount = warnings.Count;
@@ -92,7 +92,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 int j1 = j;
                 callbacks.Add((emojis[j], async (c, r) =>
                 {
-                    await ServerQueries.RemoveWarnedUserAsync(warnings.ElementAt(j1));
+                    await DatabaseQueries.RemoveWarnedUserAsync(warnings.ElementAt(j1));
                     await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
                                                      $"`Successfully removed warning #{j1 + 1}`");
 

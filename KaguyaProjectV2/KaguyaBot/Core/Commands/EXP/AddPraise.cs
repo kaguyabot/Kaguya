@@ -24,9 +24,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [Remarks("\n<user>\n<user> <reason>")]
         public async Task Command(IGuildUser user = null, [Remainder]string reason = null)
         {
-            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var userPraise = await ServerQueries.GetPraiseAsync(Context.User.Id, server.Id);
-            var lastGivenPraise = ServerQueries.GetLastPraiseTime(Context.User.Id, Context.Guild.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var userPraise = await DatabaseQueries.GetPraiseAsync(Context.User.Id, server.ServerId);
+            var lastGivenPraise = DatabaseQueries.GetLastPraiseTime(Context.User.Id, Context.Guild.Id);
 
             if (user == null)
             {
@@ -75,16 +75,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             var praise = new Praise
             {
                 UserId = user.Id,
-                ServerId = server.Id,
+                ServerId = server.ServerId,
                 GivenBy = Context.User.Id,
                 Reason = reason,
                 Server = server,
                 TimeGiven = DateTime.Now.ToOADate()
             };
 
-            await ServerQueries.AddPraiseAsync(praise);
+            await DatabaseQueries.AddPraiseAsync(praise);
 
-            var newTargetPraise = await ServerQueries.GetPraiseAsync(praise.UserId, praise.ServerId);
+            var newTargetPraise = await DatabaseQueries.GetPraiseAsync(praise.UserId, praise.ServerId);
             int newTargetPraiseCount = newTargetPraise.Count;
 
             var embed = new KaguyaEmbedBuilder

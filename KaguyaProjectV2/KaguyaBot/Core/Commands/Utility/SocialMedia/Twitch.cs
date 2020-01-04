@@ -29,8 +29,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
         {
             KaguyaEmbedBuilder embed;
 
-            Server server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var twitchChannels = await ServerQueries.GetTwitchChannelsForServer(server.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var twitchChannels = await DatabaseQueries.GetTwitchChannelsForServer(server.ServerId);
             var twitchApi = ConfigProperties.TwitchApi;
             var userIndex = await twitchApi.V5.Users.GetUserByNameAsync(twitchChannelName);
 
@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                     return;
                 }
 
-                await ServerQueries.AddTwitchChannelAsync(tchannel);
+                await DatabaseQueries.AddTwitchChannelAsync(tchannel);
 
                 string mentionString = MentionString(mentionEveryone);
                 embed = new KaguyaEmbedBuilder
@@ -96,7 +96,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
         private async Task NotifsAlreadyActiveInAltChannel(List<TwitchChannel> serverTwitchChannels, SocketTextChannel channel, Server server, TwitchChannel tchannel)
         {
             KaguyaEmbedBuilder embed;
-            string textChannelName = ConfigProperties.Client.GetGuild(server.Id).GetTextChannel(tchannel.TextChannelId).Name;
+            string textChannelName = ConfigProperties.Client.GetGuild(server.ServerId).GetTextChannel(tchannel.TextChannelId).Name;
             embed = new KaguyaEmbedBuilder
             {
                 Description = $"This Twitch stream is already being monitored somewhere else!\n\n" +
@@ -158,10 +158,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                         c.Channel.SendMessageAsync("Response has timed out."))
                 .WithCallback(new Emoji("✅"), async (c, r) =>
                 {
-                    await ServerQueries.RemoveTwitchChannel(twitchChannels.FirstOrDefault(item =>
+                    await DatabaseQueries.RemoveTwitchChannel(twitchChannels.FirstOrDefault(item =>
                         item.ChannelName == tchannel.ChannelName &&
                         item.TextChannelId == tchannel.TextChannelId));
-                    await ServerQueries.AddTwitchChannelAsync(tchannel);
+                    await DatabaseQueries.AddTwitchChannelAsync(tchannel);
                     await c.Channel.SendMessageAsync(embed: succEmbed2.Build());
                 })
                 .WithCallback(new Emoji("⛔"), async (c, r) => await c.Channel.SendMessageAsync(embed: nothingEmbed2.Build())));
@@ -175,13 +175,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                         c.Channel.SendMessageAsync("Response has timed out."))
                 .WithCallback(new Emoji("✅"), async (c, r) =>
                 {
-                    await ServerQueries.RemoveTwitchChannel(serverTwitchChannels.FirstOrDefault(x => x.ChannelName == tchannel.ChannelName));
-                    await ServerQueries.AddTwitchChannelAsync(tchannel);
+                    await DatabaseQueries.RemoveTwitchChannel(serverTwitchChannels.FirstOrDefault(x => x.ChannelName == tchannel.ChannelName));
+                    await DatabaseQueries.AddTwitchChannelAsync(tchannel);
                     await c.Channel.SendMessageAsync(embed: succEmbed.Build());
                 })
                 .WithCallback(new Emoji("❔"), async (c, r) =>
                 {
-                    await ServerQueries.AddTwitchChannelAsync(tchannel);
+                    await DatabaseQueries.AddTwitchChannelAsync(tchannel);
                     await c.Channel.SendMessageAsync(embed: altEmbed.Build());
                 })
                 .WithCallback(new Emoji("⛔"), (c, r) => c.Channel.SendMessageAsync(embed: nothingEmbed.Build())));

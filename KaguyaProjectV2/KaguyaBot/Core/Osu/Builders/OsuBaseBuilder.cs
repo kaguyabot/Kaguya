@@ -10,12 +10,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
     public abstract class OsuBaseBuilder<T> where T : OsuBaseModel
     {
         private readonly string _apiKey = ConfigProperties.BotConfig.OsuApiKey;
-        private const string BaseUrl = "https://osu.ppy.sh/api/";
+        private const string BASE_URL = "https://osu.ppy.sh/api/";
 
         public string Build(OsuRequest request)
         {
             var urlBuilder = new StringBuilder();
-            urlBuilder.Append(BaseUrl);
+            urlBuilder.Append(BASE_URL);
 
             switch (request)
             {

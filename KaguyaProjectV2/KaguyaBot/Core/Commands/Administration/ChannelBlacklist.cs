@@ -41,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task Command(params string[] _)
         {
             var args = _.ToList();
-            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var currentBlacklists = server.BlackListedChannels.ToList();
 
             bool hasT = false;
@@ -99,7 +99,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                                                         "one argument if using `-clear`.");
                 }
 
-                await ServerQueries.ClearBlacklistedChannelsAsync(server);
+                await DatabaseQueries.ClearBlacklistedChannelsAsync(server);
                 await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully cleared `{currentBlacklists.Count}` " +
                                                                  $"channels from the blacklist.");
                 return;
@@ -118,7 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             Expiration = expiration
                         };
 
-                        await ServerQueries.InsertAsync(cbl);
+                        await DatabaseQueries.InsertAsync(cbl);
                     }
 
                     await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully blacklisted `{Context.Guild.Channels.Count}` " +
@@ -133,7 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         Expiration = expiration
                     };
 
-                    await ServerQueries.InsertAsync(cbl);
+                    await DatabaseQueries.InsertAsync(cbl);
                     await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully blacklisted this channel. {expirationString}");
                 }
             }

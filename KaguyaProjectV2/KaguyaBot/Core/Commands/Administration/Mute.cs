@@ -37,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task MuteUser(IGuildUser user, string duration = null, [Remainder]string reason = null)
         {
             var guild = Context.Guild;
-            var server = await ServerQueries.GetOrCreateServerAsync(guild.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
 
             string muteString = "";
             if (duration != null)
@@ -62,9 +62,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     ExpiresAt = time
                 };
 
-                if (ServerQueries.GetSpecificMutedUser(user.Id, server.Id) != null)
+                if (DatabaseQueries.GetSpecificMutedUser(user.Id, server.ServerId) != null)
                 {
-                    MutedUser existingObject = ServerQueries.GetSpecificMutedUser(user.Id, server.Id);
+                    MutedUser existingObject = DatabaseQueries.GetSpecificMutedUser(user.Id, server.ServerId);
 
                     if (existingObject != null)
                     {
@@ -101,7 +101,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                     });
                                 }
 
-                                await ServerQueries.ReplaceMutedUser(muteObject);
+                                await DatabaseQueries.ReplaceMutedUser(muteObject);
 
                                 await c.Channel.SendMessageAsync(embed: replacementEmbed.Build());
                             })
@@ -121,7 +121,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                     Description = $"Alright, I've extended their mute! {muteString}"
                                 };
 
-                                await ServerQueries.ReplaceMutedUser(extendedMuteObject);
+                                await DatabaseQueries.ReplaceMutedUser(extendedMuteObject);
                                 await SendModLog(server, new PremiumModerationLog
                                 {
                                     Moderator = (SocketGuildUser)Context.User,
@@ -146,7 +146,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         return;
                     }
                 }
-                await ServerQueries.AddMutedUser(muteObject);
+                await DatabaseQueries.AddMutedUser(muteObject);
             }
 
             var muteRole = guild.Roles.FirstOrDefault(x => x?.Name.ToLower() == "kaguya-mute");

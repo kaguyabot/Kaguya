@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             string s = "s";
             if (newArgs.Length == 1) s = "";
 
-            Server server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var allFp = server.FilteredPhrases.ToList();
 
             if (args.Length == 0)
@@ -45,14 +45,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 FilteredPhrase fp = new FilteredPhrase
                 {
-                    ServerId = server.Id,
+                    ServerId = server.ServerId,
                     Phrase = element
                 };
 
                 if (!allFp.Contains(fp)) continue;
 
-                ServerQueries.RemoveFilteredPhrase(fp);
-                await ConsoleLogger.LogAsync($"Server {server.Id} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
+                DatabaseQueries.RemoveFilteredPhrase(fp);
+                await ConsoleLogger.LogAsync($"Server {server.ServerId} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder

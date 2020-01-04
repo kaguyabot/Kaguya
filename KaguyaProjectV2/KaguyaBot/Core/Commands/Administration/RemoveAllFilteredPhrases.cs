@@ -21,12 +21,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.ManageGuild)]
         public async Task RemovePhrase()
         {
-            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var allFp = server.FilteredPhrases.ToList();
 
             foreach (var element in allFp)
             {
-                ServerQueries.RemoveFilteredPhrase(element);
+                DatabaseQueries.RemoveFilteredPhrase(element);
             }
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder

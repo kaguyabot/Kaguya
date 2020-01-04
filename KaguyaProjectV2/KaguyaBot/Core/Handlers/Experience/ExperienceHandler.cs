@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
     {
         public static async Task AddExp(User user, ICommandContext context)
         {
-            Server server = await ServerQueries.GetOrCreateServerAsync(context.Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
 
             // If the user can receive exp, give them between 5 and 8.
             if (!CanGetExperience(user))

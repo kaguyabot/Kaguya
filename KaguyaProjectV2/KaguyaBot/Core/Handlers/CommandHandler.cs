@@ -43,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             var message = msg as SocketUserMessage;
             if (message == null || message.Author.IsBot) return;
 
-            Server server = await ServerQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
             User user = await UserQueries.GetOrCreateUserAsync(message.Author.Id);
 
             if (user.IsBlacklisted && user.Id != ConfigProperties.BotConfig.BotOwnerId) return;
@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             int argPos = 0;
 
             await UserQueries.UpdateUserAsync(user);
-            await ServerQueries.UpdateServerAsync(server);
+            await DatabaseQueries.UpdateServerAsync(server);
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
@@ -74,7 +74,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (!command.IsSpecified)
                 return;
 
-            Server server = await ServerQueries.GetOrCreateServerAsync(context.Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
             User user = await UserQueries.GetOrCreateUserAsync(context.User.Id);
 
             if (result.IsSuccess)
@@ -91,7 +91,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     UserId = context.User.Id,
                     ServerId = context.Guild.Id
                 });
-                await ServerQueries.UpdateServerAsync(server);
+                await DatabaseQueries.UpdateServerAsync(server);
                 await UserQueries.UpdateUserAsync(user);
                 return;
             }
@@ -118,7 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 if (message.Content.ToLower().Contains(phrase.ToLower()))
                 {
                     await context.Channel.DeleteMessageAsync(message);
-                    await ConsoleLogger.LogAsync($"Filtered phrase detected: [Guild: {server.Id} | Phrase: {phrase}]", LogLvl.INFO);
+                    await ConsoleLogger.LogAsync($"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {phrase}]", LogLvl.INFO);
                     return true;
                 }
             }

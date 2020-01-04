@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                     embed.WithTitle($"osu! Recent");
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! " +
                                           $"Please specify a player or set your osu! username with " +
-                                          $"`{(await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
+                                          $"`{(await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
                     await ReplyAsync(embed: embed.Build());
                     return;
                 }

@@ -173,7 +173,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 return await (from s in db.ServerExp
-                    where s.ServerId == server.Id
+                    where s.ServerId == server.ServerId
                     select s).ToListAsync();
             }
         }

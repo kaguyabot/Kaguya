@@ -34,14 +34,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task Command(int users = 0, int seconds = 0, string action = null)
         {
-            var server = await ServerQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var antiraid = server.AntiRaid.ToList();
 
             if (users == 0 && seconds == 0 && action == null)
             {
                 if (antiraid.Any())
                 {
-                    await ServerQueries.RemoveAntiRaidAsync(server);
+                    await DatabaseQueries.RemoveAntiRaidAsync(server);
                     await Context.Channel.SendBasicSuccessEmbedAsync("Successfully disabled this server's antiraid protection.");
                     return;
                 }
@@ -105,11 +105,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             if (!antiraid.Any())
             {
-                await ServerQueries.AddAntiRaidAsync(ar);
+                await DatabaseQueries.AddAntiRaidAsync(ar);
                 return;
             }
 
-            await ServerQueries.UpdateAntiRaidAsync(ar);
+            await DatabaseQueries.UpdateAntiRaidAsync(ar);
         }
     }
 }

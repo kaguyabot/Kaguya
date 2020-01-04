@@ -1,31 +1,29 @@
-﻿using System;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using LinqToDB;
 using LinqToDB.Data;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
-using TwitchLib.Client.Events;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
-    public static class ServerQueries
+    // TODO: ConfigureAwait(false) on ALL queries.
+    // TODO: Replace ALL queries with generic queries.
+    public static class DatabaseQueries
     {
         public static async Task<Server> GetOrCreateServerAsync(ulong Id)
         {
             using (var db = new KaguyaDb())
             {
-                bool exists = db.Servers.Any(x => x.Id == Id);
+                bool exists = db.Servers.Any(x => x.ServerId == Id);
 
                 if (!exists)
                 {
                     await db.InsertAsync(new Server
                     {
-                        Id = Id
+                        ServerId = Id
                     });
                 }
 
@@ -38,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     .LoadWith(x => x.ServerExp)
                     .LoadWith(x => x.WarnedUsers)
                     .LoadWith(x => x.MutedUsers)
-                    .Where(s => s.Id == Id).FirstAsync());
+                    .Where(s => s.ServerId == Id).FirstAsync());
             }
         }
 
@@ -440,7 +438,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertOrReplaceAsync(arg);
+                await db.InsertOrReplaceAsync(arg).ConfigureAwait(false);
             }
         }
 
@@ -455,7 +453,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertAsync(arg);
+                await db.InsertAsync(arg).ConfigureAwait(false);
             }
         }
 
@@ -485,15 +483,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 
         /// <summary>
         /// Returns a <see cref="T"/> object that belongs to the user, but is not necessarily
-        /// mapped to the user object directly. <see cref="searchable"/> refers to the object in the database that
+        /// mapped to the user object directly. <see cref="T"/> refers to the object in the database that
         /// we want to retreive, for example, someone's fish or something else that belongs to them.
         /// </summary>
-        /// <typeparam name="T">The <see cref="searchable"/> object that we are looking for. Must inherit from
+        /// <typeparam name="T">The <see cref="T"/> object that we are looking for. Must inherit from
         /// <see cref="IKaguyaQueryable{T}"/>, <see cref="IKaguyaUnique{T}"/> and <see cref="IUserSearchable{T}"/></typeparam>
-        /// <param name="searchable">The <see cref="T"/> object to search for.</param>
-        /// <param name="user">The user whom we are retreiving the <see cref="T"/> for.</param>
+        /// <param name="userId">The user whom we are retreiving the <see cref="T"/> for.</param>
         /// <returns></returns>
-        public static async Task<T> FindForUserAsync<T>(T searchable, ulong userId) where T : 
+        public static async Task<T> FindForUserAsync<T>(ulong userId) where T : 
             class,
             IKaguyaQueryable<T>,
             IKaguyaUnique<T>,
@@ -503,11 +500,58 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from t in db.GetTable<T>()
                     where t.UserId == userId
-                    select t).FirstOrDefaultAsync();
+                    select t).FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
 
-        public static async Task<T> FindForServerAsync<T>(T searchable, ulong serverId) where T :
+        /// <summary>
+        /// Finds all <see cref="T"/> objects that belong to the <see cref="User"/>
+        /// with the corresponding <see cref="userId"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object we want to find for the user.</typeparam>
+        /// <param name="userId">The Id of the user.</param>
+        /// <returns></returns>
+        public static async Task<List<T>> FindAllForUserAsync<T>(ulong userId) where T :
+            class,
+            IKaguyaQueryable<T>,
+            IKaguyaUnique<T>,
+            IUserSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>()
+                    where t.UserId == userId
+                    select t).ToListAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Finds the first (or default) <see cref="IKaguyaUnique{T}"/> object in the database that belongs to this <see cref="serverId"/>
+        /// </summary>
+        /// <typeparam name="T">The <see cref="IServerSearchable{T}"/> that belongs to this <see cref="serverId"/></typeparam>
+        /// <param name="serverId">The Id of the server.</param>
+        /// <returns>The first element of type <see cref="IKaguyaUnique{T}"/> that belongs to this <see cref="serverId"/></returns>
+        public static async Task<T> FindForServerAsync<T>(ulong serverId) where T :
+        class,
+        IKaguyaQueryable<T>,
+        IKaguyaUnique<T>,
+        IServerSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>()
+                    where t.ServerId == serverId
+                    select t).FirstOrDefaultAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="List{T}"/> of objects that match the given <see cref="serverId"/>.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="IServerSearchable{T}"/> that we want to get for this <see cref="serverId"/>.</typeparam>
+        /// <param name="serverId">The Id of the server we are searching for.</param>
+        /// <returns></returns>
+        public static async Task<List<T>> FindAllForServerAsync<T>(ulong serverId) where T :
             class,
             IKaguyaQueryable<T>,
             IKaguyaUnique<T>,
@@ -517,36 +561,115 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from t in db.GetTable<T>()
                     where t.ServerId == serverId
-                    select t).FirstOrDefaultAsync();
+                    select t).ToListAsync().ConfigureAwait(false);
             }
         }
 
-        // TODO: Add summaries and do the same for IEnumerable<T> and User-related queries!
-        public static async Task<T> FindForServerAsync<T>(T searchable, Server server) where T :
-        class,
-        IKaguyaQueryable<T>,
-        IKaguyaUnique<T>,
-        IServerSearchable<T>
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from t in db.GetTable<T>()
-                    where t.ServerId == server.Id
-                    select t).FirstOrDefaultAsync();
-            }
-        }
-
-        public static Task BulkCopy<T>(IEnumerable<T> args) where T : 
+        /// <summary>
+        /// Bulk copies (inserts) the <see cref="IEnumerable{T}"/> into the database.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static async Task BulkCopy<T>(IEnumerable<T> args) where T : 
             class, 
-            IKaguyaQueryable<T>,
-            IKaguyaUnique<T>
+            IKaguyaQueryable<T>
+        // TODO ~ IKaguyaUnique<T> may be necessary, but we'll see.
         {
             using (var db = new KaguyaDb())
             {
-                db.BulkCopy(args);
+                await Task.Run(() => { db.BulkCopy(args); });
             }
-            return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Deletes the <see cref="T"/> object from the database.
+        /// </summary>
+        /// <typeparam name="T">The type of object we are removing from the database.</typeparam>
+        /// <param name="arg">The exact object that we are deleting from the database.</param>
+        /// <returns></returns>
+        public static async Task DeleteAsync<T>(T arg) where T : class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.DeleteAsync(arg).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Deletes all objects from the database that are specified in <see cref="args"/>
+        /// </summary>
+        /// <typeparam name="T">The type of object we are removing from the database.</typeparam>
+        /// <param name="args">The <see cref="IEnumerable{T}"/> collection of objects to delete.</param>
+        /// <returns></returns>
+        public static async Task DeleteAsync<T>(IEnumerable<T> args) where T : class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                foreach (var arg in args)
+                {
+                    await db.DeleteAsync(arg).ConfigureAwait(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns ALL objects of type <see cref="T"/> that exist in the database. **This function should
+        /// almost never be used!!**
+        /// </summary>
+        /// <typeparam name="T">The type of object to retreive ALL items of.</typeparam>
+        /// <returns></returns>
+        public static async Task<List<T>> GetAllAsync<T>() where T : class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.GetTable<T>().ToListAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Updates the specified <see cref="IKaguyaUnique{T}"/> <see cref="arg"/> in the database.  
+        /// </summary>
+        /// <typeparam name="T">The type of object we are updating</typeparam>
+        /// <param name="arg">The object to update.</param>
+        /// <returns></returns>
+        public static async Task UpdateAsync<T>(T arg) where T : class, IKaguyaQueryable<T>, IKaguyaUnique<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.UpdateAsync(arg).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Updates the specified <see cref="IEnumerable{T}"/> <see cref="args"/> in the database.
+        /// </summary>
+        /// <typeparam name="T">The type of object whom's collection we are updating.</typeparam>
+        /// <param name="args">The collection to update.</param>
+        /// <returns></returns>
+        public static async Task UpdateAsync<T>(IEnumerable<T> args) where T : 
+            class, IKaguyaQueryable<T>, IKaguyaUnique<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                foreach (var arg in args)
+                {
+                    await db.UpdateAsync(arg).ConfigureAwait(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Executes the provided sql query and returns the number of affected rows.
+        /// </summary>
+        /// <param name="sql">The sql to execute asynchronously.</param>
+        /// <returns>The number of affected rows</returns>
+        public static async Task<int> ExecuteSqlAsync(string sql)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.ExecuteAsync(sql);
+            }
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (!log.Server.IsPremium)
                 return;
 
-            var logChannel = ConfigProperties.Client.GetGuild(log.Server.Id).GetTextChannel(log.Server.ModLog);
+            var logChannel = ConfigProperties.Client.GetGuild(log.Server.ServerId).GetTextChannel(log.Server.ModLog);
             string actionTitle = "User ";
             string embedUrl = "";
             string reason = log.Reason ?? "None specified";
@@ -108,10 +108,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             };
 
             log.Server.TotalAdminActions++;
-            await ServerQueries.UpdateServerAsync(log.Server);
+            await DatabaseQueries.UpdateServerAsync(log.Server);
 
             await logChannel.SendMessageAsync(embed: embed.Build());
-            await ConsoleLogger.LogAsync($"Premium moderation log sent for server {log.Server.Id}.", LogLvl.DEBUG);
+            await ConsoleLogger.LogAsync($"Premium moderation log sent for server {log.Server.ServerId}.", LogLvl.DEBUG);
         }
     }
 
