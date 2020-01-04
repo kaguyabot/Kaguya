@@ -37,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 EnsurePathExists(dir); // If these directories don't exist, create them.
             }
 
-            if (args.Length != 0)
+            if (args.Length != 0 && args.Length == 15)
             {
                 var model = new ConfigModel
                 {
