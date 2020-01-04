@@ -118,7 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             Expiration = expiration
                         };
 
-                        await ServerQueries.InsertOrReplaceAsync(cbl);
+                        await ServerQueries.InsertAsync(cbl);
                     }
 
                     await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully blacklisted `{Context.Guild.Channels.Count}` " +
@@ -133,7 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         Expiration = expiration
                     };
 
-                    await ServerQueries.InsertOrReplaceAsync(cbl);
+                    await ServerQueries.InsertAsync(cbl);
                     await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully blacklisted this channel. {expirationString}");
                 }
             }

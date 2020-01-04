@@ -1,13 +1,14 @@
-﻿using LinqToDB.Mapping;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "kaguyauser")]
-    public class User
+    public class User : IKaguyaQueryable<User>, IKaguyaUnique<User>
     {
         [PrimaryKey]
         public ulong Id { get; set; }

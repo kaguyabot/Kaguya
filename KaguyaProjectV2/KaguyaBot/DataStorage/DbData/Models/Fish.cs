@@ -1,12 +1,13 @@
-﻿using System;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using LinqToDB.Mapping;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "fish")]
-    public class Fish
+    public class Fish : IKaguyaQueryable<Fish>, IKaguyaUnique<Fish>, IServerSearchable<Fish>, IUserSearchable<Fish>
     {
         [PrimaryKey]
         public long FishId { get; set; }

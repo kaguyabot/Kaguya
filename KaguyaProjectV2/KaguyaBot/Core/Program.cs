@@ -22,12 +22,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 {
     class Program
     {
-        static void Main() => new Program().MainAsync().GetAwaiter().GetResult();
+        static void Main(string[] args) => new Program().MainAsync(args).GetAwaiter().GetResult();
 
         private DiscordShardedClient _client;
         private static TwitchAPI _api;
 
-        public async Task MainAsync()
+        public async Task MainAsync(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
             {
@@ -48,7 +48,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 try
                 {
-                    var _config = await Config.GetOrCreateConfigAsync();
+                    var _config = await Config.GetOrCreateConfigAsync(args);
 
                     GlobalPropertySetup(_config);
                     SetupTwitch();

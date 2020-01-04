@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using Newtonsoft.Json;
 
@@ -13,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
     {
         private static readonly string resourcesPath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\";
 
-        public static async Task<ConfigModel> GetOrCreateConfigAsync()
+        public static async Task<ConfigModel> GetOrCreateConfigAsync(string[] args)
         {
             string[] directories =
             {
@@ -34,6 +35,30 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             foreach (var dir in directories)
             {
                 EnsurePathExists(dir); // If these directories don't exist, create them.
+            }
+
+            if (args.Length != 0)
+            {
+                var model = new ConfigModel
+                {
+                    Token = args[0],
+                    BotOwnerId = args[1].AsUlong(),
+                    LogLevelNumber = args[2].AsInteger(),
+                    DefaultPrefix = args[3],
+                    OsuApiKey = args[4],
+                    TopGGApiKey = args[5],
+                    TopGGAuthorizationPassword = args[6],
+                    MySQL_Username = args[7],
+                    MySQL_Password = args[8],
+                    MySQL_Server = args[9],
+                    MySQL_Database = args[10],
+                    TwitchClientId = args[11],
+                    TwitchAuthToken = args[12],
+                    DanbooruUsername = args[13],
+                    DanbooruApiKey = args[14]
+                };
+
+                return model;
             }
 
             if (!File.Exists(configFilePath))

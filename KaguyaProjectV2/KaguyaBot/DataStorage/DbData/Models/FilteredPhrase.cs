@@ -1,10 +1,11 @@
-﻿using LinqToDB.Mapping;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using LinqToDB.Mapping;
 using System;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "filteredphrases")]
-    public class FilteredPhrase : IEquatable<FilteredPhrase>
+    public class FilteredPhrase : IKaguyaQueryable<FilteredPhrase>, IServerSearchable<FilteredPhrase>
     {
         [Column(Name = "ServerId"), NotNull]
         public ulong ServerId { get; set; }
@@ -18,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 
         public bool Equals(FilteredPhrase other)
         {
-            return this.ServerId == other.ServerId && this.Phrase == other.Phrase;
+            return this.ServerId == other?.ServerId && this.Phrase == other.Phrase;
         }
     }
 

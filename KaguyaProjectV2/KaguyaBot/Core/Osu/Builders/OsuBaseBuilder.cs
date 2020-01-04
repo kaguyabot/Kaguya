@@ -2,13 +2,14 @@
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
 {
     public abstract class OsuBaseBuilder<T> where T : OsuBaseModel
     {
-        private readonly string _apiKey = Config.GetOrCreateConfigAsync().Result.OsuApiKey;
+        private readonly string _apiKey = ConfigProperties.BotConfig.OsuApiKey;
         private const string BaseUrl = "https://osu.ppy.sh/api/";
 
         public string Build(OsuRequest request)

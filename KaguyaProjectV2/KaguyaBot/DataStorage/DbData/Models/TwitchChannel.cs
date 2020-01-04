@@ -1,9 +1,10 @@
-﻿using LinqToDB.Mapping;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "twitch")]
-    public class TwitchChannel
+    public class TwitchChannel : IKaguyaQueryable<TwitchChannel>, IServerSearchable<TwitchChannel>
     {
         [Column(Name = "ServerId"), NotNull]
         public ulong ServerId { get; set; }

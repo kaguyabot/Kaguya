@@ -17,7 +17,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             if (int.TryParse(numString, out int result))
                 return result;
-            return 0;
+            throw new NullReferenceException("Could not parse string to int.");
+        }
+
+        public static ulong AsUlong(this string numString)
+        {
+            if (ulong.TryParse(numString, out ulong result))
+                return result;
+            throw new NullReferenceException("Could not parse string to ulong.");
         }
     }
 }

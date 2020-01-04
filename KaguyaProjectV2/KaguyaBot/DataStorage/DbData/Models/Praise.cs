@@ -1,9 +1,12 @@
-﻿using LinqToDB.Mapping;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "praise")]
-    public class Praise
+    public class Praise : IKaguyaQueryable<Praise>, 
+        IServerSearchable<Praise>,
+        IUserSearchable<Praise>
     {
         [Column(Name = "UserId"), NotNull]
         public ulong UserId { get; set; }

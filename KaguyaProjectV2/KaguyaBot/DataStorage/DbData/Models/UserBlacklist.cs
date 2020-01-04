@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Column(Name = "userblacklists")]
-    public class UserBlacklist
+    public class UserBlacklist : IKaguyaQueryable<UserBlacklist>, IKaguyaUnique<UserBlacklist>, IUserSearchable<UserBlacklist>
     {
         [PrimaryKey]
         public ulong UserId { get; set; }

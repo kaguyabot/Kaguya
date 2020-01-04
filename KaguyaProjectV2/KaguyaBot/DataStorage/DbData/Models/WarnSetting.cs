@@ -1,9 +1,10 @@
-﻿using LinqToDB.Mapping;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "warnsettings")]
-    public class WarnSetting
+    public class WarnSetting : IKaguyaQueryable<WarnSetting>, IKaguyaUnique<WarnSetting>, IServerSearchable<WarnSetting>
     {
         [PrimaryKey]
         public ulong ServerId { get; set; }

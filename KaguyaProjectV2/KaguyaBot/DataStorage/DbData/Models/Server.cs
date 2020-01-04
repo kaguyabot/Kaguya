@@ -1,4 +1,5 @@
-﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB;
 using LinqToDB.Mapping;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "kaguyaserver")]
-    public class Server
+    public class Server : IKaguyaQueryable<Server>, IKaguyaUnique<Server>
     {
         [PrimaryKey]
         public ulong Id { get; set; }

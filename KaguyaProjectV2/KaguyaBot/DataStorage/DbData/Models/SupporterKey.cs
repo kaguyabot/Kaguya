@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using LinqToDB.Mapping;
+using System;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "supporterkeys")]
-    public class SupporterKey : IKey
+    public class SupporterKey : IKey, IKaguyaQueryable<SupporterKey>, IKaguyaUnique<SupporterKey>
     {
         [PrimaryKey]
         [Column(Name = "Key"), NotNull]

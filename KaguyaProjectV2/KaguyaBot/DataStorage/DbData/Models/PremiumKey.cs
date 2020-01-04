@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using LinqToDB.Mapping;
+using System;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "premiumkeys")]
-    public class PremiumKey : IKey
+    public class PremiumKey : IKey, IKaguyaQueryable<PremiumKey>, 
+        IServerSearchable<PremiumKey>, 
+        IUserSearchable<PremiumKey>
     {
         [PrimaryKey]
         [Column(Name = "Key"), NotNull]

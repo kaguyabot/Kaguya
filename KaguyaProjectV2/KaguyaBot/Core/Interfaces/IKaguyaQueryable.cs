@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KaguyaProjectV2.KaguyaBot.Core.Interfaces
+﻿namespace KaguyaProjectV2.KaguyaBot.Core.Interfaces
 {
-    public interface IKaguyaQueryable
+    public interface IKaguyaQueryable<T> where T : class
     {
     }
 }

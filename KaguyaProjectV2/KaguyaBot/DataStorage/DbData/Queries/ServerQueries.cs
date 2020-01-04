@@ -1,12 +1,15 @@
-﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+﻿using System;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using LinqToDB;
 using LinqToDB.Data;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using TwitchLib.Client.Events;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -428,12 +431,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Inserts the <see cref="IKaguyaQueryable"/> object into the database.
+        /// Inserts the <see cref="IKaguyaQueryable{T}"/> object into the database.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
         /// <returns></returns>
-        public static async Task InsertOrReplaceAsync<T>(T arg) where T : IKaguyaQueryable
+        public static async Task InsertOrReplaceAsync<T>(T arg) where T : class, IKaguyaQueryable<T>, IKaguyaUnique<T>
         {
             using (var db = new KaguyaDb())
             {
@@ -441,6 +444,109 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
+        /// <summary>
+        /// Inerts a new <see cref="IKaguyaQueryable{T}"/> object into the database. Do not use if wanting to
+        /// update.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        public static async Task InsertAsync<T>(T arg) where T : class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.InsertAsync(arg);
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="List{T}"/> of objects that belongs to the user, but is not necessarily
+        /// mapped to the user object directly. <see cref="searchable"/> refers to the object in the database that
+        /// we want to retreive, for example, someone's fish or something else that belongs to them.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="searchable"/> object that we are looking for. Must inherit from
+        /// <see cref="IKaguyaQueryable{T}"/>, <see cref="IKaguyaUnique{T}"/> and <see cref="IUserSearchable{T}"/></typeparam>
+        /// <param name="searchable"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static async Task<List<T>> FindCollectionForUserAsync<T>(T searchable, User user) 
+            where T : class, 
+            IKaguyaQueryable<T>, 
+            IKaguyaUnique<T>, 
+            IUserSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>()
+                    where t.UserId == user.Id
+                    select t).ToListAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T"/> object that belongs to the user, but is not necessarily
+        /// mapped to the user object directly. <see cref="searchable"/> refers to the object in the database that
+        /// we want to retreive, for example, someone's fish or something else that belongs to them.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="searchable"/> object that we are looking for. Must inherit from
+        /// <see cref="IKaguyaQueryable{T}"/>, <see cref="IKaguyaUnique{T}"/> and <see cref="IUserSearchable{T}"/></typeparam>
+        /// <param name="searchable">The <see cref="T"/> object to search for.</param>
+        /// <param name="user">The user whom we are retreiving the <see cref="T"/> for.</param>
+        /// <returns></returns>
+        public static async Task<T> FindForUserAsync<T>(T searchable, ulong userId) where T : 
+            class,
+            IKaguyaQueryable<T>,
+            IKaguyaUnique<T>,
+            IUserSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>()
+                    where t.UserId == userId
+                    select t).FirstOrDefaultAsync();
+            }
+        }
+
+        public static async Task<T> FindForServerAsync<T>(T searchable, ulong serverId) where T :
+            class,
+            IKaguyaQueryable<T>,
+            IKaguyaUnique<T>,
+            IServerSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>()
+                    where t.ServerId == serverId
+                    select t).FirstOrDefaultAsync();
+            }
+        }
+
+        // TODO: Add summaries and do the same for IEnumerable<T> and User-related queries!
+        public static async Task<T> FindForServerAsync<T>(T searchable, Server server) where T :
+        class,
+        IKaguyaQueryable<T>,
+        IKaguyaUnique<T>,
+        IServerSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>()
+                    where t.ServerId == server.Id
+                    select t).FirstOrDefaultAsync();
+            }
+        }
+
+        public static Task BulkCopy<T>(IEnumerable<T> args) where T : 
+            class, 
+            IKaguyaQueryable<T>,
+            IKaguyaUnique<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                db.BulkCopy(args);
+            }
+            return Task.CompletedTask;
+        }
 
     }
 }

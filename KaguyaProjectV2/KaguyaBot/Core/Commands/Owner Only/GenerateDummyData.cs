@@ -56,7 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 users.Add(user);
             }
 
-            await UserQueries.UpdateUsers(users);
+            await ServerQueries.BulkCopy(users);
             await ReplyAsync("Complete.");
         }
     }
