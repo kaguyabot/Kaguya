@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             server.CommandPrefix = prefix;
-            await DatabaseQueries.UpdateServerAsync(server);
+            await DatabaseQueries.UpdateAsync(server);
 
             embed.WithDescription($"Command prefix has been changed to `{prefix}`.");
             embed.WithFooter($"Use this command again without specifying a prefix to reset it.");
@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             server.CommandPrefix = "$";
-            await DatabaseQueries.UpdateServerAsync(server);
+            await DatabaseQueries.UpdateAsync(server);
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder 
             {

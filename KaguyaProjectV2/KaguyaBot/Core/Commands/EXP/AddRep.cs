@@ -23,8 +23,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [Remarks("\n<user>\n<user> <reason>")]
         public async Task Command(IGuildUser guildUser = null, [Remainder]string reason = null)
         {
-            User user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
-            var rep = await UserQueries.GetRepAsync(user);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            var rep = await DatabaseQueries.FindAllForUserAsync<Rep>(user.UserId);
             int repCount = rep.Count;
 
             if (guildUser == null)
@@ -75,7 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 return;
             }
 
-            User target = await UserQueries.GetOrCreateUserAsync(guildUser.Id);
+            User target = await DatabaseQueries.GetOrCreateUserAsync(guildUser.Id);
 
             if (target.IsBlacklisted)
             {
@@ -94,17 +94,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             var newTargetRep = new Rep
             {
                 UserId = guildUser.Id,
-                GivenBy = user.Id,
+                GivenBy = user.UserId,
                 TimeGiven = DateTime.Now.ToOADate(),
                 Reason = reason ?? "No reason provided."
             };
 
-            await UserQueries.AddRepAsync(newTargetRep);
+            await DatabaseQueries.InsertAsync(newTargetRep);
             user.LastGivenRep = DateTime.Now.ToOADate();
 
-            await UserQueries.UpdateUserAsync(user);
+            await DatabaseQueries.UpdateAsync(user);
 
-            var targetRepList = await UserQueries.GetRepAsync(target);
+            var targetRepList = await DatabaseQueries.FindAllForUserAsync<Rep>(target.UserId);
 
             var embed = new KaguyaEmbedBuilder
             {

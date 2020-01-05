@@ -6,7 +6,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     [Table(Name = "mutedusers")]
     public class MutedUser : IKaguyaQueryable<MutedUser>,
         IServerSearchable<MutedUser>,
-        IUserSearchable<MutedUser>
+        IUserSearchable<MutedUser>,
+        IKaguyaUnique<MutedUser>
     {
         [Column(Name = "ServerId"), NotNull]
         public ulong ServerId { get; set; }

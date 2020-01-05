@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
         [Remarks("")]
         public async Task Command()
         {
-            var user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
             if (user.FishBait < 1)
@@ -187,12 +187,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                 Sold = false
             };
 
-            await UserQueries.AddFish(fish);
-            await UserQueries.UpdateUserAsync(user);
+            await DatabaseQueries.InsertAsync(fish);
+            await DatabaseQueries.UpdateAsync(user);
 
             if (fishType != FishType.BAIT_STOLEN)
             {
-                var _ = await UserQueries.GetFishForUserAsync(fishType, user.Id);
+                var _ = await DatabaseQueries.GetFishForUserMatchingTypeAsync(fishType, user.UserId);
                 var fishCount = _.Count;
                 var fishString = fishType.ToString().Replace("_", " ").ToLower();
 

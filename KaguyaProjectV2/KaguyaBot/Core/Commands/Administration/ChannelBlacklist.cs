@@ -99,7 +99,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                                                         "one argument if using `-clear`.");
                 }
 
-                await DatabaseQueries.ClearBlacklistedChannelsAsync(server);
+                await DatabaseQueries.DeleteAllForServerAsync<BlackListedChannel>(server.ServerId);
                 await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully cleared `{currentBlacklists.Count}` " +
                                                                  $"channels from the blacklist.");
                 return;

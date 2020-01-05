@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 var id = rand.Next(100000000, 999999999);
                 var user = new User
                 {
-                    Id = (ulong) id,
+                    UserId = (ulong) id,
                     Experience = 0,
                     Points = 0,
                     OsuId = 0,

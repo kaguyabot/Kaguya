@@ -55,7 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             }
             else if (args.Length == 1 && args[0].ToLower() == "all")
             {
-                var allFishToSell = await UserQueries.GetUnsoldFishForUserAsync(Context.User.Id);
+                var allFishToSell = await DatabaseQueries.GetUnsoldFishForUserAsync(Context.User.Id);
 
                 if (allFishToSell.Count == 0)
                 {
@@ -78,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                     })
                     .AddCallBack(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
                     {
-                        await UserQueries.SellFishAsync(allFishToSell, Context.User.Id);
+                        await DatabaseQueries.SellFishAsync(allFishToSell, Context.User.Id);
 
                         await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully sold all " +
                                                                          $"`{allFishToSell.Count:N0}` fish!\n\n" +
@@ -105,7 +105,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                 return;
             }
 
-            var user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             if (!await UtilityQueries.FishBelongsToUserAsync(fishId, user))
             {
                 await Context.Channel.SendBasicErrorEmbedAsync($"This fish doesn't belong to you!");
@@ -115,8 +115,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
             if (fishType != null)
             {
-                FishType ft = Fish.GetFishTypeFromName(fishType);
-                List<Fish> fish = await UserQueries.GetFishForUserAsync(user);
+                var ft = Fish.GetFishTypeFromName(fishType);
+                var fish = await DatabaseQueries.GetUnsoldFishForUserAsync(user.UserId);
                 fish = fish.Where(x => x.FishType == ft).ToList();
 
                 if (!fish.Any())
@@ -150,8 +150,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                                                                    $"all of your `{ft.Humanize()}`, resulting " +
                                                                    $"in a payout of `{payout:N0}` " +
                                                                    $"points after taxes.");
-                        await UserQueries.SellFishAsync(fish, user);
-                        await ConsoleLogger.LogAsync($"User {user.Id} has mass-sold all of their {ft.Humanize()} " +
+                        await DatabaseQueries.SellFishAsync(fish, user.UserId);
+                        await ConsoleLogger.LogAsync($"User {user.UserId} has mass-sold all of their {ft.Humanize()} " +
                                                      $"for a payout of {payout:N0} points.", LogLvl.INFO);
                     })
                     .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
@@ -161,8 +161,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
             #endregion
 
-            var fishToSell = await UserQueries.GetFishAsync(fishId);
-            await UserQueries.SellFishAsync(fishToSell, user);
+            var fishToSell = await DatabaseQueries.GetFirstMatchAsync<Fish>(x => x.FishId == fishId);
+            await DatabaseQueries.SellFishAsync(fishToSell, user.UserId);
 
             var embed = new KaguyaEmbedBuilder
             {

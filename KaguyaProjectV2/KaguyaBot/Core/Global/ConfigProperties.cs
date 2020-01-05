@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         /// string may also be navigated up any folders using @".." if needed.
         /// </summary>
         public static string KaguyaMainFolder { get; } = Directory.GetCurrentDirectory();
-
         public static string KaguyaSupportDiscordServer { get; } = "https://discord.gg/aumCJhr";
+        public static string Version { get; } = "2.0.A2020-1-5";
     }
 }

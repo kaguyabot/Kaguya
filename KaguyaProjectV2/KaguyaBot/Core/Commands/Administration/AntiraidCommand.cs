@@ -35,13 +35,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task Command(int users = 0, int seconds = 0, string action = null)
         {
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var antiraid = server.AntiRaid.ToList();
+            var antiraid = server.AntiRaid?.FirstOrDefault();
 
             if (users == 0 && seconds == 0 && action == null)
             {
-                if (antiraid.Any())
+                if (antiraid != null)
                 {
-                    await DatabaseQueries.RemoveAntiRaidAsync(server);
+                    await DatabaseQueries.DeleteAllForServerAsync<AntiRaidConfig>(server.ServerId);
                     await Context.Channel.SendBasicSuccessEmbedAsync("Successfully disabled this server's antiraid protection.");
                     return;
                 }
@@ -89,7 +89,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             var ar = new AntiRaidConfig
             {
-                ServerId = Context.Guild.Id,
+                ServerId = server.ServerId,
                 Users = users,
                 Seconds = seconds,
                 Action = action.ToLower(),
@@ -103,13 +103,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 $"of each other.");
 
 
-            if (!antiraid.Any())
+            if (antiraid != null)
             {
-                await DatabaseQueries.AddAntiRaidAsync(ar);
+                await DatabaseQueries.InsertAsync(ar);
                 return;
             }
 
-            await DatabaseQueries.UpdateAntiRaidAsync(ar);
+            await DatabaseQueries.InsertOrReplaceAsync(ar);
         }
     }
 }

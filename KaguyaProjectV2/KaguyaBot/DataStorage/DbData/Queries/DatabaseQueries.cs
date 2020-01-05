@@ -1,11 +1,15 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using System;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using LinqToDB;
 using LinqToDB.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Net.Sockets;
 using System.Threading.Tasks;
+using TwitchLib.Client.Events;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -40,293 +44,35 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        public static async Task UpdateServerAsync(Server server)
+        public static async Task<User> GetOrCreateUserAsync(ulong Id)
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertOrReplaceAsync(server);
-            }
-        }
-
-        public static void UpdateServers(IEnumerable<Server> servers)
-        {
-            using (var db = new KaguyaDb())
-            {
-                var options = new BulkCopyOptions
+                User user;
+                try
                 {
-                    BulkCopyType = BulkCopyType.ProviderSpecific
-                };
-                db.BulkCopy(options, servers);
-            }
-        }
-
-        /// <summary>
-        /// Adds a FilteredPhrase object to the database. Duplicates are skipped automatically.
-        /// </summary>
-        /// <param name="fpObject">FilteredPhrase object to add.</param>
-        public static async Task AddFilteredPhrase(FilteredPhrase fpObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertAsync(fpObject);
-            }
-        }
-
-        /// <summary>
-        /// Removes a filtered phrase object from the database.
-        /// </summary>
-        /// <param name="fpObject">FilteredPhrase object to remove.</param>
-        public static void RemoveFilteredPhrase(FilteredPhrase fpObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                db.Delete(fpObject);
-            }
-        }
-
-        /// <summary>
-        /// Adds a blacklisted channel object to the database.
-        /// </summary>
-        /// <param name="blObj">The BlackListedChannl object to add.</param>
-        public static async Task AddBlacklistedChannel(BlackListedChannel blObj)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertOrReplaceAsync(blObj);
-            }
-        }
-
-        /// <summary>
-        /// Inserts every element of the collection into the database.
-        /// </summary>
-        /// <param name="blObjLst"></param>
-        /// <returns></returns>
-        public static async Task AddBlacklistedChannels(IEnumerable<BlackListedChannel> blObjLst)
-        {
-            using (var db = new KaguyaDb())
-            {
-                foreach (var obj in blObjLst)
-                {
-                    await db.InsertAsync(obj);
+                    user = await (from u in db.Users
+                        where u.UserId == Id
+                        select u).FirstAsync();
                 }
-            }
-        }
-
-        /// <summary>
-        /// Removes a blacklisted channel from the server's list of blacklisted channels.
-        /// </summary>
-        /// <param name="blObj">The blacklisted channel object to remove from the database.</param>
-        /// <returns></returns>
-        public static async Task RemoveBlacklistedChannelAsync(BlackListedChannel blObj)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(blObj);
-            }
-        }
-
-        /// <summary>
-        /// Deletes all currently blacklisted channels for a server.
-        /// </summary>
-        /// <param name="server">The server who's channel blacklist we are clearing.</param>
-        /// <returns></returns>
-        public static async Task ClearBlacklistedChannelsAsync(Server server)
-        {
-            using (var db = new KaguyaDb())
-            {
-                foreach (var channel in server.BlackListedChannels)
+                catch (InvalidOperationException)
                 {
-                    await db.DeleteAsync(channel);
+                    user = new User
+                    {
+                        UserId = Id
+                    };
+                    await db.InsertAsync(user);
                 }
+
+                return user;
             }
         }
 
-        public static async Task AddAutoAssignedRole(AutoAssignedRole arObject)
+        public static int GetGlobalExpRankIndex(User user)
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertAsync(arObject);
-            }
-        }
-
-        public static async Task RemoveAutoAssignedRole(AutoAssignedRole arObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(arObject);
-            }
-        }
-
-        public static async Task<IEnumerable<MutedUser>> GetCurrentlyMutedUsers()
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from m in db.MutedUsers
-                    select m).ToListAsync();
-            }
-        }
-
-        public static async Task AddMutedUser(MutedUser muObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertAsync(muObject);
-            }
-        }
-
-        public static async Task RemoveMutedUser(MutedUser muObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(muObject);
-            }
-        }
-
-        public static async Task<List<MutedUser>> GetMutedUsersForServer(ulong serverId)
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from m in db.MutedUsers
-                    where m.ServerId == serverId
-                    select m).ToListAsync();
-            }
-        }
-        /// <summary>
-        /// Returns one MutedUser object for a specific individual in a specific guild.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="serverId"></param>
-        /// <returns></returns>
-        public static MutedUser GetSpecificMutedUser(ulong userId, ulong serverId)
-        {
-            using (var db = new KaguyaDb())
-            {
-                return GetOrCreateServerAsync(serverId).Result.MutedUsers.FirstOrDefault(x => x.UserId == userId);
-            }
-        }
-
-        /// <summary>
-        /// Replaces an existing muted user object with an updated MutedUser object.
-        /// </summary>
-        /// <param name="muObject">The object you want to send to the database as a replacement.</param>
-        /// <returns></returns>
-        public static async Task ReplaceMutedUser(MutedUser muObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.UpdateAsync(from m in db.MutedUsers
-                    where m.ServerId == muObject.ServerId &&
-                          m.UserId == muObject.UserId
-                    select m);
-            }
-        }
-
-        public static async Task AddOrReplaceWarnSettingAsync(WarnSetting wsObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertOrReplaceAsync(wsObject);
-            }
-        }
-
-        public static async Task RemoveWarnSettingAsync(WarnSetting wsObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(wsObject);
-            }
-        }
-        public static async Task<WarnSetting> GetWarnConfigForServerAsync(ulong Id)
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from c in db.WarnActions
-                    where c.ServerId == Id
-                    select c).FirstOrDefaultAsync();
-            }
-        }
-
-        public static async Task AddWarnedUserAsync(WarnedUser wuObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertAsync(wuObject);
-            }
-        }
-
-        public static async Task RemoveWarnedUserAsync(WarnedUser wuObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(wuObject);
-            }
-        }
-
-        public static async Task<List<WarnedUser>> GetWarningsForUserAsync(ulong serverId, ulong userId)
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from w in db.WarnedUsers
-                    where w.ServerId == serverId && w.UserId == userId
-                    select w).ToListAsync();
-            }
-        }
-
-        public static async Task AddTwitchChannelAsync(TwitchChannel tcObj)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertAsync(tcObj);
-            }
-        }
-
-        public static async Task RemoveTwitchChannel(TwitchChannel tcObj)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(tcObj);
-            }
-        }
-
-        public static async Task<List<TwitchChannel>> GetTwitchChannelsForServer(ulong serverId)
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from t in db.TwitchChannels
-                    where t.ServerId == serverId
-                    select t).ToListAsync();
-            }
-        }
-
-        public static async Task AddServerSpecificExpForUser(ServerExp expObj)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertAsync(expObj);
-            }
-        }
-
-        /// <summary>
-        /// Replaces the old EXP object with a new, updated one. This
-        /// will remove and replace based on the userId and serverId
-        /// properties of each object. This is used specifically for
-        /// the server-specific EXP table. This does not affect global EXP.
-        /// </summary>
-        /// <param name="newExpObj">The object to insert, the updated version of oldExpObj.</param>
-        /// <returns></returns>
-        public static async Task UpdateServerExp(ServerExp newExpObj)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertOrReplaceAsync(newExpObj);
-            }
-        }
-
-        public static async Task RemoveServerExp(ServerExp expObj)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(expObj);
+                return db.Users.OrderByDescending(x => x.Experience).ToList().FindIndex(x => x.UserId == user.UserId);
             }
         }
 
@@ -341,38 +87,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return server.ServerExp.OrderByDescending(x => x.Exp).ToList().FindIndex(x => x.UserId == user.Id) + 1;
-            }
-        }
-
-        /// <summary>
-        /// Adds a new praise object to the database.
-        /// </summary>
-        /// <param name="praiseObj"></param>
-        /// <returns></returns>
-        public static async Task AddPraiseAsync(Praise praiseObj)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertAsync(praiseObj);
-            }
-        }
-
-        public static async Task RemovePraiseAsync(Praise praiseObj)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(praiseObj);
-            }
-        }
-
-        public static async Task<List<Praise>> GetPraiseAsync(ulong userId, ulong serverId)
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from r in db.Praise
-                    where r.UserId == userId && r.ServerId == serverId
-                    select r).ToListAsync();
+                return server.ServerExp.OrderByDescending(x => x.Exp).ToList().FindIndex(x => x.UserId == user.UserId) +
+                       1;
             }
         }
 
@@ -381,55 +97,92 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 return (from r in db.Praise.OrderByDescending(x => x.TimeGiven)
-                    where r.GivenBy == userId && r.ServerId == serverId
-                    select r).First()?.TimeGiven ?? 0;
-            }
-        }
-
-        public static async Task AddAntiRaidAsync(AntiRaidConfig arObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertAsync(arObject);
-            }
-        }
-
-        public static async Task RemoveAntiRaidAsync(AntiRaidConfig arObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(arObject);
+                           where r.GivenBy == userId && r.ServerId == serverId
+                           select r).First()?.TimeGiven ?? 0;
             }
         }
 
         /// <summary>
-        /// Removes the AntiRaid object for this server from the database, if it exists.
+        /// Sells a <see cref="Fish"/> to the "market", then adds the value of the fish to the
+        /// <see cref="User"/>'s points balance. This action will add the points to the user's account.
         /// </summary>
-        /// <param name="server"></param>
+        /// <param name="fish">The fish to sell.</param>
+        /// <param name="user">The user to add the value of the fish to.</param>
         /// <returns></returns>
-        public static async Task RemoveAntiRaidAsync(Server server)
+        public static async Task SellFishAsync(Fish fish, ulong userId)
         {
-            var arObject = server.AntiRaid?.ToList().FirstOrDefault();
+            var user = await GetOrCreateUserAsync(userId);
+
+            user.Points += Fish.GetPayoutForFish(fish);
+            fish.Sold = true;
 
             using (var db = new KaguyaDb())
             {
-                if (arObject != null)
-                {
-                    await db.DeleteAsync(arObject);
-                }
-            }
-        }
-
-        public static async Task UpdateAntiRaidAsync(AntiRaidConfig arObject)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertOrReplaceAsync(arObject);
+                await db.UpdateAsync(fish);
+                await db.UpdateAsync(user);
             }
         }
 
         /// <summary>
-        /// Inserts the <see cref="IKaguyaQueryable{T}"/> object into the database.
+        /// Allows a user to sell a collection of <see cref="Fish"/> en masse.
+        /// This is typically used for selling off all fish of the same type at once.
+        /// This action will add points to the user's account.
+        /// </summary>
+        /// <param name="fishCollection">The collection of fish to sell off.</param>
+        /// <param name="taxRate">The rate at which the fish is taxed. (0.05 would be a 5% fee)</param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static async Task SellFishAsync(IEnumerable<Fish> fishCollection, ulong userId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                var user = await GetOrCreateUserAsync(userId);
+                foreach (var fish in fishCollection)
+                {
+                    user.Points += Fish.GetPayoutForFish(fish);
+                    fish.Sold = true;
+
+                    await db.UpdateAsync(fish);
+                }
+
+                await db.UpdateAsync(user);
+            }
+        }
+
+        /// <summary>
+        /// Returns a List of Fish that belong to the user ID.
+        /// </summary>
+        /// <param name="user">The user who we want to get all of the fish from.</param>
+        /// <returns></returns>
+        public static async Task<List<Fish>> GetFishForUserMatchingTypeAsync(FishType fishType, ulong userId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from f in db.Fish
+                    where f.UserId == userId && f.FishType == fishType
+                    select f).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Returns a List of Fish that belongs to the user ID that have not been sold. This only returns
+        /// actual fish, not the BAIT_STOLEN event.
+        /// </summary>
+        /// <param name="user">The user who we want to get all of the unsold fish from.</param>
+        /// <returns></returns>
+        public static async Task<List<Fish>> GetUnsoldFishForUserAsync(ulong userId)
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from f in db.Fish
+                    where f.UserId == userId && !f.Sold && f.FishType != FishType.BAIT_STOLEN
+                    select f).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Inserts the <see cref="IKaguyaUnique{T}"/> object into the database. If it exists, it will replace it
+        /// via the PrimaryKey.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
@@ -467,16 +220,16 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <param name="searchable"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        public static async Task<List<T>> FindCollectionForUserAsync<T>(T searchable, User user) 
-            where T : class, 
-            IKaguyaQueryable<T>, 
-            IKaguyaUnique<T>, 
+        public static async Task<List<T>> FindCollectionForUserAsync<T>(T searchable, User user)
+            where T : class,
+            IKaguyaQueryable<T>,
+            IKaguyaUnique<T>,
             IUserSearchable<T>
         {
             using (var db = new KaguyaDb())
             {
                 return await (from t in db.GetTable<T>()
-                    where t.UserId == user.Id
+                    where t.UserId == user.UserId
                     select t).ToListAsync().ConfigureAwait(false);
             }
         }
@@ -490,7 +243,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <see cref="IKaguyaQueryable{T}"/>, <see cref="IKaguyaUnique{T}"/> and <see cref="IUserSearchable{T}"/></typeparam>
         /// <param name="userId">The user whom we are retreiving the <see cref="T"/> for.</param>
         /// <returns></returns>
-        public static async Task<T> FindForUserAsync<T>(ulong userId) where T : 
+        public static async Task<T> FindForUserAsync<T>(ulong userId) where T :
             class,
             IKaguyaQueryable<T>,
             IKaguyaUnique<T>,
@@ -514,7 +267,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task<List<T>> FindAllForUserAsync<T>(ulong userId) where T :
             class,
             IKaguyaQueryable<T>,
-            IKaguyaUnique<T>,
             IUserSearchable<T>
         {
             using (var db = new KaguyaDb())
@@ -531,11 +283,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <typeparam name="T">The <see cref="IServerSearchable{T}"/> that belongs to this <see cref="serverId"/></typeparam>
         /// <param name="serverId">The Id of the server.</param>
         /// <returns>The first element of type <see cref="IKaguyaUnique{T}"/> that belongs to this <see cref="serverId"/></returns>
-        public static async Task<T> FindForServerAsync<T>(ulong serverId) where T :
-        class,
-        IKaguyaQueryable<T>,
-        IKaguyaUnique<T>,
-        IServerSearchable<T>
+        public static async Task<T> FindFirstForServerAsync<T>(ulong serverId) where T :
+            class,
+            IKaguyaQueryable<T>,
+            IKaguyaUnique<T>,
+            IServerSearchable<T>
         {
             using (var db = new KaguyaDb())
             {
@@ -554,7 +306,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task<List<T>> FindAllForServerAsync<T>(ulong serverId) where T :
             class,
             IKaguyaQueryable<T>,
-            IKaguyaUnique<T>,
             IServerSearchable<T>
         {
             using (var db = new KaguyaDb())
@@ -566,15 +317,34 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
+        /// Deletes all of the <see cref="IServerSearchable{T}"/> objects from the database
+        /// where the serverId matches the provided <see cref="serverId"/>
+        /// </summary>
+        /// <typeparam name="T">The <see cref="IServerSearchable{T}"/> to remove from the database.</typeparam>
+        /// <param name="serverId">The id of the server to clear the objects from.</param>
+        /// <returns></returns>
+        public static async Task DeleteAllForServerAsync<T>(ulong serverId) where T :
+            class, IKaguyaQueryable<T>, IServerSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                await (from t in db.GetTable<T>()
+                    where t.ServerId == serverId
+                    select t).DeleteAsync().ConfigureAwait(false);
+            }
+        }
+
+
+        /// <summary>
         /// Bulk copies (inserts) the <see cref="IEnumerable{T}"/> into the database.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static async Task BulkCopy<T>(IEnumerable<T> args) where T : 
-            class, 
+        public static async Task BulkCopy<T>(IEnumerable<T> args) where T :
+            class,
             IKaguyaQueryable<T>
-        // TODO ~ IKaguyaUnique<T> may be necessary, but we'll see.
+        // IKaguyaUnique<T> may be necessary, but we'll see.
         {
             using (var db = new KaguyaDb())
             {
@@ -614,8 +384,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns ALL objects of type <see cref="T"/> that exist in the database. **This function should
-        /// almost never be used!!**
+        /// Returns ALL objects of type <see cref="T"/> that exist in the database.
         /// </summary>
         /// <typeparam name="T">The type of object to retreive ALL items of.</typeparam>
         /// <returns></returns>
@@ -624,6 +393,60 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 return await db.GetTable<T>().ToListAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="List{T}"/> that match the given predicate.
+        /// </summary>
+        /// <typeparam name="T">The type of <see cref="List{T}"/> to return.</typeparam>
+        /// <param name="predicate">A condition that each returned object in the <see cref="List{T}"/> must match.</param>
+        /// <returns></returns>
+        public static async Task<List<T>> GetAllAsync<T>(Expression<Func<T, bool>> predicate) where T :
+            class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>().Where(predicate)
+                    select t).ToListAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="List{T}"/> where the <see cref="userId"/> and <see cref="serverId"/> matches
+        /// the provided values.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="userId"></param>
+        /// <param name="serverId"></param>
+        /// <returns></returns>
+        public static async Task<List<T>> GetAllForServerAndUserAsync<T>(ulong userId, ulong serverId) where T :
+            class, IKaguyaQueryable<T>, IUserSearchable<T>, IServerSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>()
+                    where t.UserId == userId && t.ServerId == serverId
+                    select t).ToListAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns the FirstOrDefault <see cref="T"/> that matches the provided <see cref="userId"/> and <see cref="serverId"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arg"></param>
+        /// <param name="userId"></param>
+        /// <param name="serverId"></param>
+        /// <returns></returns>
+        public static async Task<T> GetForServerAndUserAsync<T>(ulong userId, ulong serverId) where T :
+            class, IKaguyaQueryable<T>, IUserSearchable<T>, IServerSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>()
+                    where t.UserId == userId && t.ServerId == serverId
+                    select t).FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
 
@@ -647,7 +470,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <typeparam name="T">The type of object whom's collection we are updating.</typeparam>
         /// <param name="args">The collection to update.</param>
         /// <returns></returns>
-        public static async Task UpdateAsync<T>(IEnumerable<T> args) where T : 
+        public static async Task UpdateAsync<T>(IEnumerable<T> args) where T :
             class, IKaguyaQueryable<T>, IKaguyaUnique<T>
         {
             using (var db = new KaguyaDb())
@@ -668,7 +491,68 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.ExecuteAsync(sql);
+                return await db.ExecuteAsync(sql).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns the first or default value from the database of a type that matches this <see cref="Predicate{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of <see cref="IKaguyaQueryable{T}"/> object to return</typeparam>
+        /// <param name="predicate">An expression that the returned object must match.
+        /// <code>
+        /// await FindMatchAsync{User}(x => x.UserId == SomeId);
+        /// </code></param>
+        /// <returns></returns>
+        public static async Task<T> GetFirstMatchAsync<T>(Expression<Func<T, bool>> predicate) where T :
+            class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>().Where(predicate)
+                    select t).FirstOrDefaultAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="bool"/> that determines whether the provided <see cref="arg"/> exists in the database.
+        /// If it does, this function will return true.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arg">The object that we are checking to see exists in the database.</param>
+        /// <returns></returns>
+        public static async Task<bool> ItemExists<T>(T arg) where T :
+            class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.GetTable<T>().AnyAsync(x => x.Equals(arg));
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="bool"/> that determines whether this <see cref="T"/> object exists in the database
+        /// where the <see cref="predicate"/> is true.
+        /// If it does, this function will return true.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public static async Task<bool> ItemExists<T>(Expression<Func<T, bool>> predicate) where T : 
+            class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.GetTable<T>().Where(predicate).AnyAsync();
+            }
+        }
+
+        public static async Task<bool> ItemExists<T>(IEnumerable<T> args, Expression<Func<T, bool>> predicate) where T : 
+            class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.GetTable<T>().Where(predicate).AnyAsync(x => args.Contains(x));
             }
         }
     }

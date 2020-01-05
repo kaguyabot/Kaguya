@@ -34,7 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             KaguyaEmbedBuilder embed;
 
             server.IsCurrentlyPurgingMessages = true;
-            await DatabaseQueries.UpdateServerAsync(server);
+            await DatabaseQueries.UpdateAsync(server);
 
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             messages = messages.Where(x => x.Timestamp.DateTime > DateTime.Now.AddDays(-14));
@@ -87,7 +87,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
 
             server.IsCurrentlyPurgingMessages = false;
-            await DatabaseQueries.UpdateServerAsync(server);
+            await DatabaseQueries.UpdateAsync(server);
         }
     }
 }

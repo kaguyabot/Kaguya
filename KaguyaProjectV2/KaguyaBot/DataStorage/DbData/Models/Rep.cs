@@ -4,7 +4,7 @@ using LinqToDB.Mapping;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "rep")]
-    public class Rep : IKaguyaQueryable<Rep>, IUserSearchable<Rep>
+    public class Rep : IKaguyaQueryable<Rep>, IKaguyaUnique<Rep>, IUserSearchable<Rep>
     {
         [Column(Name = "UserId"), NotNull]
         public ulong UserId { get; set; }

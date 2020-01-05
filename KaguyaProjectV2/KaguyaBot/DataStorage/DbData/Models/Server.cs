@@ -82,38 +82,38 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// <summary>
         /// FK_KaguyaServer_MutedUsers_BackReference
         /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<MutedUser> MutedUsers { get; set; }
         /// <summary>
         /// FK_KaguyaServer_FilteredPhrases_BackReference
         /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<FilteredPhrase> FilteredPhrases { get; set; }
         /// <summary>
         /// FK_KaguyaServer_AutoAssignedRoles_BackReference
         /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<AutoAssignedRole> AutoAssignedRoles { get; set; }
         /// <summary>
         /// FK_KaguyaServer_BlackListedChannels_BackReference
         /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<BlackListedChannel> BlackListedChannels { get; set; }
         /// <summary>
         /// FK_KaguyaServer_WarnedUsers_BackReference
         /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<WarnedUser> WarnedUsers { get; set; }
         /// <summary>
         /// FK_KaguyaServer_ServerExp_BackReference
         /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<ServerExp> ServerExp { get; set; }
 
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<Praise> Rep { get; set; }
 
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<AntiRaidConfig> AntiRaid { get; set; }
     }
 }

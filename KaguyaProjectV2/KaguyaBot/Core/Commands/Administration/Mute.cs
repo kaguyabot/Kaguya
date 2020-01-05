@@ -62,9 +62,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     ExpiresAt = time
                 };
 
-                if (DatabaseQueries.GetSpecificMutedUser(user.Id, server.ServerId) != null)
+                if (await DatabaseQueries.FindAllForServerAsync<MutedUser>(server.ServerId) != null)
                 {
-                    MutedUser existingObject = DatabaseQueries.GetSpecificMutedUser(user.Id, server.ServerId);
+                    MutedUser existingObject =
+                        await DatabaseQueries.GetFirstMatchAsync<MutedUser>(x =>
+                            x.UserId == user.Id && x.ServerId == server.ServerId);
 
                     if (existingObject != null)
                     {
@@ -101,8 +103,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                     });
                                 }
 
-                                await DatabaseQueries.ReplaceMutedUser(muteObject);
-
+                                await DatabaseQueries.UpdateAsync(muteObject);
                                 await c.Channel.SendMessageAsync(embed: replacementEmbed.Build());
                             })
                             .WithCallback(new Emoji("⏱️"), async (c, r) =>
@@ -121,7 +122,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                     Description = $"Alright, I've extended their mute! {muteString}"
                                 };
 
-                                await DatabaseQueries.ReplaceMutedUser(extendedMuteObject);
+                                await DatabaseQueries.UpdateAsync(extendedMuteObject);
                                 await SendModLog(server, new PremiumModerationLog
                                 {
                                     Moderator = (SocketGuildUser)Context.User,
@@ -146,7 +147,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         return;
                     }
                 }
-                await DatabaseQueries.AddMutedUser(muteObject);
+                await DatabaseQueries.InsertAsync(muteObject);
             }
 
             var muteRole = guild.Roles.FirstOrDefault(x => x?.Name.ToLower() == "kaguya-mute");

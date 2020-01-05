@@ -5,7 +5,7 @@ using System;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "filteredphrases")]
-    public class FilteredPhrase : IKaguyaQueryable<FilteredPhrase>, IServerSearchable<FilteredPhrase>
+    public class FilteredPhrase : IKaguyaQueryable<FilteredPhrase>, IKaguyaUnique<FilteredPhrase>, IServerSearchable<FilteredPhrase>
     {
         [Column(Name = "ServerId"), NotNull]
         public ulong ServerId { get; set; }

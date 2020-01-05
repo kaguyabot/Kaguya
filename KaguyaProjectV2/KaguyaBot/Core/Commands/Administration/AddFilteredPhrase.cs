@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class AddFilteredPhrase : ModuleBase<ShardedCommandContext>
+    public class UpdateAsync : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
         [Command("FilterAdd")]
@@ -53,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 if (allFp.Contains(fp)) continue;
 
-                await DatabaseQueries.AddFilteredPhrase(fp); 
+                await DatabaseQueries.InsertOrReplaceAsync(fp); 
                 await ConsoleLogger.LogAsync($"Server {server.ServerId} has added the phrase \"{element}\" to their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 

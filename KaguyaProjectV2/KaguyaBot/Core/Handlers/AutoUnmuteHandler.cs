@@ -26,49 +26,47 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             timer.Elapsed += async (sender, e) =>
             {
-                foreach (var mutedUser in await DatabaseQueries.GetCurrentlyMutedUsers())
+                var curMutedUsers = await DatabaseQueries.GetAllAsync<MutedUser>(x => x.ExpiresAt < DateTime.Now.ToOADate());
+                foreach (var mutedUser in curMutedUsers)
                 {
-                    if (mutedUser.ExpiresAt < DateTime.Now.ToOADate())
+                    var guild = ConfigProperties.Client.GetGuild(mutedUser.ServerId);
+
+                    if (guild == null)
+                        goto RemoveFromDB;
+
+                    var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
+                    var user = ConfigProperties.Client.GetGuild(server.ServerId).GetUser(mutedUser.UserId);
+
+                    if (server.IsPremium)
                     {
-                        var guild = ConfigProperties.Client.GetGuild(mutedUser.ServerId);
-
-                        if (guild == null)
-                            goto RemoveFromDB;
-
-                        var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
-                        var user = ConfigProperties.Client.GetGuild(server.ServerId).GetUser(mutedUser.UserId);
-
-                        if (server.IsPremium)
+                        await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                         {
-                            await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
-                            {
-                                Server = server,
-                                Moderator = ConfigProperties.Client.GetGuild(server.ServerId)
-                                    .GetUser(538910393918160916),
-                                ActionRecipient = user,
-                                Action = PremiumModActionHandler.UNMUTE,
-                                Reason = "User was automatically unmuted because their timed mute has expired."
-                            });
-                        }
-
-                        try
-                        {
-                            var muteRole = guild.Roles.FirstOrDefault(x => x.Name == "kaguya-mute");
-                            await user.RemoveRoleAsync(muteRole);
-                        }
-                        catch (Exception)
-                        {
-                            await ConsoleLogger.LogAsync($"Exception handled when unmuting a user in guild [Name: {guild.Name} | ID: {guild.Id}]",
-                                LogLvl.WARN);
-                        }
-
-                        await DatabaseQueries.UpdateServerAsync(server);
-
-                        RemoveFromDB:
-                        await DatabaseQueries.RemoveMutedUser(mutedUser);
-                        await ConsoleLogger.LogAsync($"User [ID: {mutedUser.UserId}] has been automatically unmuted.",
-                            LogLvl.DEBUG);
+                            Server = server,
+                            Moderator = ConfigProperties.Client.GetGuild(server.ServerId)
+                                .GetUser(538910393918160916),
+                            ActionRecipient = user,
+                            Action = PremiumModActionHandler.UNMUTE,
+                            Reason = "User was automatically unmuted because their timed mute has expired."
+                        });
                     }
+
+                    try
+                    {
+                        var muteRole = guild.Roles.FirstOrDefault(x => x.Name == "kaguya-mute");
+                        await user.RemoveRoleAsync(muteRole);
+                    }
+                    catch (Exception)
+                    {
+                        await ConsoleLogger.LogAsync($"Exception handled when unmuting a user in guild [Name: {guild.Name} | ID: {guild.Id}]",
+                            LogLvl.WARN);
+                    }
+
+                    await DatabaseQueries.UpdateAsync(server);
+
+                    RemoveFromDB:
+                    await DatabaseQueries.DeleteAsync(mutedUser);
+                    await ConsoleLogger.LogAsync($"User [ID: {mutedUser.UserId}] has been automatically unmuted.",
+                        LogLvl.DEBUG);
                 }
             };
             return Task.CompletedTask;

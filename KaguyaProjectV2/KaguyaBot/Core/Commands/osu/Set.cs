@@ -29,9 +29,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             }
 
             //Getting user profile database object and updating it.
-            var userAccount = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
+            var userAccount = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             userAccount.OsuId = playerObject.user_id;
-            await UserQueries.UpdateUserAsync(userAccount);
+            await DatabaseQueries.UpdateAsync(userAccount);
 
             embed.WithTitle("osu! Username Set");
             embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed to `{playerObject.username}`.**");

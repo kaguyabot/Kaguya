@@ -307,7 +307,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.Fish.AnyAsync(x => x.FishId == fish.FishId && x.UserId == user.Id);
+                return await db.Fish.AnyAsync(x => x.FishId == fish.FishId && x.UserId == user.UserId);
             }
         }
 
@@ -321,7 +321,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.Fish.AnyAsync(x => x.FishId == fishId && x.UserId == user.Id);
+                return await db.Fish.AnyAsync(x => x.FishId == fishId && x.UserId == user.UserId);
             }
         }
     }

@@ -39,7 +39,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task Command(string action = null, int warnings = 0)
         {
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var serverActions = await DatabaseQueries.GetWarnConfigForServerAsync(server.ServerId);
+            var serverActions = await DatabaseQueries.FindFirstForServerAsync<WarnSetting>(server.ServerId);
 
             if (action == null && warnings == 0)
             {
@@ -117,7 +117,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     break;
             }
 
-            await DatabaseQueries.AddOrReplaceWarnSettingAsync(newSetting);
+            await DatabaseQueries.InsertOrReplaceAsync(newSetting);
 
             var successEmbed = new KaguyaEmbedBuilder
             {

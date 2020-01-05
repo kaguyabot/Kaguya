@@ -8,10 +8,10 @@ using System.Linq;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "kaguyauser")]
-    public class User : IKaguyaQueryable<User>, IKaguyaUnique<User>
+    public class User : IKaguyaQueryable<User>, IKaguyaUnique<User>, IUserSearchable<User>
     {
         [PrimaryKey]
-        public ulong Id { get; set; }
+        public ulong UserId { get; set; }
         [Column(Name = "Experience"), NotNull]
         public int Experience { get; set; }
         [Column(Name = "Points"), NotNull]
@@ -75,7 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             get
             {
                 var now = DateTime.Now.ToOADate();
-                var allUserKeys = UtilityQueries.GetSupporterKeysBoundToUserAsync(Id).Result;
+                var allUserKeys = UtilityQueries.GetSupporterKeysBoundToUserAsync(UserId).Result;
                 return now + allUserKeys.Sum(key => key.Expiration - now);
             }
         }
@@ -88,19 +88,19 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// <summary>
         /// FK_KaguyaUser_GambleHistory_BackReference
         /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "UserId")]
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
         public IEnumerable<GambleHistory> GambleHistory { get; set; }
 
         /// <summary>
         /// FK_KaguyaUser_ServerExp_BackReference
         /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "ServerId")]
+        [Association(ThisKey = "UserId", OtherKey = "ServerId")]
         public IEnumerable<ServerExp> ServerExp { get; set; }
 
         /// <summary>
         /// FK_KaguyaUser_Reminder_BackReference
         /// </summary>
-        [Association(ThisKey = "Id", OtherKey = "UserId")]
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
         public IEnumerable<Reminder> Reminders { get; set; }
     }
 }

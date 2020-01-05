@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             foreach (var element in allFp)
             {
-                DatabaseQueries.RemoveFilteredPhrase(element);
+                DatabaseQueries.DeleteAsync(element);
             }
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder

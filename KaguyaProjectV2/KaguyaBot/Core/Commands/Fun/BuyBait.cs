@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                 return;
             }
 
-            var user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             int totalCost = Fish.BAIT_COST * amount;
 
             if (user.IsSupporter)
@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                                                         $"New total bait: `{user.FishBait:N0}`\n" +
                                                         $"New total points: `{user.Points:N0}`");
 
-            await UserQueries.UpdateUserAsync(user);
+            await DatabaseQueries.UpdateAsync(user);
         }
     }
 }

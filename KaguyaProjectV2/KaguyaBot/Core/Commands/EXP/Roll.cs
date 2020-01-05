@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             if (bet < 5)
                 throw new ArgumentOutOfRangeException(nameof(bet), "Your bet must be at least `5` points.");
 
-            var user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
             if (bet > MAX_NON_SUPPORTER_BET && !user.IsSupporter)
             {
@@ -80,7 +80,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             user.Points += payout;
             var gh = new GambleHistory
             {
-                UserId = user.Id,
+                UserId = user.UserId,
                 Action = GambleAction.BET_ROLL,
                 ActionString = GambleAction.BET_ROLL.ToString(),
                 Bet = bet,
@@ -90,9 +90,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 Winner = winner,
             };
 
-            await UserQueries.UpdateUserAsync(user);
-            await UserQueries.AddGambleHistory(gh);
-            var allGh = await UserQueries.GetGambleHistoryAsync(user.Id);
+            await DatabaseQueries.UpdateAsync(user);
+            await DatabaseQueries.InsertAsync(gh);
+            var allGh = await DatabaseQueries.FindAllForUserAsync<GambleHistory>(user.UserId);
 
             var footer = new EmbedFooterBuilder
             {

@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         private async Task AdminPanelMethod(ulong Id)
         {
             KaguyaEmbedBuilder embed;
-            var user = await UserQueries.GetOrCreateUserAsync(Id);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Id);
             SocketUser socketUser = ConfigProperties.Client.GetUser(Id);
 
             embed = new KaguyaEmbedBuilder
@@ -106,7 +106,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                                                                      $"`{prop.Name}` value to `{valMsg.Content}`");
                 }
             }
-            await UserQueries.UpdateUserAsync(user);
+            await DatabaseQueries.UpdateAsync(user);
         }
     }
 }

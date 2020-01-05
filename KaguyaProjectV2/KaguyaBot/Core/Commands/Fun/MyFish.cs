@@ -24,10 +24,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
         [Remarks("")]
         public async Task Command()
         {
-            var user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
-            var userFish = await UserQueries.GetFishForUserAsync(user);
+            var userFish = await DatabaseQueries.FindAllForUserAsync<Fish>(user.UserId);
             var countFishDicts = new List<Dictionary<FishType, int>>();
 
             if (userFish.Count == 0)
@@ -42,8 +42,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             {
                 // Creates a new dictionary of how many unsold fish the user has of the given type.
                 var dic = new Dictionary<FishType, int>();
-                var fishMatchingType = await UserQueries.GetUnsoldFishForUserAsync(user.Id);
-                fishMatchingType = fishMatchingType.Where(x => x.FishType == type).ToList();
+                var fishMatchingType = await DatabaseQueries.GetUnsoldFishForUserAsync(user.UserId);
+                fishMatchingType = fishMatchingType.Where(x => x.FishType == type).ToList(); // Filter the fish.
 
                 if (userFish.Count == 0)
                 {

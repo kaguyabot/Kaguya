@@ -43,11 +43,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Date = DateTime.Now.ToOADate()
             };
 
-            await DatabaseQueries.AddWarnedUserAsync(wu);
+            await DatabaseQueries.InsertAsync(wu);
             WarnEvent.Trigger(server, wu);
 
-            await user.SendMessageAsync(embed: WarnEmbed(wu, Context).Build());
-            await ReplyAsync(embed: Reply(wu, user).Build());
+            await user.SendMessageAsync(embed: WarnEmbed(wu, Context).Result.Build());
+            await ReplyAsync(embed: Reply(wu, user).Result.Build());
 
             if (server.IsPremium && server.ModLog != 0)
             {
@@ -63,11 +63,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 await PremiumModerationLog.SendModerationLog(premLog);
             }
 
-            await DatabaseQueries.UpdateServerAsync(server);
+            await DatabaseQueries.UpdateAsync(server);
         }
 
-        private static KaguyaEmbedBuilder WarnEmbed(WarnedUser user, ICommandContext context)
+        private static async Task<KaguyaEmbedBuilder> WarnEmbed(WarnedUser user, ICommandContext context)
         {
+            var curWarns = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.UserId, context.Guild.Id);
+            var curCount = curWarns.Count;
             var embed = new KaguyaEmbedBuilder
             {
                 Title = "⚠️ Warning Received",
@@ -77,16 +79,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Footer = new EmbedFooterBuilder
                 {
                     Text =
-                        $"You currently have {DatabaseQueries.GetWarningsForUserAsync(user.ServerId, user.UserId).Result.Count} warnings."
+                        $"You currently have {curCount} warnings."
                 }
             };
             embed.SetColor(EmbedColor.RED);
             return embed;
         }
 
-        private static KaguyaEmbedBuilder Reply(WarnedUser user, IGuildUser warnedUser)
+        private static async Task<KaguyaEmbedBuilder> Reply(WarnedUser user, IGuildUser warnedUser)
         {
-            var warnCount = DatabaseQueries.GetWarningsForUserAsync(user.ServerId, user.UserId).Result.Count;
+            var warnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.ServerId, user.UserId);
+            var warnCount = warnings.Count;
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully warned user `{warnedUser}`\nReason: `{user.Reason}`",

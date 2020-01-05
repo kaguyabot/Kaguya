@@ -105,7 +105,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                     }
                 }
             }
-            await DatabaseQueries.UpdateServerAsync(server);
+            await DatabaseQueries.UpdateAsync(server);
             return logTypes;
         }
     }

@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             timer.Enabled = true;
             timer.Elapsed += async (sender, e) =>
             {
-                var users = await UserQueries.UsersWhoHaveAnActiveRatelimit();
+                var users = await DatabaseQueries.GetAllAsync<User>(x => x.ActiveRateLimit > 0);
 
                 foreach (var registeredUser in users)
                 {
@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     {
                         registeredUser.RateLimitWarnings = 0;
 
-                        await ConsoleLogger.LogAsync($"User [ID: {registeredUser.Id}] has had their Ratelimit Warnings reset " +
+                        await ConsoleLogger.LogAsync($"User [ID: {registeredUser.UserId}] has had their Ratelimit Warnings reset " +
                                           $"due to not being ratelimited for 30 days.", LogLvl.INFO);
                     }
 
@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         registeredUser.RateLimitWarnings++;
                         if (registeredUser.RateLimitWarnings > 7 && registeredUser.ActiveRateLimit > 0)
                         {
-                            var _user = ConfigProperties.Client.GetUser(registeredUser.Id);
+                            var _user = ConfigProperties.Client.GetUser(registeredUser.UserId);
                             
                             var _embed = new KaguyaEmbedBuilder
                             {
@@ -55,14 +55,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                             registeredUser.BlacklistExpiration = DateTime.MaxValue.ToOADate();
                             registeredUser.ActiveRateLimit = 0;
-                            await UserQueries.UpdateUserAsync(registeredUser);
+                            await DatabaseQueries.UpdateAsync(registeredUser);
 
                             await ConsoleLogger.LogAsync($"User [Name: {_user.Username} | ID: {_user.Id} | Supporter: {registeredUser.IsSupporter}] " +
                                                     "has been permanently blacklisted. Reason: Excessive Ratelimiting", LogLvl.WARN);
                             return;
                         }
 
-                        var user = ConfigProperties.Client.GetUser(registeredUser.Id);
+                        var user = ConfigProperties.Client.GetUser(registeredUser.UserId);
 
                         string[] durations = 
                         {
@@ -108,7 +108,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     if (registeredUser.ActiveRateLimit > 0)
                     {
                         registeredUser.ActiveRateLimit = 0;
-                        await UserQueries.UpdateUserAsync(registeredUser);
+                        await DatabaseQueries.UpdateAsync(registeredUser);
                     }
                 }
             };

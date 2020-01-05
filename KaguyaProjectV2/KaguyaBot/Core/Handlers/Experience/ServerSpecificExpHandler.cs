@@ -35,14 +35,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             if (server.ServerExp != null)
             {
-                userExpObj = server.ServerExp.FirstOrDefault(x => x.UserId == user.Id);
+                userExpObj = server.ServerExp.FirstOrDefault(x => x.UserId == user.UserId);
             }
             else
             {
                 userExpObj = new ServerExp
                 {
                     ServerId = server.ServerId,
-                    UserId = user.Id,
+                    UserId = user.UserId,
                     Exp = 0,
                     LatestExp = 0
                 };
@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             var expObject = new ServerExp
             {
                 ServerId = server.ServerId,
-                UserId = user.Id,
+                UserId = user.UserId,
                 Exp = userExpObj?.Exp ?? 0,
                 LatestExp = 0
             };
@@ -60,20 +60,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             expObject.Exp += exp;
             expObject.LatestExp = DateTime.Now.ToOADate();
-            await DatabaseQueries.UpdateServerExp(expObject);
+            await DatabaseQueries.InsertOrReplaceAsync(expObject);
 
             // We update server again below because we have to refresh the serverExp list.
 
             server = await DatabaseQueries.GetOrCreateServerAsync(server.ServerId);
             double newLevel = ReturnLevel(server, user);
             await ConsoleLogger.LogAsync(
-                $"[Server Exp]: User {user.Id}] has received {exp} exp. [Guild: {server.ServerId}] " +
+                $"[Server Exp]: User {user.UserId}] has received {exp} exp. [Guild: {server.ServerId}] " +
                 $"Total Exp: {expObject.Exp:N0}]", LogLvl.TRACE);
 
             if (HasLeveledUp((int) oldLevel, (int) newLevel))
             {
                 await ConsoleLogger.LogAsync(
-                    $"[Server Exp]: [Server {server.ServerId} | User {user.Id}] has leveled up! [Level: {(int)newLevel} | Experience: {GetExpForUser(server, user)}]",
+                    $"[Server Exp]: [Server {server.ServerId} | User {user.UserId}] has leveled up! [Level: {(int)newLevel} | Experience: {GetExpForUser(server, user)}]",
                     LogLvl.INFO);
 
                 if (levelAnnouncementChannel != null && levelAnnouncementChannel is SocketTextChannel textChannel)
@@ -92,16 +92,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             try
             {
                 double twoMinutesAgo = DateTime.Now.AddSeconds(-120).ToOADate();
-                return twoMinutesAgo >= serverExp.FirstOrDefault(x => x.UserId == user.Id)?.LatestExp;
+                return twoMinutesAgo >= serverExp.FirstOrDefault(x => x.UserId == user.UserId)?.LatestExp;
             }
             catch (NullReferenceException)
             {
-                await DatabaseQueries.AddServerSpecificExpForUser(new ServerExp
+                await DatabaseQueries.InsertAsync(new ServerExp
                 {
                     Exp = 0,
                     LatestExp = 0,
                     ServerId = server.ServerId,
-                    UserId = user.Id
+                    UserId = user.UserId
                 });
                 return true;
             }
@@ -126,7 +126,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         /// <returns></returns>
         private static int GetExpForUser(Server server, User user)
         {
-            return server.ServerExp?.FirstOrDefault(x => x.UserId == user.Id)?.Exp ?? 0;
+            return server.ServerExp?.FirstOrDefault(x => x.UserId == user.UserId)?.Exp ?? 0;
         }
 
         public static Embed LevelUpEmbed(User user, Server server, ICommandContext context)
@@ -140,7 +140,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 Description = $"`{context.User.Username}` just leveled up! \n" +
                               $"Server Level: `{(int)ReturnLevel(server, user)}` | EXP: `{exp:N0}`\n" +
                               $"Rank: `#{rank}/{server.ServerExp.ToList().Count:N0}`",
-                ThumbnailUrl = ConfigProperties.Client.GetUser(user.Id).GetAvatarUrl()
+                ThumbnailUrl = ConfigProperties.Client.GetUser(user.UserId).GetAvatarUrl()
             };
 
             return embed.Build();

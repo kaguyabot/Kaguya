@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -26,14 +27,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task UnmuteUser(IGuildUser user, [Remainder]string reason = null)
         {
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var mutedObject = DatabaseQueries.GetSpecificMutedUser(user.Id, server.ServerId);
+            var mutedObject =
+                await DatabaseQueries.GetFirstMatchAsync<MutedUser>(x => x.UserId == user.Id && x.ServerId == server.ServerId);
 
             if (mutedObject != null)
-                await DatabaseQueries.RemoveMutedUser(mutedObject);
+                await DatabaseQueries.DeleteAsync(mutedObject);
 
             if (server.IsPremium)
             {
-                await DatabaseQueries.UpdateServerAsync(server);
+                await DatabaseQueries.UpdateAsync(server);
 
                 await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
                 {

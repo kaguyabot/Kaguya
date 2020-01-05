@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
             KaguyaEmbedBuilder embed;
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var twitchChannels = await DatabaseQueries.GetTwitchChannelsForServer(server.ServerId);
+            var twitchChannels = await DatabaseQueries.FindAllForServerAsync<TwitchChannel>(server.ServerId);
             var twitchApi = ConfigProperties.TwitchApi;
             var userIndex = await twitchApi.V5.Users.GetUserByNameAsync(twitchChannelName);
 
@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                     return;
                 }
 
-                await DatabaseQueries.AddTwitchChannelAsync(tchannel);
+                await DatabaseQueries.InsertAsync(tchannel);
 
                 string mentionString = MentionString(mentionEveryone);
                 embed = new KaguyaEmbedBuilder
@@ -158,10 +158,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                         c.Channel.SendMessageAsync("Response has timed out."))
                 .WithCallback(new Emoji("✅"), async (c, r) =>
                 {
-                    await DatabaseQueries.RemoveTwitchChannel(twitchChannels.FirstOrDefault(item =>
+                    await DatabaseQueries.DeleteAsync(twitchChannels.FirstOrDefault(item =>
                         item.ChannelName == tchannel.ChannelName &&
                         item.TextChannelId == tchannel.TextChannelId));
-                    await DatabaseQueries.AddTwitchChannelAsync(tchannel);
+                    await DatabaseQueries.InsertAsync(tchannel);
                     await c.Channel.SendMessageAsync(embed: succEmbed2.Build());
                 })
                 .WithCallback(new Emoji("⛔"), async (c, r) => await c.Channel.SendMessageAsync(embed: nothingEmbed2.Build())));
@@ -175,13 +175,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
                         c.Channel.SendMessageAsync("Response has timed out."))
                 .WithCallback(new Emoji("✅"), async (c, r) =>
                 {
-                    await DatabaseQueries.RemoveTwitchChannel(serverTwitchChannels.FirstOrDefault(x => x.ChannelName == tchannel.ChannelName));
-                    await DatabaseQueries.AddTwitchChannelAsync(tchannel);
+                    await DatabaseQueries.DeleteAsync(serverTwitchChannels.FirstOrDefault(x => x.ChannelName == tchannel.ChannelName));
+                    await DatabaseQueries.InsertAsync(tchannel);
                     await c.Channel.SendMessageAsync(embed: succEmbed.Build());
                 })
                 .WithCallback(new Emoji("❔"), async (c, r) =>
                 {
-                    await DatabaseQueries.AddTwitchChannelAsync(tchannel);
+                    await DatabaseQueries.InsertAsync(tchannel);
                     await c.Channel.SendMessageAsync(embed: altEmbed.Build());
                 })
                 .WithCallback(new Emoji("⛔"), (c, r) => c.Channel.SendMessageAsync(embed: nothingEmbed.Build())));

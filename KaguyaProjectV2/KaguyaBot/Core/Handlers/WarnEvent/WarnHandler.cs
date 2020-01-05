@@ -1,6 +1,7 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
@@ -10,8 +11,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
     {
         public static async void OnWarn(object warn, WarnHandlerEventArgs args)
         {
-            var currentSettings = await DatabaseQueries.GetWarnConfigForServerAsync(args.server.ServerId);
-            var currentWarnings = await DatabaseQueries.GetWarningsForUserAsync(args.server.ServerId, args.warnedUser.UserId);
+            var currentSettings = await DatabaseQueries.FindFirstForServerAsync<WarnSetting>(args.server.ServerId);
+            var currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.server.ServerId, args.warnedUser.UserId);
             var warnCount = currentWarnings.Count;
 
             var guildUser = ConfigProperties.Client.GetGuild(args.warnedUser.ServerId).GetUser(args.warnedUser.UserId);

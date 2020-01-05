@@ -30,17 +30,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             user.Experience += exp;
             user.LatestExp = DateTime.Now.ToOADate();
-            await UserQueries.UpdateUserAsync(user);
+            await DatabaseQueries.UpdateAsync(user);
 
             double newLevel = ReturnLevel(user);
-            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.Id} has received {exp} exp. [New Total: {user.Experience:N0} Exp]", 
+            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has received {exp} exp. [New Total: {user.Experience:N0} Exp]", 
                 LogLvl.DEBUG);
 
             if (!HasLeveledUp(oldLevel, newLevel))
             {
                 return;
             }
-            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.Id} has leveled up! [Level: {newLevel} | EXP: {user.Experience:N0}]",
+            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has leveled up! [Level: {newLevel} | EXP: {user.Experience:N0}]",
                 DataStorage.JsonStorage.LogLvl.INFO);
             if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
             {
@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         private static async Task<Embed> LevelUpEmbed(User user, ICommandContext context)
         {
             int count = await UtilityQueries.GetCountOfUsersAsync();
-            var rankNum = UserQueries.GetGlobalExpRankIndex(user) + 1;
+            var rankNum = DatabaseQueries.GetGlobalExpRankIndex(user) + 1;
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
@@ -78,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 Description = $"`{context.User.Username}` just leveled up! \n" +
                               $"Level: `{(int)ReturnLevel(user)}` | EXP: `{user.Experience:N0}`\n" +
                               $"Rank: `#{rankNum}/{count:N0}`",
-                ThumbnailUrl = ConfigProperties.Client.GetUser(user.Id).GetAvatarUrl()
+                ThumbnailUrl = ConfigProperties.Client.GetUser(user.UserId).GetAvatarUrl()
             };
 
             return embed.Build();

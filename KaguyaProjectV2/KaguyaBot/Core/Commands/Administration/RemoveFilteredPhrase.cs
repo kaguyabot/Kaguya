@@ -11,7 +11,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class RemoveFilteredPhrase : ModuleBase<ShardedCommandContext>
+    public class DeleteAsync : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
         [Command("FilterRemove")]
@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 if (!allFp.Contains(fp)) continue;
 
-                DatabaseQueries.RemoveFilteredPhrase(fp);
+                DatabaseQueries.DeleteAsync(fp);
                 await ConsoleLogger.LogAsync($"Server {server.ServerId} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 

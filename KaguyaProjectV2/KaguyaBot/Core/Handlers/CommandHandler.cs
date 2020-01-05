@@ -44,9 +44,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (message == null || message.Author.IsBot) return;
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
-            User user = await UserQueries.GetOrCreateUserAsync(message.Author.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(message.Author.Id);
 
-            if (user.IsBlacklisted && user.Id != ConfigProperties.BotConfig.BotOwnerId) return;
+            if (user.IsBlacklisted && user.UserId != ConfigProperties.BotConfig.BotOwnerId) return;
             if (server.IsBlacklisted) return;
 
             var context = new ShardedCommandContext(_client, message);
@@ -57,8 +57,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             int argPos = 0;
 
-            await UserQueries.UpdateUserAsync(user);
-            await DatabaseQueries.UpdateServerAsync(server);
+            await DatabaseQueries.UpdateAsync(user);
+            await DatabaseQueries.UpdateAsync(server);
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
@@ -75,7 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 return;
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
-            User user = await UserQueries.GetOrCreateUserAsync(context.User.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
 
             if (result.IsSuccess)
             {
@@ -84,15 +84,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
                 await ConsoleLogger.LogAsync(context, LogLvl.INFO);
 
-                await UserQueries.AddCommandHistory(new CommandHistory
+                await DatabaseQueries.InsertAsync(new CommandHistory
                 {
                     Command = context.Message.Content,
                     Timestamp = DateTime.Now,
                     UserId = context.User.Id,
                     ServerId = context.Guild.Id
                 });
-                await DatabaseQueries.UpdateServerAsync(server);
-                await UserQueries.UpdateUserAsync(user);
+                await DatabaseQueries.UpdateAsync(server);
+                await DatabaseQueries.UpdateAsync(user);
                 return;
             }
 

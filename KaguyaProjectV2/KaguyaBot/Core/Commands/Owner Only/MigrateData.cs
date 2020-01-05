@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using LinqToDB;
+using LinqToDB.Data;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -33,11 +34,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             await ReplyAsync($"{Context.User.Mention} Migrating {oldUserJson.Count} accounts. Please wait...");
 
             var usersToCopy = new List<User>(oldUserJson.Count);
+            var existingUsers = await DatabaseQueries.GetAllAsync<User>();
             foreach (var u in oldUserJson)
             {
                 var newUser = new User
                 {
-                    Id = (ulong)u.ID,
+                    UserId = (ulong)u.ID,
                     Experience = u.EXP,
                     Points = u.Points,
                     OsuId = new OsuUserBuilder(u.OsuUsername).Execute()?.user_id ?? 0,
@@ -65,16 +67,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     Reminders = null
                 };
 
-                if (!await UserQueries.UserExistsInDatabaseAsync(newUser))
-                {
-                    usersToCopy.Add(newUser);
-                    await ConsoleLogger.LogAsync($"User {u.ID} added to list of users to be added.", LogLvl.TRACE);
-                }
+                if (existingUsers.Any(x => x.UserId == newUser.UserId)) 
+                    continue;
+
+                usersToCopy.Add(newUser);
+                await ConsoleLogger.LogAsync($"User {u.ID} added to list of users to be added.", LogLvl.TRACE);
             }
 
-            if (!UserQueries.AnyUserExistsInDatabase(usersToCopy))
+            if (!await DatabaseQueries.ItemExists(existingUsers, x => existingUsers.Any(y => y.UserId == x.UserId)))
             {
-                await UserQueries.BulkInsertUsersAsync(usersToCopy);
+                await DatabaseQueries.BulkCopy(usersToCopy);
                 await ConsoleLogger.LogAsync($"{usersToCopy.Count} users bulk-copied to database.", LogLvl.DEBUG);
             }
 

@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Remarks("")]
         public async Task Command()
         {
-            var user = await UserQueries.GetOrCreateUserAsync(Context.User.Id);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var points = user.Points;
 
             await Context.Channel.SendBasicSuccessEmbedAsync($"{Context.User.Mention} currently has " +
