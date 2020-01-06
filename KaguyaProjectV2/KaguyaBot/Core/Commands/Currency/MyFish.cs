@@ -34,6 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 await Context.Channel.SendBasicErrorEmbedAsync($"You have never fished before. Try it out with " +
                                                                $"`{server.CommandPrefix}fish`!");
+                return;
             }
 
             string ownedFishString = "";
