@@ -8,7 +8,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
     public class Roll : ModuleBase<ShardedCommandContext>
     {

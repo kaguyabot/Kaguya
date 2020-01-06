@@ -7,7 +7,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
-    public class SomeCommand : ModuleBase<ShardedCommandContext>
+    public class BuyBait : ModuleBase<ShardedCommandContext>
     {
         [CurrencyCommand]
         [Command("BuyBait")]

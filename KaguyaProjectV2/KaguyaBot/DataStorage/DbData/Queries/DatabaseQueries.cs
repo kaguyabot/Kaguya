@@ -9,6 +9,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using TwitchLib.Client.Events;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
@@ -28,6 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     {
                         ServerId = Id
                     });
+                    await ConsoleLogger.LogAsync($"User {Id} created.", LogLvl.TRACE);
                 }
 
                 return await (db.Servers
