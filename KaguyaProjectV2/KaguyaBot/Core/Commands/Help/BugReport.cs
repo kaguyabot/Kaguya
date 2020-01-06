@@ -8,7 +8,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     public class BugReport : ModuleBase<ShardedCommandContext>
     {
         [HelpCommand]
-        [Command("BugReport ")]
+        [Command("BugReport")]
         [Summary("Responds with a link to the bug report template. Requires a GitHub account.")]
         [Remarks("")]
         public async Task Command()
