@@ -13,14 +13,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     {
         [HelpCommand]
         [Command("BugReport")]
-        [Summary("Responds with a Google Form that is used to submit Kaguya Command bug reports. " +
-                 "Bugs not relating to commands may be sent by joining the " +
-                 "[Kaguya Support Discord Server](https://discord.gg/aumCJhr).")]
+        [Summary("Responds with a link to the bug report template. Requires a GitHub account.")]
         [Remarks("")]
         public async Task Command()
         {
-            var formLink = "https://forms.gle/w1K71FERrDFgTpGz6";
-            await Context.Channel.SendBasicSuccessEmbedAsync($"{Context.User.Mention} You may send a bug report [here]({formLink}).");
+            var formLink = "https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Bug&template=bug-report.md&title=";
+            await Context.Channel.SendBasicSuccessEmbedAsync($"[[Click Here]]({formLink}) to file a new bug-report issue " +
+                                                             $"on the Kaguya Github repository. This is the fastest possible " +
+                                                             $"way the bug will be fixed.\n\n" +
+                                                             $"Requires a GitHub account. Don't have one? " +
+                                                             $"[[Create a GitHub account]](https://github.com/join)");
         }
     }
 }
