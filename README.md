@@ -13,7 +13,7 @@ as it has today, so this change was absolutely necessary and was the core reason
 - $help <cmd> now displays the command's information much more clearly.
 - `Owner Only` commands are now only displayed for bot owners.
 
-## Command Changes
+## Command Changes: Administration
 
 - `$assignrole [ar]` has been renamed to `$addrole [ar]`
 - `$antiraid` no longer has the intuitive setup that V1 has. This way changes to the anti-raid config may be made on the fly.
@@ -33,4 +33,10 @@ as it has today, so this change was absolutely necessary and was the core reason
 - `$warnoptions [wo]` has been **removed**.
 - `$warnset [ws]` has been renamed to `$warnsettings [warnset] [ws]`
 - `$warnpunishments [wp]` has been removed. `$warnset` used without any arguments displays the server's warn-punishment scheme.
-- 
+
+## Other Command Changes:
+
+- New server-specific `$praise` feature added. This is essentially `$rep` but for servers. There is more functionality with this that server administrators have control over, such as the cooldown.
+- **New game: `$fish`!** Collect fish and hunt for the **Legendary Big Kahuna!** Fish may be caught, collected, and sold.
+- `Critical Hits` removed from all games.
+- `$tictactoe` removed (it was terrible anyway)
