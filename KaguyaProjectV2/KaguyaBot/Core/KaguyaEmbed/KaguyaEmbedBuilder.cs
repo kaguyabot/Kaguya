@@ -1,4 +1,5 @@
 ﻿using Discord;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
 {
@@ -22,6 +23,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
         public KaguyaEmbedBuilder()
         {
             SetColor();
+            if (ConfigProperties.Version.ToLower().Contains("a"))
+            {
+                Description += ($"\n\n```====================BETA DISCLAIMER=========================```\n`Kaguya Bot Open-Beta: v{ConfigProperties.Version}`\n\n" +
+                                $"`Lots of commands have been renamed. Lots of features are only partially implemented " +
+                                $"or they are completely missing. Any user data, including fish, points, etc., will be deleted upon " +
+                                $"release of v2. Please report any bugs that you encounter, and please feel free to make feature " +
+                                $"requests on GitHub (even if you think they may be on the to-do list already). Thank you " +
+                                $"for participating in the open beta!`\n" +
+                                $"[[Current Changes]](https://github.com/stageosu/Kaguya/blob/v2.0/README.md) " +
+                                $"[[Report Bug]](https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Bug&template=bug-report.md&title=) " +
+                                $"[[Request Feature]](https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Feature+Request&template=feature-request.md&title=)");
+            }
         }
 
         public KaguyaEmbedBuilder(EmbedColor type)
