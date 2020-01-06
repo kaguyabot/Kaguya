@@ -41,3 +41,4 @@ as it has today, so this change was absolutely necessary and was the core reason
 - `Critical Hits` removed from all games.
 - `$tictactoe` removed (it was terrible anyway)
 - `$bugreport` will now simply reply with a link to the bug report Google form.
+- `$masspointsdistribute` has been removed.
