@@ -12,15 +12,14 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
     public class SellFish : InteractiveBase<ShardedCommandContext>
     {
-        [FunCommand]
+        [CurrencyCommand]
         [Command("SellFish")]
         [Alias("sf", "sell")]
         [Summary("Allows you to sell one of your fish or all of the fish you have that are of a specific type. " +

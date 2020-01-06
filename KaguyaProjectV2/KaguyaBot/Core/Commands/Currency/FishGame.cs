@@ -12,11 +12,11 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
     public class FishGame : InteractiveBase<ShardedCommandContext>
     {
-        [FunCommand]
+        [CurrencyCommand]
         [Command("Fish")]
         [Alias("f")]
         [Summary("Allows you to play the fishing game! Requires one bait per play. Bait may be purchased with " +

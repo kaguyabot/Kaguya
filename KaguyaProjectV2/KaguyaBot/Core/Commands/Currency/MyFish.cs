@@ -13,11 +13,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
     public class MyFish : InteractiveBase<ShardedCommandContext>
     {
-        [FunCommand]
+        [CurrencyCommand]
         [Command("MyFish")]
         [Alias("mf")]
         [Summary("Displays all of your fishing stats, including how many fish you've bought and sold!")]

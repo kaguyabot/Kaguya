@@ -1,14 +1,13 @@
-﻿using System;
-using System.Linq;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System.Threading.Tasks;
 using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -16,7 +15,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     {
         [AdminCommand]
         [Command("AntiRaid")]
-        [Alias("ar")]
         [Summary("Enables the antiraid service for this server. When enabled, the antiraid will either " +
                  "`mute`, `kick`, `ban`, or `shadowban` all members who join within the specified time frame.\n\n" +
                  "The `users` parameter determines how many users are allowed to join within the amount of " +

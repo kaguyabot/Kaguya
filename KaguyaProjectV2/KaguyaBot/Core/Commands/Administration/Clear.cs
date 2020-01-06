@@ -1,17 +1,15 @@
 ﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord.WebSocket;
-using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -19,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     {
         [AdminCommand]
         [Command("Clear", RunMode = RunMode.Async)]
-        [Alias("c", "p", "purge")]
+        [Alias("c", "purge")]
         [Summary("Clears the specified amount of messages from the current channel. " +
                  "If no value is specified, 10 messages will be cleared. A moderator " +
                  "may also specify a reason for clearing the messages. Premium servers " +
@@ -30,6 +28,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ViewAuditLog)]
         public async Task ClearMessages(int amount = 10, string reason = null)
         {
+            if (amount > 1000)
+            {
+                await Context.Channel.SendBasicErrorEmbedAsync("You may not clear more than `1,000` messages " +
+                                                               "at a time.");
+                return;
+            }
+
+            if (amount < 1)
+            {
+                await Context.Channel.SendBasicErrorEmbedAsync("You must clear at least 1 message.");
+                return;
+            }
+
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             KaguyaEmbedBuilder embed;
 
