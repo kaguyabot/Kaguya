@@ -15,7 +15,6 @@ as it has today, so this change was absolutely necessary and was the core reason
 
 ## Command Changes: Administration
 
-- `$assignrole [ar]` has been renamed to `$addrole [ar]`
 - `$antiraid` no longer has the intuitive setup that V1 has. This way changes to the anti-raid config may be made on the fly.
 - `$antiraidoff` has been **removed.** Using `$antiraid` by itself will disable it.
 - `$channelblacklist [cbl]` has been completely reworked (it's awesome).
