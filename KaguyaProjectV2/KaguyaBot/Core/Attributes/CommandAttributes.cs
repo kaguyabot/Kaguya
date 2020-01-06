@@ -4,6 +4,8 @@ using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+
 #pragma warning disable 1998
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
@@ -70,8 +72,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
-
-            return Task.FromResult(user.Result.IsSupporter ? PreconditionResult.FromSuccess() : 
+            bool inBeta = ConfigProperties.Version.ToLower().Contains("a");
+            return Task.FromResult(user.Result.IsSupporter && !inBeta ? PreconditionResult.FromSuccess() : 
                 PreconditionResult.FromError("Sorry, but you must be a supporter to use this command."));
         }
     }
@@ -82,8 +84,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var server = DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
-
-            return Task.FromResult(server.Result.IsPremium ? PreconditionResult.FromSuccess() :
+            bool inBeta = ConfigProperties.Version.ToLower().Contains("a");
+            return Task.FromResult(server.Result.IsPremium && !inBeta ? PreconditionResult.FromSuccess() :
                 PreconditionResult.FromError("Sorry, but this server must be of premium status in order to use this command."));
         }
     }
