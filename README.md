@@ -10,7 +10,7 @@ as it has today, so this change was absolutely necessary and was the core reason
 - All commands are now signinifcantly more intuitive and functional than V1.
 - Arguments may now be passed when launching the program instead of relying on a JSON "config" file. If no arguments are passed, the config file will be used as an alternative way to retreive credentials.
 - Kaguya is now as reliable as ever and is many times more efficient than V1.
-- $help <cmd> now displays the command's information much more clearly.
+- `$help <cmd>` now displays the command's information much more clearly.
 - `Owner Only` commands are now only displayed for bot owners.
 
 ## Command Changes: Administration
