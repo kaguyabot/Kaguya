@@ -3,8 +3,10 @@ using Discord.Commands;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -14,10 +16,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class AddRole : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("AddRole")]
+        [Command("AssignRole")]
         [Alias("ar")]
         [Summary("Takes a user and assigns them a role or list of roles. If a role has a space in the name, " +
-                 "surround it with quotation marks. New roles are separated by spaces.")]
+                 "surround it with quotation marks. New roles are separated by spaces. This command does support Role IDs.")]
         [Remarks("<user> <role> {...}")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -26,7 +28,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             int i = 0;
             foreach(string roleName in args)
             {
-                var role = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
+                var role = roleName.AsUlong(false) != 0 ? 
+                    Context.Guild.GetRole(roleName.AsUlong()) : 
+                    Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
                 try
                 {
                     await user.AddRoleAsync(role);
