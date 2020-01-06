@@ -32,10 +32,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task UnWarnUser(IGuildUser user, string reason = null)
         {
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var warnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(Context.Guild.Id, user.Id);
+            var warnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.Id, server.ServerId);
+            var warnCount = warnings.Count;
             var fields = new List<EmbedFieldBuilder>();
-
-            int warnCount = warnings.Count;
 
             if (warnCount > 4 && !server.IsPremium)
                 warnCount = 4;

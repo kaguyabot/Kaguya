@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Discord.Commands;
-using Discord.WebSocket;
+﻿using Discord.Commands;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
@@ -12,7 +6,10 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Discord;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -27,33 +24,67 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                  "override this blacklist, and will not notice its effect. Level-up announcements will, however, " +
                  "still be disabled even if they are an `Administrator`.\n\n" +
                  "**Arguments:**\n\n" +
+                 "The `-r` argument may be passed to unblacklist a channel (either the current channel or the specified one).\n" +
                  "The `-all` argument may be passed to completely disable Kaguya in the entire server.\n" +
                  "The `-clear` argument may be passed to lift all existing blacklists.\n" +
                  "The `-t` argument may be used to specify a time, and can be added to the other arguments as well! " +
                  "Seconds, minutes, hours, and even days may be passed in as an argument.\n\n" +
-                 "To blacklist a specific channel, pass in it's `ID` or `Name`. If you don't know the ID (or " +
-                 "the channel has an obscure name), you can simply use this command without an argument to " +
-                 "blacklist the current channel immediately.")]
-        [Remarks("(<= blacklists current channel)\n-all (<= blacklists all channels)\n" +
-                 "-clear(<= removes all blacklists)\n<ID/Name> (<= blacklists a specific channel)\n" +
+                 "To blacklist a specific channel, pass in its `ID`. If you don't know the ID, " +
+                 "you can simply use this command without an argument to " +
+                 "blacklist the channel this command was executed from.")]
+        [Remarks("(<= blacklists current channel)\n<ID> (<= blacklists a specific channel)\n" +
+                 "-r (<= Un-blacklists the current channel)\n" +
+                 "-r <ID> (<= Un-blacklists the specified channel)." +
+                 "\n-all (<= blacklists all channels)\n" +
+                 "-clear(<= removes all blacklists)\n" +
                  "-t 35m (<= blacklists current channel for 35 minutes)\n-all -t 12d36h (<= blacklists " +
                  "all channels for 12 days and 36 hours.)")]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Command(params string[] _)
         {
             var args = _.ToList();
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var currentBlacklists = server.BlackListedChannels.ToList();
 
-            bool hasT = false;
-            bool hasAll = false;
+            var hasT = false;
+            var hasAll = false;
 
-            double expiration = DateTime.MaxValue.ToOADate();
-            string expirationString = expiration == DateTime.MaxValue.ToOADate() ? "" : $"This blacklist will expire in " +
-                                                                                        $"`{(DateTime.FromOADate(expiration) - DateTime.Now).Humanize()}`";
+            var expiration = DateTime.MaxValue.ToOADate();
+            var expirationString = "This blacklist will never expire.";
+
+            if (args.Any(x => x.ToLower().Contains("-r")))
+            {
+                if (args.Count > 2)
+                {
+                    goto ArgumentProcessException;
+                }
+                if(args.Count == 1)
+                {
+                    var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
+                        x.ChannelId == Context.Channel.Id && x.ServerId == Context.Guild.Id);
+                    await DatabaseQueries.DeleteAsync(curUnblacklist);
+
+                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
+                                                                     $"`{Context.Channel.Name}`");
+                    return;
+                }
+                if (args.Count == 2)
+                {
+                    var toUnblacklistChannel = Context.Guild.GetTextChannel(args[1].AsUlong());
+                    var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
+                        x.ChannelId == toUnblacklistChannel.Id && x.ServerId == Context.Guild.Id);
+                    await DatabaseQueries.DeleteAsync(curUnblacklist);
+
+                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
+                                                                     $"`{Context.Channel.Name}`");
+                    return;
+                }
+            }
+
             if (args.Any(x => x.ToLower().Contains("-t")))
             {
                 var tIndex = args.FindIndex(x => x.ToLower().Contains("-t"));
-                TimeSpan ts = TimeSpan.MaxValue;
+                var ts = TimeSpan.MaxValue;
                 try
                 {
                     ts = args[tIndex + 1].ParseToTimespan();
@@ -79,13 +110,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 expiration = (DateTime.Now + ts).ToOADate();
                 hasT = true;
 
+                // We have this twice because tIndex will be "0" both times after the first one is removed.
+                // $cbl -t 30m => Index 0 is removed, indexoutofrange ex. thrown for tIndex + 1 (which is now 0).
+                expirationString = expiration == DateTime.MaxValue.ToOADate()
+                    ? "This will last until cancelled."
+                    : $"This blacklist will expire in `{(DateTime.FromOADate(expiration) - DateTime.Now).Humanize()}`";
+
                 args.RemoveAt(tIndex);
-                args.RemoveAt(tIndex + 1);
+                args.RemoveAt(tIndex);
             }
 
             // Since we set the "time args" to null above, we can now do normal checks :)
             if (args.Any(x => x.ToLower().Contains("-all")))
             {
+                if(args.Count > 1)
+                    goto ArgumentProcessException;
+
+                await DatabaseQueries.DeleteAllForServerAsync<BlackListedChannel>(server.ServerId);
                 var allIndex = args.FindIndex(x => x.ToLower().Contains("-all"));
                 args.RemoveAt(allIndex);
                 hasAll = true;
@@ -94,15 +135,40 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             if (!hasAll && args.Any(x => x.ToLower().Contains("-clear")))
             {
                 if (args.Count > 1)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(args), "You cannot specify more than " +
-                                                                        "one argument if using `-clear`.");
-                }
+                    goto ArgumentProcessException;
 
                 await DatabaseQueries.DeleteAllForServerAsync<BlackListedChannel>(server.ServerId);
                 await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully cleared `{currentBlacklists.Count}` " +
                                                                  $"channels from the blacklist.");
                 return;
+            }
+
+            if (args.Count == 1) // See if the arg is actually a channel in this guild
+            {
+                if (args.Any(x => x.Contains("-")))
+                {
+                    goto ArgumentProcessException;
+                }
+                try
+                {
+                    var channel = Context.Guild.GetTextChannel(args[0].AsUlong()); // Extensions ;)
+                    var cbl = new BlackListedChannel
+                    {
+                        ServerId = Context.Guild.Id,
+                        ChannelId = channel.Id,
+                        Expiration = expiration
+                    };
+
+                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully blacklisted channel `{channel}`. " +
+                                                                     $"{expirationString}");
+
+                    await DatabaseQueries.InsertAsync(cbl);
+                    return;
+                }
+                catch (NullReferenceException)
+                {
+                    throw new KaguyaSupportException($"The specified channel ID does not exist in this server.");
+                }
             }
 
             if (args.Count == 0)
@@ -121,8 +187,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         await DatabaseQueries.InsertAsync(cbl);
                     }
 
-                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully blacklisted `{Context.Guild.Channels.Count}` " +
-                                                                     $"channels. {expirationString}");
+                    await Context.Channel.SendBasicSuccessEmbedAsync(
+                        $"Successfully blacklisted `{Context.Guild.Channels.Count}` " +
+                        $"channels. {expirationString}");
+                    return;
                 }
                 else
                 {
@@ -134,9 +202,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     };
 
                     await DatabaseQueries.InsertAsync(cbl);
-                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully blacklisted this channel. {expirationString}");
+                    await Context.Channel.SendBasicSuccessEmbedAsync(
+                        $"Successfully blacklisted this channel. {expirationString}");
+                    return;
                 }
             }
+
+            ArgumentProcessException:
+            throw new KaguyaSupportException("The specified arguments were unable to be processed.");
         }
     }
 }

@@ -18,11 +18,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Exceptions
         /// At the end of the message, the Kaguya Support Discord Server is automatically linked
         /// so that the user may find additional support.
         /// </summary>
-        public KaguyaSupportException(string message) : base(message)
+        public KaguyaSupportException(string message) : base(KaguyaSupportExceptionMessage(message))
+        { }
+        private static string KaguyaSupportExceptionMessage(string msg)
         {
-            message += $"\n\nPlease join this server for additional assistance: " +
-                       $"[[Kaguya Support Discord Server]]({ConfigProperties.KaguyaSupportDiscordServer})";
+            return msg + $"\n\nPlease join this server if additional assistance is needed: " +
+                $"\n[[Kaguya Support Discord Server]]({ConfigProperties.KaguyaSupportDiscordServer})";
         }
+
 
         /// <summary>
         /// Throws a new <see cref="KaguyaSupportException"/>, displaying a message with an inner exception.

@@ -14,7 +14,6 @@ using TwitchLib.Client.Events;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     // TODO: ConfigureAwait(false) on ALL queries.
-    // TODO: Replace ALL queries with generic queries.
     public static class DatabaseQueries
     {
         public static async Task<Server> GetOrCreateServerAsync(ulong Id)
