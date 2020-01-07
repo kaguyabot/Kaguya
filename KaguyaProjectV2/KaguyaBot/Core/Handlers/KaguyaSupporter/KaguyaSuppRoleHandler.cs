@@ -5,6 +5,7 @@ using System.Timers;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
@@ -22,7 +23,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                 var client = ConfigProperties.Client;
                 var kaguyaSupportServer = client.GetGuild(546880579057221644); //Kaguya Support Discord Server
 
-                var supporters = await UtilityQueries.GetAllActiveSupporterKeysAsync();
+                var supporters = await DatabaseQueries.GetAllAsync<SupporterKey>(x =>
+                    x.Expiration > DateTime.Now.ToOADate() &&
+                    x.UserId != 0);
 
                 foreach (var supporter in supporters)
                 {
@@ -43,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 
                 // Check for expired supporter tags.
 
-                var expiredSupporters = await UtilityQueries.GetAllExpiredSupporterKeysAsync();
+                var expiredSupporters = await DatabaseQueries.GetAllAsync<SupporterKey>(x => x.Expiration < DateTime.Now.ToOADate());
 
                 foreach (var expSupporter in expiredSupporters)
                 {

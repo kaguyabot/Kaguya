@@ -27,7 +27,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Exceptions
                    $"[[Report a bug]](https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Bug&template=bug-report.md&title=)";
         }
 
-
         /// <summary>
         /// Throws a new <see cref="KaguyaSupportException"/>, displaying a message with an inner exception.
         /// At the end of the message, the Kaguya Support Discord Server is automatically linked

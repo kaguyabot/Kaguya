@@ -37,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="KaguyaBot\Core\Commands\Fun\" />
     <Folder Include="KaguyaBot\Core\Commands\Music\" />
   </ItemGroup>
 

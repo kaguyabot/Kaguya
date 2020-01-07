@@ -30,10 +30,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
             RegexTimeParser.Parse(duration, out int sec, out int min, out int hour, out int day);
 
-            TimeSpan timeSpan = RegexTimeParser.ParseToTimespan(duration);
+            TimeSpan timeSpan = duration.ParseToTimespan();
             long timeInSeconds = (long)timeSpan.TotalSeconds;
 
-            var existingKeys = await UtilityQueries.GetAllActiveSupporterKeysAsync();
+            var existingKeys = await DatabaseQueries.GetAllAsync<SupporterKey>(x =>
+                x.Expiration > DateTime.Now.ToOADate() &&
+                x.UserId != 0);
             List<PremiumKey> keys = new List<PremiumKey>();
 
             for (int i = 0; i < amount; i++)

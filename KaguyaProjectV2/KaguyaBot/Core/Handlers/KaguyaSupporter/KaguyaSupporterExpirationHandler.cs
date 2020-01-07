@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using System.Timers;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
@@ -23,7 +24,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 
             timer.Elapsed += async (sender, args) =>
             {
-                foreach (var suppKeyObject in await UtilityQueries.GetAllExpiredSupporterKeysAsync())
+                var allKeys = await DatabaseQueries.GetAllAsync<SupporterKey>(x => x.Expiration < DateTime.Now.ToOADate());
+                foreach (var suppKeyObject in allKeys)
                 {
                     if (suppKeyObject.Expiration < DateTime.Now.ToOADate() && suppKeyObject.Expiration > 1)
                     {
@@ -58,7 +60,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                                               $"but their DMs are closed.", LogLvl.DEBUG);
                         }
 
-                        await UtilityQueries.DeleteSupporterKeyAsync(suppKeyObject);
+                        await DatabaseQueries.DeleteAsync(suppKeyObject);
                     }
                 }
             };

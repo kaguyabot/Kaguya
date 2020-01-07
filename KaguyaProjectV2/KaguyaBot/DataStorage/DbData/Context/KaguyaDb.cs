@@ -12,6 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
         public ITable<AutoAssignedRole> AutoAssignedRoles => GetTable<AutoAssignedRole>();
         public ITable<BlackListedChannel> BlackListedChannels => GetTable<BlackListedChannel>();
         public ITable<CommandHistory> CommandHistories => GetTable<CommandHistory>();
+        public ITable<EightBall> EightBall => GetTable<EightBall>();
         public ITable<FilteredPhrase> FilteredPhrases => GetTable<FilteredPhrase>();
         public ITable<Fish> Fish => GetTable<Fish>();
         public ITable<GambleHistory> GambleHistories => GetTable<GambleHistory>();

@@ -111,11 +111,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (userPerms.Administrator)
                 return false;
 
-            List<FilteredPhrase> fp = server.FilteredPhrases.ToList() ;
-
+            var fp = server.FilteredPhrases.ToList() ;
             if (fp.Count == 0) return false;
 
-            List<string> phrases = new List<string>();
+            var phrases = new List<string>();
 
             foreach (var element in fp) { phrases.Add(element.Phrase); }
             foreach(var phrase in phrases)

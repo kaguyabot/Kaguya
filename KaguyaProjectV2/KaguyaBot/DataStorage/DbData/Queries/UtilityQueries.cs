@@ -14,68 +14,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     public class UtilityQueries
     {
-        public static async Task AddOrReplaceSupporterKeyAsync(SupporterKey key)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.InsertOrReplaceAsync(key);
-            }
-        }
-
-        public static async Task<bool> SupporterKeyExistsAsync(SupporterKey key)
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from k in db.SupporterKeys
-                    where k.Key == key.Key
-                    select k != null).FirstAsync();
-            }
-        }
-
-        public static void AddSupporterKeys(IEnumerable<SupporterKey> keys)
-        {
-            using (var db = new KaguyaDb())
-            {
-                db.BulkCopy(keys);
-            }
-        }
-
-        public static async Task DeleteSupporterKeyAsync(SupporterKey key)
-        {
-            using (var db = new KaguyaDb())
-            {
-                await db.DeleteAsync(key);
-            }
-        }
-
-        public static async Task<IEnumerable<SupporterKey>> GetAllExpiredSupporterKeysAsync()
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from s in db.SupporterKeys
-                    where s.Expiration < DateTime.Now.ToOADate()
-                    select s).ToListAsync();
-            }
-        }
-
-        public static async Task<List<SupporterKey>> GetAllActiveSupporterKeysAsync()
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from s in db.SupporterKeys
-                    where s.Expiration > DateTime.Now.ToOADate() && s.UserId != 0
-                    select s).ToListAsync();
-            }
-        }
-
-        public static async Task<List<SupporterKey>> GetAllSupporterKeysAsync()
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await db.GetTable<SupporterKey>().ToListAsync();
-            }
-        }
-
         /// <summary>
         /// Returns an IEnumerable<SupporterKey> containing a collection of all keys that a user has active currently.</SupporterKey> 
         /// </summary>
