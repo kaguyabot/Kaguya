@@ -23,7 +23,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Exceptions
         private static string KaguyaSupportExceptionMessage(string msg)
         {
             return msg + $"\n\nPlease join this server if additional assistance is needed: " +
-                $"\n[[Kaguya Support Discord Server]]({ConfigProperties.KaguyaSupportDiscordServer})";
+                   $"\n[[Kaguya Support Discord Server]]({ConfigProperties.KaguyaSupportDiscordServer})\n" +
+                   $"[[Report a bug]](https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Bug&template=bug-report.md&title=)";
         }
 
 

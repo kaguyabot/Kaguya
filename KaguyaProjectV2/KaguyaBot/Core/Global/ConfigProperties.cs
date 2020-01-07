@@ -1,9 +1,6 @@
 ﻿using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using System.IO;
 using TwitchLib.Api;
 
 #pragma warning disable

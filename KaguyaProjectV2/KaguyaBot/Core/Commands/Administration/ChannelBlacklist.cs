@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
+using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -151,7 +152,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 }
                 try
                 {
-                    var channel = Context.Guild.GetTextChannel(args[0].AsUlong()); // Extensions ;)
+                    SocketTextChannel channel;
+                    try
+                    {
+                        channel = Context.Guild.GetTextChannel(args[0].AsUlong());
+                    }
+                    catch(Exception)
+                    {
+                        try
+                        {
+                            // Replaces the <#> in <#94580295820586> (some random ID)
+                            args[0] = args[0].Replace("<#", "").Replace(">", "");
+                            channel = Context.Guild.GetTextChannel(args[0].AsUlong());
+                        }
+                        catch(Exception)
+                        {
+                            throw new KaguyaSupportException("I was unable to parse this input as a valid channel ID.");
+                        }
+                    }
+
+
                     var cbl = new BlackListedChannel
                     {
                         ServerId = Context.Guild.Id,
