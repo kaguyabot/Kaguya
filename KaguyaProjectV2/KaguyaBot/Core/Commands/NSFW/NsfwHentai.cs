@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using SearchResult = BooruSharp.Search.Post.SearchResult;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 {
@@ -20,21 +21,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         [Remarks("")]
         public async Task Command()
         {
+            var img = await GetHentaiAsync("sex", "breasts", "cum");
+        }
+
+        public async Task<SearchResult> GetHentaiAsync(params string[] tags)
+        {
             var userName = ConfigProperties.BotConfig.DanbooruUsername;
             var apiKey = ConfigProperties.BotConfig.DanbooruApiKey;
 
             var auth = new BooruAuth(userName, apiKey);
             var konachan = new Konachan(auth);
 
-            await ConsoleLogger.LogAsync($"Loading 1 NSFW image.", LogLvl.DEBUG);
-
             WebClient wc = new WebClient();
 
-            var img = await konachan.GetRandomImage("sex", "long_hair", "breasts", "cum", "thighhighs");
-            using (MemoryStream stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.fileUrl).ConfigureAwait(false)))
+            var img = await konachan.GetRandomImage(tags).ConfigureAwait(false);
+            using (MemoryStream stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.previewUrl).ConfigureAwait(false)))
             {
                 await Context.Channel.SendFileAsync(stream, "Kaguya_NSFW.jpg");
             }
+
+            return img;
         }
     }
 }
