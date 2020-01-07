@@ -35,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
             WebClient wc = new WebClient();
 
             var img = await konachan.GetRandomImage(tags).ConfigureAwait(false);
-            using (MemoryStream stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.previewUrl).ConfigureAwait(false)))
+            using (MemoryStream stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.fileUrl).ConfigureAwait(false)))
             {
                 await Context.Channel.SendFileAsync(stream, "Kaguya_NSFW.jpg");
             }
