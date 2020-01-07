@@ -1,20 +1,20 @@
 ﻿using Discord;
+using Discord.Net;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using Discord.Net;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 
@@ -146,12 +146,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)
         {
             return client.Shards.Count == config.TotalShards;
-        }
-
-        private async Task PopulateHentai(int count)
-        {
-            var n = new NsfwHentai();
-            await n.LoadHentaiAsync(count, true);
         }
     }
 }

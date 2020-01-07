@@ -42,7 +42,8 @@ as it has today, so this change was absolutely necessary and was the core reason
 - `$bugreport` will now simply reply with a link to the bug report Google form.
 - `$masspointsdistribute` has been removed.
 
-## Structural Changes:
+## Quality of life Changes:
 
 - 1-4 points are now earned automatically for typing in chat at the same time you earn exp. *Only being able to earn points through betting and "timely" claims was unfun. Now, points can be earned passively so that you can buy fish bait, bet, etc. whenever it's convenient!*
+- NSFW age verification requirement has been removed.
 - 
