@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
@@ -42,6 +43,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             }
             await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has leveled up! [Level: {newLevel} | EXP: {user.Experience:N0}]",
                 DataStorage.JsonStorage.LogLvl.INFO);
+
+            // Don't send announcement if the channel is blacklisted.
+            if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id))
+                return;
+
             if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
             {
                 await textChannel.SendMessageAsync(embed: await LevelUpEmbed(user, context));

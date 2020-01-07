@@ -71,6 +71,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 }
                 if (args.Count == 2)
                 {
+                    // Replaces the <#> in <#94580295820586> (some random ID)
+                    args[1] = args[1].Replace("<#", "").Replace(">", "");
+
                     var toUnblacklistChannel = Context.Guild.GetTextChannel(args[1].AsUlong());
                     var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
                         x.ChannelId == toUnblacklistChannel.Id && x.ServerId == Context.Guild.Id);

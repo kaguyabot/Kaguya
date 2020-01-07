@@ -76,6 +76,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                     $"[Server Exp]: [Server {server.ServerId} | User {user.UserId}] has leveled up! [Level: {(int)newLevel} | Experience: {GetExpForUser(server, user)}]",
                     LogLvl.INFO);
 
+                // Don't send announcement if the channel is blacklisted.
+                if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id))
+                    return;
+
                 if (levelAnnouncementChannel != null && levelAnnouncementChannel is SocketTextChannel textChannel)
                 {
                     await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, server, context));

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
@@ -14,6 +9,11 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -50,7 +50,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (server.IsBlacklisted) return;
 
             var context = new ShardedCommandContext(_client, message);
-            await IsFilteredPhrase(context, server, message);
+            await IsFilteredPhrase(context, server, message); // If filtered phrase (and user isn't admin), return.
+
+            // If the channel is blacklisted and the user isn't an Admin, return.
+            if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) && 
+                !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
+                return;
 
             await ExperienceHandler.AddExp(user, context);
             await ServerSpecificExpHandler.AddExp(user, server, context);
