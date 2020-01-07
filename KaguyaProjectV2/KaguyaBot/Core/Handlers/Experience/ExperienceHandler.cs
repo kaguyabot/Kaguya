@@ -28,13 +28,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             Random r = new Random();
             int exp = r.Next(5, 8);
+            int points = r.Next(1, 4);
 
             user.Experience += exp;
+            user.Points += points;
             user.LatestExp = DateTime.Now.ToOADate();
             await DatabaseQueries.UpdateAsync(user);
 
             double newLevel = ReturnLevel(user);
-            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has received {exp} exp. [New Total: {user.Experience:N0} Exp]", 
+            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has received {exp} exp and {points} points. [New Total: {user.Experience:N0} Exp]", 
                 LogLvl.DEBUG);
 
             if (!HasLeveledUp(oldLevel, newLevel))

@@ -3,10 +3,10 @@
 
 ## Core Changes:
 
-- Data storage overhaul: From JSON to MySQL. *Comments: Kaguya Version 1 was using a single JSON file to store data for over 85,000 users. 
+- Data storage overhaul: From JSON to MySQL. *Kaguya Version 1 was using a single JSON file to store data for over 85,000 users. 
 This resulted in absurd amounts of overwrites that would periodically make Kaguya crash. I never intended for Kaguya to grow as large 
 as it has today, so this change was absolutely necessary and was the core reason for the rewrite.*
-- Cleaner, more organized code all around. *Comments: I have learned quite a lot since my initial viewing of a "C# Discord Bot Tutorial" video. My knowledge is certainly reflected in the codebase, and I will continue to improve things overtime where I can.*
+- Cleaner, more organized code all around. *I have learned quite a lot since my initial viewing of a "C# Discord Bot Tutorial" video. My knowledge is certainly reflected in the codebase, and I will continue to improve things overtime where I can.*
 - All commands are now signinifcantly more intuitive and functional than V1.
 - Arguments may now be passed when launching the program instead of relying on a JSON "config" file. If no arguments are passed, the config file will be used as an alternative way to retreive credentials.
 - Kaguya is now as reliable as ever and is many times more efficient than V1.
@@ -41,3 +41,8 @@ as it has today, so this change was absolutely necessary and was the core reason
 - `$tictactoe` removed (it was terrible anyway)
 - `$bugreport` will now simply reply with a link to the bug report Google form.
 - `$masspointsdistribute` has been removed.
+
+## Structural Changes:
+
+- 1-4 points are now earned automatically for typing in chat at the same time you earn exp. *Only being able to earn points through betting and "timely" claims was unfun. Now, points can be earned passively so that you can buy fish bait, bet, etc. whenever it's convenient!*
+- 
