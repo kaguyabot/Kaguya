@@ -43,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
             _client = new DiscordShardedClient(config);
 
-            await SetupKaguya(); //Checks for valid database connection
+            await SetupKaguya();
             using (var services = new SetupServices().ConfigureServices(config, _client))
             {
                 try
@@ -87,10 +87,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         public async Task SetupKaguya()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("========== KaguyaBot Version 2.0 ==========");
-
-            _ = new KaguyaBot.DataStorage.DbData.Context.Init();
-            await ConsoleLogger.LogAsync("Successfully established database connection", LogLvl.INFO);
+            Console.WriteLine($"========== KaguyaBot Version {ConfigProperties.Version} ==========");
         }
 
         private void GlobalPropertySetup(ConfigModel _config)
@@ -104,7 +101,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             try
             {
-                if(TestQueries.TestConnection().ToString() == "True")
+                _ = new KaguyaBot.DataStorage.DbData.Context.Init();
+                if (await DatabaseQueries.TestConnection())
                 {
                     await ConsoleLogger.LogAsync("Database connection successfully established.", LogLvl.INFO);
                 }

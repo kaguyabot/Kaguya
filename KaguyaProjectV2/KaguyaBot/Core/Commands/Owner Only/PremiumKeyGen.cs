@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 await Context.User.SendFileAsync(memoryStream, $"{keys.Count} Keys.txt");
             }
 
-            UtilityQueries.AddPremiumKeys(keys);
+            await DatabaseQueries.BulkCopy(keys);
             await ChatReply(RegexTimeParser.FormattedTimeString(duration), amount);
         }
 

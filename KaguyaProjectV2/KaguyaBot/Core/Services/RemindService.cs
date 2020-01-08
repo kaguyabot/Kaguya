@@ -1,10 +1,13 @@
-﻿using Discord;
+﻿using System;
+using System.Linq;
+using Discord;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
 using System.Timers;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 #pragma warning disable 1998
@@ -20,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             timer.Enabled = true;
             timer.Elapsed += async (sender, args) =>
             {
-                var unTriggeredReminders = await UtilityQueries.GetAllExpiredRemindersAsync(false);
+                var unTriggeredReminders = await DatabaseQueries.GetAllAsync<Reminder>(r => r.HasTriggered == false && r.Expiration < DateTime.Now.ToOADate());
                 if (unTriggeredReminders == null)
                 {
                     return;
@@ -35,7 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         Description = $"`{reminder.Text}`"
                     };
                     await user.SendMessageAsync(embed: embed.Build());
-                    await UtilityQueries.DeleteReminderAsync(reminder);
+                    await DatabaseQueries.DeleteAsync(reminder);
 
                     await ConsoleLogger.LogAsync($"User {user} has been sent a reminder to \"{reminder.Text}\"", LogLvl.INFO);
                 }

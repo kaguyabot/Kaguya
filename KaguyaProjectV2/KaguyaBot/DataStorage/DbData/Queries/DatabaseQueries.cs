@@ -1,23 +1,38 @@
-﻿using System;
-using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using LinqToDB;
 using LinqToDB.Data;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net.Sockets;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using TwitchLib.Client.Events;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     // TODO: ConfigureAwait(false) on ALL queries.
     public static class DatabaseQueries
     {
+        public static async Task<bool> TestConnection()
+        {
+            using (var db = new KaguyaDb())
+            {
+                try
+                {
+                    return db.Connection.State.Equals(ConnectionState.Open);
+                }
+                catch (Exception e)
+                {
+                    await ConsoleLogger.LogAsync($"Failed to establish database connection!! {e.Message}", LogLvl.ERROR);
+                    return false;
+                }
+            }
+        }
+
         public static async Task<Server> GetOrCreateServerAsync(ulong Id)
         {
             using (var db = new KaguyaDb())
@@ -30,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     {
                         ServerId = Id
                     });
-                    await ConsoleLogger.LogAsync($"User {Id} created.", LogLvl.TRACE);
+                    await ConsoleLogger.LogAsync($"Server {Id} created.", LogLvl.DEBUG);
                 }
 
                 return await (db.Servers
@@ -42,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     .LoadWith(x => x.ServerExp)
                     .LoadWith(x => x.WarnedUsers)
                     .LoadWith(x => x.MutedUsers)
-                    .Where(s => s.ServerId == Id).FirstAsync());
+                    .Where(s => s.ServerId == Id).FirstAsync()).ConfigureAwait(false);
             }
         }
 
@@ -55,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 {
                     user = await (from u in db.Users
                         where u.UserId == Id
-                        select u).FirstAsync();
+                        select u).FirstAsync().ConfigureAwait(false);
                 }
                 catch (InvalidOperationException)
                 {
@@ -63,7 +78,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     {
                         UserId = Id
                     };
-                    await db.InsertAsync(user);
+                    await db.InsertAsync(user).ConfigureAwait(false);
+                    await ConsoleLogger.LogAsync($"User {Id} created.", LogLvl.DEBUG);
                 }
 
                 return user;
@@ -113,15 +129,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <returns></returns>
         public static async Task SellFishAsync(Fish fish, ulong userId)
         {
-            var user = await GetOrCreateUserAsync(userId);
+            var user = await GetOrCreateUserAsync(userId).ConfigureAwait(false);
 
             user.Points += Fish.GetPayoutForFish(fish);
             fish.Sold = true;
 
             using (var db = new KaguyaDb())
             {
-                await db.UpdateAsync(fish);
-                await db.UpdateAsync(user);
+                await db.UpdateAsync(fish).ConfigureAwait(false);
+                await db.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -144,17 +160,17 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     user.Points += Fish.GetPayoutForFish(fish);
                     fish.Sold = true;
 
-                    await db.UpdateAsync(fish);
+                    await db.UpdateAsync(fish).ConfigureAwait(false);
                 }
 
-                await db.UpdateAsync(user);
+                await db.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Returns a List of Fish that belong to the user ID.
         /// </summary>
-        /// <param name="user">The user who we want to get all of the fish from.</param>
+        /// <param name="userId">The id of the user who we want to get all of the fish from.</param>
         /// <returns></returns>
         public static async Task<List<Fish>> GetFishForUserMatchingTypeAsync(FishType fishType, ulong userId)
         {
@@ -162,7 +178,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from f in db.Fish
                     where f.UserId == userId && f.FishType == fishType
-                    select f).ToListAsync();
+                    select f).ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -178,7 +194,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from f in db.Fish
                     where f.UserId == userId && !f.Sold && f.FishType != FishType.BAIT_STOLEN
-                    select f).ToListAsync();
+                    select f).ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -528,7 +544,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.GetTable<T>().AnyAsync(x => x.Equals(arg));
+                return await db.GetTable<T>().AnyAsync(x => x.Equals(arg)).ConfigureAwait(false);
             }
         }
 
@@ -545,7 +561,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.GetTable<T>().Where(predicate).AnyAsync();
+                return await db.GetTable<T>().Where(predicate).AnyAsync().ConfigureAwait(false);
             }
         }
 
@@ -554,7 +570,95 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.GetTable<T>().Where(predicate).AnyAsync(x => args.Contains(x));
+                return await db.GetTable<T>().Where(predicate).AnyAsync(x => args.Contains(x)).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Inserts the object into the database. If it already exists, an exception will be thrown.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arg">The object to insert, assuming it doesn't already exist.</param>
+        /// <returns></returns>
+        public static async Task InsertIfNotExists<T>(T arg) where T : class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                if (await db.GetTable<T>().AnyAsync(x => x.Equals(arg)))
+                {
+                    throw new Exception("Item already exists in the database.");
+                }
+                await db.InsertAsync(arg).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns the number of objects that exist of type <see cref="T"/>
+        /// </summary>
+        /// <typeparam name="T">The type of object to return the number of occurances of.</typeparam>
+        /// <returns></returns>
+        public static async Task<int> GetCountAsync<T>() where T : class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.GetTable<T>().CountAsync();
+            }
+        }
+
+        /// <summary>
+        /// Returns the number of objects that exist of type <see cref="T"/> matching the given <see cref="Predicate{T}"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public static async Task<int> GetCountAsync<T>(Expression<Func<T, bool>> predicate)
+            where T : class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await db.GetTable<T>().Where(predicate).CountAsync();
+            }
+        }
+
+        /// <summary>
+        /// Returns the most popular command of all time, with how many uses it has.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<Dictionary<string, int>> GetMostPopularCommandAsync()
+        {
+            var dic = new Dictionary<string, int>();
+            using (var db = new KaguyaDb())
+            {
+                var commandQuery = (from h in db.CommandHistories
+                    group h by h.Command
+                    into grp
+                    orderby grp.Count() descending
+                    select grp.Key);
+
+                var command = await commandQuery.FirstAsync();
+                var count = await commandQuery.CountAsync();
+
+                dic.Add(command, count);
+
+                return dic;
+            }
+        }
+
+        /// <summary>
+        /// Returns the total amount of points in circulation across all users.
+        /// </summary>
+        /// <returns></returns>
+        public static int GetTotalCurrency()
+        {
+            using (var db = new KaguyaDb())
+            {
+                int currency = 0;
+                foreach (var user in db.Users)
+                {
+                    currency += user.Points;
+                }
+
+                return currency;
             }
         }
     }

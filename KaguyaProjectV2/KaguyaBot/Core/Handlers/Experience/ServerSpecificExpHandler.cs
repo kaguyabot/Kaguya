@@ -6,11 +6,11 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 // ReSharper disable RedundantAssignment
 
@@ -20,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
     {
         public static async Task AddExp(User user, Server server, ICommandContext context)
         {
-            List<ServerExp> specificExps = await UtilityQueries.GetAllExpForServerAsync(server);
+            var specificExps = await DatabaseQueries.FindAllForServerAsync<ServerExp>(server.ServerId);
             var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
             var userExpObj = new ServerExp();
 

@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var existingSupporterKeys = await DatabaseQueries.GetAllAsync<SupporterKey>();
-            var existingPremiumKeys = await UtilityQueries.GetAllPremiumKeysAsync();
+            var existingPremiumKeys = await DatabaseQueries.GetAllAsync<PremiumKey>();
 
             var supporterKey = existingSupporterKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0);
             var premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0 && x.ServerId == 0);
@@ -89,7 +89,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 nameSwitch = "This server's";
                 expirationDate = server.PremiumExpirationDate;
 
-                await UtilityQueries.AddOrReplacePremiumKeyAsync((PremiumKey) newKey);
+                await DatabaseQueries.InsertOrReplaceAsync((PremiumKey)newKey);
             }
 
             #region Useless code to avoid compiler errors. -_-
@@ -102,7 +102,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
             #endregion
 
-            TimeSpan ts = RegexTimeParser.ParseToTimespan($"{newKey.LengthInSeconds}s");
+            TimeSpan ts = $"{newKey.LengthInSeconds}s".ParseToTimespan();
             expirationDate += DateTime.Now.AddSeconds(ts.TotalSeconds).ToOADate();
             expirationDate -= DateTime.Now.ToOADate();
 

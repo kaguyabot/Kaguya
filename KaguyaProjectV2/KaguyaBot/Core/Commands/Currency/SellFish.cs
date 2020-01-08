@@ -97,7 +97,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 throw new KaguyaSupportException("Something broke when trying to sell your fish.");
             }
 
-            if (!await UtilityQueries.FishExistsAsync(fishId))
+            if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId))
             {
                 await Context.Channel.SendBasicErrorEmbedAsync($"The fish ID `{fishId}` does not exist. Use the " +
                                                                $"`myfish` command to view your fish and IDs!");
@@ -105,7 +105,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
 
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            if (!await UtilityQueries.FishBelongsToUserAsync(fishId, user))
+            if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId && x.UserId == user.UserId))
             {
                 await Context.Channel.SendBasicErrorEmbedAsync($"This fish doesn't belong to you!");
             }

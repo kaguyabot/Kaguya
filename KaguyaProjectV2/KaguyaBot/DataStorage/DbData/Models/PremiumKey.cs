@@ -6,6 +6,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "premiumkeys")]
     public class PremiumKey : IKey, IKaguyaQueryable<PremiumKey>, 
+        IKaguyaUnique<PremiumKey>,
         IServerSearchable<PremiumKey>, 
         IUserSearchable<PremiumKey>
     {

@@ -11,6 +11,7 @@ using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
@@ -60,8 +61,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 }
             }
 
-            var cmdsLastDay = await UtilityQueries.GetCommandHistoryLast24HoursAsync();
-            var mostPopCommand = await UtilityQueries.GetMostPopularCommandAsync();
+            var cmdsLastDay = await DatabaseQueries.GetAllAsync<CommandHistory>(h => h.Timestamp >= DateTime.Now.AddHours(-24));
+            var mostPopCommand = await DatabaseQueries.GetMostPopularCommandAsync();
 
             var fields = new List<EmbedFieldBuilder>
             {
@@ -75,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 {
                     Name = "Command Stats",
                     Value = $"Commands Run (Last 24 Hours): `{cmdsLastDay.Count:N0}`\n" +
-                            $"Commands Run (All-time): `{await UtilityQueries.GetTotalCommandCountAsync():N0}`\n" +
+                            $"Commands Run (All-time): `{await DatabaseQueries.GetCountAsync<CommandHistory>():N0}`\n" +
                             $"Most Popular Command: `{mostPopCommand.Keys.FirstOrDefault()} with {mostPopCommand.Values.FirstOrDefault()} uses.`"
                 },
                 new EmbedFieldBuilder
@@ -102,9 +103,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 new EmbedFieldBuilder
                 {
                     Name = "Kaguya User Stats",
-                    Value = $"Registered Users: `{await UtilityQueries.GetCountOfUsersAsync():N0}`\n" +
-                            $"Total Points in Circulation: `{UtilityQueries.GetTotalCurrency():N0}`\n" +
-                            $"Total Gambles: `{await UtilityQueries.GetTotalGamblesAsync():N0}`"
+                    Value = $"Registered Users: `{await DatabaseQueries.GetCountAsync<User>():N0}`\n" +
+                            $"Total Points in Circulation: `{DatabaseQueries.GetTotalCurrency():N0}`\n" +
+                            $"Total Gambles: `{await DatabaseQueries.GetCountAsync<GambleHistory>():N0}`"
                 }
             };
 

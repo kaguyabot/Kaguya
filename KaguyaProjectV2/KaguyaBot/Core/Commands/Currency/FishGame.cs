@@ -78,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             double roll = r.NextDouble();
             int fishId = r.Next(int.MaxValue);
 
-            while (await UtilityQueries.FishExistsAsync(fishId))
+            while (await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId))
             {
                 fishId = r.Next(int.MaxValue);
             }

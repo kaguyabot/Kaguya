@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 HasTriggered = false
             };
 
-            await UtilityQueries.AddReminderAsync(reminder);
+            await DatabaseQueries.InsertAsync(reminder);
 
             embed = new KaguyaEmbedBuilder
             {

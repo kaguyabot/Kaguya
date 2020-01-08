@@ -77,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
         private static async Task<Embed> LevelUpEmbed(User user, ICommandContext context)
         {
-            int count = await UtilityQueries.GetCountOfUsersAsync();
+            int count = await DatabaseQueries.GetCountAsync<User>();
             var rankNum = DatabaseQueries.GetGlobalExpRankIndex(user) + 1;
 
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
