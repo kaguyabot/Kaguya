@@ -629,17 +629,19 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             var dic = new Dictionary<string, int>();
             using (var db = new KaguyaDb())
             {
-                var commandQuery = (from h in db.CommandHistories
+                var command = await (from h in db.GetTable<CommandHistory>()
                     group h by h.Command
                     into grp
                     orderby grp.Count() descending
-                    select grp.Key);
+                    select grp.First().Command).FirstOrDefaultAsync();
 
-                var command = await commandQuery.FirstAsync();
-                var count = await commandQuery.CountAsync();
+                var count = await (from c in db.GetTable<CommandHistory>()
+                    group c by c.Command
+                    into grp
+                    orderby grp.Count() descending
+                    select grp.Count()).FirstOrDefaultAsync();
 
                 dic.Add(command, count);
-
                 return dic;
             }
         }

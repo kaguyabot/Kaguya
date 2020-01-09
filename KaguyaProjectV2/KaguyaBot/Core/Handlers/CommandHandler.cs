@@ -40,8 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public async Task HandleCommandAsync(SocketMessage msg)
         {
-            var message = msg as SocketUserMessage;
-            if (message == null || message.Author.IsBot) return;
+            if (!(msg is SocketUserMessage message) || message.Author.IsBot) return;
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
             User user = await DatabaseQueries.GetOrCreateUserAsync(message.Author.Id);
@@ -87,6 +86,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 server.TotalCommandCount++;
                 user.ActiveRateLimit++;
 
+                // Providing context as a parameter will automatically log all information about an executed command.
                 await ConsoleLogger.LogAsync(context, LogLvl.INFO);
 
                 await DatabaseQueries.InsertAsync(new CommandHistory
@@ -130,7 +130,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             return false;
         }
 
-        private async void HandleCommandResult(ICommandContext context, Server server, IResult result)
+        private static async void HandleCommandResult(ICommandContext context, Server server, IResult result)
         {
             string cmdPrefix = server.CommandPrefix;
             await ConsoleLogger.LogAsync($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLvl.DEBUG);

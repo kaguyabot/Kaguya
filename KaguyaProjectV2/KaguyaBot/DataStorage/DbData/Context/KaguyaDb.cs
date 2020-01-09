@@ -1,7 +1,5 @@
-﻿using LinqToDB;
-using System.Data;
-using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using LinqToDB;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
 {
