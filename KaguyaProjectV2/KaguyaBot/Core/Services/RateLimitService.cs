@@ -27,10 +27,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                 foreach (var registeredUser in users)
                 {
-                    if (registeredUser.LastRatelimited < DateTime.Now.Add(TimeSpan.FromDays(-31)).ToOADate())
+                    if (registeredUser.LastRatelimited < DateTime.Now.Add(TimeSpan.FromDays(-31)).ToOADate() &&
+                        registeredUser.RateLimitWarnings > 0)
                     {
                         registeredUser.RateLimitWarnings = 0;
-
                         await ConsoleLogger.LogAsync($"User [ID: {registeredUser.UserId}] has had their Ratelimit Warnings reset " +
                                           $"due to not being ratelimited for 30 days.", LogLvl.INFO);
                     }
