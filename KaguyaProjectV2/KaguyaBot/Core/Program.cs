@@ -33,7 +33,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 await ConsoleLogger.LogAsync($"Unhandled Exception: {eventArgs.ExceptionObject}", LogLvl.ERROR);
             };
-            // Console.SetWindowSize(185, 40); // Disabled due to docker crashing with this enabled.
 
             var config = new DiscordSocketConfig
             {

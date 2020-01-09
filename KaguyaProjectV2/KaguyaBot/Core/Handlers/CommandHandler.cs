@@ -91,7 +91,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
                 await DatabaseQueries.InsertAsync(new CommandHistory
                 {
-                    Command = context.Message.Content,
+                    Command = command.Value.Aliases[0],
                     Timestamp = DateTime.Now,
                     UserId = context.User.Id,
                     ServerId = context.Guild.Id
