@@ -36,7 +36,8 @@ as it has today, so this change was absolutely necessary and was the core reason
 ## Other Command Changes:
 
 - New server-specific `$praise` feature added. This is essentially `$rep` but for servers. There is more functionality with this that server administrators have control over, such as the cooldown.
-- **New game: `$fish`!** Collect fish and hunt for the **Legendary Big Kahuna!** Fish may be caught, collected, and sold.
+- **New game: `$fish`!** Collect fish and hunt for the **Legendary Big Kahuna!** Fish may be caught, collected, and sold for KP and **global** EXP. Dedicated fishermen may level up their fishing skill by fishing often, and bonuses can be earned for fishing a certain amount of times per day! The higher your fishing level, the more likely you are to catch 
+rarer fish! Be wary though, as better bait will be needed to catch rarer fish more easily, which will be more expensive!
 - `Critical Hits` removed from all games.
 - `$tictactoe` removed (it was terrible anyway)
 - `$bugreport` will now simply reply with a link to the bug report Google form.

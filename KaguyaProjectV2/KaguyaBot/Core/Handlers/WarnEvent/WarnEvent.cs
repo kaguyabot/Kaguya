@@ -24,10 +24,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
     {
         public WarnHandlerEventArgs(Server server, WarnedUser warnedUser)
         {
-            this.server = server;
-            this.warnedUser = warnedUser;
+            this.Server = server;
+            this.WarnedUser = warnedUser;
         }
-        public Server server { get; private set; }
-        public WarnedUser warnedUser { get; private set; }
+        public Server Server { get; }
+        public WarnedUser WarnedUser { get; }
     }
 }

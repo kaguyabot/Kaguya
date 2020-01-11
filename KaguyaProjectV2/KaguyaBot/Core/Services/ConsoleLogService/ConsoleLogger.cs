@@ -25,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             string contents = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} {logP} {message}";
 
             if (ConfigProperties.LogLevel > logLevel) return;
-            await LogFinisher(logLevel, contents).ConfigureAwait(false);
+            await LogFinisher(logLevel, contents);
         }
 
         public static async Task LogAsync(ICommandContext context, LogLvl logLevel)

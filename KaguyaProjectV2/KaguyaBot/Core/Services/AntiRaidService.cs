@@ -20,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 client.UserJoined += async u =>
                 {
                     var guild = u.Guild;
-                    var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id).ConfigureAwait(false);
+                    var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
                     var ar = server.AntiRaid?.FirstOrDefault();
 
                     if (ar == null)

@@ -14,6 +14,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong UserId { get; set; }
         [Column(Name = "Experience"), NotNull]
         public int Experience { get; set; }
+        [Column(Name = "FishExp"), NotNull]
+        public int FishExp { get; set; }
         [Column(Name = "Points"), NotNull]
         public int Points { get; set; }
         [Column(Name = "OsuId"), NotNull]

@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Command("BuyBait")]
         [Alias("bait")]
         [Summary("Purchases bait from the baitshop. Each bait costs " +
-                 "50 points. At least one bait is required for `fishing`. " +
+                 "75 points. At least one bait is required for `fishing`. " +
                  "Supporters get 25% off!")]
         [Remarks("<amount>")]
         public async Task Command(int amount)

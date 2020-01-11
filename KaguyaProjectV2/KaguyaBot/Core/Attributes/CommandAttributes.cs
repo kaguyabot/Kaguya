@@ -100,7 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             if (context.Client.TokenType == TokenType.Bot)
-                return (long)context.User.Id == (long)(await context.Client.GetApplicationInfoAsync().ConfigureAwait(false)).Owner.Id ? 
+                return (long)context.User.Id == (long)(await context.Client.GetApplicationInfoAsync()).Owner.Id ? 
                     PreconditionResult.FromSuccess() : PreconditionResult.FromError("Command can only be run by the owner of the bot.");
             return PreconditionResult.FromError("RequireOwnerAttribute is not supported by this TokenType.");
         }

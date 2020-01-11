@@ -43,6 +43,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogVoiceChannelConnections { get; set; }
         [Column(Name = "LevelAnnouncements"), Nullable]
         public ulong LogLevelAnnouncements { get; set; }
+        [Column(Name = "FishLevels"), NotNull]
+        public ulong LogFishLevels { get; set; }
         [Column(Name = "Antiraids"), Nullable]
         public ulong LogAntiraids { get; set; }
         [Column(Name = "TwitchNotifications"), Nullable]

@@ -23,12 +23,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public string FishString { get; set; }
         [Column(Name = "Value"), NotNull]
         public int Value { get; set; }
+        [Column(Name = "Exp"), NotNull]
+        public int Exp { get; set; }
         [Column(Name = "Sold"), NotNull]
         public bool Sold { get; set; }
 
-        public const int BAIT_COST = 50;
+        public const int BAIT_COST = 75;
         public const int SUPPORTER_BAIT_COST = (int)(BAIT_COST * .75);
-
 
         /// <summary>
         /// Takes the name of a fish and returns the type of it.
@@ -89,7 +90,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 
     public enum FishType
     {
-        BIG_KAHUNA, // 0.05%
+        BIG_KAHUNA, // 0.05% (1 in 2,000)
         GIANT_SQUID, // 0.15%
         ORANTE_SLEEPER_RAY, // 0.30%
         DEVILS_HOLE_PUPFISH, // 0.5%

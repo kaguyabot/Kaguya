@@ -11,11 +11,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
     {
         public static async void OnWarn(object warn, WarnHandlerEventArgs args)
         {
-            var currentSettings = await DatabaseQueries.FindFirstForServerAsync<WarnSetting>(args.server.ServerId);
-            var currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.server.ServerId, args.warnedUser.UserId);
+            var currentSettings = await DatabaseQueries.FindFirstForServerAsync<WarnSetting>(args.Server.ServerId);
+            var currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.Server.ServerId, args.WarnedUser.UserId);
             var warnCount = currentWarnings.Count;
 
-            var guildUser = ConfigProperties.Client.GetGuild(args.warnedUser.ServerId).GetUser(args.warnedUser.UserId);
+            var guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.ServerId).GetUser(args.WarnedUser.UserId);
             var kaguya = ConfigProperties.Client.CurrentUser;
 
             int muteNum = currentSettings.Mute;
@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 var ban = new Ban();
                 var modLog = new PremiumModerationLog
                 {
-                    Server = args.server,
+                    Server = args.Server,
                     Moderator = kaguya,
                     ActionRecipient = guildUser,
                     Action = PremiumModActionHandler.AUTOBAN,
@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 var shadowban = new Shadowban();
                 var modLog = new PremiumModerationLog
                 {
-                    Server = args.server,
+                    Server = args.Server,
                     Moderator = kaguya,
                     ActionRecipient = guildUser,
                     Action = PremiumModActionHandler.AUTOSHADOWBAN,
@@ -68,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 var kick = new Kick();
                 var modLog = new PremiumModerationLog
                 {
-                    Server = args.server,
+                    Server = args.Server,
                     Moderator = kaguya,
                     ActionRecipient = guildUser,
                     Action = PremiumModActionHandler.AUTOKICK,
@@ -89,7 +89,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                 var mute = new Mute();
                 var modLog = new PremiumModerationLog
                 {
-                    Server = args.server,
+                    Server = args.Server,
                     Moderator = kaguya,
                     ActionRecipient = guildUser,
                     Action = PremiumModActionHandler.AUTOMUTE,

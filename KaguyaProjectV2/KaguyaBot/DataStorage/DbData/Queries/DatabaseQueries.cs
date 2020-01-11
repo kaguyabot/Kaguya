@@ -57,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     .LoadWith(x => x.ServerExp)
                     .LoadWith(x => x.WarnedUsers)
                     .LoadWith(x => x.MutedUsers)
-                    .Where(s => s.ServerId == Id).FirstAsync()).ConfigureAwait(false);
+                    .Where(s => s.ServerId == Id).FirstAsync());
             }
         }
 
@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 {
                     user = await (from u in db.Users
                         where u.UserId == Id
-                        select u).FirstAsync().ConfigureAwait(false);
+                        select u).FirstAsync();
                 }
                 catch (InvalidOperationException)
                 {
@@ -78,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     {
                         UserId = Id
                     };
-                    await db.InsertAsync(user).ConfigureAwait(false);
+                    await db.InsertAsync(user);
                     await ConsoleLogger.LogAsync($"User {Id} created.", LogLvl.DEBUG);
                 }
 
@@ -129,15 +129,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <returns></returns>
         public static async Task SellFishAsync(Fish fish, ulong userId)
         {
-            var user = await GetOrCreateUserAsync(userId).ConfigureAwait(false);
+            var user = await GetOrCreateUserAsync(userId);
 
             user.Points += Fish.GetPayoutForFish(fish);
             fish.Sold = true;
 
             using (var db = new KaguyaDb())
             {
-                await db.UpdateAsync(fish).ConfigureAwait(false);
-                await db.UpdateAsync(user).ConfigureAwait(false);
+                await db.UpdateAsync(fish);
+                await db.UpdateAsync(user);
             }
         }
 
@@ -160,10 +160,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     user.Points += Fish.GetPayoutForFish(fish);
                     fish.Sold = true;
 
-                    await db.UpdateAsync(fish).ConfigureAwait(false);
+                    await db.UpdateAsync(fish);
                 }
 
-                await db.UpdateAsync(user).ConfigureAwait(false);
+                await db.UpdateAsync(user);
             }
         }
 
@@ -178,7 +178,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from f in db.Fish
                     where f.UserId == userId && f.FishType == fishType
-                    select f).ToListAsync().ConfigureAwait(false);
+                    select f).ToListAsync();
             }
         }
 
@@ -194,7 +194,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from f in db.Fish
                     where f.UserId == userId && !f.Sold && f.FishType != FishType.BAIT_STOLEN
-                    select f).ToListAsync().ConfigureAwait(false);
+                    select f).ToListAsync();
             }
         }
 
@@ -209,7 +209,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertOrReplaceAsync(arg).ConfigureAwait(false);
+                await db.InsertOrReplaceAsync(arg);
             }
         }
 
@@ -224,7 +224,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                await db.InsertAsync(arg).ConfigureAwait(false);
+                await db.InsertAsync(arg);
             }
         }
 
@@ -248,7 +248,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from t in db.GetTable<T>()
                     where t.UserId == user.UserId
-                    select t).ToListAsync().ConfigureAwait(false);
+                    select t).ToListAsync();
             }
         }
 
@@ -271,7 +271,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from t in db.GetTable<T>()
                     where t.UserId == userId
-                    select t).FirstOrDefaultAsync().ConfigureAwait(false);
+                    select t).FirstOrDefaultAsync();
             }
         }
 
@@ -291,7 +291,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from t in db.GetTable<T>()
                     where t.UserId == userId
-                    select t).ToListAsync().ConfigureAwait(false);
+                    select t).ToListAsync();
             }
         }
 
@@ -311,7 +311,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from t in db.GetTable<T>()
                     where t.ServerId == serverId
-                    select t).FirstOrDefaultAsync().ConfigureAwait(false);
+                    select t).FirstOrDefaultAsync();
             }
         }
 
@@ -330,7 +330,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from t in db.GetTable<T>()
                     where t.ServerId == serverId
-                    select t).ToListAsync().ConfigureAwait(false);
+                    select t).ToListAsync();
             }
         }
 
@@ -348,7 +348,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 await (from t in db.GetTable<T>()
                     where t.ServerId == serverId
-                    select t).DeleteAsync().ConfigureAwait(false);
+                    select t).DeleteAsync();
             }
         }
 
@@ -380,7 +380,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                await db.DeleteAsync(arg).ConfigureAwait(false);
+                await db.DeleteAsync(arg);
             }
         }
 
@@ -396,7 +396,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 foreach (var arg in args)
                 {
-                    await db.DeleteAsync(arg).ConfigureAwait(false);
+                    await db.DeleteAsync(arg);
                 }
             }
         }
@@ -410,7 +410,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.GetTable<T>().ToListAsync().ConfigureAwait(false);
+                return await db.GetTable<T>().ToListAsync();
             }
         }
 
@@ -426,7 +426,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 return await (from t in db.GetTable<T>().Where(predicate)
-                    select t).ToListAsync().ConfigureAwait(false);
+                    select t).ToListAsync();
             }
         }
 
@@ -445,7 +445,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from t in db.GetTable<T>()
                     where t.UserId == userId && t.ServerId == serverId
-                    select t).ToListAsync().ConfigureAwait(false);
+                    select t).ToListAsync();
             }
         }
 
@@ -464,7 +464,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return await (from t in db.GetTable<T>()
                     where t.UserId == userId && t.ServerId == serverId
-                    select t).FirstOrDefaultAsync().ConfigureAwait(false);
+                    select t).FirstOrDefaultAsync();
             }
         }
 
@@ -478,7 +478,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                await db.UpdateAsync(arg).ConfigureAwait(false);
+                await db.UpdateAsync(arg);
             }
         }
 
@@ -495,7 +495,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 foreach (var arg in args)
                 {
-                    await db.UpdateAsync(arg).ConfigureAwait(false);
+                    await db.UpdateAsync(arg);
                 }
             }
         }
@@ -509,7 +509,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.ExecuteAsync(sql).ConfigureAwait(false);
+                return await db.ExecuteAsync(sql);
             }
         }
 
@@ -528,7 +528,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 return await (from t in db.GetTable<T>().Where(predicate)
-                    select t).FirstOrDefaultAsync().ConfigureAwait(false);
+                    select t).FirstOrDefaultAsync();
             }
         }
 
@@ -544,7 +544,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.GetTable<T>().AnyAsync(x => x.Equals(arg)).ConfigureAwait(false);
+                return await db.GetTable<T>().AnyAsync(x => x.Equals(arg));
             }
         }
 
@@ -561,7 +561,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.GetTable<T>().Where(predicate).AnyAsync().ConfigureAwait(false);
+                return await db.GetTable<T>().Where(predicate).AnyAsync();
             }
         }
 
@@ -570,7 +570,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return await db.GetTable<T>().Where(predicate).AnyAsync(x => args.Contains(x)).ConfigureAwait(false);
+                return await db.GetTable<T>().Where(predicate).AnyAsync(x => args.Contains(x));
             }
         }
 
@@ -588,7 +588,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 {
                     throw new Exception("Item already exists in the database.");
                 }
-                await db.InsertAsync(arg).ConfigureAwait(false);
+                await db.InsertAsync(arg);
             }
         }
 
