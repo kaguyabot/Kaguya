@@ -193,7 +193,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     break;
             }
 
-            fishExp += 7000;
             user.FishExp += fishExp;
             user.FishBait -= 1;
             user.LastFished = DateTime.Now.ToOADate();
