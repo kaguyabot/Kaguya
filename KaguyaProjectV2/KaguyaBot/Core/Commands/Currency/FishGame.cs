@@ -6,12 +6,12 @@ using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -86,7 +86,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
 
             var bonuses = new FishHandler.FishLevelBonuses(user.FishExp);
-            var fishType = GetFishType(roll * (1 + (bonuses.BonusLuckPercent / 100)));
+            roll *= 1 - (bonuses.BonusLuckPercent / 100);
+
+            var fishType = GetFishType(roll);
 
             switch (fishType)
             {
@@ -191,12 +193,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     break;
             }
 
+            fishExp += 7000;
             user.FishExp += fishExp;
             user.FishBait -= 1;
             user.LastFished = DateTime.Now.ToOADate();
 
             value = (int)(value * (1 + bonuses.BonusFishValuePercent / 100));
-
             var fish = new Fish
             {
                 FishId = fishId,

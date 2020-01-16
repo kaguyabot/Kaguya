@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using LinqToDB.Common;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
@@ -101,6 +102,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 Title = $"Kaguya Fishing - Stats for {Context.User}",
                 Fields = new List<EmbedFieldBuilder>
                 {
+                    new EmbedFieldBuilder
+                    {
+                        Name = "Fish Level",
+                        Value = $"Fish Exp: `{user.FishExp:N0}` exp.\n" +
+                                $"Fish Level: `{(int)FishHandler.GetFishLevel(user.FishExp):N0}`\n" + 
+                                $"{FishHandler.GetRewardString(user.FishExp)}"
+                    },
                     new EmbedFieldBuilder
                     {
                         Name = "Statistics",

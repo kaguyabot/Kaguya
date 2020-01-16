@@ -85,10 +85,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             user.Points -= totalCost;
             user.FishBait += amount;
 
-            await Context.Channel.SendBasicSuccessEmbedAsync($"Awesome! I've gone ahead and added your bait to " +
-                                                        $"your account. Happy fishing!\n\n" +
+            await Context.Channel.SendBasicSuccessEmbedAsync($"Awesome! I've gone ahead and added `{amount:N0} bait` to your baitbox. " +
+                                                        $"Happy fishing!\n\n" +
                                                         $"New total bait: `{user.FishBait:N0}`\n" +
-                                                        $"New total points: `{user.Points:N0}`");
+                                                        $"New total points: `{user.Points:N0}`\n" +
+                                                        $"Price per bait: `{totalCost / amount:N0}`\n" +
+                                                        $"Total price: `{totalCost:N0}`");
 
             await DatabaseQueries.UpdateAsync(user);
         }
