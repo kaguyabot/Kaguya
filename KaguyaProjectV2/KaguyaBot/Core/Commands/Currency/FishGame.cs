@@ -85,7 +85,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 fishId = r.Next(int.MaxValue);
             }
 
-            var fishType = GetFishType(roll);
+            var bonuses = new FishHandler.FishLevelBonuses(user.FishExp);
+            var fishType = GetFishType(roll * (1 + (bonuses.BonusLuckPercent / 100)));
 
             switch (fishType)
             {
@@ -190,8 +191,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     break;
             }
 
+            user.FishExp += fishExp;
             user.FishBait -= 1;
             user.LastFished = DateTime.Now.ToOADate();
+
+            value = (int)(value * (1 + bonuses.BonusFishValuePercent / 100));
 
             var fish = new Fish
             {
@@ -202,6 +206,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 FishType = fishType,
                 FishString = fishType.ToString(),
                 Value = value,
+                Exp = fishExp,
                 Sold = false
             };
 
@@ -218,7 +223,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
                 embed.Description += $"\n\nFish ID: `{fishId}`\n" +
                                      $"Fish Value: `{value:N0}` points.\n" +
-                                     $"Fishing Exp Earned: `{fishExp:N0}`" +
+                                     $"Fishing Exp Earned: `{fishExp:N0} exp`\n" +
                                      $"Bait Remaining: `{user.FishBait:N0}`\n\n" +
                                      $"You now have `{fishCount}` `{fishString}`";
             }

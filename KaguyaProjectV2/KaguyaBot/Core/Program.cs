@@ -14,6 +14,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 
@@ -137,6 +138,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private void InitializeEventHandlers()
         {
             WarnEvent.OnWarn += WarnHandler.OnWarn;
+            FishEvent.OnFish += FishHandler.OnFish;
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)

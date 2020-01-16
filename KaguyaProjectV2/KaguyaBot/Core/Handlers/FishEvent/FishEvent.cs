@@ -1,7 +1,6 @@
-﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+﻿using Discord.Commands;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System;
-using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 {

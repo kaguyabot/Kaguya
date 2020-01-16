@@ -3,6 +3,7 @@ using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -52,10 +53,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         }
 
         
-        private static int GetTaxedFishPrice(Fish fish, double taxRate = 0.05)
+        private static int GetTaxedFishPrice(Fish fish, int userFishExp, double taxRate = 0.05)
         {
+            var bonuses = new FishHandler.FishLevelBonuses(userFishExp);
+
             if (fish.Value * taxRate < 100)
                 taxRate = 0.35;
+
+            taxRate *= (bonuses.TaxReductionPercent / 100);
             return (int)(fish.Value * (1 - taxRate));
         }
 
@@ -63,25 +68,23 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// Gets the taxed price on a fish. Returns the
         /// amount of points the user will get for selling this fish.
         /// </summary>
-        /// <param name="fishToSell">The fish that we need to tax.</param>
         /// <returns></returns>
-        public static int GetPayoutForFish(Fish fishToSell)
+        public static int GetPayoutForFish(Fish fishToSell, int userFishExp)
         {
-            return GetTaxedFishPrice(fishToSell);
+            return GetTaxedFishPrice(fishToSell, userFishExp);
         }
 
         /// <summary>
         /// Gets the total taxed payout for a collection of fish. Returns the
         /// amount of points the user will get for selling these fish.
         /// </summary>
-        /// <param name="fish">The fish that we need to tax.</param>
         /// <returns></returns>
-        public static int GetPayoutForFish(List<Fish> fishToSell)
+        public static int GetPayoutForFish(List<Fish> fishToSell, int userFishExp)
         {
             int payout = 0;
             foreach (var fish in fishToSell)
             {
-                payout += GetTaxedFishPrice(fish);
+                payout += GetTaxedFishPrice(fish, userFishExp);
             }
 
             return payout;

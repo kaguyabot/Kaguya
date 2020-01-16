@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using LinqToDB.Common;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -38,6 +39,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
 
             string ownedFishString = "";
+            int curFishValue = 0;
+            int allTimeFishValue = 0;
 
             foreach (FishType type in Enum.GetValues(typeof(FishType)))
             {
@@ -60,16 +63,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 }
             }
 
+            foreach (var fish in userFish)
+            {
+                allTimeFishValue += fish.Value;
+                if (!fish.Sold)
+                    curFishValue += fish.Value;
+            }
+
             foreach (var dic in countFishDicts)
             {
                 ownedFishString += $"Fish: `{dic.Keys.First().ToString()}` - Count: `{dic.Values.First():N0}` - " +
-                                   $"Total Value: `{Fish.GetPayoutForFish(userFish.Where(x => x.FishType == dic.Keys.First()).ToList()):N0}` points\n";
+                                   $"Total Value: `{Fish.GetPayoutForFish(userFish.Where(x => x.FishType == dic.Keys.First() && !x.Sold).ToList(), user.FishExp):N0}` points\n";
             }
+
+            if (ownedFishString.IsNullOrEmpty())
+            {
+                ownedFishString = "`No fish currently owned.`";
+            }
+
 
             StatsEmbed:
 
-            string rarestFish;
-            try
+            // todo: Fix the error that's thrown if $myfish is used when the user currently does not own any unsold fish.
+
+            string rarestFish = null;
+            if (userFish.Count(x => !x.Sold && x.FishType != FishType.BAIT_STOLEN) != 0)
             {
                 rarestFish = userFish
                     .OrderBy(x => x.FishType)
@@ -77,23 +95,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     .FishType
                     .ToString();
             }
-            catch (Exception)
-            {
-                rarestFish = "No fish currently owned.";
-            }
 
             var embed = new KaguyaEmbedBuilder
             {
                 Title = $"Kaguya Fishing - Stats for {Context.User}",
-                Fields = new List<EmbedFieldBuilder>()
+                Fields = new List<EmbedFieldBuilder>
                 {
                     new EmbedFieldBuilder
                     {
                         Name = "Statistics",
                         Value = $"Bait stolen: `{userFish.Count(x => x.FishType == FishType.BAIT_STOLEN):N0} times`\n" +
                                 $"All-time fish count: `{userFish.Count(x => x.FishType != FishType.BAIT_STOLEN):N0}`\n" +
-                                $"Rarest owned fish: `{rarestFish}`\n" +
-                                $"Total fish sold: `{userFish.Count(x => x.Sold && x.FishType != FishType.BAIT_STOLEN):N0}`"
+                                $"All-time fish value: `{allTimeFishValue:N0}` points\n" +
+                                $"Unsold fish value: `{curFishValue:N0}` points\n" +
+                                $"Total fish sold: `{userFish.Count(x => x.Sold && x.FishType != FishType.BAIT_STOLEN):N0}`\n" +
+                                $"Rarest owned fish: `{rarestFish ?? "No fish currently owned."}`\n" +
+                                $"Number of owned, unsold fish: `{userFish.Count(x => x.FishType != FishType.BAIT_STOLEN && !x.Sold):N0}`"
                     },
                     new EmbedFieldBuilder
                     {
@@ -108,7 +125,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             };
 
             // If they don't have any fish, we don't need to show them.
-            if (rarestFish.ToLower().Contains("no fish"))
+            if (rarestFish != null && rarestFish.ToLower().Contains("no fish"))
                 embed.Fields.RemoveAt(1);
 
             await InlineReactionReplyAsync(new ReactionCallbackData("",
@@ -122,7 +139,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                         {
                             await writer.WriteLineAsync($"Fish ID: {fish.FishId} - " +
                                                         $"Fish Type: {fish.FishType.ToString()} - " +
-                                                        $"Pre-Tax Value: {fish.Value}");
+                                                        $"Value: {fish.Value}");
                         }
 
                         await writer.FlushAsync();

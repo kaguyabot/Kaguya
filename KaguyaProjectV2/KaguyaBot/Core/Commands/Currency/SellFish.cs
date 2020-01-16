@@ -30,6 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Remarks("<Fish ID>\nall\nall <Fish Type>\n464199220\nsmall salmon")]
         public async Task Command(params string[] args)
         {
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             long fishId = 0;
             string fishType = null;
 
@@ -81,7 +82,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
                         await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully sold all " +
                                                                          $"`{allFishToSell.Count:N0}` fish!\n\n" +
-                                                                         $"`{Fish.GetPayoutForFish(allFishToSell):N0}` " +
+                                                                         $"`{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}` " +
                                                                          $"points have been added to your balance.");
                     })
                     .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) => 
@@ -104,7 +105,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId && x.UserId == user.UserId))
             {
                 await Context.Channel.SendBasicErrorEmbedAsync($"This fish doesn't belong to you!");
@@ -130,7 +130,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 {
                     Title = "Mass-Sell Fish",
                     Description = $"You have `{fish.Count:N0}` fish of type `{ft.Humanize()}`. Selling these " +
-                                  $"would result in `{Fish.GetPayoutForFish(fish):N0}` " +
+                                  $"would result in `{Fish.GetPayoutForFish(fish, user.FishExp):N0}` " +
                                   $"points added to your account.\n\n" +
                                   $"Selling these fish will make them untradeable and unsellable. They will now " +
                                   $"merely become a statistic (and a delicious meal for someone else).\n\n" +
@@ -144,7 +144,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                         })
                     .AddCallBack(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
                     {
-                        var payout = Fish.GetPayoutForFish(fish);
+                        var payout = Fish.GetPayoutForFish(fish, user.FishExp);
                         await c.Channel.SendBasicSuccessEmbedAsync($"Great! I was able to find a buyer for " +
                                                                    $"all of your `{ft.Humanize()}`, resulting " +
                                                                    $"in a payout of `{payout:N0}` " +
@@ -166,10 +166,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully sold your `{fishToSell.FishType.Humanize()}`!\n\n" +
-                              $"Payout: `{Fish.GetPayoutForFish(fishToSell):N0}` points",
+                              $"Payout: `{Fish.GetPayoutForFish(fishToSell, user.FishExp):N0}` points",
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = "Note: This fish is now inelligible for sale or trade."
+                    Text = "Note: This fish is now inelligible for sale."
                 }
             };
             await ReplyAsync(embed: embed.Build());

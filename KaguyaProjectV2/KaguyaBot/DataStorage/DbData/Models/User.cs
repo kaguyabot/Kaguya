@@ -55,8 +55,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int TotalTradedFish { get; set; }
         [Column(Name = "BlacklistExpiration"), NotNull]
         public double BlacklistExpiration { get; set; }
-        [Column(Name = "LatestEXP"), NotNull]
+        [Column(Name = "LatestExp"), NotNull]
         public double LatestExp { get; set; }
+        [Column(Name = "LatestFishExp"), NotNull]
+        public double LatestFishExp { get; set; }
         [Column(Name = "LatestTimelyBonus"), NotNull]
         public double LatestTimelyBonus { get; set; }
         [Column(Name = "LatestWeeklyBonus"), NotNull]
