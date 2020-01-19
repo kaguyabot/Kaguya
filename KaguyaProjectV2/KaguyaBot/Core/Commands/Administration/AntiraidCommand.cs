@@ -100,10 +100,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 $"`{users.ToWords()}` users joining within `{seconds.ToWords()}` seconds " +
                 $"of each other.");
 
-
             if (antiraid != null)
             {
-                await DatabaseQueries.InsertAsync(ar);
+                await DatabaseQueries.InsertOrReplaceAsync(ar);
                 return;
             }
 

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Discord.Addons.Interactive;
+﻿using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
@@ -7,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {

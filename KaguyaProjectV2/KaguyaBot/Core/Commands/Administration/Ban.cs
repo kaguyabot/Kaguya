@@ -71,6 +71,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             try
             {
                 await user.BanAsync(0, reason);
+                await ConsoleLogger.LogAsync($"User auto-muted. Guild: [Name: {user.Guild.Name} | ID: {user.Guild.Id}] " +
+                                             $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
             }
             catch (Exception e)
             {

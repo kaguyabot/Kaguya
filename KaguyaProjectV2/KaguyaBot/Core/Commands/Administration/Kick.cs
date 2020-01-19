@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -23,21 +24,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task KickUser(params SocketGuildUser[] users)
         {
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
-            var listUsers = new List<SocketGuildUser>(users);
-
+            var nonKickedUsers = new List<SocketGuildUser>();
             int i = 0;
 
-            foreach (var user in listUsers)
+            foreach (var user in users)
             {
                 try
                 {
                     await user.KickAsync();
                     embed.Description += $"Successfully kicked `{user}`\n";
-                    listUsers.Remove(user);
+                    i++;
                 }
                 catch (Exception e)
                 {
                     embed.Description += $"Failed to kick `{user}` - `{e.Message}`\n";
+                    nonKickedUsers.Add(user);
                 }
             }
 
@@ -45,12 +46,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 string failString = "";
 
-                if (listUsers.Count != 0)
-                    failString = $"\nFailed to kick `{listUsers.Count}` users.";
+                if (nonKickedUsers.Count != 0)
+                    failString = $"\nFailed to kick `{nonKickedUsers.Count}` users.";
 
                 embed = new KaguyaEmbedBuilder
                 {
-                    Description = $"Successfully kicked `{i}` users.{failString}"
+                    Description = $"Successfully kicked `{i}` users. {failString}"
                 };
             }
 
@@ -68,6 +69,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             try
             {
                 await user.KickAsync(reason);
+                await ConsoleLogger.LogAsync($"User auto-muted. Guild: [Name: {user.Guild.Name} | ID: {user.Guild.Id}] " +
+                                             $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
             }
             catch (Exception e)
             {

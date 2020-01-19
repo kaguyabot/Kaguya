@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using System;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -7,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -21,21 +24,51 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 {
                     var guild = u.Guild;
                     var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
-                    var ar = server.AntiRaid?.FirstOrDefault();
+                    var ar = server.AntiRaid?.First();
 
                     if (ar == null)
                         return;
 
-                    if (ServerTimerMethods.CachedTimers.All(x => x.Server.ServerId != server.ServerId))
+                    if (server.AntiRaid.Count() > 1)
                     {
-                        var existingTimer = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.ServerId == server.ServerId);
+                        for(int i = 0; i < server.AntiRaid.Count() - 1; i++)
+                        {
+                            await DatabaseQueries.DeleteAsync(server.AntiRaid.ToList()[i]);
+                        }
+
+                        await ConsoleLogger.LogAsync($"Server {server.ServerId} had multiple antiraid configurations. " +
+                                                     $"I have deleted all except one.", LogLvl.WARN);
+                    }
+
+                    if (ServerTimers.CachedTimers.All(x => x.ServerId != server.ServerId))
+                    {
                         var newSt = new ServerTimer
                         {
-                            Server = existingTimer.Server,
-                            UserIds = new HashSet<ulong>()
+                            ServerId = server.ServerId,
+                            UserIds = new HashSet<ulong>
+                            {
+                                u.Id
+                            }
                         };
 
-                        ServerTimerMethods.ReplaceTimer(newSt);
+                        ServerTimers.AddToCache(newSt);
+                    }
+                    else
+                    {
+                        var newIds = new HashSet<ulong>();
+                        var existingIds = ServerTimers.CachedTimers.First(x => x.ServerId == server.ServerId).UserIds;
+
+                        foreach (var id in existingIds)
+                        {
+                            newIds.Add(id);
+                        }
+
+                        newIds.Add(u.Id);
+                        ServerTimers.ReplaceTimer(new ServerTimer
+                        {
+                            ServerId = server.ServerId,
+                            UserIds = newIds
+                        });
                     }
 
                     var timer = new Timer(ar.Seconds * 1000);
@@ -43,14 +76,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     timer.AutoReset = false;
                     timer.Elapsed += async (sender, args) =>
                     {
-                        var existingObj = ServerTimerMethods.CachedTimers.FirstOrDefault(x => x.Server.ServerId == server.ServerId);
+                        var existingObj = ServerTimers.CachedTimers.FirstOrDefault(x => x.ServerId == server.ServerId);
+
+                        if (existingObj == null)
+                            return;
 
                         if (existingObj.UserIds.Count >= ar.Users)
                         {
                             await ActionUsers(existingObj.UserIds, server.ServerId, ar.Action);
                         }
 
-                        ServerTimerMethods.CachedTimers.Remove(existingObj);
+                        ServerTimers.CachedTimers.Remove(existingObj);
                     };
                 };
             });
@@ -107,13 +143,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
     public class ServerTimer
     {
-        public Server Server { get; set; }
+        public ulong ServerId { get; set; }
         public HashSet<ulong> UserIds { get; set; }
     }
 
-    public static class ServerTimerMethods
+    public static class ServerTimers
     {
-        public static List<ServerTimer> CachedTimers { get; set; }
+        public static List<ServerTimer> CachedTimers { get; set; } = new List<ServerTimer>();
 
         public static void ClearCache()
         {
@@ -131,7 +167,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         public static void ReplaceTimer(ServerTimer stObj)
         {
-            var existingObj = CachedTimers.FirstOrDefault(x => x.Server.ServerId == stObj.Server.ServerId);
+            var existingObj = CachedTimers.FirstOrDefault(x => x.ServerId == stObj.ServerId);
 
             CachedTimers.Remove(existingObj);
             CachedTimers.Add(stObj);

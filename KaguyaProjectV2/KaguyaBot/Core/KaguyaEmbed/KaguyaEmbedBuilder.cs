@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
                                 $"for participating in the open beta!`\n" +
                                 $"[[Current Changes]](https://github.com/stageosu/Kaguya/blob/v2.0/README.md) " +
                                 $"[[Report Bug]](https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Bug&template=bug-report.md&title=) " +
-                                $"[[Request Feature]](https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Feature+Request&template=feature-request.md&title=)");
+                                $"[[Request Feature]](https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Feature+Request&template=feature-request.md&title=)\n");
             }
         }
 

@@ -128,6 +128,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             if (!shardsLoggedIn) return;
 
+            await AntiRaidService.Start();
             await KaguyaSuppRoleHandler.Start();
             await KaguyaSupporterExpirationHandler.Start();
             await AutoUnmuteHandler.Start();

@@ -1,7 +1,7 @@
 ﻿using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using System.IO;
 using NekosSharp;
+using System.IO;
 using TwitchLib.Api;
 
 #pragma warning disable
@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         /// </summary>
         public static string KaguyaMainFolder { get; } = Directory.GetCurrentDirectory();
         public static string KaguyaSupportDiscordServer { get; } = "https://discord.gg/aumCJhr";
-        public static string Version { get; } = "2.0.A2020-1-15";
+        public static string Version { get; } = "2.0.A2020-1-19";
         public static bool InBeta { get; } = true;
     }
 }

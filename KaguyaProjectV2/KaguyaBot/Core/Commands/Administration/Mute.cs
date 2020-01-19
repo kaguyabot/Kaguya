@@ -253,7 +253,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
                         sendMessages: PermValue.Deny));
 
-                    await ConsoleLogger.LogAsync($"Permission overwrite added for guild channel.\n" +
+                    await ConsoleLogger.LogAsync($"Mute permission overwrite added for guild channel.\n" +
                                             $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
                                             $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
                 }
