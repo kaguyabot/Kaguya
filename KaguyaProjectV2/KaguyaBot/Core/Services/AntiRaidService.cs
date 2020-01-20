@@ -24,11 +24,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 {
                     var guild = u.Guild;
                     var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
-                    var ar = server.AntiRaid?.First();
 
-                    if (ar == null)
+                    if (server.AntiRaid == null || !server.AntiRaid.Any())
                         return;
 
+                    var ar = server.AntiRaid.First();
+                    
                     if (server.AntiRaid.Count() > 1)
                     {
                         for(int i = 0; i < server.AntiRaid.Count() - 1; i++)

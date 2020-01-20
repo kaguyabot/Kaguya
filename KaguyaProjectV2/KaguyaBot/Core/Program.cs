@@ -140,6 +140,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             WarnEvent.OnWarn += WarnHandler.OnWarn;
             FishEvent.OnFish += FishHandler.OnFish;
+            _client.UserJoined += GreetingService.Trigger;
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)

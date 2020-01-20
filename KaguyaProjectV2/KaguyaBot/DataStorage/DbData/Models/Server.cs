@@ -47,6 +47,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogFishLevels { get; set; }
         [Column(Name = "Antiraids"), Nullable]
         public ulong LogAntiraids { get; set; }
+        [Column(Name = "Greetings"), NotNull]
+        public ulong LogGreetings { get; set; }
         [Column(Name = "TwitchNotifications"), Nullable]
         public ulong LogTwitchNotifications { get; set; }
         [Column(Name = "YoutubeNotifications"), Nullable]
@@ -57,6 +59,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogTwitterNotifications { get; set; }
         [Column(Name = "IsBlacklisted"), NotNull]
         public bool IsBlacklisted { get; set; }
+        [Column(Name = "CustomGreeting"), Nullable]
+        public string CustomGreeting { get; set; }
+        [Column(Name = "CustomGreetingIsEnabled"), NotNull]
+        public bool CustomGreetingIsEnabled { get; set; }
         public double PremiumExpirationDate
         {
             get

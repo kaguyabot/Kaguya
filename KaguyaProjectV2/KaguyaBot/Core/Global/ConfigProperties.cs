@@ -2,6 +2,7 @@
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using NekosSharp;
 using System.IO;
+using BooruSharp.Booru;
 using TwitchLib.Api;
 
 #pragma warning disable
@@ -25,5 +26,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         public static string KaguyaSupportDiscordServer { get; } = "https://discord.gg/aumCJhr";
         public static string Version { get; } = "2.0.A2020-1-20";
         public static bool InBeta { get; } = true;
+        public static string KaguyaStore = "https://the-kaguya-project.myshopify.com/";
     }
 }

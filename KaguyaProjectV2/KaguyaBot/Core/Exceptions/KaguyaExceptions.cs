@@ -38,4 +38,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Exceptions
                        $"[[Kaguya Support Discord Server]]({ConfigProperties.KaguyaSupportDiscordServer})";
         }
     }
+
+    class KaguyaSupporterException : Exception
+    {
+        public KaguyaSupporterException(string message) : base(KaguyaSupporterExceptionMessage(message))
+        {
+        }
+        private static string KaguyaSupporterExceptionMessage(string msg)
+        {
+            return msg + $"\nSorry, only active supporters are allowed to use this feature. You may purchase a supporter tag " +
+                   $"at this store: {ConfigProperties.KaguyaStore}";
+        }
+    }
 }

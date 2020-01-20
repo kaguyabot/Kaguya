@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Discord.Commands;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
+{
+    public class ToggleGreeting : ModuleBase<ShardedCommandContext>
+    {
+        [UtilityCommand]
+        [Command("ToggleGreeting")]
+        [Alias("tg")]
+        [Summary("Toggles this server's greeting message. If it is currently disabled, " +
+                 "this command will enable it (and vice versa).")]
+        public async Task Command()
+        {
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+
+            server.CustomGreetingIsEnabled = server.CustomGreetingIsEnabled switch
+            {
+                true => false,
+                false => true
+            };
+
+            if (server.CustomGreetingIsEnabled)
+            {
+                await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully enabled this server's greeting message.");
+            }
+            else
+            {
+                await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully disabled this server's greeting message.");
+            }
+
+            await DatabaseQueries.UpdateAsync(server);
+        }
+    }
+}
