@@ -148,7 +148,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 };
                 embed.SetColor(EmbedColor.RED);
 
-                await context.Channel.SendMessageAsync(embed: embed.Build());
+                try
+                {
+                    await context.Channel.SendMessageAsync(embed: embed.Build());
+                }
+                catch (Discord.Net.HttpException)
+                { }
             }
         }
     }
