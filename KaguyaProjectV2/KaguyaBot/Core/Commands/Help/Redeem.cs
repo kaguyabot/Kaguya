@@ -17,6 +17,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
     public class Redeem : ModuleBase<ShardedCommandContext>
     {
+        private const double MONTHLY_SERVER_FEE = 80.99;
+        private const double AVERAGE_MONTHLY_SUPPORTER_PAYMENT = 3.99;
+
         [HelpCommand]
         [Command("Redeem")]
         [Summary("Allows a user to redeem a Kaguya Supporter or Kaguya Premium key. Supporter Keys may be " +
@@ -73,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 await DatabaseQueries.InsertOrReplaceAsync((SupporterKey) newKey);
             }
 
-            else if (premiumKey != null)
+            else if (!string.IsNullOrEmpty(premiumKey.Key))
             {
                 newKey = new PremiumKey
                 {
@@ -106,17 +109,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             expirationDate += DateTime.Now.AddSeconds(ts.TotalSeconds).ToOADate();
             expirationDate -= DateTime.Now.ToOADate();
 
+            user.TotalDaysSupported += (int)TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
+            int totalDaysSupported = user.TotalDaysSupported;
 
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully redeemed `" +
-                              $"{ts.Humanize(minUnit: TimeUnit.Day, maxUnit: TimeUnit.Day)}` of {typeString}!\n" +
-                              $"{nameSwitch} subscription will expire on: `{DateTime.FromOADate(expirationDate).ToLongDateString()}`"
+                              $"{ts.Humanize(maxUnit: TimeUnit.Day)}` of {typeString}!\n" +
+                              $"{nameSwitch} subscription will expire on: `{DateTime.FromOADate(expirationDate).ToLongDateString()}`\n" +
+                              $"You've supported for `{totalDaysSupported:N0}` days! " +
+                              $"That's `{ServerUptimeCalcInDays(totalDaysSupported):N2} days` of server uptime 💙",
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = "It may not seem like a lot, but it all adds up. Thanks for your support!"
+                }
             };
             embed.SetColor(EmbedColor.GOLD);
 
             await ReplyAsync(embed: embed.Build());
             await SendEmbedToBotOwner(Context, newKey);
+            await DatabaseQueries.UpdateAsync(user);
         }
 
         private async Task SendEmbedToBotOwner(ICommandContext context, IKey key)
@@ -156,6 +168,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
                 await owner.SendMessageAsync(embed: embed.Build());
             }
+        }
+
+        private double ServerUptimeCalcInDays(int totalDaysSupported)
+        {
+            // 13 cents per day for supporter.
+            // $2.69 per day for the server.
+            // 1 day of supporter = 0.04 days of server uptime
+            return (AVERAGE_MONTHLY_SUPPORTER_PAYMENT / 30) / (MONTHLY_SERVER_FEE / 30) * totalDaysSupported;
         }
     }
 }

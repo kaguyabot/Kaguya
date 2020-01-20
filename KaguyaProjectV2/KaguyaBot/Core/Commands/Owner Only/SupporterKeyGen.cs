@@ -7,8 +7,12 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
+using Humanizer;
+using Humanizer.Localisation;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -17,7 +21,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         private static readonly Random Random = new Random();
 
         [OwnerCommand]
-        [Command("supportergen")]
+        [Command("supportergen", RunMode = RunMode.Async)]
+        [Alias("sgen")]
         [Summary("Generates a specified amount of Kaguya Supporter " +
                  "keys for the length of time given (in days). If no amount is " +
                  "specified, this command generates 1 key. If no length of time is given, " +
@@ -30,13 +35,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
             RegexTimeParser.Parse(duration, out int sec, out int min, out int hour, out int day);
 
-            TimeSpan timeSpan = RegexTimeParser.ParseToTimespan(duration);
+            TimeSpan timeSpan = duration.ParseToTimespan();
             long timeInSeconds = (long)timeSpan.TotalSeconds;
 
             var existingKeys = await DatabaseQueries.GetAllAsync<SupporterKey>(x =>
                 x.Expiration > DateTime.Now.ToOADate() &&
                 x.UserId != 0);
-            List<SupporterKey> keys = new List<SupporterKey>();
+            var keys = new List<SupporterKey>();
 
             for (int i = 0; i < amount; i++)
             {
@@ -55,19 +60,43 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 keys.Add(key);
             }
 
-            using (var memoryStream = new MemoryStream())
-            {
-                var writer = new StreamWriter(memoryStream);
+            string keyDuration = TimeSpan.FromSeconds(keys.First().LengthInSeconds).Humanize(maxUnit: TimeUnit.Day);
 
+            if (amount < 25)
+            {
+                string keyStr = "";
                 foreach (var key in keys)
                 {
-                    writer.Write($"{key.Key}\n");
+                    keyStr += $"`{key.Key}`\n";
                 }
 
-                await writer.FlushAsync();
-                memoryStream.Seek(0, SeekOrigin.Begin);
+                var embed = new KaguyaEmbedBuilder
+                {
+                    Title = $"{amount} {keyDuration} Supporter Keys",
+                    Description = keyStr
+                };
 
-                await Context.User.SendFileAsync(memoryStream, $"{keys.Count} Keys.txt");
+                await Context.User.SendMessageAsync(embed: embed.Build());
+                await Context.Channel.SendBasicSuccessEmbedAsync($"{Context.User.Mention}, I DM'd you with {amount:N0} supporter keys.");
+            }
+            else
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    var writer = new StreamWriter(memoryStream);
+
+                    foreach (var key in keys)
+                    {
+                        writer.Write($"{key.Key}\n");
+                    }
+
+                    await writer.FlushAsync();
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+
+                    await Context.User.SendFileAsync(memoryStream, $"{keys.Count} Keys.txt");
+                    await Context.Channel.SendBasicSuccessEmbedAsync(
+                        $"{Context.User.Mention}, I DM'd you a file with `{amount:N0}` new `{keyDuration}` supporter keys.");
+                }
             }
 
             await DatabaseQueries.BulkCopy(keys);
