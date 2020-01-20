@@ -147,7 +147,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 {
                     Title = "Message Updated",
                     Description = $"User: `[Name: {oldMsg.Author} | ID: {oldMsg.Author.Id}]`\n" +
-                                  $"Old Message: `{content}`\nNew Message: `{arg2.Content}`\nChannel: `{oldMsg.Channel}`\nDate Originally Created: `{oldMsg.CreatedAt}`\n",
+                                  $"Old Message: `{content}`\nNew Message: `{arg2.Content}`\nChannel: `{oldMsg.Channel}`\n" +
+                                  $"Date Originally Created: `{oldMsg.CreatedAt}`\n",
                     ThumbnailUrl = "https://i.imgur.com/uYkjSxM.png"
                 };
 

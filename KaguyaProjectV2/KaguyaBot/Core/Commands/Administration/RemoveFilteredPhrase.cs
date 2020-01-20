@@ -16,15 +16,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [AdminCommand]
         [Command("FilterRemove")]
         [Alias("fr")]
-        [Summary("Removes one phrase or a list of filtered phrases from your server's word filter. Words are separated by periods.")]
-        [Remarks("<phrase>.<phrase 2>.{...}\ndodohead.big beachy muffins.penguins!!")]
+        [Summary("Removes one phrase or a list of filtered phrases from your server's word filter. Phrases are separated by spaces. " +
+                 "If a phrase is longer than one word, surround it with `\"\"`.")]
+        [Remarks("<phrase> {...}\nMyPhrase \"My phrase with spaces\"")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
-        public async Task RemovePhrase(string args)
+        public async Task RemovePhrase(params string[] args)
         {
-            string[] newArgs = ArrayInterpreter.ReturnParams(args);
-
             string s = "s";
-            if (newArgs.Length == 1) s = "";
+            if (args.Length == 1) s = "";
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var allFp = server.FilteredPhrases.ToList();
@@ -41,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 return;
             }
 
-            foreach (string element in newArgs)
+            foreach (string element in args)
             {
                 FilteredPhrase fp = new FilteredPhrase
                 {

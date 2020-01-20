@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using System.Threading.Tasks;
+using Humanizer;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
@@ -21,7 +22,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             greetingMsg = greetingMsg.Replace("{USERNAME}", u.Username);
             greetingMsg = greetingMsg.Replace("{USERMENTION}", u.Mention);
             greetingMsg = greetingMsg.Replace("{SERVER}", u.Guild.Name);
-            greetingMsg = greetingMsg.Replace("{MEMBERCOUNT}", $"{u.Guild.MemberCount:N0}");
+            greetingMsg = greetingMsg.Replace("{MEMBERCOUNT}", $"{u.Guild.MemberCount}");
+            greetingMsg = greetingMsg.Replace("{MEMBERCOUNT2}", $"{u.Guild.MemberCount.Ordinalize()}");
 
             await channel.SendMessageAsync(greetingMsg);
         }

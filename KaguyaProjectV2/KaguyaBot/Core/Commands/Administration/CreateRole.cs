@@ -16,14 +16,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [AdminCommand]
         [Command("CreateRole")]
         [Alias("cr")]
-        [Summary("Creates a role, or a list of roles. New roles are separated by periods.")]
-        [Remarks("<role>.<role2>.{...}\nStage Penguins.Some long role.Moofins")]
+        [Summary("Creates a role, or a list of roles. New roles are separated by spaces. If a role " +
+                 "has spaces in the name, surround it with `\"\"`.")]
+        [Remarks("<role> {...}\n\"Some long role\" Moofins")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task RemoveRole([Remainder]string targetRole)
+        public async Task RemoveRole(params string[] roleNames)
         {
-            string[] roleNames = ArrayInterpreter.ReturnParams(targetRole);
-
             if (roleNames.Count() > 1)
             {
                 KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder

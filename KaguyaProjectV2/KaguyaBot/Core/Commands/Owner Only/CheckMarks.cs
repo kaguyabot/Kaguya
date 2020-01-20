@@ -18,11 +18,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         /// </summary>
         [OwnerCommand]
         [Command("check")]
-        [Summary("Checks off items in the Kaguya Support #todo-list channel.")]
-        [Remarks("<ID>.<ID> {...}\n651506875405434937.652020702387372044")]
-        public async Task Check(string idString)
+        [Summary("Checks off items in the Kaguya Support #todo-list channel. IDs are separated by spaces.")]
+        [Remarks("<ID> {...}\n651506875405434937 652020702387372044")]
+        public async Task Check(params string[] ids)
         {
-            var ids = ArrayInterpreter.ReturnParams(idString);
             var channel = ConfigProperties.Client.GetGuild(546880579057221644).GetTextChannel(546883647429410826);
 
             foreach (var element in ids)
