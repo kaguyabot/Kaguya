@@ -47,7 +47,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var currentBlacklists = server.BlackListedChannels.ToList();
 
+#pragma warning disable 219
             var hasT = false;
+#pragma warning restore 219
             var hasAll = false;
 
             var expiration = DateTime.MaxValue.ToOADate();
@@ -59,29 +61,33 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     goto ArgumentProcessException;
                 }
-                if(args.Count == 1)
+
+                switch (args.Count)
                 {
-                    var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
-                        x.ChannelId == Context.Channel.Id && x.ServerId == Context.Guild.Id);
-                    await DatabaseQueries.DeleteAsync(curUnblacklist);
+                    case 1:
+                    {
+                        var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
+                            x.ChannelId == Context.Channel.Id && x.ServerId == Context.Guild.Id);
+                        await DatabaseQueries.DeleteAsync(curUnblacklist);
 
-                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
-                                                                     $"`{Context.Channel.Name}`");
-                    return;
-                }
-                if (args.Count == 2)
-                {
-                    // Replaces the <#> in <#94580295820586> (some random ID)
-                    args[1] = args[1].Replace("<#", "").Replace(">", "");
+                        await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
+                                                                         $"`{Context.Channel.Name}`");
+                        return;
+                    }
+                    case 2:
+                    {
+                        // Replaces the <#> in <#94580295820586> (some random ID)
+                        args[1] = args[1].Replace("<#", "").Replace(">", "");
 
-                    var toUnblacklistChannel = Context.Guild.GetTextChannel(args[1].AsUlong());
-                    var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
-                        x.ChannelId == toUnblacklistChannel.Id && x.ServerId == Context.Guild.Id);
-                    await DatabaseQueries.DeleteAsync(curUnblacklist);
+                        var toUnblacklistChannel = Context.Guild.GetTextChannel(args[1].AsUlong());
+                        var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
+                            x.ChannelId == toUnblacklistChannel.Id && x.ServerId == Context.Guild.Id);
+                        await DatabaseQueries.DeleteAsync(curUnblacklist);
 
-                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
-                                                                     $"`{Context.Channel.Name}`");
-                    return;
+                        await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
+                                                                         $"`{Context.Channel.Name}`");
+                        return;
+                    }
                 }
             }
 

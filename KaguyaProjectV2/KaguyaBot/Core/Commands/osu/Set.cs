@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
         [OsuCommand]
-        [Command("osuset")]
+        [Command("osuSet")]
         [Summary("Allows a user to store their osu! username or ID in their Kaguya account. " +
                  "This way, users may use the other osu! commands without having to specify a " +
                  "player, assuming they want information about themselves.")]
@@ -30,11 +30,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 
             //Getting user profile database object and updating it.
             var userAccount = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            userAccount.OsuId = playerObject.user_id;
+            userAccount.OsuId = playerObject.UserId;
             await DatabaseQueries.UpdateAsync(userAccount);
 
             embed.WithTitle("osu! Username Set");
-            embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed to `{playerObject.username}`.**");
+            embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed to `{playerObject.Username}`.**");
 
             await ReplyAsync(embed: embed.Build());
         }

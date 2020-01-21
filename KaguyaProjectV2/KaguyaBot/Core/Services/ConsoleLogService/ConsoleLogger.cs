@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Discord.Commands;
+﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {
@@ -13,22 +13,41 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
         private static readonly string LogFileName = $"KaguyaLog_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
 
         /// <summary>
-        /// Logs a message to the console.
+        /// Logs a message to the console and the log file.
         /// </summary>
-        /// <param name="message">The message to be logged to the console.</param>
-        /// <param name="logLevel">The severity of the message. Higher severity log messages get special coloring in the console.</param>
-        /// <param name="context"></param>
+        /// <param name="message">The <see cref="string"/> to display inside of the console.</param>
+        /// <param name="logLevel">The <see cref="LogLvl"/> that determines this log's severity.</param>
+        /// <param name="colorOverride">Whether to override the console colors.
+        /// These are normally automatically determined by the provided <see cref="logLevel"/></param>
+        /// <param name="foregroundColor">Assuming we override the colors, this will alter the color of the text shown in the console.</param>
+        /// <param name="backgroundColor">Modifies the background color </param>
+        /// <param name="displaySeverity">Whether to display the date and time in the console.</param>
+        /// <param name="showDate">Whether to display the date and time in the console.</param>
         /// <returns></returns>
-        public static async Task LogAsync(string message, LogLvl logLevel)
+        public static async Task LogAsync(string message, LogLvl logLevel, bool colorOverride = false, 
+             ConsoleColor backgroundColor = ConsoleColor.Black, ConsoleColor foregroundColor = ConsoleColor.White, bool displaySeverity = true, 
+            bool showDate = true)
         {
             string logP = LogPrefix(logLevel);
-            string contents = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} {logP} {message}";
+            string dateString = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}";
+            string contents = $"{(showDate ? $"{dateString} " : "")}{(displaySeverity ? $"{logP} " : "")}{message}";
 
+            if(colorOverride == false && foregroundColor != ConsoleColor.White || colorOverride == false && backgroundColor != ConsoleColor.Black)
+                throw new InvalidOperationException("Cannot change the console colors with the \"colorOverride\" parameter set to false.");
+
+            // If the loglevel provided in the Config is only set to display more severe logs, return.
             if (ConfigProperties.LogLevel > logLevel) return;
-            await LogFinisher(logLevel, contents);
+
+            await LogFinisher(logLevel, contents, colorOverride, backgroundColor, foregroundColor);
         }
 
-        public static async Task LogAsync(ICommandContext context, LogLvl logLevel)
+        /// <summary>
+        /// Logs a Discord command to the console. This log message is special in that the format is completely different from other log messages.
+        /// </summary>
+        /// <param name="context">The <see cref="ICommandContext"/> that we will use to gather command data from.</param>
+        /// <param name="logLevel">The severity of this log message.</param>
+        /// <returns></returns>
+        public static async Task LogAsync(ICommandContext context, LogLvl logLevel = LogLvl.INFO)
         {
             string logP = LogPrefix(logLevel);
 
@@ -98,10 +117,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             }
         }
 
-        private static async Task LogFinisher(LogLvl logLevel, string contents)
+        private static async Task LogFinisher(LogLvl logLevel, string contents, bool colorOverride = false, 
+            ConsoleColor backgroundColor = ConsoleColor.Black, ConsoleColor foregroundColor = ConsoleColor.White)
         {
             //Logs to console only if the log level is less or equally severe to what is specified in the config.
             SetConsoleColor(logLevel);
+
+            if (colorOverride)
+            { 
+                Console.BackgroundColor = backgroundColor;
+                Console.ForegroundColor = foregroundColor;
+            }
+
             Console.WriteLine(contents);
 
             if (LogFileExists())

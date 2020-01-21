@@ -4,21 +4,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Models
 {
     public class OsuRecentModel : OsuScoreableModel
     {
-        public int beatmap_id { get; set; }
-        public int score { get; set; }
-        public int counttotal { get; set; }
-        public int maxcombo { get; set; }
-        public int enabled_mods { get; set; }
-        public string perfect { get; set; }
-        public string string_mods { get; set; }
-        public string user_id { get; set; }
-        public string rank { get; set; }
-        public string rankemote { get; set; }
-        public double accuracy { get; set; }
-        public double completion { get; set; }
-        public double pp { get; set; }
-        public double fullcombopp { get; set; }
-        public DateTime date { get; set; }
-        public OsuBeatmapModel beatmap { get; set; }
+        public int BeatmapId { get; set; }
+        //public int Score { get; set; }
+        public int CountTotal { get; set; }
+        public int MaxCombo { get; set; }
+        public int EnabledMods { get; set; }
+        //public string Perfect { get; set; }
+        public string ModString { get; set; }
+        //public string UserId { get; set; }
+        public string Rank { get; set; }
+        public string RankEmote { get; set; }
+        public double Accuracy { get; set; }
+        public double Completion { get; set; }
+        public double PP { get; set; }
+        public double FullComboPP { get; set; }
+        public DateTime Date { get; set; }
+        public OsuBeatmapModel Beatmap { get; set; }
     }
 }

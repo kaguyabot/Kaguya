@@ -2,11 +2,11 @@
 {
     public class OsuScoreableModel : OsuBaseModel
     {
-        public int count50 { get; set; }
-        public int count100 { get; set; }
-        public int count300 { get; set; }
-        public int countmiss { get; set; }
-        public int countkatu { get; set; }
-        public int countgeki { get; set; }
+        public int Count50 { get; set; }
+        public int Count100 { get; set; }
+        public int Count300 { get; set; }
+        public int Countmiss { get; set; }
+        //public int Countkatu { get; set; }
+        //public int Countgeki { get; set; }
     }
 }

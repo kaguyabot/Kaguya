@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
         {
             foreach (var item in userArray)
             {
-                item.difference = DateTime.Now - item.join_date;
+                item.Difference = DateTime.Now - item.JoinDate;
             }
 
             var userList = userArray.ToList();

@@ -56,33 +56,33 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
             foreach (var item in array)
             {
                 //Calculate accuracy for osu!standard
-                item.accuracy = OsuExtension.OsuAccuracy(item.count50, item.count100, item.count300, item.countmiss);
+                item.Accuracy = OsuExtension.OsuAccuracy(item.Count50, item.Count100, item.Count300, item.Countmiss);
 
                 //Get string for mods
-                item.string_mods = OsuExtension.ModeNames(item.enabled_mods);
+                item.ModString = OsuExtension.ModeNames(item.EnabledMods);
 
                 //Fill in Emote of Grade
-                item.rankemote = OsuExtension.OsuGrade(item.rank);
+                item.RankEmote = OsuExtension.OsuGrade(item.Rank);
 
                 //Get Beatmap of recent play
                 string mapRecent = "";
                 using (WebClient client = new WebClient())
                 {
-                    mapRecent = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={ConfigProperties.BotConfig.OsuApiKey}&b={item.beatmap_id}");
+                    mapRecent = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={ConfigProperties.BotConfig.OsuApiKey}&b={item.BeatmapId}");
                 }
-                item.beatmap = JsonConvert.DeserializeObject<OsuBeatmapModel[]>(mapRecent)[0];
+                item.Beatmap = JsonConvert.DeserializeObject<OsuBeatmapModel[]>(mapRecent)[0];
 
                 //PPv2
-                byte[] data = new WebClient().DownloadData($"https://osu.ppy.sh/osu/{item.beatmap_id}");
+                byte[] data = new WebClient().DownloadData($"https://osu.ppy.sh/osu/{item.BeatmapId}");
                 var beatmapData = Beatmap.Read(new StreamReader(new MemoryStream(data, false)));
-                var diff = new DiffCalc().Calc(beatmapData, (Mods)item.enabled_mods);
+                var diff = new DiffCalc().Calc(beatmapData, (Mods)item.EnabledMods);
 
-                item.pp = new PPv2(new PPv2Parameters(beatmapData, diff, new Accuracy(item.count300, item.count100, item.count50, item.countmiss).Value(), item.countmiss, item.maxcombo, (Mods)item.enabled_mods)).Total;
-                item.fullcombopp = new PPv2(new PPv2Parameters(beatmapData, diff, accuracy: (item.accuracy / 100), mods: (Mods)item.enabled_mods)).Total;
+                item.PP = new PPv2(new PPv2Parameters(beatmapData, diff, new Accuracy(item.Count300, item.Count100, item.Count50, item.Countmiss).Value(), item.Countmiss, item.MaxCombo, (Mods)item.EnabledMods)).Total;
+                item.FullComboPP = new PPv2(new PPv2Parameters(beatmapData, diff, accuracy: (item.Accuracy / 100), mods: (Mods)item.EnabledMods)).Total;
 
                 //Get Beatmap completion rate and total count of hit notes 
-                item.counttotal = (item.count300 + item.count100 + item.count50 + item.countmiss);
-                item.completion = item.counttotal / (double)beatmapData.Objects.Count() * 100;
+                item.CountTotal = (item.Count300 + item.Count100 + item.Count50 + item.Countmiss);
+                item.Completion = item.CountTotal / (double)beatmapData.Objects.Count() * 100;
             }
 
             return array;

@@ -555,7 +555,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <typeparam name="T"></typeparam>
         /// <param name="arg">The object to insert, assuming it doesn't already exist.</param>
         /// <returns></returns>
-        public static async Task InsertIfNotExists<T>(T arg) where T : class, IKaguyaQueryable<T>
+        public static async Task InsertIfNotExistsAsync<T>(T arg) where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
             {

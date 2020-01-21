@@ -13,8 +13,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class UpdateAsync : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("FilterAdd")]
-        [Alias("fa")]
+        [Command("AddFilteredPhrase")]
+        [Alias("filteradd", "fa", "afp")]
         [Summary("Adds a list of filtered phrases to your server's word filter. " +
             "These are phrases that will automatically be deleted when typed in chat. " +
             "Users with the `Administrator` permission automatically are ignored by this " +
@@ -28,12 +28,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             string s = "s";
             if (args.Length == 1) s = "";
 
-            Server server = DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id).Result;
+            var server = DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id).Result;
             var allFp = server.FilteredPhrases.ToList();
 
             if(args.Length == 0)
             {
-                KaguyaEmbedBuilder embed0 = new KaguyaEmbedBuilder
+                var embed0 = new KaguyaEmbedBuilder
                 {
                     Description = "Please specify at least one phrase."
                 };
@@ -45,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             foreach (string element in args)
             {
-                FilteredPhrase fp = new FilteredPhrase
+                var fp = new FilteredPhrase
                 {
                     ServerId = server.ServerId,
                     Phrase = element
@@ -53,11 +53,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 if (allFp.Contains(fp)) continue;
 
-                await DatabaseQueries.InsertOrReplaceAsync(fp); 
+                await DatabaseQueries.InsertIfNotExistsAsync(fp); 
                 await ConsoleLogger.LogAsync($"Server {server.ServerId} has added the phrase \"{element}\" to their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+            var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully added {args.Length} phrase{s} to the filter."
             };

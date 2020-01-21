@@ -4,6 +4,7 @@ using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
@@ -14,15 +15,14 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args) => new Program().MainAsync(args).GetAwaiter().GetResult();
+        private static void Main(string[] args) => new Program().MainAsync(args).GetAwaiter().GetResult();
 
         private DiscordShardedClient _client;
         private static TwitchAPI _api;
@@ -65,7 +65,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                     await EnableTimers(AllShardsLoggedIn(_client, config));
                     InitializeEventHandlers();
-                   // await PopulateHentai(500);
 
                     await Task.Delay(-1);
                 }
@@ -85,8 +84,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         }
         public async Task SetupKaguya()
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"========== KaguyaBot Version {ConfigProperties.Version} ==========");
+            await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========", LogLvl.INFO, true, 
+                ConsoleColor.Cyan, ConsoleColor.Black, false, false);
         }
 
         private void GlobalPropertySetup(ConfigModel _config)

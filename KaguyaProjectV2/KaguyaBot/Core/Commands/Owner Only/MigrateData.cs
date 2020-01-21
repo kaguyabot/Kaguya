@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     UserId = (ulong)u.ID,
                     Experience = u.EXP,
                     Points = u.Points,
-                    OsuId = new OsuUserBuilder(u.OsuUsername).Execute()?.user_id ?? 0,
+                    OsuId = new OsuUserBuilder(u.OsuUsername).Execute()?.UserId ?? 0,
                     TotalCommandUses = 0,
                     TotalDaysSupported = 0,
                     TotalNSFWImages = 0,

@@ -61,23 +61,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
                 }
 
                 //Sets playnumber of this play.
-                item.play_number = i;
+                item.PlayNumber = i;
 
                 //Calculate accuracy for osu!standard
-                item.accuracy = OsuExtension.OsuAccuracy(item.count50, item.count100, item.count300, item.countmiss);
+                item.Accuracy = OsuExtension.OsuAccuracy(item.Count50, item.Count100, item.Count300, item.Countmiss);
 
                 //Get string for mods
-                item.string_mods = OsuExtension.ModeNames(item.enabled_mods);
+                item.StringMods = OsuExtension.ModeNames(item.EnabledMods);
 
                 //Fill in Emote of Grade
-                item.rankemote = OsuExtension.OsuGrade(item.rank);
+                item.RankEmote = OsuExtension.OsuGrade(item.Rank);
 
                 string mapBest = "";
                 using (WebClient client = new WebClient())
                 {
-                    mapBest = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={ConfigProperties.BotConfig.OsuApiKey}&b={item.beatmap_id}");
+                    mapBest = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={ConfigProperties.BotConfig.OsuApiKey}&b={item.BeatmapId}");
                 }
-                item.beatmap = JsonConvert.DeserializeObject<OsuBeatmapModel[]>(mapBest)[0];
+                item.Beatmap = JsonConvert.DeserializeObject<OsuBeatmapModel[]>(mapBest)[0];
 
                 i++;
             }
