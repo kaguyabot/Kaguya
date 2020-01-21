@@ -40,15 +40,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         }
                         case "deletedmessages": server.LogDeletedMessages = channel.Id; break;
                         case "updatedmessages": server.LogUpdatedMessages = channel.Id; break;
+                        case "filteredphrases": server.LogFilteredPhrases = channel.Id; break;
                         case "userjoins": server.LogUserJoins = channel.Id; break;
                         case "userleaves": server.LogUserLeaves = channel.Id; break;
-                        case "antiraid": server.LogAntiraids = channel.Id; break;
                         case "kicks": server.LogKicks = channel.Id; break;
                         case "bans": server.LogBans = channel.Id; break;
                         case "unbans": server.LogUnbans = channel.Id; break;
-                        case "filteredphrases": server.LogFilteredPhrases = channel.Id; break;
                         case "uservoiceconnectionupdated": server.LogVoiceChannelConnections = channel.Id; break;
                         case "levelups": server.LogLevelAnnouncements = channel.Id; break;
+                        case "fishlevels": server.LogFishLevels = channel.Id; break;
+                        case "antiraid": server.LogAntiraids = channel.Id; break;
+                        case "greetings": server.LogGreetings = channel.Id; break;
+                        case "twitchnotifications": server.LogTwitchNotifications = channel.Id; break;
                         case "all":
                             {
                                 server.ModLog = channel.Id;
