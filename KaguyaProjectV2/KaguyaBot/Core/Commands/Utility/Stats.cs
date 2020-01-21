@@ -26,6 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             var client = ConfigProperties.Client;
             var owner = client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
             var curShard = client.GetShardFor(Context.Guild);
 
@@ -75,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                     Name = "Command Stats",
                     Value = $"Commands Run (Last 24 Hours): `{cmdsLastDay.Count:N0}`\n" +
                             $"Commands Run (All-time): `{await DatabaseQueries.GetCountAsync<CommandHistory>():N0}`\n" +
-                            $"Most Popular Command: `{mostPopCommand.Keys.FirstOrDefault()} with {mostPopCommand.Values.FirstOrDefault()} uses.`"
+                            $"Most Popular Command: `{server.CommandPrefix}{mostPopCommand.Keys.FirstOrDefault()} with {mostPopCommand.Values.FirstOrDefault():N0} uses.`"
                 },
                 new EmbedFieldBuilder
                 {

@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
@@ -30,18 +31,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             foreach (var prop in server.GetType().GetProperties()
                 .Where(x => x.PropertyType == typeof(ulong) && !x.Name.Contains("Id")))
             {
-                ulong matchChannel = 0;
-                if (logTypes.Any(type => prop.Name == type))
-                {
-                    matchChannel = (ulong)prop.GetValue(server, null);
-                }
+                if (!server.IsPremium && prop.Name.ToLower() == "modlog")
+                    continue;
 
-                SocketTextChannel? channel =
-                    ConfigProperties.Client.GetGuild(Context.Guild.Id).GetTextChannel(matchChannel);
+                var matchChannel = (ulong)prop.GetValue(server);
+
+                SocketTextChannel? channel = ConfigProperties.Client.GetGuild(Context.Guild.Id).GetTextChannel(matchChannel);
                 var deletedChannel = channel == null && matchChannel != 0;
 
                 logSettingString +=
-                    $"**{(prop.Name == "ModLog" ? "ModLog (Kaguya Premium Only)" : prop.Name.Replace("Log", ""))}** - {(channel == null ? "`Not assigned.`" : "Currently assigned to: ")} " +
+                    $"**{(prop.Name == "ModLog" ? "ModLog (Kaguya Premium Only)" : prop.Name.Replace("Log", ""))}** - {(channel == null && !deletedChannel ? "`Not assigned.`" : "Currently assigned to: ")} " +
                     $"{(deletedChannel ? $"`*Deleted channel with ID: {matchChannel}`*" : $"{(channel == null ? null : $"`#{channel.Name}`")}")}\n";
             }
 

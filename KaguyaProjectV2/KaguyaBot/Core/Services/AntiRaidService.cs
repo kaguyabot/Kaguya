@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using System;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Humanizer;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -110,7 +112,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     {
                         await mute.AutoMute(user);
                     }
-
                     break;
                 case "kick":
                     var kick = new Kick();
@@ -118,7 +119,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     {
                         await kick.AutoKickUserAsync(user, "Kaguya Anti-Raid protection.");
                     }
-
                     break;
                 case "shadowban":
                     var sb = new Shadowban();
@@ -126,7 +126,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     {
                         await sb.AutoShadowbanUserAsync(user);
                     }
-
                     break;
                 case "ban":
                     var ban = new Ban();
@@ -134,9 +133,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     {
                         await ban.AutoBanUserAsync(user, "Kaguya Anti-Raid protection.");
                     }
-
                     break;
             }
+
+            AntiRaidEvent.Trigger(guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
         }
     }
 
@@ -170,6 +170,35 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
             CachedTimers.Remove(existingObj);
             CachedTimers.Add(stObj);
+        }
+    }
+
+    public static class AntiRaidEvent
+    {
+        public static event Func<AntiRaidEventArgs, Task> OnRaid;
+
+        public static void Trigger(List<SocketGuildUser> users, SocketGuild guild, string punishment)
+        {
+            AntiRaidEventTrigger(new AntiRaidEventArgs(users, guild, punishment));
+        }
+
+        private static void AntiRaidEventTrigger(AntiRaidEventArgs e)
+        {
+            OnRaid?.Invoke(e);
+        }
+    }
+
+    public class AntiRaidEventArgs : EventArgs
+    {
+        public List<SocketGuildUser> GuildUsers { get; }
+        public SocketGuild SocketGuild { get; }
+        public string Punishment { get; }
+
+        public AntiRaidEventArgs(List<SocketGuildUser> users, SocketGuild guild, string punishment)
+        {
+            this.GuildUsers = users;
+            this.SocketGuild = guild;
+            this.Punishment = punishment;
         }
     }
 }

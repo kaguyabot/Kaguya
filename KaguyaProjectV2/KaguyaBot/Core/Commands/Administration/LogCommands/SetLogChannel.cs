@@ -18,8 +18,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         [Remarks("<logtype> <channel>\ndeletedmessages #my-log-channel\nkaguyaserverlog.bans.unbans #my-admin-log-channel\ntwitchnotifications #live-streams")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.SendMessages)]
-        public async Task SetChannel(string logType, SocketTextChannel channel)
+        public async Task SetChannel(string logType, SocketTextChannel channel = null)
         {
+            if (channel == null)
+                channel = (SocketTextChannel)Context.Channel;
+
             KaguyaEmbedBuilder embed;
             List<string> logTypes = await LogQuery.LogSwitcher(logType, true, channel.Guild.Id, channel);
 

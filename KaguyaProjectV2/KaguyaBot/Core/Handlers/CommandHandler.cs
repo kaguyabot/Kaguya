@@ -41,6 +41,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         public async Task HandleCommandAsync(SocketMessage msg)
         {
             if (!(msg is SocketUserMessage message) || message.Author.IsBot) return;
+            if (msg.Channel.GetType() != typeof(SocketTextChannel))
+                return;
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel)message.Channel).Guild.Id);
             User user = await DatabaseQueries.GetOrCreateUserAsync(message.Author.Id);

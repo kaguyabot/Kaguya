@@ -104,8 +104,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return server.ServerExp.OrderByDescending(x => x.Exp).ToList().FindIndex(x => x.UserId == user.UserId) +
-                       1;
+                return server.ServerExp.OrderByDescending(x => x.Exp).ToList().FindIndex(x => x.UserId == user.UserId) + 1;
             }
         }
 
@@ -124,7 +123,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <see cref="User"/>'s points balance. This action will add the points to the user's account.
         /// </summary>
         /// <param name="fish">The fish to sell.</param>
-        /// <param name="user">The user to add the value of the fish to.</param>
+        /// <param name="userId">The ID of the user to add the value of the fish to.</param>
         /// <returns></returns>
         public static async Task SellFishAsync(Fish fish, ulong userId)
         {
@@ -146,8 +145,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// This action will add points to the user's account.
         /// </summary>
         /// <param name="fishCollection">The collection of fish to sell off.</param>
-        /// <param name="taxRate">The rate at which the fish is taxed. (0.05 would be a 5% fee)</param>
-        /// <param name="user"></param>
+        /// <param name="userId">The ID of the user we are selling the fish for.</param>
         /// <returns></returns>
         public static async Task SellFishAsync(IEnumerable<Fish> fishCollection, ulong userId)
         {
@@ -169,6 +167,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <summary>
         /// Returns a List of Fish that belong to the user ID.
         /// </summary>
+        /// <param name="fishType">The type of fish we are selling.</param>
         /// <param name="userId">The id of the user who we want to get all of the fish from.</param>
         /// <returns></returns>
         public static async Task<List<Fish>> GetFishForUserMatchingTypeAsync(FishType fishType, ulong userId)
@@ -185,7 +184,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// Returns a List of Fish that belongs to the user ID that have not been sold. This only returns
         /// actual fish, not the BAIT_STOLEN event.
         /// </summary>
-        /// <param name="user">The user who we want to get all of the unsold fish from.</param>
+        /// <param name="userId">The ID of the user who we want to get all of the unsold fish from.</param>
         /// <returns></returns>
         public static async Task<List<Fish>> GetUnsoldFishForUserAsync(ulong userId)
         {
@@ -428,7 +427,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// Returns the FirstOrDefault <see cref="T"/> that matches the provided <see cref="userId"/> and <see cref="serverId"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="arg"></param>
         /// <param name="userId"></param>
         /// <param name="serverId"></param>
         /// <returns></returns>
@@ -629,13 +627,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                int currency = 0;
-                foreach (var user in db.Users)
-                {
-                    currency += user.Points;
-                }
-
-                return currency;
+                return Enumerable.Sum(db.Users, user => user.Points);
             }
         }
     }
