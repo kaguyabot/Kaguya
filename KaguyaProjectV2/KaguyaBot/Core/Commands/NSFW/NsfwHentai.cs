@@ -25,8 +25,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         [NsfwCommand]
         [Command("Nsfw", RunMode = RunMode.Async)]
         [Alias("n")]
-        [Summary("Posts an NSFW image into chat.")]
-        [Remarks("")]
+        [Summary("Posts an NSFW image into chat. The `bomb` tag may be used to post 3 images at once. Normal users are limited to 12 NSFW images per day. " +
+                 "[Kaguya Supporters](https://the-kaguya-project.myshopify.com/) " +
+                 "may specify one or multiple tags and have no limit on how many images they can post per day. " +
+                 "A complete list of tags may be found [here (SFW link)](https://konachan.com/tag)")]
+        [Remarks("\nbomb\n[tag] {...} ($$$)\nbomb [tag] {...} ($$$)")]
         public async Task Command([Remainder]string tagString)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
@@ -49,7 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                     return;
                 }
 
-                if(tags[0].ToLower() == "bomb")
+                if (tags[0].ToLower() == "bomb")
                 {
                     if (tags[1..].Length != 0)
                     {
@@ -72,10 +75,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 
         public async Task<SearchResult> SendHentaiAsync(params string[] tags)
         {
-            WebClient wc = new WebClient();
+            var wc = new WebClient();
 
             var img = await konachan.GetRandomImage(tags);
-            using (MemoryStream stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.fileUrl)))
+            using (var stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.fileUrl)))
             {
                 await Context.Channel.SendFileAsync(stream, "Kaguya_NSFW.jpg");
             }

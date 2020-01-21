@@ -1,20 +1,20 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using Discord;
 using Discord.Commands;
-using System.Threading.Tasks;
-using Discord;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class ViewFilteredPhrases : ModuleBase<ShardedCommandContext>
     {
         [AdminCommand]
-        [Command("ViewFilteredPhrases")] 
+        [Command("ViewFilteredPhrases")]
         [Alias("vfp", "fv", "filterview")]
         [Summary("Displays all currently filtered phrases. If the character count of all phrases total to more than " +
                  "1,750 characters, they will be sent as a text file.")]
@@ -67,8 +67,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Description = $"{Context.User.Mention}, your filtered phrases were too long to send in one message, " +
                                   $"so I put them in a text file for you!"
                 };
-                await Context.Channel.SendFileAsync(stream, 
-                    $"Filtered_Phrases_{Context.Guild.Name}_{DateTime.Now.ToLongDateString()}.txt", 
+                await Context.Channel.SendFileAsync(stream,
+                    $"Filtered_Phrases_{Context.Guild.Name}_{DateTime.Now.ToLongDateString()}.txt",
                     embed: embed.Build());
             }
         }

@@ -51,9 +51,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             messages = messages.Where(x => x.Timestamp.DateTime > DateTime.Now.AddDays(-14));
 
             var msgsList = messages.ToList(); //Avoiding multiple enumeration.
-            await ((SocketTextChannel) Context.Channel).DeleteMessagesAsync(msgsList);
+            await ((SocketTextChannel)Context.Channel).DeleteMessagesAsync(msgsList);
 
-            if(msgsList.Count == amount + 1)
+            if (msgsList.Count == amount + 1)
             {
                 embed = new KaguyaEmbedBuilder
                 {

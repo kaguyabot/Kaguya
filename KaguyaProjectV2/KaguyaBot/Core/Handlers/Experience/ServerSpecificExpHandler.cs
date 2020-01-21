@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 $"[Server Exp]: User {user.UserId}] has received {exp} exp. [Guild: {server.ServerId}] " +
                 $"Total Exp: {expObject.Exp:N0}]", LogLvl.TRACE);
 
-            if (HasLeveledUp((int) oldLevel, (int) newLevel))
+            if (HasLeveledUp((int)oldLevel, (int)newLevel))
             {
                 await ConsoleLogger.LogAsync(
                     $"[Server Exp]: [Server {server.ServerId} | User {user.UserId}] has leveled up! [Level: {(int)newLevel} | Experience: {GetExpForUser(server, user)}]",

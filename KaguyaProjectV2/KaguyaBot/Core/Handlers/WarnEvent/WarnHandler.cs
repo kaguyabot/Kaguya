@@ -34,7 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                     Action = PremiumModActionHandler.AUTOBAN,
                     Reason = $"Automatic ban due to the user reaching {warnCount} warnings."
                 };
-                await ban.AutoBanUserAsync(guildUser, "User has been automatically banned due to " + 
+                await ban.AutoBanUserAsync(guildUser, "User has been automatically banned due to " +
                                                       $"reaching the specified warning threshold for bans " +
                                                       $"({warnCount} warnings).");
                 await PremiumModerationLog.SendModerationLog(modLog);

@@ -4,8 +4,8 @@ using LinqToDB.Mapping;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "antiraid")]
-    public class AntiRaidConfig : IKaguyaQueryable<AntiRaidConfig>, 
-        IKaguyaUnique<AntiRaidConfig>, 
+    public class AntiRaidConfig : IKaguyaQueryable<AntiRaidConfig>,
+        IKaguyaUnique<AntiRaidConfig>,
         IServerSearchable<AntiRaidConfig>
     {
         [PrimaryKey]

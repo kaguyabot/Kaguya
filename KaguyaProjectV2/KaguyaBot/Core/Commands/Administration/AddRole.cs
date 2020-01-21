@@ -25,10 +25,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task GiveRole(IGuildUser user, params string[] args)
         {
             int i = 0;
-            foreach(string roleName in args)
+            foreach (string roleName in args)
             {
-                var role = roleName.AsUlong(false) != 0 ? 
-                    Context.Guild.GetRole(roleName.AsUlong()) : 
+                var role = roleName.AsUlong(false) != 0 ?
+                    Context.Guild.GetRole(roleName.AsUlong()) :
                     Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
                 try
                 {

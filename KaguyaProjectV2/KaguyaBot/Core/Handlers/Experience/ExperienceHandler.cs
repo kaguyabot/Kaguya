@@ -5,10 +5,10 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             await DatabaseQueries.UpdateAsync(user);
 
             double newLevel = ReturnLevel(user);
-            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has received {exp} exp and {points} points. [New Total: {user.Experience:N0} Exp]", 
+            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has received {exp} exp and {points} points. [New Total: {user.Experience:N0} Exp]",
                 LogLvl.DEBUG);
 
             if (!HasLeveledUp(oldLevel, newLevel))

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using Humanizer;
+﻿using Humanizer;
 using Humanizer.Localisation;
 using LinqToDB.Common;
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Global
 {

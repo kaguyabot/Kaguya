@@ -72,7 +72,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "UpvoteBonusExpiration"), NotNull]
         public double UpvoteBonusExpiration { get; set; }
         public bool IsBlacklisted => BlacklistExpiration - DateTime.Now.ToOADate() > 0;
-        
+
 
         public double SupporterExpirationDate
         {

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.Rest;
-using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -30,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 if (ulong.TryParse(element, out ulong id))
                 {
                     var msg = await channel.GetMessageAsync(id);
-                    await ((RestUserMessage) msg).AddReactionAsync(new Emoji("✅"));
+                    await ((RestUserMessage)msg).AddReactionAsync(new Emoji("✅"));
                 }
             }
 

@@ -1,16 +1,14 @@
-﻿using System;
-using Discord;
+﻿using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
+using Discord.WebSocket;
+using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord.Addons.Interactive;
-using Discord.WebSocket;
-using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -71,7 +69,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     {
                         await role.DeleteAsync();
                         await ReplyAsync($"{Context.User.Mention} `Successfully deleted Role #{roleIndex}`");
-                    }));
+                    }
+                    ));
                 }
 
                 callbacks.Add((new Emoji("⛔"), async (c, r) =>
@@ -82,7 +81,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     }
 
                     await ReplyAsync($"{Context.User.Mention} Successfully deleted `{roles.Count.ToWords()}` roles.");
-                }));
+                }
+                ));
 
                 var data = new ReactionCallbackData("", embed.Build(), false, false, TimeSpan.FromSeconds(120));
                 data.SetCallbacks(callbacks);

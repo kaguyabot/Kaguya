@@ -1,5 +1,9 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
+using Humanizer;
+using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -9,10 +13,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
-using Humanizer;
-using Humanizer.Localisation;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Remarks(" => One 30-day key\n<amount> <time in days>")]
         public async Task GenerateKeys(int amount, string duration)
         {
-            if(amount < 1)
+            if (amount < 1)
                 throw new IndexOutOfRangeException("Amount parameter must be greater than one.");
 
             RegexTimeParser.Parse(duration, out int sec, out int min, out int hour, out int day);

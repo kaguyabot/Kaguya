@@ -3,6 +3,8 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -10,8 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -77,12 +77,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await ReactionReply(user, warnings, embed.Build(), warnCount, server, reason);
         }
 
-        private async Task ReactionReply(IGuildUser user, List<WarnedUser> warnings, Embed embed, 
+        private async Task ReactionReply(IGuildUser user, List<WarnedUser> warnings, Embed embed,
             int warnCount, Server server, string reason)
         {
             var emojis = HelpfulObjects.EmojisOneThroughNine();
 
-            var data = new ReactionCallbackData("", embed, false, false, TimeSpan.FromSeconds(300), c => 
+            var data = new ReactionCallbackData("", embed, false, false, TimeSpan.FromSeconds(300), c =>
                 c.Channel.SendMessageAsync(embed: TimeoutEmbed()));
             var callbacks = new List<(IEmote, Func<SocketCommandContext, SocketReaction, Task>)>();
 
@@ -97,7 +97,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                     if (server.IsPremium && server.ModLog != 0)
                     {
-                        var logChannel = 
+                        var logChannel =
                             ConfigProperties.Client.GetChannel(server.ModLog) as SocketTextChannel;
 
                         await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
@@ -109,7 +109,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             Reason = reason
                         });
                     }
-                }));
+                }
+                ));
             }
 
             data.SetCallbacks(callbacks);

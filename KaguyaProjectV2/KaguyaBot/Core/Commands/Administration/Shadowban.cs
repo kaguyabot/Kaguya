@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -25,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             var roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
             await user.RemoveRolesAsync(roles);
 
-            foreach(var channel in Context.Guild.Channels)
+            foreach (var channel in Context.Guild.Channels)
             {
                 await channel.AddPermissionOverwriteAsync(user, OverwritePermissions.DenyAll(channel));
             }

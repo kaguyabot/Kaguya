@@ -1,9 +1,8 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Osu.Models;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Osu.Models;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
 {

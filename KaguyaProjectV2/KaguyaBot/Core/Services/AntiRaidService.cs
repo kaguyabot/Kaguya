@@ -1,15 +1,13 @@
-﻿using System;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -29,10 +27,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         return;
 
                     var ar = server.AntiRaid.First();
-                    
+
                     if (server.AntiRaid.Count() > 1)
                     {
-                        for(int i = 0; i < server.AntiRaid.Count() - 1; i++)
+                        for (int i = 0; i < server.AntiRaid.Count() - 1; i++)
                         {
                             await DatabaseQueries.DeleteAsync(server.AntiRaid.ToList()[i]);
                         }
@@ -124,7 +122,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     break;
                 case "shadowban":
                     var sb = new Shadowban();
-                    foreach(var user in guildUsers)
+                    foreach (var user in guildUsers)
                     {
                         await sb.AutoShadowbanUserAsync(user);
                     }
@@ -132,7 +130,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     break;
                 case "ban":
                     var ban = new Ban();
-                    foreach(var user in guildUsers)
+                    foreach (var user in guildUsers)
                     {
                         await ban.AutoBanUserAsync(user, "Kaguya Anti-Raid protection.");
                     }

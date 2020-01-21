@@ -4,7 +4,7 @@ using LinqToDB.Mapping;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "praise")]
-    public class Praise : IKaguyaQueryable<Praise>, 
+    public class Praise : IKaguyaQueryable<Praise>,
         IServerSearchable<Praise>,
         IUserSearchable<Praise>
     {

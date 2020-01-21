@@ -45,11 +45,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 fishId = Id;
             }
-            else if(args.Length == 3)
+            else if (args.Length == 3)
             {
                 fishType = $"{args[0].ToUpper()}_{args[1].ToUpper()}_{args[2].ToUpper()}";
             }
-            else if(args.Length == 2)
+            else if (args.Length == 2)
             {
                 fishType = $"{args[0].ToUpper()}_{args[1].ToUpper()}";
             }
@@ -85,11 +85,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                                                                          $"`{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}` " +
                                                                          $"points have been added to your balance.");
                     })
-                    .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) => 
+                    .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
                         await c.Channel.SendBasicErrorEmbedAsync("Okay, I won't take any action.")));
                 return;
             }
-            else if(args.Length == 1)
+            else if (args.Length == 1)
             {
                 fishType = args[0].ToUpper();
             }

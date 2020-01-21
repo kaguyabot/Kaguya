@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Global;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using System.IO;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.ImageGeneration
 {

@@ -11,9 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
-using LinqToDB;
-using LinqToDB.Data;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -67,7 +64,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     Reminders = null
                 };
 
-                if (existingUsers.Any(x => x.UserId == newUser.UserId)) 
+                if (existingUsers.Any(x => x.UserId == newUser.UserId))
                     continue;
 
                 usersToCopy.Add(newUser);

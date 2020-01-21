@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogGreetings { get; set; }
         [Column(Name = "TwitchNotifications"), Nullable]
         public ulong LogTwitchNotifications { get; set; }
-        [Column(Name = "YoutubeNotifications"), Nullable]
+        [Column(Name = "IsBlacklisted"), Nullable]
         public bool IsBlacklisted { get; set; }
         [Column(Name = "CustomGreeting"), Nullable]
         public string CustomGreeting { get; set; }

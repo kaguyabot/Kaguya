@@ -1,10 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 #pragma warning disable 1998
 
@@ -72,7 +72,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
-            return Task.FromResult(user.Result.IsSupporter || ConfigProperties.InBeta ? PreconditionResult.FromSuccess() : 
+            return Task.FromResult(user.Result.IsSupporter || ConfigProperties.InBeta ? PreconditionResult.FromSuccess() :
                 PreconditionResult.FromError("Sorry, but you must be a supporter to use this command."));
         }
     }
@@ -100,7 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             if (context.Client.TokenType == TokenType.Bot)
-                return (long)context.User.Id == (long)(await context.Client.GetApplicationInfoAsync()).Owner.Id ? 
+                return (long)context.User.Id == (long)(await context.Client.GetApplicationInfoAsync()).Owner.Id ?
                     PreconditionResult.FromSuccess() : PreconditionResult.FromError("Command can only be run by the owner of the bot.");
             return PreconditionResult.FromError("RequireOwnerAttribute is not supported by this TokenType.");
         }
@@ -110,7 +110,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     {
         public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
-            if(((SocketGuildUser) context.User).GuildPermissions.Administrator)
+            if (((SocketGuildUser)context.User).GuildPermissions.Administrator)
                 return PreconditionResult.FromSuccess();
             return PreconditionResult.FromError("As this is a dangerous command, the user must be an Administrator to use this command.");
         }

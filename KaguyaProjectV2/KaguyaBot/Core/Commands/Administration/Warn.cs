@@ -3,12 +3,12 @@ using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -54,8 +54,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 var premLog = new PremiumModerationLog
                 {
                     Server = server,
-                    Moderator = (SocketGuildUser) Context.User,
-                    ActionRecipient = (SocketGuildUser) user,
+                    Moderator = (SocketGuildUser)Context.User,
+                    ActionRecipient = (SocketGuildUser)user,
                     Reason = reason,
                     Action = PremiumModActionHandler.WARN
                 };

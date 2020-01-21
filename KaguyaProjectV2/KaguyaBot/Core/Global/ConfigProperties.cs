@@ -2,7 +2,6 @@
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using NekosSharp;
 using System.IO;
-using BooruSharp.Booru;
 using TwitchLib.Api;
 
 #pragma warning disable

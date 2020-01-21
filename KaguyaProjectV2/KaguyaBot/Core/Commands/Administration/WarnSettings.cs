@@ -67,9 +67,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 return;
             }
 
-            var actions = new string[] {"mute", "kick", "shadowban", "ban"};
+            var actions = new string[] { "mute", "kick", "shadowban", "ban" };
 
-            if(actions.All(x => x.ToLower() != action))
+            if (actions.All(x => x.ToLower() != action))
             {
                 var errorEmbed = new KaguyaEmbedBuilder
                 {
@@ -93,7 +93,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 await ReplyAsync(embed: numError.Build());
                 return;
             }
-            
+
             var newSetting = new WarnSetting
             {
                 ServerId = Context.Guild.Id

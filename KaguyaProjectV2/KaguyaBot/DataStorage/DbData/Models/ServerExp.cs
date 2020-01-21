@@ -4,9 +4,9 @@ using LinqToDB.Mapping;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "serverexp")]
-    public class ServerExp : IKaguyaQueryable<ServerExp>, 
-        IKaguyaUnique<ServerExp>, 
-        IServerSearchable<ServerExp>, 
+    public class ServerExp : IKaguyaQueryable<ServerExp>,
+        IKaguyaUnique<ServerExp>,
+        IServerSearchable<ServerExp>,
         IUserSearchable<ServerExp>
     {
         [PrimaryKey]

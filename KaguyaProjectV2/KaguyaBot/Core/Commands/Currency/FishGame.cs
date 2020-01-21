@@ -67,7 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 await ReplyAndDeleteAsync("", false, errorEmbed.Build(), TimeSpan.FromSeconds(2.5));
                 return;
             }
-    
+
             int value;
 
             var embed = new KaguyaEmbedBuilder

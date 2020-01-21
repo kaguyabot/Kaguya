@@ -1,11 +1,11 @@
 ﻿using Discord;
 using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
-            if(prefix.Length > 5)
+            if (prefix.Length > 5)
             {
                 await ConsoleLogger.LogAsync("Command prefix was too long. Not set.", DataStorage.JsonStorage.LogLvl.DEBUG);
 
@@ -53,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             server.CommandPrefix = "$";
             await DatabaseQueries.UpdateAsync(server);
 
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder 
+            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
                 Description = "Reset the prefix back to `$`."
             };

@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                 var channel = (SocketTextChannel)context.Channel;
                 var level = (int)GetFishLevel(newFishExp);
 
-                if(server.LogFishLevels != 0)
+                if (server.LogFishLevels != 0)
                 {
                     try
                     {
@@ -111,7 +111,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
             string newValue = $"{newBonuses.BonusFishValuePercent:N2}%";
             string newTax = $"{newBonuses.TaxReductionPercent:N2}%";
             string newBait = $"{newBonuses.BaitCostIncreasePercent:N2}%";
-            
+
             if (oldBonuses.BonusLuckPercent == MAX_LUCK)
                 oldLuck = "MAX";
             if (oldBonuses.BonusFishValuePercent == MAX_VALUE)
@@ -150,11 +150,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 
                 // Fish level bonus modifier formulas.
                 BonusLuckPercent = Math.Sqrt((double)fishExp / 10000) * 10;
-                BonusFishValuePercent = Math.Sqrt((double) fishExp / 245) * 10;
-                BaitCostIncreasePercent = Math.Sqrt((double) fishExp / 10) * 10;
+                BonusFishValuePercent = Math.Sqrt((double)fishExp / 245) * 10;
+                BaitCostIncreasePercent = Math.Sqrt((double)fishExp / 10) * 10;
                 TaxReductionPercent = (double)fishLvl / 2;
 
-                if(BonusLuckPercent > MAX_LUCK)
+                if (BonusLuckPercent > MAX_LUCK)
                 {
                     BonusLuckPercent = MAX_LUCK;
                 }

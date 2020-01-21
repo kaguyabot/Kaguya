@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
@@ -7,7 +8,6 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {

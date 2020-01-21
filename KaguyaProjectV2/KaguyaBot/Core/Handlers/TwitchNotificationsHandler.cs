@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using TwitchLib.Api.Services.Events.LiveStreamMonitor;
+﻿using TwitchLib.Api.Services.Events.LiveStreamMonitor;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {

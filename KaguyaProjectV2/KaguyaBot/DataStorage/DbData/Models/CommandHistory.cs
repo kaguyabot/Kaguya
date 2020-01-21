@@ -1,12 +1,12 @@
-﻿using System;
-using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using LinqToDB.Mapping;
+using System;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "commandhistory")]
-    public class CommandHistory : IKaguyaQueryable<CommandHistory>, 
-        IUserSearchable<CommandHistory>, 
+    public class CommandHistory : IKaguyaQueryable<CommandHistory>,
+        IUserSearchable<CommandHistory>,
         IServerSearchable<CommandHistory>
     {
         [Column(Name = "UserId"), NotNull]

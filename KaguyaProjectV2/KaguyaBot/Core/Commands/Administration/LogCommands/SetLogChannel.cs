@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
             KaguyaEmbedBuilder embed;
             List<string> logTypes = await LogQuery.LogSwitcher(logType, true, channel.Guild.Id, channel);
 
-            if(logTypes.Count == 0)
+            if (logTypes.Count == 0)
             {
                 embed = new KaguyaEmbedBuilder
                 {
@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         [Remarks("<logtype>\ndeletedmessages\nwarns.unwarns.bans.unbans\ntwitchnotifications")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ResetLogChannel(string logType)
-        { 
+        {
             KaguyaEmbedBuilder embed;
             List<string> logTypes = await LogQuery.LogSwitcher(logType, false, Context.Guild.Id);
 

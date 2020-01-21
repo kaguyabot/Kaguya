@@ -1,9 +1,9 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -20,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public double TimeCaught { get; set; }
         [Column(Name = "Fish"), NotNull]
         public FishType FishType { get; set; }
-        [Column(Name = "FishString")] 
+        [Column(Name = "FishString")]
         public string FishString { get; set; }
         [Column(Name = "Value"), NotNull]
         public int Value { get; set; }
@@ -44,7 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 
             try
             {
-                return (FishType) Enum.Parse(typeof(FishType), name);
+                return (FishType)Enum.Parse(typeof(FishType), name);
             }
             catch (Exception)
             {
@@ -52,7 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             }
         }
 
-        
+
         private static int GetTaxedFishPrice(Fish fish, int userFishExp, double taxRate = 0.05)
         {
             var bonuses = new FishHandler.FishLevelBonuses(userFishExp);

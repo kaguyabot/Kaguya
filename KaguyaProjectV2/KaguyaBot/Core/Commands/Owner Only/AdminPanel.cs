@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -13,8 +7,12 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 // ReSharper disable OperatorIsCanBeUsed
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
@@ -57,7 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
             Type t = user.GetType();
 
-            foreach (PropertyInfo pi in t.GetProperties().Where(x => x.PropertyType == typeof(int) && 
+            foreach (PropertyInfo pi in t.GetProperties().Where(x => x.PropertyType == typeof(int) &&
                                                                      !x.Name.ToLower().Contains("active")))
             {
                 string value = pi.GetValue(user, null)?.ToString() ?? "Null";
@@ -94,7 +92,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     await Context.Channel.SendBasicSuccessEmbedAsync("What would you like to change the value to?");
                     var valMsg = await NextMessageAsync();
 
-                    if(prop.PropertyType == typeof(int))
+                    if (prop.PropertyType == typeof(int))
                         prop.SetValue(user, valMsg.Content.AsInteger(), null);
                     else
                     {

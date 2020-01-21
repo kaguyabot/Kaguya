@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Centvrio.Emoji;
+﻿using Centvrio.Emoji;
 using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
 {
@@ -25,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
             if (msgId != 0)
                 message = await Context.Channel.GetMessageAsync(msgId);
 
-            if(text.Length > 10)
+            if (text.Length > 10)
             {
                 KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
                 {
@@ -36,11 +36,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
                 await ReplyAsync(embed: embed.Build());
                 return;
             }
-                
+
             text.Replace(" ", "");
             List<Emoji> emojis = new List<Emoji>();
 
-            foreach(char letter in text)
+            foreach (char letter in text)
             {
                 emojis.Add(new Emoji($"{ReturnEmoji(letter)}"));
             }

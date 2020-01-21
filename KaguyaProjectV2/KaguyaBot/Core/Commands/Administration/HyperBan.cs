@@ -45,12 +45,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
         private async Task ActuallyBanThem(ICommandContext context, ulong Id)
         {
-            var mutualGuilds = ((SocketUser) context.User).MutualGuilds.Where(x => 
-                x.GetUser(context.User.Id).GuildPermissions.Administrator && 
-                x.GetUser(Id) != null);
+            var mutualGuilds = ((SocketUser)context.User).MutualGuilds.Where(x =>
+               x.GetUser(context.User.Id).GuildPermissions.Administrator &&
+               x.GetUser(Id) != null);
             var targets = new List<SocketGuildUser>();
 
-            foreach(var guild in mutualGuilds)
+            foreach (var guild in mutualGuilds)
             {
                 targets.Add(guild.Users.FirstOrDefault(x => x.Id == Id));
             }

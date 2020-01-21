@@ -1,13 +1,12 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Linq;
-using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
 using System.Text.RegularExpressions;
-using System;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 {
@@ -158,7 +157,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
         {
-            Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel) arg2).Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel)arg2).Guild.Id);
             if (server.LogDeletedMessages == 0)
                 return;
 

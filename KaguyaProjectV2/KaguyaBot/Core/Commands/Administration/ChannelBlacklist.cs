@@ -1,4 +1,6 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
@@ -9,8 +11,6 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -65,29 +65,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 switch (args.Count)
                 {
                     case 1:
-                    {
-                        var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
-                            x.ChannelId == Context.Channel.Id && x.ServerId == Context.Guild.Id);
-                        await DatabaseQueries.DeleteAsync(curUnblacklist);
+                        {
+                            var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
+                                x.ChannelId == Context.Channel.Id && x.ServerId == Context.Guild.Id);
+                            await DatabaseQueries.DeleteAsync(curUnblacklist);
 
-                        await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
-                                                                         $"`{Context.Channel.Name}`");
-                        return;
-                    }
+                            await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
+                                                                             $"`{Context.Channel.Name}`");
+                            return;
+                        }
                     case 2:
-                    {
-                        // Replaces the <#> in <#94580295820586> (some random ID)
-                        args[1] = args[1].Replace("<#", "").Replace(">", "");
+                        {
+                            // Replaces the <#> in <#94580295820586> (some random ID)
+                            args[1] = args[1].Replace("<#", "").Replace(">", "");
 
-                        var toUnblacklistChannel = Context.Guild.GetTextChannel(args[1].AsUlong());
-                        var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
-                            x.ChannelId == toUnblacklistChannel.Id && x.ServerId == Context.Guild.Id);
-                        await DatabaseQueries.DeleteAsync(curUnblacklist);
+                            var toUnblacklistChannel = Context.Guild.GetTextChannel(args[1].AsUlong());
+                            var curUnblacklist = await DatabaseQueries.GetAllAsync<BlackListedChannel>(x =>
+                                x.ChannelId == toUnblacklistChannel.Id && x.ServerId == Context.Guild.Id);
+                            await DatabaseQueries.DeleteAsync(curUnblacklist);
 
-                        await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
-                                                                         $"`{Context.Channel.Name}`");
-                        return;
-                    }
+                            await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
+                                                                             $"`{Context.Channel.Name}`");
+                            return;
+                        }
                 }
             }
 
@@ -133,7 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             // Since we set the "time args" to null above, we can now do normal checks :)
             if (args.Any(x => x.ToLower().Contains("-all")))
             {
-                if(args.Count > 1)
+                if (args.Count > 1)
                     goto ArgumentProcessException;
 
                 await DatabaseQueries.DeleteAllForServerAsync<BlackListedChannel>(server.ServerId);
@@ -166,7 +166,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     {
                         channel = Context.Guild.GetTextChannel(args[0].AsUlong());
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         try
                         {
@@ -174,7 +174,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             args[0] = args[0].Replace("<#", "").Replace(">", "");
                             channel = Context.Guild.GetTextChannel(args[0].AsUlong());
                         }
-                        catch(Exception)
+                        catch (Exception)
                         {
                             throw new KaguyaSupportException("I was unable to parse this input as a valid channel ID.");
                         }

@@ -1,7 +1,7 @@
 ﻿using Discord.WebSocket;
-using System.Threading.Tasks;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {

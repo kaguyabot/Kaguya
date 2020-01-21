@@ -1,5 +1,5 @@
-﻿using System;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using System;
 
 // ReSharper disable VariableHidesOuterVariable
 

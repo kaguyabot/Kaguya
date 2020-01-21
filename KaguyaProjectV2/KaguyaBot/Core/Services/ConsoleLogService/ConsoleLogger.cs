@@ -24,15 +24,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
         /// <param name="displaySeverity">Whether to display the date and time in the console.</param>
         /// <param name="showDate">Whether to display the date and time in the console.</param>
         /// <returns></returns>
-        public static async Task LogAsync(string message, LogLvl logLevel, bool colorOverride = false, 
-             ConsoleColor backgroundColor = ConsoleColor.Black, ConsoleColor foregroundColor = ConsoleColor.White, bool displaySeverity = true, 
+        public static async Task LogAsync(string message, LogLvl logLevel, bool colorOverride = false,
+             ConsoleColor backgroundColor = ConsoleColor.Black, ConsoleColor foregroundColor = ConsoleColor.White, bool displaySeverity = true,
             bool showDate = true)
         {
             string logP = LogPrefix(logLevel);
             string dateString = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}";
             string contents = $"{(showDate ? $"{dateString} " : "")}{(displaySeverity ? $"{logP} " : "")}{message}";
 
-            if(colorOverride == false && foregroundColor != ConsoleColor.White || colorOverride == false && backgroundColor != ConsoleColor.Black)
+            if (colorOverride == false && foregroundColor != ConsoleColor.White || colorOverride == false && backgroundColor != ConsoleColor.Black)
                 throw new InvalidOperationException("Cannot change the console colors with the \"colorOverride\" parameter set to false.");
 
             // If the loglevel provided in the Config is only set to display more severe logs, return.
@@ -117,14 +117,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             }
         }
 
-        private static async Task LogFinisher(LogLvl logLevel, string contents, bool colorOverride = false, 
+        private static async Task LogFinisher(LogLvl logLevel, string contents, bool colorOverride = false,
             ConsoleColor backgroundColor = ConsoleColor.Black, ConsoleColor foregroundColor = ConsoleColor.White)
         {
             //Logs to console only if the log level is less or equally severe to what is specified in the config.
             SetConsoleColor(logLevel);
 
             if (colorOverride)
-            { 
+            {
                 Console.BackgroundColor = backgroundColor;
                 Console.ForegroundColor = foregroundColor;
             }

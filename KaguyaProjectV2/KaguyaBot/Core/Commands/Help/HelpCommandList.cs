@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
-using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -28,10 +25,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var attributes = new Attribute[]
             {
                 new AdminCommandAttribute(), new CurrencyCommandAttribute(),
-                new ExpCommandAttribute(), new FunCommandAttribute(), 
-                new HelpCommandAttribute(), new MusicCommandAttribute(), 
-                new NsfwCommandAttribute(), new OsuCommandAttribute(), 
-                new UtilityCommandAttribute(), new SupporterCommandAttribute(), 
+                new ExpCommandAttribute(), new FunCommandAttribute(),
+                new HelpCommandAttribute(), new MusicCommandAttribute(),
+                new NsfwCommandAttribute(), new OsuCommandAttribute(),
+                new UtilityCommandAttribute(), new SupporterCommandAttribute(),
                 new PremiumServerCommandAttribute(), new OwnerCommandAttribute()
             };
 
@@ -41,7 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             {
                 int i = 0;
                 string aliases = cmd.Aliases.Where(alias => alias.ToLower() != cmd.Name.ToLower()).Aggregate("", (current, alias) => current + $"[{alias}]");
-                foreach(var attr in attributes)
+                foreach (var attr in attributes)
                 {
                     string warn = "";
                     if (cmd.Attributes.Contains(attr) && attr.GetType() == typeof(DangerousCommandAttribute))

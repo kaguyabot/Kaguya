@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         {
             if (!(msg is SocketUserMessage message) || message.Author.IsBot) return;
 
-            Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel)message.Channel).Guild.Id);
             User user = await DatabaseQueries.GetOrCreateUserAsync(message.Author.Id);
 
             if (user.IsBlacklisted && user.UserId != ConfigProperties.BotConfig.BotOwnerId) return;
@@ -52,7 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             await IsFilteredPhrase(context, server, message); // If filtered phrase (and user isn't admin), return.
 
             // If the channel is blacklisted and the user isn't an Admin, return.
-            if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) && 
+            if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&
                 !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
                 return;
 
@@ -111,13 +111,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (userPerms.Administrator)
                 return false;
 
-            var fp = server.FilteredPhrases.ToList() ;
+            var fp = server.FilteredPhrases.ToList();
             if (fp.Count == 0) return false;
 
             var phrases = new List<string>();
 
             foreach (var element in fp) { phrases.Add(element.Phrase); }
-            foreach(var phrase in phrases)
+            foreach (var phrase in phrases)
             {
                 if (message.Content.ToLower().Contains(phrase.ToLower()))
                 {

@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             if (ulong.TryParse(numString, out ulong result))
                 return result;
-            if(throwExceptionIfNull)
+            if (throwExceptionIfNull)
                 throw new NullReferenceException("Could not parse string to ulong.");
             return 0;
         }

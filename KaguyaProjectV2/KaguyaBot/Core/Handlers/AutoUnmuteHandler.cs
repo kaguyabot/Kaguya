@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Timers;
-using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {

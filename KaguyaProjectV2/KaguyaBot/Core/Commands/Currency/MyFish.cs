@@ -4,16 +4,16 @@ using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using LinqToDB.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
-using LinqToDB.Common;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -106,7 +106,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     {
                         Name = "Fish Level",
                         Value = $"Fish Exp: `{user.FishExp:N0}` exp.\n" +
-                                $"Fish Level: `{(int)FishHandler.GetFishLevel(user.FishExp):N0}`\n" + 
+                                $"Fish Level: `{(int)FishHandler.GetFishLevel(user.FishExp):N0}`\n" +
                                 $"{FishHandler.GetRewardString(user.FishExp)}"
                     },
                     new EmbedFieldBuilder

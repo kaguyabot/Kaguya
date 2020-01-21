@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             OsuUserModel userProfileObject = null;
             if (player != null)
                 userProfileObject = new OsuUserBuilder(player).Execute();
-            
+
             if (userProfileObject == null)
             {
                 userProfileObject = new OsuUserBuilder((await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id)).OsuId.ToString()).Execute();
@@ -81,8 +81,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 var difference = DateTime.UtcNow - playerRecentObjectList.LastOrDefault().Date;
 
                 embed.WithFooter(playerRecentObjectList.Count > 1
-                    ? $"{userProfileObject.Username} performed this plays {(int) difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago."
-                    : $"{userProfileObject.Username} performed this play {(int) difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.");
+                    ? $"{userProfileObject.Username} performed this plays {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago."
+                    : $"{userProfileObject.Username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.");
             }
 
             await ReplyAsync(embed: embed.Build());

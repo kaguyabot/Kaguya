@@ -4,10 +4,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
-using Microsoft.Extensions.Logging;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -20,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Remarks("<num>\n5000 => 5,000 dummy accounts generated.")]
         public async Task GenData(int num)
         {
-            List<User> users = new List<User>(); 
+            List<User> users = new List<User>();
 
             await ReplyAsync("Generating data...");
             for (int i = 0; i < num; i++)
@@ -29,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 var id = rand.Next(100000000, 999999999);
                 var user = new User
                 {
-                    UserId = (ulong) id,
+                    UserId = (ulong)id,
                     Experience = 0,
                     Points = 0,
                     OsuId = 0,

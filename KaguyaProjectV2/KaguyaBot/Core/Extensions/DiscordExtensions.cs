@@ -1,7 +1,6 @@
-﻿using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+﻿using Discord;
+using Discord.WebSocket;
 using System.Threading.Tasks;
-using Discord;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 {

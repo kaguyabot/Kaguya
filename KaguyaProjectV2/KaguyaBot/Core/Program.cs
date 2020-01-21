@@ -84,7 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         }
         public async Task SetupKaguya()
         {
-            await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========", LogLvl.INFO, true, 
+            await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========", LogLvl.INFO, true,
                 ConsoleColor.Cyan, ConsoleColor.Black, false, false);
         }
 
@@ -105,7 +105,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     await ConsoleLogger.LogAsync("Database connection successfully established.", LogLvl.INFO);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await ConsoleLogger.LogAsync($"Failed to establish database connection. Have you properly configured your config file? Exception: {e.Message}", LogLvl.ERROR);
             }

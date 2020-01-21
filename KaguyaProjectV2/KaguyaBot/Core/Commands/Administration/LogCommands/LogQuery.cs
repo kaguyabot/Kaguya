@@ -1,17 +1,21 @@
-﻿using Discord;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+﻿using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
-    public class LogQuery
+    public static class LogQuery
     {
+        public static string[] AllLogTypes =
+        {
+            "ModLog", "DeletedMessages", "UpdatedMessages", "FilteredPhrases", "UserJoins", "UserLeaves", "Kicks",
+            "Bans", "Unbans", "VoiceConnections", "LevelUps", "FishLevels", "AntiRaid", "Greetings", "TwitchNotifications", "All"
+        };
+
         /// <summary>
         /// Performs all necessary actions that allow a server to have their logtypes enabled or disabled.
         /// </summary>
@@ -31,13 +35,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                     switch (type.ToLower())
                     {
                         case "modlog":
-                        {
-                            if (server.IsPremium)
                             {
-                                server.ModLog = channel.Id;
+                                if (server.IsPremium)
+                                {
+                                    server.ModLog = channel.Id;
+                                }
+                                break;
                             }
-                            break;
-                        }
                         case "deletedmessages": server.LogDeletedMessages = channel.Id; break;
                         case "updatedmessages": server.LogUpdatedMessages = channel.Id; break;
                         case "filteredphrases": server.LogFilteredPhrases = channel.Id; break;
@@ -53,25 +57,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "greetings": server.LogGreetings = channel.Id; break;
                         case "twitchnotifications": server.LogTwitchNotifications = channel.Id; break;
                         case "all":
-                        {
-                            if (server.IsPremium)
-                                server.ModLog = channel.Id;
-                            server.LogDeletedMessages = channel.Id;
-                            server.LogUpdatedMessages = channel.Id;
-                            server.LogFilteredPhrases = channel.Id;
-                            server.LogUserJoins = channel.Id;
-                            server.LogUserLeaves = channel.Id;
-                            server.LogKicks = channel.Id;
-                            server.LogBans = channel.Id;
-                            server.LogUnbans = channel.Id;
-                            server.LogVoiceChannelConnections = channel.Id;
-                            server.LogLevelAnnouncements = channel.Id;
-                            server.LogFishLevels = channel.Id;
-                            server.LogAntiraids = channel.Id;
-                            server.LogGreetings = channel.Id;
-                            server.LogTwitchNotifications = channel.Id;
-                        }
-                        break;
+                            {
+                                if (server.IsPremium)
+                                    server.ModLog = channel.Id;
+                                server.LogDeletedMessages = channel.Id;
+                                server.LogUpdatedMessages = channel.Id;
+                                server.LogFilteredPhrases = channel.Id;
+                                server.LogUserJoins = channel.Id;
+                                server.LogUserLeaves = channel.Id;
+                                server.LogKicks = channel.Id;
+                                server.LogBans = channel.Id;
+                                server.LogUnbans = channel.Id;
+                                server.LogVoiceChannelConnections = channel.Id;
+                                server.LogLevelAnnouncements = channel.Id;
+                                server.LogFishLevels = channel.Id;
+                                server.LogAntiraids = channel.Id;
+                                server.LogGreetings = channel.Id;
+                                server.LogTwitchNotifications = channel.Id;
+                            }
+                            break;
                         default: logTypes.Remove(type); break;
                     }
                 }

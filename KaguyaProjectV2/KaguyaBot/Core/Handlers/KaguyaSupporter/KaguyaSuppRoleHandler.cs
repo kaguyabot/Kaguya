@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
             Timer timer = new Timer(1800000); //30 mins
             timer.Start();
             timer.AutoReset = true;
-            timer.Elapsed += async (sender, e) => 
+            timer.Elapsed += async (sender, e) =>
             {
                 var client = ConfigProperties.Client;
                 var kaguyaSupportServer = client.GetGuild(546880579057221644); //Kaguya Support Discord Server

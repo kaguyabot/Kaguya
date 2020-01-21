@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             var server = DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id).Result;
             var allFp = server.FilteredPhrases.ToList();
 
-            if(args.Length == 0)
+            if (args.Length == 0)
             {
                 var embed0 = new KaguyaEmbedBuilder
                 {
@@ -53,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 if (allFp.Contains(fp)) continue;
 
-                await DatabaseQueries.InsertIfNotExistsAsync(fp); 
+                await DatabaseQueries.InsertIfNotExistsAsync(fp);
                 await ConsoleLogger.LogAsync($"Server {server.ServerId} has added the phrase \"{element}\" to their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 

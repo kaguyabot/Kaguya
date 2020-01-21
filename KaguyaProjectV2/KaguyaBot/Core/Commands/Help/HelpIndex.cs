@@ -2,14 +2,14 @@
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -125,7 +125,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var oldVal = fieldBuilders[2].Value.ToString().Split("\n")[0];
             var newVal = oldVal.TrimEnd();
             fieldBuilders[2].Value = fieldBuilders[2].Value.ToString().Replace(oldVal, newVal);
-                
+
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
                 Title = $"Help: `{Regex.Replace(cmdInfo.Name, "([a-z])([A-Z])", "$1 $2")}` | Aliases: `{aliases}`",
@@ -137,8 +137,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
         public static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
             cmdInfo.Preconditions
-                .Where(x => x is OwnerCommandAttribute || x is SupporterCommandAttribute || 
-                            x is RequireUserPermissionAttribute || x is PremiumServerCommandAttribute || 
+                .Where(x => x is OwnerCommandAttribute || x is SupporterCommandAttribute ||
+                            x is RequireUserPermissionAttribute || x is PremiumServerCommandAttribute ||
                             x is NsfwCommandAttribute)
                 .Select(x =>
                 {

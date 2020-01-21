@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             var roles = guild.Roles;
             KaguyaEmbedBuilder embed;
 
-            if(roles.All(x => x.Name.ToLower() != roleName.ToLower()))
+            if (roles.All(x => x.Name.ToLower() != roleName.ToLower()))
             {
                 embed = new KaguyaEmbedBuilder
                 {
@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             var matchingRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
 
             var pages = Pages(guild, matchingRole);
-            var pager = new PaginatedMessage {Pages = pages, Color = Color.Blue};
+            var pager = new PaginatedMessage { Pages = pages, Color = Color.Blue };
 
             await PagedReplyAsync(pager, new ReactionList
             {
@@ -105,7 +105,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                             $"Created: `{role.CreatedAt.Humanize()}`\n" +
                             $"Position in role list (higher number = higher position): `{role.Position}`"
                 });
-                
+
                 callbacks.Add((emojis[i], async (c, r) =>
                 {
                     var pager = new PaginatedMessage
@@ -123,7 +123,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                         Last = true,
                         Trash = true
                     });
-                }));
+                }
+                ));
             }
 
             var data = new ReactionCallbackData("", embed.Build(), false, false, TimeSpan.FromSeconds(120),
@@ -146,9 +147,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             var pages = new List<PaginatedMessage.Page>();
 
-            for(int i = 0; i < totalPageCount; i++)
+            for (int i = 0; i < totalPageCount; i++)
                 pages.Add(new PaginatedMessage.Page());
-            
+
             for (int i = 0; i < count; i++)
             {
                 var pageCount = (i + 24) / 25;

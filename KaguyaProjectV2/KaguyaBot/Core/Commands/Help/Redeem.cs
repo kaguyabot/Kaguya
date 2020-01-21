@@ -1,6 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
+using Humanizer;
+using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -8,10 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Humanizer;
-using Humanizer.Localisation;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -73,7 +73,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 nameSwitch = "Your";
                 expirationDate = user.SupporterExpirationDate;
 
-                await DatabaseQueries.InsertOrReplaceAsync((SupporterKey) newKey);
+                await DatabaseQueries.InsertOrReplaceAsync((SupporterKey)newKey);
             }
 
             else if (!string.IsNullOrEmpty(premiumKey.Key))
@@ -136,9 +136,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var owner = ConfigProperties.Client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
             var fields = new List<EmbedFieldBuilder>
             {
-                new EmbedFieldBuilder 
+                new EmbedFieldBuilder
                 {
-                    IsInline = false, 
+                    IsInline = false,
                     Name = "Key Properties",
                     Value = $"Key: `{key.Key}`\nCreated by: `{owner}`\nExpires " +
                             $"`{DateTime.FromOADate(key.Expiration).Humanize(false)}`"
