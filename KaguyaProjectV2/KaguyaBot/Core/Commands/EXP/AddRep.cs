@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         public async Task Command(IGuildUser guildUser = null, [Remainder]string reason = null)
         {
             User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var rep = await DatabaseQueries.FindAllForUserAsync<Rep>(user.UserId);
+            var rep = await DatabaseQueries.GetAllForUserAsync<Rep>(user.UserId);
             int repCount = rep.Count;
 
             if (guildUser == null)
@@ -104,7 +104,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 
             await DatabaseQueries.UpdateAsync(user);
 
-            var targetRepList = await DatabaseQueries.FindAllForUserAsync<Rep>(target.UserId);
+            var targetRepList = await DatabaseQueries.GetAllForUserAsync<Rep>(target.UserId);
 
             var embed = new KaguyaEmbedBuilder
             {

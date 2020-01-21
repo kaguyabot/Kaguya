@@ -90,7 +90,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             await DatabaseQueries.UpdateAsync(user);
             await DatabaseQueries.InsertAsync(gh);
-            var allGh = await DatabaseQueries.FindAllForUserAsync<GambleHistory>(user.UserId);
+            var allGh = await DatabaseQueries.GetAllForUserAsync<GambleHistory>(user.UserId);
 
             var footer = new EmbedFooterBuilder
             {

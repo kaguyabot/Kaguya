@@ -11,7 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
     {
         public static async void OnWarn(object warn, WarnHandlerEventArgs args)
         {
-            var currentSettings = await DatabaseQueries.FindFirstForServerAsync<WarnSetting>(args.Server.ServerId);
+            var currentSettings = await DatabaseQueries.GetFirstForServerAsync<WarnSetting>(args.Server.ServerId);
             var currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.Server.ServerId, args.WarnedUser.UserId);
             var warnCount = currentWarnings.Count;
 

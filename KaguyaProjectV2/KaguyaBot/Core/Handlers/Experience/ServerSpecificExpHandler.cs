@@ -20,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
     {
         public static async Task AddExp(User user, Server server, ICommandContext context)
         {
-            var specificExps = await DatabaseQueries.FindAllForServerAsync<ServerExp>(server.ServerId);
+            var specificExps = await DatabaseQueries.GetAllForServerAsync<ServerExp>(server.ServerId);
             var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
             var userExpObj = new ServerExp();
 

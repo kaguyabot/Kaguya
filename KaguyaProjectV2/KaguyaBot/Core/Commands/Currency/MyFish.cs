@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
-            var userFish = await DatabaseQueries.FindAllForUserAsync<Fish>(user.UserId);
+            var userFish = await DatabaseQueries.GetAllForUserAsync<Fish>(user.UserId);
             var countFishDicts = new List<Dictionary<FishType, int>>();
 
             if (userFish.Count == 0)

@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     ExpiresAt = time
                 };
 
-                if (await DatabaseQueries.FindAllForServerAsync<MutedUser>(server.ServerId) != null)
+                if (await DatabaseQueries.GetAllForServerAsync<MutedUser>(server.ServerId) != null)
                 {
                     MutedUser existingObject =
                         await DatabaseQueries.GetFirstMatchAsync<MutedUser>(x =>

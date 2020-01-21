@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
             KaguyaEmbedBuilder embed;
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var twitchChannels = await DatabaseQueries.FindAllForServerAsync<TwitchChannel>(server.ServerId);
+            var twitchChannels = await DatabaseQueries.GetAllForServerAsync<TwitchChannel>(server.ServerId);
             var twitchApi = ConfigProperties.TwitchApi;
             var userIndex = await twitchApi.V5.Users.GetUserByNameAsync(twitchChannelName);
 

@@ -25,12 +25,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             string s = "s";
             if (args.Length == 1) s = "";
 
-            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var allFp = server.FilteredPhrases.ToList();
 
             if (args.Length == 0)
             {
-                KaguyaEmbedBuilder embed0 = new KaguyaEmbedBuilder
+                var embed0 = new KaguyaEmbedBuilder
                 {
                     Description = "Please specify at least one phrase."
                 };
@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             foreach (string element in args)
             {
-                FilteredPhrase fp = new FilteredPhrase
+                var fp = new FilteredPhrase
                 {
                     ServerId = server.ServerId,
                     Phrase = element
@@ -50,11 +50,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 if (!allFp.Contains(fp)) continue;
 
-                DatabaseQueries.DeleteAsync(fp);
+                await DatabaseQueries.DeleteAsync(fp);
                 await ConsoleLogger.LogAsync($"Server {server.ServerId} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+            var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully removed {args.Length} phrase{s} from the filter."
             };

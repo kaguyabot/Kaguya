@@ -20,6 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Command("check")]
         [Summary("Checks off items in the Kaguya Support #todo-list channel. IDs are separated by spaces.")]
         [Remarks("<ID> {...}\n651506875405434937 652020702387372044")]
+        [RequireBotPermission(GuildPermission.AddReactions)]
         public async Task Check(params string[] ids)
         {
             var channel = ConfigProperties.Client.GetGuild(546880579057221644).GetTextChannel(546883647429410826);

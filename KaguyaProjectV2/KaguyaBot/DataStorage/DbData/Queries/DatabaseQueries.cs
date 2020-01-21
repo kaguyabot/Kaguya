@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
-    // TODO: ConfigureAwait(false) on ALL queries.
     public static class DatabaseQueries
     {
         public static async Task<bool> TestConnection()
@@ -229,30 +228,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a <see cref="List{T}"/> of objects that belongs to the user, but is not necessarily
-        /// mapped to the user object directly. <see cref="searchable"/> refers to the object in the database that
-        /// we want to retreive, for example, someone's fish or something else that belongs to them.
-        /// </summary>
-        /// <typeparam name="T">The <see cref="searchable"/> object that we are looking for. Must inherit from
-        /// <see cref="IKaguyaQueryable{T}"/>, <see cref="IKaguyaUnique{T}"/> and <see cref="IUserSearchable{T}"/></typeparam>
-        /// <param name="searchable"></param>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public static async Task<List<T>> FindCollectionForUserAsync<T>(T searchable, User user)
-            where T : class,
-            IKaguyaQueryable<T>,
-            IKaguyaUnique<T>,
-            IUserSearchable<T>
-        {
-            using (var db = new KaguyaDb())
-            {
-                return await (from t in db.GetTable<T>()
-                    where t.UserId == user.UserId
-                    select t).ToListAsync();
-            }
-        }
-
-        /// <summary>
         /// Returns a <see cref="T"/> object that belongs to the user, but is not necessarily
         /// mapped to the user object directly. <see cref="T"/> refers to the object in the database that
         /// we want to retreive, for example, someone's fish or something else that belongs to them.
@@ -261,7 +236,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <see cref="IKaguyaQueryable{T}"/>, <see cref="IKaguyaUnique{T}"/> and <see cref="IUserSearchable{T}"/></typeparam>
         /// <param name="userId">The user whom we are retreiving the <see cref="T"/> for.</param>
         /// <returns></returns>
-        public static async Task<T> FindForUserAsync<T>(ulong userId) where T :
+        public static async Task<T> GetForUserAsync<T>(ulong userId) where T :
             class,
             IKaguyaQueryable<T>,
             IKaguyaUnique<T>,
@@ -276,13 +251,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Finds all <see cref="T"/> objects that belong to the <see cref="User"/>
+        /// Finds all <see cref="T"/> objects that belong to the <see cref="userId"/>
         /// with the corresponding <see cref="userId"/>.
         /// </summary>
         /// <typeparam name="T">The type of object we want to find for the user.</typeparam>
         /// <param name="userId">The Id of the user.</param>
         /// <returns></returns>
-        public static async Task<List<T>> FindAllForUserAsync<T>(ulong userId) where T :
+        public static async Task<List<T>> GetAllForUserAsync<T>(ulong userId) where T :
             class,
             IKaguyaQueryable<T>,
             IUserSearchable<T>
@@ -301,7 +276,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <typeparam name="T">The <see cref="IServerSearchable{T}"/> that belongs to this <see cref="serverId"/></typeparam>
         /// <param name="serverId">The Id of the server.</param>
         /// <returns>The first element of type <see cref="IKaguyaUnique{T}"/> that belongs to this <see cref="serverId"/></returns>
-        public static async Task<T> FindFirstForServerAsync<T>(ulong serverId) where T :
+        public static async Task<T> GetFirstForServerAsync<T>(ulong serverId) where T :
             class,
             IKaguyaQueryable<T>,
             IKaguyaUnique<T>,
@@ -321,7 +296,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <typeparam name="T">The <see cref="IServerSearchable{T}"/> that we want to get for this <see cref="serverId"/>.</typeparam>
         /// <param name="serverId">The Id of the server we are searching for.</param>
         /// <returns></returns>
-        public static async Task<List<T>> FindAllForServerAsync<T>(ulong serverId) where T :
+        public static async Task<List<T>> GetAllForServerAsync<T>(ulong serverId) where T :
             class,
             IKaguyaQueryable<T>,
             IServerSearchable<T>
@@ -519,7 +494,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <typeparam name="T">The type of <see cref="IKaguyaQueryable{T}"/> object to return</typeparam>
         /// <param name="predicate">An expression that the returned object must match.
         /// <code>
-        /// await FindMatchAsync{User}(x => x.UserId == SomeId);
+        /// await GetFirstMatchAsync{User}(x => x.UserId == SomeId);
         /// </code></param>
         /// <returns></returns>
         public static async Task<T> GetFirstMatchAsync<T>(Expression<Func<T, bool>> predicate) where T :
