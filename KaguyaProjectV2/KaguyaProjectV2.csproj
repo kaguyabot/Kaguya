@@ -27,6 +27,7 @@
     <PackageReference Include="Discord.Net" Version="2.1.1" />
     <PackageReference Include="Humanizer" Version="2.7.9" />
     <PackageReference Include="linq2db" Version="2.9.5" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="MySql.Data" Version="8.0.18" />
     <PackageReference Include="Nekos-Sharp" Version="3.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

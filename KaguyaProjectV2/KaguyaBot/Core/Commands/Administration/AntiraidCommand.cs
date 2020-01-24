@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 return;
             }
 
-            if (users < 3 || seconds < 5 && action != null)
+            if (users < 1 || seconds < 5 && action != null)
             {
                 if (users < 3)
                     throw new ArgumentOutOfRangeException(nameof(users), "There must be at least `3` users to action before " +

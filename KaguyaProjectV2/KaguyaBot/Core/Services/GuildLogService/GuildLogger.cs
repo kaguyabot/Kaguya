@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
         private static readonly DiscordShardedClient _client = ConfigProperties.Client;
         private static KaguyaEmbedBuilder _embed;
 
-        public static void GuildLogListener()
+        public static void InitializeGuildLogListener()
         {
             _client.MessageDeleted += _client_MessageDeleted;
             _client.MessageUpdated += _client_MessageUpdated;
@@ -46,7 +46,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             IMessage message = arg1.Value;
             if (message is null || message.Author.IsBot)
                 return;
-
 
             KaguyaEmbedBuilder embed;
             string content = string.IsNullOrEmpty(message.Content)
@@ -158,9 +157,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             if (server.LogAntiraids == 0)
                 return;
 
+            // TODO: Investigate why actionedUsers doesn't get sent. It has something to do with the foreach below.
+
             string actionedUsers = "";
-            actionedUsers = e.GuildUsers.Aggregate(actionedUsers, (source, user) => 
-                source + $"Name: `{user}` | ID: `{user.Id}` | Account Created: `{(DateTime.Now - user.CreatedAt).Humanize()}`\n");
+            foreach (var user in e.GuildUsers)
+            {
+                actionedUsers +=
+                    $"Name: `{user}` | ID: `{user.Id}` | Account Created: `{(DateTime.Now - user.CreatedAt).Humanize()}`\n";
+            }
+
+            if(actionedUsers.Length > 1750)
+                actionedUsers = e.GuildUsers.Count.ToString("N0");
 
             var embed = new KaguyaEmbedBuilder
             {

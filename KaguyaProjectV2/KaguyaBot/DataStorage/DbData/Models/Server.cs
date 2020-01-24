@@ -63,11 +63,16 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             {
                 var now = DateTime.Now.ToOADate();
                 var allUserKeys = DatabaseQueries.GetAllForServerAsync<PremiumKey>(ServerId).Result;
-                return now + allUserKeys.Sum(key => key.Expiration - now);
+                if(allUserKeys.Count > 0)
+                    return now + allUserKeys.Sum(key => key.Expiration - now);
+                return DateTime.MinValue.ToOADate();
             }
         }
-
-        public bool IsPremium => PremiumExpirationDate - DateTime.Now.ToOADate() > 0;
+        
+        /// <summary>
+        /// Whether or not the server currently has an active premium subscription.
+        /// </summary>
+        public bool IsPremium => PremiumExpirationDate > DateTime.Now.ToOADate();
 
         [Column(Name = "AutoWarnOnBlacklistedPhrase"), NotNull]
         public bool AutoWarnOnBlacklistedPhrase { get; set; } = false;

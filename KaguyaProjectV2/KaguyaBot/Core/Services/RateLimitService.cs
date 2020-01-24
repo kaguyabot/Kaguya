@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     }
 
                     if (registeredUser.ActiveRateLimit >= 4 && !registeredUser.IsSupporter ||
-                        registeredUser.ActiveRateLimit >= 6 && registeredUser.IsSupporter)
+                        registeredUser.ActiveRateLimit >= 7 && registeredUser.IsSupporter)
                     {
                         registeredUser.LastRatelimited = DateTime.Now.ToOADate();
                         registeredUser.RateLimitWarnings++;

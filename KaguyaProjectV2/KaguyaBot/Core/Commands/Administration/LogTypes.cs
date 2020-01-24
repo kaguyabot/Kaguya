@@ -41,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 logSettingString +=
                     $"**{(prop.Name == "ModLog" ? "ModLog (Kaguya Premium Only)" : prop.Name.Replace("Log", ""))}** - {(channel == null && !deletedChannel ? "`Not assigned.`" : "Currently assigned to: ")} " +
-                    $"{(deletedChannel ? $"`*Deleted channel with ID: {matchChannel}`*" : $"{(channel == null ? null : $"`#{channel.Name}`")}")}\n";
+                    $"{(deletedChannel ? $"*`Deleted Channel`*" : $"{(channel == null ? null : $"`#{channel.Name}`")}")}\n";
             }
 
             var embed = new KaguyaEmbedBuilder

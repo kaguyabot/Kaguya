@@ -98,6 +98,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             var guild = ConfigProperties.Client.GetGuild(guildId);
             var guildUsers = new List<SocketGuildUser>();
 
+            AntiRaidEvent.Trigger(guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
+
             foreach (var userId in userIds)
             {
                 var guildUser = guild.GetUser(userId);
@@ -135,8 +137,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     }
                     break;
             }
-
-            AntiRaidEvent.Trigger(guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
         }
     }
 
@@ -149,11 +149,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     public static class ServerTimers
     {
         public static List<ServerTimer> CachedTimers { get; set; } = new List<ServerTimer>();
-
-        public static void ClearCache()
-        {
-            CachedTimers.Clear();
-        }
 
         /// <summary>
         /// Adds a timer to the cache.

@@ -20,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task RemoveRole(params string[] roleNames)
         {
-            if (roleNames.Count() > 1)
+            if (roleNames.Length > 1)
             {
                 KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
                 {

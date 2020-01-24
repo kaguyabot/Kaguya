@@ -80,14 +80,16 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             {
                 var now = DateTime.Now.ToOADate();
                 var allUserKeys = DatabaseQueries.GetAllAsync<SupporterKey>(x => x.UserId == UserId).Result;
-                return now + allUserKeys.Sum(key => key.Expiration - now);
+                if (allUserKeys.Count > 0)
+                    return now + allUserKeys.Sum(key => key.Expiration - now);
+                return DateTime.MinValue.ToOADate();
             }
         }
 
         public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetTimelyPoints => DateTime.Now.AddHours(-24).ToOADate() < LatestTimelyBonus;
-        public bool CanGetWeeklyPoints => DateTime.Now.AddHours(-24).ToOADate() < LatestWeeklyBonus;
+        public bool CanGetWeeklyPoints => DateTime.Now.AddHours(-168).ToOADate() < LatestWeeklyBonus;
 
         /// <summary>
         /// FK_KaguyaUser_GambleHistory_BackReference

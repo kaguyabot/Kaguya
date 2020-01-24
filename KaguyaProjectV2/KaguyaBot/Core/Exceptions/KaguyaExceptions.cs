@@ -41,13 +41,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Exceptions
 
     class KaguyaSupporterException : Exception
     {
-        public KaguyaSupporterException(string message) : base(KaguyaSupporterExceptionMessage(message))
+        public KaguyaSupporterException(string message = null) : base(KaguyaSupporterExceptionMessage(message))
         {
         }
-        private static string KaguyaSupporterExceptionMessage(string msg)
+
+        private static string KaguyaSupporterExceptionMessage(string msg = null)
         {
-            return msg + $"\nSorry, only active supporters are allowed to use this feature. You may purchase a supporter tag " +
-                   $"at this store: {ConfigProperties.KaguyaStore}";
+            return msg + $"\nSorry, only active [Kaguya Supporters]({ConfigProperties.KaguyaStore}) are allowed to use this feature.";
+        }
+    }
+
+    class KaguyaPremiumException : Exception
+    {
+        public KaguyaPremiumException(string message = null) : base(KaguyaPremiumExceptionMessage(message))
+        {
+        }
+
+        private static string KaguyaPremiumExceptionMessage(string msg = null)
+        {
+            return msg + $"\nSorry, only servers with an active [Kaguya Premium]({ConfigProperties.KaguyaStore}) subscription are allowed to use this feature.";
         }
     }
 }

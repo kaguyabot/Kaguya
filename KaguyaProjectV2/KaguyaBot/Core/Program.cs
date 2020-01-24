@@ -53,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     SetupTwitch();
 
                     LogEventListener.Listener();
-                    GuildLogger.GuildLogListener();
+                    GuildLogger.InitializeGuildLogListener();
 
                     await TestDatabaseConnection();
 

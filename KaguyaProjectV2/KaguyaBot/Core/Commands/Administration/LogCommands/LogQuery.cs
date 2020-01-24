@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
@@ -39,6 +40,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 if (server.IsPremium)
                                 {
                                     server.ModLog = channel.Id;
+                                }
+                                else
+                                {
+                                    throw new KaguyaPremiumException();
                                 }
                                 break;
                             }

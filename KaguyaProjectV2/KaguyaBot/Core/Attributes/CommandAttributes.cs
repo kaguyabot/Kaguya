@@ -71,9 +71,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     {
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
-            var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
-            return Task.FromResult(user.Result.IsSupporter || ConfigProperties.InBeta ? PreconditionResult.FromSuccess() :
-                PreconditionResult.FromError("Sorry, but you must be a supporter to use this command."));
+            var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id).Result;
+            return Task.FromResult(user.IsSupporter
+                ? PreconditionResult.FromSuccess()
+                : PreconditionResult.FromError("Sorry, but you must be a supporter to use this command."));
         }
     }
 
@@ -83,8 +84,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var server = DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
-            return Task.FromResult(server.Result.IsPremium || ConfigProperties.InBeta ? PreconditionResult.FromSuccess() :
-                PreconditionResult.FromError("Sorry, but this server must be of premium status in order to use this command."));
+            return Task.FromResult(server.Result.IsPremium
+                ? PreconditionResult.FromSuccess()
+                : PreconditionResult.FromError(
+                    "Sorry, but this server must be of premium status in order to use this command."));
         }
     }
 

@@ -43,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
             {
                 if (tags.Length > 1 && !user.IsSupporter)
                 {
-                    throw new KaguyaSupporterException("Tagged NSFW searches.");
+                    throw new KaguyaSupporterException("Tagged NSFW searches");
                 }
 
                 if (tags.Intersect(blacklistedTags).Any())
