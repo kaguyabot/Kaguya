@@ -197,8 +197,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Inserts the <see cref="IKaguyaUnique{T}"/> object into the database. If it exists, it will replace it
-        /// via the PrimaryKey.
+        /// Inserts the <see cref="IKaguyaUnique{T}"/> object into the database, assuming it doesn't already exist.
+        /// If it exists, this will replace it via the PrimaryKey.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>

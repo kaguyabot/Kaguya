@@ -1,4 +1,5 @@
-﻿using BooruSharp.Booru;
+﻿using System;
+using BooruSharp.Booru;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
@@ -8,6 +9,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using SearchResult = BooruSharp.Search.Post.SearchResult;
 
@@ -33,11 +35,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         public async Task Command([Remainder]string tagString)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+
             string[] tags = tagString.Split(" ");
             string[] blacklistedTags =
             {
                 "loli"
             };
+
+            if (user.TotalNSFWImages == 0 && !user.IsSupporter || 
+                user.TotalNSFWImages < NSFW_BOMB_COUNT && !user.IsSupporter)
+            {
+                throw new KaguyaSupportException("You are out of NSFW image uses for right now. Please try again later. " +
+                                                 "One NSFW image is automatically earned every 2 hours. " +
+                                                 $"[Kaguya Supporters]({ConfigProperties.KaguyaStore}) may use unlimited NSFW images at " +
+                                                 $"anytime.");
+            }
 
             if (tags != null)
             {
@@ -59,6 +71,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                         for (int i = 0; i < NSFW_BOMB_COUNT; i++)
                         {
                             await SendHentaiAsync(tags[1..]);
+                            user.TotalNSFWImages -= 1;
                         }
                     }
                     else
@@ -66,15 +79,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                         for (int i = 0; i < NSFW_BOMB_COUNT; i++)
                         {
                             await SendHentaiAsync("sex", "breasts", "cum");
+                            user.TotalNSFWImages -= 1;
                         }
                     }
                 }
             }
-            await SendHentaiAsync("sex", "breasts", "cum");
+
+            if (tags == null)
+            {
+                await SendHentaiAsync("sex", "breasts", "cum");
+                user.TotalNSFWImages -= 1;
+            }
+
+            if(!user.IsSupporter)
+                await DatabaseQueries.UpdateAsync(user);
         }
 
         public async Task<SearchResult> SendHentaiAsync(params string[] tags)
         {
+            var user = await DatabaseQueries.GetOrCreateUserAsync(146092837723832320);
+            Console.WriteLine(user.TotalNSFWImages);
             var wc = new WebClient();
 
             var img = await konachan.GetRandomImage(tags);

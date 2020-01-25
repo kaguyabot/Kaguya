@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Exceptions
 
         private static string KaguyaSupporterExceptionMessage(string msg = null)
         {
-            return msg + $"\nSorry, only active [Kaguya Supporters]({ConfigProperties.KaguyaStore}) are allowed to use this feature.";
+            return $"\nSorry, only active [Kaguya Supporters]({ConfigProperties.KaguyaStore}) are allowed to use the described feature: \n\n`{msg}`";
         }
     }
 

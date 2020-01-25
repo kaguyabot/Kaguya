@@ -133,6 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await AutoUnmuteHandler.Start();
             await RateLimitService.Start();
             await RemindService.Start();
+            await NSFWImageHandler.Start();
         }
 
         private void InitializeEventHandlers()
