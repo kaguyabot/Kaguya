@@ -66,7 +66,6 @@ rarer fish! Be wary though, as better bait will be needed to catch rarer fish mo
 - Reduced fishing cooldown (15s => 5s).
 - 25% off fishing bait purchase price.
 - Increased maximum betting range for games (50,000 => 500,000)
-- 
 
 ## Kaguya Premium (Monthly Subscription):
 #### Kaguya Premium Features
