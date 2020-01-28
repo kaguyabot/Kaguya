@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
     public static class KaguyaSupporterExpirationHandler
     {
-        public static Task Start()
+        public static Task Initialize()
         {
             Timer timer = new Timer
             {

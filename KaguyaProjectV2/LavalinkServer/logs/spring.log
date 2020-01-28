@@ -1,0 +1,82 @@
+2020-01-28 11:47:20.657  INFO 8168 --- [main] lavalink.server.Launcher                 : 
+
+[32m       .  [31m _                  _ _       _    [32m__ _ _
+[32m      /\\ [31m| | __ ___   ____ _| (_)_ __ | | __[32m\ \ \ \
+[32m     ( ( )[31m| |/ _` \ \ / / _` | | | '_ \| |/ /[32m \ \ \ \
+[32m      \\/ [31m| | (_| |\ V / (_| | | | | | |   < [32m  ) ) ) )
+[32m       '  [31m|_|\__,_| \_/ \__,_|_|_|_| |_|_|\_\[32m / / / /
+[0m    =========================================[32m/_/_/_/[0m
+
+	Version:        3.2.2
+	Build:          961
+	Build time:     19.12.2019 13:43:43 UTC
+	Branch          master
+	Commit:         e30891d
+	Commit time:    19.12.2019 13:41:45 UTC
+	JVM:            12.0.1
+	Lavaplayer      1.3.32
+
+2020-01-28 11:47:20.742  INFO 8168 --- [main] lavalink.server.Launcher                 : Starting Launcher on DESKTOP-726PQBG with PID 8168 (C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\LavalinkServer\Lavalink.jar started by stage in C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\LavalinkServer)
+2020-01-28 11:47:20.788  WARN 8168 --- [background-preinit] o.s.h.c.j.Jackson2ObjectMapperBuilder    : For Jackson Kotlin classes support please add "com.fasterxml.jackson.module:jackson-module-kotlin" to the classpath
+2020-01-28 11:47:20.910  INFO 8168 --- [main] lavalink.server.Launcher                 : No active profile set, falling back to default profiles: default
+2020-01-28 11:47:22.070  WARN 8168 --- [main] io.undertow.websockets.jsr               : UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2020-01-28 11:47:22.091  INFO 8168 --- [main] io.undertow.servlet                      : Initializing Spring embedded WebApplicationContext
+2020-01-28 11:47:22.091  INFO 8168 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1144 ms
+2020-01-28 11:47:22.363  WARN 8168 --- [main] l.server.config.SentryConfiguration      : Turning off sentry
+2020-01-28 11:47:22.468  INFO 8168 --- [main] l.s.c.AudioSendFactoryConfiguration      : OS: Windows 10, Arch: amd64
+2020-01-28 11:47:22.500  INFO 8168 --- [main] l.s.c.AudioSendFactoryConfiguration      : JDA-NAS supported system detected. Enabled native audio sending.
+2020-01-28 11:47:22.533  INFO 8168 --- [main] l.s.c.AudioSendFactoryConfiguration      : Setting buffer to 400ms
+2020-01-28 11:47:22.533  INFO 8168 --- [main] l.s.c.AudioSendFactoryConfiguration      : Setting playlist load limit to 6
+2020-01-28 11:47:22.786  INFO 8168 --- [main] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 11:47:23.095  INFO 8168 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-01-28 11:47:23.331  INFO 8168 --- [main] org.xnio                                 : XNIO version 3.3.8.Final
+2020-01-28 11:47:23.338  INFO 8168 --- [main] org.xnio.nio                             : XNIO NIO Implementation Version 3.3.8.Final
+2020-01-28 11:47:23.419  INFO 8168 --- [main] o.s.b.w.e.u.UndertowServletWebServer     : Undertow started on port(s) 2333 (http) with context path ''
+2020-01-28 11:47:23.423  INFO 8168 --- [main] lavalink.server.Launcher                 : Started Launcher in 3.127 seconds (JVM running for 3.519)
+2020-01-28 11:47:36.786  INFO 8168 --- [XNIO-1 task-1] io.undertow.servlet                      : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-01-28 11:47:36.787  INFO 8168 --- [XNIO-1 task-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-01-28 11:47:36.792  INFO 8168 --- [XNIO-1 task-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2020-01-28 11:47:36.808  INFO 8168 --- [XNIO-1 task-1] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:50538
+2020-01-28 11:47:37.035  INFO 8168 --- [XNIO-1 task-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 11:47:37.131  INFO 8168 --- [XNIO-1 task-1] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:50538
+2020-01-28 11:47:37.144  INFO 8168 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 11:47:41.691  INFO 8168 --- [XNIO-1 task-2] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 11:47:42.718  INFO 8168 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: dropzone
+2020-01-28 11:47:43.181  INFO 8168 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"sessionId":"fc186589f4e543b42454bd23eb263848","guildId":"546880579057221644","event":{"token":"5711e46573331b31","endpoint":"us-east448.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 11:47:47.036  INFO 8168 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"track":"QAAAhwIAJkRhcnJlbiBTdHlsZXMgLSBEcm9wem9uZSAoQm9ua2VycyBNaXgpAAdpbGlnaHR6AAAAAAAD5BgAC1R5VE50eE12STRBAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9VHlUTnR4TXZJNEEAB3lvdXR1YmUAAAAAAAAAAA==","startTime":0,"endTime":255000,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 11:52:15.260  INFO 8168 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:50538 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 11:52:24.853  INFO 8168 --- [parallel-4] s.n.m.impl.connections.AudioWebSocket    : Websocket to wss://us-east448.discord.media/?v=4 closed with code 4014 and reason Disconnected.
+2020-01-28 11:52:24.883  INFO 8168 --- [parallel-4] s.n.m.impl.connections.AudioWebSocket    : Closing
+2020-01-28 11:52:45.261  INFO 8168 --- [pool-3-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 11:52:45.317  INFO 8168 --- [pool-3-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 11:52:47.142  INFO 8168 --- [XNIO-1 task-4] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:50850
+2020-01-28 11:52:47.197  INFO 8168 --- [XNIO-1 task-4] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 11:52:47.319  INFO 8168 --- [XNIO-1 task-4] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:50850
+2020-01-28 11:52:47.403  INFO 8168 --- [XNIO-1 I/O-14] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 11:52:50.187  INFO 8168 --- [XNIO-1 task-5] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 11:52:51.119  INFO 8168 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: road of resistance
+2020-01-28 11:52:51.635  INFO 8168 --- [XNIO-1 I/O-14] lavalink.server.io.SocketServer          : {"sessionId":"040fef2a7e473a1b8ea7689dd46acf28","guildId":"546880579057221644","event":{"token":"ebb716ee8f62a621","endpoint":"us-east366.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 11:52:53.615  INFO 8168 --- [XNIO-1 I/O-14] lavalink.server.io.SocketServer          : {"track":"QAAAnAIAOUJBQllNRVRBTCAtIFJvYWQgb2YgUmVzaXN0YW5jZSAtIExpdmUgaW4gSmFwYW4gKE9GRklDSUFMKQAJQkFCWU1FVEFMAAAAAAAIEmgAC3pURVlVRmdMdmVZAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9elRFWVVGZ0x2ZVkAB3lvdXR1YmUAAAAAAAAAAA==","startTime":0,"endTime":529000,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 11:53:28.513  INFO 8168 --- [XNIO-1 I/O-14] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 11:53:28.515  INFO 8168 --- [XNIO-1 I/O-14] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 11:53:30.350  INFO 8168 --- [XNIO-1 I/O-14] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:50850 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 11:53:39.143  INFO 8168 --- [XNIO-1 task-7] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:50894
+2020-01-28 11:53:39.146  INFO 8168 --- [XNIO-1 task-7] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 11:53:39.147  INFO 8168 --- [XNIO-1 task-7] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 11:53:39.424  INFO 8168 --- [XNIO-1 I/O-10] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 11:53:45.443  INFO 8168 --- [XNIO-1 task-8] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 11:53:46.050  INFO 8168 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: road of resistance
+2020-01-28 11:53:46.552  INFO 8168 --- [XNIO-1 I/O-10] lavalink.server.io.SocketServer          : {"sessionId":"96a99f52d8630886a18ef21e887b674e","guildId":"546880579057221644","event":{"token":"7f10594ec01f52a4","endpoint":"us-east366.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 11:53:48.864  INFO 8168 --- [XNIO-1 I/O-10] lavalink.server.io.SocketServer          : {"track":"QAAAnAIAOUJBQllNRVRBTCAtIFJvYWQgb2YgUmVzaXN0YW5jZSAtIExpdmUgaW4gSmFwYW4gKE9GRklDSUFMKQAJQkFCWU1FVEFMAAAAAAAIEmgAC3pURVlVRmdMdmVZAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9elRFWVVGZ0x2ZVkAB3lvdXR1YmUAAAAAAAAAAA==","startTime":0,"endTime":529000,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 11:54:40.785  INFO 8168 --- [XNIO-1 I/O-10] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 11:54:40.787  INFO 8168 --- [XNIO-1 I/O-10] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 11:54:42.079  INFO 8168 --- [XNIO-1 I/O-10] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:50894 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 11:55:12.080  INFO 8168 --- [pool-6-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 11:55:12.080  INFO 8168 --- [pool-6-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 12:17:09.980  INFO 8168 --- [XNIO-1 task-10] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:1695
+2020-01-28 12:17:09.984  INFO 8168 --- [XNIO-1 task-10] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 12:17:09.988  INFO 8168 --- [XNIO-1 task-10] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:1695
+2020-01-28 12:17:10.239  INFO 8168 --- [XNIO-1 I/O-3] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 12:18:52.943  INFO 8168 --- [XNIO-1 I/O-3] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:1695 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 12:19:22.945  INFO 8168 --- [pool-7-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 12:19:22.946  INFO 8168 --- [pool-7-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.

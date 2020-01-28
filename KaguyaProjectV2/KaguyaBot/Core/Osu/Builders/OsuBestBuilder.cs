@@ -44,7 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
         public List<OsuBestModel> Execute(bool specific = false)
         {
             var bestArray = ExecuteJson(OsuRequest.BEST_PERFORMANCE);
-            bestArray = specific ? ProcessJson(bestArray, specific) : ProcessJson(bestArray);
+            bestArray = specific ? ProcessJson(bestArray, true) : ProcessJson(bestArray);
 
             return bestArray.ToList();
         }
@@ -72,13 +72,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
                 //Fill in Emote of Grade
                 item.RankEmote = OsuExtension.OsuGrade(item.Rank);
 
-                string mapBest = "";
-                using (WebClient client = new WebClient())
+                string mapBest;
+                using (var client = new WebClient())
                 {
                     mapBest = client.DownloadString($"https://osu.ppy.sh/api/get_beatmaps?k={ConfigProperties.BotConfig.OsuApiKey}&b={item.BeatmapId}");
                 }
-                item.Beatmap = JsonConvert.DeserializeObject<OsuBeatmapModel[]>(mapBest)[0];
 
+                item.Beatmap = JsonConvert.DeserializeObject<OsuBeatmapModel[]>(mapBest)[0];
                 i++;
             }
 

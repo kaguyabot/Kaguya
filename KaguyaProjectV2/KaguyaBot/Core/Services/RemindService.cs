@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
     public class RemindService
     {
-        public static async Task Start()
+        public static async Task Initialize()
         {
             Timer timer = new Timer(7500);
             timer.AutoReset = true;

@@ -14,9 +14,11 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using TwitchLib.Api;
 using TwitchLib.Api.Services;
+using Victoria;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
@@ -25,7 +27,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private static void Main(string[] args) => new Program().MainAsync(args).GetAwaiter().GetResult();
 
         private DiscordShardedClient _client;
-        private static TwitchAPI _api;
+        private LavaNode _lavaNode;
+        private TwitchAPI _api;
 
         public async Task MainAsync(string[] args)
         {
@@ -40,7 +43,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 TotalShards = 1
             };
 
+            var lavaConfig = new LavaConfig
+            {
+                EnableResume = true,
+                LogSeverity = LogSeverity.Verbose,
+                ReconnectAttempts = 10,
+                SelfDeaf = true
+            };
+
             _client = new DiscordShardedClient(config);
+            _lavaNode = new LavaNode(_client, lavaConfig);
 
             await SetupKaguya();
             using (var services = new SetupServices().ConfigureServices(config, _client))
@@ -58,13 +70,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     await TestDatabaseConnection();
 
                     _client = services.GetRequiredService<DiscordShardedClient>();
-
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
+
                     await _client.LoginAsync(TokenType.Bot, _config.Token);
                     await _client.StartAsync();
 
-                    await EnableTimers(AllShardsLoggedIn(_client, config));
+                    _client.ShardReady += async c => { await _lavaNode.ConnectAsync(); };
+                    _lavaNode.OnLog += async message =>
+                    {
+                        await ConsoleLogger.LogAsync("[Kaguya Music] " + message.Message, LogLvl.INFO);
+                    };
+
+                    await InitializeTimers(AllShardsLoggedIn(_client, config));
                     InitializeEventHandlers();
+
+                    if (AllShardsLoggedIn(_client, config))
+                    {
+                        ConfigProperties.LavaNode = _lavaNode;
+                    }
 
                     await Task.Delay(-1);
                 }
@@ -123,17 +146,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             ConfigProperties.TwitchApi = _api;
         }
 
-        private async Task EnableTimers(bool shardsLoggedIn)
+        private async Task InitializeTimers(bool allShardsLoggedIn)
         {
-            if (!shardsLoggedIn) return;
+            if (!allShardsLoggedIn) return;
 
-            await AntiRaidService.Start();
-            await KaguyaSuppRoleHandler.Start();
-            await KaguyaSupporterExpirationHandler.Start();
-            await AutoUnmuteHandler.Start();
-            await RateLimitService.Start();
-            await RemindService.Start();
-            await NSFWImageHandler.Start();
+            await AntiRaidService.Initialize();
+            await KaguyaSuppRoleHandler.Initialize();
+            await KaguyaSupporterExpirationHandler.Initialize();
+            await AutoUnmuteHandler.Initialize();
+            await RateLimitService.Initialize();
+            await RemindService.Initialize();
+            await NSFWImageHandler.Initialize();
         }
 
         private void InitializeEventHandlers()

@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 var deletedChannel = channel == null && matchChannel != 0;
 
                 logSettingString +=
-                    $"**{(prop.Name == "ModLog" ? "ModLog (Kaguya Premium Only)" : prop.Name.Replace("Log", ""))}** - {(channel == null && !deletedChannel ? "`Not assigned.`" : "Currently assigned to: ")} " +
+                    $"**{(prop.Name == "ModLog" ? "ModLog (Kaguya Premium Only)" : prop.Name.Replace("Log", ""))}** - {(channel == null && !deletedChannel ? "`Not assigned.`" : " ")} " +
                     $"{(deletedChannel ? $"*`Deleted Channel`*" : $"{(channel == null ? null : $"`#{channel.Name}`")}")}\n";
             }
 
@@ -50,8 +50,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Description = logSettingString,
                 Footer = new EmbedFooterBuilder
                 {
-                    Text =
-                        $"To enable a log type, use the {server.CommandPrefix}log command. To disable, use the {server.CommandPrefix}rlog command."
+                    Text = $"To enable a log type, use the {server.CommandPrefix}log command. " +
+                        $"To disable, use the {server.CommandPrefix}rlog command."
                 }
             };
 

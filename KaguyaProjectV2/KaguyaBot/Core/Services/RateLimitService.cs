@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
     public static class RateLimitService
     {
-        public static Task Start()
+        public static Task Initialize()
         {
             Timer timer = new Timer(3700); //3.70 seconds
             timer.AutoReset = true;

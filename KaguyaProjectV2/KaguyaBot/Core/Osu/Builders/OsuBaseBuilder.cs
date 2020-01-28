@@ -1,4 +1,5 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Global;
+﻿using System;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Osu.Models;
 using Newtonsoft.Json;
 using System.Net;
@@ -27,6 +28,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu.Builders
                 case OsuRequest.USER:
                     urlBuilder.Append("get_user");
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(request), request, null);
             }
 
             urlBuilder.Append("?");

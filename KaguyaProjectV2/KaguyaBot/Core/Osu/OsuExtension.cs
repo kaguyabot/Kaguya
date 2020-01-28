@@ -1,4 +1,6 @@
 ﻿using System;
+using Humanizer;
+using Humanizer.Localisation;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Osu
 {
@@ -13,11 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu
     {
         public static string ModeNames(int modnumber)
         {
-            string modString;
-            if (modnumber > 0)
-                modString = "+";
-            else
-                modString = "";
+            string modString = modnumber > 0 ? "+" : "";
 
             if (isBitSet(modnumber, 0))
                 modString += "NF";
@@ -53,103 +51,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu
 
         public static string OsuGrade(string grade)
         {
-            switch (grade)
+            return grade switch
             {
-                case "XH":
-                    return "<:XH:553119188089176074>";
-                case "X":
-                    return "<:X_:553119217109565470>";
-                case "SH":
-                    return "<:SH:553119233463025691>";
-                case "S":
-                    return "<:S_:553119252329267240>";
-                case "A":
-                    return "<:A_:553119274256826406>";
-                case "B":
-                    return "<:B_:553119304925577228>";
-                case "C":
-                    return "<:C_:553119325565878272>";
-                case "D":
-                    return "<:D_:553119338035675138>";
-                case "F":
-                    return "<:F_:557297028263051288>";
-            }
-            return "";
+                "XH" => "<:XH:553119188089176074>",
+                "X" => "<:X_:553119217109565470>",
+                "SH" => "<:SH:553119233463025691>",
+                "S" => "<:S_:553119252329267240>",
+                "A" => "<:A_:553119274256826406>",
+                "B" => "<:B_:553119304925577228>",
+                "C" => "<:C_:553119325565878272>",
+                "D" => "<:D_:553119338035675138>",
+                "F" => "<:F_:557297028263051288>",
+                _ => ""
+            };
         }
 
         public static double OsuAccuracy(int count50, int count100, int count300, int countMiss)
         {
-            return (double)100 * ((50 * count50) + (100 * count100) + (300 * count300)) / ((300 * (countMiss + count50 + count100 + count300)));
+            return (double)100 * ((50 * count50) + (100 * count100) + (300 * count300)) / (300 * (countMiss + count50 + count100 + count300));
         }
 
         public static string ToTimeAgo(TimeSpan time)
         {
-            var timestamp = "";
-            var year = 0;
-            var month = 0;
-            var day = time.Days;
-            var hour = time.Hours;
-
-            if (day >= 30)
-            {
-                while (true)
-                {
-                    month++;
-                    day -= 30;
-                    if (day < 30)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            if (month >= 12)
-            {
-                while (true)
-                {
-                    month++;
-                    month -= 12;
-                    if (month < 12)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            if (year > 1)
-            {
-                timestamp += $"{year} years ";
-            }
-            if (year == 1)
-            {
-                timestamp += $"{year} year ";
-            }
-            if (month > 1)
-            {
-                timestamp += $"{month} months ";
-            }
-            if (month == 1)
-            {
-                timestamp += $"{month} month ";
-            }
-            if (day > 1)
-            {
-                timestamp += $"{day} days ";
-            }
-            if (day == 1)
-            {
-                timestamp += $"{day} day ";
-            }
-            if (hour == 1)
-            {
-                timestamp += $"and {hour} hour ";
-            }
-            if (hour > 1)
-            {
-                timestamp += $"and {hour} hours ";
-            }
-
-            return timestamp;
+            return time.Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 7);
         }
     }
 }

@@ -3,6 +3,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using NekosSharp;
 using System.IO;
 using TwitchLib.Api;
+using Victoria;
 
 #pragma warning disable
 
@@ -11,6 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
     public static class ConfigProperties
     {
         public static DiscordShardedClient Client { get; set; }
+        public static LavaNode LavaNode { get; set; }
         public static TwitchAPI TwitchApi { get; set; }
         public static NekoClient NekoClient = new NekoClient("Kaguya");
         public static ConfigModel BotConfig { get; set; }

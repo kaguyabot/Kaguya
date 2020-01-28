@@ -24,36 +24,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.MoveMembers)]
         public async Task Command(SocketGuildUser user, [Remainder]string voiceChannel)
         {
-            await MoveUsersToVoiceChannel(new List<SocketGuildUser> {user}, voiceChannel);
-        }
-
-        [PremiumServerCommand]
-        [AdminCommand]
-        [Command("MoveSplit")]
-        [Summary("Evenly divides all users from the current voice channel into all voice channels that match the provided " +
-                 "input. The input is a series of characters that the voice channels' names must all have.\n" +
-                 "Example:\n\n" +
-                 "If I have 30 users and 3 voice channels containing the word `team`: `Team 1`, `Team 2`, and `Team 3`, " +
-                 "I can evenly split all users from this voice channel into those three channels by using `split team`.")]
-        public async Task MoveSplit([Remainder] string matchVoiceChannel)
-        {
-            if (!(Context.User is SocketGuildUser guildUser))
-            {
-                throw new KaguyaSupportException("Unable to identify the user as a `SocketGuildUser`. If this command was executed " +
-                                                 "from a valid Discord server, please contact support in the provided Discord server.");
-            }
-
-            // ReSharper disable once PossibleNullReferenceException
-            var curVc = (Context.User as SocketGuildUser).VoiceChannel;
-
-            if(curVc.Users.Count > 70)
-                throw new KaguyaSupportException("Sorry, but this command is limited to 70 users being in the voice channel at once.");
-
-            await MoveUsersToVoiceChannel(curVc.Users.ToList(), matchVoiceChannel);
-        }
-
-        private async Task MoveUsersToVoiceChannel(SocketGuildUser user, string voiceChannel)
-        {
             var currentChannel = user.VoiceChannel;
             SocketVoiceChannel destinationChannel = null;
             try
@@ -82,32 +52,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await user.ModifyAsync(x => x.Channel = destinationChannel);
             await Context.Channel.SendBasicSuccessEmbedAsync($"User `{user}` has been moved from `{currentChannel.Name}` " +
                                                              $"into `{destinationChannel.Name}`.");
-        }
-
-        private async Task MoveUsersToVoiceChannel(List<SocketGuildUser> users, string destinationChannelMatch)
-        {
-            var channels = Context.Guild.VoiceChannels.Where(x => x.Name.ToLower().Contains(destinationChannelMatch)).ToList();
-            int count = (int)Math.Ceiling((double)users.Count / channels.Count);
-
-            int i = 0;
-            foreach(var channel in channels)
-            {
-                for (int j = 0; j < count; j++)
-                {
-                    try
-                    {
-                        var curUser = users[j + (i * 10)];
-                        await curUser.ModifyAsync(x => x.Channel = channel);
-                        await ReplyAsync($"`{curUser}` has been moved to `{channel.Name}`");
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        return;
-                    }
-                }
-
-                i++;
-            }
         }
     }
 }

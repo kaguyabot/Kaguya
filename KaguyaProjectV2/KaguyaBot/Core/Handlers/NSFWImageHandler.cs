@@ -10,7 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public static class NSFWImageHandler
     {
-        public static Task Start()
+        public static Task Initialize()
         {
             Timer timer = new Timer(7200000);
             timer.AutoReset = false;

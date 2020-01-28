@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
     public static class KaguyaSuppRoleHandler
     {
-        public static Task Start()
+        public static Task Initialize()
         {
             Timer timer = new Timer(1800000); //30 mins
             timer.Start();

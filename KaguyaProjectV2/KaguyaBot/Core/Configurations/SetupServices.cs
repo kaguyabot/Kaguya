@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using Microsoft.Extensions.DependencyInjection;
+using Victoria;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Configurations
 {
@@ -15,6 +16,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Configurations
                 .AddSingleton(new InteractiveService(client))
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandler>()
+                .AddSingleton<LavaConfig>()
+                .AddSingleton<LavaNode>()
                 .BuildServiceProvider();
         }
     }

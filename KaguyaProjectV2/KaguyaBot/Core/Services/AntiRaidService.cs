@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
     public class AntiRaidService
     {
-        public static async Task Start()
+        public static async Task Initialize()
         {
             await Task.Run(() =>
             {

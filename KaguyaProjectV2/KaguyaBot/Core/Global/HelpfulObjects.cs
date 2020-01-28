@@ -2,7 +2,10 @@
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Global
 {
-    public class HelpfulObjects
+    /// <summary>
+    /// A static class containing helpful objects, such as <see cref="Emoji"/>s that are referenced often.
+    /// </summary>
+    public static class HelpfulObjects
     {
         /// <summary>
         /// Returns an Emoji[8] containing the numeric emojis 1-9.

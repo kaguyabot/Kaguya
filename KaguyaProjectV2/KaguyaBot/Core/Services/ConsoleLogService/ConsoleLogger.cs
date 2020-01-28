@@ -4,6 +4,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Discord;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {

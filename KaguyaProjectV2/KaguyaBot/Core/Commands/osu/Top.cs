@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 {
@@ -26,8 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         {
             if (num < 1 || num > 7)
             {
-                embed.WithDescription($"{Context.User.Mention} **ERROR: Number for top plays must be between 1 and 7!** ");
-                await ReplyAsync(embed: embed.Build());
+                await Context.Channel.SendBasicErrorEmbedAsync("Number of plays must be between 1 and 7.");
                 return;
             }
 
@@ -37,7 +37,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 if (player == "0")
                 {
                     embed.WithTitle($"osu! Top {num}");
-                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{(await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
+                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username. " +
+                                          $"Please specify a player or set your osu! username with " +
+                                          $"`{(await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
                     await ReplyAsync(embed: embed.Build());
                     return;
                 }

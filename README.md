@@ -77,3 +77,7 @@ including images and anything else that a user may upload to the server.
 - View the **9** most recent warnings for users when using the $unwarn command (instead of the 4 most recent). This is especially useful if you want to remove a warning that was made a long time ago, or just view the user's warn history.
 - Ability to link up to 15 Twitch channels for live notifications (instead of 3).
 - Access to `$serverstats` command which displays many stats about your server.
+- Server-wide access to $soundcloud music searching.
+- Server-wide access to $twitchaudio audio streaming.
+- Server-wide access to $mixeraudio audio streaming.
+- Server-wide unlimited duration on songs (compared to 10 minutes).

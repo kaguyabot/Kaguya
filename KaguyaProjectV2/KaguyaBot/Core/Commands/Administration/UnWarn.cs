@@ -77,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await ReactionReply(user, warnings, embed.Build(), warnCount, server, reason);
         }
 
-        private async Task ReactionReply(IGuildUser user, List<WarnedUser> warnings, Embed embed,
+        private async Task ReactionReply(IGuildUser user, IReadOnlyCollection<WarnedUser> warnings, Embed embed,
             int warnCount, Server server, string reason)
         {
             var emojis = HelpfulObjects.EmojisOneThroughNine();
@@ -109,8 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             Reason = reason
                         });
                     }
-                }
-                ));
+                }));
             }
 
             data.SetCallbacks(callbacks);
