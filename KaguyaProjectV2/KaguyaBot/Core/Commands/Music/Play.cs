@@ -5,16 +5,14 @@ using Discord.WebSocket;
 using Humanizer;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using Victoria;
 using Victoria.Enums;
 // ReSharper disable PossibleNullReferenceException
@@ -25,16 +23,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
     {
         [MusicCommand]
         [Command("Play")]
-        [Summary("Searches YouTube for the provided song. [Kaguya Supporters](https://the-kaguya-project.myshopify.com/) " +
-                 "may have their search queried through YouTube, Soundcloud, and Twitch by applying either " +
-                 "`-y`, `-s` or `-t` at the start of the search..")]
-        [Remarks("<search>\n[tag] <search> ($$$)")]
+        [Summary("Searches YouTube for the provided song and returns a list of up to 5 songs to choose from.")]
+        [Remarks("<search>")]
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]
         [RequireContext(ContextType.Guild)]
         public async Task Command([Remainder]string query)
         {
-            await SearchAndPlay(query);
+            var data = await SearchAndPlay(Context, query);
+            if(data != null)
+                await InlineReactionReplyAsync(data);
         }
 
         /// <summary>
@@ -45,31 +43,56 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         /// <param name="query">The song to search for, user input.</param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public async Task SearchAndPlay(string query, SearchProvider provider = SearchProvider.YouTube)
+        public async Task<ReactionCallbackData> SearchAndPlay(ShardedCommandContext context, string query, SearchProvider provider = SearchProvider.YouTube)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
 
             var node = ConfigProperties.LavaNode;
-            var curVc = (Context.User as SocketGuildUser).VoiceChannel;
+            var curVc = (context.User as SocketGuildUser).VoiceChannel;
 
             if (curVc == null)
             {
-                await Context.Channel.SendMessageAsync($"{Context.User.Mention} You must be in a voice " +
+                await context.Channel.SendMessageAsync($"{context.User.Mention} You must be in a voice " +
                                                        $"channel to use this command.");
-                return;
+                return null;
             }
 
             var result = provider switch
             {
                 SearchProvider.YouTube => await node.SearchYouTubeAsync(query),
                 SearchProvider.Soundcloud => await node.SearchSoundCloudAsync(query),
-                SearchProvider.Twitch => await node.SearchAsync(query),
-                _ => throw new InvalidEnumArgumentException(nameof(provider))
+                _ => await node.SearchAsync(query)
             };
 
-            IReadOnlyList<LavaTrack> tracks;
+            if (provider == SearchProvider.Twitch)
+            {
+                const string providerURL = "www.twitch.tv";
+                string errorString = $"Your search returned no results. Ensure you are only " +
+                                     $"typing the name of the streamer who you want to watch or a direct link to their stream.\n\n" +
+                                     $"Note: The streamer must be live for this feature to work.";
 
+                if (!query.ToLower().Contains(providerURL))
+                {
+                    result = await node.SearchAsync($"https://{providerURL}/{query}");
+                    if (result.Tracks.Count == 0)
+                    {
+                        await context.Channel.SendBasicErrorEmbedAsync(errorString);
+                        return null;
+                    }
+                }
+                else
+                {
+                    if ((await node.SearchAsync($"https://{providerURL}/{query.Split('\\').Last()}")).Tracks.Count == 0 &&
+                        (await node.SearchAsync(query)).Tracks.Count == 0)
+                    {
+                        await context.Channel.SendBasicErrorEmbedAsync(errorString);
+                        return null;
+                    }
+                }
+            }
+
+            IReadOnlyList<LavaTrack> tracks;
             if (user.IsSupporter || server.IsPremium)
             {
                 tracks = result.Tracks;
@@ -80,13 +103,52 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 tracks = (IReadOnlyList<LavaTrack>)result.Tracks.Where(x => x.Duration.TotalMinutes < 10);
             }
 
+            if (tracks.Count == 0)
+            {
+                await context.Channel.SendBasicErrorEmbedAsync($"Your requested search returned no results.");
+                return null;
+            }
+
             var fields = new List<EmbedFieldBuilder>();
             var callbacks = new List<(IEmote, Func<SocketCommandContext, SocketReaction, Task>)>();
             var emojiNums = HelpfulObjects.EmojisOneThroughNine();
 
-            var player = node.HasPlayer(Context.Guild)
-                ? node.GetPlayer(Context.Guild)
+            var player = node.HasPlayer(context.Guild)
+                ? node.GetPlayer(context.Guild)
                 : await node.JoinAsync(curVc);
+
+            #region If the track is a livestream:
+            if (tracks.Any(x => x.IsStream))
+            {
+                var trackSel = tracks.First(x => x.IsStream); // Gathers the first stream from the collection.
+                var twitchName = (await ConfigProperties.TwitchApi.V5.Users.GetUserByNameAsync(trackSel.Author)).Matches[0].DisplayName;
+                string playString = player.PlayerState == PlayerState.Playing
+                    ? $"Queued stream into position {player.Queue.Count}."
+                    : $"Now playing `{twitchName}`'s stream.";
+
+                if (player.PlayerState == PlayerState.Playing)
+                {
+                    player.Queue.Enqueue(trackSel);
+                }
+                else
+                {
+                    await player.PlayAsync(trackSel);
+                }
+
+                var field = new EmbedFieldBuilder
+                {
+                    Name = $"`{twitchName}`'s Stream",
+                    Value = $"{playString}\n" // We get rid of backticks for formatting.
+                };
+
+                var embed = new KaguyaEmbedBuilder
+                {
+                    Fields = new List<EmbedFieldBuilder>{ field }
+                };
+                await context.Channel.SendEmbedAsync(embed);
+                return null;
+            }
+            #endregion
 
             for (int i = 0; i < 5; i++)
             {
@@ -103,13 +165,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 fields.Add(field);
                 callbacks.Add((emojiNums[i], async (c, r) =>
                 {
-                    string playString = player.PlayerState == PlayerState.Playing
+                    string playString = player.PlayerState == PlayerState.Playing && !player.Track.IsStream
                         ? $"Queued track #{i1 + 1} into position {player.Queue.Count}."
                         : $"Now playing track #{i1 + 1}.";
 
                     if (player.PlayerState == PlayerState.Playing)
                     {
                         player.Queue.Enqueue(trackSel);
+
+                        if (player.Track.IsStream)
+                        {
+                            await player.SkipAsync();
+                        }
                     }
                     else
                     {
@@ -124,9 +191,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                         Fields = new List<EmbedFieldBuilder>{ field }
                     };
 
-                    await Context.Channel.SendEmbedAsync(embed);
+                    await context.Channel.SendEmbedAsync(embed);
                 }));
             }
+
+            callbacks.Add((HelpfulObjects.NoEntryEmoji(), async (c, r) =>
+            {
+                await c.Message.DeleteAsync();
+                await r.Message.Value.DeleteAsync();
+            }));
 
             var songDisplayEmbed = new KaguyaEmbedBuilder
             {
@@ -140,7 +213,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 timeout: TimeSpan.FromSeconds(60));
 
             data.SetCallbacks(callbacks);
-            await InlineReactionReplyAsync(data);
+            return data;
         }
     }
 
@@ -148,7 +221,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
     {
         YouTube,
         Soundcloud,
-        Twitch,
-        Mixer
+        Twitch
     }
 }

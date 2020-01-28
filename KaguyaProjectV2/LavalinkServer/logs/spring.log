@@ -80,3 +80,463 @@
 2020-01-28 12:18:52.943  INFO 8168 --- [XNIO-1 I/O-3] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:1695 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
 2020-01-28 12:19:22.945  INFO 8168 --- [pool-7-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
 2020-01-28 12:19:22.946  INFO 8168 --- [pool-7-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 17:33:30.406  INFO 5404 --- [main] lavalink.server.Launcher                 : 
+
+[32m       .  [31m _                  _ _       _    [32m__ _ _
+[32m      /\\ [31m| | __ ___   ____ _| (_)_ __ | | __[32m\ \ \ \
+[32m     ( ( )[31m| |/ _` \ \ / / _` | | | '_ \| |/ /[32m \ \ \ \
+[32m      \\/ [31m| | (_| |\ V / (_| | | | | | |   < [32m  ) ) ) )
+[32m       '  [31m|_|\__,_| \_/ \__,_|_|_|_| |_|_|\_\[32m / / / /
+[0m    =========================================[32m/_/_/_/[0m
+
+	Version:        3.2.2
+	Build:          961
+	Build time:     19.12.2019 13:43:43 UTC
+	Branch          master
+	Commit:         e30891d
+	Commit time:    19.12.2019 13:41:45 UTC
+	JVM:            12.0.1
+	Lavaplayer      1.3.32
+
+2020-01-28 17:33:30.479  INFO 5404 --- [main] lavalink.server.Launcher                 : Starting Launcher on DESKTOP-726PQBG with PID 5404 (C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\LavalinkServer\Lavalink.jar started by stage in C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\LavalinkServer)
+2020-01-28 17:33:30.480  INFO 5404 --- [main] lavalink.server.Launcher                 : No active profile set, falling back to default profiles: default
+2020-01-28 17:33:30.510  WARN 5404 --- [background-preinit] o.s.h.c.j.Jackson2ObjectMapperBuilder    : For Jackson Kotlin classes support please add "com.fasterxml.jackson.module:jackson-module-kotlin" to the classpath
+2020-01-28 17:33:31.566  WARN 5404 --- [main] io.undertow.websockets.jsr               : UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2020-01-28 17:33:31.589  INFO 5404 --- [main] io.undertow.servlet                      : Initializing Spring embedded WebApplicationContext
+2020-01-28 17:33:31.589  INFO 5404 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1072 ms
+2020-01-28 17:33:31.851  WARN 5404 --- [main] l.server.config.SentryConfiguration      : Turning off sentry
+2020-01-28 17:33:31.855  INFO 5404 --- [main] l.s.c.AudioSendFactoryConfiguration      : OS: Windows 10, Arch: amd64
+2020-01-28 17:33:31.856  INFO 5404 --- [main] l.s.c.AudioSendFactoryConfiguration      : JDA-NAS supported system detected. Enabled native audio sending.
+2020-01-28 17:33:31.856  INFO 5404 --- [main] l.s.c.AudioSendFactoryConfiguration      : Setting buffer to 400ms
+2020-01-28 17:33:31.856  INFO 5404 --- [main] l.s.c.AudioSendFactoryConfiguration      : Setting playlist load limit to 6
+2020-01-28 17:33:32.129  INFO 5404 --- [main] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 17:33:32.420  INFO 5404 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-01-28 17:33:32.661  INFO 5404 --- [main] org.xnio                                 : XNIO version 3.3.8.Final
+2020-01-28 17:33:32.669  INFO 5404 --- [main] org.xnio.nio                             : XNIO NIO Implementation Version 3.3.8.Final
+2020-01-28 17:33:32.747  INFO 5404 --- [main] o.s.b.w.e.u.UndertowServletWebServer     : Undertow started on port(s) 2333 (http) with context path ''
+2020-01-28 17:33:32.750  INFO 5404 --- [main] lavalink.server.Launcher                 : Started Launcher in 2.738 seconds (JVM running for 3.092)
+2020-01-28 17:34:14.398  INFO 5404 --- [XNIO-1 task-1] io.undertow.servlet                      : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-01-28 17:34:14.399  INFO 5404 --- [XNIO-1 task-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-01-28 17:34:14.404  INFO 5404 --- [XNIO-1 task-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2020-01-28 17:34:14.418  INFO 5404 --- [XNIO-1 task-1] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:55472
+2020-01-28 17:34:14.727  INFO 5404 --- [XNIO-1 task-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 17:34:14.786  INFO 5404 --- [XNIO-1 task-1] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:55472
+2020-01-28 17:34:14.800  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 17:36:08.064  INFO 5404 --- [XNIO-1 task-2] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 17:36:08.957  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: goreshit
+2020-01-28 17:36:09.407  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"sessionId":"cff1b5ab4aba0b5982ffe3998757e242","guildId":"546880579057221644","event":{"token":"42cbc62c7cb9c54c","endpoint":"us-east5.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 17:36:24.186  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 17:36:24.192  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 17:36:24.219  INFO 5404 --- [parallel-4] s.n.m.impl.connections.AudioWebSocket    : Websocket to wss://us-east5.discord.media/?v=4 closed with code 1000 and reason 
+2020-01-28 17:36:24.220  INFO 5404 --- [parallel-4] s.n.m.impl.connections.AudioWebSocket    : Resuming
+2020-01-28 17:36:52.253  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:55472 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 17:37:22.254  INFO 5404 --- [pool-2-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 17:37:22.255  INFO 5404 --- [pool-2-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 17:39:16.819  INFO 5404 --- [XNIO-1 task-4] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:55755
+2020-01-28 17:39:16.822  INFO 5404 --- [XNIO-1 task-4] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 17:39:16.827  INFO 5404 --- [XNIO-1 task-4] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:55755
+2020-01-28 17:39:16.973  INFO 5404 --- [XNIO-1 I/O-15] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 17:39:21.055  INFO 5404 --- [XNIO-1 task-5] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 17:39:21.056  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 17:39:29.292  INFO 5404 --- [XNIO-1 I/O-15] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:55755 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 17:39:49.962  INFO 5404 --- [XNIO-1 task-7] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:55792
+2020-01-28 17:39:49.965  INFO 5404 --- [XNIO-1 task-7] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 17:39:49.965  INFO 5404 --- [XNIO-1 task-7] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 17:39:50.106  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 17:39:53.985  INFO 5404 --- [XNIO-1 task-8] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 17:39:53.986  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] c.s.d.l.s.s.SoundCloudClientIdTracker    : Updating SoundCloud client ID (current is null).
+2020-01-28 17:39:54.552  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] c.s.d.l.s.s.SoundCloudClientIdTracker    : Updating SoundCloud client ID succeeded, new ID is CZ7U96zrZ500dPQAGAXFM2XO0DfSHl5k.
+2020-01-28 17:39:54.893  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: lifeletters
+2020-01-28 17:40:45.062  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:55792 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 17:41:09.896  INFO 5404 --- [XNIO-1 task-10] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:55868
+2020-01-28 17:41:09.899  INFO 5404 --- [XNIO-1 task-10] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 17:41:09.899  INFO 5404 --- [XNIO-1 task-10] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 17:41:10.323  INFO 5404 --- [XNIO-1 I/O-8] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 17:41:11.832  INFO 5404 --- [XNIO-1 task-11] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 17:41:12.059  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: lifeletters
+2020-01-28 17:41:20.224  INFO 5404 --- [XNIO-1 I/O-8] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:55868 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 17:41:50.224  INFO 5404 --- [pool-4-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 17:41:50.224  INFO 5404 --- [pool-4-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 17:44:12.650  INFO 5404 --- [XNIO-1 task-13] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:56025
+2020-01-28 17:44:12.656  INFO 5404 --- [XNIO-1 task-13] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 17:44:12.660  INFO 5404 --- [XNIO-1 task-13] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:56025
+2020-01-28 17:44:12.796  INFO 5404 --- [XNIO-1 I/O-13] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 17:44:17.231  INFO 5404 --- [XNIO-1 task-14] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 17:44:17.439  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: lifeletters
+2020-01-28 17:44:17.911  INFO 5404 --- [XNIO-1 I/O-13] lavalink.server.io.SocketServer          : {"sessionId":"e6a863a7cd3d4323ef9cfcf8a2d0db9d","guildId":"546880579057221644","event":{"token":"593b284a7ffe4396","endpoint":"us-east5.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 17:44:25.444  INFO 5404 --- [XNIO-1 I/O-13] lavalink.server.io.SocketServer          : {"track":"QAABAQIADExpZmUgTGV0dGVycwAYTmV2ZXIgR2V0IFVzZWQgVG8gUGVvcGxlAAAAAAADjMEAeU06aHR0cHM6Ly9hcGktdjIuc291bmRjbG91ZC5jb20vbWVkaWEvc291bmRjbG91ZDp0cmFja3M6MjIzOTczNzg2LzZhNWYwNzI1LTc4NzItNDViMi05MTVjLTk0YjM3ZWQ0ZWM1Zi9zdHJlYW0vcHJvZ3Jlc3NpdmUAAQA9aHR0cHM6Ly9zb3VuZGNsb3VkLmNvbS9uZXZlcmdldHVzZWR0b3Blb3BsZS92LXItZy11LWQtcC1wbC0xMwAKc291bmRjbG91ZAAAAAAAAAAA","startTime":0,"endTime":232641,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 17:44:25.450  INFO 5404 --- [lava-daemon-pool-playback-13-thread-1] c.s.d.l.s.s.SoundCloudClientIdTracker    : Updating SoundCloud client ID (current is null).
+2020-01-28 17:44:25.892  INFO 5404 --- [lava-daemon-pool-playback-13-thread-1] c.s.d.l.s.s.SoundCloudClientIdTracker    : Updating SoundCloud client ID succeeded, new ID is CZ7U96zrZ500dPQAGAXFM2XO0DfSHl5k.
+2020-01-28 17:44:26.256  INFO 5404 --- [lava-daemon-pool-playback-13-thread-1] c.s.l.c.natives.NativeLibraryLoader      : Native library libmpg123-0: loading with filter com.sedmelluq.discord.lavaplayer.natives.ConnectorNativeLibLoader$$Lambda$632/0x00000008018c3c40@20e73e06
+2020-01-28 17:44:26.274  INFO 5404 --- [lava-daemon-pool-playback-13-thread-1] c.s.l.c.natives.NativeLibraryLoader      : Native library libmpg123-0: successfully loaded.
+2020-01-28 17:44:26.274  INFO 5404 --- [lava-daemon-pool-playback-13-thread-1] c.s.l.c.natives.NativeLibraryLoader      : Native library connector: loading with filter null
+2020-01-28 17:44:26.461  INFO 5404 --- [lava-daemon-pool-playback-13-thread-1] c.s.l.c.natives.NativeLibraryLoader      : Native library connector: successfully loaded.
+2020-01-28 17:48:19.818  INFO 5404 --- [XNIO-1 I/O-13] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:56025 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 17:48:49.819  INFO 5404 --- [pool-5-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 17:48:49.819  INFO 5404 --- [pool-5-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 17:59:59.793  INFO 5404 --- [XNIO-1 task-16] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:56903
+2020-01-28 17:59:59.802  INFO 5404 --- [XNIO-1 task-16] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 17:59:59.806  INFO 5404 --- [XNIO-1 task-16] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:56903
+2020-01-28 18:00:00.085  INFO 5404 --- [XNIO-1 I/O-11] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:00:06.221  INFO 5404 --- [XNIO-1 task-17] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:00:06.609  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: lifeletters
+2020-01-28 18:00:07.103  INFO 5404 --- [XNIO-1 I/O-11] lavalink.server.io.SocketServer          : {"sessionId":"c7f758aea2d5a779b6be362957cc6fb6","guildId":"546880579057221644","event":{"token":"ad7c8983b6a61736","endpoint":"us-east55.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:00:13.342  INFO 5404 --- [XNIO-1 I/O-11] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:56903 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:00:41.961  INFO 5404 --- [XNIO-1 task-19] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:56954
+2020-01-28 18:00:41.965  INFO 5404 --- [XNIO-1 task-19] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 18:00:41.965  INFO 5404 --- [XNIO-1 task-19] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 18:00:42.110  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:00:42.299  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:56954 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:01:08.065  INFO 5404 --- [XNIO-1 task-20] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:56980
+2020-01-28 18:01:08.069  INFO 5404 --- [XNIO-1 task-20] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 18:01:08.069  INFO 5404 --- [XNIO-1 task-20] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 18:01:08.337  INFO 5404 --- [XNIO-1 I/O-16] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:01:12.017  INFO 5404 --- [XNIO-1 task-21] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:01:12.266  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: lifeletters
+2020-01-28 18:01:13.117  INFO 5404 --- [XNIO-1 I/O-16] lavalink.server.io.SocketServer          : {"sessionId":"52f44ed69661ba2e9d330d80e7d8d59c","guildId":"546880579057221644","event":{"token":"ad7c8983b6a61736","endpoint":"us-east55.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:01:28.759  INFO 5404 --- [XNIO-1 task-23] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:01:29.639  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: road of resistance
+2020-01-28 18:01:56.730  INFO 5404 --- [XNIO-1 task-25] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:01:57.209  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: road of resistance
+2020-01-28 18:02:05.835  INFO 5404 --- [XNIO-1 I/O-16] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 18:02:05.836  INFO 5404 --- [XNIO-1 I/O-16] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 18:02:11.106  INFO 5404 --- [XNIO-1 task-27] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:02:11.309  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: lifeletters
+2020-01-28 18:02:11.594  INFO 5404 --- [XNIO-1 I/O-16] lavalink.server.io.SocketServer          : {"sessionId":"52f44ed69661ba2e9d330d80e7d8d59c","guildId":"546880579057221644","event":{"token":"97c63ccae245ae0a","endpoint":"us-east55.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:02:19.359  INFO 5404 --- [XNIO-1 task-29] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:02:20.017  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: road of resistance
+2020-01-28 18:02:22.021  INFO 5404 --- [XNIO-1 I/O-16] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:56980 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:02:52.022  INFO 5404 --- [pool-7-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:02:52.022  INFO 5404 --- [pool-7-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:08:56.613  INFO 5404 --- [XNIO-1 task-31] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:57393
+2020-01-28 18:08:56.619  INFO 5404 --- [XNIO-1 task-31] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:08:56.624  INFO 5404 --- [XNIO-1 task-31] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:57393
+2020-01-28 18:08:56.770  INFO 5404 --- [XNIO-1 I/O-5] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:09:02.660  INFO 5404 --- [XNIO-1 task-32] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:09:02.660  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:09:36.953  INFO 5404 --- [XNIO-1 task-34] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:09:36.953  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:10:16.017  INFO 5404 --- [XNIO-1 I/O-5] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:57393 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:10:26.423  INFO 5404 --- [XNIO-1 task-36] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:57478
+2020-01-28 18:10:26.427  INFO 5404 --- [XNIO-1 task-36] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 18:10:26.428  INFO 5404 --- [XNIO-1 task-36] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 18:10:26.904  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:10:33.714  INFO 5404 --- [XNIO-1 task-37] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:10:33.714  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:11:23.873  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:57478 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:11:53.874  INFO 5404 --- [pool-8-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:11:53.874  INFO 5404 --- [pool-8-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:13:10.051  INFO 5404 --- [XNIO-1 task-39] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:57647
+2020-01-28 18:13:10.055  INFO 5404 --- [XNIO-1 task-39] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:13:10.061  INFO 5404 --- [XNIO-1 task-39] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:57647
+2020-01-28 18:13:10.077  INFO 5404 --- [XNIO-1 I/O-3] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:13:20.945  INFO 5404 --- [XNIO-1 task-40] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:13:21.149  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track [C# | Discord.NET] Kaguya V2.0: Music
+2020-01-28 18:13:31.779  INFO 5404 --- [XNIO-1 I/O-3] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:57647 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:13:43.905  INFO 5404 --- [XNIO-1 task-42] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:57705
+2020-01-28 18:13:43.907  INFO 5404 --- [XNIO-1 task-42] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 18:13:43.907  INFO 5404 --- [XNIO-1 task-42] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 18:13:44.171  INFO 5404 --- [XNIO-1 I/O-13] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:13:46.239  INFO 5404 --- [XNIO-1 task-43] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:13:46.359  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track [C# | Discord.NET] Kaguya V2.0: Music
+2020-01-28 18:13:46.420  INFO 5404 --- [XNIO-1 I/O-13] lavalink.server.io.SocketServer          : {"track":"QAAAkgIAJVtDIyB8IERpc2NvcmQuTkVUXSBLYWd1eWEgVjIuMDogTXVzaWMACnN0YWdlY29kZXN//////////wAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMBAQAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMABnR3aXRjaAAAAAAAAAAA","startTime":0,"endTime":-2147483648,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:14:06.347  INFO 5404 --- [XNIO-1 I/O-13] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:57705 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:14:16.125  INFO 5404 --- [XNIO-1 task-45] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:57745
+2020-01-28 18:14:16.127  INFO 5404 --- [XNIO-1 task-45] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 18:14:16.128  INFO 5404 --- [XNIO-1 task-45] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 18:14:16.147  INFO 5404 --- [XNIO-1 I/O-5] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:14:28.705  INFO 5404 --- [XNIO-1 task-46] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:14:28.824  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track [C# | Discord.NET] Kaguya V2.0: Music
+2020-01-28 18:14:28.859  INFO 5404 --- [XNIO-1 I/O-5] lavalink.server.io.SocketServer          : {"track":"QAAAkgIAJVtDIyB8IERpc2NvcmQuTkVUXSBLYWd1eWEgVjIuMDogTXVzaWMACnN0YWdlY29kZXN//////////wAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMBAQAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMABnR3aXRjaAAAAAAAAAAA","startTime":0,"endTime":-2147483648,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:14:29.435  INFO 5404 --- [XNIO-1 I/O-5] lavalink.server.io.SocketServer          : {"sessionId":"6b419bf7638ab1c8fa1d3a2b9e98160e","guildId":"546880579057221644","event":{"token":"56f02b37b4885cff","endpoint":"us-east55.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:15:33.759  INFO 5404 --- [XNIO-1 I/O-5] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:57745 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:16:03.760  INFO 5404 --- [pool-9-thread-1] lavalink.server.io.SocketContext         : Shutting down 1 playing players.
+2020-01-28 18:16:03.760  INFO 5404 --- [pool-9-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:16:03.767  WARN 5404 --- [lava-daemon-pool-playback-25-thread-2] c.s.d.l.t.p.LocalAudioTrackExecutor      : Suspicious exception for playback of https://www.twitch.tv/stagecodes
+
+com.sedmelluq.discord.lavaplayer.tools.FriendlyException: The track was unexpectedly terminated.
+	at com.sedmelluq.discord.lavaplayer.track.playback.LocalAudioTrackExecutor.handlePlaybackInterrupt(LocalAudioTrackExecutor.java:334) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.track.playback.LocalAudioTrackExecutor.executeProcessingLoop(LocalAudioTrackExecutor.java:278) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.track.playback.LocalAudioTrackExecutor.executeProcessingLoop(LocalAudioTrackExecutor.java:236) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.container.adts.AdtsAudioTrack.process(AdtsAudioTrack.java:36) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.track.DelegatedAudioTrack.processDelegate(DelegatedAudioTrack.java:25) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.source.stream.MpegTsM3uStreamAudioTrack.processJoinedStream(MpegTsM3uStreamAudioTrack.java:26) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.source.stream.M3uStreamAudioTrack.process(M3uStreamAudioTrack.java:35) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioTrack.process(TwitchStreamAudioTrack.java:57) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.track.playback.LocalAudioTrackExecutor.execute(LocalAudioTrackExecutor.java:91) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$executeTrack$1(DefaultAudioPlayerManager.java:349) ~[lavaplayer-1.3.32.jar!/:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:835) ~[na:na]
+	Suppressed: org.apache.http.TruncatedChunkException: Truncated chunk (expected size: 59,110; actual size: 36,148)
+		at org.apache.http.impl.io.ChunkedInputStream.read(ChunkedInputStream.java:197) ~[httpcore-4.4.12.jar!/:4.4.12]
+		at org.apache.http.impl.io.ChunkedInputStream.read(ChunkedInputStream.java:210) ~[httpcore-4.4.12.jar!/:4.4.12]
+		at org.apache.http.impl.io.ChunkedInputStream.close(ChunkedInputStream.java:312) ~[httpcore-4.4.12.jar!/:4.4.12]
+		at org.apache.http.impl.execchain.ResponseEntityProxy.streamClosed(ResponseEntityProxy.java:142) ~[httpclient-4.5.10.jar!/:4.5.10]
+		at org.apache.http.conn.EofSensorInputStream.checkClose(EofSensorInputStream.java:228) ~[httpclient-4.5.10.jar!/:4.5.10]
+		at org.apache.http.conn.EofSensorInputStream.close(EofSensorInputStream.java:172) ~[httpclient-4.5.10.jar!/:4.5.10]
+		at com.sedmelluq.discord.lavaplayer.tools.io.ChainedInputStream.close(ChainedInputStream.java:92) ~[lavaplayer-1.3.32.jar!/:na]
+		at com.sedmelluq.discord.lavaplayer.source.stream.M3uStreamAudioTrack.process(M3uStreamAudioTrack.java:36) ~[lavaplayer-1.3.32.jar!/:na]
+		... 6 common frames omitted
+Caused by: java.lang.InterruptedException: null
+	at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.reportInterruptAfterWait(AbstractQueuedSynchronizer.java:2056) ~[na:na]
+	at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2090) ~[na:na]
+	at java.base/java.util.concurrent.ArrayBlockingQueue.put(ArrayBlockingQueue.java:367) ~[na:na]
+	at com.sedmelluq.discord.lavaplayer.track.playback.AllocatingAudioFrameBuffer.consume(AllocatingAudioFrameBuffer.java:179) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.filter.BufferingPostProcessor.process(BufferingPostProcessor.java:41) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.filter.FinalPcmAudioFilter.dispatch(FinalPcmAudioFilter.java:158) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.filter.FinalPcmAudioFilter.process(FinalPcmAudioFilter.java:147) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.filter.UserProvidedAudioFilters.process(UserProvidedAudioFilters.java:65) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.filter.ResamplingPcmAudioFilter.process(ResamplingPcmAudioFilter.java:69) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.filter.converter.ToFloatAudioFilter.process(ToFloatAudioFilter.java:66) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.filter.AudioPipeline.process(AudioPipeline.java:33) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.container.adts.AdtsStreamProvider.decodeAndSend(AdtsStreamProvider.java:111) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.container.adts.AdtsStreamProvider.provideFrames(AdtsStreamProvider.java:81) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.track.playback.LocalAudioTrackExecutor.executeProcessingLoop(LocalAudioTrackExecutor.java:262) ~[lavaplayer-1.3.32.jar!/:na]
+	... 11 common frames omitted
+
+2020-01-28 18:19:08.370  INFO 5404 --- [XNIO-1 task-48] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:58064
+2020-01-28 18:19:08.375  INFO 5404 --- [XNIO-1 task-48] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:19:08.434  INFO 5404 --- [XNIO-1 task-48] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:58064
+2020-01-28 18:19:08.735  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:19:28.308  INFO 5404 --- [XNIO-1 task-49] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:19:28.440  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track [C# | Discord.NET] Kaguya V2.0: Music
+2020-01-28 18:19:28.468  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"track":"QAAAkgIAJVtDIyB8IERpc2NvcmQuTkVUXSBLYWd1eWEgVjIuMDogTXVzaWMACnN0YWdlY29kZXN//////////wAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMBAQAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMABnR3aXRjaAAAAAAAAAAA","startTime":0,"endTime":-2147483648,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:19:29.050  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"sessionId":"c189c4521fc043c1cb4fb5cf7b16e7dd","guildId":"546880579057221644","event":{"token":"f5a69dd3b1c2cf1d","endpoint":"us-east707.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:19:36.131  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 18:19:36.132  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 18:19:39.210  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:58064 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:20:09.212  INFO 5404 --- [pool-10-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:20:09.212  INFO 5404 --- [pool-10-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:35:15.442  INFO 5404 --- [XNIO-1 task-51] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:58954
+2020-01-28 18:35:15.447  INFO 5404 --- [XNIO-1 task-51] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:35:15.454  INFO 5404 --- [XNIO-1 task-51] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:58954
+2020-01-28 18:35:15.734  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:35:19.631  INFO 5404 --- [XNIO-1 task-52] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:35:19.631  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:36:55.749  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:58954 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:37:25.750  INFO 5404 --- [pool-11-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:37:25.750  INFO 5404 --- [pool-11-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:39:26.975  INFO 5404 --- [XNIO-1 task-54] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:59184
+2020-01-28 18:39:26.980  INFO 5404 --- [XNIO-1 task-54] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:39:26.990  INFO 5404 --- [XNIO-1 task-54] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:59184
+2020-01-28 18:39:27.264  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:39:31.333  INFO 5404 --- [XNIO-1 task-55] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:39:31.334  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:39:31.348  INFO 5404 --- [XNIO-1 task-57] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:39:31.539  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track [C# | Discord.NET] Kaguya V2.0: Music
+2020-01-28 18:39:31.567  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"track":"QAAAkgIAJVtDIyB8IERpc2NvcmQuTkVUXSBLYWd1eWEgVjIuMDogTXVzaWMACnN0YWdlY29kZXN//////////wAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMBAQAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMABnR3aXRjaAAAAAAAAAAA","startTime":0,"endTime":-2147483648,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:39:32.164  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"sessionId":"39f540e51f76eca1737778be5d612b00","guildId":"546880579057221644","event":{"token":"b98678aa1a4466ae","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:39:53.341  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59184 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:40:03.830  INFO 5404 --- [XNIO-1 task-59] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:59248
+2020-01-28 18:40:03.833  INFO 5404 --- [XNIO-1 task-59] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 18:40:03.833  INFO 5404 --- [XNIO-1 task-59] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 18:40:04.107  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:40:17.548  INFO 5404 --- [parallel-12] s.n.m.impl.connections.AudioWebSocket    : Websocket to wss://us-east935.discord.media/?v=4 closed with code 4014 and reason Disconnected.
+2020-01-28 18:40:17.548  INFO 5404 --- [parallel-12] s.n.m.impl.connections.AudioWebSocket    : Closing
+2020-01-28 18:40:20.139  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"sessionId":"b38008ece87bd45215cb456815f8b3ca","guildId":"546880579057221644","event":{"token":"2e8831af64dc9a5a","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:40:42.886  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 18:40:42.887  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 18:40:45.714  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : {"sessionId":"b38008ece87bd45215cb456815f8b3ca","guildId":"546880579057221644","event":{"token":"494daa0b1b94c728","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:40:51.680  INFO 5404 --- [XNIO-1 task-60] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:40:51.681  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:40:51.954  INFO 5404 --- [XNIO-1 task-62] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:40:52.184 ERROR 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Load failed
+
+com.sedmelluq.discord.lavaplayer.tools.FriendlyException: Unknown file format.
+	at com.sedmelluq.discord.lavaplayer.source.ProbingAudioSourceManager.handleLoadResult(ProbingAudioSourceManager.java:35) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager.loadItem(HttpAudioSourceManager.java:81) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItemOnce(DefaultAudioPlayerManager.java:437) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItem(DefaultAudioPlayerManager.java:419) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$createItemLoader$0(DefaultAudioPlayerManager.java:218) ~[lavaplayer-1.3.32.jar!/:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:835) ~[na:na]
+
+2020-01-28 18:40:57.274  INFO 5404 --- [XNIO-1 I/O-12] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59248 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:41:27.275  INFO 5404 --- [pool-12-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:41:27.275  INFO 5404 --- [pool-12-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:41:48.960  INFO 5404 --- [XNIO-1 task-64] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:59366
+2020-01-28 18:41:48.964  INFO 5404 --- [XNIO-1 task-64] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:41:48.971  INFO 5404 --- [XNIO-1 task-64] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:59366
+2020-01-28 18:41:49.235  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:41:58.176  INFO 5404 --- [XNIO-1 task-65] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:41:58.176  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:41:58.436  INFO 5404 --- [XNIO-1 task-67] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:41:58.667 ERROR 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Load failed
+
+com.sedmelluq.discord.lavaplayer.tools.FriendlyException: Unknown file format.
+	at com.sedmelluq.discord.lavaplayer.source.ProbingAudioSourceManager.handleLoadResult(ProbingAudioSourceManager.java:35) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager.loadItem(HttpAudioSourceManager.java:81) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItemOnce(DefaultAudioPlayerManager.java:437) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItem(DefaultAudioPlayerManager.java:419) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$createItemLoader$0(DefaultAudioPlayerManager.java:218) ~[lavaplayer-1.3.32.jar!/:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:835) ~[na:na]
+
+2020-01-28 18:42:06.562  INFO 5404 --- [XNIO-1 task-69] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:42:06.562  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:42:06.569  INFO 5404 --- [XNIO-1 task-71] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:42:06.685  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track ?? ?? ?? TOXIC STREAM?? ?? ?? 
+2020-01-28 18:42:06.848  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : {"track":"QAAAlAIANuKYou\u002B4jyDimKLvuI8g4pii77iPIFRPWElDIFNUUkVBTeKYou\u002B4jyDimKLvuI8g4pii77iPIAAFeHFjb3d//////////wAbaHR0cHM6Ly93d3cudHdpdGNoLnR2L3hxY293AQEAG2h0dHBzOi8vd3d3LnR3aXRjaC50di94cWNvdwAGdHdpdGNoAAAAAAAAAAA=","startTime":0,"endTime":-2147483648,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:42:07.238  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : {"sessionId":"05ff2d7da8213405e055d6f955c1ed83","guildId":"546880579057221644","event":{"token":"94301c0e26e3a4c4","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:42:19.361  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 18:42:19.362  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 18:42:21.149  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59366 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:42:51.150  INFO 5404 --- [pool-13-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:42:51.150  INFO 5404 --- [pool-13-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:43:21.547  INFO 5404 --- [XNIO-1 task-73] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:59464
+2020-01-28 18:43:21.554  INFO 5404 --- [XNIO-1 task-73] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:43:21.561  INFO 5404 --- [XNIO-1 task-73] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:59464
+2020-01-28 18:43:21.841  INFO 5404 --- [XNIO-1 I/O-4] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:43:23.786  INFO 5404 --- [XNIO-1 task-74] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:43:23.787  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:43:23.799  INFO 5404 --- [XNIO-1 task-76] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:43:23.924  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track ?? ?? ?? TOXIC STREAM?? ?? ?? 
+2020-01-28 18:43:23.964  INFO 5404 --- [XNIO-1 I/O-4] lavalink.server.io.SocketServer          : {"track":"QAAAlAIANuKYou\u002B4jyDimKLvuI8g4pii77iPIFRPWElDIFNUUkVBTeKYou\u002B4jyDimKLvuI8g4pii77iPIAAFeHFjb3d//////////wAbaHR0cHM6Ly93d3cudHdpdGNoLnR2L3hxY293AQEAG2h0dHBzOi8vd3d3LnR3aXRjaC50di94cWNvdwAGdHdpdGNoAAAAAAAAAAA=","startTime":0,"endTime":-2147483648,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:43:24.482  INFO 5404 --- [XNIO-1 I/O-4] lavalink.server.io.SocketServer          : {"sessionId":"5a3fbfd1ffb1b0a69e3f6f79e6513006","guildId":"546880579057221644","event":{"token":"e4ceb5b63eac6c5b","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:43:35.792  INFO 5404 --- [XNIO-1 I/O-4] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 18:43:35.793  INFO 5404 --- [XNIO-1 I/O-4] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 18:43:37.692  INFO 5404 --- [XNIO-1 I/O-4] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59464 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:44:07.693  INFO 5404 --- [pool-14-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:44:07.693  INFO 5404 --- [pool-14-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:45:46.863  INFO 5404 --- [XNIO-1 task-78] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:59614
+2020-01-28 18:45:46.870  INFO 5404 --- [XNIO-1 task-78] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:45:46.875  INFO 5404 --- [XNIO-1 task-78] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:59614
+2020-01-28 18:45:47.131  INFO 5404 --- [XNIO-1 I/O-10] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:45:57.829  INFO 5404 --- [XNIO-1 task-79] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:45:57.829  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:45:58.087  INFO 5404 --- [XNIO-1 task-81] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:45:58.214  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track ?? ?? ?? TOXIC STREAM?? ?? ?? 
+2020-01-28 18:46:06.292  INFO 5404 --- [XNIO-1 I/O-10] lavalink.server.io.SocketServer          : {"sessionId":"6f61e67854dde30ca4902f0ea1f3f066","guildId":"546880579057221644","event":{"token":"3bdf2c4d853fe8ff","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:46:08.565  INFO 5404 --- [XNIO-1 I/O-10] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59614 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:46:32.482  INFO 5404 --- [parallel-2] s.n.m.impl.connections.AudioWebSocket    : Websocket to wss://us-east935.discord.media/?v=4 closed with code 4014 and reason Disconnected.
+2020-01-28 18:46:32.482  INFO 5404 --- [parallel-2] s.n.m.impl.connections.AudioWebSocket    : Closing
+2020-01-28 18:46:35.066  INFO 5404 --- [XNIO-1 task-83] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:59674
+2020-01-28 18:46:35.069  INFO 5404 --- [XNIO-1 task-83] lavalink.server.io.SocketContext         : Replaying 1 events
+2020-01-28 18:46:35.070  INFO 5404 --- [XNIO-1 task-83] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 18:46:35.092  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:46:37.858  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"sessionId":"e09c3d06d327f0d89a080065ee184d42","guildId":"546880579057221644","event":{"token":"10a05b190ad541f1","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:46:43.833  INFO 5404 --- [XNIO-1 task-84] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:46:43.833  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:46:43.847  INFO 5404 --- [XNIO-1 task-86] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:46:43.970  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track ?? ?? ?? TOXIC STREAM?? ?? ?? 
+2020-01-28 18:46:44.319  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"track":"QAAAlAIANuKYou\u002B4jyDimKLvuI8g4pii77iPIFRPWElDIFNUUkVBTeKYou\u002B4jyDimKLvuI8g4pii77iPIAAFeHFjb3d//////////wAbaHR0cHM6Ly93d3cudHdpdGNoLnR2L3hxY293AQEAG2h0dHBzOi8vd3d3LnR3aXRjaC50di94cWNvdwAGdHdpdGNoAAAAAAAAAAA=","startTime":0,"endTime":-2147483648,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:47:36.588  INFO 5404 --- [XNIO-1 task-88] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:47:37.166  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: road of resistance
+2020-01-28 18:47:57.451  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 18:47:57.452  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 18:48:00.408  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59674 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:48:30.409  INFO 5404 --- [pool-15-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:48:30.409  INFO 5404 --- [pool-15-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:49:14.289  INFO 5404 --- [XNIO-1 task-90] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:59863
+2020-01-28 18:49:14.296  INFO 5404 --- [XNIO-1 task-90] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:49:14.359  INFO 5404 --- [XNIO-1 task-90] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:59863
+2020-01-28 18:49:14.369  INFO 5404 --- [XNIO-1 I/O-11] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:49:17.952  INFO 5404 --- [XNIO-1 task-91] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:49:17.952  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:49:17.964  INFO 5404 --- [XNIO-1 task-93] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:49:18.081  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track ?? ?? ?? TOXIC STREAM?? ?? ?? 
+2020-01-28 18:49:18.321  INFO 5404 --- [XNIO-1 I/O-11] lavalink.server.io.SocketServer          : {"track":"QAAAlAIANuKYou\u002B4jyDimKLvuI8g4pii77iPIFRPWElDIFNUUkVBTeKYou\u002B4jyDimKLvuI8g4pii77iPIAAFeHFjb3d//////////wAbaHR0cHM6Ly93d3cudHdpdGNoLnR2L3hxY293AQEAG2h0dHBzOi8vd3d3LnR3aXRjaC50di94cWNvdwAGdHdpdGNoAAAAAAAAAAA=","startTime":0,"endTime":-2147483648,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:49:18.743  INFO 5404 --- [XNIO-1 I/O-11] lavalink.server.io.SocketServer          : {"sessionId":"5d18365011ad16ac43f182744dc3f70f","guildId":"546880579057221644","event":{"token":"2cf5791f3cef3b16","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:49:28.906  INFO 5404 --- [XNIO-1 task-95] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:49:29.371  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: road of resistance
+2020-01-28 18:49:50.773  INFO 5404 --- [XNIO-1 I/O-11] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59863 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:50:09.672  INFO 5404 --- [XNIO-1 task-97] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:59957
+2020-01-28 18:50:09.676  INFO 5404 --- [XNIO-1 task-97] lavalink.server.io.SocketContext         : Replaying 0 events
+2020-01-28 18:50:09.677  INFO 5404 --- [XNIO-1 task-97] lavalink.server.io.SocketServer          : Resumed session with key Victoria
+2020-01-28 18:50:09.986  INFO 5404 --- [XNIO-1 I/O-9] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:50:19.325  INFO 5404 --- [parallel-1] s.n.m.impl.connections.AudioWebSocket    : Websocket to wss://us-east935.discord.media/?v=4 closed with code 4014 and reason Disconnected.
+2020-01-28 18:50:19.326  INFO 5404 --- [parallel-1] s.n.m.impl.connections.AudioWebSocket    : Closing
+2020-01-28 18:50:21.785  INFO 5404 --- [XNIO-1 I/O-9] lavalink.server.io.SocketServer          : {"sessionId":"54395d91e74144a9c10f78a63374ebed","guildId":"546880579057221644","event":{"token":"ddd2d3c45875301c","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:50:27.781  INFO 5404 --- [XNIO-1 task-98] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:50:28.264  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: road of resistance
+2020-01-28 18:50:30.676  INFO 5404 --- [XNIO-1 I/O-9] lavalink.server.io.SocketServer          : {"track":"QAAAnAIAOUJBQllNRVRBTCAtIFJvYWQgb2YgUmVzaXN0YW5jZSAtIExpdmUgaW4gSmFwYW4gKE9GRklDSUFMKQAJQkFCWU1FVEFMAAAAAAAIEmgAC3pURVlVRmdMdmVZAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9elRFWVVGZ0x2ZVkAB3lvdXR1YmUAAAAAAAAAAA==","startTime":0,"endTime":529000,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:51:27.920  INFO 5404 --- [XNIO-1 I/O-9] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 18:51:27.920  INFO 5404 --- [XNIO-1 I/O-9] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 18:51:30.187  INFO 5404 --- [XNIO-1 I/O-9] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59957 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:52:00.188  INFO 5404 --- [pool-16-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:52:00.188  INFO 5404 --- [pool-16-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:52:25.582  INFO 5404 --- [XNIO-1 task-100] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:60109
+2020-01-28 18:52:25.586  INFO 5404 --- [XNIO-1 task-100] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:52:25.591  INFO 5404 --- [XNIO-1 task-100] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:60109
+2020-01-28 18:52:25.857  INFO 5404 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:52:31.721  INFO 5404 --- [XNIO-1 task-101] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:52:31.847  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track [C# | Discord.NET] Kaguya V2.0: Music
+2020-01-28 18:52:32.105  INFO 5404 --- [XNIO-1 task-103] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:52:32.215 ERROR 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Load failed
+
+com.sedmelluq.discord.lavaplayer.tools.FriendlyException: Unknown file format.
+	at com.sedmelluq.discord.lavaplayer.source.ProbingAudioSourceManager.handleLoadResult(ProbingAudioSourceManager.java:35) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager.loadItem(HttpAudioSourceManager.java:81) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItemOnce(DefaultAudioPlayerManager.java:437) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItem(DefaultAudioPlayerManager.java:419) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$createItemLoader$0(DefaultAudioPlayerManager.java:218) ~[lavaplayer-1.3.32.jar!/:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:835) ~[na:na]
+
+2020-01-28 18:52:32.226  INFO 5404 --- [XNIO-1 task-105] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:52:32.348  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track [C# | Discord.NET] Kaguya V2.0: Music
+2020-01-28 18:52:32.619  INFO 5404 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"track":"QAAAkgIAJVtDIyB8IERpc2NvcmQuTkVUXSBLYWd1eWEgVjIuMDogTXVzaWMACnN0YWdlY29kZXN//////////wAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMBAQAgaHR0cHM6Ly93d3cudHdpdGNoLnR2L3N0YWdlY29kZXMABnR3aXRjaAAAAAAAAAAA","startTime":0,"endTime":-2147483648,"noReplace":false,"guildId":"546880579057221644","op":"play"}
+2020-01-28 18:52:38.069  INFO 5404 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"ffce02fe48cc2c45d4b2fdad3517c48d","guildId":"546880579057221644","event":{"token":"ffd15c5cd5022f5e","endpoint":"us-east935.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 18:52:54.665  INFO 5404 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 18:52:54.666  INFO 5404 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 18:52:59.305  INFO 5404 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:60109 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:53:29.305  INFO 5404 --- [pool-17-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:53:29.305  INFO 5404 --- [pool-17-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 18:53:35.337  INFO 5404 --- [XNIO-1 task-107] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:60214
+2020-01-28 18:53:35.341  INFO 5404 --- [XNIO-1 task-107] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 18:53:35.346  INFO 5404 --- [XNIO-1 task-107] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:60214
+2020-01-28 18:53:35.623  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 18:54:06.554  INFO 5404 --- [XNIO-1 task-108] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:54:06.638 ERROR 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Load failed
+
+com.sedmelluq.discord.lavaplayer.tools.FriendlyException: Unknown file format.
+	at com.sedmelluq.discord.lavaplayer.source.ProbingAudioSourceManager.handleLoadResult(ProbingAudioSourceManager.java:35) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager.loadItem(HttpAudioSourceManager.java:81) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItemOnce(DefaultAudioPlayerManager.java:437) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItem(DefaultAudioPlayerManager.java:419) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$createItemLoader$0(DefaultAudioPlayerManager.java:218) ~[lavaplayer-1.3.32.jar!/:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:835) ~[na:na]
+
+2020-01-28 18:54:06.906  INFO 5404 --- [XNIO-1 task-110] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:54:07.091 ERROR 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Load failed
+
+com.sedmelluq.discord.lavaplayer.tools.FriendlyException: Unknown file format.
+	at com.sedmelluq.discord.lavaplayer.source.ProbingAudioSourceManager.handleLoadResult(ProbingAudioSourceManager.java:35) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager.loadItem(HttpAudioSourceManager.java:81) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItemOnce(DefaultAudioPlayerManager.java:437) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItem(DefaultAudioPlayerManager.java:419) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$createItemLoader$0(DefaultAudioPlayerManager.java:218) ~[lavaplayer-1.3.32.jar!/:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:835) ~[na:na]
+
+2020-01-28 18:54:10.690  INFO 5404 --- [XNIO-1 task-112] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:54:10.691  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : No matches found
+2020-01-28 18:54:10.700  INFO 5404 --- [XNIO-1 task-114] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 18:54:10.862 ERROR 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Load failed
+
+com.sedmelluq.discord.lavaplayer.tools.FriendlyException: Unknown file format.
+	at com.sedmelluq.discord.lavaplayer.source.ProbingAudioSourceManager.handleLoadResult(ProbingAudioSourceManager.java:35) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager.loadItem(HttpAudioSourceManager.java:81) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItemOnce(DefaultAudioPlayerManager.java:437) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItem(DefaultAudioPlayerManager.java:419) ~[lavaplayer-1.3.32.jar!/:na]
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$createItemLoader$0(DefaultAudioPlayerManager.java:218) ~[lavaplayer-1.3.32.jar!/:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:835) ~[na:na]
+
+2020-01-28 18:54:29.752  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:60214 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 18:54:59.753  INFO 5404 --- [pool-18-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 18:54:59.753  INFO 5404 --- [pool-18-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.

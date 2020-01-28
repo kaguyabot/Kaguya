@@ -5,3 +5,6 @@ csharp_prefer_simple_using_statement = true:none
 
 # IDE0010: Add missing cases
 dotnet_diagnostic.IDE0010.severity = none
+
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = none

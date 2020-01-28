@@ -8,17 +8,18 @@ using Discord.Addons.Interactive;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
-    public class Soundcloud : InteractiveBase<ShardedCommandContext>
+    public class TwitchAudio : InteractiveBase<ShardedCommandContext>
     {
         [MusicCommand]
-        [Command("Soundcloud")]
-        [Alias("sc")]
+        [Command("TwitchAudio")]
+        [Alias("ta")]
         [Summary("Allows either a [Kaguya Supporter](https://the-kaguya-project.myshopify.com/products/kaguya-supporter-tag) " +
                  "or [Kaguya Premium](https://the-kaguya-project.myshopify.com/products/kaguya-premium) server " +
-                 "to search Soundcloud for a desired song.")]
+                 "to stream audio live from Twitch.")]
         [Remarks("<search>")]
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]
+        [RequireContext(ContextType.Guild)]
         public async Task Command([Remainder]string query)
         {
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
@@ -27,9 +28,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             if (server.IsPremium || user.IsSupporter)
             {
                 var playInstance = new Play();
-                var data = await playInstance.SearchAndPlay(Context, query, SearchProvider.Soundcloud);
+                var data = await playInstance.SearchAndPlay(Context, query, SearchProvider.Twitch);
 
-                if(data != null)
+                if (data != null)
                     await InlineReactionReplyAsync(data);
             }
             else
