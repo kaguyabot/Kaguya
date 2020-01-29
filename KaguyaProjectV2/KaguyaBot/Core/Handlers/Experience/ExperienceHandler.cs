@@ -36,15 +36,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             await DatabaseQueries.UpdateAsync(user);
 
             double newLevel = ReturnLevel(user);
-            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has received {exp} exp and {points} points. [New Total: {user.Experience:N0} Exp]",
+            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has received {exp} exp and {points} points. " +
+                                         $"[New Total: {user.Experience:N0} Exp]",
                 LogLvl.DEBUG);
 
             if (!HasLeveledUp(oldLevel, newLevel))
             {
                 return;
             }
-            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has leveled up! [Level: {newLevel} | EXP: {user.Experience:N0}]",
-                DataStorage.JsonStorage.LogLvl.INFO);
+            await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has leveled up! " +
+                                         $"[Level: {newLevel} | EXP: {user.Experience:N0}]", LogLvl.INFO);
 
             // Don't send announcement if the channel is blacklisted.
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id))
