@@ -8,7 +8,7 @@ using Discord.Addons.Interactive;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
-    public class TwitchAudio : InteractiveBase<ShardedCommandContext>
+    public class TwitchAudio : KaguyaBase
     {
         [MusicCommand]
         [Command("TwitchAudio")]

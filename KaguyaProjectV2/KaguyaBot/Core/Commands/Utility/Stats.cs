@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
-    public class Stats : ModuleBase<ShardedCommandContext>
+    public class Stats : KaguyaBase
     {
         [UtilityCommand]
         [Command("Stats")]

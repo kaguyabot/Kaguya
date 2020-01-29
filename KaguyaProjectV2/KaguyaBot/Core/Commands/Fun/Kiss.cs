@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
-    public class Kiss : ModuleBase<ShardedCommandContext>
+    public class Kiss : KaguyaBase
     {
         [FunCommand]
         [Command("Kiss")]

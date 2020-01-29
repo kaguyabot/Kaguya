@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
-    public class RemindMe : ModuleBase<ShardedCommandContext>
+    public class RemindMe : KaguyaBase
     {
         [UtilityCommand]
         [Command("RemindMe")]

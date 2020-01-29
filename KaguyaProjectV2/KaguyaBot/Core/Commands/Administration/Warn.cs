@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class Warn : ModuleBase<ShardedCommandContext>
+    public class Warn : KaguyaBase
     {
         [AdminCommand]
         [Command("Warn")]

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
-    public class SwitchLogLevel : ModuleBase<ShardedCommandContext>
+    public class SwitchLogLevel : KaguyaBase
     {
         [OwnerCommand]
         [Command("swaploglevel")]

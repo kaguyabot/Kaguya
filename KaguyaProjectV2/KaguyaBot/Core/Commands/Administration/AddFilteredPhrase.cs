@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class UpdateAsync : ModuleBase<ShardedCommandContext>
+    public class UpdateAsync : KaguyaBase
     {
         [AdminCommand]
         [Command("AddFilteredPhrase")]

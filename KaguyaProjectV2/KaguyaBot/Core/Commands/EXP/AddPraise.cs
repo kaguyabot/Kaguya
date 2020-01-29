@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
-    public class SomeCommand : InteractiveBase<ShardedCommandContext>
+    public class SomeCommand : KaguyaBase
     {
         [ExpCommand]
         [Command("Praise")]

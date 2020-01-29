@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class CreateRole : ModuleBase<ShardedCommandContext>
+    public class CreateRole : KaguyaBase
     {
         [AdminCommand]
         [Command("CreateRole")]

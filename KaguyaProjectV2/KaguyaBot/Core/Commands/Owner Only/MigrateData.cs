@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
-    public class MigrateData : ModuleBase<ShardedCommandContext>
+    public class MigrateData : KaguyaBase
     {
         [OwnerCommand]
         [DangerousCommand]

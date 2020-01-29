@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class Ban : ModuleBase<ShardedCommandContext>
+    public class Ban : KaguyaBase
     {
         [AdminCommand]
         [Command("Ban")]

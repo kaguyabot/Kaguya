@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class AddRole : ModuleBase<ShardedCommandContext>
+    public class AddRole : KaguyaBase
     {
         [AdminCommand]
         [Command("AssignRole")]

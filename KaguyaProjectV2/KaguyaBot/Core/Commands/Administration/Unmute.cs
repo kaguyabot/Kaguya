@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class Unmute : ModuleBase<ShardedCommandContext>
+    public class Unmute : KaguyaBase
     {
         [AdminCommand]
         [Command("Unmute")]

@@ -13,7 +13,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
 {
-    public class ServerStats : ModuleBase<ShardedCommandContext>
+    public class ServerStats : KaguyaBase
     {
         [PremiumServerCommand]
         [AdminCommand]
@@ -80,7 +80,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
                     }
                 }
             };
-            await Context.Channel.SendEmbedAsync(embed);
+            await SendEmbedAsync(embed);
         }
     }
 }

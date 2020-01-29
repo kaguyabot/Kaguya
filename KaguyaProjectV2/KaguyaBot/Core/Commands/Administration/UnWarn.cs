@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class UnWarn : InteractiveBase<ShardedCommandContext>
+    public class UnWarn : KaguyaBase
     {
         [AdminCommand]
         [Command("Unwarn")]

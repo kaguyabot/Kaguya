@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
-    public class Poke : ModuleBase<ShardedCommandContext>
+    public class Poke : KaguyaBase
     {
         [FunCommand]
         [Command("Poke")]

@@ -11,7 +11,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 {
-    public class OsuTop : ModuleBase<ShardedCommandContext>
+    public class OsuTop : KaguyaBase
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 
@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         {
             if (num < 1 || num > 7)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync("Number of plays must be between 1 and 7.");
+                await SendBasicErrorEmbedAsync("Number of plays must be between 1 and 7.");
                 return;
             }
 

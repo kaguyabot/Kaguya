@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class Kick : ModuleBase<ShardedCommandContext>
+    public class Kick : KaguyaBase
     {
         [AdminCommand]
         [Command("Kick")]

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
-    public class GenerateDummyData : ModuleBase<ShardedCommandContext>
+    public class GenerateDummyData : KaguyaBase
     {
         [OwnerCommand]
         [Command("gendata", RunMode = RunMode.Async)]

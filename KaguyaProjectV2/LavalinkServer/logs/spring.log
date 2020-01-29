@@ -540,3 +540,29 @@ com.sedmelluq.discord.lavaplayer.tools.FriendlyException: Unknown file format.
 2020-01-28 18:54:29.752  INFO 5404 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:60214 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
 2020-01-28 18:54:59.753  INFO 5404 --- [pool-18-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
 2020-01-28 18:54:59.753  INFO 5404 --- [pool-18-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 19:03:01.403  INFO 5404 --- [XNIO-1 task-116] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:60751
+2020-01-28 19:03:01.407  INFO 5404 --- [XNIO-1 task-116] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 19:03:01.411  INFO 5404 --- [XNIO-1 task-116] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:60751
+2020-01-28 19:03:01.552  INFO 5404 --- [XNIO-1 I/O-3] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 19:03:12.797  INFO 5404 --- [XNIO-1 I/O-3] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:60751 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 19:03:42.799  INFO 5404 --- [pool-19-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 19:03:42.799  INFO 5404 --- [pool-19-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 19:07:42.611  INFO 5404 --- [XNIO-1 task-117] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:61002
+2020-01-28 19:07:42.614  INFO 5404 --- [XNIO-1 task-117] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 19:07:42.619  INFO 5404 --- [XNIO-1 task-117] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:61002
+2020-01-28 19:07:42.883  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 19:07:50.392  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:61002 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 19:08:20.393  INFO 5404 --- [pool-20-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 19:08:20.393  INFO 5404 --- [pool-20-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.
+2020-01-28 19:12:09.947  INFO 5404 --- [XNIO-1 task-118] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:61242
+2020-01-28 19:12:09.950  INFO 5404 --- [XNIO-1 task-118] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2020-01-28 19:12:09.956  INFO 5404 --- [XNIO-1 task-118] lavalink.server.io.SocketServer          : Connection successfully established from /127.0.0.1:61242
+2020-01-28 19:12:10.103  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"key":"Victoria","timeout":30,"op":"configureResuming"}
+2020-01-28 19:12:22.132  INFO 5404 --- [XNIO-1 task-119] l.server.player.AudioLoaderRestHandler   : GET /loadtracks
+2020-01-28 19:12:22.666  INFO 5404 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: road of resistance
+2020-01-28 19:12:23.013  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"sessionId":"8ae1d9eaa58ef05720c82320166b8450","guildId":"546880579057221644","event":{"token":"c847b5eeb70ee844","endpoint":"us-east277.discord.media:80"},"op":"voiceUpdate"}
+2020-01-28 19:12:30.650  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"stop"}
+2020-01-28 19:12:30.651  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : {"guildId":"546880579057221644","op":"destroy"}
+2020-01-28 19:12:33.185  INFO 5404 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:61242 with status CloseStatus[code=1006, reason=] -- Session can be resumed within the next 30 seconds with key Victoria
+2020-01-28 19:13:03.186  INFO 5404 --- [pool-21-thread-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2020-01-28 19:13:03.186  INFO 5404 --- [pool-21-thread-1] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring disabled.

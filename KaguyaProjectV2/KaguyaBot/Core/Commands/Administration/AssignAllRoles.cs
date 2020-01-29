@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class AssignAllRoles : ModuleBase<ShardedCommandContext>
+    public class AssignAllRoles : KaguyaBase
     {
         [AdminCommand]
         [PremiumServerCommand]

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class SomeCommand : ModuleBase<ShardedCommandContext>
+    public class SomeCommand : KaguyaBase
     {
         [AdminCommand]
         [Command("UnShadowban")]

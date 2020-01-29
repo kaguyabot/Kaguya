@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
-    public class Tickle : ModuleBase<ShardedCommandContext>
+    public class Tickle : KaguyaBase
     {
         [FunCommand]
         [Command("Tickle")]

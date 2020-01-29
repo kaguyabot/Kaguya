@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
-    public class BuyBait : InteractiveBase<ShardedCommandContext>
+    public class BuyBait : KaguyaBase
     {
         [CurrencyCommand]
         [Command("BuyBait")]
@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         {
             if (amount < 1)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync("You must purchase at least 1 bait.");
+                await SendBasicErrorEmbedAsync("You must purchase at least 1 bait.");
                 return;
             }
 
@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 if (user.FishBait == baitCapacity)
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync($"Your bait box is already at max capacity!");
+                    await SendBasicErrorEmbedAsync($"Your bait box is already at max capacity!");
                     return;
                 }
 
@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 if (user.FishBait == suppBaitCapacity)
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync($"Your bait box is already at max capacity!");
+                    await SendBasicErrorEmbedAsync($"Your bait box is already at max capacity!");
                     return;
                 }
 
@@ -76,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 if (user.IsSupporter)
                     maxBait = user.Points / Fish.SUPPORTER_BAIT_COST;
 
-                await Context.Channel.SendBasicErrorEmbedAsync($"Sorry, you don't have enough points for that. " +
+                await SendBasicErrorEmbedAsync($"Sorry, you don't have enough points for that. " +
                                                           $"The maximum amount of bait you may buy is " +
                                                           $"`{maxBait:N0}` bait.");
                 return;
@@ -85,7 +85,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             user.Points -= totalCost;
             user.FishBait += amount;
 
-            await Context.Channel.SendBasicSuccessEmbedAsync($"Awesome! I've gone ahead and added `{amount:N0} bait` to your baitbox. " +
+            await SendBasicSuccessEmbedAsync($"Awesome! I've gone ahead and added `{amount:N0} bait` to your baitbox. " +
                                                         $"Happy fishing!\n\n" +
                                                         $"New total bait: `{user.FishBait:N0}`\n" +
                                                         $"New total points: `{user.Points:N0}`\n" +

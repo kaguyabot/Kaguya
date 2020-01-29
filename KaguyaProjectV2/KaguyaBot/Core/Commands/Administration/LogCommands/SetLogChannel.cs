@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
-    public class SetLogChannel : ModuleBase<ShardedCommandContext>
+    public class SetLogChannel : KaguyaBase
     {
         [AdminCommand]
         [Command("SetLogChannel")]

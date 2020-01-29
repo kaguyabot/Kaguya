@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility.SocialMedia
 {
-    public class Twitch : InteractiveBase<ShardedCommandContext>
+    public class Twitch : KaguyaBase
     {
         [UtilityCommand]
         [Command("AddTwitch")]

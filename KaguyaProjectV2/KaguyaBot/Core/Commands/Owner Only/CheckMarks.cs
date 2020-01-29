@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
-    public class CheckMarks : ModuleBase<ShardedCommandContext>
+    public class CheckMarks : KaguyaBase
     {
         /// <summary>
         /// Checks off items in the #todo-list chat channel.

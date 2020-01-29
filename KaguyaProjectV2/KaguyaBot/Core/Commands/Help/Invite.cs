@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
-    public class Invite : ModuleBase<ShardedCommandContext>
+    public class Invite : KaguyaBase
     {
         [HelpCommand]
         [Command("Invite")]

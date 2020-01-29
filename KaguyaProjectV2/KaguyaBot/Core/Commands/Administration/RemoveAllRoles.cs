@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class RemoveAllRoles : ModuleBase<ShardedCommandContext>
+    public class RemoveAllRoles : KaguyaBase
     {
         [AdminCommand]
         [Command("RemoveAllRoles")]

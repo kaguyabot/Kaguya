@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class Mute : InteractiveBase<ShardedCommandContext>
+    public class Mute : KaguyaBase
     {
         [AdminCommand]
         [Command("Mute", RunMode = RunMode.Async)]

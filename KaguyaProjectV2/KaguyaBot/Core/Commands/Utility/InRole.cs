@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
-    public class InRole : InteractiveBase<ShardedCommandContext>
+    public class InRole : KaguyaBase
     {
         [UtilityCommand]
         [Command("InRole")]

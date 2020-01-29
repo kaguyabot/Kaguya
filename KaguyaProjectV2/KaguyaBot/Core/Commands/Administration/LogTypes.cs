@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class LogTypes : ModuleBase<ShardedCommandContext>
+    public class LogTypes : KaguyaBase
     {
         [AdminCommand]
         [Command("LogTypes")]
@@ -55,7 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 }
             };
 
-            await Context.Channel.SendEmbedAsync(embed);
+            await SendEmbedAsync(embed);
         }
     }
 }

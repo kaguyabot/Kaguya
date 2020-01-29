@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class Clear : InteractiveBase<ShardedCommandContext>
+    public class Clear : KaguyaBase
     {
         [AdminCommand]
         [Command("Clear", RunMode = RunMode.Async)]
@@ -30,14 +30,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             if (amount > 1000)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync("You may not clear more than `1,000` messages " +
+                await SendBasicErrorEmbedAsync("You may not clear more than `1,000` messages " +
                                                                "at a time.");
                 return;
             }
 
             if (amount < 1)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync("You must clear at least 1 message.");
+                await SendBasicErrorEmbedAsync("You must clear at least 1 message.");
                 return;
             }
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
-    public class MagicEightBall : ModuleBase<ShardedCommandContext>
+    public class MagicEightBall : KaguyaBase
     {
         [FunCommand]
         [Command("8ball")]

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
-    public class FishGame : InteractiveBase<ShardedCommandContext>
+    public class FishGame : KaguyaBase
     {
         [CurrencyCommand]
         [Command("Fish")]
@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                                $"active [Kaguya Supporters]({HelpfulObjects.KAGUYA_STORE_URL})."
                     }
                 };
-                await Context.Channel.SendEmbedAsync(baitEmbed);
+                await SendEmbedAsync(baitEmbed);
                 return;
             }
 

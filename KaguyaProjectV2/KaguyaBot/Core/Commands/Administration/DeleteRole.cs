@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class DeleteRole : InteractiveBase<ShardedCommandContext>
+    public class DeleteRole : KaguyaBase
     {
         [AdminCommand]
         [Command("DeleteRole")]

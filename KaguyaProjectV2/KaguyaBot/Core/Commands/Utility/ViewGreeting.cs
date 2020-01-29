@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
-    public class ViewGreeting : ModuleBase<ShardedCommandContext>
+    public class ViewGreeting : KaguyaBase
     {
         [UtilityCommand]
         [Command("ViewGreeting")]

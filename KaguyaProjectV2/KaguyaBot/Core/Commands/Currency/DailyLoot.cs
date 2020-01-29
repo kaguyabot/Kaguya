@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
-    public class DailyLoot : ModuleBase<ShardedCommandContext>
+    public class DailyLoot : KaguyaBase
     {
         [CurrencyCommand]
         [Command("DailyLoot")]
@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             if (!user.CanGetTimelyPoints)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"You must wait " +
+                await SendBasicErrorEmbedAsync($"You must wait " +
                                                                $"`{(DateTime.Now - DateTime.FromOADate(user.LatestTimelyBonus)).Humanize()}` " +
                                                                $"before you may claim this bonus.");
                 return;

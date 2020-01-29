@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class RemoveAllFilteredPhrases : ModuleBase<ShardedCommandContext>
+    public class RemoveAllFilteredPhrases : KaguyaBase
     {
         [AdminCommand]
         [Command("FilterRemoveAll")]

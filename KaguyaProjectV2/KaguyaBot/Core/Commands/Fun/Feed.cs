@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
-    public class Feed : ModuleBase<ShardedCommandContext>
+    public class Feed : KaguyaBase
     {
         [FunCommand]
         [Command("Feed")]

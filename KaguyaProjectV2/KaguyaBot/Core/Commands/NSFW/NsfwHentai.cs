@@ -15,7 +15,7 @@ using SearchResult = BooruSharp.Search.Post.SearchResult;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 {
-    public class NsfwHentai : ModuleBase<ShardedCommandContext>
+    public class NsfwHentai : KaguyaBase
     {
         private const int NSFW_BOMB_COUNT = 3;
 
@@ -60,7 +60,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 
                 if (tags.Intersect(blacklistedTags).Any())
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync($"One or more of the specified tags are blacklisted.");
+                    await SendBasicErrorEmbedAsync($"One or more of the specified tags are blacklisted.");
                     return;
                 }
 

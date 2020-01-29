@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
-    public class Join : ModuleBase<ShardedCommandContext>
+    public class Join : KaguyaBase
     {
         [MusicCommand]
         [Command("Join")]
@@ -33,18 +33,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             if (node.HasPlayer(Context.Guild) && vc != null)
             {
                 await node.MoveChannelAsync(vc);
-                await Context.Channel.SendBasicSuccessEmbedAsync(
+                await SendBasicSuccessEmbedAsync(
                     $"{Context.User.Mention} Successfully moved to `{vc.Name}`.");
             }
             else
             {
                 if (vc == botCurVc)
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync($"I am already connected to this voice channel.");
+                    await SendBasicErrorEmbedAsync($"I am already connected to this voice channel.");
                     return;
                 }
                 await node.JoinAsync(vc);
-                await Context.Channel.SendBasicSuccessEmbedAsync($"{Context.User.Mention} Successfully joined `{vc.Name}`.");
+                await SendBasicSuccessEmbedAsync($"{Context.User.Mention} Successfully joined `{vc.Name}`.");
             }
         }
     }

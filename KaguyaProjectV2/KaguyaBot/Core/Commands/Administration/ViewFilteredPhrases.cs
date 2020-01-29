@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class ViewFilteredPhrases : ModuleBase<ShardedCommandContext>
+    public class ViewFilteredPhrases : KaguyaBase
     {
         [AdminCommand]
         [Command("ViewFilteredPhrases")]
@@ -35,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 if (chars == 0)
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync("This server currently has no registered filtered phrases.");
+                    await SendBasicErrorEmbedAsync("This server currently has no registered filtered phrases.");
                     return;
                 }
 
@@ -45,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Description = fpStr
                 };
 
-                await Context.Channel.SendEmbedAsync(embed);
+                await SendEmbedAsync(embed);
                 return;
             }
 

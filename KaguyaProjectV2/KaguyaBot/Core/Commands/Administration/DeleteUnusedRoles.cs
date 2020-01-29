@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class DeleteUnusedRoles : InteractiveBase<ShardedCommandContext>
+    public class DeleteUnusedRoles : KaguyaBase
     {
         [DangerousCommand]
         [PremiumServerCommand]

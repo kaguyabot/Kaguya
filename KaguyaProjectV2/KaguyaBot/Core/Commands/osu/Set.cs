@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 {
-    public class OsuSet : ModuleBase<ShardedCommandContext>
+    public class OsuSet : KaguyaBase
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 

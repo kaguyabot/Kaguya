@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
-    public class AddRep : ModuleBase<ShardedCommandContext>
+    public class AddRep : KaguyaBase
     {
         [ExpCommand]
         [Command("Rep")]

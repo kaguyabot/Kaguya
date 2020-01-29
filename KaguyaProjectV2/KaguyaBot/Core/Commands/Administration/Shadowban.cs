@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class Shadowban : ModuleBase<ShardedCommandContext>
+    public class Shadowban : KaguyaBase
     {
         [AdminCommand]
         [Command("Shadowban", RunMode = RunMode.Async)]

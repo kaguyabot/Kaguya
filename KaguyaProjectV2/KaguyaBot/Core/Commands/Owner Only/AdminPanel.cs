@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
-    public class AdminPanel : InteractiveBase<ShardedCommandContext>
+    public class AdminPanel : KaguyaBase
     {
         [OwnerCommand]
         [Command("ownerpanel", RunMode = RunMode.Async)]
@@ -82,14 +82,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
             await ReplyAsync(embed: embed.Build());
 
-            await Context.Channel.SendBasicSuccessEmbedAsync("What value would you like to modify?");
+            await SendBasicSuccessEmbedAsync("What value would you like to modify?");
             var query = await NextMessageAsync(true, true, TimeSpan.FromSeconds(120));
 
             foreach (var prop in t.GetProperties())
             {
                 if (query.Content.ToLower() == prop.Name.ToLower() && prop.CanWrite)
                 {
-                    await Context.Channel.SendBasicSuccessEmbedAsync("What would you like to change the value to?");
+                    await SendBasicSuccessEmbedAsync("What would you like to change the value to?");
                     var valMsg = await NextMessageAsync();
 
                     if (prop.PropertyType == typeof(int))
@@ -100,7 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                                                             $"Please review `AdminPanel.cs line 118`.");
                     }
 
-                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully updated `{socketUser}`'s " +
+                    await SendBasicSuccessEmbedAsync($"Successfully updated `{socketUser}`'s " +
                                                                      $"`{prop.Name}` value to `{valMsg.Content}`");
                 }
             }

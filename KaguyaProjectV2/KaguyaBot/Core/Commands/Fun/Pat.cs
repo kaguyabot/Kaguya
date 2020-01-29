@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
-    public class Pat : ModuleBase<ShardedCommandContext>
+    public class Pat : KaguyaBase
     {
         [FunCommand]
         [Command("Pat")]

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 {
-    public class OsuRecent : ModuleBase<ShardedCommandContext>
+    public class OsuRecent : KaguyaBase
     {
         public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
 

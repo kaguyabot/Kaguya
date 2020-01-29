@@ -11,7 +11,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class Move : ModuleBase<ShardedCommandContext>
+    public class Move : KaguyaBase
     {
         [AdminCommand]
         [Command("Move")]
@@ -45,12 +45,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                                  "I don't have permissions to access it.");
             if (destinationChannel == currentChannel)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"The user is already in this voice channel.");
+                await SendBasicErrorEmbedAsync($"The user is already in this voice channel.");
                 return;
             }
 
             await user.ModifyAsync(x => x.Channel = destinationChannel);
-            await Context.Channel.SendBasicSuccessEmbedAsync($"User `{user}` has been moved from `{currentChannel.Name}` " +
+            await SendBasicSuccessEmbedAsync($"User `{user}` has been moved from `{currentChannel.Name}` " +
                                                              $"into `{destinationChannel.Name}`.");
         }
     }

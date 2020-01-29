@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
-    public class SupporterKeyGen : ModuleBase<ShardedCommandContext>
+    public class SupporterKeyGen : KaguyaBase
     {
         private static readonly Random Random = new Random();
 
@@ -77,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 };
 
                 await Context.User.SendMessageAsync(embed: embed.Build());
-                await Context.Channel.SendBasicSuccessEmbedAsync($"{Context.User.Mention}, I DM'd you with {amount:N0} supporter keys.");
+                await SendBasicSuccessEmbedAsync($"{Context.User.Mention}, I DM'd you with {amount:N0} supporter keys.");
             }
             else
             {
@@ -94,7 +94,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     memoryStream.Seek(0, SeekOrigin.Begin);
 
                     await Context.User.SendFileAsync(memoryStream, $"{keys.Count} Keys.txt");
-                    await Context.Channel.SendBasicSuccessEmbedAsync(
+                    await SendBasicSuccessEmbedAsync(
                         $"{Context.User.Mention}, I DM'd you a file with `{amount:N0}` new `{keyDuration}` supporter keys.");
                 }
             }

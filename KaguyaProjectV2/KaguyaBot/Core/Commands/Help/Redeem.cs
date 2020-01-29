@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
-    public class Redeem : ModuleBase<ShardedCommandContext>
+    public class Redeem : KaguyaBase
     {
         private const double MONTHLY_SERVER_FEE = 80.99;
         private const double AVERAGE_MONTHLY_SUPPORTER_PAYMENT = 3.99;

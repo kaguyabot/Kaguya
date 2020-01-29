@@ -19,7 +19,7 @@ using Victoria.Enums;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
-    public class Play : InteractiveBase<ShardedCommandContext>
+    public class Play : KaguyaBase
     {
         [MusicCommand]
         [Command("Play")]
@@ -145,7 +145,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 {
                     Fields = new List<EmbedFieldBuilder>{ field }
                 };
-                await context.Channel.SendEmbedAsync(embed);
+                await SendEmbedAsync(embed);
                 return null;
             }
             #endregion
@@ -191,7 +191,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                         Fields = new List<EmbedFieldBuilder>{ field }
                     };
 
-                    await context.Channel.SendEmbedAsync(embed);
+                    await SendEmbedAsync(embed);
                 }));
             }
 

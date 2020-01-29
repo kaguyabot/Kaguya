@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
-    public class Hug : ModuleBase<ShardedCommandContext>
+    public class Hug : KaguyaBase
     {
         [FunCommand]
         [Command("Hug")]

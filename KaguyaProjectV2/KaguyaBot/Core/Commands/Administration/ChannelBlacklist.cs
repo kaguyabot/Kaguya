@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class ChannelBlacklist : ModuleBase<ShardedCommandContext>
+    public class ChannelBlacklist : KaguyaBase
     {
         [AdminCommand]
         [Command("ChannelBlacklist")]
@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                 x.ChannelId == Context.Channel.Id && x.ServerId == Context.Guild.Id);
                             await DatabaseQueries.DeleteAsync(curUnblacklist);
 
-                            await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
+                            await SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
                                                                              $"`{Context.Channel.Name}`");
                             return;
                         }
@@ -84,7 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                 x.ChannelId == toUnblacklistChannel.Id && x.ServerId == Context.Guild.Id);
                             await DatabaseQueries.DeleteAsync(curUnblacklist);
 
-                            await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
+                            await SendBasicSuccessEmbedAsync($"Successfully unblacklisted channel " +
                                                                              $"`{Context.Channel.Name}`");
                             return;
                         }
@@ -101,7 +101,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync($"Please specify a time after the `-t` argument.");
+                    await SendBasicErrorEmbedAsync($"Please specify a time after the `-t` argument.");
                 }
                 catch (Exception)
                 {
@@ -148,7 +148,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     goto ArgumentProcessException;
 
                 await DatabaseQueries.DeleteAllForServerAsync<BlackListedChannel>(server.ServerId);
-                await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully cleared `{currentBlacklists.Count}` " +
+                await SendBasicSuccessEmbedAsync($"Successfully cleared `{currentBlacklists.Count}` " +
                                                                  $"channels from the blacklist.");
                 return;
             }
@@ -188,7 +188,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         Expiration = expiration
                     };
 
-                    await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully blacklisted channel `{channel}`. " +
+                    await SendBasicSuccessEmbedAsync($"Successfully blacklisted channel `{channel}`. " +
                                                                      $"{expirationString}");
 
                     await DatabaseQueries.InsertAsync(cbl);
@@ -216,7 +216,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         await DatabaseQueries.InsertAsync(cbl);
                     }
 
-                    await Context.Channel.SendBasicSuccessEmbedAsync(
+                    await SendBasicSuccessEmbedAsync(
                         $"Successfully blacklisted `{Context.Guild.Channels.Count}` " +
                         $"channels. {expirationString}");
                     return;
@@ -231,7 +231,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     };
 
                     await DatabaseQueries.InsertAsync(cbl);
-                    await Context.Channel.SendBasicSuccessEmbedAsync(
+                    await SendBasicSuccessEmbedAsync(
                         $"Successfully blacklisted this channel. {expirationString}");
                     return;
                 }

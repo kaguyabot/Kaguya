@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
-    public class MyFish : InteractiveBase<ShardedCommandContext>
+    public class MyFish : KaguyaBase
     {
         [CurrencyCommand]
         [Command("MyFish")]
@@ -34,7 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             if (userFish.Count == 0)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"You have never fished before. Try it out with " +
+                await SendBasicErrorEmbedAsync($"You have never fished before. Try it out with " +
                                                                $"`{server.CommandPrefix}fish`!");
                 return;
             }
@@ -160,7 +160,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 })
                 .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync("Okay, no action will be taken.");
+                    await SendBasicErrorEmbedAsync("Okay, no action will be taken.");
                 }));
         }
     }

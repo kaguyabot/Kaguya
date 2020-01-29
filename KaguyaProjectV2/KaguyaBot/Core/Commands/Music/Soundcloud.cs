@@ -8,7 +8,7 @@ using Discord.Addons.Interactive;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
-    public class Soundcloud : InteractiveBase<ShardedCommandContext>
+    public class Soundcloud : KaguyaBase
     {
         [MusicCommand]
         [Command("Soundcloud")]

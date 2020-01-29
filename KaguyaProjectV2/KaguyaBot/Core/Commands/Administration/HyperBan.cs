@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class HyperBan : ModuleBase<ShardedCommandContext>
+    public class HyperBan : KaguyaBase
     {
         [SupporterCommand]
         [DangerousCommand]

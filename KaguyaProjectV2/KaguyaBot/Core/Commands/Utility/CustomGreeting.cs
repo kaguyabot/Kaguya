@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
-    public class CustomGreeting : ModuleBase<ShardedCommandContext>
+    public class CustomGreeting : KaguyaBase
     {
         [UtilityCommand]
         [Command("SetCustomGreeting")]
@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             if (message.Length > 1750)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"Sorry, your message is too long. The maximum " +
+                await SendBasicErrorEmbedAsync($"Sorry, your message is too long. The maximum " +
                                                                $"length of a greeting is `1,750` characters. " +
                                                                $"This message's length is `{message.Length:N0}` characters.");
                 return;
@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             server.CustomGreeting = message;
             server.LogGreetings = Context.Channel.Id;
             await DatabaseQueries.UpdateAsync(server);
-            await Context.Channel.SendMessageAsync(embed: embed.Build());
+            await SendEmbedAsync(embed);
         }
     }
 }

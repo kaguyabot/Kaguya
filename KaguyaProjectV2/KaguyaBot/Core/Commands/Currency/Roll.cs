@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
-    public class Roll : ModuleBase<ShardedCommandContext>
+    public class Roll : KaguyaBase
     {
         private const int MAX_NON_SUPPORTER_BET = 50000;
         private const int MAX_ALL_BET = 500000;
@@ -29,20 +29,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             if (bet > MAX_NON_SUPPORTER_BET && !user.IsSupporter)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"Sorry, but only supporters may bet more than " +
+                await SendBasicErrorEmbedAsync($"Sorry, but only supporters may bet more than " +
                                                                $"`{MAX_NON_SUPPORTER_BET:N0}` points.");
                 return;
             }
             if (bet > 500000 && user.IsSupporter)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"Sorry, but you may not bet more than " +
+                await SendBasicErrorEmbedAsync($"Sorry, but you may not bet more than " +
                                                                $"`{MAX_ALL_BET:N0}` points.");
                 return;
             }
 
             if (user.Points < bet)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"You don't have enough points to perform this action.\n" +
+                await SendBasicErrorEmbedAsync($"You don't have enough points to perform this action.\n" +
                                                                $"Current points: `{user.Points:N0}` points.");
                 return;
             }

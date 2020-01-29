@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
-    public class ToggleGreeting : ModuleBase<ShardedCommandContext>
+    public class ToggleGreeting : KaguyaBase
     {
         [UtilityCommand]
         [Command("ToggleGreeting")]
@@ -25,11 +25,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             if (server.CustomGreetingIsEnabled)
             {
-                await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully enabled this server's greeting message.");
+                await SendBasicSuccessEmbedAsync($"Successfully enabled this server's greeting message.");
             }
             else
             {
-                await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully disabled this server's greeting message.");
+                await SendBasicSuccessEmbedAsync($"Successfully disabled this server's greeting message.");
             }
 
             await DatabaseQueries.UpdateAsync(server);

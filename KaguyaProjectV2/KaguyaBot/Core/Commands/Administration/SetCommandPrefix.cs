@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class SetCommandPrefix : ModuleBase<ShardedCommandContext>
+    public class SetCommandPrefix : KaguyaBase
     {
         [AdminCommand]
         [Command("SetPrefix")]

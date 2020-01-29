@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
-    public class ViewPoints : ModuleBase<ShardedCommandContext>
+    public class ViewPoints : KaguyaBase
     {
         [CurrencyCommand]
         [Command("Points")]
@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var points = user.Points;
 
-            await Context.Channel.SendBasicSuccessEmbedAsync($"{Context.User.Mention} currently has " +
+            await SendBasicSuccessEmbedAsync($"{Context.User.Mention} currently has " +
                                                              $"`{points:N0}` points.");
         }
     }

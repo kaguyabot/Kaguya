@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
-    public class SellFish : InteractiveBase<ShardedCommandContext>
+    public class SellFish : KaguyaBase
     {
         [CurrencyCommand]
         [Command("SellFish")]
@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             if (args.Length == 0 || args.Length > 3)
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"Please specify either a fish ID or a " +
+                await SendBasicErrorEmbedAsync($"Please specify either a fish ID or a " +
                                                                $"type of fish you want to sell.");
                 return;
             }
@@ -59,7 +59,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
                 if (allFishToSell.Count == 0)
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync("You have no fish to sell!");
+                    await SendBasicErrorEmbedAsync("You have no fish to sell!");
                     return;
                 }
 
@@ -80,7 +80,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     {
                         await DatabaseQueries.SellFishAsync(allFishToSell, Context.User.Id);
 
-                        await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully sold all " +
+                        await SendBasicSuccessEmbedAsync($"Successfully sold all " +
                                                                          $"`{allFishToSell.Count:N0}` fish!\n\n" +
                                                                          $"`{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}` " +
                                                                          $"points have been added to your balance.");
@@ -100,14 +100,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId))
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"The fish ID `{fishId}` does not exist. Use the " +
+                await SendBasicErrorEmbedAsync($"The fish ID `{fishId}` does not exist. Use the " +
                                                                $"`myfish` command to view your fish and IDs!");
                 return;
             }
 
             if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId && x.UserId == user.UserId))
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"This fish doesn't belong to you!");
+                await SendBasicErrorEmbedAsync($"This fish doesn't belong to you!");
             }
 
             #region If(mass-selling...)
@@ -120,7 +120,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
                 if (!fish.Any())
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync($"You don't have any fish of type " +
+                    await SendBasicErrorEmbedAsync($"You don't have any fish of type " +
                                                                    $"`{ft.Humanize()}`. Use the `myfish` command " +
                                                                    $"to view what fish you have!");
                     return;

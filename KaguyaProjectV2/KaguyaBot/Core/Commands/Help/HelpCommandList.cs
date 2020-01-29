@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
-    public class HelpCommandList : InteractiveBase<ShardedCommandContext>
+    public class HelpCommandList : KaguyaBase
     {
         [Command("Help")]
         [Alias("h")]

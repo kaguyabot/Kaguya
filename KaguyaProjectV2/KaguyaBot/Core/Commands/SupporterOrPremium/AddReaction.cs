@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
 {
-    public class AddReaction : InteractiveBase<ShardedCommandContext>
+    public class AddReaction : KaguyaBase
     {
         [SupporterCommand]
         [Command("React")]

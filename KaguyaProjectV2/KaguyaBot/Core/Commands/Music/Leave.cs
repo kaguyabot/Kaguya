@@ -10,7 +10,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
-    public class Leave : ModuleBase<ShardedCommandContext>
+    public class Leave : KaguyaBase
     {
         [MusicCommand]
         [Command("Leave")]
@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             {
                 if (curVc == null)
                 {
-                    await Context.Channel.SendBasicErrorEmbedAsync($"{Context.User.Mention} Please ensure I " +
+                    await SendBasicErrorEmbedAsync($"{Context.User.Mention} Please ensure I " +
                                                                    $"am actively in a voice channel before using " +
                                                                    $"this command.");
                 }
@@ -48,13 +48,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                                                          $"Discord server and contact Stage. Thanks!`");
                     }
 
-                    await Context.Channel.SendBasicSuccessEmbedAsync(
+                    await SendBasicSuccessEmbedAsync(
                         $"{Context.User.Mention} Successfully disconnected from `{curVc.Name}`.");
                 }
             }
             else
             {
-                await Context.Channel.SendBasicErrorEmbedAsync($"{Context.User.Mention} I must be in a voice channel via " +
+                await SendBasicErrorEmbedAsync($"{Context.User.Mention} I must be in a voice channel via " +
                                                                $"the `{server.CommandPrefix}join` command for this " +
                                                                $"command to work. Please try `{server.CommandPrefix}join` " +
                                                                $"and then `{server.CommandPrefix}leave` again to remove " +

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class AntiraidCommand : ModuleBase<ShardedCommandContext>
+    public class AntiraidCommand : KaguyaBase
     {
         [AdminCommand]
         [Command("AntiRaid")]
@@ -40,11 +40,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (antiraid != null)
                 {
                     await DatabaseQueries.DeleteAllForServerAsync<AntiRaidConfig>(server.ServerId);
-                    await Context.Channel.SendBasicSuccessEmbedAsync("Successfully disabled this server's antiraid protection.");
+                    await SendBasicSuccessEmbedAsync("Successfully disabled this server's antiraid protection.");
                     return;
                 }
 
-                await Context.Channel.SendBasicErrorEmbedAsync("This server has not setup the antiraid service, therefore " +
+                await SendBasicErrorEmbedAsync("This server has not setup the antiraid service, therefore " +
                                                     "there is nothing to disable.");
                 return;
             }
@@ -94,7 +94,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Server = server
             };
 
-            await Context.Channel.SendBasicSuccessEmbedAsync(
+            await SendBasicSuccessEmbedAsync(
                 $"Successfully enabled the antiraid service for `{Context.Guild.Name}`.\n\n" +
                 $"I will `{action.ToUpper()}` anyone part of a raid. A raid is now defined as " +
                 $"`{users.ToWords()}` users joining within `{seconds.ToWords()}` seconds " +
