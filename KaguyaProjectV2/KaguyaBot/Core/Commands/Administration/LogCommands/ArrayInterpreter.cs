@@ -1,4 +1,4 @@
-﻿namespace KaguyaProjectV2.KaguyaBot
+﻿namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
     public static class ArrayInterpreter
     {
