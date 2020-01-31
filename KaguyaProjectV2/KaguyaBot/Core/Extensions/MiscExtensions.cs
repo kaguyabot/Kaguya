@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -51,6 +52,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                 : num > 1000 
                     ? $"{((double)num / 1000):N2}K" 
                     : num.ToString();
+        }
+
+        public static bool ContainsEmoji(this string text)
+        {
+            Regex rgx = new Regex(@"[\uD83C-\uDBFF\uDC00-\uDFFF]+");
+            return rgx.IsMatch(text);
         }
     }
 }

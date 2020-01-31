@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
+using MoreLinq.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
@@ -9,9 +11,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
     {
         public static ProfileTemplateIcon ProfileIcon(SocketGuildUser user)
         {
+            var name = user.Nickname ?? $"User Id: {user.Id}";
+            var writtenUsername = "";
+
+            foreach (var c in name)
+            {
+                if (!c.ToString().ContainsEmoji())
+                    writtenUsername += c;
+            }
+
+            if (string.IsNullOrWhiteSpace(writtenUsername))
+                writtenUsername = $"User Id: {user.Id}";
+
             var nameFontSize = user.Username.Length < 20 
                 ? 40
-                : 40 - (user.Username.Length - 25);
+                : 40 - (writtenUsername.Length - 25);
             return new ProfileTemplateIcon
             {
                 Loc = new ProfileTemplateLoc
@@ -24,14 +38,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                 UsernameText = new ProfileTemplateText
                 {
                     Color = Rgba32.Orange,
-                    Font = GraphicsConstants.Font(nameFontSize + (20 - user.Username.Length)),
+                    Font = GraphicsConstants.Font(nameFontSize + (20 - writtenUsername.Length)),
                     Loc = new ProfileTemplateLoc
                     {
                         X = 133,
                         Y = 10
                     },
                     Show = true,
-                    Text = user.Username
+                    Text = writtenUsername
                 },
                 UserDiscriminatorText = new ProfileTemplateText
                 {

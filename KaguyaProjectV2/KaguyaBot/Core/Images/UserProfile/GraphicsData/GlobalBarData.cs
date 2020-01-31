@@ -63,7 +63,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     Color = Rgba32.LightSalmon,
                     Loc = new ProfileTemplateLoc
                     {
-                        X = 110,
+                        X = 103,
                         Y = 181
                     },
                     Font = GraphicsConstants.Font(16),
