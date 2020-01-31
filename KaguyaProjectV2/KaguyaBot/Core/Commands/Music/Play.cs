@@ -111,7 +111,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
             var fields = new List<EmbedFieldBuilder>();
             var callbacks = new List<(IEmote, Func<SocketCommandContext, SocketReaction, Task>)>();
-            var emojiNums = HelpfulObjects.EmojisOneThroughNine();
+            var emojiNums = GlobalProperties.EmojisOneThroughNine();
 
             var player = node.HasPlayer(context.Guild)
                 ? node.GetPlayer(context.Guild)
@@ -195,7 +195,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 }));
             }
 
-            callbacks.Add((HelpfulObjects.NoEntryEmoji(), async (c, r) =>
+            callbacks.Add((GlobalProperties.NoEntryEmoji(), async (c, r) =>
             {
                 await c.Message.DeleteAsync();
                 await r.Message.Value.DeleteAsync();

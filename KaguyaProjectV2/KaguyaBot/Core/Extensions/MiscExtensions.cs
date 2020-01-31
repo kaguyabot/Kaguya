@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Numerics;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.Shapes;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 {
@@ -31,6 +36,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             if (throwExceptionIfNull)
                 throw new NullReferenceException("Could not parse string to ulong.");
             return 0;
+        }
+
+        /// <summary>
+        /// Convertes the provided integer into it's abbreviated word form.
+        /// Ex: 1000 => 1K, 525500 => 525.5K, 1250000 => 1.25M
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static string ToAbbreviatedForm(this int num)
+        {
+            return num > 1000000 
+                ? $"{(num / 1000000):N2}M" 
+                : num > 1000 
+                    ? $"{((double)num / 1000):N2}K" 
+                    : num.ToString();
         }
     }
 }

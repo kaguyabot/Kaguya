@@ -80,7 +80,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         private async Task ReactionReply(IGuildUser user, IReadOnlyCollection<WarnedUser> warnings, Embed embed,
             int warnCount, Server server, string reason)
         {
-            var emojis = HelpfulObjects.EmojisOneThroughNine();
+            var emojis = GlobalProperties.EmojisOneThroughNine();
 
             var data = new ReactionCallbackData("", embed, false, false, TimeSpan.FromSeconds(300), c =>
                 c.Channel.SendMessageAsync(embed: TimeoutEmbed()));

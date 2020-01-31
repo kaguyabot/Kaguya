@@ -81,7 +81,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                         await InlineReactionReplyAsync(new ReactionCallbackData("", duplicateErrorEmbed.Build(),
                                 timeout: TimeSpan.FromSeconds(60))
-                            .WithCallback(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
+                            .WithCallback(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                             {
                                 var replacementEmbed = new KaguyaEmbedBuilder
                                 {

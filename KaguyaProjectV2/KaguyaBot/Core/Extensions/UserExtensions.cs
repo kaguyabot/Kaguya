@@ -1,10 +1,10 @@
-﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using Discord;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 {
@@ -37,6 +37,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             var rank = allExp.IndexOf(allExp.First(x => x.UserId == user.UserId));
 
             return (rank + 1, allExp.Count);
+        }
+
+        public static double GlobalLevel(this User user)
+        {
+            return GlobalProperties.CalculateLevel(user.Experience);
+        }
+
+        /// <summary>
+        /// Returns the lowest possible amount of EXP needed to reach this <see cref="User"/>'s next level.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static int NextLevelExp(this User user)
+        {
+            return GlobalProperties.CalculateExpFromLevel(Math.Floor(user.GlobalLevel() + 1));
         }
     }
 }

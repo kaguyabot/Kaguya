@@ -43,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             await InlineReactionReplyAsync(new ReactionCallbackData("", confirmEmbed.Build(), true, true, TimeSpan.FromSeconds(60), c =>
                 c.Channel.SendMessageAsync(embed: timeoutEmbed.Build()))
-                .WithCallback(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
+                .WithCallback(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                 {
                     int i = 0;
                     int j = 0;

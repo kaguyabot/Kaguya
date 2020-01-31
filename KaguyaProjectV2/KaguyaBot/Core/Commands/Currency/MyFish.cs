@@ -138,7 +138,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             await InlineReactionReplyAsync(new ReactionCallbackData("",
                 embed.Build(), true, true, TimeSpan.FromSeconds(90))
-                .AddCallBack(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
+                .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                 {
                     using (var stream = new MemoryStream())
                     {
@@ -158,7 +158,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                                                                    $"and DM'd you all of your fish!");
                     }
                 })
-                .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
+                .AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
                 {
                     await SendBasicErrorEmbedAsync("Okay, no action will be taken.");
                 }));

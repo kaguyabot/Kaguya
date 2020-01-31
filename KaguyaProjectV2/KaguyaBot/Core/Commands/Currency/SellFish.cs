@@ -76,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                             $"Sell all fish confirmation reactions are now disabled " +
                             $"(timed out).");
                     })
-                    .AddCallBack(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
+                    .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                     {
                         await DatabaseQueries.SellFishAsync(allFishToSell, Context.User.Id);
 
@@ -85,7 +85,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                                                                          $"`{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}` " +
                                                                          $"points have been added to your balance.");
                     })
-                    .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
+                    .AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
                         await c.Channel.SendBasicErrorEmbedAsync("Okay, I won't take any action.")));
                 return;
             }
@@ -142,7 +142,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                             await c.Channel.SendBasicErrorEmbedAsync("Mass-sell fish action timed out. Reactions have " +
                                                                      "been disabled and will take no effect.");
                         })
-                    .AddCallBack(HelpfulObjects.CheckMarkEmoji(), async (c, r) =>
+                    .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                     {
                         var payout = Fish.GetPayoutForFish(fish, user.FishExp);
                         await c.Channel.SendBasicSuccessEmbedAsync($"Great! I was able to find a buyer for " +
@@ -153,7 +153,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                         await ConsoleLogger.LogAsync($"User {user.UserId} has mass-sold all of their {ft.Humanize()} " +
                                                      $"for a payout of {payout:N0} points.", LogLvl.INFO);
                     })
-                    .AddCallBack(HelpfulObjects.NoEntryEmoji(), async (c, r) =>
+                    .AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
                         await c.Channel.SendBasicErrorEmbedAsync("Okay, no action will be taken.")));
                 return;
             }

@@ -44,7 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     Footer = new EmbedFooterBuilder
                     {
                         Text = $"Bait costs {Fish.BAIT_COST} points ({Fish.SUPPORTER_BAIT_COST} for " +
-                               $"active [Kaguya Supporters]({HelpfulObjects.KAGUYA_STORE_URL})."
+                               $"active [Kaguya Supporters]({GlobalProperties.KAGUYA_STORE_URL})."
                     }
                 };
                 await SendEmbedAsync(baitEmbed);

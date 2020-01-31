@@ -1,11 +1,12 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Global
 {
     /// <summary>
     /// A static class containing helpful objects, such as <see cref="Emoji"/>s that are referenced often.
     /// </summary>
-    public static class HelpfulObjects
+    public static class GlobalProperties
     {
         /// <summary>
         /// Returns an Emoji[8] containing the numeric emojis 1-9.
@@ -40,5 +41,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
             return new Emoji("⛔");
         }
 
+        /// <summary>
+        /// Calculates the Kaguya Exp/Fish level for the provided exp.
+        /// </summary>
+        /// <param name="userExp"></param>
+        /// <returns></returns>
+        public static double CalculateLevel(int userExp)
+        {
+            return Math.Sqrt((userExp / 8) - 8);
+        }
+
+        /// <summary>
+        /// Returns the amount of experience points needed to reach the specified level.
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static int CalculateExpFromLevel(double level)
+        {
+            return (int)(8 * Math.Pow(level, 2)) + 64; // Inverse of CalculateLevel()
+        }
     }
 }
