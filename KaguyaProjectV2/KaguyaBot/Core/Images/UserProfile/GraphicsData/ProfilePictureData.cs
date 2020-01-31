@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
+using LinqToDB.Common;
 using MoreLinq.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -11,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
     {
         public static ProfileTemplateIcon ProfileIcon(SocketGuildUser user)
         {
-            var name = user.Nickname ?? $"User Id: {user.Id}";
+            var name = user.Username.IsNullOrEmpty() ? $"User Id: {user.Id}" : user.Username;
             var writtenUsername = "";
 
             foreach (var c in name)

@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     Loc = new ProfileTemplateLoc
                     {
                         X = aX + 8,
-                        Y = aY + 6
+                        Y = 181
                     },
                     Font = GraphicsConstants.Font(16),
                     Show = true,
@@ -51,8 +51,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     Color = Rgba32.LightCoral,
                     Loc = new ProfileTemplateLoc
                     {
-                        X = aX + length - 110,
-                        Y = aY + 8
+                        X = aX + length - 115,
+                        Y = 181
                     },
                     Font = GraphicsConstants.Font(15),
                     Show = true,
@@ -121,7 +121,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
         private static float GetGlobalXpBarFillCoordinate(User user, ProfileTemplateXpBar bar)
         {
             var percentToNextLevel = GetPercentToNextLevel(user);
-            return (float)(percentToNextLevel * (bar.Length + bar.LocA.X));
+            return (float)((percentToNextLevel * bar.Length) + bar.LocA.X);
         }
     }
 }
