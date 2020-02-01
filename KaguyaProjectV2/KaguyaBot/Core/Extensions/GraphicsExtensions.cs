@@ -1,6 +1,6 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
+using PointF = SixLabors.Primitives.PointF;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 {
@@ -16,9 +16,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <returns></returns>
         public static IImageProcessingContext DrawKaguyaText(this IImageProcessingContext ctx, ProfileTemplateText text)
         {
-            if(text.Show)
-                return ctx.DrawText(text.Text, text.Font, text.Color, new PointF(text.Loc.X, text.Loc.Y));
+            if (text.Show)
+            {
+                var brush = new SolidBrush(text.Color);
+                var stroke = new Pen(text.StrokeColor, text.StrokeWidth);
+                return text.HasStroke 
+                    ? ctx.DrawText(text.Text, text.Font, brush, stroke, new PointF(text.Loc.X, text.Loc.Y)) 
+                    : ctx.DrawText(text.Text, text.Font, text.Color, new PointF(text.Loc.X, text.Loc.Y));
+            }
             return null;
+        }
+
+        public static IImageProcessingContext[] DrawKaguyaTemplatePanel(this IImageProcessingContext ctx,
+            ProfileTemplatePanel panel)
+        {
+            return new IImageProcessingContext[]
+            {
+                ctx.DrawKaguyaText(panel.TopTextHeader),
+                ctx.DrawKaguyaText(panel.TopTextBody),
+                ctx.DrawKaguyaText(panel.BottomTextHeader),
+                ctx.DrawKaguyaText(panel.BottomTextBody)
+            };
         }
     }
 }

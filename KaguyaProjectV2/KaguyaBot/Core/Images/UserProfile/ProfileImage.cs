@@ -1,16 +1,16 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData;
+﻿using Discord;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData;
 using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.Primitives;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using SixLabors.Primitives;
 using Image = SixLabors.ImageSharp.Image;
 // ReSharper disable AccessToDisposedClosure
 
@@ -36,9 +36,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
                 Xp = new ProfileTemplateXp
                 {
                     GlobalBar = GlobalBarData.Bar(user),
-                    GuildBar = GuildBarData.Bar,
+                    GuildBar = GuildBarData.Bar(user, server),
                     IconAndUsername = ProfilePictureData.ProfileIcon(guildUser),
-                    SupporterBadge = new SupporterBadge(user).Data
+                    SupporterBadge = new SupporterBadge(user).Data,
+                    LeftPanel = await ProfilePanelData.LeftPanel(user, server),
+                    RightPanel = await ProfilePanelData.RightPanel(user)
                 }
             };
 
@@ -57,9 +59,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             using var profilePicture = Image.Load(pfpStream);
             using var suppBadge = Image.Load(badgeStream);
             using var gBar = new Image<Rgba32>(image.Width, image.Height);
-            using var sBar = new Image<Rgba32>(image.Width, image.Height);
 
-            var gFillPoints = GlobalBarData.GlobalXpBarCoordinates(user, profile.Xp, new ProfileTemplateUserData(user, server));
+            var gFillPoints = GlobalBarData.GlobalXpBarCoordinates(user, profile.Xp);
+            var sFillPoints = GuildBarData.GuildXpBarCoordinates(user, server, profile.Xp);
 
             /*
                  * In order to avoid clipping and artifacts, we render a completely new image
@@ -76,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             */
 
             // Resize downloaded supporter image, she's a little too chonky <(^-^)>
-            double resizeScalar = 0.75;
+            const double resizeScalar = 0.75;
             suppBadge.Mutate(x => x.Resize((int)(x.GetCurrentSize().Width * resizeScalar), (int)(x.GetCurrentSize().Height * resizeScalar)));
 
             // Draw the profile picture on top of the global bar. Global bar will serve as the base layer 
@@ -84,14 +86,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             // with the same size of our template. Think of it as a canvas.
             gBar.Mutate(x => x.DrawImage(profilePicture, new Point(12, 12), 1));
             gBar.Mutate(x => x.FillPolygon(profile.Xp.GlobalBar.Color, gFillPoints));
+            gBar.Mutate(x => x.FillPolygon(profile.Xp.GuildBar.Color, sFillPoints));
             gBar.Mutate(x => x.DrawImage(image, 1));
 
+            // Draw username and discriminator texts.
             gBar.Mutate(x => x.DrawKaguyaText(pfpIcon.UsernameText));
             gBar.Mutate(x => x.DrawKaguyaText(pfpIcon.UserDiscriminatorText));
 
+            //Draw global bar top-left, bottom-right, and center texts
             gBar.Mutate(x => x.DrawKaguyaText(profile.Xp.GlobalBar.TopLeftText));
             gBar.Mutate(x => x.DrawKaguyaText(profile.Xp.GlobalBar.BottomRightText));
             gBar.Mutate(x => x.DrawKaguyaText(profile.Xp.GlobalBar.CenterText));
+
+            //Draw guild bar top-left, bottom-right, and center texts
+            gBar.Mutate(x => x.DrawKaguyaText(profile.Xp.GuildBar.TopLeftText));
+            gBar.Mutate(x => x.DrawKaguyaText(profile.Xp.GuildBar.BottomRightText));
+            gBar.Mutate(x => x.DrawKaguyaText(profile.Xp.GuildBar.CenterText));
+
+            //Draw card/panel data/statistics texts
+            gBar.Mutate(x => x.DrawKaguyaTemplatePanel(profile.Xp.LeftPanel));
+            gBar.Mutate(x => x.DrawKaguyaTemplatePanel(profile.Xp.RightPanel));
 
             // Draw supporter badge.
             if (user.IsSupporter)

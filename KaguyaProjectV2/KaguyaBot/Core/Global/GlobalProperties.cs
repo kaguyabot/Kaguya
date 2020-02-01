@@ -46,8 +46,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         /// </summary>
         /// <param name="userExp"></param>
         /// <returns></returns>
-        public static double CalculateLevel(int userExp)
+        public static double CalculateLevelFromExp(int userExp)
         {
+            if (userExp < 65) // Can't have the square root of a negative!!
+            {
+                return 0;
+            }
             return Math.Sqrt((userExp / 8) - 8);
         }
 

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Numerics;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.Shapes;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 {
@@ -41,17 +37,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
         /// <summary>
         /// Convertes the provided integer into it's abbreviated word form.
-        /// Ex: 1000 => 1K, 525500 => 525.5K, 1250000 => 1.25M
+        /// Ex: 1000 => 1.00K, 525500 => 525.5K, 1250000 => 1.25M
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
         public static string ToAbbreviatedForm(this int num)
         {
-            return num > 1000000 
-                ? $"{(num / 1000000):N2}M" 
-                : num > 1000 
-                    ? $"{((double)num / 1000):N2}K" 
-                    : num.ToString();
+            return num > 1000000
+                ? $"{((double)num / 1000000):N2}M"
+                : num > 100000
+                    ? $"{((double) num / 1000):N1}K"
+                    : num > 1000
+                        ? $"{((double) num / 1000):N2}K"
+                        : num.ToString();
         }
 
         public static bool ContainsEmoji(this string text)
@@ -59,5 +57,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             Regex rgx = new Regex(@"[\uD83C-\uDBFF\uDC00-\uDFFF]+");
             return rgx.IsMatch(text);
         }
+
+        public static int Rounded(this double num, RoundDirection dir)
+        {
+            return dir switch
+            {
+                RoundDirection.Down => (int) Math.Floor(num),
+                RoundDirection.Up => (int) Math.Ceiling(num),
+                _ => throw new InvalidEnumArgumentException()
+            };
+        }
+    }
+
+    public enum RoundDirection
+    {
+        Down,
+        Up
     }
 }

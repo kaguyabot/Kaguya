@@ -3,7 +3,6 @@ using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
 using LinqToDB.Common;
-using MoreLinq.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
@@ -46,7 +45,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                         Y = 10
                     },
                     Show = true,
-                    Text = writtenUsername
+                    Text = writtenUsername,
+                    HasStroke = true,
+                    StrokeWidth = 2
                 },
                 UserDiscriminatorText = new ProfileTemplateText
                 {
@@ -58,7 +59,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                         Y = 57
                     },
                     Show = true,
-                    Text = $"#{user.Discriminator}"
+                    Text = $"#{user.Discriminator}",
+                    HasStroke = true,
+                    StrokeWidth = 0.5f
                 }
             };
         }

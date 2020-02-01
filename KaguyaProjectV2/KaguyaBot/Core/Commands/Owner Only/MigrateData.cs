@@ -60,7 +60,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     LastRatelimited = 0,
                     UpvoteBonusExpiration = 0,
                     GambleHistory = null,
-                    ServerExp = null,
                     Reminders = null
                 };
 

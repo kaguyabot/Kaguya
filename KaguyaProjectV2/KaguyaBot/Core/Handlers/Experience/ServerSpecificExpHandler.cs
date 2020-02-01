@@ -114,7 +114,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         private static double ReturnLevel(Server server, User user)
         {
             int exp = GetExpForUser(server, user);
-            return GlobalProperties.CalculateLevel(exp);
+            return GlobalProperties.CalculateLevelFromExp(exp);
         }
 
         private static bool HasLeveledUp(int oldLevel, int newLevel)

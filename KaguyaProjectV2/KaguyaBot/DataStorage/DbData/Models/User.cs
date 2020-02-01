@@ -4,7 +4,6 @@ using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -86,6 +85,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             }
         }
 
+        public int RepCount => DatabaseQueries.GetAllForUserAsync<Rep>(UserId).Result.Count;
+        public List<Rep> Rep => DatabaseQueries.GetAllForUserAsync<Rep>(UserId).Result;
         public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetTimelyPoints => DateTime.Now.AddHours(-24).ToOADate() < LatestTimelyBonus;
@@ -96,12 +97,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "UserId", OtherKey = "UserId")]
         public IEnumerable<GambleHistory> GambleHistory { get; set; }
-
-        /// <summary>
-        /// FK_KaguyaUser_ServerExp_BackReference
-        /// </summary>
-        [Association(ThisKey = "UserId", OtherKey = "ServerId")]
-        public IEnumerable<ServerExp> ServerExp { get; set; }
 
         /// <summary>
         /// FK_KaguyaUser_Reminder_BackReference

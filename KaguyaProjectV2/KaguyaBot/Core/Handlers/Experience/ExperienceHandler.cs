@@ -68,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
         private static double ReturnLevel(User user)
         {
-            return GlobalProperties.CalculateLevel(user.Experience);
+            return GlobalProperties.CalculateLevelFromExp(user.Experience);
         }
 
         private static bool HasLeveledUp(double oldLevel, double newLevel)

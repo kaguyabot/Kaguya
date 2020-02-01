@@ -13,5 +13,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
         public Font Font { get; set; }
         public string Text { get; set; }
         public bool Show { get; set; } = true;
+        public bool HasStroke { get; set; }
+        public float StrokeWidth { get; set; }
+        public Rgba32 StrokeColor { get; set; } = Rgba32.Black;
     }
 }

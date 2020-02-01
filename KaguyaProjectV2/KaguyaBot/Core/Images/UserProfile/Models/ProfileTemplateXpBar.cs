@@ -21,7 +21,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
         /// The length of the bar, in pixels.
         /// </summary>
         public int Length { get; set; }
+        /// <summary>
+        /// The top-left coordinate of this bar.
+        /// </summary>
         public ProfileTemplateLoc LocA { get; set; }
+        /// <summary>
+        /// The bottom-left coordinate of this bar.
+        /// </summary>
         public ProfileTemplateLoc LocB { get; set; }
         public ProfileTemplateText TopLeftText { get; set; }
         public ProfileTemplateText BottomRightText { get; set; }
