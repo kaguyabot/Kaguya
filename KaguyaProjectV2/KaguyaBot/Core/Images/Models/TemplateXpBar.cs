@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using SixLabors.ImageSharp.PixelFormats;
+﻿using SixLabors.ImageSharp.PixelFormats;
 
 // ReSharper disable AccessToDisposedClosure
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
+namespace KaguyaProjectV2.KaguyaBot.Core.Images.Models
 {
     /*
      * I primarily created these classes so that it would be very easy to change the
@@ -11,7 +10,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
      * It would be as simple as editing the X-Y coordinates of the objects.
      */
 
-    public class ProfileTemplateXpBar
+    /// <summary>
+    /// Represents a generic rectange with two <see cref="TemplateLoc"/>s that determine where the bar shall fill out from.
+    /// </summary>
+    public class TemplateXpBar
     {
         /// <summary>
         /// The color of the bar's fill.
@@ -24,13 +26,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
         /// <summary>
         /// The top-left coordinate of this bar.
         /// </summary>
-        public ProfileTemplateLoc LocA { get; set; }
+        public TemplateLoc LocA { get; set; }
         /// <summary>
         /// The bottom-left coordinate of this bar.
         /// </summary>
-        public ProfileTemplateLoc LocB { get; set; }
-        public ProfileTemplateText TopLeftText { get; set; }
-        public ProfileTemplateText BottomRightText { get; set; }
-        public ProfileTemplateText CenterText { get; set; }
+        public TemplateLoc LocB { get; set; }
+        public TemplateText TopLeftText { get; set; }
+        public TemplateText BottomRightText { get; set; }
+        public TemplateText CenterText { get; set; }
     }
 }

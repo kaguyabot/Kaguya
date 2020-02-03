@@ -1,77 +1,77 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.Primitives;
 using System;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
+namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
     public static class GlobalBarData
     {
-        public static string FontPath = GraphicsConstants.FONT_PATH;
+        public static string FontPath = ImageBase.FONT_PATH;
 
-        public static ProfileTemplateXpBar Bar(User user)
+        public static TemplateXpBar Bar(User user)
         {
             const float aX = 37f;
             const float aY = 174.5f;
             const float bX = aX;
             const float bY = aY + 26;
 
-            return new ProfileTemplateXpBar
+            return new TemplateXpBar
             {
                 // What color should fill the bar?
                 Color = Rgba32.BlueViolet,
                 Length = 277,
-                LocA = new ProfileTemplateLoc
+                LocA = new TemplateLoc
                 {
                     X = aX,
                     Y = aY
                 },
-                LocB = new ProfileTemplateLoc
+                LocB = new TemplateLoc
                 {
                     X = bX,
                     Y = bY
                 },
-                TopLeftText = new ProfileTemplateText
+                TopLeftText = new TemplateText
                 {
                     Color = Rgba32.WhiteSmoke,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 45,
                         Y = 181
                     },
-                    Font = GraphicsConstants.Font(16),
+                    Font = ImageBase.Font(16),
                     Show = true,
                     Text = "Global",
                     HasStroke = true,
                     StrokeWidth = 1,
                     StrokeColor = Rgba32.WhiteSmoke
                 },
-                BottomRightText = new ProfileTemplateText
+                BottomRightText = new TemplateText
                 {
                     Color = Rgba32.WhiteSmoke,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 199,
                         Y = 181
                     },
-                    Font = GraphicsConstants.Font(15),
+                    Font = ImageBase.Font(15),
                     Show = true,
                     Text = $"{user.Experience.ToAbbreviatedForm()} / {user.NextGlobalLevelExp().ToAbbreviatedForm()}",
                     HasStroke = true,
                     StrokeWidth = 1,
                     StrokeColor = Rgba32.WhiteSmoke
                 },
-                CenterText = new ProfileTemplateText
+                CenterText = new TemplateText
                 {
                     Color = Rgba32.LightSalmon,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 103,
                         Y = 181
                     },
-                    Font = GraphicsConstants.Font(16),
+                    Font = ImageBase.Font(16),
                     Show = true,
                     Text = $"Lvl {Math.Floor(user.GlobalLevel())}: {user.PercentToNextLevel() * 100:N0}%",
                     HasStroke = true,
@@ -98,7 +98,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
         /// required exp to level up.
         /// </summary>
         /// <returns></returns>
-        private static float GetGlobalXpBarFillCoordinate(User user, ProfileTemplateXpBar bar)
+        private static float GetGlobalXpBarFillCoordinate(User user, TemplateXpBar bar)
         {
             var percentToNextLevel = user.PercentToNextLevel();
             return (float)((percentToNextLevel * bar.Length) + bar.LocA.X);

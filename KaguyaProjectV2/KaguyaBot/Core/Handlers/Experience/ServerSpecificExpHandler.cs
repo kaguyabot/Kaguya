@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp;
 
 // ReSharper disable RedundantAssignment
 
@@ -80,9 +81,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id))
                     return;
 
+                var xp = new XpImage();
+                var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User, server);
+
                 if (levelAnnouncementChannel != null && levelAnnouncementChannel is SocketTextChannel textChannel)
                 {
-                    await textChannel.SendMessageAsync(embed: LevelUpEmbed(user, server, context));
+                    await textChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
                 }
                 else
                 {

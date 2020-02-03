@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
@@ -56,6 +57,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             Regex rgx = new Regex(@"[\uD83C-\uDBFF\uDC00-\uDFFF]+");
             return rgx.IsMatch(text);
+        }
+
+        /// <summary>
+        /// Alters a string that may contain an emoji and removes all of them, if they are present.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string FilterEmojis(this string text)
+        {
+            return text.Where(c => !c.ToString().ContainsEmoji()).Aggregate("", (current, c) => current + c);
         }
 
         public static int Rounded(this double num, RoundDirection dir)

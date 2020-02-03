@@ -1,4 +1,6 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp;
+using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
 using SixLabors.ImageSharp.Processing;
 using PointF = SixLabors.Primitives.PointF;
 
@@ -7,14 +9,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
     public static class GraphicsExtensions
     {
         /// <summary>
-        /// An extension method to draw the given <see cref="ProfileTemplateText"/> onto the
+        /// An extension method to draw the given <see cref="TemplateText"/> onto the
         /// <see cref="IImageProcessingContext"/> that we're working with.
         /// <para>Usage: <code>SixLabors.ImageSharp.SomeImage.Mutate(x => x.DrawKaguyaText(...))</code></para>
         /// </summary>
         /// <param name="ctx">The <see cref="IImageProcessingContext"/> we are working with.</param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static IImageProcessingContext DrawKaguyaText(this IImageProcessingContext ctx, ProfileTemplateText text)
+        public static IImageProcessingContext DrawKaguyaText(this IImageProcessingContext ctx, TemplateText text)
         {
             if (text.Show)
             {
@@ -27,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             return null;
         }
 
-        public static IImageProcessingContext[] DrawKaguyaTemplatePanel(this IImageProcessingContext ctx,
+        public static IImageProcessingContext[] DrawKaguyaTemplatePanelText(this IImageProcessingContext ctx,
             ProfileTemplatePanel panel)
         {
             return new IImageProcessingContext[]
@@ -36,6 +38,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                 ctx.DrawKaguyaText(panel.TopTextBody),
                 ctx.DrawKaguyaText(panel.BottomTextHeader),
                 ctx.DrawKaguyaText(panel.BottomTextBody)
+            };
+        }
+
+        public static IImageProcessingContext[] DrawKaguyaXpPanelText(this IImageProcessingContext ctx,
+            XpTemplate xpTemplate)
+        {
+            return new IImageProcessingContext[]
+            {
+                ctx.DrawKaguyaText(xpTemplate.LevelText),
+                ctx.DrawKaguyaText(xpTemplate.LevelUpMessageText),
+                ctx.DrawKaguyaText(xpTemplate.NameText)
             };
         }
     }

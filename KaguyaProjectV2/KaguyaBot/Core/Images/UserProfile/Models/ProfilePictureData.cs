@@ -1,15 +1,15 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
 using LinqToDB.Common;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
+namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
     public static class ProfilePictureData
     {
-        public static ProfileTemplateIcon ProfileIcon(SocketGuildUser user)
+        public static TemplateIcon ProfileIcon(SocketGuildUser user)
         {
             var name = user.Username.IsNullOrEmpty() ? $"User Id: {user.Id}" : user.Username;
             var writtenUsername = "";
@@ -23,23 +23,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
             if (string.IsNullOrWhiteSpace(writtenUsername))
                 writtenUsername = $"User Id: {user.Id}";
 
-            var nameFontSize = user.Username.Length < 20 
-                ? 40
-                : 40 - (writtenUsername.Length - 25);
-            return new ProfileTemplateIcon
+            return new TemplateIcon
             {
-                Loc = new ProfileTemplateLoc
+                Loc = new TemplateLoc
                 {
                     X = 79,
                     Y = 80
                 },
                 ProfileUrl = user.GetAvatarUrl(ImageFormat.Png, 137),
                 Show = true,
-                UsernameText = new ProfileTemplateText
+                UsernameText = new TemplateText
                 {
                     Color = Rgba32.Orange,
-                    Font = GraphicsConstants.Font(nameFontSize + (20 - writtenUsername.Length)),
-                    Loc = new ProfileTemplateLoc
+                    Font = ImageBase.Font(user.Username, 40, 20),
+                    Loc = new TemplateLoc
                     {
                         X = 133,
                         Y = 10
@@ -49,11 +46,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     HasStroke = true,
                     StrokeWidth = 2
                 },
-                UserDiscriminatorText = new ProfileTemplateText
+                UserDiscriminatorText = new TemplateText
                 {
                     Color = Rgba32.DarkOrange,
-                    Font = GraphicsConstants.Font(22),
-                    Loc = new ProfileTemplateLoc
+                    Font = ImageBase.Font(22),
+                    Loc = new TemplateLoc
                     {
                         X = 145,
                         Y = 57

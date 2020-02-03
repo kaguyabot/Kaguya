@@ -1,15 +1,13 @@
-﻿// ReSharper disable AccessToDisposedClosure
-
-using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
     public class ProfileTemplateXp
     {
-        public ProfileTemplateXpBar GlobalBar { get; set; }
-        public ProfileTemplateXpBar GuildBar { get; set; }
-        public ProfileTemplateBadge SupporterBadge { get; set; }
-        public ProfileTemplateIcon IconAndUsername { get; set; }
+        public TemplateXpBar GlobalBar { get; set; }
+        public TemplateXpBar GuildBar { get; set; }
+        public TemplateBadge SupporterBadge { get; set; }
+        public TemplateIcon IconAndUsername { get; set; }
         public ProfileTemplatePanel LeftPanel { get; set; }
         public ProfileTemplatePanel RightPanel { get; set; }
     }

@@ -1,17 +1,17 @@
-﻿using System.Linq;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using System.Linq;
 
 // ReSharper disable AccessToDisposedClosure
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
+namespace KaguyaProjectV2.KaguyaBot.Core.Images.Models
 {
-    public class ProfileTemplateUserData
+    public class TemplateUserData
     {
         private SocketGuildUser User { get; }
-        public ProfileTemplateUserData(User user, Server server)
+        public TemplateUserData(User user, Server server)
         {
             User = ConfigProperties.Client.GetGuild(server.ServerId).GetUser(user.UserId);
             ServerXp = server.ServerExp.First(x => x.UserId == user.UserId).Exp;

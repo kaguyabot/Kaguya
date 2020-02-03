@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
@@ -9,9 +7,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
         /// <summary>
         /// The small print at the top of the top text's data, this acts as a header.
         /// </summary>
-        public ProfileTemplateText TopTextHeader { get; set; }
-        public ProfileTemplateText TopTextBody { get; set; }
-        public ProfileTemplateText BottomTextHeader { get; set; }
-        public ProfileTemplateText BottomTextBody { get; set; }
+        public TemplateText TopTextHeader { get; set; }
+        public TemplateText TopTextBody { get; set; }
+        public TemplateText BottomTextHeader { get; set; }
+        public TemplateText BottomTextBody { get; set; }
     }
 }

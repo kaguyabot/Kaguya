@@ -1,70 +1,70 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.Primitives;
 using System;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
+namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
     public static class GuildBarData
     {
-        public static ProfileTemplateXpBar Bar(User user, Server server)
+        public static TemplateXpBar Bar(User user, Server server)
         {
-            return new ProfileTemplateXpBar
+            return new TemplateXpBar
             {
                 Color = Rgba32.BlueViolet,
                 Length = 446,
-                LocA = new ProfileTemplateLoc
+                LocA = new TemplateLoc
                 {
                     X = 38.5f,
                     Y = 213f
                 },
-                LocB = new ProfileTemplateLoc
+                LocB = new TemplateLoc
                 {
                     X = 37.5f,
                     Y = 253.5f
                 },
-                TopLeftText = new ProfileTemplateText
+                TopLeftText = new TemplateText
                 {
                     Color = Rgba32.LightCoral,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 44,
                         Y = 216
                     },
-                    Font = GraphicsConstants.Font(18),
+                    Font = ImageBase.Font(18),
                     HasStroke = true,
                     Show = true,
                     StrokeColor = Rgba32.WhiteSmoke,
                     StrokeWidth = 1,
                     Text = "Server Level"
                 },
-                BottomRightText = new ProfileTemplateText
+                BottomRightText = new TemplateText
                 {
                     Color = Rgba32.LightCoral,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 345,
                         Y = 230
                     },
-                    Font = GraphicsConstants.Font(22),
+                    Font = ImageBase.Font(22),
                     HasStroke = true,
                     Show = true,
                     StrokeColor = Rgba32.WhiteSmoke,
                     StrokeWidth = 1,
                     Text = $"{user.ServerExp(server).ToAbbreviatedForm()} / {user.NextServerLevelExp(server).ToAbbreviatedForm()}"
                 },
-                CenterText = new ProfileTemplateText
+                CenterText = new TemplateText
                 {
                     Color = Rgba32.LightCoral,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 185,
                         Y = 224
                     },
-                    Font = GraphicsConstants.Font(22),
+                    Font = ImageBase.Font(22),
                     HasStroke = true,
                     Show = true,
                     StrokeColor = Color.WhiteSmoke,
@@ -92,7 +92,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
         /// required exp to level up.
         /// </summary>
         /// <returns></returns>
-        private static float GetGuildXpBarFillCoordinate(User user, Server server, ProfileTemplateXpBar bar)
+        private static float GetGuildXpBarFillCoordinate(User user, Server server, TemplateXpBar bar)
         {
             var percentToNextLevel = user.PercentToNextServerLevel(server);
             if(percentToNextLevel < 1)

@@ -1,10 +1,10 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
+namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
     public class ProfilePanelData
     {
@@ -17,12 +17,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
         {
             return new ProfileTemplatePanel
             {
-                TopTextHeader = new ProfileTemplateText
+                TopTextHeader = new TemplateText
                 {
                     Color = HeaderColor,
-                    Font = GraphicsConstants.Font(HeaderFontSize),
+                    Font = ImageBase.Font(HeaderFontSize),
                     HasStroke = false,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 182,
                         Y = 87
@@ -30,12 +30,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     Show = true,
                     Text = $"Global Rank"
                 },
-                TopTextBody = new ProfileTemplateText
+                TopTextBody = new TemplateText
                 {
                     Color = BodyColor,
-                    Font = GraphicsConstants.Font(BodyFontSize),
+                    Font = ImageBase.Font(BodyFontSize),
                     HasStroke = false,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 178,
                         Y = 98
@@ -43,12 +43,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     Show = true,
                     Text = $"#{(await user.GetGlobalXpRank()).Item1.ToAbbreviatedForm()} / {(await user.GetGlobalXpRank()).Item2.ToAbbreviatedForm()}"
                 },
-                BottomTextHeader = new ProfileTemplateText
+                BottomTextHeader = new TemplateText
                 {
                     Color = HeaderColor,
-                    Font = GraphicsConstants.Font(HeaderFontSize),
+                    Font = ImageBase.Font(HeaderFontSize),
                     HasStroke = false,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 175,
                         Y = 115
@@ -56,12 +56,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     Show = true,
                     Text = "Server Rank"
                 },
-                BottomTextBody = new ProfileTemplateText
+                BottomTextBody = new TemplateText
                 {
                     Color = BodyColor,
-                    Font = GraphicsConstants.Font(BodyFontSize),
+                    Font = ImageBase.Font(BodyFontSize),
                     HasStroke = false,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 171,
                         Y = 126
@@ -76,12 +76,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
         {
             return new ProfileTemplatePanel
             {
-                TopTextHeader = new ProfileTemplateText
+                TopTextHeader = new TemplateText
                 {
                     Color = HeaderColor,
-                    Font = GraphicsConstants.Font(HeaderFontSize),
+                    Font = ImageBase.Font(HeaderFontSize),
                     HasStroke = false,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 368,
                         Y = 87
@@ -89,12 +89,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     Show = true,
                     Text = $"Points"
                 },
-                TopTextBody = new ProfileTemplateText
+                TopTextBody = new TemplateText
                 {
                     Color = HeaderColor,
-                    Font = GraphicsConstants.Font(BodyFontSize),
+                    Font = ImageBase.Font(BodyFontSize),
                     HasStroke = false,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 364,
                         Y = 99
@@ -102,12 +102,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     Show = true,
                     Text = $"{user.Points.ToAbbreviatedForm()}"
                 },
-                BottomTextHeader = new ProfileTemplateText
+                BottomTextHeader = new TemplateText
                 {
                     Color = HeaderColor,
-                    Font = GraphicsConstants.Font(HeaderFontSize),
+                    Font = ImageBase.Font(HeaderFontSize),
                     HasStroke = false,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 362,
                         Y = 116
@@ -115,12 +115,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.GraphicsData
                     Show = true,
                     Text = $"Rep"
                 },
-                BottomTextBody = new ProfileTemplateText
+                BottomTextBody = new TemplateText
                 {
                     Color = HeaderColor,
-                    Font = GraphicsConstants.Font(BodyFontSize),
+                    Font = ImageBase.Font(BodyFontSize),
                     HasStroke = false,
-                    Loc = new ProfileTemplateLoc
+                    Loc = new TemplateLoc
                     {
                         X = 363,
                         Y = 127
