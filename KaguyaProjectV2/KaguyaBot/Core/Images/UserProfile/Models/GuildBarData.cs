@@ -46,10 +46,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
                     Color = Rgba32.LightCoral,
                     Loc = new TemplateLoc
                     {
-                        X = 345,
+                        X = 335,
                         Y = 230
                     },
-                    Font = ImageBase.Font(22),
+                    Font = ImageBase.Font(20),
                     HasStroke = true,
                     Show = true,
                     StrokeColor = Rgba32.WhiteSmoke,

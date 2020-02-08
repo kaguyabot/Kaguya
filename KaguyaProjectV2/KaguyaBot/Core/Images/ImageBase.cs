@@ -5,9 +5,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
 {
     public abstract class ImageBase
     {
+        //todo: Un-hardcode these filepaths.
+#if DEBUG
         public const string FONT_PATH = @"C:\Users\stage\Documents\GitHub\Kaguya\KaguyaProjectV2\Resources\Fonts\frankMedium.ttf";
         public const string PROFILE_TEMPLATE_PATH = @"C:\Users\stage\Desktop\Artwork\KaguyaArtworkAssets\Discord-Chat-Images\ProfileSmall.png";
         public const string XP_TEMPLATE_PATH = @"C:\Users\stage\Desktop\Artwork\KaguyaArtworkAssets\Discord-Chat-Images\XpLevelUpSmall.png";
+#else
+        public const string FONT_PATH = @"Resources\Fonts\frankMedium.ttf";
+        public const string PROFILE_TEMPLATE_PATH = @"Resources\Images\ProfileSmall.png";
+        public const string XP_TEMPLATE_PATH = @"Resources\Images\XpLevelUpSmall.png";
+#endif
 
         public static Font Font(float fontSize)
         {
