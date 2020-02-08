@@ -25,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         /// </summary>
         public static string KaguyaMainFolder { get; } = Directory.GetCurrentDirectory();
         public static string KaguyaSupportDiscordServer { get; } = "https://discord.gg/aumCJhr";
-        public static string Version { get; } = "2.0.A2020-1-28";
+        public static string Version { get; } = "2.0.A2020-2-07";
         public static bool InBeta { get; } = true;
         public static string KaguyaStore = "https://the-kaguya-project.myshopify.com/";
     }

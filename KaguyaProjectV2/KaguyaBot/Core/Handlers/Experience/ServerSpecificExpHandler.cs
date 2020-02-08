@@ -1,8 +1,9 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -11,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp;
 
 // ReSharper disable RedundantAssignment
 
@@ -22,7 +22,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         public static async Task AddExp(User user, Server server, ICommandContext context)
         {
             var specificExps = await DatabaseQueries.GetAllForServerAsync<ServerExp>(server.ServerId);
-            var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
             var userExpObj = new ServerExp();
 
             // If the user can receive exp, give them between 5 and 8.
@@ -31,7 +30,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 return;
             }
 
-            Random r = new Random();
+            SocketTextChannel levelAnnouncementChannel;
+            if (server.LogLevelAnnouncements != 0)
+            {
+                levelAnnouncementChannel = await context.Guild.GetTextChannelAsync(server.LogLevelAnnouncements) as SocketTextChannel;
+            }
+            else
+            {
+                levelAnnouncementChannel = context.Channel as SocketTextChannel;
+            }
+
+            var r = new Random();
             int exp = r.Next(5, 8);
 
             if (server.ServerExp != null)
@@ -82,15 +91,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                     return;
 
                 var xp = new XpImage();
-                var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User, server);
 
-                if (levelAnnouncementChannel != null && levelAnnouncementChannel is SocketTextChannel textChannel)
+                if (user.ExpChatNotificationType == ExpType.Server || user.ExpChatNotificationType == ExpType.Both)
                 {
-                    await textChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                    var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User, server);
+                    if (levelAnnouncementChannel != null)
+                    {
+                        await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                    }
+                    else
+                    {
+                        await context.Channel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                    }
                 }
-                else
+                if (user.ExpDmNotificationType == ExpType.Server || user.ExpDmNotificationType == ExpType.Both)
                 {
-                    await context.Channel.SendMessageAsync(embed: LevelUpEmbed(user, server, context));
+                    var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User, server);
+                    await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
                 }
             }
         }
@@ -135,23 +152,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         private static int GetExpForUser(Server server, User user)
         {
             return server.ServerExp?.FirstOrDefault(x => x.UserId == user.UserId)?.Exp ?? 0;
-        }
-
-        public static Embed LevelUpEmbed(User user, Server server, ICommandContext context)
-        {
-            var exp = GetExpForUser(server, user);
-            var rank = DatabaseQueries.GetServerExpRankForUser(server, user);
-
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
-            {
-                Title = "Level Up!",
-                Description = $"`{context.User.Username}` just leveled up! \n" +
-                              $"Server Level: `{(int)ReturnLevel(server, user)}` | EXP: `{exp:N0}`\n" +
-                              $"Rank: `#{rank}/{server.ServerExp.ToList().Count:N0}`",
-                ThumbnailUrl = ConfigProperties.Client.GetUser(user.UserId).GetAvatarUrl()
-            };
-
-            return embed.Build();
         }
     }
 }

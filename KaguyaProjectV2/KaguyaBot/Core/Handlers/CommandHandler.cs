@@ -54,19 +54,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             var context = new ShardedCommandContext(_client, message);
             await IsFilteredPhrase(context, server, message); // If filtered phrase (and user isn't admin), return.
 
+            await ExperienceHandler.AddExp(user, server, context);
+            await ServerSpecificExpHandler.AddExp(user, server, context);
+
             // If the channel is blacklisted and the user isn't an Admin, return.
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&
                 !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
                 return;
 
-            await ExperienceHandler.AddExp(user, context);
-            await ServerSpecificExpHandler.AddExp(user, server, context);
-
             int argPos = 0;
-
-            await DatabaseQueries.UpdateAsync(user);
-            await DatabaseQueries.UpdateAsync(server);
-
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
                 message.Author.IsBot)
@@ -90,7 +86,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 user.ActiveRateLimit++;
 
                 // Providing context as a parameter will automatically log all information about an executed command.
-                await ConsoleLogger.LogAsync(context, LogLvl.INFO);
+                await ConsoleLogger.LogAsync(context);
 
                 await DatabaseQueries.InsertAsync(new CommandHistory
                 {

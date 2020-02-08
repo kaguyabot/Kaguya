@@ -4,6 +4,9 @@ using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
@@ -71,7 +74,22 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public double LastFished { get; set; }
         [Column(Name = "UpvoteBonusExpiration"), NotNull]
         public double UpvoteBonusExpiration { get; set; }
+
+        /// <summary>
+        /// If a user wants to receive level-up notifications in chat, what type should it be?
+        /// </summary>
+        [Column(Name = "ExpChatNotificationType"), NotNull]
+        public int ExpChatNotificationTypeNum { private get; set; } = 2;
+
+        /// <summary>
+        /// If a user wants to receive level-up notifications in their DMs, what type should it be?
+        /// </summary>
+        [Column(Name = "ExpDMNotificationType"), NotNull]
+        public int ExpDmNotificationTypeNum { private get; set; } = 3;
+
         public bool IsBlacklisted => BlacklistExpiration - DateTime.Now.ToOADate() > 0;
+        public ExpType ExpChatNotificationType => (ExpType) ExpChatNotificationTypeNum;
+        public ExpType ExpDmNotificationType => (ExpType) ExpDmNotificationTypeNum;
 
         public double SupporterExpirationDate
         {

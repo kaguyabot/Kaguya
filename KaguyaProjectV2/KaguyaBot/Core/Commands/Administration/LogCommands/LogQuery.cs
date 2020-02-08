@@ -14,7 +14,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         public static string[] AllLogTypes =
         {
             "ModLog", "DeletedMessages", "UpdatedMessages", "FilteredPhrases", "UserJoins", "UserLeaves", "Kicks",
-            "Bans", "Unbans", "VoiceConnections", "LevelUps", "FishLevels", "AntiRaid", "Greetings", "TwitchNotifications", "All"
+            "Bans", "Unbans", "VoiceConnections", "LevelAnnouncements", "FishLevels", "AntiRaid", "Greetings", "TwitchNotifications", 
+            "All"
         };
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "bans": server.LogBans = channel.Id; break;
                         case "unbans": server.LogUnbans = channel.Id; break;
                         case "voiceconnections": server.LogVoiceChannelConnections = channel.Id; break;
-                        case "levelups": server.LogLevelAnnouncements = channel.Id; break;
+                        case "levelannouncements": server.LogLevelAnnouncements = channel.Id; break;
                         case "fishlevels": server.LogFishLevels = channel.Id; break;
                         case "antiraid": server.LogAntiraids = channel.Id; break;
                         case "greetings": server.LogGreetings = channel.Id; break;
@@ -99,7 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "bans": server.LogBans = 0; break;
                         case "unbans": server.LogUnbans = 0; break;
                         case "voiceconnections": server.LogVoiceChannelConnections = 0; break;
-                        case "levelups": server.LogLevelAnnouncements = 0; break;
+                        case "levelannouncements": server.LogLevelAnnouncements = 0; break;
                         case "fishlevels": server.LogFishLevels = 0; break;
                         case "antiraid": server.LogAntiraids = 0; break;
                         case "greetings": server.LogGreetings = 0; break;

@@ -1,7 +1,9 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -14,19 +16,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
     public static class ExperienceHandler
     {
-        public static async Task AddExp(User user, ICommandContext context)
+        public static async Task AddExp(User user, Server server, ICommandContext context)
         {
-            Server server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
-
             // If the user can receive exp, give them between 5 and 8.
             if (!CanGetExperience(user))
             {
                 return;
             }
-            var levelAnnouncementChannel = await context.Guild.GetChannelAsync(server.LogLevelAnnouncements);
+
+            SocketTextChannel levelAnnouncementChannel;
+            if (server.LogLevelAnnouncements != 0)
+            {
+                levelAnnouncementChannel = await context.Guild.GetTextChannelAsync(server.LogLevelAnnouncements) as SocketTextChannel;
+            }
+            else
+            {
+                levelAnnouncementChannel = context.Channel as SocketTextChannel;
+            }
+
             double oldLevel = ReturnLevel(user);
 
-            Random r = new Random();
+            var r = new Random();
             int exp = r.Next(5, 8);
             int points = r.Next(1, 4);
 
@@ -37,8 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             double newLevel = ReturnLevel(user);
             await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has received {exp} exp and {points} points. " +
-                                         $"[New Total: {user.Experience:N0} Exp]",
-                LogLvl.DEBUG);
+                                         $"[New Total: {user.Experience:N0} Exp]", LogLvl.DEBUG);
 
             if (!HasLeveledUp(oldLevel, newLevel))
             {
@@ -47,17 +56,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has leveled up! " +
                                          $"[Level: {newLevel} | EXP: {user.Experience:N0}]", LogLvl.INFO);
 
-            // Don't send announcement if the channel is blacklisted.
-            if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id))
+            // Don't send announcement if the channel is blacklisted, but only if it's not a level-announcements log channel.
+            if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id && x.ChannelId != server.LogLevelAnnouncements))
                 return;
 
-            if (levelAnnouncementChannel != null && levelAnnouncementChannel is IMessageChannel textChannel)
+            var xp = new XpImage();
+
+            if (user.ExpChatNotificationType == ExpType.Global || user.ExpChatNotificationType == ExpType.Both)
             {
-                await textChannel.SendMessageAsync(embed: await LevelUpEmbed(user, context));
-                return;
+                if (levelAnnouncementChannel != null)
+                {
+                    var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User);
+                    await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                }
             }
-
-            await context.Channel.SendMessageAsync(embed: await LevelUpEmbed(user, context));
+            if (user.ExpDmNotificationType == ExpType.Global || user.ExpDmNotificationType == ExpType.Both)
+            {
+                var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User);
+                await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+            }
         }
 
         private static bool CanGetExperience(User user)
@@ -74,23 +91,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         private static bool HasLeveledUp(double oldLevel, double newLevel)
         {
             return Math.Floor(oldLevel) < Math.Floor(newLevel);
-        }
-
-        private static async Task<Embed> LevelUpEmbed(User user, ICommandContext context)
-        {
-            int count = await DatabaseQueries.GetCountAsync<User>();
-            var rankNum = DatabaseQueries.GetGlobalExpRankIndex(user) + 1;
-
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
-            {
-                Title = "Level Up!",
-                Description = $"`{context.User.Username}` just leveled up! \n" +
-                              $"Level: `{(int)ReturnLevel(user)}` | EXP: `{user.Experience:N0}`\n" +
-                              $"Rank: `#{rankNum}/{count:N0}`",
-                ThumbnailUrl = ConfigProperties.Client.GetUser(user.UserId).GetAvatarUrl()
-            };
-
-            return embed.Build();
         }
     }
 }
