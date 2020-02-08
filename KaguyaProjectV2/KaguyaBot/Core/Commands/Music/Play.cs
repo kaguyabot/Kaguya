@@ -40,6 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         /// This method also adds the song to the guild's player queue and will even join the user's voice
         /// channel automatically.
         /// </summary>
+        /// <param name="context"></param>
         /// <param name="query">The song to search for, user input.</param>
         /// <param name="provider"></param>
         /// <returns></returns>
@@ -105,7 +106,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
             if (tracks.Count == 0)
             {
-                await context.Channel.SendBasicErrorEmbedAsync($"Your requested search returned no results.");
+                await context.Channel.SendBasicErrorEmbedAsync($"Your requested search returned no results. If you are " +
+                                                               $"not a [Kaguya Supporter]({GlobalProperties.KAGUYA_STORE_URL}), " +
+                                                               $"you are only limited to playing songs less than `10 minutes` in duration.");
                 return null;
             }
 
@@ -150,7 +153,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             }
             #endregion
 
-            for (int i = 0; i < 5; i++)
+            int h = tracks.Count;
+            for (int i = 0; i < (h < 5 ? h : 5); i++)
             {
                 int i1 = i;
                 var trackSel = tracks[i];
@@ -183,6 +187,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                         await player.PlayAsync(trackSel);
                     }
 
+                    if (player.Volume == 0 && player.PlayerState == PlayerState.Playing)
+                    {
+                        await player.UpdateVolumeAsync(100); // Sets the volume back to default if it is muted.
+                    }
+
                     var embed = new KaguyaEmbedBuilder
                     {
                         Title = $"Kaguya Music {Centvrio.Emoji.Music.Notes}",
@@ -201,10 +210,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 await r.Message.Value.DeleteAsync();
             }));
 
+            string s = tracks.Count == 1 ? "" : "s";
             var songDisplayEmbed = new KaguyaEmbedBuilder
             {
                 Title = "Kaguya Music Search Results",
-                Description = $" I found {tracks.Count} tracks from {provider}, " +
+                Description = $" I found {tracks.Count} track{s} from {provider}, " +
                               $"{(tracks.Count > 5 ? "but here are the top 5" : "here they are")}. " +
                               $"Please select a track to play.",
                 Fields = fields

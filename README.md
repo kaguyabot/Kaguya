@@ -59,7 +59,6 @@ rarer fish! Be wary though, as better bait will be needed to catch rarer fish mo
 - `$nsfw` may now have tags appended to it (`$nsfw long_hair swimsuit`). Tag count is unlimited.
 - Significantly more lenient rate limit when using commands.
 - Higher priority suggestions for new features.
-- No currency betting limit.
 - Special **Supporter** role in the Kaguya Support Discord Server.
 - Special badge on your `$profile`
 - Access to supporter only commands, including `$react`.
@@ -70,8 +69,7 @@ rarer fish! Be wary though, as better bait will be needed to catch rarer fish mo
 ## Kaguya Premium (Monthly Subscription):
 #### Kaguya Premium Features
 *Kaguya Premium is a server-bound monthly subscription that grants access to many special utilities. The following features are restricted to premium servers only.*
-- Access to the `logtype` `ModLog`. This logtype will automatically log events for `AutoBan`, `AutoKick`, `AutoMute`, `AutoShadowban`, `Shadowban`, `Unshadowban`, `Mute`, `Unmute`, `Warn`, `UnWarn`, 
-`Bulk deletion of messages ($clear 100)`.
+- Access to the `logtype` `ModLog`. This logtype will automatically log events for `AutoBan`, `AutoKick`, `AutoMute`, `AutoShadowban`, `Shadowban`, `Unshadowban`, `Mute`, `Unmute`, `Warn`, `UnWarn`, `Bulk deletion of messages ($clear 100)`.
 - If a message is deleted and the `DeletedMessages` logtype is enabled, the log will now display **permanent links** to any attachments or files that were uploaded and included with the deleted message, 
 including images and anything else that a user may upload to the server.
 - View the **9** most recent warnings for users when using the $unwarn command (instead of the 4 most recent). This is especially useful if you want to remove a warning that was made a long time ago, or just view the user's warn history.

@@ -61,7 +61,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 return;
 
             var xp = new XpImage();
-
             if (user.ExpChatNotificationType == ExpType.Global || user.ExpChatNotificationType == ExpType.Both)
             {
                 if (levelAnnouncementChannel != null)
