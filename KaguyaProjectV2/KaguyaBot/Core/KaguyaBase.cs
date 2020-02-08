@@ -19,6 +19,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         }
 
         /// <summary>
+        /// Builds and sends the provided unbuilt embed to the provided <see cref="ICommandContext"/>'s channel.
+        /// </summary>
+        /// <param name="embed"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async Task SendEmbedAsync(EmbedBuilder embed, ICommandContext context)
+        {
+            await context.Channel.SendMessageAsync(embed: embed.Build());
+        }
+
+        /// <summary>
         /// Sends a basic <see cref="KaguyaEmbedBuilder"/> in chat with a red color.
         /// </summary>
         /// <param name="description"></param>

@@ -235,7 +235,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 };
             }
 
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(embed: _embed.Build());
+            if(server.LogVoiceChannelConnections != 0)
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(embed: _embed.Build());
         }
     }
 }

@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using Discord;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
@@ -21,6 +22,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                  "same as setting the volume to zero.\n\n" +
                  "The maximum total volume a player may have is `250`, and the lowest is `0`.")]
         [Remarks("<amount>\n70\n+50\n-35\nmute")]
+        [RequireUserPermission(GuildPermission.Connect)]
+        [RequireBotPermission(GuildPermission.Connect)]
         [RequireContext(ContextType.Guild)]
         public async Task Command(string amount = null)
         {

@@ -26,8 +26,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
             if (server.IsPremium || user.IsSupporter)
             {
-                var playInstance = new Play();
-                var data = await playInstance.SearchAndPlay(Context, query, SearchProvider.Soundcloud);
+                var playInstance = new Search();
+                var data = await playInstance.SearchAndPlay(Context, query, false, SearchProvider.Soundcloud);
 
                 if(data != null)
                     await InlineReactionReplyAsync(data);
