@@ -34,7 +34,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             foreach (var guild in ConfigProperties.Client.Guilds)
             {
                 i++;
-                j--;
                 await guild.DefaultChannel.SendMessageAsync(notifyStr);
                 await ConsoleLogger.LogAsync($"{i}/{j} guilds notified of V2 changes.", LogLvl.WARN);
             }

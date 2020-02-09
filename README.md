@@ -65,6 +65,9 @@ rarer fish! Be wary though, as better bait will be needed to catch rarer fish mo
 - Reduced fishing cooldown (15s => 5s).
 - 25% off fishing bait purchase price.
 - Increased maximum betting range for games (50,000 => 500,000)
+- Access to $soundcloud music streaming in any server shared with Kaguya.
+- Access to $twitchaudio music streaming in any server shared with Kaguya.
+- Unlimited duration on songs (compared to 10 minutes).
 
 ## Kaguya Premium (Monthly Subscription):
 #### Kaguya Premium Features
@@ -77,5 +80,4 @@ including images and anything else that a user may upload to the server.
 - Access to `$serverstats` command which displays many stats about your server.
 - Server-wide access to $soundcloud music searching.
 - Server-wide access to $twitchaudio audio streaming.
-- Server-wide access to $mixeraudio audio streaming.
 - Server-wide unlimited duration on songs (compared to 10 minutes).
