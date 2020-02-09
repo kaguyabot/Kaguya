@@ -12,7 +12,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class AssignAllRoles : KaguyaBase
     {
-        [AdminCommand]
         [PremiumServerCommand]
         [Command("AssignAllRoles", RunMode = RunMode.Async)]
         [Alias("aar")]

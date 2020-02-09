@@ -101,7 +101,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             else
             {
                 // Limit track duration to 10 minutes for non-supporters/premium servers.
-                tracks = (IReadOnlyList<LavaTrack>)result.Tracks.Where(x => x.Duration.TotalMinutes < 10);
+                tracks = result.Tracks.Where(x => x.Duration.TotalMinutes < 10).ToList();
             }
 
             if (tracks.Count == 0)

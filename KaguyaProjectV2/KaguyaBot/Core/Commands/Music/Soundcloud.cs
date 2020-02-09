@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         public async Task Command([Remainder]string query)
         {
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.Guild.Id);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
             if (server.IsPremium || user.IsSupporter)
             {

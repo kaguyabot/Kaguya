@@ -106,8 +106,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             #endregion
 
             TimeSpan ts = $"{newKey.LengthInSeconds}s".ParseToTimespan();
-            expirationDate += DateTime.Now.AddSeconds(ts.TotalSeconds).ToOADate();
-            expirationDate -= DateTime.Now.ToOADate();
+            expirationDate += DateTime.Now.AddSeconds(newKey.LengthInSeconds).ToOADate();
+
+            if(existingSupporterKeys.Any(x => x.UserId == user.UserId))
+                expirationDate -= DateTime.Now.ToOADate();
+            if(existingPremiumKeys.All(x => x.ServerId != Context.Guild.Id))
+                expirationDate += DateTime.Now.ToOADate();
 
             user.TotalDaysSupported += (int)TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
             int totalDaysSupported = user.TotalDaysSupported;
@@ -175,7 +179,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             // 13 cents per day for supporter.
             // $2.69 per day for the server.
             // 1 day of supporter = 0.04 days of server uptime
-            return (AVERAGE_MONTHLY_SUPPORTER_PAYMENT / 30) / (MONTHLY_SERVER_FEE / 30) * totalDaysSupported;
+            return AVERAGE_MONTHLY_SUPPORTER_PAYMENT / 30 / (MONTHLY_SERVER_FEE / 30) * totalDaysSupported;
         }
     }
 }

@@ -17,8 +17,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [Command("RemoveRoleReward")]
         [Alias("rrr")]
         [Summary("Allows an administrator to remove a role from being given out as a " +
-                 "level-up reward, or disable all roles for being given out for a given level.")]
-        [Remarks("<level>\n<role name or ID>\nSomeRoleName\n10\n675870125353861160")]
+                 "level-up reward, or disable all roles for being given out for a given level. " +
+                 "You may also `clear` your list and remove every role reward at once.")]
+        [Remarks("<level>\n<role name or ID>\nclear\nSomeRoleName\n10\n675870125353861160")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         [RequireContext(ContextType.Guild)]
@@ -27,6 +28,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             SocketRole role = null;
             int level = 0;
+
+            if (arg.ToLower() == "clear")
+            {
+                await DatabaseQueries.DeleteAllForServerAsync<ServerRoleReward>(server.ServerId);
+                await SendBasicSuccessEmbedAsync($"Successfully cleared this server's role-reward configuration(s).");
+                return;
+            }
 
             if (arg.AsInteger(false) == 0 && arg.AsUlong(false) == 0)
             {

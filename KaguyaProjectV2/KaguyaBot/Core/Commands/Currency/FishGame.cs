@@ -43,8 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                                   $"`{server.CommandPrefix}buybait` command!",
                     Footer = new EmbedFooterBuilder
                     {
-                        Text = $"Bait costs {Fish.BAIT_COST} points ({Fish.SUPPORTER_BAIT_COST} for " +
-                               $"active [Kaguya Supporters]({GlobalProperties.KAGUYA_STORE_URL})."
+                        Text = $"Bait costs {Fish.BAIT_COST} points ({Fish.SUPPORTER_BAIT_COST} if supporter)."
                     }
                 };
                 await SendEmbedAsync(baitEmbed);
