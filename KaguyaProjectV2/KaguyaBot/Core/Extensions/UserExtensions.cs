@@ -66,7 +66,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <returns></returns>
         public static double ServerLevel(this User user, Server server)
         {
-            return GlobalProperties.CalculateLevelFromExp(server.ServerExp.First(x => x.UserId == user.UserId).Exp);
+            return GlobalProperties.CalculateLevelFromExp(user.ServerExp(server));
         }
 
         /// <summary>
@@ -105,7 +105,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
         public static int ServerExp(this User user, Server server)
         {
-            return server.ServerExp.First(x => x.UserId == user.UserId).Exp;
+            if(server.ServerExp.Count() != 0)
+                return server.ServerExp?.First(x => x?.UserId == user.UserId)?.Exp ?? 0;
+            return 0;
         }
 
         public static double PercentToNextLevel(this User user)

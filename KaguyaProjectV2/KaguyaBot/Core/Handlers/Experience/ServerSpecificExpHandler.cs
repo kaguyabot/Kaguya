@@ -112,24 +112,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             }
         }
 
-        private static async Task<bool> CanGetExperience(IEnumerable<ServerExp> serverExp, Server server, User user)
+        private static async Task<bool> CanGetExperience(IReadOnlyCollection<ServerExp> serverExp, Server server, User user)
         {
-            try
+            var match = serverExp?.FirstOrDefault(x => x?.UserId == user?.UserId);
+            if (match != null)
             {
                 double twoMinutesAgo = DateTime.Now.AddSeconds(-120).ToOADate();
-                return twoMinutesAgo >= serverExp.FirstOrDefault(x => x.UserId == user.UserId)?.LatestExp;
+                // ReSharper disable PossibleNullReferenceException
+                return twoMinutesAgo >= serverExp.FirstOrDefault(x => x.UserId == user.UserId).LatestExp;
+                // ReSharper restore PossibleNullReferenceException
             }
-            catch (NullReferenceException)
+
+            await DatabaseQueries.InsertAsync(new ServerExp
             {
-                await DatabaseQueries.InsertAsync(new ServerExp
-                {
-                    Exp = 0,
-                    LatestExp = 0,
-                    ServerId = server.ServerId,
-                    UserId = user.UserId
-                });
-                return true;
-            }
+                Exp = 0,
+                LatestExp = 0,
+                ServerId = server.ServerId,
+                UserId = user.UserId
+            });
+            return true;
         }
 
         private static double ReturnLevel(Server server, User user)

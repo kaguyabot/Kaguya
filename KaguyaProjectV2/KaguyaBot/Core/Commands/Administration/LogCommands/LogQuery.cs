@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
     {
         public static string[] AllLogTypes =
         {
-            "ModLog", "DeletedMessages", "UpdatedMessages", "FilteredPhrases", "UserJoins", "UserLeaves", "Kicks",
+            "ModLog", "DeletedMessages", "UpdatedMessages", "FilteredPhrases", "UserJoins", "UserLeaves",
             "Bans", "Unbans", "VoiceConnections", "LevelAnnouncements", "FishLevels", "AntiRaid", "Greetings", "TwitchNotifications", 
             "All"
         };
@@ -53,7 +53,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "filteredphrases": server.LogFilteredPhrases = channel.Id; break;
                         case "userjoins": server.LogUserJoins = channel.Id; break;
                         case "userleaves": server.LogUserLeaves = channel.Id; break;
-                        case "kicks": server.LogKicks = channel.Id; break;
                         case "bans": server.LogBans = channel.Id; break;
                         case "unbans": server.LogUnbans = channel.Id; break;
                         case "voiceconnections": server.LogVoiceChannelConnections = channel.Id; break;
@@ -71,7 +70,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogFilteredPhrases = channel.Id;
                                 server.LogUserJoins = channel.Id;
                                 server.LogUserLeaves = channel.Id;
-                                server.LogKicks = channel.Id;
                                 server.LogBans = channel.Id;
                                 server.LogUnbans = channel.Id;
                                 server.LogVoiceChannelConnections = channel.Id;
@@ -96,7 +94,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "filteredphrases": server.LogFilteredPhrases = 0; break;
                         case "userjoins": server.LogUserJoins = 0; break;
                         case "userleaves": server.LogUserLeaves = 0; break;
-                        case "kicks": server.LogKicks = 0; break;
                         case "bans": server.LogBans = 0; break;
                         case "unbans": server.LogUnbans = 0; break;
                         case "voiceconnections": server.LogVoiceChannelConnections = 0; break;
@@ -114,7 +111,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogFilteredPhrases = 0;
                                 server.LogUserJoins = 0;
                                 server.LogUserLeaves = 0;
-                                server.LogKicks = 0;
                                 server.LogBans = 0;
                                 server.LogUnbans = 0;
                                 server.LogVoiceChannelConnections = 0;

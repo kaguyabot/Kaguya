@@ -37,8 +37,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ulong LogBans { get; set; }
         [Column(Name = "Unbans"), Nullable]
         public ulong LogUnbans { get; set; }
-        [Column(Name = "Kicks"), Nullable]
-        public ulong LogKicks { get; set; }
         [Column(Name = "VoiceChannelConnections"), Nullable]
         public ulong LogVoiceChannelConnections { get; set; }
         [Column(Name = "LevelAnnouncements"), Nullable]
@@ -57,6 +55,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public string CustomGreeting { get; set; }
         [Column(Name = "CustomGreetingIsEnabled"), NotNull]
         public bool CustomGreetingIsEnabled { get; set; }
+        [Column(Name = "LevelAnnouncementsEnabled"), NotNull]
+        public bool LevelAnnouncementsEnabled { get; set; }
         public double PremiumExpirationDate
         {
             get
@@ -118,7 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public IEnumerable<ServerExp> ServerExp { get; set; }
 
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
-        public IEnumerable<Praise> Rep { get; set; }
+        public IEnumerable<Praise> Praise { get; set; }
 
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<AntiRaidConfig> AntiRaid { get; set; }

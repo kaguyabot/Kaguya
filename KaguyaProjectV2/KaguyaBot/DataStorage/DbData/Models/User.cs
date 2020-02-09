@@ -121,5 +121,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "UserId", OtherKey = "UserId")]
         public IEnumerable<Reminder> Reminders { get; set; }
+
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        public IEnumerable<CommandHistory> CommandHistory { get; set; }
     }
 }

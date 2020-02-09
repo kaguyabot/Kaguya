@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Column(Name = "userblacklists")]
+    [Table(Name = "userblacklists")]
     public class UserBlacklist : IKaguyaQueryable<UserBlacklist>, IKaguyaUnique<UserBlacklist>, IUserSearchable<UserBlacklist>
     {
         [PrimaryKey]

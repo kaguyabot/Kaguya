@@ -358,6 +358,26 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
+#if DEBUG
+        public static async Task DeleteAllAsync<T>() where T : class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                var records = await db.GetTable<T>().ToListAsync();
+
+                if (records.Count > 0)
+                {
+                    foreach (var record in records)
+                    {
+                        await db.DeleteAsync(record);
+                    }
+                }
+
+                await ConsoleLogger.LogAsync($"Deleted all records of type {typeof(T)}", LogLvl.WARN);
+            }
+        }
+#endif
+
         /// <summary>
         /// Deletes all objects from the database that are specified in <see cref="args"/>
         /// </summary>
