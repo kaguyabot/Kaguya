@@ -50,14 +50,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task SetPrefix()
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            server.CommandPrefix = "$";
-            await DatabaseQueries.UpdateAsync(server);
-
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+            var embed = new KaguyaEmbedBuilder(EmbedColor.VIOLET)
             {
-                Description = "Reset the prefix back to `$`."
+                Description = $"Your current command prefix is `{server.CommandPrefix}`"
             };
-            embed.SetColor(EmbedColor.VIOLET);
 
             await ReplyAsync(embed: embed.Build());
         }

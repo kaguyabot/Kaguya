@@ -58,6 +58,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 
         public static double GetFishLevel(int exp)
         {
+            if (exp < 64)
+                return 0;
             return Math.Sqrt((exp / 8) + -8); // Same as normal EXP.
         }
 

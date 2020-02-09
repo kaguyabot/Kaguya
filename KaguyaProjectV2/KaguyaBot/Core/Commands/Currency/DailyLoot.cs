@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -12,28 +13,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
     {
         [CurrencyCommand]
         [Command("DailyLoot")]
-        [Alias("daily", "d")]
+        [Alias("daily", "d", "timely")]
         [Summary("Claim your daily loot or give it to somebody else! Rewards increased " +
                  "if given to another user.")]
         [Remarks("<user>")]
-        public async Task Command()
+        public async Task Command(SocketGuildUser guildUser = null)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-
             if (!user.CanGetTimelyPoints)
             {
                 await SendBasicErrorEmbedAsync($"You must wait " +
-                                                               $"`{(DateTime.Now - DateTime.FromOADate(user.LatestTimelyBonus)).Humanize()}` " +
-                                                               $"before you may claim this bonus.");
+                                               $"`{(DateTime.Now - DateTime.FromOADate(user.LatestTimelyBonus)).Humanize()}` " +
+                                               $"before you may claim this bonus.");
                 return;
             }
 
-            Random r = new Random();
-
-            var points = r.Next(35, 210);
+            var r = new Random();
+            var points = r.Next(35, 700);
             var exp = r.Next(8, 112);
 
+            user.Points += points;
+            user.Experience += exp;
 
+            await SendBasicSuccessEmbedAsync($"{Context.User.Mention} Successfully received " +
+                                             $"`+{points} points` and `+{exp} exp`!");
+            await DatabaseQueries.UpdateAsync(user);
         }
     }
 }
