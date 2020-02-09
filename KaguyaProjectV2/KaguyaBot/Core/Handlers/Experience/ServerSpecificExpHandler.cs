@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 // ReSharper disable RedundantAssignment
 
@@ -91,7 +92,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                     return;
 
                 var xp = new XpImage();
-
                 if (user.ExpChatNotificationType == ExpType.Server || user.ExpChatNotificationType == ExpType.Both)
                 {
                     var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User, server);
@@ -108,6 +108,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 {
                     var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User, server);
                     await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                }
+
+                // Server level-up reward stuffs.
+
+                var serverRoleRewards = server.RoleRewards.ToList();
+                if (serverRoleRewards.Count > 0)
+                {
+                    foreach (var item in serverRoleRewards)
+                    {
+                        if (user.ServerLevel(server).Rounded(RoundDirection.Down) == item.Level)
+                        {
+                            var targetRole = context.Guild.Roles.First(x => x.Id == item.RoleId);
+                            // ReSharper disable PossibleNullReferenceException
+                            await (context.User as SocketGuildUser).AddRoleAsync(targetRole);
+                            await ConsoleLogger.LogAsync($"User {user.UserId} received level-up role reward in guild " +
+                                                         $"{server.ServerId}. Role Name: {targetRole.Name}", LogLvl.DEBUG);
+                            // ReSharper restore PossibleNullReferenceException
+                        }
+                    }
                 }
             }
         }

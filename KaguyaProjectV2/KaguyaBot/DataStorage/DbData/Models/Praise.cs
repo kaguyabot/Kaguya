@@ -19,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "Reason"), NotNull]
         public string Reason { get; set; }
 
-        [Association(ThisKey = "ServerId", OtherKey = "Id")]
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public Server Server { get; set; }
     }
 }

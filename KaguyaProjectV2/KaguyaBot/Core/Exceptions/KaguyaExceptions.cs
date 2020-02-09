@@ -59,7 +59,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Exceptions
 
         private static string KaguyaPremiumExceptionMessage(string msg = null)
         {
-            return msg + $"\nSorry, only servers with an active [Kaguya Premium]({ConfigProperties.KaguyaStore}) subscription are allowed to use this feature.";
+            return $"\nSorry, only servers with an active [Kaguya Premium]({ConfigProperties.KaguyaStore}) subscription are allowed to use this feature.\n\n`{msg}`";
         }
     }
 }

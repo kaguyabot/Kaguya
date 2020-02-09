@@ -14,11 +14,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             return false;
         }
 
-        public static int AsInteger(this string numString)
+        public static int AsInteger(this string numString, bool throwException = true)
         {
             if (int.TryParse(numString, out int result))
                 return result;
-            throw new NullReferenceException("Could not parse string to int.");
+            if (throwException)
+                throw new NullReferenceException("Could not parse string to int.");
+            return 0;
         }
 
         /// <summary>

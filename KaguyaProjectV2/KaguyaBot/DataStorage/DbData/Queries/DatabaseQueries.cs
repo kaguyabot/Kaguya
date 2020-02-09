@@ -47,16 +47,17 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     await ConsoleLogger.LogAsync($"Server {Id} created.", LogLvl.DEBUG);
                 }
 
-                return await (db.Servers
+                return await db.Servers
                     .LoadWith(x => x.AntiRaid)
                     .LoadWith(x => x.AutoAssignedRoles)
                     .LoadWith(x => x.BlackListedChannels)
                     .LoadWith(x => x.FilteredPhrases)
                     .LoadWith(x => x.MutedUsers)
+                    .LoadWith(x => x.Praise)
                     .LoadWith(x => x.ServerExp)
+                    .LoadWith(x => x.RoleRewards)
                     .LoadWith(x => x.WarnedUsers)
-                    .LoadWith(x => x.MutedUsers)
-                    .Where(s => s.ServerId == Id).FirstAsync());
+                    .Where(s => s.ServerId == Id).FirstAsync();
             }
         }
 
