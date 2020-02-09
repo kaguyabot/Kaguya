@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -21,8 +20,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [DangerousCommand]
         [Command("MigrateAllData", RunMode = RunMode.Async)]
         [Summary("Migrates all data from the old bot into the new database.")]
-        [Remarks("")]
-        public async Task Command()
+        [Remarks("<Accounts file path> <Servers file path>")]
+        public async Task Command(string accountsFilePath, string serversFilePath)
         {
             await ReplyAsync($"{Context.User.Mention} Clearing database...");
 
@@ -41,9 +40,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             await DatabaseQueries.DeleteAllAsync<User>();
             await DatabaseQueries.DeleteAllAsync<Server>();
 
-            var accountsFilePath = @"C:\Users\Stage\Desktop\accounts.json";
-            var serversFilePath = @"C:\Users\Stage\Desktop\servers.json";
-
             var userjsonText = await File.ReadAllTextAsync(accountsFilePath);
             var oldUserJson = JsonConvert.DeserializeObject<List<OldUser>>(userjsonText);
 
@@ -57,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             var existingUsers = await DatabaseQueries.GetAllAsync<User>();
             var existingServers = await DatabaseQueries.GetAllAsync<Server>();
 
-            foreach (var u in oldUserJson.ToArray()[..100])
+            foreach (var u in oldUserJson)
             {
                 var newUser = new User
                 {
@@ -137,7 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             await ReplyAsync($"{Context.User.Mention} User objects stored in memory.");
             await ReplyAsync($"{Context.User.Mention} beginning migration of servers into database...");
 
-            foreach (var server in oldServerJson.ToArray()[..100])
+            foreach (var server in oldServerJson)
             {
                 var newServer = new Server
                 {

@@ -175,11 +175,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
                 if (player.PlayerState == PlayerState.Playing)
                 {
-                    player.Queue.Enqueue(trackSel);
-
-                    if (player.Track.IsStream)
+                    if (player.Queue.Items.Count() == 50 && !server.IsPremium)
                     {
-                        await player.SkipAsync();
+                        await SendBasicErrorEmbedAsync($"Your queue is full! `50 songs` is the maximum " +
+                                                       $"for non [Kaguya Premium]({GlobalProperties.KAGUYA_STORE_URL}) " +
+                                                       $"servers.");
+                    }
+                    else
+                    {
+                        player.Queue.Enqueue(trackSel);
+                        if (player.Track.IsStream)
+                        {
+                            await player.SkipAsync();
+                        }
                     }
                 }
                 else
@@ -227,11 +235,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
                     if (player.PlayerState == PlayerState.Playing)
                     {
-                        player.Queue.Enqueue(trackSel);
-
-                        if (player.Track.IsStream)
+                        if (player.Queue.Items.Count() == 50 && !server.IsPremium)
                         {
-                            await player.SkipAsync();
+                            await SendBasicErrorEmbedAsync($"Your queue is full! `50 songs` is the maximum " +
+                                                           $"for non [Kaguya Premium]({GlobalProperties.KAGUYA_STORE_URL}) " +
+                                                           $"servers.");
+                            return;
+                        }
+                        else
+                        {
+                            player.Queue.Enqueue(trackSel);
+
+                            if (player.Track.IsStream)
+                            {
+                                await player.SkipAsync();
+                            }
                         }
                     }
                     else

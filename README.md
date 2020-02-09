@@ -49,8 +49,7 @@ rarer fish! Be wary though, as better bait will be needed to catch rarer fish mo
 ## Quality of life Changes:
 
 - 1-4 points are now earned automatically for typing in chat at the same time you earn exp. *Only being able to earn points through betting and "timely" claims was unfun. Now, points can be earned passively so that you can buy fish bait, bet, etc. whenever it's convenient!*
-- NSFW age verification requirement has been removed.
-- 
+- NSFW age verification requirement has been removed. *It's implied that anyone with access to a NSFW-marked channel is already of age.*
 
 ## Kaguya Supporter (Monthly Subscription):
 #### Supporter Only Features
@@ -81,3 +80,4 @@ including images and anything else that a user may upload to the server.
 - Server-wide access to $soundcloud music searching.
 - Server-wide access to $twitchaudio audio streaming.
 - Server-wide unlimited duration on songs (compared to 10 minutes).
+- Unlimited song queue size (compared to 50 songs).
