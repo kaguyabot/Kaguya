@@ -18,9 +18,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         {
             string[] directories =
             {
-                resourcesPath + "Logs",
+                resourcesPath + "Fonts",
                 resourcesPath + "Images",
-                resourcesPath + "Images\\Hentai",
                 resourcesPath + "Logs",
                 resourcesPath + "Logs\\Debug"
             };
@@ -37,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 EnsurePathExists(dir); // If these directories don't exist, create them.
             }
 
-            if (args.Length != 0 && args.Length == 15)
+            if (args.Length != 0 && args.Length == 16)
             {
                 var model = new ConfigModel
                 {
@@ -46,16 +45,17 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                     LogLevelNumber = args[2].AsInteger(),
                     DefaultPrefix = args[3],
                     OsuApiKey = args[4],
-                    TopGGApiKey = args[5],
-                    TopGGAuthorizationPassword = args[6],
-                    MySQL_Username = args[7],
-                    MySQL_Password = args[8],
-                    MySQL_Server = args[9],
-                    MySQL_Database = args[10],
-                    TwitchClientId = args[11],
-                    TwitchAuthToken = args[12],
-                    DanbooruUsername = args[13],
-                    DanbooruApiKey = args[14]
+                    TillerinoApiKey = args[5],
+                    TopGGApiKey = args[6],
+                    TopGGAuthorizationPassword = args[7],
+                    MySQL_Username = args[8],
+                    MySQL_Password = args[9],
+                    MySQL_Server = args[10],
+                    MySQL_Database = args[11],
+                    TwitchClientId = args[12],
+                    TwitchAuthToken = args[13],
+                    DanbooruUsername = args[14],
+                    DanbooruApiKey = args[15]
                 };
 
                 return model;
@@ -70,14 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             {
                 //Reads config file.
                 var model = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(configFilePath));
-                if (model == null)
-                {
-                    return JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath));
-                }
-                else
-                {
-                    return model;
-                }
+                return model ?? JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath));
             }
         }
 
@@ -134,6 +127,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         public int LogLevelNumber { get; set; } = 1;
         public string DefaultPrefix { get; set; } = "$";
         public string OsuApiKey { get; set; }
+        public string TillerinoApiKey { get; set; }
         public string TopGGApiKey { get; set; }
         public string TopGGAuthorizationPassword { get; set; }
         public string MySQL_Username { get; set; }

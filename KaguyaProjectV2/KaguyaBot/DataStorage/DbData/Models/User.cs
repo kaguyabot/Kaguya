@@ -23,6 +23,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int Points { get; set; }
         [Column(Name = "OsuId"), NotNull]
         public int OsuId { get; set; }
+        [Column(Name = "OsuBeatmapsLinked"), NotNull]
+        public int OsuBeatmapsLinked { get; set; }
         [Column(Name = "CommandUses"), NotNull]
         public int TotalCommandUses { get; set; }
         [Column(Name = "TotalDaysSupported"), NotNull]
@@ -54,26 +56,26 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int TotalQuickdrawLosses { get; set; }
         [Column(Name = "FishBait"), NotNull]
         public int FishBait { get; set; }
-        [Column(Name = "TotalTradedFish"), NotNull]
-        public int TotalTradedFish { get; set; }
+        [Column(Name = "TotalUpvotes"), NotNull]
+        public int TotalUpvotes { get; set; }
         [Column(Name = "BlacklistExpiration"), NotNull]
         public double BlacklistExpiration { get; set; }
         [Column(Name = "LatestExp"), NotNull]
         public double LatestExp { get; set; }
-        [Column(Name = "LatestFishExp"), NotNull]
-        public double LatestFishExp { get; set; }
-        [Column(Name = "LatestTimelyBonus"), NotNull]
-        public double LatestTimelyBonus { get; set; }
-        [Column(Name = "LatestWeeklyBonus"), NotNull]
-        public double LatestWeeklyBonus { get; set; }
+        [Column(Name = "LatestDailyBonus"), NotNull]
+        public double LatestDailyBonus { get; set; }
         [Column(Name = "LastGivenRep"), NotNull]
         public double LastGivenRep { get; set; }
         [Column(Name = "LastRatelimited"), NotNull]
         public double LastRatelimited { get; set; }
         [Column(Name = "LastFished"), NotNull]
         public double LastFished { get; set; }
-        [Column(Name = "UpvoteBonusExpiration"), NotNull]
-        public double UpvoteBonusExpiration { get; set; }
+        [Column(Name = "LastUpvoted"), NotNull]
+        public double LastUpvoted { get; set; }
+        [Column(Name = "LastRemindedToUpvote"), NotNull]
+        public double LastRemindedToUpvote { get; set; }
+        [Column(Name = "UpvoteReminderSent"), NotNull]
+        public bool UpvoteReminderSent { get; set; }
 
         /// <summary>
         /// If a user wants to receive level-up notifications in chat, what type should it be?
@@ -107,8 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public List<Rep> Rep => DatabaseQueries.GetAllForUserAsync<Rep>(UserId).Result;
         public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
-        public bool CanGetTimelyPoints => DateTime.Now.AddHours(-24).ToOADate() < LatestTimelyBonus;
-        public bool CanGetWeeklyPoints => DateTime.Now.AddHours(-168).ToOADate() < LatestWeeklyBonus;
+        public bool CanGetDailyPoints => LatestDailyBonus < DateTime.Now.AddHours(-24).ToOADate();
 
         /// <summary>
         /// FK_KaguyaUser_GambleHistory_BackReference

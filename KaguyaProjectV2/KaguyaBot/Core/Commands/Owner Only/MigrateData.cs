@@ -1,6 +1,5 @@
 ﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Osu.Builders;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -11,6 +10,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Osu;
+using OsuSharp;
+using User = KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models.User;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -55,12 +57,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
             foreach (var u in oldUserJson)
             {
+                var osuUser = await OsuBase.client.GetUserByUsernameAsync(u.OsuUsername, GameMode.Standard);
+                int osuId = osuUser == null ? 0 : (int)osuUser.UserId;
+
                 var newUser = new User
                 {
                     UserId = u.ID,
                     Experience = u.EXP,
                     Points = u.Points + (u.Diamonds * 10),
-                    OsuId = new OsuUserBuilder(u.OsuUsername).Execute()?.UserId ?? 0,
+                    OsuId = osuId,
                     TotalCommandUses = 0,
                     TotalDaysSupported = 0,
                     TotalNSFWImages = 0,
@@ -75,11 +80,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     TotalQuickdrawLosses = u.QuickdrawLosses,
                     BlacklistExpiration = 0,
                     LatestExp = 0,
-                    LatestTimelyBonus = 0,
-                    LatestWeeklyBonus = 0,
+                    LatestDailyBonus = 0,
                     LastGivenRep = 0,
                     LastRatelimited = 0,
-                    UpvoteBonusExpiration = 0
+                    LastUpvoted = 0
                 };
 
                 if (existingUsers.All(x => x.UserId != newUser.UserId))

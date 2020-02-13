@@ -1,16 +1,16 @@
 ﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.Core.Osu.Builders;
+using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using OsuSharp;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 {
     public class OsuSet : KaguyaBase
     {
-        public KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
-
         [OsuCommand]
         [Command("osuSet")]
         [Summary("Allows a user to store their osu! username or ID in their Kaguya account. " +
@@ -19,22 +19,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         [Remarks("<username or ID>\nSomeUser\nSome user with spaces")]
         public async Task OsuSetCommand([Remainder]string username)
         {
-            var playerObject = new OsuUserBuilder(username).Execute();
+            KaguyaEmbedBuilder embed;
+            User playerObject = username.AsUlong(false) == 0
+                ? await OsuBase.client.GetUserByUsernameAsync(username, GameMode.Standard)
+                : await OsuBase.client.GetUserByUserIdAsync((long)username.AsUlong(), GameMode.Standard);
+
             if (playerObject == null)
             {
-                embed.WithDescription($"{Context.User.Mention} **ERROR: This username does not match a valid osu! username!**");
-                embed.SetColor(EmbedColor.RED);
-                await ReplyAsync(embed: embed.Build());
+                await SendBasicErrorEmbedAsync($"The username you provided doesn't match an existing osu! player.");
                 return;
             }
 
             //Getting user profile database object and updating it.
-            var userAccount = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            userAccount.OsuId = playerObject.UserId;
-            await DatabaseQueries.UpdateAsync(userAccount);
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
-            embed.WithTitle("osu! Username Set");
-            embed.WithDescription($"{Context.User.Mention} **Your new username has been set! Changed to `{playerObject.Username}`.**");
+            user.OsuId = (int)playerObject.UserId;
+            await DatabaseQueries.UpdateAsync(user);
+
+            embed = new KaguyaEmbedBuilder
+            {
+                Title = "osu! Username",
+                Description = $"Your osu! username has been set to `{playerObject.Username}`."
+            };
 
             await ReplyAsync(embed: embed.Build());
         }

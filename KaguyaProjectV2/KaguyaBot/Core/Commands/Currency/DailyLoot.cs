@@ -20,11 +20,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         public async Task Command(SocketGuildUser guildUser = null)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            if (!user.CanGetTimelyPoints)
+            if (!user.CanGetDailyPoints)
             {
-                await SendBasicErrorEmbedAsync($"You must wait " +
-                                               $"`{(DateTime.Now - DateTime.FromOADate(user.LatestTimelyBonus)).Humanize()}` " +
-                                               $"before you may claim this bonus.");
+                var dt = DateTime.FromOADate(user.LatestDailyBonus).AddHours(24);
+                await SendBasicErrorEmbedAsync($"You must wait `{dt.Humanize(false)}` " +
+                                               $"before you may claim this bonus."); 
                 return;
             }
 
@@ -34,6 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             user.Points += points;
             user.Experience += exp;
+            user.LatestDailyBonus = DateTime.Now.ToOADate();
 
             await SendBasicSuccessEmbedAsync($"{Context.User.Mention} Successfully received " +
                                              $"`+{points} points` and `+{exp} exp`!");

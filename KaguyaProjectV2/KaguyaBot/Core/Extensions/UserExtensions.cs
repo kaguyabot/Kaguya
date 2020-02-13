@@ -174,7 +174,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
             return nextLevelExp - curLevelExp;
         }
-
         #endregion
+
+        public static bool HasRecentlyUsedNSFWCommands(this User user, int days = 7)
+        {
+            return user.CommandHistory?.Where(x => x.Command == "nsfw")
+                .All(x => x?.Timestamp < DateTime.Now.AddDays(-days)) ?? false;
+        }
     }
 }

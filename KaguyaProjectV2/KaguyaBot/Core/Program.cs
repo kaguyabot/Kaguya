@@ -1,23 +1,25 @@
 ﻿using Discord;
 using Discord.Net;
 using Discord.WebSocket;
+using DiscordBotsList.Api;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
+using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.DependencyInjection;
+using OsuSharp;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using TwitchLib.Api;
-using TwitchLib.Api.Services;
 using Victoria;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
@@ -60,8 +62,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 try
                 {
                     var _config = await Config.GetOrCreateConfigAsync(args);
-
                     GlobalPropertySetup(_config);
+
                     SetupTwitch();
 
                     LogEventListener.Listener();
@@ -87,8 +89,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     if (AllShardsLoggedIn(_client, config))
                     {
                         ConfigProperties.LavaNode = _lavaNode;
+                        OsuBase.client = new OsuClient(new OsuSharpConfiguration
+                        {
+                            ApiKey = _config.OsuApiKey
+                        });
                     }
 
+                    // Keep the app running.
                     await Task.Delay(-1);
                 }
                 catch (HttpException e)
@@ -116,6 +123,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             ConfigProperties.Client = _client;
             ConfigProperties.BotConfig = _config;
             ConfigProperties.LogLevel = (LogLvl)_config.LogLevelNumber;
+            ConfigProperties.TopGGApi = new AuthDiscordBotListApi(538910393918160916, _config.TopGGApiKey);
         }
 
         private async Task TestDatabaseConnection()
@@ -139,10 +147,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             _api = new TwitchAPI();
             _api.Settings.ClientId = ConfigProperties.BotConfig.TwitchClientId;
             _api.Settings.AccessToken = ConfigProperties.BotConfig.TwitchAuthToken;
-
-            var monitor = new LiveStreamMonitorService(_api, 30);
-            monitor.OnStreamOnline += TwitchNotificationsHandler.OnStreamOnline;
-
             ConfigProperties.TwitchApi = _api;
         }
 
@@ -157,6 +161,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await RateLimitService.Initialize();
             await RemindService.Initialize();
             await NSFWImageHandler.Initialize();
+            await KaguyaPremiumExpirationHandler.Initialize();
+            await TopGGUpvoteHandler.Initialize();
+
+            await ConsoleLogger.LogAsync($"All timers initialized.", LogLvl.WARN);
         }
 
         private void InitializeEventHandlers()

@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using DiscordBotsList.Api;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using NekosSharp;
 using System.IO;
@@ -13,6 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
     {
         public static DiscordShardedClient Client { get; set; }
         public static LavaNode LavaNode { get; set; }
+        public static AuthDiscordBotListApi TopGGApi { get; set; }
         public static TwitchAPI TwitchApi { get; set; }
         public static NekoClient NekoClient = new NekoClient("Kaguya");
         public static ConfigModel BotConfig { get; set; }

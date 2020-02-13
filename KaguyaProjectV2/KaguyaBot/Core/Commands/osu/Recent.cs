@@ -1,12 +1,16 @@
 ﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.Core.Osu.Builders;
-using KaguyaProjectV2.KaguyaBot.Core.Osu.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using OsuSharp;
+using OsuSharp.Oppai;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+
+// ReSharper disable PossibleInvalidOperationException
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 {
@@ -17,38 +21,44 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         [OsuCommand]
         [Command("osuRecent")]
         [Alias("recent", "r")]
-        [Summary("Displays the most recent osu! play for the user.")]
-        [Remarks("<username or ID> (Optional if configured with osuset already)")]
-        public async Task OsuRecentCommand([Remainder]string player = null)
+        [Summary("Displays the most recent osu! play for the user. If the user has spaces in their " +
+                 "username, wrap the name with quotation marks. You may see up to 5 of the user's most " +
+                 "recent plays at once via the `limit` property (default limit is 1).")]
+        [Remarks("[username, NOT ID] [limit] (Optional if configured with `osuset` already)\n" +
+                 "SomeName\n\"Name with spaces 123\" 3")]
+        public async Task OsuRecentCommand(string player = null)
         {
-            OsuUserModel userProfileObject = null;
-            if (player != null)
-                userProfileObject = new OsuUserBuilder(player).Execute();
+            var client = OsuBase.client;
+            var gameMode = GameMode.Standard;
 
-            if (userProfileObject == null)
+            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+
+            var osuPlayer = player == null
+                ? await client.GetUserByUserIdAsync(user.OsuId, gameMode)
+                : await client.GetUserByUsernameAsync(player, gameMode);
+
+            if (osuPlayer == null)
             {
-                userProfileObject = new OsuUserBuilder((await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id)).OsuId.ToString()).Execute();
-                if (userProfileObject == null)
-                {
-                    embed.WithTitle($"osu! Recent");
-                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! " +
-                                          $"Please specify a player or set your osu! username with " +
-                                          $"`{(await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
-                    await ReplyAsync(embed: embed.Build());
-                    return;
-                }
+                embed.WithTitle($"osu! Recent");
+                embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! " +
+                                      $"Please specify a player or set your osu! username with " +
+                                      $"`{server.CommandPrefix}osuset`!**");
+                await ReplyAsync(embed: embed.Build());
+                return;
             }
 
-            //Getting recent object.
-            var playerRecentObjectList = new OsuRecentBuilder(userProfileObject.UserId.ToString()).Execute();
+            var osuRecents = player == null
+                ? await client.GetUserRecentsByUserIdAsync(user.OsuId, GameMode.Standard, 1)
+                : await client.GetUserRecentsByUsernameAsync(player, GameMode.Standard, 1);
 
-            if (!playerRecentObjectList.Any())
+            if (!osuRecents.Any())
             {
                 embed.WithAuthor(author =>
                 {
                     author
-                        .WithName("" + userProfileObject.Username + " hasn't got any recent plays")
-                        .WithIconUrl("https://a.ppy.sh/" + userProfileObject.UserId);
+                        .WithName($"{osuPlayer.Username} hasn't got any recent plays")
+                        .WithIconUrl("https://a.ppy.sh/" + osuPlayer.UserId);
                 });
             }
             else
@@ -57,35 +67,43 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 embed.WithAuthor(author =>
                 {
                     author
-                        .WithName($"Most Recent osu! Standard Play for " + userProfileObject.Username)
-                        .WithIconUrl("https://a.ppy.sh/" + userProfileObject.UserId);
+                        .WithName($"Most Recent osu! {gameMode} Play for {osuPlayer.Username}")
+                        .WithIconUrl("https://a.ppy.sh/" + osuPlayer.UserId);
                 });
 
                 //Description
-                foreach (var playerRecentObject in playerRecentObjectList)
-                {
-                    embed.Description += $"▸ **{playerRecentObject.RankEmote}{playerRecentObject.ModString}** ▸ **[{playerRecentObject.Beatmap.Title} [{playerRecentObject.Beatmap.Version}]](https://osu.ppy.sh/b/{playerRecentObject.BeatmapId})** by **{playerRecentObject.Beatmap.Artist}**\n" +
-                        $"▸ **☆{playerRecentObject.Beatmap.Difficultyrating:F}** ▸ **{playerRecentObject.Accuracy:F}%**\n" +
-                        $"▸ **Combo:** `{playerRecentObject.MaxCombo:N0}x / {playerRecentObject.Beatmap.MaxCombo:N0}x`\n" +
-                        $"▸ [300 / 100 / 50 / X]: `[{playerRecentObject.Count300} / {playerRecentObject.Count100} / {playerRecentObject.Count50} / {playerRecentObject.Countmiss}]`\n" +
-                        $"▸ **Map Completion:** `{Math.Round(playerRecentObject.Completion, 2)}%`\n" +
-                        $"▸ **Full Combo Percentage:** `{(((double)playerRecentObject.MaxCombo / (double)playerRecentObject.Beatmap.MaxCombo) * 100):N2}%`\n";
+                var beatmap = await osuRecents[0].GetBeatmapAsync();
+                var pp = await beatmap.GetPPAsync((float) osuRecents[0].Accuracy);
 
-                    if (playerRecentObject == playerRecentObjectList[^1])
-                        embed.Description += $"▸ **PP for FC**: `{playerRecentObject.FullComboPP:N0}pp`";
-                    else
-                        embed.Description += $"▸ **PP for FC**: `{playerRecentObject.FullComboPP:N0}pp`\n";
-                }
+                embed.Description += $"▸ **{OsuBase.OsuGrade(osuRecents[0].Rank)}{osuRecents[0].Mods}** ▸ " +
+                                     $"**[{beatmap.Title} [{beatmap.Difficulty}]]" +
+                                     $"(https://osu.ppy.sh/b/{osuRecents[0].BeatmapId})** by **{beatmap.Artist}**\n" +
+                                     $"▸ **☆{beatmap.StarRating:F}** ▸ **{osuRecents[0].Accuracy:N2}%**\n" +
+                                     $"▸ **Combo:** `{osuRecents[0].MaxCombo:N0}x / {beatmap.MaxCombo:N0}x`\n" +
+                                     $"▸ `[{osuRecents[0].Count300} / {osuRecents[0].Count100} / " +
+                                     $"{osuRecents[0].Count50} / {osuRecents[0].Miss}]` ▸ " +
+                                     $"`[{osuRecents[0].Geki}激 / {osuRecents[0].Katu}喝]`\n" +
+                                     $"▸ **Map Completion:** `{MapCompletionPercent(osuRecents[0], beatmap) * 100:N2}%`\n" +
+                                     $"▸ **Max Combo Percentage:** `{(double)osuRecents[0].MaxCombo / beatmap.MaxCombo * 100:N2}%`\n";
+
+                embed.Description += $"▸ **PP for FC**: `{pp.Pp:N0}pp`\n";
 
                 //Footer
-                var difference = DateTime.UtcNow - playerRecentObjectList.LastOrDefault().Date;
+                var difference = DateTime.UtcNow - osuRecents.Last().Date.Value.ToLocalTime();
 
-                embed.WithFooter(playerRecentObjectList.Count > 1
-                    ? $"{userProfileObject.Username} performed this plays {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago."
-                    : $"{userProfileObject.Username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.");
+                embed.WithFooter(osuRecents.Count > 1
+                    ? $"{osuPlayer.Username} performed these plays {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago."
+                    : $"{osuPlayer.Username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.");
             }
 
             await ReplyAsync(embed: embed.Build());
+        }
+
+        private double MapCompletionPercent(Score score, Beatmap beatmap)
+        {
+            if(beatmap.MaxCombo == null)
+                throw new KaguyaSupportException("This score does not have a max combo, according to the API.");
+            return (double) (score.Count50 + score.Count100 + score.Count300 + score.Miss) / beatmap.MaxCombo.Value;
         }
     }
 }

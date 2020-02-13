@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                 foreach (var registeredUser in users)
                 {
-                    if (registeredUser.LastRatelimited < DateTime.Now.Add(TimeSpan.FromDays(-31)).ToOADate() &&
+                    if (registeredUser.LastRatelimited < DateTime.Now.Add(TimeSpan.FromDays(-30)).ToOADate() &&
                         registeredUser.RateLimitWarnings > 0)
                     {
                         registeredUser.RateLimitWarnings = 0;

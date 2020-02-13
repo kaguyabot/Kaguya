@@ -28,7 +28,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
             var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
             var fish = await DatabaseQueries.GetAllForServerAsync<Fish>(server.ServerId);
             var praise = await DatabaseQueries.GetAllForServerAsync<Praise>(server.ServerId);
-            var twitchChannels = await DatabaseQueries.GetAllForServerAsync<TwitchChannel>(server.ServerId);
             var warnedUsers = await DatabaseQueries.GetAllForServerAsync<WarnedUser>(server.ServerId);
             var commandHistory = await DatabaseQueries.GetAllForServerAsync<CommandHistory>(server.ServerId);
             var autoAssignedRoles = await DatabaseQueries.GetAllForServerAsync<AutoAssignedRole>(server.ServerId);
@@ -69,7 +68,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
                         Name = "Kaguya Statistics",
                         Value = $"Premium Expiration: `{DateTime.FromOADate(DateTime.Now.ToOADate() + premiumExpiration).Humanize(false)}`\n" +
                                 $"Total Praise Given: `{praise.Count:N0}`\n" +
-                                $"Active Twitch Channels: `{twitchChannels.Count:N0}`\n" +
                                 $"Total Fish Caught: `{fish?.Count(x => x.FishType != FishType.BAIT_STOLEN).ToString("N0") ?? "No fish caught."}`\n" +
                                 $"Rarest Fish Caught: `{fish?.OrderBy(x => x.FishType).First().FishType.ToString() ?? "No fish caught."}`\n" +
                                 $"Total Active Warnings: `{warnedUsers.Count:N0}`\n" +

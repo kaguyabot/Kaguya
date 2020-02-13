@@ -1,18 +1,11 @@
-﻿using System;
-using Humanizer;
-using Humanizer.Localisation;
+﻿using OsuSharp;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Osu
 {
-    public enum OsuRequest
+    public class OsuBase
     {
-        USER,
-        BEST_PERFORMANCE,
-        RECENT_PLAYED,
-    }
+        public static OsuClient client { get; internal set; }
 
-    public static class OsuExtension
-    {
         public static string ModeNames(int modnumber)
         {
             string modString = modnumber > 0 ? "+" : "";
@@ -69,11 +62,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu
         public static double OsuAccuracy(int count50, int count100, int count300, int countMiss)
         {
             return (double)100 * ((50 * count50) + (100 * count100) + (300 * count300)) / (300 * (countMiss + count50 + count100 + count300));
-        }
-
-        public static string ToTimeAgo(TimeSpan time)
-        {
-            return time.Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 7);
         }
     }
 }

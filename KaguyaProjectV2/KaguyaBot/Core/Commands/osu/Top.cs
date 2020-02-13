@@ -1,13 +1,15 @@
 ﻿using Discord.Commands;
+using Humanizer;
+using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
-using KaguyaProjectV2.KaguyaBot.Core.Osu.Builders;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using OsuSharp;
+using OsuSharp.Oppai;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 {
@@ -22,9 +24,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                  "they do not need to specify a player. The command used " +
                  "by itself returns 5 top plays for the current user. " +
                  "The amount of requested plays must be between 1 and 7.")]
-        [Remarks("\n5 someUser\n<n> <player>")]
+        [Remarks("\n[index] [player]\n60 SomePlayer")]
         public async Task TopOsuPlays(int num = 5, [Remainder]string player = null)
         {
+            DataStorage.DbData.Models.User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            User osuUser;
+
             if (num < 1 || num > 7)
             {
                 await SendBasicErrorEmbedAsync("Number of plays must be between 1 and 7.");
@@ -33,8 +39,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 
             if (string.IsNullOrEmpty(player))
             {
-                player = (await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id)).OsuId.ToString();
-                if (player == "0")
+                osuUser = await OsuBase.client.GetUserByUserIdAsync(user.OsuId, GameMode.Standard);
+                if (osuUser.UserId == 0)
                 {
                     embed.WithTitle($"osu! Top {num}");
                     embed.WithDescription($"**{Context.User.Mention} Failed to acquire username. " +
@@ -44,39 +50,52 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                     return;
                 }
             }
-
-            player = player.Replace(' ', '_');
-
-            var playerBestObjectList = new OsuBestBuilder(player, limit: num).Execute();
-            var playerUserObject = new OsuUserBuilder(player).Execute();
-
-            if (playerUserObject == null)
+            else
             {
-                embed.WithDescription($"{Context.User.Mention} Failed to download data for {player}.");
-                await ReplyAsync(embed: embed.Build());
-                return;
+                player = player.Replace(' ', '_');
+                osuUser = await OsuBase.client.GetUserByUsernameAsync(player, GameMode.Standard);
             }
+
+            if (osuUser == null)
+            {
+                throw new KaguyaSupportException($"Failed to download data for player. If no user was specified, " +
+                                                 $"you must set your osu! username or user ID via " +
+                                                 $"`{server.CommandPrefix}osuset <name/ID>`.\n\n" +
+                                                 $"If a username was specified, it's likely that the user does not exist or " +
+                                                 $"you are providing invalid data.");
+            }
+
+            var playerBestObjectList = await OsuBase.client.GetUserBestsByUserIdAsync(osuUser.UserId, GameMode.Standard, num);
+            var playerUserObject = await OsuBase.client.GetUserByUserIdAsync(osuUser.UserId, GameMode.Standard);
+
+            string s = num == 1 ? "" : "s";
 
             embed.WithAuthor(author =>
             {
-                author.Name = $"{playerUserObject.Username}'s Top {num} osu! Standard Play";
+                author.Name = $"{playerUserObject.Username}'s Top {(num == 1 ? "" : num.ToString())} osu! Standard Play{s}";
                 author.IconUrl = $"https://osu.ppy.sh/images/flags/{playerUserObject.Country}.png";
             });
-            embed.WithTitle($"**Top #{num} play for {playerUserObject.Username}:**");
+            embed.WithTitle($"**Top {num} play for {playerUserObject.Username}:**");
             embed.WithUrl($"https://osu.ppy.sh/u/{playerUserObject.UserId}");
 
+            int i = 0;
             string topPlayString = "";
             foreach (var playerBestObject in playerBestObjectList)
             {
-                topPlayString += $"\n{playerBestObject.PlayNumber}: ▸ **{playerBestObject.RankEmote}{playerBestObject.StringMods}** ▸ " +
-                                 $"{playerBestObject.BeatmapId} ▸ **[{playerBestObject.Beatmap.Title} " +
-                                 $"[{playerBestObject.Beatmap.Version}]](https://osu.ppy.sh/b/{playerBestObject.BeatmapId})** " +
-                    $"\n▸ **☆{playerBestObject.Beatmap.Difficultyrating:N2}** ▸ **{playerBestObject.Accuracy:F}%** for **{playerBestObject.PP:F}pp** " +
-                    $"\n▸ [Combo: {playerBestObject.MaxCombo}x / Max: {playerBestObject.Beatmap.MaxCombo}]" +
-                    $"\n▸ Play made {OsuExtension.ToTimeAgo(DateTime.Now - playerBestObject.Date)} ago\n";
+                i++;
+                var beatmap = await playerBestObject.GetBeatmapAsync();
+                var pp = await beatmap.GetPPAsync(playerBestObject.Mods, (float)playerBestObject.Accuracy);
+
+                topPlayString += $"\n{i}: ▸ **{OsuBase.OsuGrade(playerBestObject.Rank)}" +
+                                 $"{playerBestObject.Mods.ToModeString(OsuBase.client).Replace("No Mode", "No Mod")}** ▸ " +
+                                 $"{beatmap.BeatmapId} ▸ **[{beatmap.Title} " +
+                                 $"[{beatmap.Difficulty}]](https://osu.ppy.sh/b/{beatmap.BeatmapId})** " +
+                    $"\n▸ **☆{beatmap.StarRating:N2}** ▸ **{playerBestObject.Accuracy:F}%** " +
+                    $"for **{pp.Pp:F}pp** " +
+                    $"\n▸ [Combo: {playerBestObject.MaxCombo}x / Max: {beatmap.MaxCombo}]" +
+                    $"\n▸ Play made {(DateTime.Now - playerBestObject.Date.Value).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 3)} ago\n";
             }
             embed.WithDescription(topPlayString);
-
             await ReplyAsync(embed: embed.Build());
         }
 
@@ -87,57 +106,80 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                  "display the user's best play, 100 will return their worst (out of their top 100). " +
                  "If a user has set their osu! username with the `osuset` command, they do not need " +
                  "to specify a player if they want to return their own information.")]
-        [Remarks("<n>\n<n> <player>")]
+        [Remarks("<index>\n<index> <player>")]
         public async Task SpecificOsuTopPlay(int num, [Remainder]string player = null)
         {
+            DataStorage.DbData.Models.User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            User osuUser;
+
             if (num < 1 || num > 100)
             {
-                embed.WithDescription($"{Context.User.Mention} **ERROR: Number for top play must be between 1 and 100!**");
-                await ReplyAsync(embed: embed.Build());
+                await SendBasicErrorEmbedAsync("Play index must be between 1 and 100.");
                 return;
             }
 
             if (string.IsNullOrEmpty(player))
             {
-                player = (await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id)).OsuId.ToString();
-                if (player == "")
+                osuUser = await OsuBase.client.GetUserByUserIdAsync(user.OsuId, GameMode.Standard);
+                if (osuUser == null)
                 {
-                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! Please specify a player or set your osu! username with `{(await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
+                    embed.WithTitle($"osu! Top {num}");
+                    embed.WithDescription($"**{Context.User.Mention} Failed to acquire username. " +
+                                          $"Please specify a player or set your osu! username with " +
+                                          $"`{(await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id)).CommandPrefix}osuset`!**");
                     await ReplyAsync(embed: embed.Build());
                     return;
                 }
             }
-
-            player = player.Replace(' ', '_');
-
-            var playerUserObject = new OsuUserBuilder(player).Execute();
-
-            //If the API doesn't return anything, send a response in chat letting the user know what happened.
-            if (playerUserObject == null)
+            else
             {
-                embed.WithDescription($"{Context.User.Mention} **ERROR: Could not download data for {player}!**");
-                embed.SetColor(EmbedColor.RED);
-                await ReplyAsync(embed: embed.Build());
+                player = player.Replace(' ', '_');
+                osuUser = await OsuBase.client.GetUserByUsernameAsync(player, GameMode.Standard);
+
+                if (osuUser == null)
+                {
+                    await SendBasicErrorEmbedAsync($"{Context.User.Mention} Failed to download data for `{player}`.");
+                    return;
+                }
+            }
+
+            var playerBestObjectList = await OsuBase.client.GetUserBestsByUserIdAsync(osuUser.UserId, GameMode.Standard);
+
+            if (playerBestObjectList.Count < num)
+            {
+                await SendBasicErrorEmbedAsync($"The user does not have `{num}` top plays recorded. " +
+                                               $"They only have `{playerBestObjectList.Count}`.");
                 return;
             }
 
-            var playerBestObject = new OsuBestBuilder(player, limit: num).Execute(true).FirstOrDefault(c => c.PlayNumber == num);
+            var playerBestObject = playerBestObjectList[num - 1];
 
-            embed.WithTitle($"**Top #{num} play for {playerUserObject.Username}:**");
-            embed.WithUrl($"https://osu.ppy.sh/u/{playerUserObject.UserId}");
-            embed.WithDescription($"\n▸ **{playerBestObject.RankEmote}{playerBestObject.StringMods}** ▸ {playerBestObject.BeatmapId} ▸ **[{playerBestObject.Beatmap.Title} [{playerBestObject.Beatmap.Version}]](https://osu.ppy.sh/b/{playerBestObject.BeatmapId})** " +
-                $"\n▸ **☆{playerBestObject.Beatmap.Difficultyrating.ToString("N2")}** ▸ **{playerBestObject.Accuracy.ToString("F")}%** for **{playerBestObject.PP.ToString("F")}pp** " +
-                $"\n▸ [Combo: {playerBestObject.MaxCombo}x / Max: {playerBestObject.Beatmap.MaxCombo}]" +
-                $"\n▸ Play made {OsuExtension.ToTimeAgo(DateTime.Now - playerBestObject.Date)} ago\n");
-
-            //Code to build embedded message that is then sent into chat.
+            if (playerBestObject == null)
+            {
+                await SendBasicErrorEmbedAsync($"A play could not be found for this user at the given index.");
+                return;
+            }
 
             embed.WithAuthor(author =>
             {
-                author.Name = $"{playerUserObject.Username}'s Top {num} osu! Standard Play";
-                author.IconUrl = $"https://osu.ppy.sh/images/flags/{playerUserObject.Country}.png";
+                author.Name = $"{osuUser.Username}'s {num.Ordinalize()} Top osu! {playerBestObject.GameMode} Play";
+                author.IconUrl = $"https://osu.ppy.sh/images/flags/{osuUser.Country}.png";
             });
+            embed.WithTitle($"**Top #{num} play for {osuUser.Username}:**");
+            embed.WithUrl($"https://osu.ppy.sh/u/{osuUser.UserId}");
 
+            var beatmap = await playerBestObject.GetBeatmapAsync();
+            var pp = await beatmap.GetPPAsync(playerBestObject.Mods, (float)playerBestObject.Accuracy);
+            
+            string topPlayString = $"#{num}: ▸ **{OsuBase.OsuGrade(playerBestObject.Rank)}{playerBestObject.Mods.ToModeString(OsuBase.client).Replace("No Mode", "No Mod")}** ▸ " +
+                             $"{beatmap.BeatmapId} ▸ **[{beatmap.Title} " +
+                             $"[{beatmap.Difficulty}]](https://osu.ppy.sh/b/{beatmap.BeatmapId})** " +
+                $"\n▸ **☆{beatmap.StarRating:N2}** ▸ **{playerBestObject.Accuracy:F}%** " +
+                $"for **{pp.Pp:F}pp** " +
+                $"\n▸ [Combo: {playerBestObject.MaxCombo}x / Max: {beatmap.MaxCombo}]" +
+                $"\n▸ Play made {(DateTime.Now - playerBestObject.Date.Value).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 3)} ago\n";
+
+            embed.WithDescription(topPlayString);
             await ReplyAsync(embed: embed.Build());
         }
     }

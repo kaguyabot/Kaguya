@@ -13,8 +13,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Services;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -61,6 +63,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&
                 !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
                 return;
+
+            if(Regex.IsMatch(msg.Content, @"http^[Ss|\s]$://osu.ppy.sh/beatmapsets/^[\d{4-9}]$#^[osu|mania|taiko|fruits]$/^[\d{12-5}]$") ||
+               Regex.IsMatch(msg.Content, @"http^[Ss|\s]$://osu.ppy.sh/b/^[\d{10-3}]$"))
+                await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, context);
 
             int argPos = 0;
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
