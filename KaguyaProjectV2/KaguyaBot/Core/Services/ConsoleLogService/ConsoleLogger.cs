@@ -10,7 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {
     public class ConsoleLogger
     {
-        private static readonly string LogDirectory = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\Logs\\Debug";
+        private static readonly string LogDirectory = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\Logs";
         private static readonly string LogFileName = $"KaguyaLog_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
 
         /// <summary>

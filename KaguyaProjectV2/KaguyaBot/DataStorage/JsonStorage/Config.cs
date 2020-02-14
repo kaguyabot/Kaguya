@@ -3,7 +3,9 @@ using KaguyaProjectV2.KaguyaBot.Core.Global;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 #region This file will load all Config file data into memory for the bot to use. This file contains very important credentials.
 #endregion
@@ -14,6 +16,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
     {
         private static readonly string resourcesPath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\";
 
+        /// <summary>
+        /// Retreives a populated <see cref="ConfigModel"/> and also re-populates any necessary data from the Resources folder.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static async Task<ConfigModel> GetOrCreateConfigAsync(string[] args)
         {
             string[] directories =
@@ -21,24 +28,57 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 resourcesPath + "Fonts",
                 resourcesPath + "Images",
                 resourcesPath + "Logs",
-                resourcesPath + "Logs\\Debug"
+                resourcesPath + "Logs"
             };
 
             string configFilePath = resourcesPath + "config.json";
 
             if (!Directory.Exists(resourcesPath))
             {
-                EnsurePathExists(resourcesPath);
+                CreateIfNotExists(resourcesPath);
             }
 
             foreach (var dir in directories)
             {
-                EnsurePathExists(dir); // If these directories don't exist, create them.
+                CreateIfNotExists(dir); // If these directories don't exist, create them.
             }
 
-            if (args.Length != 0 && args.Length == 16)
+            // Populate resources folder, if needed.
+            using (var wc = new WebClient())
             {
-                var model = new ConfigModel
+                // Font for $profile etc. images.
+                if (!File.Exists($@"{directories[0]}\frankMedium.ttf"))
+                {
+                    var data = await wc.DownloadDataTaskAsync("https://drive.google.com/file/d/1-K8snSV4K-z-gcO7_2DHXC15Mmij1XUi/view?usp=drivesdk");
+                    await File.WriteAllBytesAsync($@"{directories[0]}\frankMedium.ttf", data);
+
+                    await ConsoleLogger.LogAsync("Downloaded and saved frankMedium.ttf font.", LogLvl.INFO);
+                }
+
+                // $profile image
+                if (!File.Exists($@"{directories[1]}\ProfileSmall.png"))
+                {
+                    var data = await wc.DownloadDataTaskAsync("https://i.imgur.com/Ae2BBiC.png");
+                    await File.WriteAllBytesAsync($@"{directories[1]}\ProfileSmall.png", data);
+
+                    await ConsoleLogger.LogAsync("Downloaded and saved ProfileSmall.png image.", LogLvl.INFO);
+                }
+
+                // Exp level-up image
+                if (!File.Exists($@"{directories[1]}\XpLevelUpSmall.png"))
+                {
+                    var data = await wc.DownloadDataTaskAsync("https://i.imgur.com/fgNNX8H.png");
+                    await File.WriteAllBytesAsync($@"{directories[1]}\XpLevelUpSmall.png", data);
+
+                    await ConsoleLogger.LogAsync("Downloaded and saved XpLevelUpSmall.png image.", LogLvl.INFO);
+                }
+            }
+
+            ConfigModel model = new ConfigModel();
+
+            if (args.Length == 16)
+            {
+                model = new ConfigModel
                 {
                     Token = args[0],
                     BotOwnerId = args[1].AsUlong(),
@@ -57,24 +97,27 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                     DanbooruUsername = args[14],
                     DanbooruApiKey = args[15]
                 };
-
-                return model;
             }
 
-            if (!File.Exists(configFilePath))
+            if (!File.Exists(configFilePath) || !model.Equals(new ConfigModel()))
             {
                 //Creates JSON from model.
-                return JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath));
+                var modelToSave = JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath, model));
+                await File.WriteAllTextAsync(configFilePath, JsonConvert.SerializeObject(modelToSave));
+
+                await ConsoleLogger.LogAsync($"Wrote new config file.", LogLvl.INFO);
             }
-            else
+            else if(args.Length != 16)
             {
                 //Reads config file.
-                var model = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(configFilePath));
+                model = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(configFilePath));
                 return model ?? JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath));
             }
+
+            return model;
         }
 
-        private static void EnsurePathExists(string path)
+        private static void CreateIfNotExists(string path)
         {
             try
             {
