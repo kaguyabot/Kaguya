@@ -6,8 +6,8 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using MoreLinq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -30,8 +30,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 foreach (var voter in voters)
                 {
                     var user = await DatabaseQueries.GetOrCreateUserAsync(voter.Id);
+                    var votes = (await DatabaseQueries.GetAllForUserAsync<Upvote>(voter.Id))?.OrderByDescending(x => x.Time).ToList();
+                    var mostRecentVote = votes == null || votes.Count == 0 ? null : votes[0];
 
-                    if (user.LastUpvoted < DateTime.Now.AddHours(-24).ToOADate())
+                    if (mostRecentVote == null || mostRecentVote.Time < DateTime.Now.AddHours(-12).ToOADate() && mostRecentVote.ReminderSent)
                     {
                         var socketUser = ConfigProperties.Client.GetUser(voter.Id);
 
@@ -48,7 +50,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                           $"You've been rewarded with `{points:N0} points` and `{xp:N0} global exp`! {nsfwStr}",
                             Footer = new EmbedFooterBuilder
                             {
-                                Text = "You may earn rewards again in 24 hours."
+                                Text = "You may earn rewards again in 12 hours."
                             }
                         };
 
@@ -59,46 +61,58 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                         }
                         catch (Exception)
                         {
-                            //
+                            await ConsoleLogger.LogAsync(
+                                $"Tried to DM a user their upvote rewards, but an exception was thrown when " +
+                                $"trying to message them.", LogLvl.DEBUG);
                         }
 
-                        user.LastUpvoted = DateTime.Now.ToOADate();
+                        var vote = new Upvote
+                        {
+                            UserId = voter.Id,
+                            Time = DateTime.Now.ToOADate(),
+                            PointsAwarded = points,
+                            ExpAwarded = xp,
+                            ReminderSent = false
+                        };
+
                         user.TotalNSFWImages = 12;
                         user.Points += points;
                         user.Experience += xp;
-                        user.UpvoteReminderSent = false;
                         user.TotalUpvotes++;
+
                         await DatabaseQueries.UpdateAsync(user);
+                        await DatabaseQueries.InsertAsync(vote);
 
                         await ConsoleLogger.LogAsync($"User {voter.Id} has successfully upvoted Kaguya.", LogLvl.DEBUG);
                     }
                 }
             };
 
-            Timer upvoteResetTimer = new Timer(20000);
+            Timer upvoteResetTimer = new Timer(60000);
             upvoteResetTimer.Enabled = true;
             upvoteResetTimer.AutoReset = true;
             upvoteResetTimer.Elapsed += async (sender, e) =>
             {
-                var curVoters = await api.GetVotersAsync();
-                var previousVoters = await DatabaseQueries.GetAllAsync<User>(x =>
-                    x.LastUpvoted < DateTime.Now.AddHours(-24).ToOADate() && 
-                    !x.UpvoteReminderSent);
+                var voters = (await api.GetVotersAsync()).DistinctBy(x => x.Id).ToList();
 
-                var matches = new List<User>();
-
-                foreach (var voter in curVoters)
+                foreach (var voter in voters)
                 {
-                    var user = previousVoters.FirstOrDefault(x => x.UserId == voter.Id);
-                    if (user != null)
+                    var mostRecentVote = (await DatabaseQueries.GetAllForUserAsync<Upvote>(voter.Id))?
+                        .OrderByDescending(x => x.Time).ToList()[0];
+
+                    if (mostRecentVote == null)
                     {
-                        matches.Add(user);
+                        await ConsoleLogger.LogAsync($"User {voter.Id} may now vote again, but " +
+                                                     $"their most recent vote was null in the database. " +
+                                                     $"No DM has been sent, and nothing has been " +
+                                                     $"updated in the database.", LogLvl.WARN);
+                        return;
                     }
-                }
 
-                foreach (var voter in matches)
-                {
-                    var socketUser = ConfigProperties.Client.GetUser(voter.UserId);
+                    if (mostRecentVote.ReminderSent)
+                        return;
+
+                    var socketUser = ConfigProperties.Client.GetUser(voter.Id);
                     if (socketUser == null) goto UpdateInDB;
 
                     var embed = new KaguyaEmbedBuilder(EmbedColor.PINK)
@@ -115,20 +129,40 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     }
                     catch (Exception)
                     {
-                        //
+                        await ConsoleLogger.LogAsync(
+                            $"Tried to DM a user their upvote reminder, but an exception was thrown when " +
+                            $"trying to message them.", LogLvl.DEBUG);
                     }
 
                     UpdateInDB:
-                    voter.UpvoteReminderSent = true;
-                    await DatabaseQueries.UpdateAsync(voter);
+                    mostRecentVote.ReminderSent = true;
+
+                    /*
+                     * The reason for creating a brand new upvote and deleting the old one from the database
+                     * is due to the fact that Upvote objects don't have a primary key. There can be multiple
+                     * upvotes in the database belonging to the same UserId. Therefore, we can't simply
+                     * update the object.
+                     */
+
+                    var replacementVote = new Upvote
+                    {
+                        UserId = mostRecentVote.UserId,
+                        Time = mostRecentVote.Time + 0.00000000001,
+                        PointsAwarded = mostRecentVote.PointsAwarded,
+                        ExpAwarded = mostRecentVote.ExpAwarded,
+                        ReminderSent = true
+                    };
+
+                    await DatabaseQueries.DeleteAsync(mostRecentVote);
+                    await DatabaseQueries.InsertAsync(replacementVote);
 
                     if (socketUser == null)
                     {
-                        await ConsoleLogger.LogAsync($"User {voter.UserId} can now upvote Kaguya. DM NOT sent.", LogLvl.DEBUG);
+                        await ConsoleLogger.LogAsync($"User {voter.Id} can now upvote Kaguya. DM NOT sent.", LogLvl.DEBUG);
                         return;
                     }
 
-                    await ConsoleLogger.LogAsync($"User {voter.UserId} has been reminded to upvote Kaguya.", LogLvl.DEBUG);
+                    await ConsoleLogger.LogAsync($"User {voter.Id} has been reminded to upvote Kaguya.", LogLvl.DEBUG);
                 }
             };
         }

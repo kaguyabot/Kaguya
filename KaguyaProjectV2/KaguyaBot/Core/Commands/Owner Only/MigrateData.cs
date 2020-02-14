@@ -79,11 +79,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     TotalQuickdrawWins = u.QuickdrawWinnings,
                     TotalQuickdrawLosses = u.QuickdrawLosses,
                     BlacklistExpiration = 0,
-                    LatestExp = 0,
-                    LatestDailyBonus = 0,
+                    LastGivenExp = 0,
+                    LastDailyBonus = 0,
                     LastGivenRep = 0,
                     LastRatelimited = 0,
-                    LastUpvoted = 0
                 };
 
                 if (existingUsers.All(x => x.UserId != newUser.UserId))

@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
             user.Experience += exp;
             user.Points += points;
-            user.LatestExp = DateTime.Now.ToOADate();
+            user.LastGivenExp = DateTime.Now.ToOADate();
             await DatabaseQueries.UpdateAsync(user);
 
             double newLevel = ReturnLevel(user);
@@ -79,7 +79,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         private static bool CanGetExperience(User user)
         {
             double twoMinutesAgo = DateTime.Now.AddSeconds(-120).ToOADate();
-            return twoMinutesAgo >= user.LatestExp;
+            return twoMinutesAgo >= user.LastGivenExp;
         }
 
         private static double ReturnLevel(User user)

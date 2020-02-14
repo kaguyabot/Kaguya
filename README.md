@@ -50,9 +50,9 @@ rarer fish! Be wary though, as better bait will be needed to catch rarer fish mo
 
 - 1-4 points are now earned automatically for typing in chat at the same time you earn exp. *Only being able to earn points through betting and "timely" claims was unfun. Now, points can be earned passively so that you can buy fish bait, bet, etc. whenever it's convenient!*
 - NSFW age verification requirement has been removed. *It's implied that anyone with access to a NSFW-marked channel is already of age.*
-
-## Known Bugs:
-- All `osu!` related commands' pp values for the `Hard Rock` mod are marginally wrong. This is due to the pp calculation library being out of date. All other pp calculations should be accurate within ~1%.
+- All upvote rewards are now automatically given soon after you upvote online (top.gg, search for Kaguya).
+- A small amount of EXP is now given for votes.
+- If you haven't recently used NSFW commands (within the last 7 days), you won't be reminded that your NSFW image cooldown reset has triggered when voting.
 
 ## Kaguya Supporter (Monthly Subscription):
 #### Supporter Only Features

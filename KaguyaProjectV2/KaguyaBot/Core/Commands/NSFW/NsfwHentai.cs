@@ -10,7 +10,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
+using Discord;
+using RestSharp.Extensions;
 using SearchResult = BooruSharp.Search.Post.SearchResult;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
@@ -30,16 +33,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         [Summary("Posts an NSFW image into chat. The `bomb` tag may be used to post 3 images at once. Normal users are limited to 12 NSFW images per day. " +
                  "[Kaguya Supporters](https://the-kaguya-project.myshopify.com/) " +
                  "may specify one or multiple tags and have no limit on how many images they can post per day. " +
-                 "A complete list of tags may be found [here (SFW link)](https://konachan.com/tag)")]
+                 "A complete list of tags may be found [here (SFW link)](https://konachan.com/tag).\n\n" +
+                 "Voting online [here](https://top.gg/bot/538910393918160916)")]
         [Remarks("\nbomb\n[tag] {...} ($$$)\nbomb [tag] {...} ($$$)")]
-        public async Task Command([Remainder]string tagString)
+        public async Task Command([Remainder]string tagString = null)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
-            string[] tags = tagString.Split(" ");
+            string[] tags = tagString?.Split(" ");
             string[] blacklistedTags =
             {
-                "loli"
+                "loli", "shota", "blood", "gore", "rape"
             };
 
             if (user.TotalNSFWImages == 0 && !user.IsSupporter || 

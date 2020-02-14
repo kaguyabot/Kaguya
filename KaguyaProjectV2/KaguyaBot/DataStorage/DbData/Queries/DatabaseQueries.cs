@@ -236,7 +236,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <see cref="IKaguyaQueryable{T}"/>, <see cref="IKaguyaUnique{T}"/> and <see cref="IUserSearchable{T}"/></typeparam>
         /// <param name="userId">The user whom we are retreiving the <see cref="T"/> for.</param>
         /// <returns></returns>
-        public static async Task<T> GetForUserAsync<T>(ulong userId) where T :
+        public static async Task<T> GetFirstForUserAsync<T>(ulong userId) where T :
             class,
             IKaguyaQueryable<T>,
             IKaguyaUnique<T>,
@@ -267,6 +267,17 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 return await (from t in db.GetTable<T>()
                               where t.UserId == userId
                               select t).ToListAsync();
+            }
+        }
+
+        public static async Task<List<T>> GetAllForUserAsync<T>(ulong userId, Expression<Func<T, bool>> predicate) where T :
+            class, IKaguyaQueryable<T>, IUserSearchable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<T>().Where(predicate)
+                    where t.UserId == userId
+                    select t).ToListAsync();
             }
         }
 
@@ -463,7 +474,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Updates the specified <see cref="IKaguyaUnique{T}"/> <see cref="arg"/> in the database.  
+        /// Updates the specified <see cref="IKaguyaUnique{T}"/> <see cref="arg"/> in the database. Item
+        /// must have a primary key in order for this query to execute. 
         /// </summary>
         /// <typeparam name="T">The type of object we are updating</typeparam>
         /// <param name="arg">The object to update.</param>

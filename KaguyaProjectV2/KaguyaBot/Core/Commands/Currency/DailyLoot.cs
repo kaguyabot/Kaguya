@@ -1,11 +1,10 @@
 ﻿using Discord.Commands;
+using Discord.WebSocket;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
-using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -22,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             if (!user.CanGetDailyPoints)
             {
-                var dt = DateTime.FromOADate(user.LatestDailyBonus).AddHours(24);
+                var dt = DateTime.FromOADate(user.LastDailyBonus).AddHours(24);
                 await SendBasicErrorEmbedAsync($"You must wait `{dt.Humanize(false)}` " +
                                                $"before you may claim this bonus."); 
                 return;
@@ -34,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             user.Points += points;
             user.Experience += exp;
-            user.LatestDailyBonus = DateTime.Now.ToOADate();
+            user.LastDailyBonus = DateTime.Now.ToOADate();
 
             await SendBasicSuccessEmbedAsync($"{Context.User.Mention} Successfully received " +
                                              $"`+{points} points` and `+{exp} exp`!");
