@@ -4,8 +4,10 @@ using LinqToDB.Mapping;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "upvotes")]
-    public class Upvote : IKaguyaQueryable<Upvote>, IUserSearchable<Upvote>
+    public class Upvote : IKaguyaQueryable<Upvote>, IKaguyaUnique<Upvote>, IUserSearchable<Upvote>
     {
+        [PrimaryKey]
+        public string VoteId { get; set; }
         [Column(Name = "UserId"), NotNull]
         public ulong UserId { get; set; }
         [Column(Name = "Time"), NotNull]

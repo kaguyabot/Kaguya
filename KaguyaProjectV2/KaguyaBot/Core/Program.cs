@@ -164,13 +164,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await KaguyaPremiumExpirationHandler.Initialize();
             await TopGGUpvoteHandler.Initialize();
 
-            await ConsoleLogger.LogAsync($"All timers initialized.", LogLvl.WARN);
+            await ConsoleLogger.LogAsync($"All timers initialized.", LogLvl.INFO);
         }
 
         private void InitializeEventHandlers()
         {
             WarnEvent.OnWarn += WarnHandler.OnWarn;
-            FishEvent.OnFish += FishHandler.OnFish;
+            FishEvent.OnFish += async args => await FishHandler.OnFish(args);
             _client.UserJoined += GreetingService.Trigger;
         }
 

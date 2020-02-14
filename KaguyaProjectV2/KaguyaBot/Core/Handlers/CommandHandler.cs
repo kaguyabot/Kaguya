@@ -64,8 +64,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
                 return;
 
-            if(Regex.IsMatch(msg.Content, @"http^[Ss|\s]$://osu.ppy.sh/beatmapsets/^[\d{4-9}]$#^[osu|mania|taiko|fruits]$/^[\d{12-5}]$") ||
-               Regex.IsMatch(msg.Content, @"http^[Ss|\s]$://osu.ppy.sh/b/^[\d{10-3}]$"))
+            if(Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/beatmapsets/[0-9]*#\b(?:osu|taiko|mania|fruits)\b/[0-9]*") ||
+               Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/b/[0-9]*"))
                 await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, context);
 
             int argPos = 0;
@@ -106,7 +106,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 return;
             }
 
-            HandleCommandResult(context, server, result);
+            await HandleCommandResult(context, server, result);
         }
 
         public async Task<bool> IsFilteredPhrase(ICommandContext context, Server server, IMessage message)
@@ -135,7 +135,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             return false;
         }
 
-        private static async void HandleCommandResult(ICommandContext context, Server server, IResult result)
+        private static async Task HandleCommandResult(ICommandContext context, Server server, IResult result)
         {
             string cmdPrefix = server.CommandPrefix;
             await ConsoleLogger.LogAsync($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLvl.DEBUG);

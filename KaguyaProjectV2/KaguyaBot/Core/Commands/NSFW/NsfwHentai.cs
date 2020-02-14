@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using RestSharp.Extensions;
 using SearchResult = BooruSharp.Search.Post.SearchResult;
 
@@ -43,6 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
             string[] tags = tagString?.Split(" ");
             string[] blacklistedTags =
             {
+                // monkaTOS
                 "loli", "shota", "blood", "gore", "rape"
             };
 
@@ -68,48 +70,64 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                     return;
                 }
 
-                if (tags[0].ToLower() == "bomb")
+                try
                 {
-                    if (tags[1..].Length != 0)
+                    if (tags[0].ToLower() == "bomb")
                     {
-                        for (int i = 0; i < NSFW_BOMB_COUNT; i++)
+                        if (tags[1..].Length != 0)
                         {
-                            await SendHentaiAsync(tags[1..]);
-                            user.TotalNSFWImages -= 1;
+                            if (user.TotalNSFWImages < 3)
+                            {
+                                await SendBasicErrorEmbedAsync(
+                                    $"You do not have enough NSFW images to process this command. " +
+                                    $"[Kaguya Supporters]({GlobalProperties.KAGUYA_STORE_URL}) have " +
+                                    $"unlimited NSFW command uses. For non-supporters, 1 NSFW image is " +
+                                    $"earned automatically every 2 hours.");
+                            }
+
+                        }
+                        else
+                        {
+                            for (int i = 0; i < NSFW_BOMB_COUNT; i++)
+                            {
+                                await SendHentaiAsync(user, "sex", "breasts", "cum");
+                            }
                         }
                     }
-                    else
-                    {
-                        for (int i = 0; i < NSFW_BOMB_COUNT; i++)
-                        {
-                            await SendHentaiAsync("sex", "breasts", "cum");
-                            user.TotalNSFWImages -= 1;
-                        }
-                    }
+                }
+                catch (Discord.Net.HttpException)
+                {
+                    await SendBasicErrorEmbedAsync($"An image was too large to send and will not be delivered. Please " +
+                                                   $"try again.");
                 }
             }
 
             if (tags == null)
             {
-                await SendHentaiAsync("sex", "breasts", "cum");
-                user.TotalNSFWImages -= 1;
+                await SendHentaiAsync(user, "sex", "breasts", "cum");
             }
 
             if(!user.IsSupporter)
                 await DatabaseQueries.UpdateAsync(user);
         }
 
-        public async Task<SearchResult> SendHentaiAsync(params string[] tags)
+        public async Task<SearchResult?> SendHentaiAsync(User user, params string[] tags)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(146092837723832320);
-            Console.WriteLine(user.TotalNSFWImages);
-            var wc = new WebClient();
+            if (user.TotalNSFWImages < 1 && !user.IsSupporter)
+            {
+                await Context.Channel.SendBasicErrorEmbedAsync("You are out of NSFW images");
+                return null;
+            }
 
+            var wc = new WebClient();
             var img = await konachan.GetRandomImage(tags);
             using (var stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.fileUrl)))
             {
                 await Context.Channel.SendFileAsync(stream, "Kaguya_NSFW.jpg");
             }
+
+            user.TotalNSFWImages -= 1;
+            await DatabaseQueries.UpdateAsync(user);
 
             return img;
         }

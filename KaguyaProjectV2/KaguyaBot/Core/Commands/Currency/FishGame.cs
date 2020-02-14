@@ -213,7 +213,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             await DatabaseQueries.InsertAsync(fish);
             await DatabaseQueries.UpdateAsync(user);
 
-            FishEvent.Trigger(user, fish, Context); // Triggers the fish EXP service.
+            await FishEvent.Trigger(user, fish, Context); // Triggers the fish EXP service.
 
             if (fishType != FishType.BAIT_STOLEN)
             {

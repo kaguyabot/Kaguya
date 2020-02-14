@@ -1,21 +1,23 @@
 ﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 {
     public static class FishEvent
     {
-        public static event EventHandler<FishHandlerEventArgs> OnFish;
+        public static event Func<FishHandlerEventArgs, Task> OnFish;
 
-        public static void Trigger(User user, Fish fish, ICommandContext context)
+        public static async Task Trigger(User user, Fish fish, ICommandContext context)
         {
-            FishEventTrigger(new FishHandlerEventArgs(user, fish, context));
+            await FishEventTrigger(new FishHandlerEventArgs(user, fish, context));
         }
 
-        static void FishEventTrigger(FishHandlerEventArgs e)
+        static async Task FishEventTrigger(FishHandlerEventArgs e)
         {
-            OnFish?.Invoke(null, e);
+            // ReSharper disable once PossibleNullReferenceException
+            await OnFish?.Invoke(e);
         }
     }
 

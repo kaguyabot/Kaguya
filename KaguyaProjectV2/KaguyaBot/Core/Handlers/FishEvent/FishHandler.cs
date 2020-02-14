@@ -3,6 +3,8 @@ using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Threading.Tasks;
+
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 // Todo: Test
@@ -15,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
         public const int MAX_VALUE = 285;
         public const int MAX_BAIT = 1150;
         public const int MAX_TAX = 100;
-        public static async void OnFish(object fish, FishHandlerEventArgs args)
+        public static async Task OnFish(FishHandlerEventArgs args)
         {
             var context = args.Context;
             var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
