@@ -72,7 +72,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
             };
         }
 
-        public static async Task<ProfileTemplatePanel> RightPanel(User user)
+        public static ProfileTemplatePanel RightPanel(User user)
         {
             return new ProfileTemplatePanel
             {

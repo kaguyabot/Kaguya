@@ -55,11 +55,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     return;
                 }
 
-                var maxBaitEmbed = new KaguyaEmbedBuilder
-                {
-                    Description = $"You may only carry {suppBaitCapacity} bait at one time, due to the size of your bait box. " +
-                                  $"The most bait you may purchase right now is `{suppBaitCapacity - user.FishBait}`"
-                };
+                await SendBasicErrorEmbedAsync(
+                    $"You may only carry {suppBaitCapacity} bait at one time, due to the size of your bait box. " +
+                    $"The most bait you may purchase right now is `{suppBaitCapacity - user.FishBait}`");
+                return;
             }
 
             if (user.IsSupporter)

@@ -106,12 +106,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         {
             return roll switch
             {
-                int r when roll >= 0 && roll <= 66 => RollResult.LOSS,
-                int r when roll > 66 && roll <= 78 => RollResult.LOW_WIN,
-                int r when roll > 78 && roll <= 89 => RollResult.LOW_MEDIUM_WIN,
-                int r when roll > 89 && roll <= 95 => RollResult.MEDIUM_WIN,
-                int r when roll > 95 && roll <= 99 => RollResult.HIGH_WIN,
-                int r when roll == 100 => RollResult.MAX_WIN,
+                int _ when roll >= 0 && roll <= 66 => RollResult.LOSS,
+                int _ when roll > 66 && roll <= 78 => RollResult.LOW_WIN,
+                int _ when roll > 78 && roll <= 89 => RollResult.LOW_MEDIUM_WIN,
+                int _ when roll > 89 && roll <= 95 => RollResult.MEDIUM_WIN,
+                int _ when roll > 95 && roll <= 99 => RollResult.HIGH_WIN,
+                int _ when roll == 100 => RollResult.MAX_WIN,
                 _ => throw new ArgumentOutOfRangeException(nameof(roll), $"Roll was either below 0 or above 100.")
             };
         }

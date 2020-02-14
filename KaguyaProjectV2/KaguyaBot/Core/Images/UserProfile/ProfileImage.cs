@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
                     IconAndUsername = ProfilePictureData.ProfileIcon(guildUser),
                     SupporterBadge = new SupporterBadge(user).Data,
                     LeftPanel = await ProfilePanelData.LeftPanel(user, server),
-                    RightPanel = await ProfilePanelData.RightPanel(user)
+                    RightPanel = ProfilePanelData.RightPanel(user)
                 }
             };
 

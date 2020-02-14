@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OsuSharp;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using TwitchLib.Api;
 using Victoria;
 
@@ -130,7 +131,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             try
             {
-                _ = new KaguyaBot.DataStorage.DbData.Context.Init();
+                var _ = new KaguyaBot.DataStorage.DbData.Context.Init();
                 if (await DatabaseQueries.TestConnection())
                 {
                     await ConsoleLogger.LogAsync("Database connection successfully established.", LogLvl.INFO);

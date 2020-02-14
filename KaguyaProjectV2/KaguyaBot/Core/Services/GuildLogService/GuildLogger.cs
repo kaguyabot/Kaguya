@@ -185,7 +185,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             if (server.LogBans == 0)
                 return;
 
-            //todo: Send the log!
+            var embed = new KaguyaEmbedBuilder
+            {
+                Title = "User Banned",
+                Description = $"User: `[Name: {arg1} | ID: {arg1.Id}`]\n" +
+                              $"Reason: `{(await arg2.GetBanAsync(arg1.Id)).Reason}`",
+                ThumbnailUrl = "https://i.imgur.com/6Xk2HCG.png"
+            };
+
+            await arg2.GetTextChannel(server.LogBans).SendEmbedAsync(embed);
         }
 
         private static async Task _client_UserUnbanned(SocketUser arg1, SocketGuild arg2)
@@ -193,6 +201,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             var server = await DatabaseQueries.GetOrCreateServerAsync(arg2.Id);
             if (server.LogUnbans == 0)
                 return;
+
+            var embed = new KaguyaEmbedBuilder
+            {
+                Title = "User Un-Banned",
+                Description = $"User: `[Name: {arg1} | ID: {arg1.Id}`]\n",
+                ThumbnailUrl = "https://i.imgur.com/6Xk2HCG.png"
+            };
+
+            await arg2.GetTextChannel(server.LogBans).SendEmbedAsync(embed);
         }
 
         private static async Task _client_UserVoiceStateUpdated(SocketUser arg1, SocketVoiceState arg2, SocketVoiceState arg3)

@@ -42,4 +42,8 @@
     <PackageReference Include="Victoria" Version="5.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="KaguyaBot\Core\Enums\" />
+  </ItemGroup>
+
 </Project>

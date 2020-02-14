@@ -62,7 +62,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
         private async Task MultipleMatchingRolesHandler(SocketGuild guild, string roleName, IReadOnlyCollection<SocketRole> roles)
         {
-            KaguyaEmbedBuilder embed;
             var matchingRoles = roles.Where(x => x.Name.ToLower() == roleName.ToLower()).ToList();
             var matchCount = matchingRoles.Count;
 
@@ -78,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 new Emoji("8⃣"), new Emoji("9⃣")
             };
 
-            embed = new KaguyaEmbedBuilder
+            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
                 Description = $"I found `{matchCount.ToWords()}` roles that match this name. Please " +
                               $"select the role that you want.",

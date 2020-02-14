@@ -98,13 +98,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             var guild = ConfigProperties.Client.GetGuild(guildId);
             var guildUsers = new List<SocketGuildUser>();
 
-            AntiRaidEvent.Trigger(guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
-
             foreach (var userId in userIds)
             {
                 var guildUser = guild.GetUser(userId);
                 guildUsers.Add(guildUser);
             }
+
+            AntiRaidEvent.Trigger(guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
 
             switch (action.ToLower())
             {

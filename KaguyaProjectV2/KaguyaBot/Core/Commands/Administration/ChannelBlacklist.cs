@@ -118,7 +118,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     throw new InvalidOperationException("The duration value must be at least 5.");
 
                 expiration = (DateTime.Now + ts).ToOADate();
-                hasT = true;
 
                 // We have this twice because tIndex will be "0" both times after the first one is removed.
                 // $cbl -t 30m => Index 0 is removed, indexoutofrange ex. thrown for tIndex + 1 (which is now 0).

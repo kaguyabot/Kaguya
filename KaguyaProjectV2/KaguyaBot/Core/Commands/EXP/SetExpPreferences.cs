@@ -46,9 +46,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             var expType = GetExpType(type);
             var expChannel = GetChannelPref(channel);
 
-            string expTypeStr = expType == ExpType.Both ? "Global + Server" : expType.Humanize(LetterCasing.Title);
-            string channelPrefStr = expChannel == ExpChannel.Both ? "Chat + DM" : expChannel.Humanize(LetterCasing.Title);
-
             switch (expChannel)
             {
                 case ExpChannel.Chat:

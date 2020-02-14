@@ -9,6 +9,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using OsuSharp;
 using OsuSharp.Oppai;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
@@ -86,14 +87,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 var beatmap = await playerBestObject.GetBeatmapAsync();
                 var pp = await beatmap.GetPPAsync(playerBestObject.Mods, (float)playerBestObject.Accuracy);
 
+                Debug.Assert(playerBestObject.Date != null, "playerBestObject.Date != null");
                 topPlayString += $"\n{i}: ▸ **{OsuBase.OsuGrade(playerBestObject.Rank)}" +
                                  $"{playerBestObject.Mods.ToModeString(OsuBase.client).Replace("No Mode", "No Mod")}** ▸ " +
                                  $"{beatmap.BeatmapId} ▸ **[{beatmap.Title} " +
                                  $"[{beatmap.Difficulty}]](https://osu.ppy.sh/b/{beatmap.BeatmapId})** " +
-                    $"\n▸ **☆{beatmap.StarRating:N2}** ▸ **{playerBestObject.Accuracy:F}%** " +
-                    $"for **{pp.Pp:F}pp** " +
-                    $"\n▸ [Combo: {playerBestObject.MaxCombo}x / Max: {beatmap.MaxCombo}]" +
-                    $"\n▸ Play made {(DateTime.Now - playerBestObject.Date.Value).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 3)} ago\n";
+                                 $"\n▸ **☆{beatmap.StarRating:N2}** ▸ **{playerBestObject.Accuracy:F}%** " +
+                                 $"for **{pp.Pp:F}pp** " +
+                                 $"\n▸ [Combo: {playerBestObject.MaxCombo}x / Max: {beatmap.MaxCombo}]" +
+                                 $"\n▸ Play made {(DateTime.Now - playerBestObject.Date.Value).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 3)} ago\n";
             }
             embed.WithDescription(topPlayString);
             await ReplyAsync(embed: embed.Build());

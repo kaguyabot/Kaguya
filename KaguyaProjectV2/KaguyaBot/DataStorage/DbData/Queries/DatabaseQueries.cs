@@ -94,21 +94,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-        /// <summary>
-        /// Returns what rank the user is on the server-specific EXP "leaderboard". If they are
-        /// the highest EXP holder, this value would be 1.
-        /// </summary>
-        /// <param name="server"></param>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public static int GetServerExpRankForUser(Server server, User user)
-        {
-            using (var db = new KaguyaDb())
-            {
-                return server.ServerExp.OrderByDescending(x => x.Exp).ToList().FindIndex(x => x.UserId == user.UserId) + 1;
-            }
-        }
-
         public static double GetLastPraiseTime(ulong userId, ulong serverId)
         {
             using (var db = new KaguyaDb())

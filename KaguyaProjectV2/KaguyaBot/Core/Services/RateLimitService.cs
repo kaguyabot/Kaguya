@@ -101,7 +101,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                             dm = false;
                         }
 
-                        await ConsoleLogger.LogAsync($"User [Name: {user?.Username} | ID: {user?.Id} | Supporter: {registeredUser?.IsSupporter}] " +
+                        await ConsoleLogger.LogAsync($"User [Name: {user?.Username} | ID: {user?.Id} | Supporter: {registeredUser.IsSupporter}] " +
                                                 $"has been ratelimited. Duration: {humanizedTime} Direct Message: {dm}", LogLvl.INFO);
                     }
 
