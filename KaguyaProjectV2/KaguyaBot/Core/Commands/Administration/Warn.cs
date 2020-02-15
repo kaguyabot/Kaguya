@@ -9,6 +9,8 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -46,7 +48,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await DatabaseQueries.InsertAsync(wu);
             WarnEvent.Trigger(server, wu);
 
-            await user.SendMessageAsync(embed: (await WarnEmbed(wu, Context)).Build());
+            try
+            {
+                await user.SendMessageAsync(embed: (await WarnEmbed(wu, Context)).Build());
+            }
+            catch (Exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to DM user {user.Id} that they have been " +
+                                             $"warned in guild {server.ServerId}. " +
+                                             $"Database updated regardless.", LogLvl.DEBUG);
+            }
             await ReplyAsync(embed: (await Reply(wu, user)).Build());
 
             if (server.IsPremium && server.ModLog != 0)

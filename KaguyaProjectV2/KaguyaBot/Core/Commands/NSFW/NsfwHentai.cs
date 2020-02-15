@@ -35,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                  "[Kaguya Supporters](https://the-kaguya-project.myshopify.com/) " +
                  "may specify one or multiple tags and have no limit on how many images they can post per day. " +
                  "A complete list of tags may be found [here (SFW link)](https://konachan.com/tag).\n\n" +
-                 "Voting online [here](https://top.gg/bot/538910393918160916)")]
+                 "Voting online [here](https://top.gg/bot/538910393918160916/vote)")]
         [Remarks("\nbomb\n[tag] {...} ($$$)\nbomb [tag] {...} ($$$)")]
         public async Task Command([Remainder]string tagString = null)
         {

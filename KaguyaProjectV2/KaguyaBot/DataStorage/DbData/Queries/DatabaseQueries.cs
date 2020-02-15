@@ -111,9 +111,16 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                return (from r in db.Praise.OrderByDescending(x => x.TimeGiven)
+                try
+                {
+                    return (from r in db.Praise.OrderByDescending(x => x.TimeGiven)
                         where r.GivenBy == userId && r.ServerId == serverId
-                        select r).First()?.TimeGiven ?? 0;
+                        select r).First().TimeGiven;
+                }
+                catch (InvalidOperationException)
+                {
+                    return 0;
+                }
             }
         }
 

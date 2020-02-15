@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             if (currentSettings == null)
                 return;
 
-            var currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.Server.ServerId, args.WarnedUser.UserId);
+            var currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.WarnedUser.UserId, args.Server.ServerId);
             var warnCount = currentWarnings.Count;
 
             var guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.ServerId).GetUser(args.WarnedUser.UserId);

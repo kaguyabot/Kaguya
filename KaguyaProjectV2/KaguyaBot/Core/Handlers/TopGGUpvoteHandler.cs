@@ -31,7 +31,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 {
                     var user = await DatabaseQueries.GetOrCreateUserAsync(voter.Id);
                     var curMonthlyVotes = voters.Count(x => x.Id == voter.Id);
-                    var dbVotes = (await DatabaseQueries.GetAllForUserAsync<Upvote>(voter.Id))?.OrderByDescending(x => x.Time).ToList();
+
+                    // UTC Because this is what the voting API uses when resetting the votes every month.
+                    var utcNow = DateTime.UtcNow;
+                    var firstOfTheMonth = new DateTime(utcNow.Year, utcNow.Month, 1, 0, 0, 0);
+
+                    var dbVotes = (await DatabaseQueries.GetAllForUserAsync<Upvote>(voter.Id))
+                        ?.Where(x => x.Time > firstOfTheMonth.ToOADate())
+                        .OrderByDescending(x => x.Time).ToList();
+
                     var mostRecentVote = dbVotes == null || dbVotes.Count == 0 ? null : dbVotes[0];
 
                     // If they are owed at least one vote based on how many votes the api reports back to us
@@ -87,7 +95,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                             user.TotalUpvotes++;
 
                             await DatabaseQueries.UpdateAsync(user);
-                            await DatabaseQueries.InsertAsync(vote);
+
+                            if (curMonthlyVotes < dbVotes.Count)
+                            {
+
+                                await DatabaseQueries.InsertAsync(vote);
+                            }
 
                             await ConsoleLogger.LogAsync($"User {voter.Id} has successfully upvoted Kaguya.", LogLvl.DEBUG);
                         }
@@ -116,8 +129,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                         return;
                     }
 
-                    //if (mostRecentVote.Time > DateTime.Now.AddHours(-12).ToOADate())
-                    //    return;
+                    if (mostRecentVote.Time > DateTime.Now.AddHours(-12).ToOADate())
+                        return;
 
                     if (mostRecentVote.ReminderSent)
                         return;

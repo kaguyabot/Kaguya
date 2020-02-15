@@ -24,6 +24,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             var userPraise = await DatabaseQueries.GetAllForServerAndUserAsync<Praise>(Context.User.Id, server.ServerId);
             var lastGivenPraise = DatabaseQueries.GetLastPraiseTime(Context.User.Id, Context.Guild.Id);
 
+            if (user == null && reason == null)
+            {
+                await SendBasicSuccessEmbedAsync($"You currently have `{userPraise.Count}` praise.");
+                return;
+            }
+
             if (user == null)
             {
                 var curEmbed = new KaguyaEmbedBuilder

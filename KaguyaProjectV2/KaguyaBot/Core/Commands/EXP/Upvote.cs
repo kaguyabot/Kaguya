@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            await SendBasicSuccessEmbedAsync($"Upvote me here! [Kaguya on Top.GG](https://top.gg/bot/538910393918160916)");
+            await SendBasicSuccessEmbedAsync($"Upvote me here! [Kaguya on Top.GG](https://top.gg/bot/538910393918160916/vote)");
         }
     }
 }

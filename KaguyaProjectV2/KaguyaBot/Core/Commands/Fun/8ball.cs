@@ -5,6 +5,8 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
@@ -25,13 +27,35 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 
             var response = responses[val];
 
+            Regex[] suicidePreventionRegexArray = new[]
+            {
+                new Regex(@"should i \b(?:kill|end|hang)\b \b(myself|it all)\b"),
+                new Regex(@"should i \b(commit|hang)\b \b(?:myself|suicide)\b"),
+                new Regex(@"\b(hang|kill|suicide)\b \b(myself)\b"),
+                new Regex(@"suicide"),
+                new Regex(@"i \b(end)\b \b(it all|my life|myself)\b")
+            };
+
             var embed = new KaguyaEmbedBuilder
             {
                 Title = $"Magic 8Ball | {new Emoji("🔮")}",
                 Description = response.Response
             };
 
-            await ReplyAsync(embed: embed.Build());
+            if (suicidePreventionRegexArray.Any(x => x.IsMatch(question.ToLower())))
+            {
+                embed = new KaguyaEmbedBuilder(EmbedColor.VIOLET)
+                {
+                    Title = $"Magic 8Ball | {new Emoji("🔮")}",
+                    Description = $"Hey, friend. I'm not really sure how to answer this " +
+                                  $"one. These resources may be able to help you figure this out:\n\n" +
+                                  $"[[USA Suicide Prevention Hotline: 1-800-273-8255]](https://suicidepreventionlifeline.org/)\n" +
+                                  $"[[USA Suicide Prevention Website]](https://suicidepreventionlifeline.org/)\n" +
+                                  $"[[International Suicide Prevention Website]](https://www.supportisp.org/)"
+                };
+            }
+
+            await SendEmbedAsync(embed);
         }
     }
 }
