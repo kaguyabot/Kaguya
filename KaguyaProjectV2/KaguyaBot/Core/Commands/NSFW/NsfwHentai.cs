@@ -12,7 +12,9 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using BooruSharp.Search.Post;
 using Discord;
+using Discord.Net;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using RestSharp.Extensions;
 using SearchResult = BooruSharp.Search.Post.SearchResult;
@@ -94,6 +96,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                             }
                         }
                     }
+                    else
+                    {
+                        await SendHentaiAsync(user, tags);
+                    }
                 }
                 catch (Discord.Net.HttpException)
                 {
@@ -119,11 +125,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 return null;
             }
 
+            if (tags.Any(x => x.ToLower().Equals("sex")))
+            {
+                tags.Append("sex");
+            }
+
             var wc = new WebClient();
             var img = await konachan.GetRandomImage(tags);
             using (var stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.fileUrl)))
             {
-                await Context.Channel.SendFileAsync(stream, "Kaguya_NSFW.jpg");
+                if (img.Equals(null))
+                {
+                    await SendBasicErrorEmbedAsync($"An image could not be found for the provided tag(s). Please try again.");
+                    return null;
+                }
+                try
+                {
+                    await Context.Channel.SendFileAsync(stream, "Kaguya_NSFW.jpg");
+                }
+                catch (HttpException)
+                {
+                    await SendBasicErrorEmbedAsync($"A file was too large to be sent, please try again.");
+                    return null;
+                }
             }
 
             user.TotalNSFWImages -= 1;

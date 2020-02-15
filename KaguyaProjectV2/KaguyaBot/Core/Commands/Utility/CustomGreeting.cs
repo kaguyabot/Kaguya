@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
@@ -21,7 +20,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                  "`{USERNAME}` - The name of the user who just joined the server.\n" +
                  "`{USERMENTION}` - Mentions the user who just joined.\n" +
                  "`{SERVER}` - The name of this server.\n" +
-                 "`{MEMBERCOUNT}` - The member count of this server, including the user who just joined.\n")]
+                 "`{MEMBERCOUNT}` - The member count of this server, including the user who just joined. " +
+                 "Formatted as such: `321st`, `4th`, etc.\n")]
         [Remarks("<msg>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Command([Remainder] string message)

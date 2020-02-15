@@ -22,8 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             greetingMsg = greetingMsg.Replace("{USERNAME}", u.Username);
             greetingMsg = greetingMsg.Replace("{USERMENTION}", u.Mention);
             greetingMsg = greetingMsg.Replace("{SERVER}", u.Guild.Name);
-            greetingMsg = greetingMsg.Replace("{MEMBERCOUNT}", $"{u.Guild.MemberCount}");
-            greetingMsg = greetingMsg.Replace("{MEMBERCOUNT2}", $"{u.Guild.MemberCount.Ordinalize()}");
+            greetingMsg = greetingMsg.Replace("{MEMBERCOUNT}", $"{u.Guild.MemberCount.Ordinalize()}");
 
             await channel.SendMessageAsync(greetingMsg);
         }

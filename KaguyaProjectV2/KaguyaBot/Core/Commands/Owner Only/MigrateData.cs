@@ -1,17 +1,17 @@
 ﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Newtonsoft.Json;
+using OsuSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Osu;
-using OsuSharp;
 using User = KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models.User;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
@@ -32,11 +32,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             await DatabaseQueries.DeleteAllAsync<BlackListedChannel>();
             await DatabaseQueries.DeleteAllAsync<CommandHistory>();
             await DatabaseQueries.DeleteAllAsync<FilteredPhrase>();
+            await DatabaseQueries.DeleteAllAsync<Fish>();
             await DatabaseQueries.DeleteAllAsync<GambleHistory>();
+            await DatabaseQueries.DeleteAllAsync<MutedUser>();
+            await DatabaseQueries.DeleteAllAsync<PremiumKey>();
             await DatabaseQueries.DeleteAllAsync<Rep>();
+            await DatabaseQueries.DeleteAllAsync<Reminder>();
+            await DatabaseQueries.DeleteAllAsync<ServerExp>();
+            await DatabaseQueries.DeleteAllAsync<ServerRoleReward>();
             await DatabaseQueries.DeleteAllAsync<SupporterKey>();
             await DatabaseQueries.DeleteAllAsync<ServerExp>();
             await DatabaseQueries.DeleteAllAsync<UserBlacklist>();
+            await DatabaseQueries.DeleteAllAsync<Upvote>();
             await DatabaseQueries.DeleteAllAsync<WarnedUser>();
             await DatabaseQueries.DeleteAllAsync<WarnSetting>();
             await DatabaseQueries.DeleteAllAsync<User>();

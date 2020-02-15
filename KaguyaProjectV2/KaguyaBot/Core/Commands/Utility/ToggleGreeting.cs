@@ -1,6 +1,6 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
 
@@ -13,6 +13,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Alias("tg")]
         [Summary("Toggles this server's greeting message. If it is currently disabled, " +
                  "this command will enable it (and vice versa).")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.SendMessages)]
         public async Task Command()
         {
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);

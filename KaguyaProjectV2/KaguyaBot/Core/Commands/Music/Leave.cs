@@ -56,9 +56,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} I must be in a voice channel via " +
                                                                $"the `{server.CommandPrefix}join` command for this " +
-                                                               $"command to work. Please try `{server.CommandPrefix}join` " +
-                                                               $"and then `{server.CommandPrefix}leave` again to remove " +
-                                                               $"me from the voice channel if I am stuck.");
+                                                               $"command to work. Please try **joining a new voice channel** via " +
+                                                               $"`{server.CommandPrefix}join` if I am refusing to connect/disconnect.");
             }
         }
     }

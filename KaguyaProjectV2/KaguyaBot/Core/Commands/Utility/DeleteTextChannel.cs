@@ -1,9 +1,8 @@
-﻿using System.Linq;
+﻿using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using System.Threading.Tasks;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -11,7 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
     {
         [UtilityCommand]
         [Command("DeleteTextChannel")]
-        [Alias("ctc")]
+        [Alias("dtc")]
         [Summary("Deletes a standard text channel.")]
         [Remarks("<name>")]
         [RequireUserPermission(GuildPermission.ManageChannels)]

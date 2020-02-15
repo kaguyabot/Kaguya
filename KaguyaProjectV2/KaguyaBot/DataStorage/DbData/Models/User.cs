@@ -148,12 +148,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public IEnumerable<ServerExp> ServerExp { get; set; }
 
         /// <summary>
-        /// FK_SupporterKeys_KaguyaUser_BackReference
-        /// </summary>
-        [Association(ThisKey = "UserId", OtherKey = "UserId")]
-        public IEnumerable<SupporterKey> SupporterKeys { get; set; }
-
-        /// <summary>
         /// FK_Upvotes_KaguyaUser_BackReference
         /// </summary>
         [Association(ThisKey = "UserId", OtherKey = "UserId")]

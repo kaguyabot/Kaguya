@@ -138,12 +138,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public IEnumerable<Praise> Praise { get; set; }
 
         /// <summary>
-        /// FK_PremiumKeys_KaguyaServer_BackReference
-        /// </summary>
-        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
-        public IEnumerable<PremiumKey> PremiumKeys { get; set; }
-
-        /// <summary>
         /// FK_ServerRoleRewards_KaguyaServer_BackReference
         /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]

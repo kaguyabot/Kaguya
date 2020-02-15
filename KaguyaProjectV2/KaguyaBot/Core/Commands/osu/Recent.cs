@@ -22,10 +22,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         [Command("osuRecent")]
         [Alias("recent", "r")]
         [Summary("Displays the most recent osu! play for the user. If the user has spaces in their " +
-                 "username, wrap the name with quotation marks. You may see up to 5 of the user's most " +
-                 "recent plays at once via the `limit` property (default limit is 1).")]
-        [Remarks("[username, NOT ID] [limit] (Optional if configured with `osuset` already)\n" +
-                 "SomeName\n\"Name with spaces 123\" 3")]
+                 "username, wrap the name with quotation marks.")]
+        [Remarks("[username, NOT ID] (Optional if configured with `osuset` already)\n" +
+                 "SomeName\n\"Name with spaces 123\"")]
         public async Task OsuRecentCommand(string player = null)
         {
             var client = OsuBase.client;

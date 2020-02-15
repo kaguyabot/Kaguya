@@ -102,7 +102,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
 
             using (var wc = new WebClient())
             {
-                var pfpImg = await wc.DownloadDataTaskAsync(xp.ProfilePicture.ProfileUrl);
+                string pfpLink = xp.ProfilePicture?.ProfileUrl ?? guildUser.GetDefaultAvatarUrl();
+
+                var pfpImg = await wc.DownloadDataTaskAsync(pfpLink);
                 pfpStream = new MemoryStream(pfpImg);
 
                 var badgeImg = await wc.DownloadDataTaskAsync(xp.SupporterBadge.Emote.Url);
@@ -117,6 +119,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
             const double resizeScalar = 0.82;
             suppBadge.Mutate(x => x.Resize((int)(suppBadge.Width * resizeScalar), (int)(suppBadge.Height * resizeScalar)));
 
+            if (xp.ProfilePicture.ProfileUrl == null)
+            {
+                profilePicture.Mutate(x => x.Resize(132, 132));
+            }
             // The reason why we draw the template onto the profile picture here is because 
             // the profile picture is beneath the template. Our template contains a cutout for this, 
             // so we draw everything ontop of our virtual base layer (in this case, our profile pic).

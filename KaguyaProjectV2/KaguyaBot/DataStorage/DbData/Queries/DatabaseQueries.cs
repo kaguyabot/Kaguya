@@ -57,7 +57,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     .LoadWith(x => x.Fish)
                     .LoadWith(x => x.MutedUsers)
                     .LoadWith(x => x.Praise)
-                    .LoadWith(x => x.PremiumKeys)
                     .LoadWith(x => x.RoleRewards)
                     .LoadWith(x => x.ServerExp)
                     .LoadWith(x => x.WarnedUsers)
@@ -81,7 +80,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                         .LoadWith(x => x.Reminders)
                         .LoadWith(x => x.Rep)
                         .LoadWith(x => x.ServerExp)
-                        .LoadWith(x => x.SupporterKeys)
                         .LoadWith(x => x.Upvotes)
                         .Where(u => u.UserId == Id).FirstAsync();
                 }

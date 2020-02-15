@@ -152,7 +152,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 {
                     Fields = new List<EmbedFieldBuilder>{ field }
                 };
-                await SendEmbedAsync(embed);
+                await context.Channel.SendEmbedAsync(embed);
                 return null;
             }
             #endregion

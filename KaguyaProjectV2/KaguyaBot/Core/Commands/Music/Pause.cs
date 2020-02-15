@@ -38,7 +38,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             }
             else
             {
-                await SendBasicErrorEmbedAsync($"There is no song currently playing, therefore I have nothing to pause.");
+                await SendBasicErrorEmbedAsync($"There is no song currently playing, therefore I have nothing to pause. If " +
+                                               $"you have previously used the `{server.CommandPrefix}pause` command, " +
+                                               $"use the `{server.CommandPrefix}resume` command to resume the player.");
             }
         }
     }

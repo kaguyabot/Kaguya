@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
@@ -32,7 +33,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
             if (node.HasPlayer(Context.Guild) && vc != null)
             {
-                await node.MoveChannelAsync(vc);
+                try
+                {
+                    await node.MoveChannelAsync(vc);
+                }
+                catch (Exception)
+                {
+                    await SendBasicErrorEmbedAsync($"It looks like I'm already connected to this voice channel " +
+                                                   $"via the WebSocket. If I am not present in the voice channel, this " +
+                                                   $"is due to an error. To fix this issue, join a new voice channel and " +
+                                                   $"try the command again. This issue usually arises when I am manually " +
+                                                   $"force-disconnected from the channel.");
+                    return;
+                }
                 await SendBasicSuccessEmbedAsync(
                     $"{Context.User.Mention} Successfully moved to `{vc.Name}`.");
             }
