@@ -12,5 +12,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public double Expiration { get; set; }
         [Column(Name = "Reason"), NotNull]
         public string Reason { get; set; }
+
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        public User User { get; set; }
     }
 }

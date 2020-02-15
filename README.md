@@ -14,6 +14,26 @@ as it has today, so this change was absolutely necessary and was the core reason
 - `Owner Only` commands are now only displayed for bot owners.
 - Some commands have been renamed and will not use the same names or aliases as V1. However, most commands do share the same aliases or names as V1 for consistency.
 
+## New Commands:
+
+*Note: Some commands here may be exclusive to supporters/premium servers.
+- `$move` - Moves users between voice channels.
+- `$deleteunusedroles` - Deletes all roles that currently aren't used by anyone, except roles managed by bots and integrations.
+- `$hyperban` - Bans a target from any server where the **command executor** is an *Administrator* that Kaguya also shares with the user and target.
+- `$serverstats` - Very detailed statistics about the server.
+- `$toggleosulinks` - Toggles the automatic osu! link parsing feature.
+- `$buybait` - Bait purchasing for new fish game.
+- `$dailyloot` - Replacement for `$timely` - now earns both points and exp, and the amounts fluctuate.
+- `$fish` - Awesome new fishing game!
+- `$myfish` - View all of your fish and other fish stats.
+- `$sellfish` - Allows you to sell your fish for points.
+- `$addrolereward` - Allows server admins to add a new role reward (based on the new server-specific exp system). Very similar to Mee6's *premium-only* role rewards feature (except this is free!)
+- `$removerolereward`
+- `$viewrolerewards`
+- `$exppreferences` - Allows users to determine where they want their EXP level-up messages sent (Chat, DM, Both, or None at all) as well as what types to send where (Server or Global). Very customizable.
+- `$praise` - Rep but for servers. Server admins can modify a user's praise at anytime.
+
+
 ## Command Changes: Administration
 
 - `$antiraid` no longer has the intuitive setup that V1 has. This way changes to the anti-raid config may be made on the fly.
@@ -45,6 +65,9 @@ rarer fish! Be wary though, as better bait will be needed to catch rarer fish mo
 - `$masspointsdistribute` has been removed.
 - `$redeem` will now support keys of all types (Kaguya Supporter, Kaguya Premium, etc.) instead of there being separate `$redeem` commands for each key type.
 - `$nsfw bomb` command removed. **Note:** Although this individual command is removed, using `$nsfw bomb` by itself will still trigger the same function as V1. It is just not present in the command list.
+- `$exp` and `$points` have been removed - `$profile` is now the official replacement for these commands.
+- `$timely` and `$weekly` removed.
+- `$profile` is now a programatically generated image ontop of a template that displays various stats, such as your exp rank, points, level (both global and server), etc.
 
 ## Quality of life Changes:
 

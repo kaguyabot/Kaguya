@@ -87,44 +87,84 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// value is not in the database.
         /// </summary>
         [Column(Name = "IsCurrentlyPurgingMessages"), NotNull]
-        public bool IsCurrentlyPurgingMessages { get; set; } = false; //Not in database.
+        public bool IsCurrentlyPurgingMessages { get; set; } = false;
+
         /// <summary>
-        /// FK_KaguyaServer_MutedUsers_BackReference
+        /// FK_AntiRaid_KaguyaServer_BackReference
         /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
-        public IEnumerable<MutedUser> MutedUsers { get; set; }
-        /// <summary>
-        /// FK_KaguyaServer_FilteredPhrases_BackReference
-        /// </summary>
-        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
-        public IEnumerable<FilteredPhrase> FilteredPhrases { get; set; }
+        public IEnumerable<AntiRaidConfig> AntiRaid { get; set; }
+
         /// <summary>
         /// FK_KaguyaServer_AutoAssignedRoles_BackReference
         /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<AutoAssignedRole> AutoAssignedRoles { get; set; }
+
         /// <summary>
         /// FK_KaguyaServer_BlackListedChannels_BackReference
         /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<BlackListedChannel> BlackListedChannels { get; set; }
+
         /// <summary>
-        /// FK_KaguyaServer_WarnedUsers_BackReference
+        /// FK_CommandHistory_KaguyaServer_BackReference
         /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
-        public IEnumerable<WarnedUser> WarnedUsers { get; set; }
+        public IEnumerable<CommandHistory> CommandHistory { get; set; }
+
+        /// <summary>
+        /// FK_KaguyaServer_FilteredPhrases_BackReference
+        /// </summary>
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
+        public IEnumerable<FilteredPhrase> FilteredPhrases { get; set; }
+
+        /// <summary>
+        /// FK_Fish_KaguyaServer_BackReference
+        /// </summary>
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
+        public IEnumerable<Fish> Fish { get; set; }
+
+        /// <summary>
+        /// FK_KaguyaServer_MutedUsers_BackReference
+        /// </summary>
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
+        public IEnumerable<MutedUser> MutedUsers { get; set; }
+
+        /// <summary>
+        /// FK_Praise_KaguyaServer_BackReference
+        /// </summary>
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
+        public IEnumerable<Praise> Praise { get; set; }
+
+        /// <summary>
+        /// FK_PremiumKeys_KaguyaServer_BackReference
+        /// </summary>
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
+        public IEnumerable<PremiumKey> PremiumKeys { get; set; }
+
+        /// <summary>
+        /// FK_ServerRoleRewards_KaguyaServer_BackReference
+        /// </summary>
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
+        public IEnumerable<ServerRoleReward> RoleRewards { get; set; }
+
         /// <summary>
         /// FK_KaguyaServer_ServerExp_BackReference
         /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<ServerExp> ServerExp { get; set; }
 
+        /// <summary>
+        /// FK_WarnedUsers_KaguyaServer_BackReference
+        /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
-        public IEnumerable<Praise> Praise { get; set; }
+        public IEnumerable<WarnedUser> WarnedUsers { get; set; }
 
+        /// <summary>
+        /// FK_WarnSettings_KaguyaServer_BackReference
+        /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
-        public IEnumerable<AntiRaidConfig> AntiRaid { get; set; }
-        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
-        public IEnumerable<ServerRoleReward> RoleRewards { get; set; }
+        public WarnSetting WarnSettings { get; set; }
     }
 }

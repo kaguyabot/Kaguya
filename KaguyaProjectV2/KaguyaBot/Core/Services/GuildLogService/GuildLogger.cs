@@ -157,8 +157,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             if (server.LogAntiraids == 0)
                 return;
 
-            // TODO: Investigate why actionedUsers doesn't get sent. It has something to do with the foreach below.
-
             string actionedUsers = "";
             foreach (var user in e.GuildUsers)
             {
@@ -206,7 +204,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             {
                 Title = "User Un-Banned",
                 Description = $"User: `[Name: {arg1} | ID: {arg1.Id}`]\n",
-                ThumbnailUrl = "https://i.imgur.com/6Xk2HCG.png"
+                ThumbnailUrl = "https://i.imgur.com/uYOa4VD.png"
             };
 
             await arg2.GetTextChannel(server.LogBans).SendEmbedAsync(embed);

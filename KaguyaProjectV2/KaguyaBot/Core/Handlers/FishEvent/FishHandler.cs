@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
-// Todo: Test
-
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 {
     public static class FishHandler // Fish level-up handler.

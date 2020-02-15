@@ -164,6 +164,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await NSFWImageHandler.Initialize();
             await KaguyaPremiumExpirationHandler.Initialize();
             await TopGGUpvoteHandler.Initialize();
+            await GameRotationService.Initialize();
 
             await ConsoleLogger.LogAsync($"All timers initialized.", LogLvl.INFO);
         }

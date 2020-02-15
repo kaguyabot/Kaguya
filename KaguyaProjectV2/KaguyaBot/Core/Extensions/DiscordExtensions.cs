@@ -51,5 +51,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
             await channel.SendMessageAsync(embed: embed.Build());
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        public static long TotalUsers(this DiscordShardedClient client)
+        {
+            long users = 0;
+
+            foreach (var shard in client.Shards)
+            {
+                foreach (var guild in shard.Guilds)
+                {
+                    users += guild.MemberCount;
+                }
+            }
+
+            return users;
+        }
     }
 }

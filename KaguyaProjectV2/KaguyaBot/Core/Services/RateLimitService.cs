@@ -3,6 +3,7 @@ using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
@@ -23,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             timer.Enabled = true;
             timer.Elapsed += async (sender, e) =>
             {
-                var users = await DatabaseQueries.GetAllAsync<User>(x => x.ActiveRateLimit > 0);
+                var users = await DatabaseQueries.GetAllAsync<User>(x => x.ActiveRateLimit > 0 && x.UserId != 146092837723832320);
 
                 foreach (var registeredUser in users)
                 {
@@ -42,22 +43,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         registeredUser.RateLimitWarnings++;
                         if (registeredUser.RateLimitWarnings > 7 && registeredUser.ActiveRateLimit > 0)
                         {
-                            var _user = ConfigProperties.Client.GetUser(registeredUser.UserId);
+                            var socketUser = ConfigProperties.Client.GetUser(registeredUser.UserId);
 
-                            var _embed = new KaguyaEmbedBuilder
+                            var _embed = new KaguyaEmbedBuilder(EmbedColor.RED)
                             {
                                 Description = "You have exceeded your maximum allotment of ratelimit strikes, therefore " +
                                               "you will be permanently blacklisted."
                             };
-                            _embed.SetColor(EmbedColor.RED);
+                            await socketUser.SendMessageAsync(embed: _embed.Build());
 
-                            await _user.SendMessageAsync(embed: _embed.Build());
+                            var bl = new UserBlacklist
+                            {
+                                UserId = socketUser.Id,
+                                Expiration = DateTime.MaxValue.ToOADate(),
+                                Reason = "Ratelimit service: Automatic permanent blacklist for surpassing " +
+                                         "7 ratelimit strikes in one month.",
+                                User = registeredUser
+                            };
 
-                            registeredUser.BlacklistExpiration = DateTime.MaxValue.ToOADate();
                             registeredUser.ActiveRateLimit = 0;
                             await DatabaseQueries.UpdateAsync(registeredUser);
+                            await DatabaseQueries.InsertOrReplaceAsync(bl);
 
-                            await ConsoleLogger.LogAsync($"User [Name: {_user.Username} | ID: {_user.Id} | Supporter: {registeredUser.IsSupporter}] " +
+                            await ConsoleLogger.LogAsync($"User [Name: {socketUser.Username} | ID: {socketUser.Id} | Supporter: {registeredUser.IsSupporter}] " +
                                                     "has been permanently blacklisted. Reason: Excessive Ratelimiting", LogLvl.WARN);
                             return;
                         }
@@ -74,8 +82,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         List<TimeSpan> timeSpans = durations.Select(RegexTimeParser.ParseToTimespan).ToList();
                         string humanizedTime = timeSpans.ElementAt(registeredUser.RateLimitWarnings - 1).Humanize();
 
-                        registeredUser.BlacklistExpiration =
-                            DateTime.Now.Add(timeSpans.ElementAt(registeredUser.RateLimitWarnings - 1)).ToOADate();
+                        var tempBlacklist = new UserBlacklist
+                        {
+                            UserId = user.Id,
+                            Expiration = (DateTime.Now + timeSpans.ElementAt(registeredUser.RateLimitWarnings - 1)).ToOADate(),
+                            Reason = "Ratelimit service: Automatic permanent blacklist for surpassing " +
+                                     "7 ratelimit strikes in one month.",
+                            User = registeredUser
+                        };
 
                         var embed = new KaguyaEmbedBuilder
                         {

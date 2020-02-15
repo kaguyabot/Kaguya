@@ -84,9 +84,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
 
             StatsEmbed:
-
-            // todo: Fix the error that's thrown if $myfish is used when the user currently does not own any unsold fish.
-
             string rarestFish = null;
             if (userFish.Count(x => !x.Sold && x.FishType != FishType.BAIT_STOLEN) != 0)
             {

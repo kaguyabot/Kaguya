@@ -55,8 +55,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             var context = new ShardedCommandContext(_client, message);
             await IsFilteredPhrase(context, server, message); // If filtered phrase (and user isn't admin), return.
 
-            await ExperienceHandler.AddExp(user, server, context);
-            await ServerSpecificExpHandler.AddExp(user, server, context);
+            await ExperienceHandler.TryAddExp(user, server, context);
+            await ServerSpecificExpHandler.TryAddExp(user, server, context);
 
             // If the channel is blacklisted and the user isn't an Admin, return.
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&

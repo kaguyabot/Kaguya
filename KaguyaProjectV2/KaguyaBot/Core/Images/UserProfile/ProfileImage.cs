@@ -31,6 +31,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             MemoryStream pfpStream;
             MemoryStream badgeStream;
 
+            bool isDefaultPfp = string.IsNullOrEmpty(guildUser.AvatarId);
+
             var profile = new ProfileTemplate
             {
                 Xp = new ProfileTemplateXp
@@ -48,7 +50,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
 
             using (var wc = new WebClient())
             {
-                var pfpImg = await wc.DownloadDataTaskAsync(guildUser.GetAvatarUrl(ImageFormat.Png));
+                var avatarURL = guildUser.GetAvatarUrl(ImageFormat.Png);
+                avatarURL = string.IsNullOrEmpty(avatarURL) ? guildUser.GetDefaultAvatarUrl() : avatarURL;
+
+                var pfpImg = await wc.DownloadDataTaskAsync(avatarURL);
                 pfpStream = new MemoryStream(pfpImg);
 
                 var badgeImg = await wc.DownloadDataTaskAsync(profile.Xp.SupporterBadge.Emote.Url);
@@ -80,6 +85,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             // Resize downloaded supporter image, she's a little too chonky <(^-^)>
             const double resizeScalar = 0.75;
             suppBadge.Mutate(x => x.Resize((int)(x.GetCurrentSize().Width * resizeScalar), (int)(x.GetCurrentSize().Height * resizeScalar)));
+
+            if(isDefaultPfp)
+                profilePicture.Mutate(x => x.Resize(132, 132));
 
             // Draw the profile picture on top of the global bar. Global bar will serve as the base layer 
             // that we continually add onto, even if it doesn't directly overlap it, as it's a layer 

@@ -35,8 +35,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
             var mutedUsers = await DatabaseQueries.GetAllForServerAsync<MutedUser>(server.ServerId);
             var premiumKeys = await DatabaseQueries.GetAllForServerAsync<PremiumKey>(server.ServerId);
 
-            var percentageOnline = guild.Users.Count(x => 
-                                       x.Status != UserStatus.Offline && x.Status != UserStatus.Invisible) / guild.MemberCount;
+            var percentageOnline =
+                ((double)guild.Users.Count(x => x.Status != UserStatus.Offline && x.Status != UserStatus.Invisible) /
+                 guild.MemberCount) * 100;
 
             double premiumExpiration = premiumKeys.Sum(key => key.Expiration - DateTime.Now.ToOADate());
 
@@ -59,7 +60,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
                                 $"Multi-factor Authentication: `{guild.MfaLevel.Humanize(LetterCasing.Sentence)}`\n" +
                                 $"Verification Level: `{guild.VerificationLevel}`\n" +
                                 $"Total Member Count: `{guild.MemberCount:N0}`\n" +
-                                $"Percentage of users online: `{percentageOnline:N2}%`\n" +
+                                $"Percentage of users online: `{percentageOnline:F}%`\n" +
                                 $"Voice-Channel AFK Timeout: `{(guild.AFKTimeout != 0 ? TimeSpan.FromSeconds(guild.AFKTimeout).Humanize() : "Disabled")}`\n" +
                                 $"AFK Voice Channel: `{(guild.AFKChannel is null ? "Disabled." : guild.AFKChannel.Name)}`\n"
                     },

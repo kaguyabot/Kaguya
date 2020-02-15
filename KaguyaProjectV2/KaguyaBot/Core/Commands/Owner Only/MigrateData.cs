@@ -78,7 +78,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     TotalRollWins = (int)u.LifetimeGambleWins,
                     TotalQuickdrawWins = u.QuickdrawWinnings,
                     TotalQuickdrawLosses = u.QuickdrawLosses,
-                    BlacklistExpiration = 0,
                     LastGivenExp = 0,
                     LastDailyBonus = 0,
                     LastGivenRep = 0,

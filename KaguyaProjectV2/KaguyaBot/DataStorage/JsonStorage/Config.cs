@@ -25,9 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         {
             string[] directories =
             {
-                resourcesPath + "Fonts",
                 resourcesPath + "Images",
-                resourcesPath + "Logs",
                 resourcesPath + "Logs"
             };
 
@@ -46,29 +44,20 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             // Populate resources folder, if needed.
             using (var wc = new WebClient())
             {
-                // Font for $profile etc. images.
-                if (!File.Exists($@"{directories[0]}\frankMedium.ttf"))
-                {
-                    var data = await wc.DownloadDataTaskAsync("https://drive.google.com/file/d/1-K8snSV4K-z-gcO7_2DHXC15Mmij1XUi/view?usp=drivesdk");
-                    await File.WriteAllBytesAsync($@"{directories[0]}\frankMedium.ttf", data);
-
-                    await ConsoleLogger.LogAsync("Downloaded and saved frankMedium.ttf font.", LogLvl.INFO);
-                }
-
                 // $profile image
-                if (!File.Exists($@"{directories[1]}\ProfileSmall.png"))
+                if (!File.Exists($@"{directories[0]}\ProfileSmall.png"))
                 {
                     var data = await wc.DownloadDataTaskAsync("https://i.imgur.com/Ae2BBiC.png");
-                    await File.WriteAllBytesAsync($@"{directories[1]}\ProfileSmall.png", data);
+                    await File.WriteAllBytesAsync($@"{directories[0]}\ProfileSmall.png", data);
 
                     await ConsoleLogger.LogAsync("Downloaded and saved ProfileSmall.png image.", LogLvl.INFO);
                 }
 
                 // Exp level-up image
-                if (!File.Exists($@"{directories[1]}\XpLevelUpSmall.png"))
+                if (!File.Exists($@"{directories[0]}\XpLevelUpSmall.png"))
                 {
                     var data = await wc.DownloadDataTaskAsync("https://i.imgur.com/fgNNX8H.png");
-                    await File.WriteAllBytesAsync($@"{directories[1]}\XpLevelUpSmall.png", data);
+                    await File.WriteAllBytesAsync($@"{directories[0]}\XpLevelUpSmall.png", data);
 
                     await ConsoleLogger.LogAsync("Downloaded and saved XpLevelUpSmall.png image.", LogLvl.INFO);
                 }

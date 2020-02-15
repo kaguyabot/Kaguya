@@ -11,7 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
     public class ViewRoleRewards : KaguyaBase
     {
-        [AdminCommand]
+        [ExpCommand]
         [Command("ViewRoleRewards")]
         [Alias("rolerewards", "rrs", "vrrs", "vrr")]
         [Summary("Allows an administrator to view the current role rewards configuration.")]

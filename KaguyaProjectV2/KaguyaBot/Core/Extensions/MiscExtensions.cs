@@ -19,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             if (int.TryParse(numString, out int result))
                 return result;
             if (throwException)
-                throw new NullReferenceException("Could not parse string to int.");
+                throw new NullReferenceException("Could not parse string to integer.");
             return 0;
         }
 

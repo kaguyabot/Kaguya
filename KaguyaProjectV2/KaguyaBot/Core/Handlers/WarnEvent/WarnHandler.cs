@@ -12,16 +12,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
         public static async void OnWarn(object warn, WarnHandlerEventArgs args)
         {
             var currentSettings = await DatabaseQueries.GetFirstForServerAsync<WarnSetting>(args.Server.ServerId);
+
+            if (currentSettings == null)
+                return;
+
             var currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.Server.ServerId, args.WarnedUser.UserId);
             var warnCount = currentWarnings.Count;
 
             var guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.ServerId).GetUser(args.WarnedUser.UserId);
             var kaguya = ConfigProperties.Client.CurrentUser;
 
-            int muteNum = currentSettings.Mute;
-            int kickNum = currentSettings.Kick;
-            int shadowbanNum = currentSettings.Shadowban;
-            int banNum = currentSettings.Ban;
+            int? muteNum = currentSettings.Mute;
+            int? kickNum = currentSettings.Kick;
+            int? shadowbanNum = currentSettings.Shadowban;
+            int? banNum = currentSettings.Ban;
 
             if (warnCount == banNum)
             {

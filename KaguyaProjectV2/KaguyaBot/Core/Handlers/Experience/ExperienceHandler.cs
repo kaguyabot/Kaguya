@@ -16,23 +16,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
     public static class ExperienceHandler
     {
-        public static async Task AddExp(User user, Server server, ICommandContext context)
+        public static async Task TryAddExp(User user, Server server, ICommandContext context)
         {
             // If the user can receive exp, give them between 5 and 8.
             if (!CanGetExperience(user))
-            {
                 return;
-            }
+
+            if (user.IsBlacklisted || server.IsBlacklisted)
+                return;
 
             SocketTextChannel levelAnnouncementChannel;
             if (server.LogLevelAnnouncements != 0)
-            {
                 levelAnnouncementChannel = await context.Guild.GetTextChannelAsync(server.LogLevelAnnouncements) as SocketTextChannel;
-            }
             else
-            {
                 levelAnnouncementChannel = context.Channel as SocketTextChannel;
-            }
 
             double oldLevel = ReturnLevel(user);
 
@@ -50,14 +47,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                                          $"[New Total: {user.Experience:N0} Exp]", LogLvl.DEBUG);
 
             if (!HasLeveledUp(oldLevel, newLevel))
-            {
                 return;
-            }
+
             await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has leveled up! " +
                                          $"[Level: {newLevel} | EXP: {user.Experience:N0}]", LogLvl.INFO);
 
             // Don't send announcement if the channel is blacklisted, but only if it's not a level-announcements log channel.
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id && x.ChannelId != server.LogLevelAnnouncements))
+                return;
+
+            if (!server.LevelAnnouncementsEnabled)
                 return;
 
             var xp = new XpImage();

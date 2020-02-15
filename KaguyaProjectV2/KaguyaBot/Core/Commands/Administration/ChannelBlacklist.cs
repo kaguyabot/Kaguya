@@ -35,8 +35,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                  "blacklist the channel this command was executed from.")]
         [Remarks("(<= blacklists current channel)\n<ID> (<= blacklists a specific channel)\n" +
                  "-r (<= Un-blacklists the current channel)\n" +
-                 "-r <ID> (<= Un-blacklists the specified channel)." +
-                 "\n-all (<= blacklists all channels)\n" +
+                 "-r <ID> (<= Un-blacklists the specified channel).\n" +
+                 "-r -all (<= Un-blacklists all channels).\n" +
+                 "-all (<= blacklists all channels)\n" +
                  "-clear(<= removes all blacklists)\n" +
                  "-t 35m (<= blacklists current channel for 35 minutes)\n-all -t 12d36h (<= blacklists " +
                  "all channels for 12 days and 36 hours.)")]
@@ -60,6 +61,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (args.Count > 2)
                 {
                     goto ArgumentProcessException;
+                }
+
+                if (args.Count == 2)
+                {
+                    if (args[0].ToLower() == "-r" && args[1]?.ToLower() == "-all")
+                    {
+                        if (currentBlacklists.Count == 0)
+                        {
+                            await SendBasicErrorEmbedAsync($"There are currently no channels blacklisted.");
+                            return;
+                        }
+
+                        await DatabaseQueries.DeleteAsync(currentBlacklists);
+                        await SendBasicSuccessEmbedAsync($"Successfully unblacklisted `{currentBlacklists.Count}` channels.");
+                        return;
+                    }
                 }
 
                 switch (args.Count)
@@ -178,7 +195,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             throw new KaguyaSupportException("I was unable to parse this input as a valid channel ID.");
                         }
                     }
-
 
                     var cbl = new BlackListedChannel
                     {

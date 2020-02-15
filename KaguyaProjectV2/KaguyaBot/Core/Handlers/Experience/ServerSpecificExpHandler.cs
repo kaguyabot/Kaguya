@@ -20,34 +20,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
     public class ServerSpecificExpHandler
     {
-        public static async Task AddExp(User user, Server server, ICommandContext context)
+        public static async Task TryAddExp(User user, Server server, ICommandContext context)
         {
             var specificExps = await DatabaseQueries.GetAllForServerAsync<ServerExp>(server.ServerId);
             var userExpObj = new ServerExp();
 
             // If the user can receive exp, give them between 5 and 8.
             if (!await CanGetExperience(specificExps, server, user))
-            {
                 return;
-            }
+
+            if (user.IsBlacklisted || server.IsBlacklisted)
+                return;
 
             SocketTextChannel levelAnnouncementChannel;
             if (server.LogLevelAnnouncements != 0)
-            {
                 levelAnnouncementChannel = await context.Guild.GetTextChannelAsync(server.LogLevelAnnouncements) as SocketTextChannel;
-            }
             else
-            {
                 levelAnnouncementChannel = context.Channel as SocketTextChannel;
-            }
 
             var r = new Random();
             int exp = r.Next(5, 8);
 
             if (server.ServerExp != null)
-            {
                 userExpObj = server.ServerExp.FirstOrDefault(x => x.UserId == user.UserId);
-            }
             else
             {
                 userExpObj = new ServerExp
@@ -91,18 +86,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id))
                     return;
 
+                if (!server.LevelAnnouncementsEnabled)
+                    return;
+
                 var xp = new XpImage();
                 if (user.ExpChatNotificationType == ExpType.Server || user.ExpChatNotificationType == ExpType.Both)
                 {
                     var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User, server);
                     if (levelAnnouncementChannel != null)
-                    {
                         await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
-                    }
                     else
-                    {
                         await context.Channel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
-                    }
                 }
                 if (user.ExpDmNotificationType == ExpType.Server || user.ExpDmNotificationType == ExpType.Both)
                 {

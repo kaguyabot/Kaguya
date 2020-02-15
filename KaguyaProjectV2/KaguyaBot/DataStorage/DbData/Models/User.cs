@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using MoreLinq.Experimental;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -58,8 +60,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int FishBait { get; set; }
         [Column(Name = "TotalUpvotes"), NotNull]
         public int TotalUpvotes { get; set; }
-        [Column(Name = "BlacklistExpiration"), NotNull]
-        public double BlacklistExpiration { get; set; }
         [Column(Name = "LastGivenExp"), NotNull]
         public double LastGivenExp { get; set; }
         [Column(Name = "LastDailyBonus"), NotNull]
@@ -83,7 +83,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "ExpDMNotificationType"), NotNull]
         public int ExpDmNotificationTypeNum { private get; set; } = 3;
 
-        public bool IsBlacklisted => BlacklistExpiration - DateTime.Now.ToOADate() > 0;
+        public bool IsBlacklisted => Blacklist != null && Blacklist.Expiration - DateTime.Now.ToOADate() > 0;
         public ExpType ExpChatNotificationType => (ExpType) ExpChatNotificationTypeNum;
         public ExpType ExpDmNotificationType => (ExpType) ExpDmNotificationTypeNum;
 
@@ -99,25 +99,64 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             }
         }
 
-        public int RepCount => DatabaseQueries.GetAllForUserAsync<Rep>(UserId).Result.Count;
-        public List<Rep> Rep => DatabaseQueries.GetAllForUserAsync<Rep>(UserId).Result;
+        public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
         public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetDailyPoints => LastDailyBonus < DateTime.Now.AddHours(-24).ToOADate();
+        public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
 
         /// <summary>
-        /// FK_KaguyaUser_GambleHistory_BackReference
+        /// FK_UserBlacklists_KaguyaUser_BackReference
+        /// </summary>
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        public UserBlacklist Blacklist { get; set; }
+
+        /// <summary>
+        /// FK_CommandHistory_KaguyaUser_BackReference
+        /// </summary>
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        public IEnumerable<CommandHistory> CommandHistory { get; set; }
+
+        /// <summary>
+        /// FK_Fish_KaguyaUser_BackReference
+        /// </summary>
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        public IEnumerable<Fish> Fish { get; set; }
+
+        /// <summary>
+        /// FK_GambleHistory_KaguyaUser_BackReference
         /// </summary>
         [Association(ThisKey = "UserId", OtherKey = "UserId")]
         public IEnumerable<GambleHistory> GambleHistory { get; set; }
 
         /// <summary>
-        /// FK_KaguyaUser_Reminder_BackReference
+        /// FK_KaguyaUser_Reminder
         /// </summary>
         [Association(ThisKey = "UserId", OtherKey = "UserId")]
         public IEnumerable<Reminder> Reminders { get; set; }
 
+        /// <summary>
+        /// FK_Rep_KaguyaUser_BackReference
+        /// </summary>
         [Association(ThisKey = "UserId", OtherKey = "UserId")]
-        public IEnumerable<CommandHistory> CommandHistory { get; set; }
+        public IEnumerable<Rep> Rep { get; set; }
+
+        /// <summary>
+        /// FK_ServerExp_KaguyaUser_BackReference
+        /// </summary>
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        public IEnumerable<ServerExp> ServerExp { get; set; }
+
+        /// <summary>
+        /// FK_SupporterKeys_KaguyaUser_BackReference
+        /// </summary>
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        public IEnumerable<SupporterKey> SupporterKeys { get; set; }
+
+        /// <summary>
+        /// FK_Upvotes_KaguyaUser_BackReference
+        /// </summary>
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        public IEnumerable<Upvote> Upvotes { get; set; }
     }
 }

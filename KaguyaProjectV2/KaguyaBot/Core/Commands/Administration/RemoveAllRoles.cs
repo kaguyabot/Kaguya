@@ -51,16 +51,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             var embed = new KaguyaEmbedBuilder
             {
-                Description = $"Successfully removed `{(Context.Guild.Roles.Count - errorRoles).ToWords()}` roles from " +
-                              $"{nameString}."
+                Description = $"Successfully removed all roles from " +
+                              $"{nameString}. Note that if there are any roles " +
+                              $"managed by integrations or bots, these may not be removed."
             };
-
-            if (errorRoles > 0)
-            {
-                embed.Description += $"\n\nI failed to remove `{errorRoles.ToWords()}` roles. These " +
-                                     $"roles are managed by integrations or other bots, therefore they " +
-                                     $"cannot be assigned to any users.";
-            }
 
             await ReplyAsync(embed: embed.Build());
         }

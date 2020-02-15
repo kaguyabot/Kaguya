@@ -173,19 +173,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 waitEmbed.SetColor(EmbedColor.VIOLET);
 
                 await ReplyAsync(embed: waitEmbed.Build());
+            }
 
-                foreach (var channel in guild.Channels)
+            foreach (var channel in guild.Channels)
+            {
+                if (channel.GetPermissionOverwrite(muteRole).HasValue)
                 {
-                    await channel.AddPermissionOverwriteAsync(muteRole, OverwritePermissions.InheritAll);
-                    await channel.AddPermissionOverwriteAsync(muteRole, new OverwritePermissions(
-                        addReactions: PermValue.Deny, speak: PermValue.Deny,
-                        sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
-                        sendMessages: PermValue.Deny));
-
-                    await ConsoleLogger.LogAsync($"Permission overwrite added for guild channel.\n" +
-                                            $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
-                                            $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
+                    continue;
                 }
+
+                await channel.AddPermissionOverwriteAsync(muteRole, OverwritePermissions.InheritAll);
+                await channel.AddPermissionOverwriteAsync(muteRole, new OverwritePermissions(
+                    addReactions: PermValue.Deny, speak: PermValue.Deny,
+                    sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
+                    sendMessages: PermValue.Deny));
+
+                await ConsoleLogger.LogAsync($"Permission overwrite added for guild channel.\n" +
+                                             $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
+                                             $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
             }
 
             await user.AddRoleAsync(muteRole);
@@ -242,6 +247,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 guild = ConfigProperties.Client.GetGuild(guild.Id);
                 muteRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
+
+                if (Context.Guild.Channels.Any(x => !x.GetPermissionOverwrite(muteRole).HasValue))
+                {
+                    await ReplyAsync($"{Context.User.Mention} Updating permission overwrites for the mute role...");
+                }
 
                 foreach (var channel in guild.Channels)
                 {

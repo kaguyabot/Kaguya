@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using TwitchLib.Api.Core.RateLimiter;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -51,12 +52,16 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     .LoadWith(x => x.AntiRaid)
                     .LoadWith(x => x.AutoAssignedRoles)
                     .LoadWith(x => x.BlackListedChannels)
+                    .LoadWith(x => x.CommandHistory)
                     .LoadWith(x => x.FilteredPhrases)
+                    .LoadWith(x => x.Fish)
                     .LoadWith(x => x.MutedUsers)
                     .LoadWith(x => x.Praise)
-                    .LoadWith(x => x.ServerExp)
+                    .LoadWith(x => x.PremiumKeys)
                     .LoadWith(x => x.RoleRewards)
+                    .LoadWith(x => x.ServerExp)
                     .LoadWith(x => x.WarnedUsers)
+                    .LoadWith(x => x.WarnSettings)
                     .Where(s => s.ServerId == Id).FirstAsync();
             }
         }
@@ -68,9 +73,17 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 User user;
                 try
                 {
-                    user = await (from u in db.Users
-                                  where u.UserId == Id
-                                  select u).FirstAsync();
+                    user = await db.Users
+                        .LoadWith(x => x.Blacklist)
+                        .LoadWith(x => x.CommandHistory)
+                        .LoadWith(x => x.Fish)
+                        .LoadWith(x => x.GambleHistory)
+                        .LoadWith(x => x.Reminders)
+                        .LoadWith(x => x.Rep)
+                        .LoadWith(x => x.ServerExp)
+                        .LoadWith(x => x.SupporterKeys)
+                        .LoadWith(x => x.Upvotes)
+                        .Where(u => u.UserId == Id).FirstAsync();
                 }
                 catch (InvalidOperationException)
                 {
@@ -355,7 +368,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-#if DEBUG
         public static async Task DeleteAllAsync<T>() where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
@@ -373,7 +385,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 await ConsoleLogger.LogAsync($"Deleted all records of type {typeof(T)}", LogLvl.WARN);
             }
         }
-#endif
 
         /// <summary>
         /// Deletes all objects from the database that are specified in <see cref="args"/>
@@ -410,6 +421,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// </summary>
         /// <typeparam name="T">The type of <see cref="List{T}"/> to return.</typeparam>
         /// <param name="predicate">A condition that each returned object in the <see cref="List{T}"/> must match.</param>
+        /// <param name="limit">The amount of objects to return. If this value is below zero, the function will
+        /// return all objects that match the <see cref="Predicate{T}"/></param>
         /// <returns></returns>
         public static async Task<List<T>> GetAllAsync<T>(Expression<Func<T, bool>> predicate) where T :
             class, IKaguyaQueryable<T>
@@ -417,7 +430,48 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 return await (from t in db.GetTable<T>().Where(predicate)
-                              select t).ToListAsync();
+                    select t).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Returns all of the <see cref="T"/> objects from the database that match the given <see cref="Predicate{T}"/>,
+        /// limited by the <see cref="limit"/> parameter. The <see cref="selector"/> will determine what variable to order
+        /// the results by. If the <see cref="selector"/> is provided, the results will be ordered based on the
+        /// <see cref="orderByDescending"/> parameter.
+        /// </summary>
+        /// <typeparam name="T">The type of object to return results of.</typeparam>
+        /// <typeparam name="TKey">The <see cref="TKey"/> to order our results by, assuming we want them ordered.</typeparam>
+        /// <param name="predicate"></param>
+        /// <param name="limit"></param>
+        /// <param name="selector"></param>
+        /// <param name="orderByDescending"></param>
+        /// <returns></returns>
+        public static async Task<List<T>> GetLimitAsync<T>(uint limit, Expression<Func<T, bool>> predicate = null,
+            Expression<Func<T, object>> selector = null, bool orderByDescending = false) where T : class, IKaguyaQueryable<T>
+        {
+            // ReSharper disable once PossibleInvalidOperationException
+            using (var db = new KaguyaDb())
+            {
+                var baseQuery = db.GetTable<T>().AsQueryable();
+
+                baseQuery = predicate == null
+                    ? baseQuery
+                    : baseQuery.Where(predicate);
+
+                if (selector != null)
+                {
+                    baseQuery = orderByDescending
+                        ? baseQuery.OrderByDescending(selector)
+                        : baseQuery.OrderBy(selector);
+
+                    return await baseQuery.Take((int) limit).ToListAsync();
+                }
+
+                if(orderByDescending)
+                    throw new InvalidOperationException("Unable to apply descendant ordering with a null selector parameter.");
+
+                return await baseQuery.Take((int)limit).ToListAsync();
             }
         }
 
@@ -570,14 +624,16 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg">The object to insert, assuming it doesn't already exist.</param>
+        /// <param name="throwExceptionIfPresent">Whether to throw an exception if the object was found in the database already.</param>
         /// <returns></returns>
-        public static async Task InsertIfNotExistsAsync<T>(T arg) where T : class, IKaguyaQueryable<T>
+        public static async Task InsertIfNotExistsAsync<T>(T arg, bool throwExceptionIfPresent = true) where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
             {
                 if (await db.GetTable<T>().AnyAsync(x => x.Equals(arg)))
                 {
-                    throw new Exception("Item already exists in the database.");
+                    if(throwExceptionIfPresent)
+                        throw new Exception("Item already exists in the database.");
                 }
                 await db.InsertAsync(arg);
             }

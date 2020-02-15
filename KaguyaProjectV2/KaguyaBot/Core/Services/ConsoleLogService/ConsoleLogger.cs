@@ -133,7 +133,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             Console.WriteLine(contents);
 
             if (LogFileExists())
-                await File.AppendAllTextAsync($"{LogDirectory}\\{LogFileName}", $"{contents}\n");
+            {
+                try
+                {
+                    await File.AppendAllTextAsync($"{LogDirectory}\\{LogFileName}", $"{contents}\n");
+                }
+                catch (Exception)
+                {
+                    //
+                }
+            }
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+#pragma warning disable 4014
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 {
@@ -105,8 +108,33 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
         public static int ServerExp(this User user, Server server)
         {
-            if(server.ServerExp.Count() != 0)
-                return server.ServerExp?.First(x => x?.UserId == user.UserId)?.Exp ?? 0;
+            if(server.ServerExp?.Count() != null || server.ServerExp?.Count() != 0)
+            {
+                try
+                {
+                    return server.ServerExp?.First(x => x?.UserId == user.UserId)?.Exp ?? 0;
+                }
+                catch (InvalidOperationException)
+                {
+                    var exp = new ServerExp
+                    {
+                        ServerId = server.ServerId,
+                        UserId = user.UserId,
+                        Exp = 0,
+                        LatestExp = 0,
+                        Server = server,
+                        User = user
+                    };
+
+                    if(server.ServerExp != null && server.ServerExp.Any(x => x.UserId == exp.UserId))
+                        DatabaseQueries.InsertOrReplaceAsync(exp);
+                    ConsoleLogger.LogAsync($"User {user.UserId} in {server.ServerId} was not present " +
+                                                 $"in the guild's ServerExp list when attempting to load this value. " +
+                                                 $"They have now been added into the database under the ServerExp table.", LogLvl.DEBUG);
+
+                    return 0;
+                }
+            }
             return 0;
         }
 

@@ -1,4 +1,5 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+﻿using System.Linq;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using SixLabors.ImageSharp.PixelFormats;
@@ -126,7 +127,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
                         Y = 127
                     },
                     Show = true,
-                    Text = $"{user.RepCount.ToAbbreviatedForm()}"
+                    Text = $"{user.Rep.Count().ToAbbreviatedForm()}"
                 }
             };
         }
