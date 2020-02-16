@@ -47,6 +47,8 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
         [HttpPost("webhook")]
         public async Task Post([FromBody]TopGgWebhook baseHook, [FromHeader(Name = "Authorization")]string auth)
         {
+            await ConsoleLogger.LogAsync($"POST received: Given Authorization Header: {auth}", LogLvl.INFO);
+
             if (auth != _cfg.Value.TopGGAuthorization)
                 return;
 
