@@ -41,7 +41,6 @@
 
   <ItemGroup>
     <Folder Include="KaguyaBot\Core\Enums\" />
-    <Folder Include="KaguyaApi\" />
   </ItemGroup>
 
 </Project>

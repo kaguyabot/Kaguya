@@ -11,7 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.UpvoteHandler
 {
     public class UpvoteNotifier
     {
-        private static readonly BlockingCollection<TopGgWebhook> _voteQueue = new BlockingCollection<TopGgWebhook>();
+        private static readonly BlockingCollection<DatabaseUpvoteWebhook> _voteQueue = new BlockingCollection<DatabaseUpvoteWebhook>();
         private Task _runner;
 
         public UpvoteNotifier()
@@ -61,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.UpvoteHandler
             }
         }
 
-        public void Enqueue(TopGgWebhook item)
+        public void Enqueue(DatabaseUpvoteWebhook item)
         {
             _voteQueue.Add(item);
         }

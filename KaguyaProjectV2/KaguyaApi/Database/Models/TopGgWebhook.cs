@@ -3,21 +3,35 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaApi.Database.Models
 {
-    [Table(Name = "upvotes")]
     public class TopGgWebhook
     {
-        [Column(Name = "VoteId"), NotNull]
+        [JsonPropertyName("bot")]
+        public string BotId { get; set; }
+        [JsonPropertyName("user")]
+        public string UserId { get; set; }
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+        [JsonPropertyName("isWeekend")]
+        public bool IsWeekend { get; set; }
+        [JsonPropertyName("query")]
+        public string Query { get; set; }
+    }
+
+    /// <summary>
+    /// The object we insert into the database to represent a standard Top.GG webhook.
+    /// </summary>
+    [Table(Name = "upvotes")]
+    public class DatabaseUpvoteWebhook
+    {
         public string VoteId { get; set; }
         /// <summary>
         /// ID of the bot that received a vote
         /// </summary>
-        [JsonPropertyName("bot")]
         [Column(Name = "BotId"), NotNull]
         public ulong BotId { get; set; }
         /// <summary>
         /// ID of the user who voted
         /// </summary>
-        [JsonPropertyName("user")]
         [Column(Name = "UserId"), NotNull]
         public ulong UserId { get; set; }
         /// <summary>
@@ -28,20 +42,17 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Models
         /// <summary>
         /// The type of the vote (should always be "upvote" except when using the test button it's "test")
         /// </summary>
-        [JsonPropertyName("type")]
         [Column(Name = "VoteType"), NotNull]
         public string UpvoteType { get; set; }
         /// <summary>
         /// Whether the weekend multiplier is in effect, meaning users' votes count as two
         /// </summary>
-        [JsonPropertyName("isWeekend")]
         [Column(Name = "IsWeekend"), NotNull]
         public bool IsWeekend { get; set; }
         /// <summary>
-        /// Query string params found on the /bot/:ID/vote page. Example: ?a=1&b=2
+        /// Query string params found on the /bot/:ID/vote page. Example: ?a=1
         /// </summary>
-        [JsonPropertyName("query")]
-        [Column(Name = "QueryParams"), NotNull]
-        public string? QueryParams { get; set; }
+        [Column(Name = "QueryParams"), Nullable]
+        public string QueryParams { get; set; }
     }
 }

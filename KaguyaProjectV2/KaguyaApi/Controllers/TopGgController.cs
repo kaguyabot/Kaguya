@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaApi.Database.Context;
 using KaguyaProjectV2.KaguyaApi.Database.Models;
+using KaguyaProjectV2.KaguyaApi.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.UpvoteHandler;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -52,21 +54,21 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
             if (auth != _cfg.Value.TopGGAuthorization)
                 return;
 
-            var webhook = new TopGgWebhook
+            var dbWebhook = new DatabaseUpvoteWebhook()
             {
-                BotId = baseHook.BotId,
-                UserId = baseHook.UserId,
-                UpvoteType = baseHook.UpvoteType,
+                BotId = baseHook.BotId.AsUlong(),
+                UserId = baseHook.UserId.AsUlong(),
+                UpvoteType = baseHook.Type,
                 IsWeekend = baseHook.IsWeekend,
-                QueryParams = baseHook.QueryParams,
+                QueryParams = baseHook.Query,
                 TimeVoted = DateTime.Now.ToOADate(),
                 VoteId = Guid.NewGuid().ToString()
             };
 
-            await _db.InsertAsync(webhook);
-            _uvNotifier.Enqueue(webhook);
+            await _db.InsertAsync(dbWebhook);
+            _uvNotifier.Enqueue(dbWebhook);
 
-            await ConsoleLogger.LogAsync($"[Kaguya Api]: Authorized DBL Webhook received for user {webhook.UserId}.", LogLvl.INFO);
+            await ConsoleLogger.LogAsync($"[Kaguya Api]: Authorized DBL Webhook received for user {dbWebhook.UserId}.", LogLvl.INFO);
         }
 
         // PUT api/<controller>/5
