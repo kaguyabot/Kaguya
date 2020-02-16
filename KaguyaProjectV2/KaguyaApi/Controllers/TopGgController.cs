@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaApi.Database.Context;
 using KaguyaProjectV2.KaguyaApi.Database.Models;
-using KaguyaProjectV2.KaguyaApi.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.UpvoteHandler;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
