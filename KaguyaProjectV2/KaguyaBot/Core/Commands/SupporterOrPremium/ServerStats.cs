@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
 {

@@ -4,7 +4,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
@@ -37,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 
             var p = new ProfileImage();
             var image = await p.GenerateProfileImageStream(user, server, Context.Guild.GetUser(id.Value));
-            
+
             await Context.Channel.SendFileAsync(image, $"Kaguya_Profile_" + $"{Context.User.Username}_{DateTime.Now.Month}_" +
                                                        $"{DateTime.Now.Day}_{DateTime.Now.Year}.png");
         }

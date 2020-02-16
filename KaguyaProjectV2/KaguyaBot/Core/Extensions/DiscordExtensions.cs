@@ -1,8 +1,7 @@
-﻿using System.Text.RegularExpressions;
-using Discord;
+﻿using Discord;
 using Discord.WebSocket;
-using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 {

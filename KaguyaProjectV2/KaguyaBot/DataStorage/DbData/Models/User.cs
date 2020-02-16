@@ -1,12 +1,11 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using MoreLinq.Experimental;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -31,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int TotalCommandUses { get; set; }
         [Column(Name = "TotalDaysSupported"), NotNull]
         public int TotalDaysSupported { get; set; }
-        [Column(Name = "NSFWImages"), NotNull] 
+        [Column(Name = "NSFWImages"), NotNull]
         public int TotalNSFWImages { get; set; } = 12;
         /// <summary>
         /// Whenever a user uses a command, increase this by one.
@@ -84,8 +83,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int ExpDmNotificationTypeNum { private get; set; } = 3;
 
         public bool IsBlacklisted => Blacklist != null && Blacklist.Expiration - DateTime.Now.ToOADate() > 0;
-        public ExpType ExpChatNotificationType => (ExpType) ExpChatNotificationTypeNum;
-        public ExpType ExpDmNotificationType => (ExpType) ExpDmNotificationTypeNum;
+        public ExpType ExpChatNotificationType => (ExpType)ExpChatNotificationTypeNum;
+        public ExpType ExpDmNotificationType => (ExpType)ExpDmNotificationTypeNum;
 
         public double SupporterExpirationDate
         {
@@ -146,11 +145,5 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "UserId", OtherKey = "UserId")]
         public IEnumerable<ServerExp> ServerExp { get; set; }
-
-        /// <summary>
-        /// FK_Upvotes_KaguyaUser_BackReference
-        /// </summary>
-        [Association(ThisKey = "UserId", OtherKey = "UserId")]
-        public IEnumerable<Upvote> Upvotes { get; set; }
     }
 }

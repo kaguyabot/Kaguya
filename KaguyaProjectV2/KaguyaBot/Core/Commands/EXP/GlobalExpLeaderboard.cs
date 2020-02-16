@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            var top50 = (await DatabaseQueries.GetLimitAsync<User>(50, x => x.Experience > 0, 
+            var top50 = (await DatabaseQueries.GetLimitAsync<User>(50, x => x.Experience > 0,
                 x => x.Experience, true)).Where(x => !x.IsBlacklisted).ToList();
 
             int i = 1;
@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 Fields = new List<EmbedFieldBuilder>()
             };
 
-            foreach(var user in top50)
+            foreach (var user in top50)
             {
                 if (i > 10)
                     break;

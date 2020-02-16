@@ -1,6 +1,5 @@
 ﻿using Centvrio.Emoji;
 using Discord;
-using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -11,13 +11,10 @@
   <ItemGroup>
     <Compile Remove="Main\**" />
     <Compile Remove="out\**" />
-    <Compile Remove="Resources\**" />
     <EmbeddedResource Remove="Main\**" />
     <EmbeddedResource Remove="out\**" />
-    <EmbeddedResource Remove="Resources\**" />
     <None Remove="Main\**" />
     <None Remove="out\**" />
-    <None Remove="Resources\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +22,6 @@
     <PackageReference Include="Centvrio.Emoji" Version="1.1.5" />
     <PackageReference Include="Discord.Addons.PassiveInteractive" Version="2.0.4" />
     <PackageReference Include="Discord.Net" Version="2.1.1" />
-    <PackageReference Include="DiscordBotList.Core" Version="0.1.2" />
     <PackageReference Include="DiscordBotsList.Api" Version="1.4.0" />
     <PackageReference Include="Humanizer" Version="2.7.9" />
     <PackageReference Include="linq2db" Version="3.0.0-preview.1" />
@@ -44,6 +40,7 @@
 
   <ItemGroup>
     <Folder Include="KaguyaBot\Core\Enums\" />
+    <Folder Include="KaguyaApi\" />
   </ItemGroup>
 
 </Project>

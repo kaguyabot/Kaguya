@@ -72,7 +72,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 
                 //Description
                 var beatmap = await osuRecents[0].GetBeatmapAsync();
-                var pp = await beatmap.GetPPAsync((float) osuRecents[0].Accuracy);
+                var pp = await beatmap.GetPPAsync((float)osuRecents[0].Accuracy);
 
                 embed.Description += $"▸ **{OsuBase.OsuGrade(osuRecents[0].Rank)}{osuRecents[0].Mods}** ▸ " +
                                      $"**[{beatmap.Title} [{beatmap.Difficulty}]]" +
@@ -100,9 +100,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 
         private double MapCompletionPercent(Score score, Beatmap beatmap)
         {
-            if(beatmap.MaxCombo == null)
+            if (beatmap.MaxCombo == null)
                 throw new KaguyaSupportException("This score does not have a max combo, according to the API.");
-            return (double) (score.Count50 + score.Count100 + score.Count300 + score.Miss) / beatmap.MaxCombo.Value;
+            return (double)(score.Count50 + score.Count100 + score.Count300 + score.Miss) / beatmap.MaxCombo.Value;
         }
     }
 }

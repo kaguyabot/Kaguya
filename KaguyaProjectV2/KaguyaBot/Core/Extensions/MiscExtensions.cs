@@ -49,9 +49,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             return num > 1000000
                 ? $"{((double)num / 1000000):N2}M"
                 : num > 100000
-                    ? $"{((double) num / 1000):N1}K"
+                    ? $"{((double)num / 1000):N1}K"
                     : num > 1000
-                        ? $"{((double) num / 1000):N2}K"
+                        ? $"{((double)num / 1000):N2}K"
                         : num.ToString();
         }
 
@@ -75,8 +75,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             return dir switch
             {
-                RoundDirection.Down => (int) Math.Floor(num),
-                RoundDirection.Up => (int) Math.Ceiling(num),
+                RoundDirection.Down => (int)Math.Floor(num),
+                RoundDirection.Up => (int)Math.Ceiling(num),
                 _ => throw new InvalidEnumArgumentException()
             };
         }

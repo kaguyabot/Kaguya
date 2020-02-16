@@ -1,22 +1,16 @@
-﻿using System;
-using BooruSharp.Booru;
+﻿using BooruSharp.Booru;
 using Discord.Commands;
+using Discord.Net;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
-using System.Threading;
 using System.Threading.Tasks;
-using BooruSharp.Search.Post;
-using Discord;
-using Discord.Net;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using RestSharp.Extensions;
 using SearchResult = BooruSharp.Search.Post.SearchResult;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
@@ -50,7 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 "loli", "shota", "blood", "gore", "rape"
             };
 
-            if (user.TotalNSFWImages == 0 && !user.IsSupporter || 
+            if (user.TotalNSFWImages == 0 && !user.IsSupporter ||
                 user.TotalNSFWImages < NSFW_BOMB_COUNT && !user.IsSupporter)
             {
                 throw new KaguyaSupportException("You are out of NSFW image uses for right now. Please try again later. " +
@@ -113,7 +107,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 await SendHentaiAsync(user, "sex", "breasts", "cum");
             }
 
-            if(!user.IsSupporter)
+            if (!user.IsSupporter)
                 await DatabaseQueries.UpdateAsync(user);
         }
 

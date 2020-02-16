@@ -65,12 +65,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             {
                 var now = DateTime.Now.ToOADate();
                 var allUserKeys = DatabaseQueries.GetAllForServerAsync<PremiumKey>(ServerId).Result;
-                if(allUserKeys.Count > 0)
+                if (allUserKeys.Count > 0)
                     return now + allUserKeys.Sum(key => key.Expiration - now);
                 return DateTime.MinValue.ToOADate();
             }
         }
-        
+
         /// <summary>
         /// Whether or not the server currently has an active premium subscription.
         /// </summary>

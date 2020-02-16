@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.Addons.Interactive;
 using Discord.Commands;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;

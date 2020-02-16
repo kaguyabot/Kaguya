@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System.Linq;
+using System.Threading.Tasks;
 using Victoria;
 using Victoria.Enums;
 

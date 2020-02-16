@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models

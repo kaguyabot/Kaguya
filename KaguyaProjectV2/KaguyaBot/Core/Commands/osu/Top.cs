@@ -172,7 +172,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 
             var beatmap = await playerBestObject.GetBeatmapAsync();
             var pp = await beatmap.GetPPAsync(playerBestObject.Mods, (float)playerBestObject.Accuracy);
-            
+
             string topPlayString = $"#{num}: ▸ **{OsuBase.OsuGrade(playerBestObject.Rank)}{playerBestObject.Mods.ToModeString(OsuBase.client).Replace("No Mode", "No Mod")}** ▸ " +
                              $"{beatmap.BeatmapId} ▸ **[{beatmap.Title} " +
                              $"[{beatmap.Difficulty}]](https://osu.ppy.sh/b/{beatmap.BeatmapId})** " +

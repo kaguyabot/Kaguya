@@ -106,7 +106,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             Reason = reason
                         });
                     }
-                }));
+                }
+                ));
             }
 
             data.SetCallbacks(callbacks);

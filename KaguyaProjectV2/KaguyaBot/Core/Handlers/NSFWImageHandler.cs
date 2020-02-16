@@ -1,6 +1,5 @@
 ﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 var usersToUpdate = new List<User>();
-                foreach(var user in await DatabaseQueries.GetAllAsync<User>(x => x.TotalNSFWImages < 12))
+                foreach (var user in await DatabaseQueries.GetAllAsync<User>(x => x.TotalNSFWImages < 12))
                 {
                     user.TotalNSFWImages += 1;
                     await DatabaseQueries.InsertOrReplaceAsync(user);

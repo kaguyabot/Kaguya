@@ -45,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         private async Task ActuallyBanThem(ICommandContext context, ulong Id)
         {
             var mutualGuilds = ((SocketUser)context.User).MutualGuilds.Where(x =>
-               x.GetUser(context.User.Id).GuildPermissions.Administrator || 
+               x.GetUser(context.User.Id).GuildPermissions.Administrator ||
                x.GetUser(context.User.Id) == x.Owner &&
                x.GetUser(Id) != null).ToList();
             var targets = new List<SocketGuildUser>();
@@ -53,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             foreach (var guild in mutualGuilds)
             {
                 var selection = guild.Users.FirstOrDefault(x => x.Id == Id);
-                if(selection != null)
+                if (selection != null)
                     targets.Add(selection);
             }
 
@@ -67,7 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 try
                 {
-                    await target.BanAsync(0, $"{context.User} used the `HyperBan` command " +
+                    await target.BanAsync(0, $"{context.User} used the \"HyperBan\" command " +
                                              $"in guild \"{context.Guild}\"");
                 }
                 catch (Exception)

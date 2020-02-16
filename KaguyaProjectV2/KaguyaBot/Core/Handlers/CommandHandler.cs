@@ -63,7 +63,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
                 return;
 
-            if(Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/beatmapsets/[0-9]*#\b(?:osu|taiko|mania|fruits)\b/[0-9]*") ||
+            if (Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/beatmapsets/[0-9]*#\b(?:osu|taiko|mania|fruits)\b/[0-9]*") ||
                Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/b/[0-9]*"))
                 await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, context);
 

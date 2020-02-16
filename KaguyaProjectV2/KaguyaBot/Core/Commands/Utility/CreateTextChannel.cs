@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {

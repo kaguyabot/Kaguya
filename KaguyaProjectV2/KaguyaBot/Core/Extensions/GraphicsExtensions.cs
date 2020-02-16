@@ -22,8 +22,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             {
                 var brush = new SolidBrush(text.Color);
                 var stroke = new Pen(text.StrokeColor, text.StrokeWidth);
-                return text.HasStroke 
-                    ? ctx.DrawText(text.Text, text.Font, brush, stroke, new PointF(text.Loc.X, text.Loc.Y)) 
+                return text.HasStroke
+                    ? ctx.DrawText(text.Text, text.Font, brush, stroke, new PointF(text.Loc.X, text.Loc.Y))
                     : ctx.DrawText(text.Text, text.Font, text.Color, new PointF(text.Loc.X, text.Loc.Y));
             }
             return null;

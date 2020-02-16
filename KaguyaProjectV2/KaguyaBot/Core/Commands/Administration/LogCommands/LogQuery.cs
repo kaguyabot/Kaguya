@@ -1,11 +1,11 @@
 ﻿using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         public static string[] AllLogTypes =
         {
             "ModLog", "DeletedMessages", "UpdatedMessages", "FilteredPhrases", "UserJoins", "UserLeaves",
-            "Bans", "Unbans", "VoiceConnections", "LevelAnnouncements", "FishLevels", "AntiRaid", "Greetings", "TwitchNotifications", 
+            "Bans", "Unbans", "VoiceConnections", "LevelAnnouncements", "FishLevels", "AntiRaid", "Greetings", "TwitchNotifications",
             "All"
         };
 

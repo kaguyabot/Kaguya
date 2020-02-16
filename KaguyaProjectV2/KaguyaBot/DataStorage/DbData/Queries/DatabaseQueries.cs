@@ -11,7 +11,6 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using TwitchLib.Api.Core.RateLimiter;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -80,7 +79,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                         .LoadWith(x => x.Reminders)
                         .LoadWith(x => x.Rep)
                         .LoadWith(x => x.ServerExp)
-                        .LoadWith(x => x.Upvotes)
                         .Where(u => u.UserId == Id).FirstAsync();
                 }
                 catch (InvalidOperationException)
@@ -112,8 +110,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 try
                 {
                     return (from r in db.Praise.OrderByDescending(x => x.TimeGiven)
-                        where r.GivenBy == userId && r.ServerId == serverId
-                        select r).First().TimeGiven;
+                            where r.GivenBy == userId && r.ServerId == serverId
+                            select r).First().TimeGiven;
                 }
                 catch (InvalidOperationException)
                 {
@@ -279,8 +277,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 return await (from t in db.GetTable<T>().Where(predicate)
-                    where t.UserId == userId
-                    select t).ToListAsync();
+                              where t.UserId == userId
+                              select t).ToListAsync();
             }
         }
 
@@ -435,7 +433,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 return await (from t in db.GetTable<T>().Where(predicate)
-                    select t).ToListAsync();
+                              select t).ToListAsync();
             }
         }
 
@@ -470,10 +468,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                         ? baseQuery.OrderByDescending(selector)
                         : baseQuery.OrderBy(selector);
 
-                    return await baseQuery.Take((int) limit).ToListAsync();
+                    return await baseQuery.Take((int)limit).ToListAsync();
                 }
 
-                if(orderByDescending)
+                if (orderByDescending)
                     throw new InvalidOperationException("Unable to apply descendant ordering with a null selector parameter.");
 
                 return await baseQuery.Take((int)limit).ToListAsync();
@@ -637,7 +635,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 if (await db.GetTable<T>().AnyAsync(x => x.Equals(arg)))
                 {
-                    if(throwExceptionIfPresent)
+                    if (throwExceptionIfPresent)
                         throw new Exception("Item already exists in the database.");
                 }
                 await db.InsertAsync(arg);

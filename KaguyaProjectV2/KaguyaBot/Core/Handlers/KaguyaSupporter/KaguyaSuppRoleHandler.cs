@@ -44,7 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                     var supporterRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower().Contains("supporter"));
                     var kaguyaSuppGuildUser = kaguyaSupportServer.GetUser(socketUser.Id);
 
-                    if(supporterRole is null)
+                    if (supporterRole is null)
                         throw new NullReferenceException("The Kaguya Supporter role may not be null.");
 
                     if (kaguyaSuppGuildUser.Roles.Contains(supporterRole))
@@ -115,7 +115,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                     var premRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower().Contains("premium"));
                     var kaguyaSuppUser = kaguyaSupportServer.GetUser(socketUser.Id);
 
-                    if(premRole is null)
+                    if (premRole is null)
                         throw new NullReferenceException("The Kaguya Premium role may not be null.");
 
                     if (!kaguyaSuppUser.Roles.Contains(premRole))

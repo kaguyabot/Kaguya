@@ -95,7 +95,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
         private static float GetGuildXpBarFillCoordinate(User user, Server server, TemplateXpBar bar)
         {
             var percentToNextLevel = user.PercentToNextServerLevel(server);
-            if(percentToNextLevel < 1)
+            if (percentToNextLevel < 1)
                 return (float)((percentToNextLevel * bar.Length) + bar.LocA.X) + 5;
             return (float)((percentToNextLevel * bar.Length) + bar.LocA.X);
         }

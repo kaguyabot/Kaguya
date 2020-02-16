@@ -1,6 +1,6 @@
 ﻿using Discord.Commands;
-using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {

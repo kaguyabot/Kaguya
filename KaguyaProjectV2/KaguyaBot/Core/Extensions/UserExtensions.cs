@@ -108,7 +108,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
         public static int ServerExp(this User user, Server server)
         {
-            if(server.ServerExp?.Count() != null || server.ServerExp?.Count() != 0)
+            if (server.ServerExp?.Count() != null || server.ServerExp?.Count() != 0)
             {
                 try
                 {
@@ -126,7 +126,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                         User = user
                     };
 
-                    if(server.ServerExp != null && server.ServerExp.Any(x => x.UserId == exp.UserId))
+                    if (server.ServerExp != null && server.ServerExp.Any(x => x.UserId == exp.UserId))
                         DatabaseQueries.InsertOrReplaceAsync(exp);
                     ConsoleLogger.LogAsync($"User {user.UserId} in {server.ServerId} was not present " +
                                                  $"in the guild's ServerExp list when attempting to load this value. " +

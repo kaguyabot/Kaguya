@@ -43,9 +43,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             await DatabaseQueries.DeleteAllAsync<SupporterKey>();
             await DatabaseQueries.DeleteAllAsync<ServerExp>();
             await DatabaseQueries.DeleteAllAsync<UserBlacklist>();
-            await DatabaseQueries.DeleteAllAsync<Upvote>();
             await DatabaseQueries.DeleteAllAsync<WarnedUser>();
             await DatabaseQueries.DeleteAllAsync<WarnSetting>();
+            await DatabaseQueries.DeleteAllAsync<TopGgWebhook>();
             await DatabaseQueries.DeleteAllAsync<User>();
             await DatabaseQueries.DeleteAllAsync<Server>();
 
@@ -99,7 +99,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     var suppKey = new SupporterKey
                     {
                         Key = SupporterKeyGen.RandomString(),
-                        LengthInSeconds = (long) (u.KaguyaSupporterExpiration - DateTime.Now).TotalSeconds,
+                        LengthInSeconds = (long)(u.KaguyaSupporterExpiration - DateTime.Now).TotalSeconds,
                         KeyCreatorId = 538910393918160916,
                         UserId = u.ID,
                         Expiration = u.KaguyaSupporterExpiration.ToOADate()
@@ -339,6 +339,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
     public class Warnedmembers
     {
-       public List<Dictionary<ulong, int>> WarnedUsers { get; set; } = new List<Dictionary<ulong, int>>();
+        public List<Dictionary<ulong, int>> WarnedUsers { get; set; } = new List<Dictionary<ulong, int>>();
     }
 }

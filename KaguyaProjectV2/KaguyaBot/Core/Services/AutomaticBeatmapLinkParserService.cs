@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             if (mapID.Contains('?'))
                 mapID = mapID.Replace("?m=0", "");
 
-            var mapData = await client.GetBeatmapByIdAsync((long) mapID.AsUlong());
+            var mapData = await client.GetBeatmapByIdAsync((long)mapID.AsUlong());
 
             string status = "";
             var state = mapData.State;

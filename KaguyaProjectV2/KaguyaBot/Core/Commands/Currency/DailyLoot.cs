@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 var dt = DateTime.FromOADate(user.LastDailyBonus).AddHours(24);
                 await SendBasicErrorEmbedAsync($"You must wait `{dt.Humanize(false)}` " +
-                                               $"before you may claim this bonus."); 
+                                               $"before you may claim this bonus.");
                 return;
             }
 

@@ -86,7 +86,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             const double resizeScalar = 0.75;
             suppBadge.Mutate(x => x.Resize((int)(x.GetCurrentSize().Width * resizeScalar), (int)(x.GetCurrentSize().Height * resizeScalar)));
 
-            if(isDefaultPfp)
+            if (isDefaultPfp)
                 profilePicture.Mutate(x => x.Resize(132, 132));
 
             // Draw the profile picture on top of the global bar. Global bar will serve as the base layer 

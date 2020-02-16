@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
                     Color = Rgba32.WhiteSmoke,
                     Font = Font(server is null ? 60 : 48),
                     HasStroke = true,
-                    Loc = server is null 
+                    Loc = server is null
                     ? new TemplateLoc
                     {
                         X = 210,
@@ -77,15 +77,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
                     HasStroke = true,
                     Loc = new TemplateLoc
                     {
-                        X = user.GlobalLevel().Rounded(RoundDirection.Down).ToString().Length == 1 
+                        X = user.GlobalLevel().Rounded(RoundDirection.Down).ToString().Length == 1
                             ? 300 : user.GlobalLevel().Rounded(RoundDirection.Down).ToString().Length > 2 ? 270 : 288,
                         Y = 200
                     },
                     Show = true,
                     StrokeColor = Rgba32.DarkSalmon,
                     StrokeWidth = 1,
-                    Text = server is null 
-                        ? user.GlobalLevel().Rounded(RoundDirection.Down).ToString() 
+                    Text = server is null
+                        ? user.GlobalLevel().Rounded(RoundDirection.Down).ToString()
                         : user.ServerLevel(server).Rounded(RoundDirection.Down).ToString()
                 },
                 SupporterBadge = new TemplateBadge

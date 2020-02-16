@@ -1,11 +1,11 @@
-﻿using System.Linq;
+﻿using Discord;
 using Discord.Commands;
-using System.Threading.Tasks;
-using Discord;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB.Common;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {

@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         public async Task Command([Remainder]string query)
         {
             var data = await SearchAndPlay(Context, query);
-            if(data != null)
+            if (data != null)
                 await InlineReactionReplyAsync(data);
         }
 
@@ -150,7 +150,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
                 var embed = new KaguyaEmbedBuilder
                 {
-                    Fields = new List<EmbedFieldBuilder>{ field }
+                    Fields = new List<EmbedFieldBuilder> { field }
                 };
                 await context.Channel.SendEmbedAsync(embed);
                 return null;
@@ -267,18 +267,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                         Title = $"Kaguya Music {Centvrio.Emoji.Music.Notes}",
                         Description = playString,
                         ThumbnailUrl = await trackSel.FetchArtworkAsync(),
-                        Fields = new List<EmbedFieldBuilder>{ field }
+                        Fields = new List<EmbedFieldBuilder> { field }
                     };
 
                     await SendEmbedAsync(embed);
-                }));
+                }
+                ));
             }
 
             callbacks.Add((GlobalProperties.NoEntryEmoji(), async (c, r) =>
             {
                 await c.Message.DeleteAsync();
                 await r.Message.Value.DeleteAsync();
-            }));
+            }
+            ));
 
             string s = tracks.Count == 1 ? "" : "s";
             var songDisplayEmbed = new KaguyaEmbedBuilder

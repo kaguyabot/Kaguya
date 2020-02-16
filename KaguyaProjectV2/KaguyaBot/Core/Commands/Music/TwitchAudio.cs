@@ -4,7 +4,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
-using Discord.Addons.Interactive;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {

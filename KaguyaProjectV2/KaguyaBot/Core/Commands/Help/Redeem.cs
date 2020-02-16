@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Renci.SshNet.Messages.Transport;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -109,7 +108,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             TimeSpan ts = $"{newKey.LengthInSeconds}s".ParseToTimespan();
             expirationDate += DateTime.Now.AddSeconds(newKey.LengthInSeconds).ToOADate();
 
-            if(existingSupporterKeys.Any(x => x.UserId == user.UserId))
+            if (existingSupporterKeys.Any(x => x.UserId == user.UserId))
                 expirationDate -= DateTime.Now.ToOADate();
             if (existingPremiumKeys.All(x => x.ServerId != Context.Guild.Id) &&
                 typeString == "Kaguya Premium")

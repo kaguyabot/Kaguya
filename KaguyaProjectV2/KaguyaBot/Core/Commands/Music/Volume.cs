@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Discord;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
@@ -75,47 +75,47 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             switch (adjuster)
             {
                 case VolumeAdjuster.Set:
-                {
-                    if (!(volumeAdj <= limit))
                     {
-                        await SendBasicErrorEmbedAsync("The volume may not be set above 250.");
-                        return;
-                    }
+                        if (!(volumeAdj <= limit))
+                        {
+                            await SendBasicErrorEmbedAsync("The volume may not be set above 250.");
+                            return;
+                        }
 
-                    await player.UpdateVolumeAsync(volumeAdj);
-                    await SendBasicSuccessEmbedAsync($"Successfully set the volume to `{player.Volume}`");
-                    break;
-                }
+                        await player.UpdateVolumeAsync(volumeAdj);
+                        await SendBasicSuccessEmbedAsync($"Successfully set the volume to `{player.Volume}`");
+                        break;
+                    }
                 case VolumeAdjuster.Increase:
-                {
-                    if(!(player.Volume + volumeAdj <= 250))
                     {
-                        await SendBasicSuccessEmbedAsync($"Successfully set the volume to max: `250`.");
-                        await player.UpdateVolumeAsync(250);
-                        return;
-                    }
+                        if (!(player.Volume + volumeAdj <= 250))
+                        {
+                            await SendBasicSuccessEmbedAsync($"Successfully set the volume to max: `250`.");
+                            await player.UpdateVolumeAsync(250);
+                            return;
+                        }
 
-                    await player.UpdateVolumeAsync((ushort)(player.Volume + volumeAdj));
-                    await SendBasicSuccessEmbedAsync($"Successfully adjusted the volume by `{amount}`. " +
-                                                     $"The volume is now {player.Volume}.");
-                    break;
-                }
+                        await player.UpdateVolumeAsync((ushort)(player.Volume + volumeAdj));
+                        await SendBasicSuccessEmbedAsync($"Successfully adjusted the volume by `{amount}`. " +
+                                                         $"The volume is now {player.Volume}.");
+                        break;
+                    }
                 case VolumeAdjuster.Decrease:
-                {
-                    if (player.Volume - volumeAdj < 0)
                     {
-                        await SendBasicSuccessEmbedAsync("Successfully muted the player.");
-                        await player.UpdateVolumeAsync(0);
-                        return;
+                        if (player.Volume - volumeAdj < 0)
+                        {
+                            await SendBasicSuccessEmbedAsync("Successfully muted the player.");
+                            await player.UpdateVolumeAsync(0);
+                            return;
+                        }
+                        else
+                        {
+                            await SendBasicSuccessEmbedAsync($"Successfully reduced the volume by `{amount}`. The " +
+                                                             $"current volume is now `{player.Volume - volumeAdj}`");
+                        }
+                        await player.UpdateVolumeAsync((ushort)(player.Volume - volumeAdj));
+                        break;
                     }
-                    else
-                    {
-                        await SendBasicSuccessEmbedAsync($"Successfully reduced the volume by `{amount}`. The " +
-                                                         $"current volume is now `{player.Volume - volumeAdj}`");
-                    }
-                    await player.UpdateVolumeAsync((ushort) (player.Volume - volumeAdj));
-                    break;
-                }
                 case VolumeAdjuster.Mute:
                     break;
                 default:

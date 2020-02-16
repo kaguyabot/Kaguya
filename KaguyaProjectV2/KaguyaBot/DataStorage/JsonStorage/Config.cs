@@ -1,11 +1,11 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 #region This file will load all Config file data into memory for the bot to use. This file contains very important credentials.
 #endregion
@@ -96,7 +96,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 
                 await ConsoleLogger.LogAsync($"Wrote new config file.", LogLvl.INFO);
             }
-            else if(args.Length != 16)
+            else if (args.Length != 16)
             {
                 //Reads config file.
                 model = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(configFilePath));

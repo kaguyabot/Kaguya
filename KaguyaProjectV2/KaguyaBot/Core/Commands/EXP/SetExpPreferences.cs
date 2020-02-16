@@ -5,7 +5,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
-using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {

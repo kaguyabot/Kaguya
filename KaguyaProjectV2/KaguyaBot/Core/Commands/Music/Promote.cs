@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Discord.Commands;
-using System.Threading.Tasks;
+﻿using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System.Linq;
+using System.Threading.Tasks;
 using Victoria;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
@@ -68,7 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
             foreach (var item in oldQueueTracks)
             {
-                if(!item.Equals(track))
+                if (!item.Equals(track))
                     player.Queue.Enqueue(item);
             }
 

@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} I couldn't find a text channel " +
                                                $"that matched the input you gave me.");
             }
-            
+
         }
     }
 }

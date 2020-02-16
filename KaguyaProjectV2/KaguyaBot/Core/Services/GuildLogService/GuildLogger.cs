@@ -1,15 +1,15 @@
-﻿using System;
-using Discord;
+﻿using Discord;
 using Discord.WebSocket;
+using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
 {
@@ -164,7 +164,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                     $"Name: `{user}` | ID: `{user.Id}` | Account Created: `{(DateTime.Now - user.CreatedAt).Humanize()}`\n";
             }
 
-            if(actionedUsers.Length > 1750)
+            if (actionedUsers.Length > 1750)
                 actionedUsers = e.GuildUsers.Count.ToString("N0");
 
             var embed = new KaguyaEmbedBuilder
@@ -250,7 +250,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 };
             }
 
-            if(server.LogVoiceChannelConnections != 0)
+            if (server.LogVoiceChannelConnections != 0)
                 await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(embed: _embed.Build());
         }
     }

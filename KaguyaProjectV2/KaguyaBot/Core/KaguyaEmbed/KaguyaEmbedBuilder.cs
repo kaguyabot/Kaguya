@@ -1,5 +1,4 @@
 ﻿using Discord;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
 {

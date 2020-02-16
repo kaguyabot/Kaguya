@@ -2,12 +2,14 @@
 using Discord.Net;
 using Discord.WebSocket;
 using DiscordBotsList.Api;
+using KaguyaProjectV2.KaguyaApi;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.UpvoteHandler;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
@@ -15,11 +17,12 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using OsuSharp;
 using System;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using TwitchLib.Api;
 using Victoria;
 
@@ -27,11 +30,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 {
     internal class Program
     {
-        private static void Main(string[] args) => new Program().MainAsync(args).GetAwaiter().GetResult();
+        private static async Task Main(string[] args)
+        {
+            var task1 = CreateHostBuilder(args).Build().RunAsync();
+            var task2 = new Program().MainAsync(args);
+
+            Task.WaitAll(task1, task2);
+        }
 
         private DiscordShardedClient _client;
         private LavaNode _lavaNode;
         private TwitchAPI _api;
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://+:6969");
+                    webBuilder.UseKestrel();
+                });
 
         public async Task MainAsync(string[] args)
         {
@@ -81,7 +99,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     _client.ShardReady += async c => { await _lavaNode.ConnectAsync(); };
                     _lavaNode.OnLog += async message =>
                     {
-                        await ConsoleLogger.LogAsync("[Kaguya Music] " + message.Message, LogLvl.INFO);
+                        await ConsoleLogger.LogAsync("[Kaguya Music]: " + message.Message, LogLvl.INFO);
                     };
 
                     await InitializeTimers(AllShardsLoggedIn(_client, config));
@@ -163,7 +181,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await RemindService.Initialize();
             await NSFWImageHandler.Initialize();
             await KaguyaPremiumExpirationHandler.Initialize();
-            await TopGGUpvoteHandler.Initialize();
+            await UpvoteExpirationNotifier.Initialize();
             await GameRotationService.Initialize();
 
             await ConsoleLogger.LogAsync($"All timers initialized.", LogLvl.INFO);

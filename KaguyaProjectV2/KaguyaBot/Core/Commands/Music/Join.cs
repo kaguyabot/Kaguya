@@ -1,10 +1,9 @@
-﻿using System;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 // ReSharper disable PossibleNullReferenceException
@@ -27,8 +26,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         {
             var node = ConfigProperties.LavaNode;
             var botCurVc = Context.Guild.CurrentUser.VoiceChannel;
-            var vc = vcMatch == null 
-                ? (Context.User as SocketGuildUser).VoiceChannel 
+            var vc = vcMatch == null
+                ? (Context.User as SocketGuildUser).VoiceChannel
                 : Context.Guild.VoiceChannels.First(x => x.Name.ToLower().Contains(vcMatch.ToLower()));
 
             if (node.HasPlayer(Context.Guild) && vc != null)

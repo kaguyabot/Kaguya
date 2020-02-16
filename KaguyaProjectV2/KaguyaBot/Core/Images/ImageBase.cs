@@ -1,6 +1,5 @@
-﻿using System;
-using Discord.WebSocket;
-using SixLabors.Fonts;
+﻿using SixLabors.Fonts;
+using System;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images
 {
