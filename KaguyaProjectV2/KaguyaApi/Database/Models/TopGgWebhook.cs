@@ -23,6 +23,7 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Models
     [Table(Name = "upvotes")]
     public class DatabaseUpvoteWebhook
     {
+        [Column("VoteId"), NotNull]
         public string VoteId { get; set; }
         /// <summary>
         /// ID of the bot that received a vote
