@@ -1,11 +1,29 @@
+﻿# KaguyaBot
+/.vs/Kaguya/v16
+/Kaguya/obj/Debug
+/KaguyaProjectV2/.vs/*/
+/KaguyaProjectV2/bin
+/KaguyaProjectV2/obj
+/KaguyaProjectV2/Resources
+/Kaguya/KaguyaWebBlazor/*
 
-Kaguya/bin/Debug/Resources
-.vs*
-Kaguya/bin*
-Kaguya/obj*
-Lavalink/logs/spring.log
-*.gz
-30DayKeys.txt
-60DayKeys.txt
-90DayKeys.txt
-*.gz
+# Blazor
+/KaguyaWebBlazor/bin/Debug/netcoreapp3.0
+/KaguyaWebBlazor/bin/Release/netcoreapp3.0
+/KaguyaWebBlazor/obj/Debug/netcoreapp3.0
+/KaguyaWebBlazor/bin
+/KaguyaWebBlazor/obj
+/KaguyaWebBlazor/.vs/*/
+
+*.suo
+KaguyaProjectV2/Properties/launchSettings.json
+KaguyaProjectV2/LavalinkServer/logs/spring.log
+KaguyaProjectV2/LavalinkServer/logs/spring.log.2020-02-10.0.gz
+KaguyaProjectV2/appsettings.json
+
+# Other
+**/bin
+**/obj
+**/out
+**/.vs
+**/.vscode

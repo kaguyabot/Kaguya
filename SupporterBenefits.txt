@@ -1,0 +1,8 @@
+Supporter Benefits for Kaguya V2.0
+Supporters who pay $4.99/mo will gain access to all of the following:
+
+- Up to 9 most recent warnings displayed when using $unwarn (compared to 4)
+- Unlimited nsfw command usage (compared to 12 per day)
+- Less restrictive rate limit (3 commands every 2.75 seconds) (was 3/3.75 seconds)
+- 7 linked Twitch channels (was 3)
+- Access to real-time Twitch followers, subscribers, bit cheers, raids
