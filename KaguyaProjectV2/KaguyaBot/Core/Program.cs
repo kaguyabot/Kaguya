@@ -23,6 +23,7 @@ using Microsoft.Extensions.Hosting;
 using OsuSharp;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using TwitchLib.Api;
 using Victoria;
 
@@ -44,6 +45,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
