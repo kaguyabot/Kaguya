@@ -65,7 +65,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 
             ConfigModel model = new ConfigModel();
 
-            if (args.Length == 16)
+            if (args.Length == 14)
             {
                 model = new ConfigModel
                 {
@@ -74,17 +74,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                     LogLevelNumber = args[2].AsInteger(),
                     DefaultPrefix = args[3],
                     OsuApiKey = args[4],
-                    TillerinoApiKey = args[5],
-                    TopGGApiKey = args[6],
-                    TopGGAuthorizationPassword = args[7],
-                    MySQL_Username = args[8],
-                    MySQL_Password = args[9],
-                    MySQL_Server = args[10],
-                    MySQL_Database = args[11],
-                    TwitchClientId = args[12],
-                    TwitchAuthToken = args[13],
-                    DanbooruUsername = args[14],
-                    DanbooruApiKey = args[15]
+                    TopGGApiKey = args[5],
+                    MySQL_Username = args[6],
+                    MySQL_Password = args[7],
+                    MySQL_Server = args[8],
+                    MySQL_Database = args[9],
+                    TwitchClientId = args[10],
+                    TwitchAuthToken = args[11],
+                    DanbooruUsername = args[12],
+                    DanbooruApiKey = args[13]
                 };
             }
 
@@ -96,7 +94,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 
                 await ConsoleLogger.LogAsync($"Wrote new config file.", LogLvl.INFO);
             }
-            else if (args.Length != 16)
+            else if (args.Length != 14)
             {
                 //Reads config file.
                 model = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(configFilePath));
@@ -159,9 +157,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         public int LogLevelNumber { get; set; } = 1;
         public string DefaultPrefix { get; set; } = "$";
         public string OsuApiKey { get; set; }
-        public string TillerinoApiKey { get; set; }
         public string TopGGApiKey { get; set; }
-        public string TopGGAuthorizationPassword { get; set; }
         public string MySQL_Username { get; set; }
         public string MySQL_Password { get; set; }
         public string MySQL_Server { get; set; }
