@@ -65,7 +65,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             foreach (var u in oldUserJson)
             {
                 var osuUser = await OsuBase.client.GetUserByUsernameAsync(u.OsuUsername, GameMode.Standard);
-                int osuId = osuUser == null ? 0 : (int)osuUser.UserId;
+                int osuId = osuUser == null ? 0 : (int) osuUser.UserId;
 
                 var newUser = new User
                 {
@@ -78,11 +78,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     TotalNSFWImages = 0,
                     ActiveRateLimit = 0,
                     RateLimitWarnings = 0,
-                    TotalGamblingWins = (int)u.LifetimeGambleWins,
-                    TotalGamblingLosses = (int)u.LifetimeGambleLosses,
+                    TotalGamblingWins = (int) u.LifetimeGambleWins,
+                    TotalGamblingLosses = (int) u.LifetimeGambleLosses,
                     TotalCurrencyAwarded = u.TotalCurrencyAwarded,
                     TotalCurrencyLost = u.TotalCurrencyLost,
-                    TotalRollWins = (int)u.LifetimeGambleWins,
+                    TotalRollWins = (int) u.LifetimeGambleWins,
                     TotalQuickdrawWins = u.QuickdrawWinnings,
                     TotalQuickdrawLosses = u.QuickdrawLosses,
                     LastGivenExp = 0,
@@ -93,7 +93,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
                 if (existingUsers.All(x => x.UserId != newUser.UserId))
                     usersToCopy.Add(newUser);
+            }
 
+            await DatabaseQueries.BulkCopy(usersToCopy);
+            await ConsoleLogger.LogAsync($"{usersToCopy.Count} users bulk-copied to database.", LogLvl.DEBUG);
+            await ReplyAsync($"{Context.User.Mention} Users bulk copied to database.");
+
+            foreach (var u in oldUserJson)
+            {
                 if (u.KaguyaSupporterExpiration.ToOADate() > DateTime.Now.ToOADate())
                 {
                     var suppKey = new SupporterKey
@@ -139,8 +146,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 await ConsoleLogger.LogAsync($"User {u.ID} added to list of users to be added.", LogLvl.TRACE);
             }
 
-            await ReplyAsync($"{Context.User.Mention} User objects stored in memory.");
+            await ReplyAsync($"{Context.User.Mention} User-related tables populated in database.");
             await ReplyAsync($"{Context.User.Mention} beginning migration of servers into database...");
+
+            var serversToCopy = new List<Server>();
 
             foreach (var server in oldServerJson)
             {
@@ -173,9 +182,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     LevelAnnouncementsEnabled = true
                 };
 
-                if (existingServers.All(x => x.ServerId != server.ID))
-                    await DatabaseQueries.InsertAsync(newServer);
+                serversToCopy.Add(newServer);
+            }
 
+            await DatabaseQueries.BulkCopy(serversToCopy);
+            await ConsoleLogger.LogAsync($"{serversToCopy.Count} servers bulk-copied to database.", LogLvl.DEBUG);
+            await ReplyAsync($"{Context.User.Mention} Servers bulk copied to database.");
+
+            int j = 0;
+            foreach (var server in oldServerJson)
+            { 
                 if (server.FilteredWords.Length > 0)
                 {
                     var fp = new List<FilteredPhrase>(server.FilteredWords.Length);
@@ -185,7 +201,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                         {
                             ServerId = server.ID,
                             Phrase = phrase,
-                            Server = newServer
+                            Server = serversToCopy[j]
                         });
                     }
 
@@ -201,7 +217,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                         {
                             ServerId = server.ID,
                             RoleId = roleId,
-                            Server = newServer
+                            Server = serversToCopy[j]
                         });
                     }
 
@@ -218,7 +234,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                             ServerId = server.ID,
                             ChannelId = bcId,
                             Expiration = DateTime.MaxValue.ToOADate(),
-                            Server = newServer
+                            Server = serversToCopy[j]
                         });
                     }
 
@@ -237,7 +253,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                             ModeratorName = "Kaguya#2708",
                             Reason = "Automatic warning transfer from V1 ==> V2 data migration.",
                             Date = DateTime.Now.ToOADate(),
-                            Server = newServer
+                            Server = serversToCopy[j]
                         });
                     }
 
@@ -253,7 +269,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                         Users = server.AntiRaidCount,
                         Seconds = server.AntiRaidSeconds,
                         Action = server.AntiRaidPunishment,
-                        Server = newServer
+                        Server = serversToCopy[j]
                     };
 
                     await DatabaseQueries.InsertAsync(ar);
@@ -269,15 +285,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 };
 
                 if (!(wa.Ban == 0 && wa.Kick == 0 &&
-                    wa.Mute == 0 && wa.Shadowban == 0))
+                      wa.Mute == 0 && wa.Shadowban == 0))
                 {
                     await DatabaseQueries.InsertAsync(wa);
                 }
+
+                j++;
             }
-
-
-            await DatabaseQueries.BulkCopy(usersToCopy);
-            await ConsoleLogger.LogAsync($"{usersToCopy.Count} users bulk-copied to database.", LogLvl.DEBUG);
+            
             await ReplyAsync($"{Context.User.Mention} Completed.");
         }
     }
