@@ -48,8 +48,6 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
         [HttpPost("webhook")]
         public async Task Post([FromBody]TopGgWebhook baseHook, [FromHeader(Name = "Authorization")]string auth)
         {
-            await ConsoleLogger.LogAsync($"POST received: Given Authorization Header: {auth}", LogLvl.INFO);
-
             if (auth != _cfg.Value.TopGGAuthorization)
                 return;
 
@@ -67,7 +65,7 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
             await _db.InsertAsync(dbWebhook);
             _uvNotifier.Enqueue(dbWebhook);
 
-            await ConsoleLogger.LogAsync($"[Kaguya Api]: Authorized DBL Webhook received for user {dbWebhook.UserId}.", LogLvl.INFO);
+            await ConsoleLogger.LogAsync($"[Kaguya Api]: Authorized Top.GG Webhook received for user {dbWebhook.UserId}.", LogLvl.INFO);
         }
 
         // PUT api/<controller>/5
