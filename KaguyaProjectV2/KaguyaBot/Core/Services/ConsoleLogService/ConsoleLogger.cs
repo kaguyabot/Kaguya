@@ -4,6 +4,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Discord;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {
@@ -58,6 +59,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
                        $"Channel: [Name: {context.Channel.Name} | ID: {context.Channel.Id}]\n";
 
             await LogFinisher(logLevel, contents);
+        }
+
+        /// <summary>
+        /// Asynchronously logs a Discord <see cref="CommandService"/> log message to the console and log file.
+        /// This is generally used for capturing thrown command exceptions.
+        /// </summary>
+        /// <param name="logMsg"></param>
+        /// <param name="cmdException"></param>
+        /// <returns></returns>
+        public static async Task LogAsync(LogMessage logMsg, CommandException cmdException)
+        {
+            string logP = LogPrefix(LogLvl.ERROR);
+            string dateString = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}";
+            string contents = $"{dateString}{logP} Exception thrown when executing command {cmdException.Command.Name} in guild " +
+                              $"{cmdException.Context.Guild.Id} by user {cmdException.Context.User.Id}:\n" +
+                              $"Message: {cmdException.Message}\n" +
+                              $"Stack Trace: {cmdException.StackTrace}";
+            await LogFinisher(LogLvl.ERROR, contents);
         }
 
         private static string LogPrefix(LogLvl logLevel)

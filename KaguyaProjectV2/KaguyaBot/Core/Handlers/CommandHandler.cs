@@ -33,6 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             _client.MessageReceived += HandleCommandAsync;
             _commands.CommandExecuted += CommandExecutedAsync;
+            _commands.Log += HandleCommandLog;
         }
 
         public async Task InitializeAsync()
@@ -147,7 +148,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
                 {
                     Title = "Command Failed",
-                    Description = $"Failed to execute command `{context.Message}` \nReason: {result.ErrorReason}",
+                    Description = $"Failed to execute command `{context.Message}` \nReason: {result.ErrorReason}\n",
                     Footer = new EmbedFooterBuilder
                     {
                         Text = $"Use {cmdPrefix}h <command> for information on how to use a command!",
@@ -160,7 +161,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     await context.Channel.SendMessageAsync(embed: embed.Build());
                 }
                 catch (Discord.Net.HttpException)
-                { }
+                {
+                    await ConsoleLogger.LogAsync(
+                        $"An exception was thrown when trying to send a command result into a text channel.\n" +
+                        $"Channel: {context.Channel.Id} in guild {context.Guild.Id}",
+                        LogLvl.WARN);
+                }
+            }
+        }
+
+        private static async Task HandleCommandLog(LogMessage logMsg)
+        {
+            if (logMsg.Exception is CommandException cmdException)
+            {
+                await ConsoleLogger.LogAsync(logMsg, cmdException);
             }
         }
     }

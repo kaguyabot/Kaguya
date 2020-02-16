@@ -62,8 +62,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
             foreach (var u in oldUserJson)
             {
-                var osuUser = await OsuBase.client.GetUserByUsernameAsync(u.OsuUsername, GameMode.Standard);
-                int osuId = osuUser == null ? 0 : (int) osuUser.UserId;
+                int osuId = 0;
+                try
+                {
+                    var osuUser = await OsuBase.client.GetUserByUsernameAsync(u.OsuUsername, GameMode.Standard);
+                    osuId = osuUser == null ? 0 : (int) osuUser.UserId;
+                }
+                catch (Exception)
+                {
+                    await ConsoleLogger.LogAsync($"User {u.ID} had their osu! api-fetch throw an exception.",
+                        LogLvl.WARN);
+                }
 
                 var newUser = new User
                 {
