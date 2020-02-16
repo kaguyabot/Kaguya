@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
     public class AssignRoleToAll : KaguyaBase
     {
         [OwnerCommand]
-        [Command("AssignRoleToAll")]
+        [Command("AssignRoleToAll", RunMode = RunMode.Async)]
         [Alias("arta")]
         [Summary("Assigns the given role to every user in the server.")]
         [Remarks("<role>")]
@@ -20,7 +20,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task Command(SocketRole role)
         {
+            await ReplyAsync($"{Context.User.Mention} Executing...");
             int i = 0;
+
+            await Context.Guild.DownloadUsersAsync();
             foreach (var user in Context.Guild.Users.Where(x => !x.Roles.Contains(role)))
             {
                 await user.AddRoleAsync(role);
