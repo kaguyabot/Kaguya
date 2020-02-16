@@ -46,8 +46,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             await DatabaseQueries.DeleteAllAsync<WarnedUser>();
             await DatabaseQueries.DeleteAllAsync<WarnSetting>();
             await DatabaseQueries.DeleteAllAsync<TopGgWebhook>();
-            await DatabaseQueries.DeleteAllAsync<User>();
-            await DatabaseQueries.DeleteAllAsync<Server>();
+
+            await ReplyAsync($"{Context.User.Mention} Users and servers still remain.");
 
             var userjsonText = await File.ReadAllTextAsync(accountsFilePath);
             var oldUserJson = JsonConvert.DeserializeObject<List<OldUser>>(userjsonText);
@@ -58,9 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             await ReplyAsync($"{Context.User.Mention} Migrating {oldUserJson.Count} accounts. Please wait...");
 
             var usersToCopy = new List<User>(oldUserJson.Count);
-
             var existingUsers = await DatabaseQueries.GetAllAsync<User>();
-            var existingServers = await DatabaseQueries.GetAllAsync<Server>();
 
             foreach (var u in oldUserJson)
             {
@@ -95,6 +93,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     usersToCopy.Add(newUser);
             }
 
+            await DatabaseQueries.DeleteAllAsync<User>();
             await DatabaseQueries.BulkCopy(usersToCopy);
             await ConsoleLogger.LogAsync($"{usersToCopy.Count} users bulk-copied to database.", LogLvl.DEBUG);
             await ReplyAsync($"{Context.User.Mention} Users bulk copied to database.");
@@ -185,6 +184,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 serversToCopy.Add(newServer);
             }
 
+            await DatabaseQueries.DeleteAllAsync<Server>();
             await DatabaseQueries.BulkCopy(serversToCopy);
             await ConsoleLogger.LogAsync($"{serversToCopy.Count} servers bulk-copied to database.", LogLvl.DEBUG);
             await ReplyAsync($"{Context.User.Mention} Servers bulk copied to database.");
