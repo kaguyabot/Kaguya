@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://+:6969");
+                    webBuilder.UseUrls("http://+:80");
                     webBuilder.UseKestrel();
                 });
 

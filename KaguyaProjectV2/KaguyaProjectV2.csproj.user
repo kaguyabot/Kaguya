@@ -3,6 +3,9 @@
   <PropertyGroup>
     <_LastSelectedProfileId>C:\Users\Stage\Documents\GitHub\Kaguya\KaguyaProjectV2\Properties\PublishProfiles\WindowsProfile.pubxml</_LastSelectedProfileId>
     <ShowAllFiles>false</ShowAllFiles>
-    <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
+    <ActiveDebugProfile>KaguyaProjectV2</ActiveDebugProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
