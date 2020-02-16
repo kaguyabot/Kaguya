@@ -42,33 +42,36 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public async Task HandleCommandAsync(SocketMessage msg)
         {
+            if (msg.Author.Id != 146092837723832320)
+                return;
+
             if (!(msg is SocketUserMessage message) || message.Author.IsBot) return;
             if (msg.Channel.GetType() != typeof(SocketTextChannel))
                 return;
 
-            Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel)message.Channel).Guild.Id);
-            User user = await DatabaseQueries.GetOrCreateUserAsync(message.Author.Id);
+            //Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel)message.Channel).Guild.Id);
+            //User user = await DatabaseQueries.GetOrCreateUserAsync(message.Author.Id);
 
-            if (user.IsBlacklisted && user.UserId != ConfigProperties.BotConfig.BotOwnerId) return;
-            if (server.IsBlacklisted) return;
+           // if (user.IsBlacklisted && user.UserId != ConfigProperties.BotConfig.BotOwnerId) return;
+           // if (server.IsBlacklisted) return;
 
             var context = new ShardedCommandContext(_client, message);
-            await IsFilteredPhrase(context, server, message); // If filtered phrase (and user isn't admin), return.
+            //await IsFilteredPhrase(context, server, message); // If filtered phrase (and user isn't admin), return.
 
-            await ExperienceHandler.TryAddExp(user, server, context);
-            await ServerSpecificExpHandler.TryAddExp(user, server, context);
+            //await ExperienceHandler.TryAddExp(user, server, context);
+            //await ServerSpecificExpHandler.TryAddExp(user, server, context);
 
             // If the channel is blacklisted and the user isn't an Admin, return.
-            if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&
-                !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
-                return;
+            //if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&
+            //    !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
+            //    return;
 
-            if (Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/beatmapsets/[0-9]*#\b(?:osu|taiko|mania|fruits)\b/[0-9]*") ||
-               Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/b/[0-9]*"))
-                await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, context);
+            //if (Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/beatmapsets/[0-9]*#\b(?:osu|taiko|mania|fruits)\b/[0-9]*") ||
+            //   Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/b/[0-9]*"))
+            //    await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, context);
 
             int argPos = 0;
-            if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
+            if (!(message.HasStringPrefix(".", ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
                 message.Author.IsBot)
                 return;
