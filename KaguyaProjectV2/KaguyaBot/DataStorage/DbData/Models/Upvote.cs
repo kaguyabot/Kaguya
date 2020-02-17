@@ -6,7 +6,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     [Table(Name = "upvotes")]
     public class TopGgWebhook : IKaguyaQueryable<TopGgWebhook>, IKaguyaUnique<TopGgWebhook>, IUserSearchable<TopGgWebhook>
     {
-        [Column(Name = "VoteId"), NotNull]
+        [PrimaryKey]
         public string VoteId { get; set; }
         /// <summary>
         /// ID of the bot that received a vote
