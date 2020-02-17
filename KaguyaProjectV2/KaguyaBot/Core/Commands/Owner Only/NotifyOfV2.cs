@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using System;
+using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
@@ -34,7 +35,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             foreach (var guild in ConfigProperties.Client.Guilds)
             {
                 i++;
-                await guild.DefaultChannel.SendMessageAsync(notifyStr);
+                try
+                {
+                    await guild.DefaultChannel.SendMessageAsync(notifyStr);
+                }
+                catch (Exception)
+                {
+                    await ConsoleLogger.LogAsync(
+                        $"I tried to notify a guild of V2 changes, but I encountered an exception.", LogLvl.DEBUG);
+                }
                 await ConsoleLogger.LogAsync($"{i}/{j} guilds notified of V2 changes.", LogLvl.WARN);
             }
 
