@@ -228,6 +228,17 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
+        public static async Task InsertAsync<T>(IEnumerable<T> arg) where T : class, IKaguyaQueryable<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                foreach (var element in arg)
+                {
+                    await db.InsertAsync(element);
+                }
+            }
+        }
+
         /// <summary>
         /// Returns a <see cref="T"/> object that belongs to the user, but is not necessarily
         /// mapped to the user object directly. <see cref="T"/> refers to the object in the database that
