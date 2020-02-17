@@ -25,6 +25,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Remarks("<Accounts file path> <Servers file path>")]
         public async Task Command(string accountsFilePath, string serversFilePath)
         {
+            bool enabled = false;
+            if (!enabled)
+            {
+                throw new Exception("Unabled to execute this command. This command " +
+                                    "has been hardcoded to never execute as a safe-guard " +
+                                    "to an accidental data migration.");
+            }
+
+#if DEBUG
             await ReplyAsync($"{Context.User.Mention} Clearing database...");
 
             await DatabaseQueries.DeleteAllAsync<AntiRaidConfig>();
@@ -48,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             await DatabaseQueries.DeleteAllAsync<TopGgWebhook>();
 
             await ReplyAsync($"{Context.User.Mention} Users, servers, and 8ball still remain.");
-
+#endif
             var userjsonText = await File.ReadAllTextAsync(accountsFilePath);
             var oldUserJson = JsonConvert.DeserializeObject<List<OldUser>>(userjsonText);
 
