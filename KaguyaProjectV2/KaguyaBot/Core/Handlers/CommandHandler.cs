@@ -42,9 +42,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public async Task HandleCommandAsync(SocketMessage msg)
         {
-            if (msg.Author.Id != 146092837723832320)
-                return;
-
             if (!(msg is SocketUserMessage message) || message.Author.IsBot) return;
             if (msg.Channel.GetType() != typeof(SocketTextChannel))
                 return;

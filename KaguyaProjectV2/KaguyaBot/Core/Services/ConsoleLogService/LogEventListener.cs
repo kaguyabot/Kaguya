@@ -54,8 +54,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             _client.UserJoined += async (SocketGuildUser user) => await ConsoleLogger.LogAsync($"User Joined Guild [User: {user} | User ID: {user.Id} | Guild: {user.Guild}]", LogLvl.DEBUG);
 
             _client.UserVoiceStateUpdated += async (SocketUser user, SocketVoiceState vs1, SocketVoiceState vs2) => await ConsoleLogger.LogAsync($"User Voice State Updated: [User: {user}]", LogLvl.TRACE);
-
-            //Twitch stuff
         }
     }
 }
