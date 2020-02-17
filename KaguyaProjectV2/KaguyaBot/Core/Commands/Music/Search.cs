@@ -147,11 +147,35 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
                 if (player.PlayerState == PlayerState.Playing)
                 {
-                    player.Queue.Enqueue(trackSel);
+                    try
+                    {
+                        player.Queue.Enqueue(trackSel);
+                        await ConsoleLogger.LogAsync($"Enqueued livestream {trackSel.Title} in guild {context.Guild.Id}",
+                            LogLvl.TRACE);
+                    }
+                    catch (Exception e)
+                    {
+                        await ConsoleLogger.LogAsync($"An exception was thrown when trying to enqueue the livestream " +
+                                                     $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
+                                                     $"Exception Message: {e.Message}\n" +
+                                                     $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
+                    }
                 }
                 else
                 {
-                    await player.PlayAsync(trackSel);
+                    try
+                    {
+                        await player.PlayAsync(trackSel);
+                        await ConsoleLogger.LogAsync($"Playing livestream {trackSel.Title} in guild {context.Guild.Id}",
+                            LogLvl.TRACE);
+                    }
+                    catch (Exception e)
+                    {
+                        await ConsoleLogger.LogAsync($"An exception was thrown when trying to play track " +
+                                                     $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
+                                                     $"Exception Message: {e.Message}\n" +
+                                                     $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
+                    }
                 }
 
                 var field = new EmbedFieldBuilder
@@ -208,8 +232,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 }
                 else
                 {
-                    await player.PlayAsync(trackSel);
-                    await ConsoleLogger.LogAsync($"Playing track {trackSel.Title} in guild {context.Guild.Id}.", LogLvl.TRACE);
+                    try
+                    {
+                        await player.PlayAsync(trackSel);
+                        await ConsoleLogger.LogAsync($"Playing track {trackSel.Title} in guild {context.Guild.Id}",
+                            LogLvl.TRACE);
+                    }
+                    catch (Exception e)
+                    {
+                        await ConsoleLogger.LogAsync($"An exception was thrown when trying to play track " +
+                                                     $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
+                                                     $"Exception Message: {e.Message}\n" +
+                                                     $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
+                    }
                 }
 
                 if (player.Volume == 0 && player.PlayerState == PlayerState.Playing)
@@ -276,8 +311,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     }
                     else
                     {
-                        await player.PlayAsync(trackSel);
-                        await ConsoleLogger.LogAsync($"Playing track {trackSel.Title} in guild {context.Guild.Id}", LogLvl.TRACE);
+                        try
+                        {
+                            await player.PlayAsync(trackSel);
+                            await ConsoleLogger.LogAsync($"Playing track {trackSel.Title} in guild {context.Guild.Id}",
+                                LogLvl.TRACE);
+                        }
+                        catch (Exception e)
+                        {
+                            await ConsoleLogger.LogAsync($"An exception was thrown when trying to play track " +
+                                                         $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
+                                                         $"Exception Message: {e.Message}\n" +
+                                                         $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
+                        }
                     }
 
                     if (player.Volume == 0 && player.PlayerState == PlayerState.Playing)
