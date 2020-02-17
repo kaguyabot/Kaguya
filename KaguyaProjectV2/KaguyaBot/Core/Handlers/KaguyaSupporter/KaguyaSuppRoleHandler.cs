@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Discord.WebSocket;
+using Renci.SshNet.Compression;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
@@ -36,7 +38,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 
                 foreach (var supporter in supporters)
                 {
-                    var socketUser = client.GetUser(supporter.UserId);
+                    SocketUser socketUser = null;
+                    try
+                    {
+                        socketUser = client.GetUser(supporter.UserId);
+                    }
+                    catch (Exception)
+                    {
+                        await ConsoleLogger.LogAsync($"Tried to get data for a supporter in hopes of " +
+                                                     $"applying the Kaguya Supporter role to them, but they " +
+                                                     $"couldn't be found. A null-reference exception was thrown.", LogLvl.WARN);
+                    }
+
+                    if (socketUser == null)
+                        continue;
 
                     if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
                         continue;
