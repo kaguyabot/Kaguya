@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         {
             Process curProcess = Process.GetCurrentProcess();
 
-            var client = ConfigProperties.Client;
+            var client = Client;
             var owner = client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 

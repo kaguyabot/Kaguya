@@ -1,7 +1,6 @@
 ﻿using Discord.Commands;
-using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
+using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -15,8 +14,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            var ping = ConfigProperties.Client.Latency;
-            await sendbasic
+            var ping = Client.Latency;
+            await SendBasicSuccessEmbedAsync($"{Context.User.Mention} pong! {Centvrio.Emoji.Sport.PingPong}\n" +
+                                             $"Latency: `{ping:N0}ms`");
         }
     }
 }

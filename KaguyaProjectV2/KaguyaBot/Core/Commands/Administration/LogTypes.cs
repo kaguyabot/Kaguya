@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 var matchChannel = (ulong)prop.GetValue(server);
 
-                var channel = ConfigProperties.Client.GetGuild(Context.Guild.Id).GetTextChannel(matchChannel);
+                var channel = Client.GetGuild(Context.Guild.Id).GetTextChannel(matchChannel);
                 var deletedChannel = channel == null && matchChannel != 0;
 
                 logSettingString +=

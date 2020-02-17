@@ -39,7 +39,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 if (i > 10)
                     break;
 
-                var socketUser = ConfigProperties.Client.GetUser(element.UserId);
+                var socketUser = Client.GetUser(element.UserId);
                 var user = await DatabaseQueries.GetOrCreateUserAsync(element.UserId);
 
                 embed.Fields.Add(new EmbedFieldBuilder
