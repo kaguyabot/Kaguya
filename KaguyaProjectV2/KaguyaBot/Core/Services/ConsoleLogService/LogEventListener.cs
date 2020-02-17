@@ -47,15 +47,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             _client.RoleCreated += async (SocketRole role) => await ConsoleLogger.LogAsync($"Role Created [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]", LogLvl.DEBUG);
             _client.RoleDeleted += async (SocketRole role) => await ConsoleLogger.LogAsync($"Role Deleted [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]", LogLvl.DEBUG);
             _client.RoleUpdated += async (SocketRole role, SocketRole role2) =>
-                await ConsoleLogger.LogAsync($"Role Updated [Name: {role.Name} | New Name: {role2.Name} | ID: {role.Id} | Guild: {role.Guild}]", LogLvl.DEBUG);
+                await ConsoleLogger.LogAsync($"Role Updated [Name: {role.Name} | New Name: {role2.Name} | ID: {role.Id} | Guild: {role.Guild}]", LogLvl.TRACE);
 
             _client.UserBanned += async (SocketUser user, SocketGuild guild) => await ConsoleLogger.LogAsync($"User Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]", LogLvl.DEBUG);
             _client.UserUnbanned += async (SocketUser user, SocketGuild guild) => await ConsoleLogger.LogAsync($"User Un-Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]", LogLvl.DEBUG);
             _client.UserJoined += async (SocketGuildUser user) => await ConsoleLogger.LogAsync($"User Joined Guild [User: {user} | User ID: {user.Id} | Guild: {user.Guild}]", LogLvl.DEBUG);
 
             _client.UserVoiceStateUpdated += async (SocketUser user, SocketVoiceState vs1, SocketVoiceState vs2) => await ConsoleLogger.LogAsync($"User Voice State Updated: [User: {user}]", LogLvl.TRACE);
-
-            //Twitch stuff
         }
     }
 }

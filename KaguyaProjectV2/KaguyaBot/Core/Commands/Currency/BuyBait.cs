@@ -14,7 +14,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Command("BuyBait")]
         [Alias("bait")]
         [Summary("Purchases bait from the baitshop. Each bait costs " +
-                 "75 points. At least one bait is required for `fishing`. " +
+                 "75 points (unless you have previously fished, in which it costs " +
+                 "more based on your fishing level). At least one bait is required for `fishing`. " +
                  "Supporters get 25% off!")]
         [Remarks("<amount>")]
         public async Task Command(int amount)
@@ -41,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 var maxBaitEmbed = new KaguyaEmbedBuilder
                 {
                     Description = $"You may only carry {baitCapacity} bait at one time, due to the size of your bait box. " +
-                                  $"The most bait you may purchase right now is `{baitCapacity - user.FishBait}`"
+                                  $"The most additional bait you may purchase right now is `{baitCapacity - user.FishBait}`"
                 };
             }
 
