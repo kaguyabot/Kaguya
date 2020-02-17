@@ -67,7 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             var config = new DiscordSocketConfig
             {
                 MessageCacheSize = 500,
-                TotalShards = 1
+                TotalShards = 3
             };
 
             var lavaConfig = new LavaConfig
