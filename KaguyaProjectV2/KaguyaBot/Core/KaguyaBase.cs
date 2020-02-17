@@ -3,11 +3,15 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
     public abstract class KaguyaBase : InteractiveBase<ShardedCommandContext>
     {
+        public static DiscordShardedClient Client = 
+
         /// <summary>
         /// Sends an unbuilt <see cref="EmbedBuilder"/> to the current <see cref="ICommandContext"/>'s <see cref="ITextChannel"/>.
         /// </summary>
