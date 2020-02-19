@@ -92,7 +92,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 new EmbedFieldBuilder
                 {
                     Name = "Global Stats",
-                    Value = $"Uptime: `{(DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize()}`\n" +
+                    Value = $"Uptime: `{(DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(precision: 4)}`\n" +
                             $"Guilds: `{totalGuilds:N0}`\n" +
                             $"Text Channels: `{totalTextChannels:N0}`\n" +
                             $"Voice Channels: `{totalVoiceChannels:N0}`\n" +

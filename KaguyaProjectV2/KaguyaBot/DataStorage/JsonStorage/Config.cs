@@ -90,7 +90,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             {
                 //Creates JSON from model.
                 var modelToSave = JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath, model));
-                await File.WriteAllTextAsync(configFilePath, JsonConvert.SerializeObject(modelToSave));
+                await File.WriteAllTextAsync(configFilePath, JsonConvert.SerializeObject(modelToSave, Formatting.Indented));
 
                 await ConsoleLogger.LogAsync($"Wrote new config file.", LogLvl.INFO);
             }
