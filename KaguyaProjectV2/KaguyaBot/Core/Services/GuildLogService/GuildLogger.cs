@@ -106,6 +106,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 if (oldMsg.Author.IsBot) return;
                 if (string.IsNullOrEmpty(content)) content = "<No previous text>";
 
+                if (content == arg2.Content)
+                    return;
+
                 var embed = new KaguyaEmbedBuilder
                 {
                     Title = "Message Updated",

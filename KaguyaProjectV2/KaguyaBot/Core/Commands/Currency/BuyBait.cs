@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -39,11 +40,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     return;
                 }
 
-                var maxBaitEmbed = new KaguyaEmbedBuilder
-                {
-                    Description = $"You may only carry {baitCapacity} bait at one time, due to the size of your bait box. " +
-                                  $"The most additional bait you may purchase right now is `{baitCapacity - user.FishBait}`"
-                };
+                await SendBasicErrorEmbedAsync($"You may only carry {baitCapacity} bait at one time, " +
+                                               $"due to the size of your bait box. " +
+                                               $"The most additional bait you may purchase" +
+                                               $" right now is `{baitCapacity - user.FishBait}`");
+                return;
             }
 
             if (amount + user.FishBait > suppBaitCapacity && user.IsSupporter)
@@ -64,19 +65,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 totalCost = Fish.SUPPORTER_BAIT_COST * amount;
 
             var bonuses = new FishHandler.FishLevelBonuses(user.FishExp);
-
             totalCost = (int)(totalCost * (1 + bonuses.BaitCostIncreasePercent / 100));
 
             if (user.Points < totalCost)
             {
-                int maxBait = user.Points / Fish.BAIT_COST;
-
-                if (user.IsSupporter)
-                    maxBait = user.Points / Fish.SUPPORTER_BAIT_COST;
-
                 await SendBasicErrorEmbedAsync($"Sorry, you don't have enough points for that. " +
                                                           $"The maximum amount of bait you may buy is " +
-                                                          $"`{maxBait:N0}` bait.");
+                                                          $"`{user.Points / user.FishbaitCost():N0}` bait.");
                 return;
             }
 

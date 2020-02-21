@@ -7,7 +7,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     public class Ping : KaguyaBase
     {
         [HelpCommand]
-        [Name("Ping")]
+        [Command("Ping")]
         [Summary("Sends a ping to Discord and replies with the estimated " +
                  "round-trip latency, in milliseconds, to the gateway server.")]
         [Remarks("")]

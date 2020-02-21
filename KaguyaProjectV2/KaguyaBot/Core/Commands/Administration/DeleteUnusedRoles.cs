@@ -65,7 +65,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     if (j != 0)
                     {
                         failString = $"However, I failed to delete `{j}` roles. These roles are likely " +
-                                     "managed by integrations, therefore they cannot be deleted.";
+                                     "managed by integrations, therefore they cannot be deleted. \n" +
+                                     "*Hint: Is my role at the top of the hierarchy?*";
                     }
 
                     if (i == 0 && j == 0)

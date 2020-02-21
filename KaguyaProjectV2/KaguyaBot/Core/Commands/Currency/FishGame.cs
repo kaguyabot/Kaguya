@@ -9,6 +9,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -40,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                                   $"`{server.CommandPrefix}buybait` command!",
                     Footer = new EmbedFooterBuilder
                     {
-                        Text = $"Bait costs {Fish.BAIT_COST} points ({Fish.SUPPORTER_BAIT_COST} if supporter)."
+                        Text = $"One bait will cost you {user.FishbaitCost():N0} points."
                     }
                 };
                 await SendEmbedAsync(baitEmbed);
@@ -168,14 +169,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     break;
                 case FishType.GIANT_SQUID:
                     value = 10000;
-                    fishExp = r.Next(4000, 11000);
+                    fishExp = r.Next(1000, 3500);
                     embed.Description += $"Well butter my buttcheeks and call me a biscuit, you caught the second " +
                                          $"rarest fish in the sea! It's a `giant squid`!! Congratulations!";
                     embed.SetColor(EmbedColor.ORANGE);
                     break;
                 case FishType.BIG_KAHUNA:
-                    value = 75000;
-                    fishExp = r.Next(9000, 21000);
+                    value = 25000;
+                    fishExp = r.Next(4000, 7500);
                     embed.Description += $"<a:siren:429784681316220939> NO WAY! You hit the jackpot " +
                                          $"and caught the **Legendary `BIG KAHUNA`**!!!! " +
                                          $"What an incredible moment this is! <a:siren:429784681316220939>";

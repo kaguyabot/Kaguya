@@ -10,6 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
     {
         [UtilityCommand]
         [Command("ToggleLevels")]
+        [Alias("tl")]
         [Summary("Allows a server administrator to turn this server's level-up notifications " +
                  "on or off. This will override any logging preference for these notifications, assuming " +
                  "a channel is currently set for that logtype. This means that if a level-up redirect channel " +

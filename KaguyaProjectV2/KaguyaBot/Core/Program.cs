@@ -106,6 +106,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     await _client.LoginAsync(TokenType.Bot, _config.Token);
                     await _client.StartAsync();
 
+                    await _client.SetGameAsync($"Kaguya v{ConfigProperties.Version}: Booting up!");
                     _client.ShardReady += async c => { await _lavaNode.ConnectAsync(); };
                     _lavaNode.OnLog += async message =>
                     {
@@ -202,6 +203,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             WarnEvent.OnWarn += WarnHandler.OnWarn;
             FishEvent.OnFish += async args => await FishHandler.OnFish(args);
             _client.UserJoined += GreetingService.Trigger;
+            _client.UserJoined += AutoAssignedRoleHandler.Trigger;
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)

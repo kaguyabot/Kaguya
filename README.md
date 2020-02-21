@@ -89,10 +89,12 @@ rarer fish! Be wary though, as better bait will be needed to catch rarer fish mo
 - Access to supporter only commands, including `$react`.
 - Reduced fishing cooldown (15s => 5s).
 - 25% off fishing bait purchase price.
+- Carry 1,000 fish bait at a time (compared to 100)
 - Increased maximum betting range for games (50,000 => 500,000)
 - Access to $soundcloud music streaming in any server shared with Kaguya.
 - Access to $twitchaudio music streaming in any server shared with Kaguya.
 - Unlimited duration on songs (compared to 10 minutes).
+
 
 ## Kaguya Premium (Monthly Subscription):
 #### Kaguya Premium Features

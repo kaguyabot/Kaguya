@@ -55,7 +55,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             Type t = user.GetType();
 
             foreach (PropertyInfo pi in t.GetProperties().Where(x => x.PropertyType == typeof(int) &&
-                                                                     !x.Name.ToLower().Contains("active")))
+                                                                     !x.Name.ToLower().Contains("active") &&
+                                                                     x.CanWrite))
             {
                 string value = pi.GetValue(user, null)?.ToString() ?? "Null";
 
@@ -86,7 +87,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
             foreach (var prop in t.GetProperties())
             {
-                if (query.Content.ToLower() == prop.Name.ToLower() && prop.CanWrite)
+                if (query.Content.ToLower() == prop.Name.ToLower())
                 {
                     await SendBasicSuccessEmbedAsync("What would you like to change the value to?");
                     var valMsg = await NextMessageAsync();
