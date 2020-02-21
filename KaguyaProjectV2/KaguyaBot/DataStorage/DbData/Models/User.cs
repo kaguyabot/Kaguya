@@ -6,6 +6,7 @@ using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -85,16 +86,29 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public bool IsBlacklisted => Blacklist != null && Blacklist.Expiration - DateTime.Now.ToOADate() > 0;
         public ExpType ExpChatNotificationType => (ExpType)ExpChatNotificationTypeNum;
         public ExpType ExpDmNotificationType => (ExpType)ExpDmNotificationTypeNum;
+        public FishHandler.FishLevelBonuses FishLevelBonuses => new FishHandler.FishLevelBonuses(FishExp);
 
         public double SupporterExpirationDate
         {
             get
             {
-                var now = DateTime.Now.ToOADate();
-                var allUserKeys = DatabaseQueries.GetAllAsync<SupporterKey>(x => x.UserId == UserId).Result;
-                if (allUserKeys.Count > 0)
-                    return now + allUserKeys.Sum(key => key.Expiration - now);
-                return DateTime.MinValue.ToOADate();
+                var allUserKeys = DatabaseQueries
+                    .GetAllAsync<SupporterKey>(x => x.UserId == UserId && x.Expiration > DateTime.Now.ToOADate()).Result
+                    .ToArray();
+
+                if (allUserKeys.Length == 0)
+                    return DateTime.MinValue.ToOADate();
+
+                var expiration = allUserKeys[0].Expiration;
+                if (allUserKeys.Length > 1)
+                {
+                    foreach (var key in allUserKeys[1..])
+                    {
+                        expiration += DateTime.MinValue.AddSeconds(key.LengthInSeconds).ToOADate();
+                    }
+                }
+
+                return expiration;
             }
         }
 

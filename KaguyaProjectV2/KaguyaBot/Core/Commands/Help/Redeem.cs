@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var nameSwitch = "";
             double expirationDate = 0;
 
-            if (supporterKey != null)
+            if (!string.IsNullOrEmpty(supporterKey?.Key))
             {
                 newKey = new SupporterKey
                 {
@@ -76,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 await DatabaseQueries.InsertOrReplaceAsync((SupporterKey)newKey);
             }
 
-            else if (!string.IsNullOrEmpty(premiumKey.Key))
+            else if (!string.IsNullOrEmpty(premiumKey?.Key))
             {
                 newKey = new PremiumKey
                 {
@@ -140,7 +140,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
         private async Task SendEmbedToBotOwner(ICommandContext context, IKey key)
         {
-            var owner = ConfigProperties.Client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
+            var owner = Client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
             var fields = new List<EmbedFieldBuilder>
             {
                 new EmbedFieldBuilder

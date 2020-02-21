@@ -8,7 +8,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
     {
         [ExpCommand]
         [Command("Upvote")]
-        [Alias("uv")]
+        [Alias("vote", "uv")]
         [Summary("Displays the URL where users may upvote Kaguya online. The act of upvoting grants Kaguya " +
                  "more exposure to new users, and really helps out! As a thanks for voting, users will automatically " +
                  "receive bonus points and exp. The act of voting also resets your NSFW image stock to 12, rather than " +

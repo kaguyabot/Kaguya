@@ -55,9 +55,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 
             if (tags != null)
             {
-                if (tags.Length > 1 && !user.IsSupporter)
+                if (tags.Length > 1 && !user.IsSupporter ||
+                    tags.Length > 0 && tags[0].ToLower() != "bomb" && !user.IsSupporter)
                 {
-                    throw new KaguyaSupporterException("Tagged NSFW searches");
+                    throw new KaguyaSupporterException("Tagged NSFW searches are for " +
+                                                       "Kaguya Supporters only.");
                 }
 
                 if (tags.Intersect(blacklistedTags).Any())
@@ -72,15 +74,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                     {
                         if (tags[1..].Length != 0)
                         {
-                            if (user.TotalNSFWImages < 3)
+                            if (user.TotalNSFWImages < 3 && !user.IsSupporter)
                             {
                                 await SendBasicErrorEmbedAsync(
                                     $"You do not have enough NSFW images to process this command. " +
                                     $"[Kaguya Supporters]({GlobalProperties.KAGUYA_STORE_URL}) have " +
                                     $"unlimited NSFW command uses. For non-supporters, 1 NSFW image is " +
                                     $"earned automatically every 2 hours.");
+                                return;
                             }
 
+                            // Gets rid of the "bomb" term.
+                            tags[0] = null;
+
+                            await SendHentaiAsync(user, tags);
                         }
                         else
                         {
@@ -119,7 +126,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 return null;
             }
 
-            if (tags.Any(x => x.ToLower().Equals("sex")))
+            if (!tags.Any(x => x.ToLower().Equals("sex")))
             {
                 tags.Append("sex");
             }
@@ -144,9 +151,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 }
             }
 
-            user.TotalNSFWImages -= 1;
-            await DatabaseQueries.UpdateAsync(user);
+            if (!user.IsSupporter)
+            {
+                user.TotalNSFWImages -= 1;
+            }
 
+            await DatabaseQueries.UpdateAsync(user);
             return img;
         }
     }

@@ -4,6 +4,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 #pragma warning disable 4014
@@ -208,6 +209,37 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             return user.CommandHistory?.Where(x => x.Command == "nsfw")
                 .Any(x => x.Timestamp > DateTime.Now.AddDays(-days)) ?? false;
+        }
+
+        public static int FishbaitCost(this User user)
+        {
+            return user.IsSupporter 
+                ? (int)(Fish.SUPPORTER_BAIT_COST * (1 + user.FishLevelBonuses.BaitCostIncreasePercent / 100))
+                : (int)(Fish.BAIT_COST * (1 + (user.FishLevelBonuses.BaitCostIncreasePercent / 100)));
+        }
+
+        /// <summary>
+        /// Returns whether the user has any active Kaguya Premium keys.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static async Task<bool> IsPremiumAsync(this User user)
+        {
+            var allKeys = await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId, 
+                x => x.Expiration > DateTime.Now.ToOADate());
+
+            return allKeys.Count > 0;
+        }
+
+        /// <summary>
+        /// Returns all unexpired, active premium keys for this user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static async Task<List<PremiumKey>> GetPremiumKeysAsync(this User user)
+        {
+            return (await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId,
+                x => x.Expiration > DateTime.Now.ToOADate())).ToList();
         }
     }
 }

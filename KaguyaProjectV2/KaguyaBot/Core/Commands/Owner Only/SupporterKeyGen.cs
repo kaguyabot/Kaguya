@@ -127,7 +127,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         // We could use a prettier LINQ expression, but this is twice as fast.
         public static string RandomString(int length = 20)
         {
-            const string chars = @"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789!@#$%^&()+=-\{}[]';~";
+            const string chars = @"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789!@#$%^&()+=-{}[]';~";
             var stringChars = new char[length];
 
             for (int i = 0; i < stringChars.Length; i++)

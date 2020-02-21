@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     {
         [PremiumServerCommand]
         [Command("AssignAllRoles", RunMode = RunMode.Async)]
-        [Alias("aar")]
+        [Alias("aaroles", "aa")]
         [Summary("Assigns every single role in the server to a user, or list of users.")]
         [Remarks("<user> {...}")]
         [RequireUserPermission(GuildPermission.ManageRoles)]

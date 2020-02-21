@@ -19,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [RequireBotPermission(GuildPermission.AddReactions)]
         public async Task Check(params string[] ids)
         {
-            var channel = ConfigProperties.Client.GetGuild(546880579057221644).GetTextChannel(546883647429410826);
+            var channel = Client.GetGuild(546880579057221644).GetTextChannel(546883647429410826);
 
             foreach (var element in ids)
             {

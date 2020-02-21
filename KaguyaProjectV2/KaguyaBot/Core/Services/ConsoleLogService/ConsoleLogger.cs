@@ -71,11 +71,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
         public static async Task LogAsync(LogMessage logMsg, CommandException cmdException)
         {
             string logP = LogPrefix(LogLvl.ERROR);
-            string dateString = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}";
-            string contents = $"{dateString}{logP} Exception thrown when executing command {cmdException.Command.Name} in guild " +
-                              $"{cmdException.Context.Guild.Id} by user {cmdException.Context.User.Id}:\n" +
+            string contents = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} Exception thrown when executing command " +
+                              $"{cmdException.Command.Name} in guild {cmdException.Context.Guild.Id} by user {cmdException.Context.User.Id}:\n" +
                               $"Message: {cmdException.Message}\n" +
-                              $"Stack Trace: {cmdException.StackTrace}";
+                              $"Stack Trace: {logMsg.Exception.StackTrace}";
             await LogFinisher(LogLvl.ERROR, contents);
         }
 

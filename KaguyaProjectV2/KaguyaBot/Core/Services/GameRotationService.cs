@@ -34,7 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                 var curGame = games[index];
                 await client.SetGameAsync(curGame.Item1 + ".", null, curGame.Item2);
-                await ConsoleLogger.LogAsync($"Switched game to: {curGame.Item2} {curGame.Item1}.", LogLvl.INFO);
+                await ConsoleLogger.LogAsync($"Switched game to: {curGame.Item2} {curGame.Item1}", LogLvl.INFO);
 
                 index++;
             };

@@ -245,7 +245,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                  * in order for this to work.
                  */
 
-                guild = ConfigProperties.Client.GetGuild(guild.Id);
+                guild = Client.GetGuild(guild.Id);
                 muteRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
 
                 if (Context.Guild.Channels.Any(x => !x.GetPermissionOverwrite(muteRole).HasValue))
