@@ -12,13 +12,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         public static Task Initialize()
         {
             Timer timer = new Timer(7200000);
-            timer.AutoReset = false;
+            timer.AutoReset = true;
             timer.Enabled = true;
             timer.Elapsed += async (s, a) =>
             {
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                var usersToUpdate = new List<User>();
                 foreach (var user in await DatabaseQueries.GetAllAsync<User>(x => x.TotalNSFWImages < 12))
                 {
                     user.TotalNSFWImages += 1;

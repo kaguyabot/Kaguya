@@ -66,7 +66,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                         continue;
 
                     await kaguyaSuppGuildUser.AddRoleAsync(supporterRole);
-                    await ConsoleLogger.LogAsync($"Supporter {socketUser} has had their {supporterRole.Name} role given to them in the Kaguya Support server.", LogLvl.INFO);
+                    await ConsoleLogger.LogAsync($"Supporter {socketUser} has had their {supporterRole.Name} role " +
+                                                 $"given to them in the Kaguya Support server.", LogLvl.INFO);
                 }
 
                 foreach (var premUser in premiumUsers)
