@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         public static string[] AllLogTypes =
         {
             "ModLog", "DeletedMessages", "UpdatedMessages", "FilteredPhrases", "UserJoins", "UserLeaves",
-            "Bans", "Unbans", "VoiceConnections", "LevelAnnouncements", "FishLevels", "AntiRaid", "Greetings", "TwitchNotifications",
+            "Bans", "Unbans", "VoiceConnections", "LevelAnnouncements", "FishLevels", "AntiRaid", "Greetings",
             "All"
         };
 
@@ -60,7 +60,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "fishlevels": server.LogFishLevels = channel.Id; break;
                         case "antiraid": server.LogAntiraids = channel.Id; break;
                         case "greetings": server.LogGreetings = channel.Id; break;
-                        case "twitchnotifications": server.LogTwitchNotifications = channel.Id; break;
                         case "all":
                             {
                                 if (server.IsPremium)
@@ -77,7 +76,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogFishLevels = channel.Id;
                                 server.LogAntiraids = channel.Id;
                                 server.LogGreetings = channel.Id;
-                                server.LogTwitchNotifications = channel.Id;
                             }
                             break;
                         default: logTypes.Remove(type); break;
@@ -101,7 +99,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "fishlevels": server.LogFishLevels = 0; break;
                         case "antiraid": server.LogAntiraids = 0; break;
                         case "greetings": server.LogGreetings = 0; break;
-                        case "twitchnotifications": server.LogTwitchNotifications = 0; break;
                         case "all":
                             {
                                 if (server.IsPremium)
@@ -118,7 +115,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                                 server.LogFishLevels = 0;
                                 server.LogAntiraids = 0;
                                 server.LogGreetings = 0;
-                                server.LogTwitchNotifications = 0;
                             }
                             break;
                         default: logTypes.Remove(type); break;

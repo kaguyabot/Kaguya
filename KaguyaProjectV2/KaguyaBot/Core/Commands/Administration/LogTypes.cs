@@ -31,6 +31,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (!server.IsPremium && prop.Name.ToLower() == "modlog")
                     continue;
 
+                if (prop.Name.ToLower().Contains("twitch"))
+                    continue;
+
                 var matchChannel = (ulong)prop.GetValue(server);
 
                 var channel = Client.GetGuild(Context.Guild.Id).GetTextChannel(matchChannel);

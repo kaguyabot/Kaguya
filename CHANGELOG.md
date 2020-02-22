@@ -1,3 +1,6 @@
+### Version 2.0.4
+- Got rid of TwitchNotifications logtype - it was accidentally left in the production build.
+
 ### Version 2.0.3
 - NSFW images are now earned at a rate of 1 every 15 minutes for non-supporters (compared to 1 every 2 hours).
 

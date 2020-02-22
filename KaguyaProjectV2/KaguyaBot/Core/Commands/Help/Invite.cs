@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         public async Task InviteDM()
         {
             string devInviteUrl = "[[Kaguya Dev Invite]](https://discordapp.com/api/oauth2/authorize?client_id=367403886841036820&permissions=8&scope=bot)\n";
-            const string inviteUrl = "[[Invite Kaguya to your server]](https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=8)\n";
+            const string inviteUrl = "[[Invite Kaguya to your server]](https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=469101694)\n";
             const string discordUrl = "[[Kaguya Support Discord]](https://discord.gg/aumCJhr)\n";
 
             if (Context.User.Id != ConfigProperties.BotConfig.BotOwnerId)

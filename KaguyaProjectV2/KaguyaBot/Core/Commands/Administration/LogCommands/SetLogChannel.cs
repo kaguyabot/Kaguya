@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         [Command("SetLogChannel")]
         [Alias("log")]
         [Summary("Enables a list of given logtypes and sends the log messages to a specific channel. All available logtypes may be displayed with the `logtypes` command.")]
-        [Remarks("<logtype> <channel>\ndeletedmessages #my-log-channel\nkaguyaserverlog.bans.unbans #my-admin-log-channel\ntwitchnotifications #live-streams")]
+        [Remarks("<logtype> <channel>\ndeletedmessages #my-log-channel\nkaguyaserverlog.bans.unbans #my-admin-log-channel")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.SendMessages)]
         public async Task SetChannel(string logType, SocketTextChannel channel = null)
@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         [Command("resetlogchannel")]
         [Alias("rlog")]
         [Summary("Disables a list of given logtypes. All available logtypes may be displayed with the `logtypes` command.")]
-        [Remarks("<logtype>\ndeletedmessages\nwarns.unwarns.bans.unbans\ntwitchnotifications")]
+        [Remarks("<logtype>\ndeletedmessages\nwarns.unwarns.bans.unbans")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ResetLogChannel(string logType)
         {
