@@ -1,3 +1,6 @@
+### Version 2.0.3
+- NSFW images are now earned at a rate of 1 every 15 minutes for non-supporters (compared to 1 every 2 hours).
+
 ### Version 2.0.2
 - Fixed a bug where users weren't getting points or exp for voting (this is separate, but related, to the notification bug that was patched in v2.0.1).
 - Fixed a bug where the NSFW image handler timer would not auto reset.

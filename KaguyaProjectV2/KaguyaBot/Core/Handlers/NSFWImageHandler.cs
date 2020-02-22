@@ -1,9 +1,9 @@
 ﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Timers;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -11,7 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     {
         public static Task Initialize()
         {
-            Timer timer = new Timer(7200000);
+            Timer timer = new Timer(900000); // 15 minutes.
             timer.AutoReset = true;
             timer.Enabled = true;
             timer.Elapsed += async (s, a) =>
@@ -21,6 +21,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     user.TotalNSFWImages += 1;
                     await DatabaseQueries.InsertOrReplaceAsync(user);
                 }
+
+                await ConsoleLogger.LogAsync($"Users have been given +1 nsfw images.", LogLvl.INFO);
             };
             return Task.CompletedTask;
         }
