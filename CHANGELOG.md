@@ -1,3 +1,7 @@
+### Version 2.0.2
+- Fixed a bug where users weren't getting points or exp for voting (this is separate, but related, to the notification bug that was patched in v2.0.1).
+- Fixed a bug where the NSFW image handler timer would not auto reset.
+
 ### Version 2.0.1
 
 - Fixed a bug where the $buybait command was displaying an incorrect maximum value for how much bait you could buy based on how many points you have.

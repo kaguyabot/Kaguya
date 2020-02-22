@@ -40,6 +40,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.UpvoteHandler
                         exp *= 2;
                     }
 
+                    user.Points += points;
+                    user.Experience += exp;
+
                     if (socketUser != null)
                     {
                         var dmCh = await socketUser.GetOrCreateDMChannelAsync();
