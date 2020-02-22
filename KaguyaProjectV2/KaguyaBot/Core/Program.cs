@@ -106,7 +106,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     await _client.LoginAsync(TokenType.Bot, _config.Token);
                     await _client.StartAsync();
 
-                    await _client.SetGameAsync($"Kaguya v{ConfigProperties.Version}: Booting up!");
+                    await _client.SetGameAsync($"v{ConfigProperties.Version}: Booting up!");
                     _client.ShardReady += async c => { await _lavaNode.ConnectAsync(); };
                     _lavaNode.OnLog += async message =>
                     {
