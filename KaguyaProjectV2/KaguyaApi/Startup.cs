@@ -1,6 +1,6 @@
 using KaguyaProjectV2.KaguyaApi.Database;
 using KaguyaProjectV2.KaguyaApi.Database.Context;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.UpvoteHandler;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
 using LinqToDB.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

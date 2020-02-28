@@ -1,15 +1,15 @@
-﻿using KaguyaProjectV2.KaguyaApi.Database.Models;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaApi.Database.Models;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.UpvoteHandler
+namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
 {
     public class UpvoteNotifier
     {

@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
@@ -168,14 +169,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     embed.SetColor(EmbedColor.ORANGE);
                     break;
                 case FishType.GIANT_SQUID:
-                    value = 10000;
+                    value = 25000;
                     fishExp = r.Next(1000, 3500);
                     embed.Description += $"Well butter my buttcheeks and call me a biscuit, you caught the second " +
                                          $"rarest fish in the sea! It's a `giant squid`!! Congratulations!";
                     embed.SetColor(EmbedColor.ORANGE);
                     break;
                 case FishType.BIG_KAHUNA:
-                    value = 25000;
+                    value = 50000;
                     fishExp = r.Next(4000, 7500);
                     embed.Description += $"<a:siren:429784681316220939> NO WAY! You hit the jackpot " +
                                          $"and caught the **Legendary `BIG KAHUNA`**!!!! " +
@@ -215,8 +216,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             if (fishType != FishType.BAIT_STOLEN)
             {
-                var _ = await DatabaseQueries.GetFishForUserMatchingTypeAsync(fishType, user.UserId);
-                var fishCount = _.Count;
+                var existingFish = (await DatabaseQueries.GetFishForUserMatchingTypeAsync(fishType, user.UserId)).ToList();
+                var fishCount = existingFish.Count(x => !x.Sold);
                 var fishString = fishType.ToString().Replace("_", " ").ToLower();
 
                 embed.Description += $"\n\nFish ID: `{fishId}`\n" +

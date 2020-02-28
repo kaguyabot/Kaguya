@@ -9,7 +9,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.UpvoteHandler;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
@@ -23,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using OsuSharp;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
 using Microsoft.Extensions.Logging;
 using TwitchLib.Api;
 using Victoria;
@@ -67,6 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             var config = new DiscordSocketConfig
             {
                 MessageCacheSize = 500,
+                AlwaysDownloadUsers = true,
 #if DEBUG
                 TotalShards = 1
 #else
@@ -194,6 +195,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await KaguyaPremiumExpirationHandler.Initialize();
             await UpvoteExpirationNotifier.Initialize();
             await GameRotationService.Initialize();
+#if !DEBUG
+            await StatsUpdater.Initialize();
+#endif
 
             await ConsoleLogger.LogAsync($"All timers initialized.", LogLvl.INFO);
         }

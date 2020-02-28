@@ -87,21 +87,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
             }
 
             var newBonuses = new FishLevelBonuses(fishExp);
-            //if ((int)GetFishLevel(fishExp) == MAX_FISH_LEVEL)
-            //{
-            //    return $"`{oldBonuses.BonusLuckPercent:N2}%` 👉 **`{newBonuses.BonusLuckPercent:N2}%`** == **`MAX`** {rare}\n" +
-            //           $"`{oldBonuses.BonusFishValuePercent:N2}%` 👉 **`{newBonuses.BonusFishValuePercent:N2}%`** == **`MAX`** {value}\n" +
-            //           $"`{oldBonuses.TaxReductionPercent:N2}%` 👉 **`{newBonuses.TaxReductionPercent:N2}%`** == **`MAX`** {tax}\n" +
-            //           $"`{oldBonuses.BaitCostIncreasePercent:N2}%` 👉 **`{newBonuses.BaitCostIncreasePercent:N2}%`** == **`MAX`** {bait}\n";
-            //}
-
-            //if (GetFishLevel(fishExp) > MAX_FISH_LEVEL)
-            //{
-            //    return $"**`MAX`** {rare}\n" +
-            //           $"**`MAX`** {value}\n" +
-            //           $"**`MAX`** {tax}\n" +
-            //           $"**`MAX`** {bait}\n";
-            //}
 
             #region Sometimes you just need some if statements...
 
@@ -151,10 +136,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                 var fishLvl = (int)GetFishLevel(fishExp);
 
                 // Fish level bonus modifier formulas.
-                BonusLuckPercent = Math.Sqrt((double)fishExp / 10000) * 10;
-                BonusFishValuePercent = Math.Sqrt((double)fishExp / 245) * 10;
-                BaitCostIncreasePercent = Math.Sqrt((double)fishExp / 10) * 10;
-                TaxReductionPercent = (double)fishLvl / 2;
+                BonusLuckPercent = Math.Sqrt((double)fishExp / 10000) * 13.5;
+                BonusFishValuePercent = Math.Sqrt((double)fishExp / 210) * 10;
+                BaitCostIncreasePercent = Math.Sqrt((double)fishExp / 15) * 10;
+                TaxReductionPercent = (double)fishLvl / 1.50;
 
                 if (BonusLuckPercent > MAX_LUCK)
                 {

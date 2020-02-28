@@ -50,7 +50,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             embed = new KaguyaEmbedBuilder
             {
-                Description = $"Okay! I'll remind you in `{time.Humanize()}` to `{text}`"
+                Description = $"Okay! I'll remind you in `{time.Humanize(3)}` to `{text}`"
             };
             await ReplyAsync(embed: embed.Build());
         }
