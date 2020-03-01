@@ -195,6 +195,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await KaguyaPremiumExpirationHandler.Initialize();
             await UpvoteExpirationNotifier.Initialize();
             await GameRotationService.Initialize();
+            await KaguyaStatsLogger.Initialize();
 #if !DEBUG
             await StatsUpdater.Initialize();
 #endif
@@ -208,6 +209,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             FishEvent.OnFish += async args => await FishHandler.OnFish(args);
             _client.UserJoined += GreetingService.Trigger;
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;
+            _client.JoinedGuild += NewOwnerNotificationService.Trigger;
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)

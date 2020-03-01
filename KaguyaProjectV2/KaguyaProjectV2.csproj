@@ -9,10 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="KaguyaBot\Core\Enums\**" />
     <Compile Remove="Main\**" />
     <Compile Remove="out\**" />
+    <Content Remove="KaguyaBot\Core\Enums\**" />
+    <EmbeddedResource Remove="KaguyaBot\Core\Enums\**" />
     <EmbeddedResource Remove="Main\**" />
     <EmbeddedResource Remove="out\**" />
+    <None Remove="KaguyaBot\Core\Enums\**" />
     <None Remove="Main\**" />
     <None Remove="out\**" />
   </ItemGroup>
@@ -37,10 +41,6 @@
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
     <PackageReference Include="TwitchLib" Version="3.1.0" />
     <PackageReference Include="Victoria" Version="5.1.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="KaguyaBot\Core\Enums\" />
   </ItemGroup>
 
 </Project>

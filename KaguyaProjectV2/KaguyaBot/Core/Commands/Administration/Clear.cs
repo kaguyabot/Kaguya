@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await DatabaseQueries.UpdateAsync(server);
 
             var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
-            messages = messages.Where(x => x.Timestamp.DateTime > DateTime.Now.AddDays(-14));
+            var invalidMessages = messages.Where(x => x.Timestamp.DateTime > DateTime.Now.AddDays(-14));
 
             var msgsList = messages.ToList(); //Avoiding multiple enumeration.
             await ((SocketTextChannel)Context.Channel).DeleteMessagesAsync(msgsList);

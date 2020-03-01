@@ -20,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Remarks("<time> <text>\n2h35m Walk the dog.\n18d12h30m Watch the game!")]
         public async Task Remind(string timeString, [Remainder]string text)
         {
-            var time = RegexTimeParser.ParseToTimespan(timeString);
+            var time = timeString.ParseToTimespan();
             KaguyaEmbedBuilder embed;
 
             text = Regex.Replace(text, "[mM][yY]", "your");

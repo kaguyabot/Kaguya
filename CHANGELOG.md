@@ -1,3 +1,8 @@
+### Version 2.0.6
+- If the server's custom greeting is disabled when they set a new greeting, they will be given a clear message displaying that the message needs to be enabled via a separate command.
+- Generic stats now logged to database.
+- Kaguya will now DM owners with a brief message whenever she joins a new guild.
+
 ### Version 2.0.5
 - Top.gg stats are now posted every 15 minutes (server and shard counts).
 - `$remindme` time responses are now more precise.

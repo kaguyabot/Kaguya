@@ -42,9 +42,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                               $"`{message}`",
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = $"To enable your new greeting, use the {server.CommandPrefix}tg command."
+                    Text = $"**This greeting is disabled!!** To enable your new greeting, use the {server.CommandPrefix}tg command."
                 }
             };
+
+            if (!server.CustomGreetingIsEnabled)
+            {
+                embed.Description += "$\n\n**This custom greeting is not enabled yet! " +
+                                     $"Use the `{server.CommandPrefix}tg` command to enable!";
+            }
 
             server.CustomGreeting = message;
             server.LogGreetings = Context.Channel.Id;
