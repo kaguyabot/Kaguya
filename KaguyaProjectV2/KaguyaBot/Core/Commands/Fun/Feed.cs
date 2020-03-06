@@ -37,6 +37,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                 var names = new List<string>();
                 users.ToList().ForEach(x => names.Add(x.Mention));
 
+                if (names.Count == 0)
+                    names.Add("the air");
+
                 var embed = new KaguyaEmbedBuilder
                 {
                     Title = $"Feed | {Centvrio.Emoji.FoodPrepared.Pancakes}",

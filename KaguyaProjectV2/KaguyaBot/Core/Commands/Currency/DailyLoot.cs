@@ -28,14 +28,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
 
             var r = new Random();
-            var points = r.Next(35, 700);
-            var exp = r.Next(8, 112);
+            var points = 750; //r.Next(35, 700);
+            var exp = 275; //r.Next(8, 112);
 
             user.Points += points;
             user.Experience += exp;
             user.LastDailyBonus = DateTime.Now.ToOADate();
 
-            await SendBasicSuccessEmbedAsync($"{Context.User.Mention} Successfully received " +
+            await SendBasicSuccessEmbedAsync($"{Context.User.Mention} You have received " +
                                              $"`+{points} points` and `+{exp} exp`!");
             await DatabaseQueries.UpdateAsync(user);
         }

@@ -82,8 +82,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             var emojis = GlobalProperties.EmojisOneThroughNine();
 
-            var data = new ReactionCallbackData("", embed, false, false, TimeSpan.FromSeconds(300), c =>
-                c.Channel.SendMessageAsync(embed: TimeoutEmbed()));
+            var data = new ReactionCallbackData("", embed, false, false, TimeSpan.FromSeconds(300));
             var callbacks = new List<(IEmote, Func<SocketCommandContext, SocketReaction, Task>)>();
 
             for (int j = 0; j < warnCount; j++)
@@ -112,17 +111,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             data.SetCallbacks(callbacks);
             await InlineReactionReplyAsync(data);
-        }
-
-        private static Embed TimeoutEmbed()
-        {
-            KaguyaEmbedBuilder timeoutEmbed = new KaguyaEmbedBuilder
-            {
-                Description = "Warn remove has timed out. (5 minutes)"
-            };
-
-            timeoutEmbed.SetColor(EmbedColor.RED);
-            return timeoutEmbed.Build();
         }
     }
 }
