@@ -1,3 +1,6 @@
+### Version 2.0.9
+- Added ability for bot owner(s) to blacklist users.
+
 ### Version 2.0.8
 - Patched an exploit that allowed users to sell the same fish (via ID) over and over.
 
