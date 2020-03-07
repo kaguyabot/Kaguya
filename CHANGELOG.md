@@ -1,3 +1,6 @@
+### Version 2.0.8
+- Patched an exploit that allowed users to sell the same fish (via ID) over and over.
+
 ### Version 2.0.7
 - Cleaned up some console logging issues (users won't notice this)
 - $daily now rewards a constant 750 points and 275 exp. (Was 35-700 points and 8-112 exp.)

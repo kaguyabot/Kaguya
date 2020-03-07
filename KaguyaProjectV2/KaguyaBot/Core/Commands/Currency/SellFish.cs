@@ -156,6 +156,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             #endregion
 
             var fishToSell = await DatabaseQueries.GetFirstMatchAsync<Fish>(x => x.FishId == fishId);
+
+            if (fishToSell.Sold)
+            {
+                await SendBasicErrorEmbedAsync($"This fish has already been sold.");
+                return;
+            }
+
             await DatabaseQueries.SellFishAsync(fishToSell, user.UserId);
 
             var embed = new KaguyaEmbedBuilder
