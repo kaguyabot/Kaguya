@@ -72,6 +72,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                         var user = ConfigProperties.Client.GetUser(registeredUser.UserId);
 
+                        if (user == null)
+                        {
+                            return;
+                        }
+
                         string[] durations =
                         {
                             "60s", "5m", "30m",
@@ -86,10 +91,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         {
                             UserId = user.Id,
                             Expiration = (DateTime.Now + timeSpans.ElementAt(registeredUser.RateLimitWarnings - 1)).ToOADate(),
-                            Reason = "Ratelimit service: Automatic permanent blacklist for surpassing " +
-                                     "7 ratelimit strikes in one month.",
+                            Reason = $"Ratelimit service: Automatic {timeSpans.ElementAt(registeredUser.RateLimitWarnings - 1)} " +
+                                     $"temporary blacklist for surpassing a ratelimit strike",
                             User = registeredUser
                         };
+
+                        await DatabaseQueries.InsertOrReplaceAsync(tempBlacklist);
 
                         var embed = new KaguyaEmbedBuilder
                         {
