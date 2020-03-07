@@ -1,3 +1,10 @@
+### Version 2.0.7
+- Cleaned up some console logging issues (users won't notice this)
+- $daily now rewards a constant 750 points and 275 exp. (Was 35-700 points and 8-112 exp.)
+- Fixed a bug where after using $unwarn, a unnecessary notification would be sent after 5 minutes.
+- If any of the GIF commands are used without a target, it will now show that you "<action>ed the air!".
+- Fixed a fatal bug where Kaguya would crash if it could not send ratelimit DMs to users.
+
 ### Version 2.0.6
 - If the server's custom greeting is disabled when they set a new greeting, they will be given a clear message displaying that the message needs to be enabled via a separate command.
 - Generic stats now logged to database.

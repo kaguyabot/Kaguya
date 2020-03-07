@@ -154,11 +154,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 {
                     await context.Channel.SendMessageAsync(embed: embed.Build());
                 }
-                catch (Discord.Net.HttpException)
+                catch (Discord.Net.HttpException e)
                 {
                     await ConsoleLogger.LogAsync(
                         $"An exception was thrown when trying to send a command result into a text channel.\n" +
-                        $"Channel: {context.Channel.Id} in guild {context.Guild.Id}",
+                        $"Channel: {context.Channel.Id} in guild {context.Guild.Id}\n" +
+                        $"Message: {e.Message}\n" +
+                        $"Stack Trace: {e.StackTrace}",
                         LogLvl.WARN);
                 }
             }
