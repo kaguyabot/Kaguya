@@ -11,8 +11,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
     public class Roll : KaguyaBase
     {
-        private const int MAX_NON_SUPPORTER_BET = 50000;
-        private const int MAX_ALL_BET = 500000;
+        private const int MAX_BET = 50000;
+        private const int MAX_SUPPORTER_BET = 500000;
 
         [CurrencyCommand]
         [Command("Roll")]
@@ -26,16 +26,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
-            if (bet > MAX_NON_SUPPORTER_BET && !user.IsSupporter)
+            if (bet > MAX_BET && !user.IsSupporter)
             {
                 await SendBasicErrorEmbedAsync($"Sorry, but only supporters may bet more than " +
-                                                               $"`{MAX_NON_SUPPORTER_BET:N0}` points.");
+                                                               $"`{MAX_BET:N0}` points.");
                 return;
             }
-            if (bet > 500000 && user.IsSupporter)
+            if (bet > MAX_SUPPORTER_BET && user.IsSupporter)
             {
                 await SendBasicErrorEmbedAsync($"Sorry, but you may not bet more than " +
-                                                               $"`{MAX_ALL_BET:N0}` points.");
+                                                               $"`{MAX_SUPPORTER_BET:N0}` points.");
                 return;
             }
 

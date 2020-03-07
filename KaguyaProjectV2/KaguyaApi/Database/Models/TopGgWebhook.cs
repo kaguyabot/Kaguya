@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaApi.Database.Models
@@ -21,7 +22,10 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Models
     /// The object we insert into the database to represent a standard Top.GG webhook.
     /// </summary>
     [Table(Name = "upvotes")]
-    public class DatabaseUpvoteWebhook
+    public class DatabaseUpvoteWebhook : 
+        IKaguyaQueryable<DatabaseUpvoteWebhook>, 
+        IKaguyaUnique<DatabaseUpvoteWebhook>,
+        IUserSearchable<DatabaseUpvoteWebhook>
     {
         [Column("VoteId"), NotNull]
         public string VoteId { get; set; }

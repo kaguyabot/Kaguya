@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaApi.Database.Models;
+
 #pragma warning disable 4014
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
@@ -240,6 +242,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             return (await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId,
                 x => x.Expiration > DateTime.Now.ToOADate())).ToList();
+        }
+
+        public static async Task<List<DatabaseUpvoteWebhook>> GetRecentUpvotesAsync(this User user, int days = 7)
+        {
+            return (await DatabaseQueries.GetAllForUserAsync<DatabaseUpvoteWebhook>(user.UserId,
+                x => x.TimeVoted > DateTime.Now.AddHours(days * 24).ToOADate())).ToList();
         }
     }
 }
