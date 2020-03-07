@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Discord.Net;
 using User = KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models.User;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
@@ -110,13 +111,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         {
                             await user.SendMessageAsync(embed: embed.Build());
                         }
-                        catch (NullReferenceException)
+                        catch (Exception)
                         {
                             dm = false;
                         }
 
                         await ConsoleLogger.LogAsync($"User [Name: {user?.Username} | ID: {user?.Id} | Supporter: {registeredUser.IsSupporter}] " +
-                                                $"has been ratelimited. Duration: {humanizedTime} Direct Message: {dm}", LogLvl.INFO);
+                                                $"has been ratelimited. Duration: {humanizedTime} Direct Message Sent: {dm}", LogLvl.INFO);
                     }
 
                     if (registeredUser.ActiveRateLimit > 0)
