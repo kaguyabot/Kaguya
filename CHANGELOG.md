@@ -1,3 +1,6 @@
+### Version 2.0.10
+- Fixed a fatal bug where Kaguya would repeatedly crash - this was because the antiraid service was trying to action users that it wasn't supposed to (because they weren't in the server anymore).
+
 ### Version 2.0.9
 - Added ability for bot owner(s) to blacklist users.
 

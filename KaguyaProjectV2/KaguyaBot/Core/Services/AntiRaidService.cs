@@ -112,28 +112,70 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     var mute = new Mute();
                     foreach (var user in guildUsers)
                     {
-                        await mute.AutoMute(user);
+                        try
+                        {
+                            await mute.AutoMute(user);
+                        }
+                        catch (Exception)
+                        {
+                            await ConsoleLogger.LogAsync($"Attempted to auto-mute user " +
+                                                         $"{user.ToString() ?? "NULL"} as " +
+                                                         $"part of the antiraid service, but " +
+                                                         $"an exception was thrown!!", LogLvl.ERROR);
+                        }
                     }
                     break;
                 case "kick":
                     var kick = new Kick();
                     foreach (var user in guildUsers)
                     {
-                        await kick.AutoKickUserAsync(user, "Kaguya Anti-Raid protection.");
+                        try
+                        {
+                            await kick.AutoKickUserAsync(user, "Kaguya Anti-Raid protection.");
+
+                        }
+                        catch (Exception)
+                        {
+                            await ConsoleLogger.LogAsync($"Attempted to auto-kick user " +
+                                                         $"{user.ToString() ?? "NULL"} as " +
+                                                         $"part of the antiraid service, but " +
+                                                         $"an exception was thrown!!", LogLvl.ERROR);
+                        }
                     }
                     break;
                 case "shadowban":
                     var sb = new Shadowban();
                     foreach (var user in guildUsers)
                     {
-                        await sb.AutoShadowbanUserAsync(user);
+                        try
+                        {
+                            await sb.AutoShadowbanUserAsync(user);
+
+                        }
+                        catch (Exception)
+                        {
+                            await ConsoleLogger.LogAsync($"Attempted to auto-shadowban user " +
+                                                         $"{user.ToString() ?? "NULL"} as " +
+                                                         $"part of the antiraid service, but " +
+                                                         $"an exception was thrown!!", LogLvl.ERROR);
+                        }
                     }
                     break;
                 case "ban":
                     var ban = new Ban();
                     foreach (var user in guildUsers)
                     {
-                        await ban.AutoBanUserAsync(user, "Kaguya Anti-Raid protection.");
+                        try
+                        {
+                            await ban.AutoBanUserAsync(user, "Kaguya Anti-Raid protection.");
+                        }
+                        catch (Exception)
+                        {
+                            await ConsoleLogger.LogAsync($"Attempted to auto-ban user " +
+                                                         $"{user.ToString() ?? "NULL"} as " +
+                                                         $"part of the antiraid service, but " +
+                                                         $"an exception was thrown!!", LogLvl.ERROR);
+                        }
                     }
                     break;
             }
