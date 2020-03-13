@@ -1,3 +1,6 @@
+### Version 2.0.11
+- Fixed a fatal error where, upon trying to automatically execute a warnaction after a user reaches the specified "warn threshold" (to auto kick, ban, mute, or shadowban), the bot would crash. This would occur if a guild didn't have Kaguya's permissions set properly. Now, the error will be logged but no action will be taken against the warned yser.
+
 ### Version 2.0.10
 - Fixed a fatal bug where Kaguya would repeatedly crash - this was because the antiraid service was trying to action users that it wasn't supposed to (because they weren't in the server anymore).
 
