@@ -4,6 +4,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
@@ -47,7 +48,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                                   $"{GetRewardString(oldFishExp, newFishExp)}"
                 };
 
-                await channel.SendMessageAsync(embed: embed.Build());
+                await channel.SendEmbedAsync(embed);
             }
         }
 

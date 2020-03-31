@@ -39,7 +39,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 };
                 embed0.SetColor(EmbedColor.RED);
 
-                await Context.Channel.SendMessageAsync(embed: embed0.Build());
+                await SendEmbedAsync(embed0);
                 return;
             }
 

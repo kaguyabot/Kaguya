@@ -15,6 +15,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -152,7 +153,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
                 try
                 {
-                    await context.Channel.SendMessageAsync(embed: embed.Build());
+                    await context.Channel.SendEmbedAsync(embed);
                 }
                 catch (Discord.Net.HttpException e)
                 {

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -82,7 +83,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                               $"`{targets.Count.ToWords()}` servers. 😳"
             };
 
-            await context.Channel.SendMessageAsync(embed: embed.Build());
+            await context.Channel.SendEmbedAsync(embed);
         }
     }
 }

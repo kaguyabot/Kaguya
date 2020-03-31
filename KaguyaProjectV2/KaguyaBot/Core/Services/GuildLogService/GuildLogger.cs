@@ -89,7 +89,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             }
 
             await _client.GetGuild(server.ServerId).GetTextChannel(server.LogDeletedMessages)
-                .SendMessageAsync(embed: embed.Build());
+                .SendEmbedAsync(embed);
         }
 
         private static async Task _client_MessageUpdated(Cacheable<IMessage, ulong> arg1, SocketMessage arg2, ISocketMessageChannel arg3)
@@ -118,7 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                     ThumbnailUrl = "https://i.imgur.com/uYkjSxM.png"
                 };
 
-                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUpdatedMessages).SendMessageAsync(embed: embed.Build());
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUpdatedMessages).SendEmbedAsync(embed);
             }
         }
 
@@ -135,7 +135,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 ThumbnailUrl = "https://i.imgur.com/3PsE0Ey.png",
             };
 
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendMessageAsync(embed: embed.Build());
+            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendEmbedAsync(embed);
         }
 
         private static async Task _client_UserLeft(SocketGuildUser arg)
@@ -151,7 +151,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
                 ThumbnailUrl = "https://i.imgur.com/1I0ayRE.png",
             };
 
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendMessageAsync(embed: embed.Build());
+            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendEmbedAsync(embed);
         }
 
         private static async Task OnAntiRaid(AntiRaidEventArgs e)
@@ -254,7 +254,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             }
 
             if (server.LogVoiceChannelConnections != 0)
-                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(embed: _embed.Build());
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections)
+                    .SendEmbedAsync(_embed);
         }
     }
 }

@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -35,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 };
                 embed0.SetColor(EmbedColor.RED);
 
-                await Context.Channel.SendMessageAsync(embed: embed0.Build());
+                await Context.Channel.SendEmbedAsync(embed0);
                 return;
             }
 

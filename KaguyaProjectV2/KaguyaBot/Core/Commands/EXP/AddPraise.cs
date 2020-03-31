@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
@@ -37,7 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                     Description = $"You currently have `{userPraise.Count}` praise.",
                 };
 
-                await Context.Channel.SendMessageAsync(embed: curEmbed.Build());
+                await Context.Channel.SendEmbedAsync(curEmbed);
                 return;
             }
 

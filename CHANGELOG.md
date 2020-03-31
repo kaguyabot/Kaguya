@@ -1,3 +1,7 @@
+### Version 2.0.12
+- Patched a bug where, when using $scg, if the greeting was already enabled for the server, the footer of the response embed would still show that the server had to use "$tg" in order to enable it.
+- Other small improvements.
+
 ### Version 2.0.11
 - Fixed a fatal error where, upon trying to automatically execute a warnaction after a user reaches the specified "warn threshold" (to auto kick, ban, mute, or shadowban), the bot would crash. This would occur if a guild didn't have Kaguya's permissions set properly. Now, the error will be logged but no action will be taken against the warned user.
 

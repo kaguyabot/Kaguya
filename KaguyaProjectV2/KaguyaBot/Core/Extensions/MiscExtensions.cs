@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
@@ -79,6 +80,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                 RoundDirection.Up => (int)Math.Ceiling(num),
                 _ => throw new InvalidEnumArgumentException()
             };
+        }
+
+        public static string ToUwuSpeak(this string text)
+        {
+            var sb = new StringBuilder(text);
+            sb.Replace("!", "! ^w^");
+            sb.Replace(".", ". uwu");
+            sb.Replace("r", "w");
+            sb.Replace("l", "w");
+            sb.Replace("e", "ey");
+            sb.Replace("no", "nyo");
+            sb.Replace("<@! ^w^", "<@!");
+
+            return sb.ToString();
         }
     }
 

@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -42,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             timeoutEmbed.SetColor(EmbedColor.RED);
 
             await InlineReactionReplyAsync(new ReactionCallbackData("", confirmEmbed.Build(), true, true, TimeSpan.FromSeconds(60), c =>
-                c.Channel.SendMessageAsync(embed: timeoutEmbed.Build()))
+                c.Channel.SendEmbedAsync(timeoutEmbed))
                 .WithCallback(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                 {
                     int i = 0;

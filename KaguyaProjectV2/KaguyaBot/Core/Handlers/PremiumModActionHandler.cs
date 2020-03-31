@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -108,7 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             log.Server.TotalAdminActions++;
             await DatabaseQueries.UpdateAsync(log.Server);
 
-            await logChannel.SendMessageAsync(embed: embed.Build());
+            await logChannel.SendEmbedAsync(embed);
             await ConsoleLogger.LogAsync($"Premium moderation log sent for server {log.Server.ServerId}.", LogLvl.DEBUG);
         }
     }

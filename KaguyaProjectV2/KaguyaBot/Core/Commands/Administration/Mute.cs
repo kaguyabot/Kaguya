@@ -14,6 +14,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -102,7 +103,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                 }
 
                                 await DatabaseQueries.UpdateAsync(muteObject);
-                                await c.Channel.SendMessageAsync(embed: replacementEmbed.Build());
+                                await c.Channel.SendEmbedAsync(replacementEmbed);
                             })
                             .WithCallback(new Emoji("⏱️"), async (c, r) =>
                             {

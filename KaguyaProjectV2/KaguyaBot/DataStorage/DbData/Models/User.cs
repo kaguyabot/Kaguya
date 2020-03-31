@@ -1,12 +1,11 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -117,6 +116,42 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetDailyPoints => LastDailyBonus < DateTime.Now.AddHours(-24).ToOADate();
         public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
+
+        /// <summary>
+        /// Adds the specified number of points to the user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public User AddPoints(uint points)
+        {
+            this.Points += (int)points;
+            return this;
+        }
+
+        /// <summary>
+        /// Removes the specified number of points from the user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public User RemovePoints(uint points)
+        {
+            this.Points -= (int)points;
+            return this;
+        }
+
+        public User AddGlobalExp(uint exp)
+        {
+            this.Experience += (int)exp;
+            return this;
+        }
+
+        public User RemoveGlobalExp(uint exp)
+        {
+            this.Experience -= (int)exp;
+            return this;
+        }
 
         /// <summary>
         /// FK_UserBlacklists_KaguyaUser_BackReference

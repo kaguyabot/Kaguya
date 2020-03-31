@@ -74,7 +74,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     break;
             }
 
-            user.Points += payout;
+            user = user.AddPoints((uint)payout);
             var gh = new GambleHistory
             {
                 UserId = user.UserId,
@@ -98,7 +98,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             embed.Footer = footer;
             embed.SetColor(GetEmbedColorBasedOnRoll(rollResult));
 
-            await ReplyAsync(embed: embed.Build());
+            await SendEmbedAsync(embed);
         }
 
         private RollResult GetRollResult(int roll)

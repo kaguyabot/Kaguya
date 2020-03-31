@@ -7,8 +7,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
@@ -19,11 +17,10 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using OsuSharp;
 using System;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
-using Microsoft.Extensions.Logging;
 using TwitchLib.Api;
 using Victoria;
 
@@ -169,7 +166,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             }
             catch (Exception e)
             {
-                await ConsoleLogger.LogAsync($"Failed to establish database connection. Have you properly configured your config file? Exception: {e.Message}", LogLvl.ERROR);
+                await ConsoleLogger.LogAsync($"Failed to establish database connection. " +
+                                             $"Have you properly configured your config file? " +
+                                             $"Exception: {e.Message}", LogLvl.ERROR);
             }
         }
 
@@ -184,10 +183,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private async Task InitializeTimers(bool allShardsLoggedIn)
         {
             if (!allShardsLoggedIn) return;
-
-            await AntiRaidService.Initialize();
+#if !DEBUG
+            await StatsUpdater.Initialize();
             await KaguyaSuppRoleHandler.Initialize();
             await KaguyaSupporterExpirationHandler.Initialize();
+            await KaguyaStatsLogger.Initialize();
+            await AntiRaidService.Initialize();
             await AutoUnmuteHandler.Initialize();
             await RateLimitService.Initialize();
             await RemindService.Initialize();
@@ -195,12 +196,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await KaguyaPremiumExpirationHandler.Initialize();
             await UpvoteExpirationNotifier.Initialize();
             await GameRotationService.Initialize();
-            await KaguyaStatsLogger.Initialize();
-#if !DEBUG
-            await StatsUpdater.Initialize();
-#endif
-
             await ConsoleLogger.LogAsync($"All timers initialized.", LogLvl.INFO);
+#endif
         }
 
         private void InitializeEventHandlers()

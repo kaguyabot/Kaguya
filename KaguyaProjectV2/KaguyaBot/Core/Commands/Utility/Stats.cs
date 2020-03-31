@@ -60,7 +60,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 }
             }
 
-            var cmdsLastDay = await DatabaseQueries.GetAllAsync<CommandHistory>(h => h.Timestamp >= DateTime.Now.AddHours(-24));
+            var cmdsLastDay = await DatabaseQueries.GetAllAsync<CommandHistory>(h => 
+                h.Timestamp >= DateTime.Now.AddHours(-24));
             var mostPopCommand = await DatabaseQueries.GetMostPopularCommandAsync();
 
             var fields = new List<EmbedFieldBuilder>
@@ -76,7 +77,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                     Name = "Command Stats",
                     Value = $"Commands Run (Last 24 Hours): `{cmdsLastDay.Count:N0}`\n" +
                             $"Commands Run (All-time): `{await DatabaseQueries.GetCountAsync<CommandHistory>():N0}`\n" +
-                            $"Most Popular Command: `{server.CommandPrefix}{mostPopCommand.Keys.FirstOrDefault()} with {mostPopCommand.Values.FirstOrDefault():N0} uses.`"
+                            $"Most Popular Command: `{server.CommandPrefix}{mostPopCommand.Keys.FirstOrDefault()} with " +
+                            $"{mostPopCommand.Values.FirstOrDefault():N0} uses.`"
                 },
                 new EmbedFieldBuilder
                 {
@@ -114,7 +116,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 Fields = fields
             };
             embed.SetColor(EmbedColor.GOLD);
-
             await ReplyAsync(embed: embed.Build());
         }
     }

@@ -692,13 +692,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 var command = await (from h in db.GetTable<CommandHistory>()
                                      group h by h.Command
-                    into grp
+                                     into grp
                                      orderby grp.Count() descending
                                      select grp.First().Command).FirstOrDefaultAsync();
 
                 var count = await (from c in db.GetTable<CommandHistory>()
                                    group c by c.Command
-                    into grp
+                                   into grp
                                    orderby grp.Count() descending
                                    select grp.Count()).FirstOrDefaultAsync();
 

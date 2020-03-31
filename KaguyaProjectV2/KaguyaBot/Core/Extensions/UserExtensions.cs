@@ -171,7 +171,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             return (((double)user.ServerExp(server) - curLevelExpRoundedDown) / minMaxDifference);
         }
 
-        #region Helper function for PercentToNextLevel -- NOT an extension.
+        #region Helper function for PercentToNextLevel -- NOT public.
 
         /// <summary>
         /// Calculates the difference of EXP between the user's current level (rounded
