@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <NoWarn>1998</NoWarn>
     <ApplicationIcon>server-icon.ico</ApplicationIcon>
     <Win32Resource />
     <LangVersion>8</LangVersion>

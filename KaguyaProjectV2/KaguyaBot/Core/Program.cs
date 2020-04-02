@@ -210,6 +210,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             _client.UserJoined += GreetingService.Trigger;
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;
             _client.JoinedGuild += NewOwnerNotificationService.Trigger;
+            _lavaNode.OnTrackEnded += MusicService.OnTrackEnd;
         }
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)

@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
@@ -40,6 +41,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
 
             double premiumExpiration = premiumKeys.Sum(key => key.Expiration - DateTime.Now.ToOADate());
 
+            var genSb = new StringBuilder();
+            genSb.AppendLine($"Name: `{guild}`");
+            genSb.AppendLine($"ID: `{guild.Id}`");
+            genSb.AppendLine($"Date Created: `{guild.CreatedAt.Date.ToLongDateString()}`");
+            genSb.AppendLine($"Owner: `{guild.Owner}`");
+            genSb.AppendLine($"Total Channels: `{guild.TextChannels.Count + guild.VoiceChannels.Count:N0}`");
+            genSb.AppendLine($"Voice Channels: `{guild.VoiceChannels.Count:N0}`");
+            genSb.AppendLine($"Text Channels: `{guild.TextChannels.Count:N0}`");
+            genSb.AppendLine($"Emotes: `{guild.Emotes.Count:N0}`");
+            genSb.AppendLine($"Multi-factor Authentication: `{guild.MfaLevel.Humanize(LetterCasing.Sentence)}`");
+            genSb.AppendLine($"Verification Level: `{guild.VerificationLevel}`");
+            genSb.AppendLine($"Total Member Count: `{guild.MemberCount:N0}`");
+            genSb.AppendLine($"Percentage of users online: `{percentageOnline:F}%`");
+            genSb.AppendLine($"Voice-Channel AFK Timeout: `{(guild.AFKTimeout != 0 ? TimeSpan.FromSeconds(guild.AFKTimeout).Humanize() : "Disabled")}`");
+            genSb.AppendLine($"AFK Voice Channel: `{(guild.AFKChannel is null ? "Disabled." : guild.AFKChannel.Name)}`");
+
             var embed = new KaguyaEmbedBuilder
             {
                 Title = $"Kaguya Statistics for {guild.Name}",
@@ -48,20 +65,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
                     new EmbedFieldBuilder
                     {
                         Name = "General Information",
-                        Value = $"Name: `{guild}`\n" +
-                                $"ID: `{guild.Id}`\n" +
-                                $"Date Created: `{guild.CreatedAt.Humanize()}`\n" +
-                                $"Owner: `{guild.Owner}`\n" +
-                                $"Total Channels: `{guild.TextChannels.Count+ guild.VoiceChannels.Count:N0}`\n" +
-                                $"Voice Channels: `{guild.VoiceChannels.Count:N0}`\n" +
-                                $"Text Channels: `{guild.TextChannels.Count:N0}`\n" +
-                                $"Emotes: `{guild.Emotes.Count:N0}`\n" +
-                                $"Multi-factor Authentication: `{guild.MfaLevel.Humanize(LetterCasing.Sentence)}`\n" +
-                                $"Verification Level: `{guild.VerificationLevel}`\n" +
-                                $"Total Member Count: `{guild.MemberCount:N0}`\n" +
-                                $"Percentage of users online: `{percentageOnline:F}%`\n" +
-                                $"Voice-Channel AFK Timeout: `{(guild.AFKTimeout != 0 ? TimeSpan.FromSeconds(guild.AFKTimeout).Humanize() : "Disabled")}`\n" +
-                                $"AFK Voice Channel: `{(guild.AFKChannel is null ? "Disabled." : guild.AFKChannel.Name)}`\n"
+                        Value = genSb.ToString()
                     },
                     new EmbedFieldBuilder
                     {

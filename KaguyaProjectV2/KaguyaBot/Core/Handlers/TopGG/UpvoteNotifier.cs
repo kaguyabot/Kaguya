@@ -31,8 +31,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
                     var socketUser = ConfigProperties.Client.GetUser(user.UserId);
 
                     var r = new Random();
-                    var points = r.Next(150, 700);
-                    var exp = r.Next(75, 350);
+                    var points = 750;
+                    var exp = 500;
 
                     if (vote.IsWeekend)
                     {

@@ -37,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// Query string params found on the /bot/:ID/vote page. Example: ?a=1&b=2
         /// </summary>
         [Column(Name = "QueryParams"), NotNull]
-        public string? QueryParams { get; set; }
+        public string QueryParams { get; set; }
         /// <summary>
         /// Whether or not a reminder has been sent out for this upvote object.
         /// </summary>

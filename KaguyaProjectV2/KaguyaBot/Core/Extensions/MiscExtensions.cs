@@ -81,20 +81,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                 _ => throw new InvalidEnumArgumentException()
             };
         }
-
-        public static string ToUwuSpeak(this string text)
-        {
-            var sb = new StringBuilder(text);
-            sb.Replace("!", "! ^w^");
-            sb.Replace(".", ". uwu");
-            sb.Replace("r", "w");
-            sb.Replace("l", "w");
-            sb.Replace("e", "ey");
-            sb.Replace("no", "nyo");
-            sb.Replace("<@! ^w^", "<@!");
-
-            return sb.ToString();
-        }
     }
 
     public enum RoundDirection

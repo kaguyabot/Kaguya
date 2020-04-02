@@ -93,16 +93,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 throw new KaguyaSupportException("Something broke when trying to sell your fish.");
             }
 
-            if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId))
+            if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId) && fishId != 0)
             {
                 await SendBasicErrorEmbedAsync($"The fish ID `{fishId}` does not exist. Use the " +
                                                                $"`myfish` command to view your fish and IDs!");
                 return;
             }
 
-            if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId && x.UserId == user.UserId))
+            if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId && x.UserId == user.UserId) && fishId != 0)
             {
                 await SendBasicErrorEmbedAsync($"This fish doesn't belong to you!");
+                return;
             }
 
             #region If(mass-selling...)

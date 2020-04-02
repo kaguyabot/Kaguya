@@ -1,3 +1,11 @@
+### Version 2.1
+- Removed April Fool's "uwu-ify'd" text.
+- Fixed a bug where it was impossible to sell a fish by their type. Now if you want to sell a specific fish type, you can use `$sell <type>`. Example: `$sell giant sea bass` or `$sell small_salmon`. You can replace the underscores with spaces for the fish types.
+- Upvoting on top.gg will now reward users with a constant 750 points and 500 exp. Was formerly...Points: Random between 150-700 | Exp: Random between 75-350.
+- Fixed a bug where songs wouldn't automatically play after each other when queued.
+- $ss "date created" value is now much more exact.
+- **NEW COMMAND:** `$loop` -- Allows a user to repeat a song up to 10 times. Use $h loop for more info!
+
 ### Version 2.0.12
 - Patched a bug where, when using $scg, if the greeting was already enabled for the server, the footer of the response embed would still show that the server had to use "$tg" in order to enable it.
 - Other small improvements.

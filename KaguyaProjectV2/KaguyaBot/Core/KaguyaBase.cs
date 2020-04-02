@@ -4,7 +4,6 @@ using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System.Threading.Tasks;
 using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
@@ -20,7 +19,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         /// <returns></returns>
         public async Task SendEmbedAsync(EmbedBuilder embed)
         {
-            embed.Description = embed.Description.ToUwuSpeak();
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
@@ -32,7 +30,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         /// <returns></returns>
         public async Task SendEmbedAsync(EmbedBuilder embed, ICommandContext context)
         {
-            embed.Description = embed.Description.ToUwuSpeak();
             await context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
@@ -45,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             var embed = new KaguyaEmbedBuilder(EmbedColor.RED)
             {
-                Description = description.ToUwuSpeak()
+                Description = description
             };
 
             await SendEmbedAsync(embed);
@@ -60,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             var embed = new KaguyaEmbedBuilder
             {
-                Description = description.ToUwuSpeak()
+                Description = description
             };
 
             await SendEmbedAsync(embed);
