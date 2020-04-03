@@ -54,6 +54,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             return GlobalProperties.CalculateLevelFromExp(user.Experience);
         }
 
+        public static double FishLevel(this User user)
+        {
+            return GlobalProperties.CalculateLevelFromExp(user.FishExp);
+        }
+
         /// <summary>
         /// Returns the lowest possible amount of EXP needed to reach this <see cref="User"/>'s next level.
         /// </summary>

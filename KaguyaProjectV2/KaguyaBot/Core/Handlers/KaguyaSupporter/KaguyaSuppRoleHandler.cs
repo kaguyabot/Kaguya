@@ -9,7 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Discord.WebSocket;
-using Renci.SshNet.Compression;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
@@ -48,6 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                         await ConsoleLogger.LogAsync($"Tried to get data for a supporter in hopes of " +
                                                      $"applying the Kaguya Supporter role to them, but they " +
                                                      $"couldn't be found. A null-reference exception was thrown.", LogLvl.WARN);
+                        continue;
                     }
 
                     if (socketUser == null)
@@ -56,11 +56,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                     if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
                         continue;
 
-                    var supporterRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower().Contains("supporter"));
+                    var supporterRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya supporter");
                     var kaguyaSuppGuildUser = kaguyaSupportServer.GetUser(socketUser.Id);
 
                     if (supporterRole is null)
-                        throw new NullReferenceException("The Kaguya Supporter role may not be null.");
+                    {
+                        await ConsoleLogger.LogAsync("The Kaguya Supporter role was found to be null " + 
+                        $"when trying to apply it to user {socketUser}", LogLvl.ERROR);
+                        continue;
+                    }
 
                     if (kaguyaSuppGuildUser.Roles.Contains(supporterRole))
                         continue;
@@ -77,11 +81,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                     if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
                         continue;
 
-                    var premiumRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower().Contains("premium"));
+                    var premiumRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya premium");
                     var kaguyaSuppGuildUser = kaguyaSupportServer.GetUser(socketUser.Id);
 
                     if (premiumRole is null)
-                        throw new NullReferenceException("The Kaguya Premium role may not be null.");
+                    {
+                        await ConsoleLogger.LogAsync("The Kaguya Premium role was found to be null " + 
+                        $"when trying to apply it to user {socketUser}", LogLvl.ERROR);
+                        continue;
+                    }
 
                     if (kaguyaSuppGuildUser.Roles.Contains(premiumRole))
                         continue;

@@ -106,6 +106,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
             AntiRaidEvent.Trigger(guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
 
+            if(guildUsers.Count == 0)
+            {
+                await ConsoleLogger.LogAsync($"The antiraid service was triggered in guild: {guild.Id} " + 
+                "but no guild users were found from the provided set of IDs!", LogLvl.WARN);
+                return;
+            }
+
             switch (action.ToLower())
             {
                 case "mute":
@@ -132,7 +139,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         try
                         {
                             await kick.AutoKickUserAsync(user, "Kaguya Anti-Raid protection.");
-
                         }
                         catch (Exception)
                         {
@@ -179,6 +185,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     }
                     break;
             }
+
+            await ConsoleLogger.LogAsync($"Antiraid: Successfully actioned {guildUsers.Count:N0} users in guild {guild.Id}.", LogLvl.INFO);
         }
     }
 

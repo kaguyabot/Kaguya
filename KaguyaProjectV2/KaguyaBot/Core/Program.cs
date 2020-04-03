@@ -61,7 +61,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
             {
-                await ConsoleLogger.LogAsync($"Unhandled Exception: {eventArgs.ExceptionObject}", LogLvl.ERROR);
+                await ConsoleLogger.LogAsync($"Unhandled Exception: {eventArgs.ExceptionObject}\n" + 
+                $"Inner Exception: {((Exception)eventArgs.ExceptionObject).InnerException}", LogLvl.ERROR);
             };
 
             var config = new DiscordSocketConfig

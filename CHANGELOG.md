@@ -1,3 +1,7 @@
+### Version 2.1.1
+- Added even more unhandled exception logging (so solutions to problems can be found faster)
+- Added a new command: $fishleaderboard [$flb]
+
 ### Version 2.1
 - Removed April Fool's "uwu-ify'd" text.
 - Fixed a bug where it was impossible to sell a fish by their type. Now if you want to sell a specific fish type, you can use `$sell <type>`. Example: `$sell giant sea bass` or `$sell small_salmon`. You can replace the underscores with spaces for the fish types.
