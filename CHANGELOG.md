@@ -1,3 +1,6 @@
+### Version 2.1.3
+- Slightly tweaked appearance of $flb leaderboard to match the other leaderboard commands.
+
 ### Version 2.1.2
 - Fixed bug with $fishleaderboard where "Unknown User" would be shown if the user wasn't in the server the command was executed in.
 

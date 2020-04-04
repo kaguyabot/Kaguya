@@ -24,13 +24,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             var embed = new KaguyaEmbedBuilder();
             embed.Title = "Kaguya Fishing Leaderboard";
 
+            int i = 0;
             foreach(var player in players)
             {
+                i++;
                 var socketUser = client.GetUser(player.UserId);
 
                 embed.Fields.Add(new EmbedFieldBuilder
                 {
-                    Name = ($"[{socketUser?.ToString() ?? $"Unknown User: {player.UserId}"}]"),
+                    Name = ($"{i}. {socketUser?.ToString() ?? $"[Unknown User: {player.UserId}]"}"),
                     Value = $"Fish Level: {player.FishLevel():0} | Fish Exp: {player.FishExp:N0}"
                 });
             }
