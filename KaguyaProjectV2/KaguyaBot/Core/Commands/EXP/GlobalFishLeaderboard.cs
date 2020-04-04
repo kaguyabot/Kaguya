@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
@@ -19,17 +20,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         public async Task Command()
         {
             var players = await DatabaseQueries.GetLimitAsync<User>(10, x => x.FishExp > 0, x => x.FishExp, true);
-
+            var client = ConfigProperties.Client;
             var embed = new KaguyaEmbedBuilder();
             embed.Title = "Kaguya Fishing Leaderboard";
 
             foreach(var player in players)
             {
-                var guildUser = Context.Guild.GetUser(player.UserId);
+                var socketUser = client.GetUser(player.UserId);
 
                 embed.Fields.Add(new EmbedFieldBuilder
                 {
-                    Name = ($"[{guildUser?.ToString() ?? $"Unknown User: {player.UserId}"}]"),
+                    Name = ($"[{socketUser?.ToString() ?? $"Unknown User: {player.UserId}"}]"),
                     Value = $"Fish Level: {player.FishLevel():0} | Fish Exp: {player.FishExp:N0}"
                 });
             }

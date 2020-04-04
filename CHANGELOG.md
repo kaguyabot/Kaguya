@@ -1,3 +1,6 @@
+### Version 2.1.2
+- Fixed bug with $fishleaderboard where "Unknown User" would be shown if the user wasn't in the server the command was executed in.
+
 ### Version 2.1.1
 - Added even more unhandled exception logging (so solutions to problems can be found faster)
 - Added a new command: $fishleaderboard [$flb]
