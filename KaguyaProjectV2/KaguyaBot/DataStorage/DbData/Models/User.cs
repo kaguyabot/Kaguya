@@ -130,6 +130,18 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         }
 
         /// <summary>
+        /// Adds the specified number of points to the user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public User AddPoints(int points)
+        {
+            this.Points += points;
+            return this;
+        }
+
+        /// <summary>
         /// Removes the specified number of points from the user.
         /// </summary>
         /// <param name="user"></param>

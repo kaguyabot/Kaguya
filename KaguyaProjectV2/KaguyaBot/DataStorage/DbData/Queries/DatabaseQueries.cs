@@ -156,7 +156,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 var user = await GetOrCreateUserAsync(userId);
                 foreach (var fish in fishCollection)
                 {
-                    user.Points += Fish.GetPayoutForFish(fish, user.FishExp);
+                    user = user.AddPoints(Fish.GetPayoutForFish(fish, user.FishExp));
                     fish.Sold = true;
 
                     await db.UpdateAsync(fish);

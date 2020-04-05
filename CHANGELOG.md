@@ -1,3 +1,6 @@
+### Version 2.1.4
+- Fixed a bug where after mass-selling a specific fish type, an error message would be thrown stating that the reactions for the confirmation message have been disabled.
+
 ### Version 2.1.3
 - Slightly tweaked appearance of $flb leaderboard to match the other leaderboard commands.
 

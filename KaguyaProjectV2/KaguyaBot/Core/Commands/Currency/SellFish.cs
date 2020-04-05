@@ -133,11 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                                   $"**`Do you wish to perform this action?`**"
                 };
                 await InlineReactionReplyAsync(new ReactionCallbackData("", embed: massSellEmbed.Build(),
-                        true, true, TimeSpan.FromSeconds(120), async c =>
-                        {
-                            await c.Channel.SendBasicErrorEmbedAsync("Mass-sell fish action timed out. Reactions have " +
-                                                                     "been disabled and will take no effect.");
-                        })
+                        true, true, TimeSpan.FromSeconds(120))
                     .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                     {
                         var payout = Fish.GetPayoutForFish(fish, user.FishExp);
