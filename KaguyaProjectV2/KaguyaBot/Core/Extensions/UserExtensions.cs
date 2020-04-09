@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// </summary>
         /// <param name="user">The user of whom we are finding the Xp rank of.</param>
         /// <returns></returns>
-        public static async Task<(int, int)> GetGlobalXpRank(this User user)
+        public static async Task<(int, int)> GetGlobalXpRankAsync(this User user)
         {
             var allExp = (await DatabaseQueries.GetAllAsync<User>()).OrderByDescending(x => x.Experience).ToList();
             var rank = allExp.IndexOf(allExp.First(x => x.UserId == user.UserId)) + 1;

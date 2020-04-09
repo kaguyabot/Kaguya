@@ -20,9 +20,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.Models
             Discriminator = User.Discriminator;
             ProfileUrl = User.GetAvatarUrl();
             ServerXpRank = user.GetServerXpRank(server).Item1;
-            GlobalXpRank = user.GetGlobalXpRank().Result.Item1;
+            GlobalXpRank = user.GetGlobalXpRankAsync().Result.Item1;
             TotalServerXpUsers = user.GetServerXpRank(server).Item2;
-            TotalGlobalXpUsers = user.GetGlobalXpRank().Result.Item2;
+            TotalGlobalXpUsers = user.GetGlobalXpRankAsync().Result.Item2;
         }
         public string Username { get; set; }
         public string Discriminator { get; set; }

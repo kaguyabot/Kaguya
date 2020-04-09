@@ -1,3 +1,6 @@
+### Version 2.2
+- New command: $exp -- Allows users to quickly view their global and server exp and ranks.
+
 ### Version 2.1.4
 - Fixed a bug where after mass-selling a specific fish type, an error message would be thrown stating that the reactions for the confirmation message have been disabled.
 

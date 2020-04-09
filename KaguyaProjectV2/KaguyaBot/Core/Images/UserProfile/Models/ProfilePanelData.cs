@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
                         Y = 98
                     },
                     Show = true,
-                    Text = $"#{(await user.GetGlobalXpRank()).Item1.ToAbbreviatedForm()} / {(await user.GetGlobalXpRank()).Item2.ToAbbreviatedForm()}"
+                    Text = $"#{(await user.GetGlobalXpRankAsync()).Item1.ToAbbreviatedForm()} / {(await user.GetGlobalXpRankAsync()).Item2.ToAbbreviatedForm()}"
                 },
                 BottomTextHeader = new TemplateText
                 {

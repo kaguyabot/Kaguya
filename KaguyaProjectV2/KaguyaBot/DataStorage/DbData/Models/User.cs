@@ -1,11 +1,14 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
+﻿using System.Text;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -163,6 +166,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         {
             this.Experience -= (int)exp;
             return this;
+        }
+
+        public async Task<ServerExp> GetServerExp(ulong serverId) {
+            var expCol = (await DatabaseQueries.GetAllForServerAndUserAsync<ServerExp>(this.UserId, serverId));
+            var curExp = expCol[0];
+            return curExp;
         }
 
         /// <summary>
