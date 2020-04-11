@@ -78,6 +78,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
             await LogFinisher(LogLvl.ERROR, contents);
         }
 
+        public static async Task LogAsync(Exception e, LogLvl logLvl = LogLvl.ERROR)
+        {
+            string logP = LogPrefix(LogLvl.ERROR);
+            string contents = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} {logP} Exception thrown: " +
+                              $"{e.Message}.\n Inner Exception Message: {e.InnerException?.Message ?? "NULL"}\n" +
+                              $"Stack Trace: {e.StackTrace ?? "NULL"}";
+            await LogFinisher(LogLvl.ERROR, contents);
+        }
+
         private static string LogPrefix(LogLvl logLevel)
         {
             return logLevel switch

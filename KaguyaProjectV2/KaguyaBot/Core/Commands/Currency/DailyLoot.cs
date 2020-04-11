@@ -27,9 +27,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            var r = new Random();
-            var points = 750; //r.Next(35, 700);
-            var exp = 275; //r.Next(8, 112);
+            var points = 750;
+            var exp = 275;
 
             user.Points += points;
             user.Experience += exp;

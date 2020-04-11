@@ -114,6 +114,30 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             }
         }
 
+        public double PremiumExpirationDate
+        {
+            get
+            {
+                var allKeys = DatabaseQueries
+                .GetAllAsync<PremiumKey>(x => x.UserId == UserId && x.Expiration > DateTime.Now.ToOADate()).Result
+                .ToArray();
+
+                if(allKeys.Length == 0)
+                    return DateTime.MinValue.ToOADate();
+
+                var expiration = allKeys[0].Expiration;
+                if(allKeys.Length > 1)
+                {
+                    foreach(var keys in allKeys[1..])
+                    {
+                        expiration += DateTime.MinValue.AddSeconds(keys.LengthInSeconds).ToOADate();
+                    }
+                }
+
+                return expiration;
+            }
+        }
+
         public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
         public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
@@ -215,5 +239,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "UserId", OtherKey = "UserId")]
         public IEnumerable<ServerExp> ServerExp { get; set; }
+
+        /// <summary>
+        /// FK_Quotes_KaguyaUser_BackReference
+        /// </summary>
+        /// <value></value>
+        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        public IEnumerable<Quote> Quotes { get; set; }
     }
 }

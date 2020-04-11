@@ -74,7 +74,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                     {
                         await DatabaseQueries.SellFishAsync(allFishToSell, Context.User.Id);
-
                         await SendBasicSuccessEmbedAsync($"Successfully sold all " +
                                                                          $"`{allFishToSell.Count:N0}` fish!\n\n" +
                                                                          $"`{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}` " +

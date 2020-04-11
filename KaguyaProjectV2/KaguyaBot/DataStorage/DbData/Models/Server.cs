@@ -89,6 +89,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "IsCurrentlyPurgingMessages"), NotNull]
         public bool IsCurrentlyPurgingMessages { get; set; } = false;
 
+        [Column(Name = "NextQuoteId"), NotNull]
+        public int NextQuoteId { get; set; } = 1;
+
         /// <summary>
         /// FK_AntiRaid_KaguyaServer_BackReference
         /// </summary>
@@ -136,6 +139,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
         public IEnumerable<Praise> Praise { get; set; }
+
+        /// <summary>
+        /// FK_Quotes_KaguyaServer_BackReference
+        /// </summary>
+        /// <value></value>
+        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
+        public IEnumerable<Quote> Quotes { get; set; }
 
         /// <summary>
         /// FK_ServerRoleRewards_KaguyaServer_BackReference

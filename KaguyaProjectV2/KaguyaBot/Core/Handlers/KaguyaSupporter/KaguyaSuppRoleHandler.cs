@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Discord.WebSocket;
+using System.Collections.Generic;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
@@ -31,11 +32,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                     x.Expiration > DateTime.Now.ToOADate() &&
                     x.UserId != 0);
 
-                // Get rid of duplicates.
-                supporters = supporters.DistinctBy(x => x.UserId).ToList();
-                premiumUsers = premiumUsers.DistinctBy(x => x.UserId).ToList();
+                var validSupporters = new List<User>();
+                var validPremium = new List<User>();
 
-                foreach (var supporter in supporters)
+                foreach(var supporter in supporters)
+                {
+                    var user = await DatabaseQueries.GetOrCreateUserAsync(supporter.UserId);
+                    if(user.SupporterExpirationDate > DateTime.Now.ToOADate())
+                        validSupporters.Add(user);
+                }
+
+                foreach(var prem in premiumUsers)
+                {
+                    var user = await DatabaseQueries.GetOrCreateUserAsync(prem.UserId);
+                    if(user.PremiumExpirationDate > DateTime.Now.ToOADate())
+                        validPremium.Add(user);
+                }
+                
+                foreach (var supporter in validSupporters)
                 {
                     SocketUser socketUser = null;
                     try
@@ -74,14 +88,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                                                  $"given to them in the Kaguya Support server.", LogLvl.INFO);
                 }
 
-                foreach (var premUser in premiumUsers)
+                foreach (var premUser in validPremium)
                 {
                     var socketUser = client.GetUser(premUser.UserId);
 
                     if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
                         continue;
 
-                    var premiumRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya premium");
+                    var premiumRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Id == 657104752559259659);
                     var kaguyaSuppGuildUser = kaguyaSupportServer.GetUser(socketUser.Id);
 
                     if (premiumRole is null)
@@ -99,19 +113,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                 }
 
                 // Check for expired supporter tags.
-
-                var expiredSupporters = await DatabaseQueries.GetAllAsync<SupporterKey>(x => x.Expiration < DateTime.Now.ToOADate());
-                var expiredPremiumUsers = await DatabaseQueries.GetAllAsync<PremiumKey>(x => x.Expiration < DateTime.Now.ToOADate());
+                var expiredSupporters = await DatabaseQueries.GetAllAsync<SupporterKey>(x => x.Expiration < DateTime.Now.ToOADate() && x.UserId != 0);
+                var expiredPremiumUsers = await DatabaseQueries.GetAllAsync<PremiumKey>(x => x.Expiration < DateTime.Now.ToOADate() && x.UserId != 0);
 
                 foreach (var expSupporter in expiredSupporters)
                 {
+                    if(validSupporters.Any(x => x.UserId == expSupporter.UserId))
+                        continue;
+
                     var socketUser = client.GetUser(expSupporter.UserId);
                     if (socketUser == null) continue;
 
-                    if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
+                    if(!kaguyaSupportServer.Users.Contains(socketUser))
                         continue;
 
-                    var supporterRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower().Contains("supporter"));
+                    var supporterRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Id == 569279637679505409);
                     var kaguyaSuppUser = kaguyaSupportServer.GetUser(socketUser.Id);
 
                     if (supporterRole is null)
@@ -127,16 +143,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                 foreach (var expPrem in expiredPremiumUsers)
                 {
                     // If the user is already identified as an active premium subscriber in one server, they aren't an expired user.
-                    if (premiumUsers.Any(x => x.UserId == expPrem.UserId))
+                    if (validPremium.Any(x => x.UserId == expPrem.UserId))
                         continue;
 
                     var socketUser = client.GetUser(expPrem.UserId);
                     if (socketUser == null) continue;
 
-                    if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
+                    if(!kaguyaSupportServer.Users.Contains(socketUser))
                         continue;
 
-                    var premRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Name.ToLower().Contains("premium"));
+                    var premRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Id == 657104752559259659);
                     var kaguyaSuppUser = kaguyaSupportServer.GetUser(socketUser.Id);
 
                     if (premRole is null)
@@ -146,7 +162,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                         continue;
 
                     await kaguyaSuppUser.RemoveRoleAsync(premRole);
-                    await ConsoleLogger.LogAsync($"Expired premium subscriber {socketUser} has had their {premRole.Name} role removed from them in the Kaguya Support server.", LogLvl.INFO);
+                    await ConsoleLogger.LogAsync($"Expired premium subscriber {socketUser} has had their {premRole.Name} role " + 
+                    "removed from them in the Kaguya Support server.", LogLvl.INFO);
                 }
             };
             return Task.CompletedTask;

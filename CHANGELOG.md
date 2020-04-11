@@ -1,3 +1,12 @@
+### Version 2.3
+- **New command:** $myreminders [reminders][mr] -- Allows users to view and delete any existing reminders they have.
+- Fixed a bug where users in the Kaguya Support discord server would not get their supporter/premium roles automatically added/removed to/from them when it was necessary.
+- **New command:** $addquote [aq] -- Allows users with the manage messages permission to add quotes for their server!
+- **New command:** $randomquote [rq] -- Allows users to view a random quote from the server, no permissions needed.
+- **New command:** $removequote [deletequote] [dq] [rq] -- Allows users with the manage messages permission to remove quotes from the server.
+- **New command:** $allquotes [listquotes] [quotes] -- Allows users with the manage messages permission to view all quotes for the current server.
+- Reminders will now be sent in sentence casing, rather than all lower case letters.
+
 ### Version 2.2
 - New command: $exp -- Allows users to quickly view their global and server exp and ranks.
 

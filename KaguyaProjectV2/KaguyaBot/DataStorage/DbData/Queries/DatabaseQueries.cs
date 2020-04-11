@@ -56,6 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     .LoadWith(x => x.Fish)
                     .LoadWith(x => x.MutedUsers)
                     .LoadWith(x => x.Praise)
+                    .LoadWith(x => x.Quotes)
                     .LoadWith(x => x.RoleRewards)
                     .LoadWith(x => x.ServerExp)
                     .LoadWith(x => x.WarnedUsers)
@@ -76,6 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                         .LoadWith(x => x.CommandHistory)
                         .LoadWith(x => x.Fish)
                         .LoadWith(x => x.GambleHistory)
+                        .LoadWith(x => x.Quotes)
                         .LoadWith(x => x.Reminders)
                         .LoadWith(x => x.Rep)
                         .LoadWith(x => x.ServerExp)
@@ -156,10 +158,18 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 var user = await GetOrCreateUserAsync(userId);
                 foreach (var fish in fishCollection)
                 {
-                    user = user.AddPoints(Fish.GetPayoutForFish(fish, user.FishExp));
-                    fish.Sold = true;
+                    try
+                    {
+                        user.Points += Fish.GetPayoutForFish(fish, user.FishExp);
+                        fish.Sold = true;
 
-                    await db.UpdateAsync(fish);
+                        await db.UpdateAsync(fish);
+                    }
+                    catch(Exception e)
+                    {
+                        await ConsoleLogger.LogAsync(e, LogLvl.WARN);
+                        continue;
+                    }
                 }
 
                 await db.UpdateAsync(user);
@@ -717,6 +727,36 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 return Enumerable.Sum(db.Users, user => user.Points);
             }
+        }
+
+        public static async Task<int> SafeAddQuote(Server server, Quote quote)
+        {
+            using (var db = new KaguyaDb())
+            {
+                await db.BeginTransactionAsync();
+                try
+                {
+                    var id = await (db.Servers
+                            .Where(s => s.ServerId == server.ServerId)
+                            .Select(s => s.NextQuoteId)).FirstOrDefaultAsync();
+
+                    quote.Id = id;
+                    var updateQuote = await db.InsertAsync(quote);
+                    var statement = db.Servers
+                                    .Where(s => s.ServerId == server.ServerId)
+                                    .Set(i => i.NextQuoteId, id + 1);
+
+                    await db.CommitTransactionAsync();
+                    return id;
+                }
+                catch(Exception e)
+                {
+                    await ConsoleLogger.LogAsync(e);
+                    await db.RollbackTransactionAsync();
+                }
+            }
+
+            return -1;
         }
     }
 }
