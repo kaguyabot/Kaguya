@@ -168,9 +168,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                         "removed from them in the Kaguya Support server.", LogLvl.INFO);
                     }
                 }
-                catch(OverflowException e)
+                catch(OverflowException ex)
                 {
-                    await ConsoleLogger.LogAsync(e);
+                    await ConsoleLogger.LogAsync(ex);
                 }
             };
             return Task.CompletedTask;
