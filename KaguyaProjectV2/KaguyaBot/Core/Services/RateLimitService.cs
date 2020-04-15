@@ -51,7 +51,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                                 Description = "You have exceeded your maximum allotment of ratelimit strikes, therefore " +
                                               "you will be permanently blacklisted."
                             };
-                            await socketUser.SendMessageAsync(embed: _embed.Build());
+                            try
+                            {
+                                await socketUser.SendMessageAsync(embed: _embed.Build());
+                            }
+                            catch (HttpException exception)
+                            {
+                                await ConsoleLogger.LogAsync($"Attempted to DM user {socketUser.Id} about " +
+                                                       $"acheiving the maximum allotted ratelimit strikes, " +
+                                                       $"but a Discord.Net.HttpException was thrown.", LogLvl.WARN);
+                            }
 
                             var bl = new UserBlacklist
                             {

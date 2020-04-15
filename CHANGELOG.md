@@ -1,3 +1,6 @@
+### Version 2.3.2
+- Added lots of redundancy against crashes that occur in relation to being unable to send users direct messages. (This has gone on for too long!!)
+
 ### Version 2.3.1
 - Fixed a fatal error where the bot would crash if an attempt was made to send a reminder to a user who no longer shared any guilds with the bot.
 

@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.Threading.Tasks;
 using System.Timers;
+using Discord.Net;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
 {
@@ -48,7 +49,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaSupporter
                             };
                             embed.SetColor(EmbedColor.RED);
 
-                            await socketUser.SendMessageAsync(embed: embed.Build());
                             await ConsoleLogger.LogAsync($"User [Name: {socketUser} | ID: {socketUser.Id}] has been notified" +
                                               $" in DM that their supporter tag is now expired.", LogLvl.INFO);
                         }

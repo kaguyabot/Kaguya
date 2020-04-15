@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.Net;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -75,8 +78,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     Description = keyStr
                 };
 
-                await Context.User.SendMessageAsync(embed: embed.Build());
-                await SendBasicSuccessEmbedAsync($"{Context.User.Mention}, I DM'd you with {amount:N0} premium keys.");
+                try
+                {
+                    await Context.User.SendMessageAsync(embed: embed.Build());
+                    await SendBasicSuccessEmbedAsync($"{Context.User.Mention}, I DM'd you with {amount:N0} premium keys.");
+                }
+                catch (HttpException e)
+                {
+                    await ConsoleLogger.LogAsync("Attempted to send a bot owner a DM with " +
+                                                 "various Kaguya Premium keys, but a " +
+                                                 "Discord.Net.HttpException was thrown.", LogLvl.WARN);
+                }
             }
             else
             {

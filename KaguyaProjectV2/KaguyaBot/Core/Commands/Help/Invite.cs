@@ -1,9 +1,13 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System.Threading.Tasks;
+using Discord.Net;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -29,7 +33,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 Description = $"{inviteUrl}{discordUrl}{devInviteUrl}"
             };
 
-            await Context.User.SendMessageAsync(embed: embed.Build());
+            try
+            {
+                await Context.User.SendMessageAsync(embed: embed.Build());
+            }
+            catch (HttpException e)
+            {
+                await ConsoleLogger.LogAsync("Tried to DM a user the Kaguya invite links " +
+                                       "but an HttpException was thrown.", LogLvl.WARN);
+            }
 
             await ReplyAsync(embed: new KaguyaEmbedBuilder
             {

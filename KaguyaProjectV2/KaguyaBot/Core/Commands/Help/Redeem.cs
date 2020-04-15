@@ -12,6 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.Net;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -161,7 +164,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     Fields = fields
                 };
 
-                await owner.SendMessageAsync(embed: embed.Build());
+                try
+                {
+                    await owner.SendMessageAsync(embed: embed.Build());
+                }
+                catch (HttpException e)
+                {
+                    await ConsoleLogger.LogAsync("Attempted to DM an owner a notification about a " +
+                                                 "Kaguya Supporter key redemption, but a " +
+                                                 "Discord.Net.HttpException was thrown.", LogLvl.WARN);
+                }
             }
 
             if (key.GetType() == typeof(PremiumKey))
@@ -173,7 +185,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     Fields = fields
                 };
 
-                await owner.SendMessageAsync(embed: embed.Build());
+                try
+                {
+                    await owner.SendMessageAsync(embed: embed.Build());
+                }
+                catch (HttpException e)
+                {
+                    await ConsoleLogger.LogAsync("Attempted to DM an owner a notification about a " +
+                                                 "Kaguya Premium key redemption, but a " +
+                                                 "Discord.Net.HttpException was thrown.", LogLvl.WARN);
+                }
             }
         }
 
