@@ -37,7 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             {
                 await Context.User.SendMessageAsync(embed: embed.Build());
             }
-            catch (HttpException e)
+            catch (HttpException)
             {
                 await ConsoleLogger.LogAsync("Tried to DM a user the Kaguya invite links " +
                                        "but an HttpException was thrown.", LogLvl.WARN);

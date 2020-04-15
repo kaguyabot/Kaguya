@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task Command(params SocketRole[] roles)
         {
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var aars = server.AutoAssignedRoles.ToList();
+            var aars = server.AutoAssignedRoles.ToArray();
 
             int i = 0;
             foreach (var role in roles)
@@ -57,8 +57,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 await SendBasicSuccessEmbedAsync($"Successfully removed {roles.Humanize()} from " +
                                                  $"this server's list of automatically assigned roles.");
             }
-
-            //todo: Test.
         }
     }
 }

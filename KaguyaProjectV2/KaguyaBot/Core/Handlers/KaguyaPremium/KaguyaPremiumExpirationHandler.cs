@@ -17,7 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
         {
             Timer timer = new Timer
             {
-                Interval = 300000, //5 minutes
+                Interval = 300000, // 5 minutes
                 Enabled = true,
                 AutoReset = true
             };

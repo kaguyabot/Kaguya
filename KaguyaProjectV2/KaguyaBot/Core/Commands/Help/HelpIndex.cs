@@ -134,10 +134,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             return embed;
         }
 
-        public static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
+        private static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
             cmdInfo.Preconditions
-                .Where(x => x is OwnerCommandAttribute || x is SupporterCommandAttribute ||
-                            x is RequireUserPermissionAttribute || x is PremiumServerCommandAttribute ||
+                .Where(x => x is OwnerCommandAttribute ||
+                            x is RequireUserPermissionAttribute || x is PremiumCommandAttribute ||
                             x is NsfwCommandAttribute)
                 .Select(x =>
                 {
@@ -145,9 +145,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     {
                         case OwnerCommandAttribute _:
                             return "Bot Owner";
-                        case SupporterCommandAttribute _:
-                            return "Kaguya Supporter";
-                        case PremiumServerCommandAttribute _:
+                        case PremiumCommandAttribute _:
                             return "Kaguya Premium";
                         case NsfwCommandAttribute _:
                             return "Invoke from NSFW-marked channel";

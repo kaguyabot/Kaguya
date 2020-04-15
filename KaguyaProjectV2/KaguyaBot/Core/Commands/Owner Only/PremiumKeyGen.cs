@@ -83,7 +83,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     await Context.User.SendMessageAsync(embed: embed.Build());
                     await SendBasicSuccessEmbedAsync($"{Context.User.Mention}, I DM'd you with {amount:N0} premium keys.");
                 }
-                catch (HttpException e)
+                catch (HttpException)
                 {
                     await ConsoleLogger.LogAsync("Attempted to send a bot owner a DM with " +
                                                  "various Kaguya Premium keys, but a " +
@@ -137,7 +137,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         }
 
         // We could use a prettier LINQ expression, but this is twice as fast.
-        public static string RandomString(int length = 20)
+        private static string RandomString(int length = 20)
         {
             const string chars = @"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789!@#$%^&()+=-\{}[]';~";
             var stringChars = new char[length];

@@ -28,8 +28,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new ExpCommandAttribute(), new FunCommandAttribute(),
                 new HelpCommandAttribute(), new MusicCommandAttribute(),
                 new NsfwCommandAttribute(), new OsuCommandAttribute(),
-                new UtilityCommandAttribute(), new SupporterCommandAttribute(),
-                new PremiumServerCommandAttribute(), new OwnerCommandAttribute()
+                new UtilityCommandAttribute(), new PremiumCommandAttribute(), 
+                new OwnerCommandAttribute()
             };
 
             var pages = ReturnPages();

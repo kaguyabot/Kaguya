@@ -82,7 +82,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 {
                     await Context.User.SendMessageAsync(embed: embed.Build());
                 }
-                catch (HttpException e)
+                catch (HttpException)
                 {
                     await ConsoleLogger.LogAsync("Tried to DM a bot owner various Kaguya Supporter " +
                                            "keys, but a Discord.Net.HttpException was thrown.", LogLvl.WARN);

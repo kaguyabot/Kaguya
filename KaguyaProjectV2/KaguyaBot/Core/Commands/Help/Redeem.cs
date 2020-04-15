@@ -168,7 +168,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 {
                     await owner.SendMessageAsync(embed: embed.Build());
                 }
-                catch (HttpException e)
+                catch (HttpException)
                 {
                     await ConsoleLogger.LogAsync("Attempted to DM an owner a notification about a " +
                                                  "Kaguya Supporter key redemption, but a " +
@@ -189,7 +189,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 {
                     await owner.SendMessageAsync(embed: embed.Build());
                 }
-                catch (HttpException e)
+                catch (HttpException)
                 {
                     await ConsoleLogger.LogAsync("Attempted to DM an owner a notification about a " +
                                                  "Kaguya Premium key redemption, but a " +

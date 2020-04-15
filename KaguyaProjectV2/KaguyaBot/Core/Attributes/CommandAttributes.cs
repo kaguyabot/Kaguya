@@ -4,6 +4,7 @@ using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 #pragma warning disable 1998
 
@@ -66,27 +67,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    internal class SupporterCommandAttribute : PreconditionAttribute
+    internal class PremiumCommandAttribute : PreconditionAttribute
     {
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
+            var server = DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id).Result;
             var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id).Result;
-            return Task.FromResult(user.IsSupporter || user.IsBotOwner
+            return Task.FromResult(server.IsPremium || user.IsBotOwner || user.IsPremiumAsync().Result
                 ? PreconditionResult.FromSuccess()
-                : PreconditionResult.FromError("Sorry, but you must be a supporter to use this command."));
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Method)]
-    internal class PremiumServerCommandAttribute : PreconditionAttribute
-    {
-        public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
-        {
-            var server = DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
-            var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
-            return Task.FromResult(server.Result.IsPremium || user.Result.IsBotOwner
-                ? PreconditionResult.FromSuccess()
-                : PreconditionResult.FromError("Sorry, but this server must be of premium status in order to use this command."));
+                : PreconditionResult.FromError("Sorry, but this server must be of premium status in order to use this command. " +
+                                               "If the server isn't premium, this command may only be used by the holder " +
+                                               "of a valid, unexpired Kaguya Premium key."));
         }
     }
 

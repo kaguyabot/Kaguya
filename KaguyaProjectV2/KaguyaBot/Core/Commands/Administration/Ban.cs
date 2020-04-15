@@ -31,7 +31,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 try
                 {
                     await user.BanAsync();
-                    embed.Description += $"Successfully banned `{user}`\n";
+                    if (user.Id != 159985870458322944)
+                        embed.Description += $"Successfully banned `{user}`\n";
+                    else // ;)
+                        embed.Description += $"Successfully banned `{user}`. Nice choice <:Kaguya:581581938884608001> 👍";
                     i++;
                 }
                 catch (Exception)

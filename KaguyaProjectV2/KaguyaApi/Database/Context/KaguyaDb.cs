@@ -4,7 +4,7 @@ using LinqToDB.Data;
 
 namespace KaguyaProjectV2.KaguyaApi.Database.Context
 {
-    public partial class KaguyaDb : DataConnection
+    public class KaguyaDb : DataConnection
     {
         public KaguyaDb() : base("KaguyaContext") { }
         public ITable<TopGgWebhook> TopGGUpvotes => GetTable<TopGgWebhook>();

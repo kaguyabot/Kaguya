@@ -50,13 +50,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                                 LogLvl.WARN);
                         }
                     }
-                    catch (NullReferenceException e)
+                    catch (NullReferenceException)
                     {
                         await ConsoleLogger.LogAsync(
                             "Attempted to send a reminder to a user, but the user was not found. " +
                             "The reminder has been removed from the database.", LogLvl.WARN);
                     }
-                    catch (HttpException e)
+                    catch (HttpException)
                     {
                         await ConsoleLogger.LogAsync($"Attempted to send user {reminder.UserId} a reminder to " +
                                                      $"\"{reminder.Text}\", but the user doesn't accept direct messages " +

@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class HyperBan : KaguyaBase
     {
-        [SupporterCommand]
+        [PremiumCommand]
         [DangerousCommand]
         [Command("HyperBan")]
         [Summary("Permanently bans a user from this server and from **any other server " +
@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await ActuallyBanThem(Context, user.Id);
         }
 
-        [SupporterCommand]
+        [PremiumCommand]
         [DangerousCommand]
         [AdminCommand]
         [Command("HyperBan")]
