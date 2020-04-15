@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [RequireContext(ContextType.Guild)]
         public async Task Command([Remainder]string query)
         {
-            var data = await SearchAndPlay(Context, query);
+            var data = await SearchAndPlayAsync(Context, query);
             if (data != null)
                 await InlineReactionReplyAsync(data);
         }
@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         /// <param name="playFirst"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public async Task<ReactionCallbackData> SearchAndPlay(ShardedCommandContext context, string query, bool playFirst = false, SearchProvider provider = SearchProvider.YouTube)
+        public async Task<ReactionCallbackData> SearchAndPlayAsync(ShardedCommandContext context, string query, bool playFirst = false, SearchProvider provider = SearchProvider.YouTube)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);

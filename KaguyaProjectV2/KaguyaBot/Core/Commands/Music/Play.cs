@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         public async Task Command([Remainder]string query)
         {
             var s = new Search();
-            await s.SearchAndPlay(Context, query, true);
+            await s.SearchAndPlayAsync(Context, query, true);
         }
     }
 }

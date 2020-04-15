@@ -2,6 +2,8 @@
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 {
@@ -28,6 +30,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
         public ICommandContext Context { get; }
         public FishHandlerEventArgs(User user, Fish fish, ICommandContext context)
         {
+            ConsoleLogger.LogAsync($"User {user.UserId} has caught fish {fish} with value {fish.Value}.", LogLvl.DEBUG);
+            
             this.User = user;
             this.Fish = fish;
             this.Context = context;

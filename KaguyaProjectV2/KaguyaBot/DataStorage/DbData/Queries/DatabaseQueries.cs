@@ -168,7 +168,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     catch(Exception e)
                     {
                         await ConsoleLogger.LogAsync(e, LogLvl.WARN);
-                        continue;
                     }
                 }
 

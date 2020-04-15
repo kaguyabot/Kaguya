@@ -27,4 +27,6 @@ KaguyaProjectV2/appsettings.json
 **/out
 **/.vs
 **/.vscode
+**/.idea
 KaguyaProjectV2/KaguyaProjectV2.csproj.user
+**/LavalinkServer/logs

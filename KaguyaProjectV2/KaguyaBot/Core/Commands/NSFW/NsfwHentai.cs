@@ -118,7 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 await DatabaseQueries.UpdateAsync(user);
         }
 
-        public async Task<SearchResult?> SendHentaiAsync(User user, params string[] tags)
+        private async Task<SearchResult?> SendHentaiAsync(User user, params string[] tags)
         {
             if (user.TotalNSFWImages < 1 && !user.IsSupporter)
             {

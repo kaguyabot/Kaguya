@@ -95,7 +95,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     {
         BIG_KAHUNA, // 0.05% (1 in 2,000)
         GIANT_SQUID, // 0.15%
-        ORANTE_SLEEPER_RAY, // 0.30%
+        ORANTE_SLEEPER_RAY, // 0.3%
         DEVILS_HOLE_PUPFISH, // 0.5%
         SMALLTOOTH_SAWFISH, // 1%
         GIANT_SEA_BASS, // 3%

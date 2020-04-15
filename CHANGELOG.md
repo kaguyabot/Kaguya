@@ -1,3 +1,6 @@
+### Version 2.3.1
+- Fixed a fatal error where the bot would crash if an attempt was made to send a reminder to a user who no longer shared any guilds with the bot.
+
 ### Version 2.3
 - **New command:** $myreminders [reminders][mr] -- Allows users to view and delete any existing reminders they have.
 - Fixed a bug where users in the Kaguya Support discord server would not get their supporter/premium roles automatically added/removed to/from them when it was necessary.

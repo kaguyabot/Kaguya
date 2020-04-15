@@ -27,7 +27,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             if (server.IsPremium || user.IsSupporter)
             {
                 var playInstance = new Search();
-                var data = await playInstance.SearchAndPlay(Context, query, false, SearchProvider.Twitch);
+                var data = await playInstance.SearchAndPlayAsync(Context, query, false, SearchProvider.Twitch);
 
                 if (data != null)
                     await InlineReactionReplyAsync(data);
