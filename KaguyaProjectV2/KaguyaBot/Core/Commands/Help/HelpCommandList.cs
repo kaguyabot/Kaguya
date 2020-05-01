@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new ExpCommandAttribute(), new FunCommandAttribute(),
                 new HelpCommandAttribute(), new MusicCommandAttribute(),
                 new NsfwCommandAttribute(), new OsuCommandAttribute(),
-                new UtilityCommandAttribute(), new PremiumCommandAttribute(), 
+                new UtilityCommandAttribute(), new PremiumCommandAttribute(),
                 new OwnerCommandAttribute()
             };
 
@@ -91,73 +91,67 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             {
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Administration (Page 1/11)",
+                    Title = "Command List: Administration (Page 1/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Currency (Page 2/11)",
+                    Title = "Command List: Currency (Page 2/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: EXP (Page 3/11)",
+                    Title = "Command List: EXP (Page 3/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Fun (Page 4/11)",
+                    Title = "Command List: Fun (Page 4/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Help (Page 5/11)",
+                    Title = "Command List: Help (Page 5/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Music (Page 6/11)",
+                    Title = "Command List: Music (Page 6/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: NSFW (Page 7/11)",
+                    Title = "Command List: NSFW (Page 7/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: osu! (Page 8/11)",
+                    Title = "Command List: osu! (Page 8/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Utility (Page 9/11)",
+                    Title = "Command List: Utility (Page 9/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Supporter Only (Page 10/11)",
+                    Title = "Command List: Premium (Page 10/10)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Premium Servers Only (Page 11/11)",
-                    Description = $"```css\n"
-                },
-
-                new PaginatedMessage.Page
-                {
-                    Title = "Command List: Owner Only (Page 12)",
+                    Title = "Command List: Owner Only (Page 11: Hidden)",
                     Description = $"```css\n"
                 }
             };

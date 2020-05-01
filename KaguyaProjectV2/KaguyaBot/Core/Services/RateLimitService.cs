@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Discord.Net;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using User = KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models.User;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
@@ -37,8 +38,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                                           $"due to not being ratelimited for 30 days.", LogLvl.INFO);
                     }
 
-                    if (registeredUser.ActiveRateLimit >= 4 && !registeredUser.IsSupporter ||
-                        registeredUser.ActiveRateLimit >= 7 && registeredUser.IsSupporter)
+                    if (registeredUser.ActiveRateLimit >= 4 && !await registeredUser.IsPremiumAsync() ||
+                        registeredUser.ActiveRateLimit >= 7 && await registeredUser.IsPremiumAsync())
                     {
                         registeredUser.LastRatelimited = DateTime.Now.ToOADate();
                         registeredUser.RateLimitWarnings++;
@@ -75,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                             await DatabaseQueries.UpdateAsync(registeredUser);
                             await DatabaseQueries.InsertOrReplaceAsync(bl);
 
-                            await ConsoleLogger.LogAsync($"User [Name: {socketUser.Username} | ID: {socketUser.Id} | Supporter: {registeredUser.IsSupporter}] " +
+                            await ConsoleLogger.LogAsync($"User [Name: {socketUser.Username} | ID: {socketUser.Id} | Supporter: {await registeredUser.IsPremiumAsync()}] " +
                                                     "has been permanently blacklisted. Reason: Excessive Ratelimiting", LogLvl.WARN);
                             return;
                         }
@@ -132,7 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                             dm = false;
                         }
 
-                        await ConsoleLogger.LogAsync($"User [Name: {user?.Username} | ID: {user?.Id} | Supporter: {registeredUser.IsSupporter}] " +
+                        await ConsoleLogger.LogAsync($"User [Name: {user?.Username} | ID: {user?.Id} | Supporter: {await registeredUser.IsPremiumAsync()}] " +
                                                 $"has been ratelimited. Duration: {humanizedTime} Direct Message Sent: {dm}", LogLvl.INFO);
                     }
 

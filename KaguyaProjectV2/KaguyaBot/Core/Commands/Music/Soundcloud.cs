@@ -4,6 +4,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
@@ -12,8 +13,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [MusicCommand]
         [Command("Soundcloud")]
         [Alias("sc")]
-        [Summary("Allows either a [Kaguya Supporter](https://the-kaguya-project.myshopify.com/products/kaguya-supporter-tag) " +
-                 "or [Kaguya Premium](https://the-kaguya-project.myshopify.com/products/kaguya-premium) server " +
+        [Summary("Allows either a " +
+                 "[Kaguya Premium](https://the-kaguya-project.myshopify.com/products/kaguya-premium) server or subscriber " +
                  "to search Soundcloud for a desired song.")]
         [Remarks("<search>")]
         [RequireUserPermission(GuildPermission.Connect)]
@@ -23,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
-            if (server.IsPremium || user.IsSupporter)
+            if (server.IsPremium || await user.IsPremiumAsync())
             {
                 var playInstance = new Search();
                 var data = await playInstance.SearchAndPlayAsync(Context, query, false, SearchProvider.Soundcloud);

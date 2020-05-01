@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -26,13 +27,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
-            if (bet > MAX_BET && !user.IsSupporter)
+            if (bet > MAX_BET && !await user.IsPremiumAsync())
             {
                 await SendBasicErrorEmbedAsync($"Sorry, but only supporters may bet more than " +
                                                                $"`{MAX_BET:N0}` points.");
                 return;
             }
-            if (bet > MAX_SUPPORTER_BET && user.IsSupporter)
+            if (bet > MAX_SUPPORTER_BET && await user.IsPremiumAsync())
             {
                 await SendBasicErrorEmbedAsync($"Sorry, but you may not bet more than " +
                                                                $"`{MAX_SUPPORTER_BET:N0}` points.");

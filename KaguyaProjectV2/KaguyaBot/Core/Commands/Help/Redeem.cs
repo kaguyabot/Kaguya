@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Net;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
@@ -28,17 +29,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Summary("Allows a user to redeem a Kaguya Supporter or Kaguya Premium key. Supporter Keys may be " +
                  "purchased [at this link](https://stageosu.selly.store/)")]
         [Remarks("<key>")]
-        public async Task RedeemKey(string userKey)
+        public async Task RedeemKey(string keyString)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var existingSupporterKeys = await DatabaseQueries.GetAllAsync<SupporterKey>();
             var existingPremiumKeys = await DatabaseQueries.GetAllAsync<PremiumKey>();
-
-            var supporterKey = existingSupporterKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0);
-            var premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == userKey && x.UserId == 0 && x.ServerId == 0);
-
-            if (supporterKey == null && premiumKey == null)
+            var premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == keyString && x.UserId == 0 && x.ServerId == 0);
+            
+            if (premiumKey == null)
             {
                 await Context.Message.DeleteAsync();
                 var embed0 = new KaguyaEmbedBuilder
@@ -61,25 +59,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var nameSwitch = "";
             double expirationDate = 0;
 
-            if (!string.IsNullOrEmpty(supporterKey?.Key))
-            {
-                newKey = new SupporterKey
-                {
-                    Key = supporterKey.Key,
-                    LengthInSeconds = supporterKey.LengthInSeconds,
-                    KeyCreatorId = supporterKey.KeyCreatorId,
-                    UserId = Context.User.Id,
-                    Expiration = DateTime.Now.AddSeconds(supporterKey.LengthInSeconds).ToOADate()
-                };
-
-                typeString = "Kaguya Supporter";
-                nameSwitch = "Your";
-                expirationDate = user.SupporterExpirationDate;
-
-                await DatabaseQueries.InsertOrReplaceAsync((SupporterKey)newKey);
-            }
-
-            else if (!string.IsNullOrEmpty(premiumKey?.Key))
+            if (!string.IsNullOrEmpty(premiumKey?.Key))
             {
                 newKey = new PremiumKey
                 {
@@ -97,22 +77,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
                 await DatabaseQueries.InsertOrReplaceAsync((PremiumKey)newKey);
             }
-
-            #region Useless code to avoid compiler errors. -_-
-
             else
             {
-                // This is only here to avoid compiler errors -_-
-                newKey = new SupporterKey();
+                await Context.Message.DeleteAsync();
+                throw new KaguyaSupportException("Failed to redeem your key. Please " +
+                                                   "join our support server for assistance.");
             }
-
-            #endregion
 
             TimeSpan ts = $"{newKey.LengthInSeconds}s".ParseToTimespan();
             expirationDate += DateTime.Now.AddSeconds(newKey.LengthInSeconds).ToOADate();
 
-            if (existingSupporterKeys.Any(x => x.UserId == user.UserId))
-                expirationDate -= DateTime.Now.ToOADate();
             if (existingPremiumKeys.All(x => x.ServerId != Context.Guild.Id) &&
                 typeString == "Kaguya Premium")
             {
@@ -154,27 +128,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                             $"`{DateTime.FromOADate(key.Expiration).Humanize(false)}`"
                 }
             };
-
-            if (key.GetType() == typeof(SupporterKey))
-            {
-                var embed = new KaguyaEmbedBuilder
-                {
-                    Description = $"User `{context.User}` has just redeemed a " +
-                                  $"Kaguya Supporter key!",
-                    Fields = fields
-                };
-
-                try
-                {
-                    await owner.SendMessageAsync(embed: embed.Build());
-                }
-                catch (HttpException)
-                {
-                    await ConsoleLogger.LogAsync("Attempted to DM an owner a notification about a " +
-                                                 "Kaguya Supporter key redemption, but a " +
-                                                 "Discord.Net.HttpException was thrown.", LogLvl.WARN);
-                }
-            }
 
             if (key.GetType() == typeof(PremiumKey))
             {

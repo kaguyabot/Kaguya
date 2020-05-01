@@ -42,6 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
 
                     user.Points += points;
                     user.Experience += exp;
+                    user.TotalUpvotes++;
 
                     if (socketUser != null)
                     {

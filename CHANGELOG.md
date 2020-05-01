@@ -1,3 +1,10 @@
+### Version 2.3.3
+- Axed "Kaguya Supporter" system - everything now falls under one subscription: "Kaguya Premium".
+    - Kaguya Premium works the same as normal, but now all Kaguya Supporter perks will apply to the *redeemer* of the key.
+    - Kaguya Premium is now the only thing able to be purchased from the online store.
+- Fixed a bug with $nsfw bomb where it would break if tags were appended.
+- Fixed a bug where users would not receive their Kaguya Premium role automatically.
+
 ### Version 2.3.2
 - Added lots of redundancy against crashes that occur in relation to being unable to send users direct messages. (This has gone on for too long!!)
 

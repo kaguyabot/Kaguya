@@ -49,12 +49,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            if (user.LastFished >= DateTime.Now.AddSeconds(-15).ToOADate() && !user.IsSupporter ||
-                user.LastFished >= DateTime.Now.AddSeconds(-5).ToOADate() && user.IsSupporter)
+            if (user.LastFished >= DateTime.Now.AddSeconds(-15).ToOADate() && !await user.IsPremiumAsync() ||
+                user.LastFished >= DateTime.Now.AddSeconds(-5).ToOADate() && await user.IsPremiumAsync())
             {
                 var ts = DateTime.FromOADate(user.LastFished) - DateTime.Now.AddSeconds(-15);
 
-                if (user.IsSupporter)
+                if (await user.IsPremiumAsync())
                     ts += TimeSpan.FromSeconds(-10);
 
                 var errorEmbed = new KaguyaEmbedBuilder(EmbedColor.RED)

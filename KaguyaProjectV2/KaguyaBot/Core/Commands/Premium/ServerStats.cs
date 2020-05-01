@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
 {
     public class ServerStats : KaguyaBase
     {

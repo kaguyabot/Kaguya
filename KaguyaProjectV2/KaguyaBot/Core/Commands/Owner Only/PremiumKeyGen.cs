@@ -40,26 +40,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             TimeSpan timeSpan = duration.ParseToTimespan();
             long timeInSeconds = (long)timeSpan.TotalSeconds;
 
-            var existingKeys = await DatabaseQueries.GetAllAsync<SupporterKey>(x =>
-                x.Expiration > DateTime.Now.ToOADate() &&
-                x.UserId != 0);
+            var existingKeys = await DatabaseQueries.GetAllAsync<PremiumKey>(x =>
+                x.Expiration > DateTime.Now.ToOADate() && x.UserId != 0);
+            
             List<PremiumKey> keys = new List<PremiumKey>();
 
             for (int i = 0; i < amount; i++)
             {
-                var key = new PremiumKey()
+                while (true)
                 {
-                    Key = RandomString(),
-                    LengthInSeconds = timeInSeconds,
-                    KeyCreatorId = Context.User.Id
-                };
+                    var key = new PremiumKey
+                    {
+                        Key = RandomString(),
+                        LengthInSeconds = timeInSeconds,
+                        KeyCreatorId = Context.User.Id
+                    };
 
-                if (existingKeys.Exists(x => x.Key == key.Key))
-                {
-                    continue;
+                    if (existingKeys.Exists(x => x.Key == key.Key))
+                    {
+                        continue;
+                    }
+
+                    keys.Add(key);
+                    break;
                 }
-
-                keys.Add(key);
             }
 
             string keyDuration = TimeSpan.FromSeconds(keys.First().LengthInSeconds).Humanize(maxUnit: TimeUnit.Day);

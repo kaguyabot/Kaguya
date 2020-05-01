@@ -102,22 +102,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             }
 
             IReadOnlyList<LavaTrack> tracks;
-            if (user.IsSupporter || server.IsPremium)
+            if (await user.IsPremiumAsync() || server.IsPremium)
             {
                 tracks = result.Tracks;
             }
             else
             {
-                // Limit track duration to 10 minutes for non-supporters/premium servers.
+                // Limit track duration to 10 minutes for non-premium servers/users.
                 tracks = result.Tracks.Where(x => x.Duration.TotalMinutes < 10).ToList();
             }
 
             if (tracks.Count == 0)
             {
-                string suppString = user.IsSupporter
+                string suppString = await user.IsPremiumAsync()
                     ? ""
                     : "If you are " +
-                      $"not a [Kaguya Supporter]({GlobalProperties.KAGUYA_STORE_URL}), " +
+                      $"not a [Kaguya Premium Subscriber]({GlobalProperties.KAGUYA_STORE_URL}), " +
                       $"you are only limited to playing songs less than `10 minutes` in duration.";
 
                 await context.Channel.SendBasicErrorEmbedAsync($"Your requested search returned no results. {suppString}");

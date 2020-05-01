@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             const int baitCapacity = 100;
             const int suppBaitCapacity = 1000;
 
-            if (amount + user.FishBait > baitCapacity && !user.IsSupporter)
+            if (amount + user.FishBait > baitCapacity && !await user.IsPremiumAsync())
             {
                 if (user.FishBait == baitCapacity)
                 {
@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            if (amount + user.FishBait > suppBaitCapacity && user.IsSupporter)
+            if (amount + user.FishBait > suppBaitCapacity && await user.IsPremiumAsync())
             {
                 if (user.FishBait == suppBaitCapacity)
                 {
@@ -55,13 +55,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     return;
                 }
 
+                var difference = suppBaitCapacity - user.FishBait;
                 await SendBasicErrorEmbedAsync(
                     $"You may only carry {suppBaitCapacity} bait at one time, due to the size of your bait box. " +
-                    $"The most bait you may purchase right now is `{suppBaitCapacity - user.FishBait}`");
+                    $"The most bait you may purchase right now is `{(difference < 0 ? 0 : difference)}`");
                 return;
             }
 
-            if (user.IsSupporter)
+            if (await user.IsPremiumAsync())
                 totalCost = Fish.SUPPORTER_BAIT_COST * amount;
 
             var bonuses = new FishHandler.FishLevelBonuses(user.FishExp);

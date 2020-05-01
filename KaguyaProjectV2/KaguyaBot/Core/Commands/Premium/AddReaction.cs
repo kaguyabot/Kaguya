@@ -1,12 +1,12 @@
-﻿using Centvrio.Emoji;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Centvrio.Emoji;
 using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
 {
     public class AddReaction : KaguyaBase
     {

@@ -11,32 +11,21 @@ using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
 {
     public class CheckExpiration : KaguyaBase
     {
         [HelpCommand]
         [Command("CheckExpiration")]
         [Alias("ce")]
-        [Summary("Allows a Kaguya Supporter and/or user with active Kaguya Premium keys " +
-                 "to see when their respective subscriptions will expire.")]
+        [Summary("Allows a user with active Kaguya Premium keys " +
+                 "to see when their subscription(s) will expire.")]
         [Remarks("")]
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var expiration = new KaguyaEmbedBuilder();
-
-            Console.WriteLine(DateTime.Now.ToOADate());
-            Console.WriteLine(DateTime.Now.ToLongTimeString());
-
-            if (user.IsSupporter)
-            {
-                expiration.AddField("Kaguya Supporter",
-                    $"`{DateTime.FromOADate(user.SupporterExpirationDate).Humanize(false)}`\n");
-                Console.WriteLine(user.SupporterExpirationDate);
-                Console.WriteLine(DateTime.FromOADate(user.SupporterExpirationDate).ToLongTimeString());
-            }
 
             if (await user.IsPremiumAsync())
             {
@@ -46,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.SupporterOrPremium
                 foreach (var key in await user.GetPremiumKeysAsync())
                 {
                     var guild = Client.GetGuild(key.ServerId);
-                    field.Value += $"Server: `{guild}` \n" +
+                    field.Value += $"Server: `{(guild == null ? $"Unknown Server: (ID {key.ServerId})" : guild.Name)}`\n" +
                                    $"\tExpiration: `{DateTime.FromOADate(key.Expiration).Humanize(false)}`\n\n";
                 }
 

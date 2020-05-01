@@ -90,30 +90,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ExpType ExpDmNotificationType => (ExpType)ExpDmNotificationTypeNum;
         public FishHandler.FishLevelBonuses FishLevelBonuses => new FishHandler.FishLevelBonuses(FishExp);
 
-        public double SupporterExpirationDate
-        {
-            get
-            {
-                var allUserKeys = DatabaseQueries
-                    .GetAllAsync<SupporterKey>(x => x.UserId == UserId && x.Expiration > DateTime.Now.ToOADate()).Result
-                    .ToArray();
-
-                if (allUserKeys.Length == 0)
-                    return DateTime.MinValue.ToOADate();
-
-                var expiration = allUserKeys[0].Expiration;
-                if (allUserKeys.Length > 1)
-                {
-                    foreach (var key in allUserKeys[1..])
-                    {
-                        expiration += DateTime.MinValue.AddSeconds(key.LengthInSeconds).ToOADate();
-                    }
-                }
-
-                return expiration;
-            }
-        }
-
         public double PremiumExpirationDate
         {
             get
@@ -128,9 +104,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
                 var expiration = allKeys[0].Expiration;
                 if(allKeys.Length > 1)
                 {
-                    foreach(var keys in allKeys[1..])
+                    foreach(var key in allKeys[1..])
                     {
-                        expiration += DateTime.MinValue.AddSeconds(keys.LengthInSeconds).ToOADate();
+                        expiration += DateTime.FromOADate(0).AddMinutes((double)key.LengthInSeconds / 60).ToOADate();
                     }
                 }
 
@@ -139,7 +115,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         }
 
         public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
-        public bool IsSupporter => SupporterExpirationDate - DateTime.Now.ToOADate() > 0;
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetDailyPoints => LastDailyBonus < DateTime.Now.AddHours(-24).ToOADate();
         public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;

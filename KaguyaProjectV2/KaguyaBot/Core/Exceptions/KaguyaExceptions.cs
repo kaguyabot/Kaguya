@@ -39,18 +39,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Exceptions
         }
     }
 
-    class KaguyaSupporterException : Exception
-    {
-        public KaguyaSupporterException(string message = null) : base(KaguyaSupporterExceptionMessage(message))
-        {
-        }
-
-        private static string KaguyaSupporterExceptionMessage(string msg = null)
-        {
-            return $"\nSorry, only active [Kaguya Supporters]({ConfigProperties.KaguyaStore}) are allowed to use the described feature: \n\n`{msg}`";
-        }
-    }
-
     class KaguyaPremiumException : Exception
     {
         public KaguyaPremiumException(string message = null) : base(KaguyaPremiumExceptionMessage(message))

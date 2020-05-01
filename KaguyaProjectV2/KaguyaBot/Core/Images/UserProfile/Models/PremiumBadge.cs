@@ -4,16 +4,16 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
-    public class SupporterBadge
+    public class PremiumBadge
     {
-        public SupporterBadge(User user)
+        public PremiumBadge(User user)
         {
             Data.User = user;
         }
 
-        public TemplateBadge Data = new TemplateBadge
+        public readonly TemplateBadge Data = new TemplateBadge
         {
-            Emote = ConfigProperties.Client.GetGuild(546880579057221644).GetEmoteAsync(672187970534768641).Result,
+            Emote = ConfigProperties.Client.GetGuild(546880579057221644)?.GetEmoteAsync(672187970534768641)?.Result,
             Loc = new TemplateLoc
             {
                 X = 100,

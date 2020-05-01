@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
                     GlobalBar = GlobalBarData.Bar(user),
                     GuildBar = GuildBarData.Bar(user, server),
                     IconAndUsername = ProfilePictureData.ProfileIcon(guildUser),
-                    SupporterBadge = new SupporterBadge(user).Data,
+                    SupporterBadge = new PremiumBadge(user).Data,
                     LeftPanel = await ProfilePanelData.LeftPanel(user, server),
                     RightPanel = ProfilePanelData.RightPanel(user)
                 }
@@ -116,7 +116,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             gBar.Mutate(x => x.DrawKaguyaTemplatePanelText(profile.Xp.RightPanel));
 
             // Draw supporter badge.
-            if (user.IsSupporter)
+            if (await user.IsPremiumAsync())
             {
                 gBar.Mutate(x => x.DrawImage(suppBadge,
                     new Point((int)profile.Xp.SupporterBadge.Loc.X, (int)profile.Xp.SupporterBadge.Loc.Y), 1));

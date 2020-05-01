@@ -35,30 +35,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         [Remarks("\nbomb\n[tag] {...} ($$$)\nbomb [tag] {...} ($$$)")]
         public async Task Command([Remainder]string tagString = null)
         {
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
             string[] tags = tagString?.Split(" ");
             string[] blacklistedTags =
             {
-                // monkaTOS
+                // ~\<O_O>/~
                 "loli", "shota", "blood", "gore", "rape"
             };
 
-            if (user.TotalNSFWImages == 0 && !user.IsSupporter ||
-                user.TotalNSFWImages < NSFW_BOMB_COUNT && !user.IsSupporter)
+            if (user.TotalNSFWImages == 0 && !await user.IsPremiumAsync() ||
+                user.TotalNSFWImages < NSFW_BOMB_COUNT && !await user.IsPremiumAsync() && !server.IsPremium)
             {
                 throw new KaguyaSupportException("You are out of NSFW image uses for right now. Please try again later. " +
                                                  "One NSFW image is automatically earned every 2 hours. " +
-                                                 $"[Kaguya Supporters]({ConfigProperties.KaguyaStore}) may use unlimited NSFW images at " +
+                                                 $"[Kaguya Premium Subscribers]({ConfigProperties.KaguyaStore}) may use unlimited NSFW images at " +
                                                  $"anytime.");
             }
 
             if (tags != null)
             {
-                if (tags.Length > 1 && !user.IsSupporter ||
-                    tags.Length > 0 && tags[0].ToLower() != "bomb" && !user.IsSupporter)
+                if (tags.Length > 1 && !await user.IsPremiumAsync() ||
+                    tags.Length > 0 && tags[0].ToLower() != "bomb" && !await user.IsPremiumAsync() && !server.IsPremium)
                 {
-                    throw new KaguyaSupporterException("Tagged NSFW searches are for " +
+                    throw new KaguyaPremiumException("Tagged NSFW searches are for " +
                                                        "Kaguya Supporters only.");
                 }
 
@@ -74,7 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                     {
                         if (tags[1..].Length != 0)
                         {
-                            if (user.TotalNSFWImages < 3 && !user.IsSupporter)
+                            if (user.TotalNSFWImages < 3 && (!await user.IsPremiumAsync() && !server.IsPremium))
                             {
                                 await SendBasicErrorEmbedAsync(
                                     $"You do not have enough NSFW images to process this command. " +
@@ -85,15 +86,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                             }
 
                             // Gets rid of the "bomb" term.
-                            tags[0] = null;
+                            tags[0] = "";
 
-                            await SendHentaiAsync(user, tags);
+                            for (int i = 0; i < NSFW_BOMB_COUNT; i++)
+                            {
+                                await SendHentaiAsync(user, tags);
+                            }
                         }
                         else
                         {
                             for (int i = 0; i < NSFW_BOMB_COUNT; i++)
                             {
-                                await SendHentaiAsync(user, "sex", "breasts", "cum");
+                                await SendHentaiAsync(user, "sex");
                             }
                         }
                     }
@@ -114,13 +118,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 await SendHentaiAsync(user, "sex", "breasts", "cum");
             }
 
-            if (!user.IsSupporter)
+            if (!await user.IsPremiumAsync())
                 await DatabaseQueries.UpdateAsync(user);
         }
 
+        private static int attempts = 0;
         private async Task<SearchResult?> SendHentaiAsync(User user, params string[] tags)
         {
-            if (user.TotalNSFWImages < 1 && !user.IsSupporter)
+            if (user.TotalNSFWImages < 1 && !await user.IsPremiumAsync())
             {
                 await Context.Channel.SendBasicErrorEmbedAsync("You are out of NSFW images");
                 return null;
@@ -146,17 +151,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 }
                 catch (HttpException)
                 {
-                    await SendBasicErrorEmbedAsync($"A file was too large to be sent, please try again.");
-                    return null;
+                    attempts++;
+
+                    if (attempts > 2)
+                        return null;
+                    return await SendHentaiAsync(user, tags);
                 }
             }
 
-            if (!user.IsSupporter)
+            if (!await user.IsPremiumAsync())
             {
                 user.TotalNSFWImages -= 1;
             }
 
             await DatabaseQueries.UpdateAsync(user);
+
+            attempts = 0;
             return img;
         }
     }

@@ -220,7 +220,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
         public static int FishbaitCost(this User user)
         {
-            return user.IsSupporter 
+            return user.IsPremiumAsync().Result 
                 ? (int)(Fish.SUPPORTER_BAIT_COST * (1 + user.FishLevelBonuses.BaitCostIncreasePercent / 100))
                 : (int)(Fish.BAIT_COST * (1 + (user.FishLevelBonuses.BaitCostIncreasePercent / 100)));
         }
