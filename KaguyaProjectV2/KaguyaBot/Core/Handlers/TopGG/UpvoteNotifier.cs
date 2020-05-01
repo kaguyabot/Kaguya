@@ -40,6 +40,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
                         exp *= 2;
                     }
 
+                    if (await user.IsPremiumAsync())
+                    {
+                        points *= 2;
+                        exp *= 2;
+                    }
+                    
                     user.Points += points;
                     user.Experience += exp;
                     user.TotalUpvotes++;

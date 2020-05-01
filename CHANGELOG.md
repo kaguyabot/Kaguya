@@ -1,10 +1,22 @@
-### Version 2.3.3
+### Version 2.4
 - Axed "Kaguya Supporter" system - everything now falls under one subscription: "Kaguya Premium".
     - Kaguya Premium works the same as normal, but now all Kaguya Supporter perks will apply to the *redeemer* of the key.
     - Kaguya Premium is now the only thing able to be purchased from the online store.
 - Fixed a bug with $nsfw bomb where it would break if tags were appended.
 - Fixed a bug where users would not receive their Kaguya Premium role automatically.
+- Fixed a bug where users who no longer have Kaguya Premium wouldn't have their role removed in the Kaguya Support discord server.
 - All Kaguya Premium commands are now displayed in their respective command categories, rather than on a separate command page list. All premium commands will have a `{$}` appended to the end of them, after the aliases.
+- Fixed a bug where if a user had multiple active Kaguya Premium keys, they would be DM'd as soon as any one of them expired. Now the user will only be notified if all other keys have run out and they are no longer a premium user.
+- *Note: The benefits described below do not apply to the Kaguya Support server.*
+- Kaguya Premium servers now grant +5% luck to all betting events.
+- Kaguya Premium servers now grant +5% luck to all fishing events.
+- Kaguya Premium servers now grant +50% bonus to all points and EXP received from $daily.
+- Kaguya Premium key redeemers now have priority DM support (DM Stage with any questions or concerns!). Stage will not respond to DMs from non-premium users if related to Kaguya.
+- Kaguya Premium key redeemers now receive +100% bonus EXP and points when using $upvote
+- New command: $choose
+- New command: $reverse
+- New game: $dice
+
 
 ### Version 2.3.2
 - Added lots of redundancy against crashes that occur in relation to being unable to send users direct messages. (This has gone on for too long!!)

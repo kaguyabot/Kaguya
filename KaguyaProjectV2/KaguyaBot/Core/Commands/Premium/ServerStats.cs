@@ -19,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
         [AdminCommand]
         [Command("ServerStats")]
         [Alias("ss")]
-        [Summary("Displays an extremely detailed array of statistics about the server, including stats collected by Kaguya.")]
+        [Summary("Displays a detailed array of statistics about the server, including stats collected by Kaguya.")]
         [Remarks("")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Command()

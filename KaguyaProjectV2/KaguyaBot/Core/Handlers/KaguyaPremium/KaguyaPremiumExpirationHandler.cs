@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.Threading.Tasks;
 using System.Timers;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
 {
@@ -29,6 +30,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
                 {
                     if (premKey.Expiration < DateTime.Now.ToOADate() && premKey.Expiration > 1)
                     {
+                        if (await (await DatabaseQueries.GetOrCreateUserAsync(premKey.UserId)).IsPremiumAsync())
+                            continue;
                         var socketUser = ConfigProperties.Client.GetUser(premKey.UserId);
 
                         try

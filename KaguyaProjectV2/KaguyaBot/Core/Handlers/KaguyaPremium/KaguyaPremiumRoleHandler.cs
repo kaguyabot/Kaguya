@@ -73,7 +73,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
                         var socketUser = client.GetUser(expPrem.UserId);
                         if (socketUser == null) continue;
 
-                        if(!kaguyaSupportServer.Users.Contains(socketUser))
+                        if(!kaguyaSupportServer.Users.Any(x => x.Id == socketUser.Id))
                             continue;
 
                         var premRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Id == 657104752559259659);

@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
     public class Roll : KaguyaBase
     {
         private const int MAX_BET = 50000;
-        private const int MAX_SUPPORTER_BET = 500000;
+        private const int MAX_PREMIUM_BET = 500000;
 
         [CurrencyCommand]
         [Command("Roll")]
@@ -22,21 +22,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Remarks("<points>")]
         public async Task Command(int bet)
         {
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             if (bet < 5)
                 throw new ArgumentOutOfRangeException(nameof(bet), "Your bet must be at least `5` points.");
 
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
-            if (bet > MAX_BET && !await user.IsPremiumAsync())
+            if (bet > MAX_BET && !await user.IsPremiumAsync() && !server.IsPremium)
             {
                 await SendBasicErrorEmbedAsync($"Sorry, but only supporters may bet more than " +
                                                                $"`{MAX_BET:N0}` points.");
                 return;
             }
-            if (bet > MAX_SUPPORTER_BET && await user.IsPremiumAsync())
+            if (bet > MAX_PREMIUM_BET && await user.IsPremiumAsync() || server.IsPremium)
             {
                 await SendBasicErrorEmbedAsync($"Sorry, but you may not bet more than " +
-                                                               $"`{MAX_SUPPORTER_BET:N0}` points.");
+                                                               $"`{MAX_PREMIUM_BET:N0}` points.");
                 return;
             }
 
@@ -50,6 +51,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             Random r = new Random();
             int roll = r.Next(101);
 
+            if (roll > 100)
+                roll = 100;
+
+            if (await user.IsPremiumAsync() || server.IsPremium)
+                roll = (int)(roll * 1.05);
+            
             var rollResult = GetRollResult(roll);
             int payout = GetPayout(rollResult, bet);
             bool winner;

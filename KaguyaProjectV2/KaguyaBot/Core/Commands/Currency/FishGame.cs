@@ -86,6 +86,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var bonuses = new FishHandler.FishLevelBonuses(user.FishExp);
             roll *= 1 - (bonuses.BonusLuckPercent / 100);
 
+            if (await user.IsPremiumAsync() || server.IsPremium)
+                roll *= 0.95;
+            
             var fishType = GetFishType(roll);
 
             switch (fishType)

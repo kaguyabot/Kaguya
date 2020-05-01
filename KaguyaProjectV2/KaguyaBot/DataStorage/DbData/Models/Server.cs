@@ -74,7 +74,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// <summary>
         /// Whether or not the server currently has an active premium subscription.
         /// </summary>
-        public bool IsPremium => PremiumExpirationDate > DateTime.Now.ToOADate();
+        public bool IsPremium => PremiumExpirationDate > DateTime.Now.ToOADate() && ServerId != 546880579057221644;
 
         [Column(Name = "AutoWarnOnBlacklistedPhrase"), NotNull]
         public bool AutoWarnOnBlacklistedPhrase { get; set; } = false;

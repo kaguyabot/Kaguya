@@ -99,7 +99,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                             $"Text Channels: `{totalTextChannels:N0}`\n" +
                             $"Voice Channels: `{totalVoiceChannels:N0}`\n" +
                             $"Users: `{totalUsers:N0}`\n" +
-                            $"RAM Usage: `{(double)curProcess.PrivateMemorySize64 / 1000000:N2} Megabytes`"
+                            $"RAM Usage: `{(double)curProcess.PrivateMemorySize64 / 1000000:N2} Megabytes`\n" +
+                            $"Current Version: `{ConfigProperties.Version}`"
                 },
                 new EmbedFieldBuilder
                 {

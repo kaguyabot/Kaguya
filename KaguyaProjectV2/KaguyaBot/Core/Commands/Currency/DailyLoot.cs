@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -19,6 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         public async Task Command(SocketGuildUser guildUser = null)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             if (!user.CanGetDailyPoints)
             {
                 var dt = DateTime.FromOADate(user.LastDailyBonus).AddHours(24);
@@ -27,15 +29,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            var points = 750;
-            var exp = 275;
+            int points = 750;
+            int exp = 275;
 
+            // Premium bonuses
+            if (await user.IsPremiumAsync() || server.IsPremium)
+            {
+                points = (int)(points * 1.50);
+                exp = (int)(exp * 1.50);
+            }
+            
             user.Points += points;
             user.Experience += exp;
             user.LastDailyBonus = DateTime.Now.ToOADate();
 
             await SendBasicSuccessEmbedAsync($"{Context.User.Mention} You have received " +
-                                             $"`+{points} points` and `+{exp} exp`!");
+                                             $"`+{points:N0} points` and `+{exp:N0} exp`!");
             await DatabaseQueries.UpdateAsync(user);
         }
     }

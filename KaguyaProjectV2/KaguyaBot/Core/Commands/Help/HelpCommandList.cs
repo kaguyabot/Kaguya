@@ -40,6 +40,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 string aliases = cmd.Aliases.Where(alias => alias.ToLower() != cmd.Name.ToLower()).Aggregate("", (current, alias) => current + $"[{alias}]");
                 foreach (var attr in attributes)
                 {
+                    // We skip this attribute because it no longer has a page of its own.
+                    if (attr.GetType() == typeof(PremiumCommandAttribute))
+                        continue;
+                    
                     string warn = "";
                     string premium = "";
                     
@@ -60,9 +64,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                         }
                     }
 
-                    // PremiumCommandAttribute doesn't have a page anymore, so let's skip it.
-                    if(attr.GetType() != typeof(PremiumCommandAttribute))
-                        i++;
+                    i++;
                 }
             }
 

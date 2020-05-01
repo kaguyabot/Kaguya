@@ -13,6 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 {
     public class Doujin : KaguyaBase
     {
+        [PremiumCommand]
         [NsfwCommand]
         [Command("Doujin")]
         [Summary("Displays a random doujin in chat.")]

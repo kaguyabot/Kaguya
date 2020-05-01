@@ -214,9 +214,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     if (player.Queue.Items.Count() == 50 && !server.IsPremium)
                     {
                         await ConsoleLogger.LogAsync($"Queue is full in {context.Guild.Id}, sending error.", LogLvl.TRACE);
-                        await SendBasicErrorEmbedAsync($"Your queue is full! `50 songs` is the maximum " +
+                        await SendBasicErrorEmbedAsync("Your queue is full! `50 songs` is the maximum " +
                                                        $"for non [Kaguya Premium]({GlobalProperties.KAGUYA_STORE_URL}) " +
-                                                       $"servers.");
+                                                       "servers.");
                     }
                     else
                     {
