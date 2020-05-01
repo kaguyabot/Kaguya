@@ -88,7 +88,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var embed = new KaguyaEmbedBuilder(eColor)
             {
                 Title = "Dice Roll",
-                Description = DiceDescription(rollOne, rollTwo, points, winner, outcome),
+                Description = DiceDescription(rollOne, rollTwo, points, winner, outcome, prediction),
                 Footer = new EmbedFooterBuilder
                 {
                     Text = $"New Points Balance: {user.Points:N0} ({formattedPayout})"
@@ -131,7 +131,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             };
         }
         
-        private string DiceDescription(int rollOne, int rollTwo, int points, bool winner, DiceOutcome outcome)
+        private string DiceDescription(int rollOne, int rollTwo, int points, bool winner, DiceOutcome outcome, 
+            DicePrediction prediction)
         {
             var diceEmoji = Centvrio.Emoji.Game.GameDie;
             
@@ -153,11 +154,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
             else
             {
-                string lossString = outcome switch
+                string lossString = prediction switch
                 {
-                    DiceOutcome.Higher => "not higher than 7.",
-                    DiceOutcome.Lower => "not lower than 7.",
-                    DiceOutcome.Seven => "not exactly 7."
+                    DicePrediction.Higher => "not higher than 7.",
+                    DicePrediction.Lower => "not lower than 7.",
+                    DicePrediction.Seven => "not exactly 7."
                 };
                 
                 return $"{diceEmoji} Roll One: `{rollOne}`\n" +

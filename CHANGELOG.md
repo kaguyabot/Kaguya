@@ -1,3 +1,6 @@
+### Version 2.4.1
+- Fixed a small text error with $dice.
+
 ### Version 2.4
 - Axed "Kaguya Supporter" system - everything now falls under one subscription: "Kaguya Premium".
     - Kaguya Premium works the same as normal, but now all Kaguya Supporter perks will apply to the *redeemer* of the key.
