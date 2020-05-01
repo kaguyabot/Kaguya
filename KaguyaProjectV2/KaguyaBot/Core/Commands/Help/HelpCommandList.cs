@@ -41,18 +41,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 foreach (var attr in attributes)
                 {
                     string warn = "";
-                    if (cmd.Attributes.Contains(attr) && attr.GetType() == typeof(DangerousCommandAttribute))
-                        warn = @" {Dangerous Command}";
-
+                    string premium = "";
+                    
+                    if (cmd.Preconditions.Contains(attributes[9]))
+                        premium = "{$}";
+                    
                     if (cmd.Attributes.Contains(attr) || cmd.Preconditions.Contains(attr))
                     {
-                        if (!pages[i].Description.Contains($"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}{warn}\n"))
+                        if (!pages[i].Description.Contains($"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}{warn}"))
                         {
-                            pages[i].Description += $"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}{warn}\n";
+                            if (!string.IsNullOrWhiteSpace(aliases))
+                            {
+                                aliases = aliases.Insert(0, " ");
+                            }
+                            
+                            pages[i].Description += $"{server.CommandPrefix}{cmd.Name.ToLower()}{aliases} {premium}";
+                            pages[i].Description += "\n";
                         }
                     }
 
-                    i++;
+                    // PremiumCommandAttribute doesn't have a page anymore, so let's skip it.
+                    if(attr.GetType() != typeof(PremiumCommandAttribute))
+                        i++;
                 }
             }
 
@@ -91,67 +101,61 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             {
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Administration (Page 1/10)",
+                    Title = "Command List: Administration (Page 1/9)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Currency (Page 2/10)",
+                    Title = "Command List: Currency (Page 2/9)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: EXP (Page 3/10)",
+                    Title = "Command List: EXP (Page 3/9)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Fun (Page 4/10)",
+                    Title = "Command List: Fun (Page 4/9)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Help (Page 5/10)",
+                    Title = "Command List: Help (Page 5/9)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Music (Page 6/10)",
+                    Title = "Command List: Music (Page 6/9)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: NSFW (Page 7/10)",
+                    Title = "Command List: NSFW (Page 7/9)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: osu! (Page 8/10)",
+                    Title = "Command List: osu! (Page 8/9)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Utility (Page 9/10)",
+                    Title = "Command List: Utility (Page 9/9)",
                     Description = $"```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
-                    Title = "Command List: Premium (Page 10/10)",
-                    Description = $"```css\n"
-                },
-
-                new PaginatedMessage.Page
-                {
-                    Title = "Command List: Owner Only (Page 11: Hidden)",
+                    Title = "Command List: Owner Only (Page 10: Hidden)",
                     Description = $"```css\n"
                 }
             };
