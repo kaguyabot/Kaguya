@@ -153,26 +153,23 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <returns></returns>
         public static async Task SellFishAsync(IEnumerable<Fish> fishCollection, ulong userId)
         {
-            using (var db = new KaguyaDb())
+            var user = await GetOrCreateUserAsync(userId);
+            foreach (var fish in fishCollection)
             {
-                var user = await GetOrCreateUserAsync(userId);
-                foreach (var fish in fishCollection)
+                try
                 {
-                    try
-                    {
-                        user.Points += Fish.GetPayoutForFish(fish, user.FishExp);
-                        fish.Sold = true;
+                    user.Points += Fish.GetPayoutForFish(fish, user.FishExp);
+                    fish.Sold = true;
 
-                        await db.UpdateAsync(fish);
-                    }
-                    catch(Exception e)
-                    {
-                        await ConsoleLogger.LogAsync(e, LogLvl.WARN);
-                    }
+                    await UpdateAsync(fish);
                 }
-
-                await db.UpdateAsync(user);
+                catch(Exception e)
+                {
+                    await ConsoleLogger.LogAsync(e, LogLvl.WARN);
+                }
             }
+
+            await UpdateAsync(user);
         }
 
         /// <summary>

@@ -1,3 +1,8 @@
+### Version 2.4.2
+- $ban now only allows users to ban one user at a time, but now provides support for ban reasons.
+- $kick now only allows users to ban one user at a time, but now provides support for ban reasons.
+- Possibly fixed a bug where users who sold multiple fish at once wouldn't receive their payout. This *might* have been due to too many concurrent database connections being made at once. This patch attempts to fix this.
+
 ### Version 2.4.1
 - Fixed a small text error with $dice.
 
@@ -19,7 +24,6 @@
 - New command: $choose
 - New command: $reverse
 - New game: $dice
-
 
 ### Version 2.3.2
 - Added lots of redundancy against crashes that occur in relation to being unable to send users direct messages. (This has gone on for too long!!)

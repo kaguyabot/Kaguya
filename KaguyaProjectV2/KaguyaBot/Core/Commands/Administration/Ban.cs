@@ -15,47 +15,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [AdminCommand]
         [Command("Ban")]
         [Alias("b")]
-        [Summary("Permanently bans a user, or a list of users from the server.")]
-        [Remarks("<user>\n<user> {...}")]
+        [Summary("Permanently bans a user from the server.")]
+        [Remarks("<user> [reason]")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
-        public async Task BanUser(params SocketGuildUser[] users)
+        public async Task BanUser(SocketGuildUser user, [Remainder]string reason = null)
         {
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
-
-            int i = 0;
-            int j = 0;
-
-            foreach (var user in users)
+            reason ??= "<No reason provided>";
+            
+            try
             {
-                try
-                {
-                    await user.BanAsync();
-                    if (user.Id != 159985870458322944)
-                        embed.Description += $"Successfully banned `{user}`\n";
-                    else // ;)
-                        embed.Description += $"Successfully banned `{user}`. Nice choice <:Kaguya:581581938884608001> 👍";
-                    i++;
-                }
-                catch (Exception)
-                {
-                    embed.Description += $"Failed to ban `{user}`\n";
-                    j++;
-                }
+                await user.BanAsync(reason: reason);
+                if (user.Id != 159985870458322944)
+                    embed.Description = $"Successfully banned `{user}` with reason `{reason}`\n";
+                else // Easter egg lol
+                    embed.Description = $"Successfully banned `{user}` with reason `{reason}`\n" +
+                                         $"Nice choice <:Kaguya:581581938884608001> 👍";
+            }
+            catch (Exception)
+            {
+                embed.Description = $"Failed to ban `{user}`\n";
             }
 
-            if (embed.Description.Length > 2000)
-            {
-                string failString = "";
-
-                if (j != 0)
-                    failString = $"\nFailed to ban `{j}` users.";
-
-                embed = new KaguyaEmbedBuilder
-                {
-                    Description = $"Successfully banned `{i}` users.{failString}"
-                };
-            }
             await ReplyAsync(embed: embed.Build());
         }
 
@@ -70,7 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             try
             {
                 await user.BanAsync(0, reason);
-                await ConsoleLogger.LogAsync($"User auto-muted. Guild: [Name: {user.Guild.Name} | ID: {user.Guild.Id}] " +
+                await ConsoleLogger.LogAsync($"User auto-banned. Guild: [Name: {user.Guild.Name} | ID: {user.Guild.Id}] " +
                                              $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
             }
             catch (Exception e)
