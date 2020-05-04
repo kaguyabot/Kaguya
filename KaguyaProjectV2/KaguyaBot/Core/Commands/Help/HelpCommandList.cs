@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,12 +33,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new OwnerCommandAttribute()
             };
 
-            var pages = ReturnPages();
+            var pages = ReturnPages().ToList();
 
             foreach (var cmd in cmdInfo.Commands.OrderBy(x => x.Name))
             {
                 int i = 0;
-                string aliases = cmd.Aliases.Where(alias => alias.ToLower() != cmd.Name.ToLower()).Aggregate("", (current, alias) => current + $"[{alias}]");
+                string aliases = cmd.Aliases.Where(alias => alias.ToLower() != cmd.Name.ToLower())
+                    .Aggregate("", (current, alias) => current + $"[{alias}]");
                 foreach (var attr in attributes)
                 {
                     // We skip this attribute because it no longer has a page of its own.
@@ -74,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             }
 
             if (Context.User.Id != ConfigProperties.BotConfig.BotOwnerId)
-                pages[attributes.Length - 1] = null;
+                pages.RemoveAt(pages.Count - 1);
 
             var pager = new PaginatedMessage
             {
@@ -97,7 +99,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             });
         }
 
-        private PaginatedMessage.Page[] ReturnPages()
+        private IEnumerable<PaginatedMessage.Page> ReturnPages()
         {
             var pages = new[]
             {
