@@ -1,3 +1,6 @@
+### Version 2.4.3
+- Fixed a bug where Kaguya Premium users could not play the $dice game.
+
 ### Version 2.4.2
 - $ban now only allows users to ban one user at a time, but now provides support for ban reasons.
 - $kick now only allows users to ban one user at a time, but now provides support for kick reasons.

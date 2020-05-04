@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            if (points > 500000 && await user.IsPremiumAsync() || server.IsPremium)
+            if (points > 500000 && (await user.IsPremiumAsync() || server.IsPremium))
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} Sorry, the maximum points you may bet regardless " +
                                                $"of [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
