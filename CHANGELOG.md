@@ -1,3 +1,6 @@
+### Version 2.4.4
+- Fixed a bug with $help where it would error on use for all users.
+
 ### Version 2.4.3
 - Fixed a bug where Kaguya Premium users could not play the $dice game.
 
