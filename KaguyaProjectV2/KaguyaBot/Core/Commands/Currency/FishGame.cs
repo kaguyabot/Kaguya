@@ -172,15 +172,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     embed.SetColor(EmbedColor.ORANGE);
                     break;
                 case FishType.GIANT_SQUID:
-                    value = 25000;
-                    fishExp = r.Next(1000, 3500);
+                    value = 20000;
+                    fishExp = r.Next(400, 900);
                     embed.Description += $"Well butter my buttcheeks and call me a biscuit, you caught the second " +
                                          $"rarest fish in the sea! It's a `giant squid`!! Congratulations!";
                     embed.SetColor(EmbedColor.ORANGE);
                     break;
                 case FishType.BIG_KAHUNA:
                     value = 50000;
-                    fishExp = r.Next(4000, 7500);
+                    fishExp = r.Next(1250, 4500);
                     embed.Description += $"<a:siren:429784681316220939> NO WAY! You hit the jackpot " +
                                          $"and caught the **Legendary `BIG KAHUNA`**!!!! " +
                                          $"What an incredible moment this is! <a:siren:429784681316220939>";
@@ -248,31 +248,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return FishType.BIG_KAHUNA;
             if (roll > 0.0005 && roll <= 0.0015)
                 return FishType.GIANT_SQUID;
-            if (roll > 0.0015 && roll <= 0.0030)
+            if (roll > 0.0015 && roll <= 0.0035)
                 return FishType.ORANTE_SLEEPER_RAY;
-            if (roll > 0.0035 && roll <= 0.0050)
+            if (roll > 0.0035 && roll <= 0.0070)
                 return FishType.DEVILS_HOLE_PUPFISH;
-            if (roll > 0.0050 && roll <= 0.01)
+            if (roll > 0.01 && roll <= 0.025)
                 return FishType.SMALLTOOTH_SAWFISH;
-            if (roll > 0.01 && roll <= 0.03)
+            if (roll > 0.025 && roll <= 0.05)
                 return FishType.GIANT_SEA_BASS;
-            if (roll > 0.03 && roll <= 0.05)
+            if (roll > 0.05 && roll <= 0.085)
                 return FishType.TRIGGERFISH;
-            if (roll > 0.05 && roll <= 0.10)
+            if (roll > 0.085 && roll <= 0.13)
                 return FishType.RED_DRUM;
-            if (roll > 0.10 && roll <= 0.17)
+            if (roll > 0.13 && roll <= 0.20)
                 return FishType.LARGE_SALMON;
-            if (roll > 0.17 && roll <= 0.24)
+            if (roll > 0.20 && roll <= 0.27)
                 return FishType.LARGE_BASS;
-            if (roll > 0.24 && roll <= 0.33)
+            if (roll > 0.27 && roll <= 0.36)
                 return FishType.CATFISH;
-            if (roll > 0.33 && roll <= 0.43)
+            if (roll > 0.36 && roll <= 0.46)
                 return FishType.SMALL_SALMON;
-            if (roll > 0.43 && roll <= 0.53)
+            if (roll > 0.46 && roll <= 0.56)
                 return FishType.SMALL_BASS;
-            if (roll > 0.53 && roll <= 0.65)
+            if (roll > 0.56 && roll <= 0.68)
                 return FishType.PINFISH;
-            if (roll > 0.65 && roll <= 0.75)
+            if (roll > 0.68 && roll <= 0.78)
                 return FishType.SEAWEED;
             return FishType.BAIT_STOLEN;
         }

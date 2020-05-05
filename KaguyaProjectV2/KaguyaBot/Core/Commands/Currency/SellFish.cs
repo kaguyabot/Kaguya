@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 };
 
                 await InlineReactionReplyAsync(new ReactionCallbackData("", sellAllConfirmEmbed.Build(), true,
-                    true, TimeSpan.FromSeconds(90))
+                    true, TimeSpan.FromSeconds(180))
                     .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                     {
                         await DatabaseQueries.SellFishAsync(allFishToSell, Context.User.Id);

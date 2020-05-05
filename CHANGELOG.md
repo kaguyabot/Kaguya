@@ -1,3 +1,19 @@
+### Version 2.5
+- $flb now shows how many total fish the top 10 users have caught.
+- Reduced the amount of fish EXP players earn when catching a giant squid or big kahuna.
+- Fixed an issue where there was a very very small chance to roll for a bait stolen event when the player should have earned a "devils hole pupfish" event.
+- Increased the rate at which Triggerfish, Red Drum, Large Salmon, Large Bass, Catfish, Small Salmon, Small Bass, Pinfish, and Seaweed are caught by 3%.
+- The chance to catch a Giant Sea Bass is now 3.5% (was 2%)
+- The chance to catch a Smalltooth Sawfish is now 2.5% (was 2%)
+- The chance to catch an Orante Sleeper Ray is now 0.45% (was 0.2%)
+- The chance to catch a Giant Squid is now 0.2% (was 0.15%)
+- Reduced the rate of the Bait Stolen fishing event by 3%.
+- The base points value of the Giant Squid is now 20,000 (was 25,000)
+- Reworked the $fish and $sellfish tax system. Now, all fish are taxed by 40% of their catch price, assuming you are level 0. As you rank up your fishing level, your "fish tax reduction %", seen via $myfish, displays how much % off of the 40% tax you have. So if you have 50% tax reduction, your fish will only be taxed for 20% of their sale price. If you have the max value, 100% off, your fish will no longer be taxed at all.
+- The max amount of $fishbait cost increase has been set to 600% (was 1150%)
+- The rate at which a user's bait cost will increase has been slowed down by 50%, meaning it will now take twice as many levels to reach the same bait cost % increase.
+- The rate at which a user's base fish value will go up has been slowed down by 20%. 
+
 ### Version 2.4.4
 - Fixed a bug with $help where it would error on use for all users.
 

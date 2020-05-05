@@ -53,15 +53,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         }
 
 
-        private static int GetTaxedFishPrice(Fish fish, int userFishExp, double taxRate = 0.05)
+        private static int GetTaxedFishPrice(Fish fish, int userFishExp, double defaultTaxRate = 0.40)
         {
             var bonuses = new FishHandler.FishLevelBonuses(userFishExp);
 
-            if (fish.Value * taxRate < 100)
-                taxRate = 0.35;
-
-            taxRate *= (bonuses.TaxReductionPercent / 100);
-            return (int)(fish.Value * (1 - taxRate));
+            var taxPercent = defaultTaxRate * (1 - (bonuses.TaxReductionPercent / 100));
+            return (int)(fish.Value * (1 - taxPercent));
         }
 
         /// <summary>
