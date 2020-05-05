@@ -144,35 +144,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Allows a user to sell a collection of <see cref="Fish"/> en masse.
-        /// This is typically used for selling off all fish of the same type at once.
-        /// This action will add points to the user's account.
-        /// </summary>
-        /// <param name="fishCollection">The collection of fish to sell off.</param>
-        /// <param name="userId">The ID of the user we are selling the fish for.</param>
-        /// <returns></returns>
-        public static async Task SellFishAsync(IEnumerable<Fish> fishCollection, ulong userId)
-        {
-            var user = await GetOrCreateUserAsync(userId);
-            foreach (var fish in fishCollection)
-            {
-                try
-                {
-                    user.Points += Fish.GetPayoutForFish(fish, user.FishExp);
-                    fish.Sold = true;
-
-                    await UpdateAsync(fish);
-                }
-                catch(Exception e)
-                {
-                    await ConsoleLogger.LogAsync(e, LogLvl.WARN);
-                }
-            }
-
-            await UpdateAsync(user);
-        }
-
-        /// <summary>
         /// Returns a List of Fish that belong to the user ID.
         /// </summary>
         /// <param name="fishType">The type of fish we are selling.</param>

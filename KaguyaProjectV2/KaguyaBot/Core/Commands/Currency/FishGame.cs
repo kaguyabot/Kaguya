@@ -224,7 +224,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 var fishString = fishType.ToString().Replace("_", " ").ToLower();
 
                 embed.Description += $"\n\nFish ID: `{fishId}`\n" +
-                                     $"Fish Value: `{value:N0}` points.\n" +
+                                     $"Fish Value (excluding tax): `{value:N0}` points.\n" +
                                      $"Fishing Exp Earned: `{fishExp:N0} exp`\n" +
                                      $"Bait Remaining: `{user.FishBait:N0}`\n\n" +
                                      $"You now have `{fishCount}` `{fishString}`";

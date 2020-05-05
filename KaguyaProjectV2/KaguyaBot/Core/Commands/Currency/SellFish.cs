@@ -73,7 +73,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     true, TimeSpan.FromSeconds(180))
                     .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                     {
-                        await DatabaseQueries.SellFishAsync(allFishToSell, Context.User.Id);
+                        foreach (var fish in allFishToSell)
+                        {
+                            await DatabaseQueries.SellFishAsync(fish, Context.User.Id);
+                        }
+                        
                         await SendBasicSuccessEmbedAsync($"Successfully sold all " +
                                                                          $"`{allFishToSell.Count:N0}` fish!\n\n" +
                                                                          $"`{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}` " +
@@ -110,10 +114,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             if (fishType != null)
             {
                 var ft = Fish.GetFishTypeFromName(fishType);
-                var fish = await DatabaseQueries.GetUnsoldFishForUserAsync(user.UserId);
-                fish = fish.Where(x => x.FishType == ft).ToList();
+                var unsoldFishToSell = await DatabaseQueries.GetUnsoldFishForUserAsync(user.UserId);
+                unsoldFishToSell = unsoldFishToSell.Where(x => x.FishType == ft).ToList();
 
-                if (!fish.Any())
+                if (!unsoldFishToSell.Any())
                 {
                     await SendBasicErrorEmbedAsync($"You don't have any fish of type " +
                                                                    $"`{ft.Humanize()}`. Use the `myfish` command " +
@@ -124,8 +128,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 var massSellEmbed = new KaguyaEmbedBuilder
                 {
                     Title = "Mass-Sell Fish",
-                    Description = $"You have `{fish.Count:N0}` fish of type `{ft.Humanize()}`. Selling these " +
-                                  $"would result in `{Fish.GetPayoutForFish(fish, user.FishExp):N0}` " +
+                    Description = $"You have `{unsoldFishToSell.Count:N0}` fish of type `{ft.Humanize()}`. Selling these " +
+                                  $"would result in `{Fish.GetPayoutForFish(unsoldFishToSell, user.FishExp):N0}` " +
                                   $"points added to your account.\n\n" +
                                   $"Selling these fish will make them untradeable and unsellable. They will now " +
                                   $"merely become a statistic (and a delicious meal for someone else).\n\n" +
@@ -135,14 +139,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                         true, true, TimeSpan.FromSeconds(120))
                     .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                     {
-                        var payout = Fish.GetPayoutForFish(fish, user.FishExp);
+                        foreach (var fish in unsoldFishToSell)
+                        {
+                            await DatabaseQueries.SellFishAsync(fish, user.UserId);
+                        }
+                        
+                        var payout = Fish.GetPayoutForFish(unsoldFishToSell, user.FishExp);
+                        await ConsoleLogger.LogAsync($"User {user.UserId} has mass-sold all of their {ft.Humanize()} " +
+                                                     $"for a payout of {payout:N0} points.", LogLvl.INFO);
+                        
                         await c.Channel.SendBasicSuccessEmbedAsync($"Great! I was able to find a buyer for " +
                                                                    $"all of your `{ft.Humanize()}`, resulting " +
                                                                    $"in a payout of `{payout:N0}` " +
                                                                    $"points after taxes.");
-                        await DatabaseQueries.SellFishAsync(fish, user.UserId);
-                        await ConsoleLogger.LogAsync($"User {user.UserId} has mass-sold all of their {ft.Humanize()} " +
-                                                     $"for a payout of {payout:N0} points.", LogLvl.INFO);
+                        
                     })
                     .AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
                         await c.Channel.SendBasicErrorEmbedAsync("Okay, no action will be taken.")));

@@ -68,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 allTimeFishValue += fish.Value;
                 if (!fish.Sold)
-                    curFishValue += fish.Value;
+                    curFishValue += Fish.GetPayoutForFish(fish, user.FishExp);
             }
 
             foreach (var dic in countFishDicts)

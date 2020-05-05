@@ -1,3 +1,7 @@
+### Version 2.5.1
+- Attempted to fix the bug with $sf all where points would sometimes not be added to the user's account.
+- When catching a new fish, the untaxed fish value is now shown with a proper label.
+
 ### Version 2.5
 - $flb now shows how many total fish the top 10 users have caught.
 - Reduced the amount of fish EXP players earn when catching a giant squid or big kahuna.
