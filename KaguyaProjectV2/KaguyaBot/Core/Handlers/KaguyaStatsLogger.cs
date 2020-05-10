@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         {
             var client = ConfigProperties.Client;
 
-            Timer timer = new Timer(10000);
+            Timer timer = new Timer(120000);
             timer.Enabled = true;
             timer.AutoReset = true;
             timer.Elapsed += async (s, e) =>

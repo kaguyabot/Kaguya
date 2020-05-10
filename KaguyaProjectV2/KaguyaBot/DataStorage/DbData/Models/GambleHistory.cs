@@ -1,4 +1,5 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
@@ -11,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "Action"), NotNull]
         public GambleAction Action { get; set; }
         [Column(Name = "ActionString"), NotNull]
-        public string ActionString { get; set; }
+        public string ActionString => Action.Humanize(LetterCasing.AllCaps);
         [Column(Name = "Bet"), NotNull]
         public int Bet { get; set; }
         /// <summary>
@@ -46,6 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 
     public enum GambleAction
     {
-        BET_ROLL
+        BET_ROLL,
+        DICE_ROLL
     }
 }

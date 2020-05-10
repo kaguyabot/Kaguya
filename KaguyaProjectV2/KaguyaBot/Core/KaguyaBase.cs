@@ -62,5 +62,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
             await SendEmbedAsync(embed);
         }
+
+        /// <summary>
+        /// Sends a very generic error message stating "Sorry, this feature is only
+        /// available to Kaguya Premium subscribers and Kaguya Premium servers.
+        /// </summary>
+        /// <returns></returns>
+        public async Task SendPremiumError()
+        {
+            var embed = new KaguyaEmbedBuilder(EmbedColor.RED)
+            {
+                Description = $"Sorry, this feature is only available to [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
+                              $"subscribers and their servers."
+            };
+
+            await SendEmbedAsync(embed);
+        }
     }
 }

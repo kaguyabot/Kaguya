@@ -75,13 +75,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     {
                         foreach (var fish in allFishToSell)
                         {
-                            await DatabaseQueries.SellFishAsync(fish, Context.User.Id);
+                            DatabaseQueries.SellFish(fish, Context.User.Id);
                         }
                         
                         await SendBasicSuccessEmbedAsync($"Successfully sold all " +
-                                                                         $"`{allFishToSell.Count:N0}` fish!\n\n" +
-                                                                         $"`{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}` " +
-                                                                         $"points have been added to your balance.");
+                                                         $"`{allFishToSell.Count:N0}` fish!\n\n" +
+                                                         $"`{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}` " +
+                                                         $"points have been added to your balance.\n" +
+                                                         $"New total points: `{user.Points:N0}`");
                     })
                     .AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
                         await c.Channel.SendBasicErrorEmbedAsync("Okay, I won't take any action.")));
@@ -120,8 +121,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 if (!unsoldFishToSell.Any())
                 {
                     await SendBasicErrorEmbedAsync($"You don't have any fish of type " +
-                                                                   $"`{ft.Humanize()}`. Use the `myfish` command " +
-                                                                   $"to view what fish you have!");
+                                                   $"`{ft.Humanize()}`. Use the `myfish` command " +
+                                                   $"to view what fish you have!");
                     return;
                 }
 
@@ -141,7 +142,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     {
                         foreach (var fish in unsoldFishToSell)
                         {
-                            await DatabaseQueries.SellFishAsync(fish, user.UserId);
+                            DatabaseQueries.SellFish(fish, user.UserId);
                         }
                         
                         var payout = Fish.GetPayoutForFish(unsoldFishToSell, user.FishExp);
@@ -169,8 +170,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            await DatabaseQueries.SellFishAsync(fishToSell, user.UserId);
-
+            DatabaseQueries.SellFish(fishToSell, user.UserId);
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully sold your `{fishToSell.FishType.Humanize()}`!\n\n" +

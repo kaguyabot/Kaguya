@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
@@ -81,8 +82,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
             else
             {
-                user.Points -= points;
+                payout = -points;
+                user.Points -= payout;
             }
+            
+            var gambleH = new GambleHistory
+            {
+                UserId = user.UserId,
+                Action = GambleAction.DICE_ROLL,
+                Bet = points,
+                Payout = payout,
+                Roll = combinedScore,
+                Time = DateTime.Now.ToOADate(),
+                Winner = winner,
+                User = user
+            };
+            await DatabaseQueries.InsertAsync(gambleH);
 
             string formattedPayout = winner ? $"+{payout:N0}" : $"-{points:N0}";
             var embed = new KaguyaEmbedBuilder(eColor)

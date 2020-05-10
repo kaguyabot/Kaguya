@@ -87,7 +87,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 UserId = user.UserId,
                 Action = GambleAction.BET_ROLL,
-                ActionString = GambleAction.BET_ROLL.ToString(),
                 Bet = bet,
                 Payout = payout,
                 Roll = roll,

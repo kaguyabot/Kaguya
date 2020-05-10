@@ -1,3 +1,6 @@
+### Version 2.5.2
+- Forces the database query for $sellfish to be synchronous, hopefully fixing the existing bug where sometimes a user's fish can be sold yet the points aren't added.
+
 ### Version 2.5.1
 - Attempted to fix the bug with $sf all where points would sometimes not be added to the user's account.
 - When catching a new fish, the untaxed fish value is now shown with a proper label.

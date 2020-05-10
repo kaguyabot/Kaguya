@@ -125,22 +125,24 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <summary>
         /// Sells a <see cref="Fish"/> to the "market", then adds the value of the fish to the
         /// <see cref="User"/>'s points balance. This action will add the points to the user's account.
+        ///
+        /// This method is synchronous as of v2.5.2 due to errors relating to users not getting points when mass-selling fish.
         /// </summary>
         /// <param name="fish">The fish to sell.</param>
         /// <param name="userId">The ID of the user to add the value of the fish to.</param>
         /// <returns></returns>
-        public static async Task SellFishAsync(Fish fish, ulong userId)
+        public static void SellFish(Fish fish, ulong userId)
         {
-            var user = await GetOrCreateUserAsync(userId);
+            var user = GetOrCreateUserAsync(userId).Result;
 
             user.Points += Fish.GetPayoutForFish(fish, user.FishExp);
             fish.Sold = true;
 
             using (var db = new KaguyaDb())
             {
-                await db.UpdateAsync(fish);
-                await db.UpdateAsync(user);
-            }
+                db.UpdateAsync(fish);
+                db.UpdateAsync(user);
+            }    
         }
 
         /// <summary>
