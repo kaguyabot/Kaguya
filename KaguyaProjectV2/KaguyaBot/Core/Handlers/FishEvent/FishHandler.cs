@@ -13,8 +13,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
     public static class FishHandler // Fish level-up handler.
     {
         public const int MAX_LUCK = 36;
-        public const int MAX_VALUE = 285;
-        public const int MAX_BAIT = 600;
+        public const int MAX_VALUE = 245;
+        public const int MAX_BAIT = 1200;
         public const int MAX_TAX = 100;
         public static async Task OnFish(FishHandlerEventArgs args)
         {
@@ -139,7 +139,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                 // Fish level bonus modifier formulas.
                 BonusLuckPercent = Math.Sqrt((double)fishExp / 10000) * 13.5;
                 BonusFishValuePercent = Math.Sqrt((double)fishExp / 210) * 8;
-                BaitCostIncreasePercent = Math.Sqrt((double)fishExp / 15) * 5;
+                BaitCostIncreasePercent = Math.Sqrt(fishExp) * 3;
                 TaxReductionPercent = fishLvl / 1.50;
 
                 if (BonusLuckPercent > MAX_LUCK)

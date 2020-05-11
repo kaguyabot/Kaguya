@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class AssignAllRoles : KaguyaBase
     {
-        [PremiumCommand]
+        [PremiumUserCommand]
         [Command("AssignAllRoles", RunMode = RunMode.Async)]
         [Alias("aaroles", "aa")]
         [Summary("Assigns every single role in the server to a user, or list of users.")]

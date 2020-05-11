@@ -114,7 +114,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute), we add the same thing to the start of the new line.
                     Name = "Syntax",
                     Value =
-                        $"`{baseHelpAlias} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]} ", cmdInfo.Remarks.Split("\n"))}`",
+                        $"`{baseHelpAlias} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]} ", cmdInfo.Remarks.Split("\n"))}`".Replace(" `", "`"),
                     IsInline = false,
                 }
             };
@@ -137,7 +137,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         private static string[] GetCommandPermissions(CommandInfo cmdInfo) =>
             cmdInfo.Preconditions
                 .Where(x => x is OwnerCommandAttribute ||
-                            x is RequireUserPermissionAttribute || x is PremiumCommandAttribute ||
+                            x is RequireUserPermissionAttribute || x is PremiumUserCommandAttribute ||
                             x is NsfwCommandAttribute)
                 .Select(x =>
                 {
@@ -145,8 +145,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     {
                         case OwnerCommandAttribute _:
                             return "Bot Owner";
-                        case PremiumCommandAttribute _:
-                            return "Kaguya Premium";
+                        case PremiumUserCommandAttribute _:
+                            return "Kaguya Premium (Key Redeemer)";
+                        case PremiumServerCommandAttribute _:
+                            return "Kaguya Premium (Server Member)";
                         case NsfwCommandAttribute _:
                             return "Invoke from NSFW-marked channel";
                     }

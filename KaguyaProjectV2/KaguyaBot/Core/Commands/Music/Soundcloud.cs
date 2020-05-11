@@ -10,7 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Soundcloud : KaguyaBase
     {
-        [PremiumCommand]
+        [PremiumUserCommand]
         [MusicCommand]
         [Command("Soundcloud")]
         [Alias("sc")]

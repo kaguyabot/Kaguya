@@ -11,7 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
     public class AddReaction : KaguyaBase
     {
         [FunCommand]
-        [PremiumCommand]
+        [PremiumUserCommand]
         [Command("React")]
         [Summary("Takes a line of text and message ID and adds a reaction to the message. If no message ID is specified, the command-invoking " +
             "message will be the recipient of the reactions.")]

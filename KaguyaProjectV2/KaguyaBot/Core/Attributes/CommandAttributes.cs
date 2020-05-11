@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 
 #pragma warning disable 1998
 
@@ -67,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    internal class PremiumCommandAttribute : PreconditionAttribute
+    internal class PremiumServerCommandAttribute : PreconditionAttribute
     {
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
@@ -75,9 +76,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
             var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id).Result;
             return Task.FromResult(server.IsPremium || user.IsBotOwner || user.IsPremiumAsync().Result
                 ? PreconditionResult.FromSuccess()
-                : PreconditionResult.FromError("Sorry, but this server must be of premium status in order to use this command. " +
-                                               "If the server isn't premium, this command may only be used by the holder " +
-                                               "of a valid, unexpired Kaguya Premium key."));
+                : PreconditionResult.FromError($"Sorry, but this server must be of [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
+                                               "status in order to use this command. This command may be used anywhere by " +
+                                               "the key redeemer."));
+        }
+    }
+    
+    [AttributeUsage(AttributeTargets.Method)]
+    internal class PremiumUserCommandAttribute : PreconditionAttribute
+    {
+        public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
+        {
+            var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id).Result;
+            return Task.FromResult(user.IsBotOwner || user.IsPremiumAsync().Result
+                ? PreconditionResult.FromSuccess()
+                : PreconditionResult.FromError("This command may only be executed by the redeemer of a " +
+                                               $"[Kaguya Premium]({ConfigProperties.KaguyaStore}) key."));
         }
     }
 

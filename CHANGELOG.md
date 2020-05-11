@@ -1,3 +1,9 @@
+### Version 2.6
+- New command: $weekly - Receive weekly bonus points! (Premium only)
+- Fixed a bug where the wrong cooldown was displayed when trying to use NSFW images.
+- Updated cooldown message for $dailyloot.
+- Reversed some changes relating to fish bait cost % increases. I did some math and on average, this should result in very balanced fish bait costs/values for fish.
+
 ### Version 2.5.2
 - Forces the database query for $sellfish to be synchronous, hopefully fixing the existing bug where sometimes a user's fish can be sold yet the points aren't added.
 

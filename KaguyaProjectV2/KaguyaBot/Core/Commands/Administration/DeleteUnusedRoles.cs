@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class DeleteUnusedRoles : KaguyaBase
     {
         [DangerousCommand]
-        [PremiumCommand]
+        [PremiumUserCommand]
         [AdminCommand]
         [Command("DeleteUnusedRoles")]
         [Summary("Deletes all roles in the current server " +

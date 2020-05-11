@@ -1,16 +1,19 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
     public abstract class KaguyaBase : InteractiveBase<ShardedCommandContext>
     {
-        public static DiscordShardedClient Client = ConfigProperties.Client;
+        public static readonly DiscordShardedClient Client = ConfigProperties.Client;
 
         /// <summary>
         /// Sends an unbuilt <see cref="EmbedBuilder"/> to the current <see cref="ICommandContext"/>'s <see cref="ITextChannel"/>.
@@ -19,7 +22,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         /// <returns></returns>
         public async Task SendEmbedAsync(EmbedBuilder embed)
         {
-            await Context.Channel.SendMessageAsync(embed: embed.Build());
+            try
+            {
+                await Context.Channel.SendMessageAsync(embed: embed.Build());
+            }
+            catch (Exception e)
+            {
+                await ConsoleLogger.LogAsync("An exception occurred when trying to send an embedded message " +
+                                       $"in guild {Context.Guild} | {Context.Guild.Id}.\n" +
+                                       $"Attempting to DM user...", LogLvl.ERROR);
+                try
+                {
+                    embed.Description += "\n\n**NOTE: You are receiving this response in your DM " +
+                                         "because I was unable to send it in the channel the command was " +
+                                         "executed from! Commands do not work through DMs!!\n\n" +
+                                         "Please report this to this server's Administration.**";
+                    await Context.User.SendMessageAsync(embed: embed.Build());
+                }
+                catch (Exception ex)
+                {
+                    await ConsoleLogger.LogAsync("I was unable to send the user the embed through their DMs either!", LogLvl.ERROR);
+                }
+            }
         }
 
         /// <summary>

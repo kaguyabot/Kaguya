@@ -29,8 +29,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new ExpCommandAttribute(), new FunCommandAttribute(),
                 new HelpCommandAttribute(), new MusicCommandAttribute(),
                 new NsfwCommandAttribute(), new OsuCommandAttribute(),
-                new UtilityCommandAttribute(), new PremiumCommandAttribute(),
-                new OwnerCommandAttribute()
+                new UtilityCommandAttribute(), new PremiumServerCommandAttribute(),
+                new PremiumUserCommandAttribute(), new OwnerCommandAttribute()
             };
 
             var pages = ReturnPages().ToList();
@@ -43,13 +43,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 foreach (var attr in attributes)
                 {
                     // We skip this attribute because it no longer has a page of its own.
-                    if (attr.GetType() == typeof(PremiumCommandAttribute))
+                    if (attr.GetType() == typeof(PremiumUserCommandAttribute) || attr.GetType() == typeof(PremiumServerCommandAttribute))
                         continue;
                     
                     string warn = "";
                     string premium = "";
                     
-                    if (cmd.Preconditions.Contains(attributes[9]))
+                    if (cmd.Preconditions.Contains(attributes[9]) || cmd.Preconditions.Contains(attributes[10]))
                         premium = "{$}";
                     
                     if (cmd.Attributes.Contains(attr) || cmd.Preconditions.Contains(attr))

@@ -23,8 +23,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             if (!user.CanGetDailyPoints)
             {
-                var dt = DateTime.FromOADate(user.LastDailyBonus).AddHours(24);
-                await SendBasicErrorEmbedAsync($"You must wait `{dt.Humanize(false)}` " +
+                var ts = DateTime.FromOADate(user.LastDailyBonus).AddHours(24) - DateTime.Now;
+                await SendBasicErrorEmbedAsync($"You must wait `{ts.Humanize(2)}` " +
                                                $"before you may claim this bonus.");
                 return;
             }

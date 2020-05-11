@@ -66,6 +66,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public double LastGivenExp { get; set; }
         [Column(Name = "LastDailyBonus"), NotNull]
         public double LastDailyBonus { get; set; }
+        [Column(Name = "LastWeeklyBonus"), NotNull]
+        public double LastWeeklyBonus { get; set; }
         [Column(Name = "LastGivenRep"), NotNull]
         public double LastGivenRep { get; set; }
         [Column(Name = "LastRatelimited"), NotNull]
@@ -117,6 +119,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetDailyPoints => LastDailyBonus < DateTime.Now.AddHours(-24).ToOADate();
+        public bool CanGetWeeklyPoints => LastWeeklyBonus < DateTime.Now.AddDays(-7).ToOADate();
         public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
 
         /// <summary>

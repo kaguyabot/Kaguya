@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
 {
     public class ServerStats : KaguyaBase
     {
-        [PremiumCommand]
+        [PremiumServerCommand]
         [AdminCommand]
         [Command("ServerStats")]
         [Alias("ss")]

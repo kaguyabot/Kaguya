@@ -10,7 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class TwitchAudio : KaguyaBase
     {
-        [PremiumCommand]
+        [PremiumUserCommand]
         [MusicCommand]
         [Command("TwitchAudio")]
         [Alias("ta")]
