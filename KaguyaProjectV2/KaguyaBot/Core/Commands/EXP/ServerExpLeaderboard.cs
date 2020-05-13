@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
@@ -45,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 embed.Fields.Add(new EmbedFieldBuilder
                 {
                     IsInline = false,
-                    Name = $"{i}. {socketUser?.ToString() ?? $"[Unknown: {user.UserId}]"}",
+                    Name = $"{i}. {socketUser?.ToString().Split('#').First() ?? $"[Unknown User: {user.UserId}]"}",
                     Value = $"Level: {user.ServerLevel(server):N0} ({user.PercentToNextServerLevel(server) * 100:N0}% {Centvrio.Emoji.Arrow.Right}" +
                             $" Lvl {user.ServerLevel(server) + 1:N0}) " +
                             $"- Exp: {element.Exp:N0}"

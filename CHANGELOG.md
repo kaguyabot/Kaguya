@@ -1,3 +1,6 @@
+### Version 2.6.1
+- Removed discriminators from all public leaderboards in an effort to protect the privacy of users.
+
 ### Version 2.6
 - New command: $weekly - Receive weekly bonus points! (Premium only)
 - Fixed a bug where the wrong cooldown was displayed when trying to use NSFW images.

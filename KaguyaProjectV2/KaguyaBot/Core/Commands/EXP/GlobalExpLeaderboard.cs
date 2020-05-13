@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 embed.Fields.Add(new EmbedFieldBuilder
                 {
                     IsInline = false,
-                    Name = $"{i}. {socketUser?.ToString() ?? $"[Unknown: {user.UserId}]"}",
+                    Name = $"{i}. {socketUser?.ToString().Split('#').First() ?? $"[Unknown User: {user.UserId}]"}",
                     Value = $"Level: {user.GlobalLevel():N0} ({user.PercentToNextLevel() * 100:N0}% {Centvrio.Emoji.Arrow.Right}" +
                             $" Lvl {user.GlobalLevel() + 1:N0}) " +
                             $"- Exp: {user.Experience:N0}"
