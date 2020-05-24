@@ -7,14 +7,6 @@
 /KaguyaProjectV2/Resources
 /Kaguya/KaguyaWebBlazor/*
 
-# Blazor
-/KaguyaWebBlazor/bin/Debug/netcoreapp3.0
-/KaguyaWebBlazor/bin/Release/netcoreapp3.0
-/KaguyaWebBlazor/obj/Debug/netcoreapp3.0
-/KaguyaWebBlazor/bin
-/KaguyaWebBlazor/obj
-/KaguyaWebBlazor/.vs/*/
-
 *.suo
 KaguyaProjectV2/Properties/launchSettings.json
 KaguyaProjectV2/LavalinkServer/logs/spring.log
