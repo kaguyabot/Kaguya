@@ -1,3 +1,7 @@
+### Version 2.6.3
+- Fixed a bug with $h tg where the help command could not be displayed.
+- Fixed a bug where interactive reactions would not work.
+
 ### Version 2.6.2
 - Fixed a bug with $fr where phrases wouldn't be removed.
 - Fixed a bug with $dice where losers would still be given points as if they had won.

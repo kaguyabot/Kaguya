@@ -13,6 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Alias("tg")]
         [Summary("Toggles this server's greeting message. If it is currently disabled, " +
                  "this command will enable it (and vice versa).")]
+        [Remarks("")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.SendMessages)]
         public async Task Command()

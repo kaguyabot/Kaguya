@@ -25,7 +25,6 @@
   <ItemGroup>
     <PackageReference Include="BooruSharp" Version="1.4.7" />
     <PackageReference Include="Centvrio.Emoji" Version="1.1.5" />
-    <PackageReference Include="Discord.Addons.PassiveInteractive" Version="2.0.4" />
     <PackageReference Include="Discord.Net" Version="2.2.0" />
     <PackageReference Include="DiscordBotsList.Api" Version="1.4.0" />
     <PackageReference Include="Humanizer" Version="2.7.9" />
@@ -43,6 +42,15 @@
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
     <PackageReference Include="TwitchLib" Version="3.1.0" />
     <PackageReference Include="Victoria" Version="5.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Discord.Addons.Interactive">
+      <HintPath>..\..\Discord.Addons.Interactive\Discord.Addons.Interactive\bin\Release\netstandard2.0\Discord.Addons.Interactive.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Addons.Interactive, Version=2.0.3.1, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Discord.Addons.Interactive\Discord.Addons.Interactive\bin\Release\netstandard2.0\Discord.Addons.Interactive.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
