@@ -1,14 +1,13 @@
-﻿using System.Text;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Configurations.Models;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -120,7 +119,25 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetDailyPoints => LastDailyBonus < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetWeeklyPoints => LastWeeklyBonus < DateTime.Now.AddDays(-7).ToOADate();
+        public Inventory Inventory => new Inventory(UserId);
         public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
+        
+        //todo: Test
+        public bool HasActiveBonus(ConsumableItem consumableItem)
+        {
+            var matches = DatabaseQueries.GetAllForUserAsync<UserConsumable>(UserId,
+                x => x.HasConsumed && x.Expiration > DateTime.Now.ToOADate() && x.ConsumableItem == consumableItem).Result;
+
+            return matches.Count > 0;
+        }
+
+        public bool HasActiveBonus(Tool tool)
+        {
+            var matches = DatabaseQueries.GetAllForUserAsync<UserTool>(UserId,
+                x => x.CurrentDurability > 0 && x.Tool == tool).Result;
+
+            return matches.Count > 0;
+        }
 
         /// <summary>
         /// Adds the specified number of points to the user.

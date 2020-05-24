@@ -83,7 +83,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             else
             {
                 payout = -points;
-                user.Points -= payout;
+                user.Points += payout; // We are adding a negative number.
             }
             
             var gambleH = new GambleHistory

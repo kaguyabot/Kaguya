@@ -153,7 +153,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             if (muteRole == null)
             {
-                await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
+                await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, Color.Default, false, false, null);
                 await ConsoleLogger.LogAsync($"New mute role created in guild [Name: {guild.Name} | ID: {guild.Id}]",
                     LogLvl.DEBUG);
 
@@ -236,7 +236,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             if (muteRole == null)
             {
-                await guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None);
+                await guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, Color.Default, false, false, null);
                 await ConsoleLogger.LogAsync($"New mute role created in guild [Name: {guild.Name} | ID: {guild.Id}]",
                     LogLvl.DEBUG);
 

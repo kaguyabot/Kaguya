@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 foreach (var role in roleNames)
                 {
                     embed.AddField("Role Created", $"`{role}` has been created.");
-                    await Context.Guild.CreateRoleAsync(role);
+                    await Context.Guild.CreateRoleAsync(role, GuildPermissions.None, Color.Default, false, false, null);
                 }
                 await ReplyAsync(embed: embed.Build());
             }
@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     Description = $"**{Context.User.Mention} Successfully created role `{roleNames[0]}`**"
                 };
-                await Context.Guild.CreateRoleAsync(roleNames[0]);
+                await Context.Guild.CreateRoleAsync(roleNames[0], GuildPermissions.None, Color.Default, false, false, null);
 
                 await ReplyAsync(embed: embed.Build());
             }

@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Collections.Generic;
+using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -40,25 +41,54 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 return;
             }
 
+            int remCount = 0;
+            bool matches = false;
             foreach (string element in args)
             {
-                var fp = new FilteredPhrase
-                {
-                    ServerId = server.ServerId,
-                    Phrase = element
-                };
+                if (!allFp.Any(x => x.Phrase.ToLower() == element.ToLower() && x.ServerId == server.ServerId)) continue;
 
-                if (!allFp.Contains(fp)) continue;
+                await DatabaseQueries.DeleteAsync(allFp.FirstOrDefault(x =>
+                    x.Phrase.ToLower() == element.ToLower() && x.ServerId == server.ServerId));
 
-                await DatabaseQueries.DeleteAsync(fp);
-                await ConsoleLogger.LogAsync($"Server {server.ServerId} has removed the phrase \"{element}\" from their word filter.", DataStorage.JsonStorage.LogLvl.DEBUG);
+                matches = true;
+                remCount++;
+                
+                await ConsoleLogger.LogAsync($"Server {server.ServerId} has removed the phrase \"{element}\" from their word filter.", 
+                    DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 
-            var embed = new KaguyaEmbedBuilder
+            KaguyaEmbedBuilder embed;
+
+            if (!matches)
             {
-                Description = $"Successfully removed {args.Length} phrase{s} from the filter."
-            };
-            embed.SetColor(EmbedColor.VIOLET);
+                embed = new KaguyaEmbedBuilder(EmbedColor.RED)
+                {
+                    Description = "The phrases you wrote here are not present in your filter.",
+                    Footer = new EmbedFooterBuilder
+                    {
+                        Text = "If your phrase has a space, wrap it in quotation marks."
+                    }
+                };
+            }
+            else
+            {
+                if (remCount == args.Length)
+                {
+                    embed = new KaguyaEmbedBuilder(EmbedColor.VIOLET)
+                    {
+                        Description = $"Successfully removed `{args.Length:N0}` phrase{s} from the filter."
+                    };
+                }
+                else
+                {
+                    s = remCount == 0 ? "" : "s";
+                    embed = new KaguyaEmbedBuilder(EmbedColor.ORANGE)
+                    {
+                        Description = $"Successfully removed `{remCount:N0}` phrase{s} from the filter.\n" +
+                                      $"`{args.Length - remCount}` phrases did not exist in the filter."
+                    };
+                }
+            }
 
             await ReplyAsync(embed: embed.Build());
         }

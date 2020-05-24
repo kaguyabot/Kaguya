@@ -1,3 +1,7 @@
+### Version 2.6.2
+- Fixed a bug with $fr where phrases wouldn't be removed.
+- Fixed a bug with $dice where losers would still be given points as if they had won.
+
 ### Version 2.6.1
 - Removed discriminators from all public leaderboards in an effort to protect the privacy of users.
 

@@ -31,9 +31,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Remarks("")]
         public async Task Command()
         {
+            const int FISHING_COOLDOWN = 15;
+            const int FISHING_COOLDOWN_PREMIUM = 5;
+            double FISHING_COOLDOWN_BASSMASTER_HAT = (double)FISHING_COOLDOWN / 2;
+            
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-
+            var inventory = user.Inventory;
+            
             if (user.FishBait < 1)
             {
                 var baitEmbed = new KaguyaEmbedBuilder(EmbedColor.RED)
@@ -48,21 +53,38 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 await SendEmbedAsync(baitEmbed);
                 return;
             }
+            
+            bool premium = await user.IsPremiumAsync();
+            bool bassHatBonus = user.HasActiveBonus(Tool.BASSMASTER_HAT);
+            UserTool masterHat = null;
+            
+            if (bassHatBonus)
+            {
+                masterHat = inventory.Tools.Where(x => x.Tool == Tool.BASSMASTER_HAT && x.CurrentDurability > 0)
+                    .OrderByDescending(x => x.Rank).FirstOrDefault();
+            }
 
-            if (user.LastFished >= DateTime.Now.AddSeconds(-15).ToOADate() && !await user.IsPremiumAsync() ||
-                user.LastFished >= DateTime.Now.AddSeconds(-5).ToOADate() && await user.IsPremiumAsync())
+            if (masterHat != null)
+            {
+                // For ranks 2 and beyond, the cooldown is reduced by 1 second for each rank.
+                FISHING_COOLDOWN_BASSMASTER_HAT -= masterHat.Rank - 1;
+            }
+            
+            if (user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN).ToOADate() && !premium && !bassHatBonus ||
+                user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN_PREMIUM).ToOADate() && premium || 
+                user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN_BASSMASTER_HAT).ToOADate() && bassHatBonus)
             {
                 var ts = DateTime.FromOADate(user.LastFished) - DateTime.Now.AddSeconds(-15);
 
-                if (await user.IsPremiumAsync())
-                    ts += TimeSpan.FromSeconds(-10);
+                if (premium)
+                    ts -= TimeSpan.FromSeconds(10);
 
                 var errorEmbed = new KaguyaEmbedBuilder(EmbedColor.RED)
                 {
                     Description = $"Please wait `{ts.Humanize(minUnit: TimeUnit.Second)}` before fishing again."
                 };
 
-                await ReplyAndDeleteAsync("", false, errorEmbed.Build(), TimeSpan.FromSeconds(2.5));
+                await ReplyAndDeleteAsync("", false, errorEmbed.Build(), TimeSpan.FromSeconds(3));
                 return;
             }
 
@@ -75,6 +97,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             Random r = new Random();
             double roll = r.NextDouble();
+            
+            // This rolls from 0.000 -- 1.000. Increased by +0.05 for each hat rank, increasing your chance to keep it
+            // by up to 0.05. By default, hat has a 3% chance to be lost with each fish cast. If you have a 
+            // rank 5 hat though, the chance to lose it is 0.5%.
+            double? bassMasterHatWind = masterHat == null ? null : r.NextDouble() + 0.005 * (masterHat?.Rank - 1);
+            //todo: Keep testing and building out the master hat.
             int fishId = r.Next(int.MaxValue);
             int fishExp;
 
@@ -86,7 +114,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var bonuses = new FishHandler.FishLevelBonuses(user.FishExp);
             roll *= 1 - (bonuses.BonusLuckPercent / 100);
 
-            if (await user.IsPremiumAsync() || server.IsPremium)
+            if (premium || server.IsPremium)
                 roll *= 0.95;
             
             var fishType = GetFishType(roll);
@@ -239,7 +267,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 Text = $"Use the {server.CommandPrefix}myfish command to view your fishing stats!\n" +
                        $"The {server.CommandPrefix}sellfish command may be used to sell your fish."
             };
+            // Fish Embed
             await ReplyAsync(embed: embed.Build());
+            
+            //todo: Add logic for bassmaster hat.
         }
 
         private FishType GetFishType(double roll)
