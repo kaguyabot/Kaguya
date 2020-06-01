@@ -22,6 +22,7 @@ using OsuSharp;
 using System;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.Statistics;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
 using TwitchLib.Api;
 using Victoria;
@@ -187,6 +188,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             if (!allShardsLoggedIn) return;
 #if !DEBUG
+            CachedPopularCommandHandler.Initialize();
             await KaguyaPremiumRoleHandler.Initialize();
             await StatsUpdater.Initialize();
             await KaguyaStatsLogger.Initialize();

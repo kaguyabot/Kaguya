@@ -1,3 +1,7 @@
+### Version 2.6.4
+- Fixed a bug with $stats that would prevent it from executing. The speed of this command has also increased as some data is now cached.
+- Added owner only $advertisestream command.
+
 ### Version 2.6.3
 - Fixed a bug with $h tg where the help command could not be displayed.
 - Fixed a bug where interactive reactions would not work.

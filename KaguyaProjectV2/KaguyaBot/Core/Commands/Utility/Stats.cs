@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.Statistics;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -62,8 +63,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             var cmdsLastDay = await DatabaseQueries.GetAllAsync<CommandHistory>(h => 
                 h.Timestamp >= DateTime.Now.AddHours(-24));
-            var mostPopCommand = await DatabaseQueries.GetMostPopularCommandAsync();
+            Dictionary<string, int> mostPopCommand = CachedPopularCommandHandler.MostPopularCommand;
 
+            string mostPopCommandName = mostPopCommand?.Keys.First();
+            string mostPopCommandCount = mostPopCommand?.Values.First().ToString("N0");
+
+            string mostPopCommandText = "";
+
+            if (mostPopCommandName == null || String.IsNullOrWhiteSpace(mostPopCommandCount))
+            {
+                mostPopCommandText = "Data not loaded into cache yet.";
+            }
+            else
+            {
+                mostPopCommandText = $"{mostPopCommandName} with {int.Parse(mostPopCommandCount.Replace(",", "")):N0} uses.";
+            }
+            
             var fields = new List<EmbedFieldBuilder>
             {
                 new EmbedFieldBuilder
@@ -77,8 +92,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                     Name = "Command Stats",
                     Value = $"Commands Run (Last 24 Hours): `{cmdsLastDay.Count:N0}`\n" +
                             $"Commands Run (All-time): `{await DatabaseQueries.GetCountAsync<CommandHistory>():N0}`\n" +
-                            $"Most Popular Command: `{server.CommandPrefix}{mostPopCommand.Keys.FirstOrDefault()} with " +
-                            $"{mostPopCommand.Values.FirstOrDefault():N0} uses.`"
+                            $"Most Popular Command: `{mostPopCommandText}`"
                 },
                 new EmbedFieldBuilder
                 {

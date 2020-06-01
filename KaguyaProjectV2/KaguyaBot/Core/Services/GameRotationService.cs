@@ -10,9 +10,10 @@ using System.Timers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
-    class GameRotationService
+    public static class GameRotationService
     {
-        public static byte index;
+        private static byte index;
+        private static bool Enabled = true;
         public static async Task Initialize()
         {
             Timer timer = new Timer(600000); // 10 Minutes
@@ -20,6 +21,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             timer.AutoReset = true;
             timer.Elapsed += async (sender, e) =>
             {
+                if (!Enabled)
+                    return;
                 var client = ConfigProperties.Client;
                 var games = new List<Tuple<string, ActivityType>>
                 {
@@ -38,6 +41,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                 index++;
             };
+        }
+
+        /// <summary>
+        /// Pauses the game rotation service for a set duration.
+        /// </summary>
+        /// <param name="duration"></param>
+        public static void Pause(TimeSpan duration)
+        {
+            Enabled = false;
+            Timer timer = new Timer(duration.TotalMilliseconds);
+            timer.Enabled = true;
+            timer.AutoReset = false;
+            timer.Elapsed += (s, e) => Enabled = true;
         }
     }
 }

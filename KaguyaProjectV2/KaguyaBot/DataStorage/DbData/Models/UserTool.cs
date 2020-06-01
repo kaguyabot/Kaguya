@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         DEEP_SEA_FISHING_ROD,
         /// <summary>
-        /// 50% reduced fishing cooldown.
+        /// Reduced fishing cooldown.
         /// </summary>
         BASSMASTER_HAT
     }

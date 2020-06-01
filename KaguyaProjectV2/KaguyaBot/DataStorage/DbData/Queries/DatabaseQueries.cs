@@ -664,24 +664,23 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// Returns the most popular command of all time, with how many uses it has.
         /// </summary>
         /// <returns></returns>
-        public static async Task<Dictionary<string, int>> GetMostPopularCommandAsync()
+        public static Dictionary<string, int> GetMostPopularCommandAsync()
         {
             var dic = new Dictionary<string, int>();
             using (var db = new KaguyaDb())
             {
-                var command = await (from h in db.GetTable<CommandHistory>()
-                                     group h by h.Command
-                                     into grp
-                                     orderby grp.Count() descending
-                                     select grp.First().Command).FirstOrDefaultAsync();
+                var command = from h in db.GetTable<CommandHistory>() select h;
+                var descending = command.GroupBy(x => x.Command);
+                descending = descending.OrderByDescending(x => x.Count());
+                var name = descending.First().Key;
+                    
+                var count = from c in db.GetTable<CommandHistory>()
+                    group c by c.Command
+                    into grp
+                    orderby grp.Count() descending
+                    select grp.Count();
 
-                var count = await (from c in db.GetTable<CommandHistory>()
-                                   group c by c.Command
-                                   into grp
-                                   orderby grp.Count() descending
-                                   select grp.Count()).FirstOrDefaultAsync();
-
-                dic.Add(command, count);
+                dic.Add(name, count.Select(x => x).First());
                 return dic;
             }
         }
