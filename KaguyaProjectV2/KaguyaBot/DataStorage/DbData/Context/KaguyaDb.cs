@@ -25,7 +25,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context
         public ITable<ServerExp> ServerExp => GetTable<ServerExp>();
         public ITable<User> Users => GetTable<User>();
         public ITable<UserConsumable> UserConsumables => GetTable<UserConsumable>();
-        public ITable<UserTool> UserTools => GetTable<UserTool>();
         public ITable<WarnSetting> WarnActions => GetTable<WarnSetting>();
         public ITable<WarnedUser> WarnedUsers => GetTable<WarnedUser>();
     }

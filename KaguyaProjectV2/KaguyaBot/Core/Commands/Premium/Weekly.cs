@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
                 {
                     await DatabaseQueries.UpdateAsync(user);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new KaguyaSupportException("An error occurred when trying to add your weekly points! " +
                                                      "Your weekly cooldown has not been triggered. Please report this bug!");

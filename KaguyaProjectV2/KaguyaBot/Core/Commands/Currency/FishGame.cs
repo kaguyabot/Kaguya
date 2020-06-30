@@ -35,11 +35,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         {
             const int FISHING_COOLDOWN = 15;
             const int FISHING_COOLDOWN_PREMIUM = 5;
-            double FISHING_COOLDOWN_BASSMASTER_HAT = (double)FISHING_COOLDOWN / 2;
             
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var inventory = user.Inventory;
             
             if (user.FishBait < 1)
             {
@@ -57,24 +55,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
             
             bool premium = await user.IsPremiumAsync();
-            bool bassHatBonus = user.HasActiveBonus(Tool.BASSMASTER_HAT);
-            UserTool bassMasterHat = null;
             
-            if (bassHatBonus)
-            {
-                bassMasterHat = inventory.Tools.Where(x => x.Tool == Tool.BASSMASTER_HAT && x.CurrentDurability > 0)
-                    .OrderByDescending(x => x.Rank).FirstOrDefault();
-            }
-
-            if (bassMasterHat != null)
-            {
-                // For ranks 2 and beyond, the cooldown is reduced by 1 second for each rank.
-                FISHING_COOLDOWN_BASSMASTER_HAT -= bassMasterHat.Rank - 1;
-            }
-            
-            if (user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN).ToOADate() && !premium && !bassHatBonus ||
-                user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN_PREMIUM).ToOADate() && premium || 
-                user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN_BASSMASTER_HAT).ToOADate() && bassHatBonus)
+            if (user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN).ToOADate() && !premium ||
+                user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN_PREMIUM).ToOADate() && premium)
             {
                 var ts = DateTime.FromOADate(user.LastFished) - DateTime.Now.AddSeconds(-15);
 
@@ -91,7 +74,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
 
             int value;
-
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"🎣 | {Context.User.Mention} "
@@ -99,8 +81,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             Random r = new Random();
             double roll = r.NextDouble();
-            
-            //todo: Keep testing and building out the master hat.
             int fishId = r.Next(int.MaxValue);
             int fishExp;
 
@@ -267,56 +247,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             };
             // Fish Embed
             await ReplyAsync(embed: embed.Build());
-            await HatDurabilityLogic(inventory);
         }
 
-        private async Task HatDurabilityLogic(Inventory userInventory)
-        {
-            UserTool bassmasterHat = userInventory.Tools?.FirstOrDefault(x => x?.Tool == Tool.BASSMASTER_HAT && x.CurrentDurability > 0);
-
-            if (bassmasterHat == null)
-                return;
-            
-            var r = new Random();
-            var durabilityRng = r.NextDouble();
-            var loseChance = r.NextDouble();
-            bool loseDurability = durabilityRng <= .80 - .05 * (bassmasterHat.Rank - 1); // 80% chance to lose 1 durability on a fish cast, -5% chance for each rank.
-            bool lostHat = loseChance <= .03 - .005 * (bassmasterHat.Rank - 1); // 3% chance to lose hat entirely, -0.5% per rank.
-
-            if (loseDurability)
-            {
-                // Takes away one durability from the hat.
-                bassmasterHat.CurrentDurability -= 1;
-            }
-            
-            if (lostHat)
-            {
-                bassmasterHat.CurrentDurability = 0;
-            }
-
-            if (bassmasterHat.CurrentDurability <= 0)
-            {
-                string[] eventText =
-                {
-                    "has fallen into the water and was swallowed by sharks!",
-                    "was swept away by the wind and was lost in the trees.",
-                    "is damaged beyond repair.",
-                    "was stolen by squirrels while you were in the middle of casting!"
-                };
-
-                int index = r.Next(0, eventText.Length);
-                
-                var embed = new KaguyaEmbedBuilder(EmbedColor.YELLOW)
-                {
-                    Description = $"Oh no! Your `Bassmaster's Hat` {eventText[index]}!"
-                };
-
-                await SendEmbedAsync(embed);
-            }
-
-            //todo: Figure out database updating!
-        }
-        
         private FishType GetFishType(double roll)
         {
             if (roll <= 0.0005) // 1 in 2000 chance. o_o

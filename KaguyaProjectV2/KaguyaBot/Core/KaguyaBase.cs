@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 await Context.Channel.SendMessageAsync(embed: embed.Build());
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await ConsoleLogger.LogAsync("An exception occurred when trying to send an embedded message " +
                                        $"in guild {Context.Guild} | {Context.Guild.Id}.\n" +
@@ -39,7 +39,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                                          "Please report this to this server's Administration.**";
                     await Context.User.SendMessageAsync(embed: embed.Build());
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     await ConsoleLogger.LogAsync("I was unable to send the user the embed through their DMs either!", LogLvl.ERROR);
                 }

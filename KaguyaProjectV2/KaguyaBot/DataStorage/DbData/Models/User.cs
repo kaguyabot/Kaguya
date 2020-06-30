@@ -131,14 +131,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
             return matches.Count > 0;
         }
 
-        public bool HasActiveBonus(Tool tool)
-        {
-            var matches = DatabaseQueries.GetAllForUserAsync<UserTool>(UserId,
-                x => x.CurrentDurability > 0 && x.Tool == tool).Result;
-
-            return matches.Count > 0;
-        }
-
         /// <summary>
         /// Adds the specified number of points to the user.
         /// </summary>

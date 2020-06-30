@@ -1,3 +1,6 @@
+### Version 2.6.5
+- Fixed a bug with $recent not showing the proper time for when the play was performed.
+
 ### Version 2.6.4
 - Fixed a bug with $stats that would prevent it from executing. The speed of this command has also increased as some data is now cached.
 - Added owner only $advertisestream command.

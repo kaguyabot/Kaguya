@@ -56,7 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                             {
                                 await socketUser.SendMessageAsync(embed: _embed.Build());
                             }
-                            catch (HttpException exception)
+                            catch (HttpException)
                             {
                                 await ConsoleLogger.LogAsync($"Attempted to DM user {socketUser.Id} about " +
                                                        $"acheiving the maximum allotted ratelimit strikes, " +

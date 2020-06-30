@@ -9,6 +9,8 @@ using OsuSharp.Oppai;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
+using Humanizer.Localisation;
 
 // ReSharper disable PossibleInvalidOperationException
 
@@ -88,11 +90,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 embed.Description += $"▸ **PP for FC**: `{pp.Pp:N0}pp`\n";
 
                 //Footer
-                var difference = DateTime.UtcNow - osuRecents.Last().Date.Value.ToLocalTime();
-
+                var difference = DateTime.UtcNow - osuRecents.Last().Date.Value;
+                difference = difference.Add(new TimeSpan(0, 4, 0, 0));
+                string humanizedDif = difference.Humanize(2, minUnit: TimeUnit.Second);
+                
                 embed.WithFooter(osuRecents.Count > 1
-                    ? $"{osuPlayer.Username} performed these plays {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago."
-                    : $"{osuPlayer.Username} performed this play {(int)difference.TotalHours} hours {difference.Minutes} minutes and {difference.Seconds} seconds ago.");
+                    ? $"{osuPlayer.Username} performed these plays {humanizedDif} ago."
+                    : $"{osuPlayer.Username} performed this play {humanizedDif} ago.");
             }
 
             await ReplyAsync(embed: embed.Build());
