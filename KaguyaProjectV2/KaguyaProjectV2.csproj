@@ -51,9 +51,6 @@
     <Reference Include="Discord.Addons.Interactive, Version=2.0.3.1, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\Discord.Addons.Interactive\Discord.Addons.Interactive\bin\Release\netstandard2.0\Discord.Addons.Interactive.dll</HintPath>
     </Reference>
-    <Reference Include="Discord.Net.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\Discord.Net\src\Discord.Net.Core\bin\Release\netstandard2.1\Discord.Net.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
