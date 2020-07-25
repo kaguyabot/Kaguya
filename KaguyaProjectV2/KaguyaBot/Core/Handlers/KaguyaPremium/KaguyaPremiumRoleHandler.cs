@@ -26,8 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
                     var kaguyaSupportServer = client.GetGuild(546880579057221644); //Kaguya Support Discord Server
 
                     var premiumUsers = await DatabaseQueries.GetAllAsync<PremiumKey>(x =>
-                    x.Expiration > DateTime.Now.ToOADate() &&
-                    x.UserId != 0);
+                    x.Expiration > DateTime.Now.ToOADate() && x.UserId != 0);
 
                     var validPremium = new List<User>();
                     
@@ -38,39 +37,34 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
                             validPremium.Add(user);
                     }
                     
+                    var premiumRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Id == 657104752559259659);
+                    if (premiumRole == null)
+                    {
+                        await ConsoleLogger.LogAsync("The Kaguya Premium role was found to be null when trying " +
+                                                     "to apply it to a premium user!!", LogLvl.ERROR);
+                        return;
+                    }
+                    
                     foreach (var premUser in validPremium)
                     {
-                        var socketUser = client.GetUser(premUser.UserId);
+                        var guildUser = kaguyaSupportServer.GetUser(premUser.UserId); 
 
-                        if (!socketUser.MutualGuilds.Contains(kaguyaSupportServer))
+                        if (guildUser.Roles.Contains(premiumRole))
                             continue;
 
-                        var premiumRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Id == 657104752559259659);
-                        var kaguyaSuppGuildUser = kaguyaSupportServer.GetUser(socketUser.Id);
-
-                        if (premiumRole is null)
-                        {
-                            await ConsoleLogger.LogAsync("The Kaguya Premium role was found to be null " + 
-                            $"when trying to apply it to user {socketUser}", LogLvl.ERROR);
-                            continue;
-                        }
-
-                        if (kaguyaSuppGuildUser.Roles.Contains(premiumRole))
-                            continue;
-
-                        await kaguyaSuppGuildUser.AddRoleAsync(premiumRole);
-                        await ConsoleLogger.LogAsync($"Premium Subscriber {socketUser} has had their {premiumRole.Name} role given to them in the Kaguya Support server.", LogLvl.INFO);
+                        await guildUser.AddRoleAsync(premiumRole);
+                        await ConsoleLogger.LogAsync($"Premium Subscriber {guildUser} has had their {premiumRole.Name} role given to them in the Kaguya Support server.", LogLvl.INFO);
                     }
 
                     // Check for expired premium users.
-                    var expiredPremiumUsers = await DatabaseQueries.GetAllAsync<PremiumKey>(x => x.Expiration < DateTime.Now.ToOADate() && x.UserId != 0);
-                    foreach (var expPrem in expiredPremiumUsers)
+                    var expiredKeys = await DatabaseQueries.GetAllAsync<PremiumKey>(x => x.Expiration < DateTime.Now.ToOADate() && x.UserId != 0);
+                    foreach (var expKey in expiredKeys)
                     {
                         // If the user is already identified as an active premium subscriber in one server, they aren't an expired user.
-                        if (validPremium.Any(x => x.UserId == expPrem.UserId))
+                        if (validPremium.Any(x => x.UserId == expKey.UserId))
                             continue;
 
-                        var socketUser = client.GetUser(expPrem.UserId);
+                        var socketUser = client.GetUser(expKey.UserId);
                         if (socketUser == null) continue;
 
                         if(!kaguyaSupportServer.Users.Any(x => x.Id == socketUser.Id))
