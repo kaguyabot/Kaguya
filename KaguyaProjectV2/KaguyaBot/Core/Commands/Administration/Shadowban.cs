@@ -52,6 +52,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         /// <returns></returns>
         public async Task AutoShadowbanUserAsync(SocketGuildUser user)
         {
+            // Not try-catched as the exception is handled elsewhere.
+            
             var roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
             await user.RemoveRolesAsync(roles);
 

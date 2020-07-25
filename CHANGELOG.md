@@ -1,3 +1,6 @@
+### Version 2.6.6
+- Fixed a bug with the antiraid service where, if the antiraid service attempted to action a user that was no longer in the server, the bot would crash.
+
 ### Version 2.6.5
 - Fixed a bug with $recent not showing the proper time for when the play was performed.
 

@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="BooruSharp" Version="1.4.7" />
-    <PackageReference Include="Centvrio.Emoji" Version="1.1.5" />
+    <PackageReference Include="Centvrio.Emoji" Version="1.1.6" />
     <PackageReference Include="Discord.Net" Version="2.2.0" />
     <PackageReference Include="DiscordBotsList.Api" Version="1.4.0" />
     <PackageReference Include="Humanizer" Version="2.7.9" />
@@ -50,6 +50,9 @@
     </Reference>
     <Reference Include="Discord.Addons.Interactive, Version=2.0.3.1, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\Discord.Addons.Interactive\Discord.Addons.Interactive\bin\Release\netstandard2.0\Discord.Addons.Interactive.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Discord.Net\src\Discord.Net.Core\bin\Release\netstandard2.1\Discord.Net.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
 

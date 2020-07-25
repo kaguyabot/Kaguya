@@ -32,6 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                     if (server.AntiRaid.Count() > 1)
                     {
+                        // Checks for duplicate antiraid entries in the database. There can only be one.
                         for (int i = 0; i < server.AntiRaid.Count() - 1; i++)
                         {
                             await DatabaseQueries.DeleteAsync(server.AntiRaid.ToList()[i]);
@@ -41,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                                                      $"I have deleted all except one.", LogLvl.WARN);
                     }
 
-                    if (ServerTimers.CachedTimers.All(x => x.ServerId != server.ServerId))
+                    if (!ServerTimers.CachedTimers.Any(x => x.ServerId == server.ServerId))
                     {
                         var newSt = new ServerTimer
                         {
@@ -101,7 +102,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             foreach (var userId in userIds)
             {
                 var guildUser = guild.GetUser(userId);
-                guildUsers.Add(guildUser);
+                
+                if(guildUser != null)
+                    guildUsers.Add(guildUser);
             }
 
             AntiRaidEvent.Trigger(guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
@@ -183,6 +186,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                                                          $"an exception was thrown!!", LogLvl.ERROR);
                         }
                     }
+                    break;
+                default:
+                    await ConsoleLogger.LogAsync("Antiraid service triggered, but no users actioned. " +
+                                                 "Antiraid action string is different than expected. " +
+                                                 "Expected \"mute\" \"kick\" \"shadowban\" OR \"ban\". " +
+                                                 $"Received: '{action.ToLower()}'. " +
+                                                 $"Guild: {guildId}.", LogLvl.ERROR);
                     break;
             }
 

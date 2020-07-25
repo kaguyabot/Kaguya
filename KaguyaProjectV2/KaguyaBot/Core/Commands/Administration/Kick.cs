@@ -46,17 +46,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         /// <returns></returns>
         public async Task AutoKickUserAsync(SocketGuildUser user, string reason)
         {
-            try
-            {
-                await user.KickAsync(reason);
-                await ConsoleLogger.LogAsync($"User auto-kicked. Guild: [Name: {user.Guild.Name} | ID: {user.Guild.Id}] " +
-                                             $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
-            }
-            catch (Exception e)
-            {
-                await ConsoleLogger.LogAsync($"Attempt to auto-kick user has failed in guild " +
-                                        $"[{user.Guild.Name} | {user.Guild.Id}]. Exception: {e.Message}", LogLvl.INFO);
-            }
+            // Not try-catched as the exception is handled elsewhere.
+            await user.KickAsync(reason);
+            await ConsoleLogger.LogAsync($"User auto-kicked. Guild: [Name: {user.Guild.Name} | ID: {user.Guild.Id}] " +
+                                         $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
         }
     }
 }
