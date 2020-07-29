@@ -13,10 +13,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.TypeReaders
         public override async Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
         {
             var result = new List<SocketGuildUser>();
-            var allGuildUsers = await context.Guild
-                .GetUsersAsync();
+            var allGuildUsers = await context.Guild.GetUsersAsync();
 
-            var users = input
+            string[] users = input
                 .ToLower()
                 .Split(' ');
 

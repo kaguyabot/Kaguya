@@ -11,11 +11,13 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.TypeReaders;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -38,6 +40,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public async Task InitializeAsync()
         {
+            _commands.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTr());
+            _commands.AddTypeReader(typeof(Emote), new EmoteTr());
             await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
         }
 

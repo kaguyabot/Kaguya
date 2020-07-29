@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 user.TotalNSFWImages < NSFW_BOMB_COUNT && !await user.IsPremiumAsync() && !server.IsPremium)
             {
                 throw new KaguyaSupportException("You are out of NSFW image uses for right now. Please try again later. " +
-                                                 "One NSFW image is automatically earned every 15 minutes. " +
+                                                 "One NSFW image is automatically earned every 2 hours. " +
                                                  $"[Kaguya Premium Subscribers]({ConfigProperties.KaguyaStore}) may use unlimited NSFW images at " +
                                                  $"anytime.");
             }
