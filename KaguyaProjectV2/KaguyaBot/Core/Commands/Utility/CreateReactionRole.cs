@@ -11,6 +11,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using TwitchLib.Api.Core.Extensions.System;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -25,15 +26,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                  "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
                  "together on a new line.\n\n" +
                  "Note: The emote assigned must be a Discord emote uploaded to this server. " +
-                 "Emojis are not yet supported.")]
-        [Remarks("<message ID> <emoji> <role> {[emoji] [role] ...}")]
+                 "Standard Emojis are not supported.\n\n" +
+                 "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
+                 "Subsequent emote-role pairs can be added seamlessly.")]
+        [Remarks("<message ID> [channel] <emote> <role> {emote role} {...}\n" +
+                 "588369719132684296 :Banger: OG\n" +
+                 "588369719132684296 :PepeJam: \"DJ Master\" :PepeLaugh: Comedian\n" +
+                 "685369725551652584 #role-channel :color-blue: \"Aqua Blue\" :color-red: Crimson")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.AddReactions)]
         [RequireBotPermission(ChannelPermission.ManageRoles)]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
         [RequireBotPermission(ChannelPermission.AddReactions)]
-        public async Task Command(ulong messageId, Emote emote, IRole role, [Remainder] string args = null)
+        public async Task Command(ulong messageId, Emote emote, IRole role, params string[] args)
             => await Command(messageId, (ITextChannel)Context.Channel, emote, role, args);
         
         // Main command logic
@@ -46,59 +52,93 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                  "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
                  "together on a new line.\n\n" +
                  "Note: The emote assigned must be a Discord emote uploaded to this server. " +
-                 "Emojis are not yet supported.")]
-        [Remarks("<message ID> <emoji> <role> {[emoji] [role] ...}")]
+                 "Standard Emojis are not supported.\n\n" +
+                 "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
+                 "Subsequent emote-role pairs can be added seamlessly.")]
+        [Remarks("<message ID> [channel] <emote> <role> {emote role} {...}\n" +
+                 "588369719132684296 :Banger: OG\n" +
+                 "588369719132684296 :PepeJam: \"DJ Master\" :PepeLaugh: Comedian\n" +
+                 "685369725551652584 #role-channel :color-blue: \"Aqua Blue\" :color-red: Crimson")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.AddReactions)]
         [RequireBotPermission(ChannelPermission.ManageRoles)]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
         [RequireBotPermission(ChannelPermission.AddReactions)]
-        public async Task Command(ulong messageId, ITextChannel channel, Emote emote, IRole role, [Remainder]string args = null)
+        public async Task Command(ulong messageId, ITextChannel channel, Emote emote, IRole role, params string[] args)
         {
             IMessage message = await channel.GetMessageAsync(messageId);
-            var emoteRolePair = new Dictionary<Emote, IRole>() { {emote, role} };
-            var argLines = args?.Split("\n");
+            var emoteRolePair = new Dictionary<Emote, IRole> { {emote, role} };
             
-            if (!string.IsNullOrWhiteSpace(args))
+            if (args.Any())
             {
                 // If there aren't an even amount of args, we know the user messed up.
-                if (args.Split(' ').Length % 2 != 0)
+                if (args.Length % 2 != 0)
                 {
-                    throw new KaguyaSupportException("There were an invalid amount of arguments provided. " +
+                    throw new KaguyaSupportException("There were an invalid amount of additional arguments provided. " +
                                                      "Note that for each additional entry, there must be an " +
                                                      "emote followed by a role.");
                 }
 
-                foreach (var line in argLines)
-                {
-                    bool validEmote = false;
-                    bool validRole = false;
-                    var lineSplits = line.Split(" ");
+                string[][] emoteRolePairs = new string[args.Length / 2][];
 
-                    if (Emote.TryParse(lineSplits[0], out Emote emoteResult))
-                        validEmote = true;
-                    
-                    if (MentionUtils.TryParseRole(lineSplits[1], out ulong roleId))
+                for (int i = 0; i < args.Length / 2; i++)
+                {
+                    var rolePair = new string[2];
+
+                    for (int j = 0; j < args.Length; j += 2)
                     {
-                        if (Context.Guild.GetRole(roleId) != null)
-                        {
-                            validRole = true;
-                        }
+                        rolePair[0] = args[j];
+                        rolePair[1] = args[j + 1];
                     }
 
-                    if (validEmote == false || validRole == false)
+                    emoteRolePairs[i] = rolePair;
+                }
+                
+                foreach (var pair in emoteRolePairs)
+                {
+                    string emoteText = pair[0];
+                    string roleText = pair[1];
+                    
+                    bool validEmote = false;
+                    bool validRole = false;
+
+                    if (Emote.TryParse(emoteText, out Emote emoteResult))
+                        validEmote = true;
+
+                    IRole roleResult = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleText.ToLower());
+                    if (roleResult != null)
                     {
-                        throw new KaguyaSupportException("Failed to parse a valid emote and role from provided " +
-                                                         $"input: '{line}'\n\n" +
+                        validRole = true;
+                    }
+                    
+                    //todo: Resolve error: "An item with the same key has already been added. Key: :NepYay:"
+                    if (validEmote == false)
+                    {
+                        throw new KaguyaSupportException("Failed to parse a valid emote from the provided " +
+                                                         $"input: Emote: '{emoteText}'\n\n" +
                                                          $"Note that the emote must be from this server only and " +
                                                          $"cannot be a standard emoji.");
                     }
+
+                    if (validRole == false)
+                    {
+                        throw new KaguyaSupportException("Failed to parse a valid role from the provided " +
+                                                         $"input: Role: '{roleText}'");
+                    }
                     
-                    emoteRolePair.Add(emoteResult, Context.Guild.GetRole(roleId));
+                    emoteRolePair.Add(emoteResult, Context.Guild.GetRole(roleResult.Id));
                 }
             }
 
+            if (message == null)
+            {
+                throw new KaguyaSupportException("The message with this ID could not be found in the specified channel. " +
+                                                 "You must specify the 'channel' argument for this command if you are " +
+                                                 "executing the command from another channel. \n\n" +
+                                                 $"Example: '{{prefix}}crr {messageId} {{#some-channel}} ...'");
+            }
+            
             var respSb = new StringBuilder();
             foreach (var pair in emoteRolePair)
             {

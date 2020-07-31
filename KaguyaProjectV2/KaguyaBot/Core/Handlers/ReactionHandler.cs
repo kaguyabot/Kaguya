@@ -90,7 +90,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             var role = guild.Roles.First(x => x.Id == rrCacheMatch.RoleId);
             var user = reaction.User.Value as SocketGuildUser;
 
-            if (user == null) 
+            if (user == null || user.IsBot) 
                 return; // We sort of already check for this above, this is here just to be safe.
 
             if(added && user.Roles.Any(x => x.Id == role.Id))
