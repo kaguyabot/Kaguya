@@ -43,8 +43,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         /// <summary>
         /// Handles the processing of reaction roles when a new reaction is added to a message.
         /// </summary>
-        public async Task ReactionAdded(Cacheable<IUserMessage, ulong> cache,
-            ISocketMessageChannel channel, SocketReaction reaction)
+        public async Task ReactionChanged(Cacheable<IUserMessage, ulong> cache,
+            ISocketMessageChannel channel, SocketReaction reaction, bool added)
         {
             if (!(channel is SocketGuildChannel guildChannel))
                 return; // The reaction was sent via DM, return.
@@ -92,22 +92,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             if (user == null) 
                 return; // We sort of already check for this above, this is here just to be safe.
-            
-            if(user.Roles.Any(x => x.Id == role.Id))
+
+            if(added && user.Roles.Any(x => x.Id == role.Id))
                 return; // The user already has the role, no need to re-assign.
             
-            
-
             try
             {
-                await user.AddRoleAsync(role);
-                await ConsoleLogger.LogAsync($"User {user.Id} has been given role [Name: {role.Name} | " +
-                                             $"ID: {role.Id}] in guild [Name: {guild.Name} | {guild.Id}] via " +
-                                             $"a Reaction Role.", LogLvl.DEBUG);
+                if (added)
+                {
+                    await user.AddRoleAsync(role);
+                    await ConsoleLogger.LogAsync($"User {user.Id} has been given role [Name: {role.Name} | " +
+                                                 $"ID: {role.Id}] in guild [Name: {guild.Name} | {guild.Id}] via " +
+                                                 $"a Reaction Role.", LogLvl.DEBUG);
+                }
+                else
+                {
+                    await user.RemoveRoleAsync(role);
+                    await ConsoleLogger.LogAsync($"User {user.Id} has had role [Name: {role.Name} | " +
+                                                 $"ID: {role.Id}] removed from them in guild " +
+                                                 $"[Name: {guild.Name} | {guild.Id}] via " +
+                                                 $"a Reaction Role.", LogLvl.DEBUG);
+                }
             }
             catch (Exception e)
             {
-                await ConsoleLogger.LogAsync(e, LogLvl.ERROR);
+                await ConsoleLogger.LogAsync(e);
             }
         }
 

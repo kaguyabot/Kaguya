@@ -210,11 +210,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             
             WarnEvent.OnWarn += WarnHandler.OnWarn;
             FishEvent.OnFish += async args => await FishHandler.OnFish(args);
+            
             _client.UserJoined += GreetingService.Trigger;
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;
             _client.JoinedGuild += NewOwnerNotificationService.Trigger;
+
+            _client.ReactionAdded += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, true);
+            _client.ReactionRemoved += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, false);
             
-            _client.ReactionAdded += reactionHandler.ReactionAdded;
             _lavaNode.OnTrackEnded += MusicService.OnTrackEnd;
         }
 
