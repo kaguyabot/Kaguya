@@ -61,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             if (errorRoles > 0)
             {
                 embed.Description += $"\n\nI failed to assign `{errorRoles.ToWords()}` roles. These " +
-                                     $"roles are managed by integrations or other bots, therefore they " +
+                                     $"roles are managed by integrations or other bots, therefore it " +
                                      $"cannot be assigned to any users.";
             }
 

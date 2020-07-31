@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 {
@@ -80,11 +81,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
 
         public static async Task LogAsync(Exception e, LogLvl logLvl = LogLvl.ERROR)
         {
+            var type = e.GetType();
+            if (type == typeof(KaguyaSupportException) || type == typeof(KaguyaPremiumException))
+                return;
+            
             string logP = LogPrefix(LogLvl.ERROR);
             string contents = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} {logP} Exception thrown: " +
-                              $"{e.Message}.\n Inner Exception Message: {e.InnerException?.Message ?? "NULL"}\n" +
+                              $"{e.Message}.\nInner Exception Message: {e.InnerException?.Message ?? "NULL"}\n" +
                               $"Stack Trace: {e.StackTrace ?? "NULL"}";
-            await LogFinisher(LogLvl.ERROR, contents);
+            await LogFinisher(logLvl, contents);
+        }
+        
+        public static async Task LogAsync(Exception e, string additionalInfo, LogLvl logLvl = LogLvl.ERROR)
+        {
+            var type = e.GetType();
+            if (type == typeof(KaguyaSupportException) || type == typeof(KaguyaPremiumException))
+                return;
+            
+            string logP = LogPrefix(LogLvl.ERROR);
+            string contents = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} {logP} Exception thrown: " +
+                              $"{e.Message}.\nInner Exception Message: {e.InnerException?.Message ?? "NULL"}\n" +
+                              $"Stack Trace: {e.StackTrace ?? "NULL"}\nAdditional Information: {additionalInfo}";
+            await LogFinisher(logLvl, contents);
         }
 
         private static string LogPrefix(LogLvl logLevel)

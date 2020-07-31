@@ -206,11 +206,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void InitializeEventHandlers()
         {
+            var reactionHandler = new ReactionHandler();
+            
             WarnEvent.OnWarn += WarnHandler.OnWarn;
             FishEvent.OnFish += async args => await FishHandler.OnFish(args);
             _client.UserJoined += GreetingService.Trigger;
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;
             _client.JoinedGuild += NewOwnerNotificationService.Trigger;
+            
+            _client.ReactionAdded += reactionHandler.ReactionAdded;
             _lavaNode.OnTrackEnded += MusicService.OnTrackEnd;
         }
 

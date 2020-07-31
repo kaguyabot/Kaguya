@@ -26,12 +26,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.TypeReaders
                     "Could not parse this Emote's ID from the provided input.");
             }
 
-            string emoteName = gifEmote ? emoteSplits[1] : emoteSplits[0];
+            string emoteName = emoteSplits[1];
             
             Emote result = DiscordHelpers.CreateInstance<Emote>(emoteId, emoteName, gifEmote);
             if (context.Guild.Emotes.FirstOrDefault(x => x.Id == emoteId) == null)
             {
-                return TypeReaderResult.FromError(CommandError.ObjectNotFound, "The current guild does not contain this emote.");
+                // If a user copy/pastes a msg with an emote in it instead of typing the emote, look for this emote anyway.
+                var emoteAltPossibility = context.Guild.Emotes.FirstOrDefault(x => x.Name == emoteName);
+
+                if (emoteAltPossibility == null)
+                {
+                    return TypeReaderResult.FromError(CommandError.ObjectNotFound, "The current guild does not contain this emote.");
+                }
+                
+                return TypeReaderResult.FromSuccess(emoteAltPossibility);
             }
             
             return TypeReaderResult.FromSuccess(result);

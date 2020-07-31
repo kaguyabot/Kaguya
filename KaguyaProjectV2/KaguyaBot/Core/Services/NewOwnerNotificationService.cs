@@ -16,15 +16,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             var embed = new KaguyaEmbedBuilder
             {
                 Title = $"Salutations!",
-                Description = $"Greetings, {owner.Username}. Thanks for adding me to your server!\n\n" +
+                Description = $"Greetings, {owner.Username}. Thanks for adding me to your server! " +
                               $"Here's a few tips on how to get started:\n\n" +
                               $"- Kaguya's default prefix is `$`. Use this to invoke all commands. " +
                               $"All commands may be found by typing `$help`.\n" +
                               $"- Change my prefix to something else using `$prefix <new prefix>`. " +
                               $"Example: `$prefix k!`.\n" +
-                              $"- If you forget the prefix, tag me at anytime to use commands.\n" +
-                              $"- I highly advise you read through the FAQ my creator has made! This " +
-                              $"document [can be found here.](https://docs.google.com/document/d/1AWYatYUk3qiDN3OykZhKkQ_1ThVtpilXSjohHeSxE0E/edit)\n\n" +
+                              $"- If you forget the prefix, tag me at anytime to use commands.\n\n" +
                               $"If you need assistance, [click here to join my support server.](https://discord.gg/aumCJhr)\n\n" +
                               $"Enjoy!"
             };

@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
-using KaguyaProjectV2.KaguyaBot.Core.Helpers;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using MoreLinq;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -25,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                  "their reaction, the role will be removed from them.\n\n" +
                  "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
                  "together on a new line.\n\n" +
-                 "Note: The emote assigned must either be a Discord emote uploaded to this server. " +
+                 "Note: The emote assigned must be a Discord emote uploaded to this server. " +
                  "Emojis are not yet supported.")]
         [Remarks("<message ID> <emoji> <role> {[emoji] [role] ...}")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
@@ -46,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                  "their reaction, the role will be removed from them.\n\n" +
                  "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
                  "together on a new line.\n\n" +
-                 "Note: The emote assigned must either be a Discord emote uploaded to this server. " +
+                 "Note: The emote assigned must be a Discord emote uploaded to this server. " +
                  "Emojis are not yet supported.")]
         [Remarks("<message ID> <emoji> <role> {[emoji] [role] ...}")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
@@ -105,14 +104,49 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             {
                 var pEmote = pair.Key;
                 var pRole = pair.Value;
+
+                var rr = new ReactionRole
+                {
+                    EmoteId = emote.Id,
+                    MessageId = message.Id,
+                    RoleId = role.Id,
+                    ServerId = Context.Guild.Id
+                };
+
+                if (pRole.IsManaged)
+                {
+                    throw new KaguyaSupportException($"Role '{pRole.Name}' is managed by an integration or a bot. It may not be " +
+                                                     "assigned to users. Therefore, they may not be assigned to " +
+                                                     "reaction roles either.");
+                }
                 
-                var rr = new ReactionRole(pEmote.Id, pRole.Id, message.Id, Context.Guild.Id);
-                await message.AddReactionAsync(pEmote);
+                try
+                {
+                    await message.AddReactionAsync(pEmote);
+                }
+                catch (Discord.Net.HttpException e)
+                {
+                    if (e.HttpCode == HttpStatusCode.BadRequest)
+                    {
+                        await SendBasicErrorEmbedAsync($"An error occurred when attempting to make the reaction role " +
+                                                       $"for the '{pEmote.Name}' emote. This error occurs when Discord " +
+                                                       $"doesn't know how to process an emote. This can happen if you " +
+                                                       $"copy/paste the emote into the Discord text box instead of " +
+                                                       $"manually typing out the emote yourself. Discord is really " +
+                                                       $"finnicky when it comes to emotes.");
+                        return;
+                    }
+
+                    await SendBasicErrorEmbedAsync($"An unknown error occurred.\n\nDetails: {e}");
+                }
 
                 var possibleMatch = await DatabaseQueries.GetFirstMatchAsync<ReactionRole>(x =>
                     x.EmoteId == pEmote.Id && x.RoleId == pRole.Id && x.MessageId == rr.MessageId);
-
-                if (possibleMatch != null)
+                var messageReactions = message.Reactions;
+                
+                // If the reaction is in the database, and Kaguya has a emote-role pair for this emote, throw an error.
+                if (possibleMatch != null && messageReactions.Keys.Contains(pEmote) && 
+                    messageReactions.GetValueOrDefault(pEmote).IsMe)
                 {
                     throw new KaguyaSupportException($"The emote '{emote}' has already been assigned to role {role} " +
                                                      "as a reaction role.");
@@ -142,7 +176,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 }
             };
 
-            //todo: Come back and continue to fix.
             await ReplyAndDeleteAsync(null, false, embed.Build(), TimeSpan.FromSeconds(30));
         }
     }
