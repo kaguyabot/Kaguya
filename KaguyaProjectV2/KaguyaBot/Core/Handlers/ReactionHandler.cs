@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using System.Timers;
 using Discord;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.Utility;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using MoreLinq.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -25,6 +27,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             _reactionRoleCache ??= GetReactionRoleCache().Result;
             ConsoleLogger.LogAsync("Reaction role cache populated.", LogLvl.DEBUG);
 
+            CreateReactionRole.UpdatedCache += AddToCache;
+            
             if (!CacheTimerEnabled)
             {
                 CacheTimerEnabled = true;
@@ -119,8 +123,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 await ConsoleLogger.LogAsync(e);
             }
         }
-
-        private static async Task<List<ReactionRole>> GetReactionRoleCache()
+        
+        private async Task<List<ReactionRole>> GetReactionRoleCache()
             => await DatabaseQueries.GetAllAsync<ReactionRole>();
+
+        private void AddToCache(IEnumerable<ReactionRole> reactionRoles) => _reactionRoleCache.AddRange(reactionRoles);
+        private void AddToCache(ReactionRole reactionRole) => _reactionRoleCache.Add(reactionRole);
+        private void RemoveFromCache(IEnumerable<ReactionRole> reactionRoles) => 
+            reactionRoles.ForEach(x => _reactionRoleCache.Remove(x));
+        private void RemoveFromCache(ReactionRole reactionRole) => _reactionRoleCache.Remove(reactionRole);
     }
 }

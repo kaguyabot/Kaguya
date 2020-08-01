@@ -11,12 +11,13 @@ using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using TwitchLib.Api.Core.Extensions.System;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
     public class CreateReactionRole : KaguyaBase
     {
+        public static event Action<IEnumerable<ReactionRole>> UpdatedCache; 
+        
         [UtilityCommand]
         [Command("CreateReactionRole")]
         [Alias("crr")]
@@ -82,17 +83,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
                 string[][] emoteRolePairs = new string[args.Length / 2][];
 
-                for (int i = 0; i < args.Length / 2; i++)
+                int count = 0;
+                for (int i = 0; i < args.Length; i += 2)
                 {
                     var rolePair = new string[2];
+                    rolePair[0] = args[i];
+                    rolePair[1] = args[i + 1];
 
-                    for (int j = 0; j < args.Length; j += 2)
-                    {
-                        rolePair[0] = args[j];
-                        rolePair[1] = args[j + 1];
-                    }
-
-                    emoteRolePairs[i] = rolePair;
+                    emoteRolePairs[count] = rolePair;
+                    count++;
                 }
                 
                 foreach (var pair in emoteRolePairs)
@@ -112,7 +111,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                         validRole = true;
                     }
                     
-                    //todo: Resolve error: "An item with the same key has already been added. Key: :NepYay:"
                     if (validEmote == false)
                     {
                         throw new KaguyaSupportException("Failed to parse a valid emote from the provided " +
@@ -138,7 +136,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                                                  "executing the command from another channel. \n\n" +
                                                  $"Example: '{{prefix}}crr {messageId} {{#some-channel}} ...'");
             }
-            
+
+            var cacheToSend = new List<ReactionRole>(emoteRolePair.Count);
+
+            int cacheListIndex = 0;
             var respSb = new StringBuilder();
             foreach (var pair in emoteRolePair)
             {
@@ -147,9 +148,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
                 var rr = new ReactionRole
                 {
-                    EmoteId = emote.Id,
+                    EmoteId = pEmote.Id,
                     MessageId = message.Id,
-                    RoleId = role.Id,
+                    RoleId = pRole.Id,
                     ServerId = Context.Guild.Id
                 };
 
@@ -160,26 +161,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                                                      "reaction roles either.");
                 }
                 
-                try
-                {
-                    await message.AddReactionAsync(pEmote);
-                }
-                catch (Discord.Net.HttpException e)
-                {
-                    if (e.HttpCode == HttpStatusCode.BadRequest)
-                    {
-                        await SendBasicErrorEmbedAsync($"An error occurred when attempting to make the reaction role " +
-                                                       $"for the '{pEmote.Name}' emote. This error occurs when Discord " +
-                                                       $"doesn't know how to process an emote. This can happen if you " +
-                                                       $"copy/paste the emote into the Discord text box instead of " +
-                                                       $"manually typing out the emote yourself. Discord is really " +
-                                                       $"finnicky when it comes to emotes.");
-                        return;
-                    }
-
-                    await SendBasicErrorEmbedAsync($"An unknown error occurred.\n\nDetails: {e}");
-                }
-
                 var possibleMatch = await DatabaseQueries.GetFirstMatchAsync<ReactionRole>(x =>
                     x.EmoteId == pEmote.Id && x.RoleId == pRole.Id && x.MessageId == rr.MessageId);
                 var messageReactions = message.Reactions;
@@ -194,8 +175,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
                 try
                 {
+                    await message.AddReactionAsync(pEmote);
                     await DatabaseQueries.InsertAsync(rr);
+                    
+                    cacheToSend.Insert(cacheListIndex, rr);
                     respSb.AppendLine($"Successfully linked {pEmote} to {pRole.Mention}");
+                }
+                catch (Discord.Net.HttpException e)
+                {
+                    if (e.HttpCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new KaguyaSupportException($"An error occurred when attempting to make the reaction role " +
+                                                         $"for the '{pEmote.Name}' emote. This error occurs when Discord " +
+                                                         $"doesn't know how to process an emote. This can happen if you " +
+                                                         $"copy/paste the emote into the Discord text box instead of " +
+                                                         $"manually typing out the emote yourself. Discord is really " +
+                                                         $"finnicky when it comes to emotes.");
+                    }
+
+                    throw new KaguyaSupportException($"An unknown error occurred.\n\n" +
+                                                     $"Exception Message: {e.Message}\nInner Exception: {e.InnerException}");
                 }
                 catch (Exception e)
                 {
@@ -210,13 +209,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             {
                 Title = "Kaguya Reaction Roles",
                 Description = respSb.ToString(),
-                Footer = new EmbedFooterBuilder()
-                {
-                    Text = "This message will self destruct in 30 seconds..."
-                }
             };
 
-            await ReplyAndDeleteAsync(null, false, embed.Build(), TimeSpan.FromSeconds(30));
+            UpdatedCache?.Invoke(cacheToSend);
+            await SendEmbedAsync(embed);
         }
     }
 }

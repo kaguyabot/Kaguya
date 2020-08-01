@@ -13,14 +13,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 {
     public abstract class KaguyaBase : InteractiveBase<ShardedCommandContext>
     {
-        public static readonly DiscordShardedClient Client = ConfigProperties.Client;
+        protected static readonly DiscordShardedClient Client = ConfigProperties.Client;
 
         /// <summary>
         /// Sends an unbuilt <see cref="EmbedBuilder"/> to the current <see cref="ICommandContext"/>'s <see cref="ITextChannel"/>.
         /// </summary>
         /// <param name="embed"></param>
         /// <returns></returns>
-        public async Task SendEmbedAsync(EmbedBuilder embed)
+        protected async Task SendEmbedAsync(EmbedBuilder embed)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         /// <param name="embed"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task SendEmbedAsync(EmbedBuilder embed, ICommandContext context)
+        protected async Task SendEmbedAsync(EmbedBuilder embed, ICommandContext context)
         {
             await context.Channel.SendMessageAsync(embed: embed.Build());
         }
@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         /// </summary>
         /// <param name="description"></param>
         /// <returns></returns>
-        public async Task SendBasicErrorEmbedAsync(string description)
+        protected async Task SendBasicErrorEmbedAsync(string description)
         {
             var embed = new KaguyaEmbedBuilder(EmbedColor.RED)
             {
@@ -77,27 +77,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         /// </summary>
         /// <param name="description"></param>
         /// <returns></returns>
-        public async Task SendBasicSuccessEmbedAsync(string description)
+        protected async Task SendBasicSuccessEmbedAsync(string description)
         {
             var embed = new KaguyaEmbedBuilder
             {
                 Description = description
-            };
-
-            await SendEmbedAsync(embed);
-        }
-
-        /// <summary>
-        /// Sends a very generic error message stating "Sorry, this feature is only
-        /// available to Kaguya Premium subscribers and Kaguya Premium servers.
-        /// </summary>
-        /// <returns></returns>
-        public async Task SendPremiumError()
-        {
-            var embed = new KaguyaEmbedBuilder(EmbedColor.RED)
-            {
-                Description = $"Sorry, this feature is only available to [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
-                              $"subscribers and their servers."
             };
 
             await SendEmbedAsync(embed);
