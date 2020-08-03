@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     {
                         webBuilder.UseUrls("http://+:80");
                     }
-                    catch (Exception e)
+                    catch (AggregateException e)
                     {
 #pragma warning disable 4014
                         ConsoleLogger.LogAsync("Webhook port 80 already in use! " +
