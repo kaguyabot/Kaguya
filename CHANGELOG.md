@@ -1,3 +1,8 @@
+### Version 2.7
+- New feature: Reaction Roles.
+- Create a reaction role through the $createreactionrole [crr] command!
+    - Please inform @Stage of any bugs you encounter with this feature if you find some.
+
 ### Version 2.6.6
 - Fixed a bug with the antiraid service where, if the antiraid service attempted to action a user that was no longer in the server, the bot would crash.
 
