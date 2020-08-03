@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
@@ -26,8 +27,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command(int level, [Remainder]SocketRole role)
         {
+            const int premiumLimit = Int32.MaxValue;
+            const int regLimit = 3;
+            
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            int limit = server.IsPremium ? 15 : 3;
+            int limit = server.IsPremium ? premiumLimit : regLimit;
 
             if (level < 1)
             {
@@ -43,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 
             if (server.RoleRewards.Count() == limit)
             {
-                string limitStr = (server.IsPremium ? $"Your premium limit: 15." : $"Your non-premium limit: 3.");
+                string limitStr = (server.IsPremium ? $"Your premium limit: {premiumLimit:N0}." : $"Your non-premium limit: {regLimit}.");
                 string baseLimitStr = "You have reached your limit of allowed " +
                                       $"concurrent role rewards. Please delete one " +
                                       $"if you still wish to create this reward.\n\n {limitStr}";
@@ -51,7 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 if (server.IsPremium)
                     throw new KaguyaSupportException(baseLimitStr);
                 else
-                    throw new KaguyaPremiumException("More than 3 role rewards.\n" + baseLimitStr);
+                    throw new KaguyaPremiumException($"More than {regLimit} role rewards.\n" + baseLimitStr);
             }
 
             var rr = new ServerRoleReward

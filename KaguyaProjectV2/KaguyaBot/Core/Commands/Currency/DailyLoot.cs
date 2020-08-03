@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             int exp = 275;
 
             // Premium bonuses
-            if (await user.IsPremiumAsync() || server.IsPremium)
+            if (await user.IsPremiumAsync())
             {
                 points = (int)(points * 1.50);
                 exp = (int)(exp * 1.50);

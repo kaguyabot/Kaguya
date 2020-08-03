@@ -19,9 +19,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
     public static class RateLimitService
     {
+        private const int DURATION_MS = 4250; // 4.25 seconds
+        private const int THRESHOLD_REG = 3;
+        private const int THRESHOLD_PREMIUM = 5;
         public static Task Initialize()
         {
-            Timer timer = new Timer(3700); //3.70 seconds
+            Timer timer = new Timer(DURATION_MS);
             timer.AutoReset = true;
             timer.Enabled = true;
             timer.Elapsed += async (sender, e) =>
@@ -38,8 +41,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                                           $"due to not being ratelimited for 30 days.", LogLvl.INFO);
                     }
 
-                    if (registeredUser.ActiveRateLimit >= 4 && !await registeredUser.IsPremiumAsync() ||
-                        registeredUser.ActiveRateLimit >= 7 && await registeredUser.IsPremiumAsync())
+                    if (registeredUser.LastRatelimited > DateTime.Now.AddSeconds(-30).ToOADate() &&
+                        registeredUser.RateLimitWarnings > 0)
+                        return; // The user has been rate limited within the last 30 seconds.
+                                // Don't accidentally double-rate-limit them.
+
+                    if (registeredUser.ActiveRateLimit >= THRESHOLD_REG && !await registeredUser.IsPremiumAsync() ||
+                        registeredUser.ActiveRateLimit >= THRESHOLD_PREMIUM && await registeredUser.IsPremiumAsync())
                     {
                         registeredUser.LastRatelimited = DateTime.Now.ToOADate();
                         registeredUser.RateLimitWarnings++;

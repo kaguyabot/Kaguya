@@ -1,5 +1,8 @@
 ### Version 2.7.4
 - Fixed a bug where the expiration date when using $redeem on a Premium Key would be incorrect.
+- Adjusted the ratelimit so that it works better with the actual Discord rate limit.
+- Ensured that a user who is spamming commands will not be ratelimited multiple times for a single "spam offence".
+- Premium subscribers now gain access to unlimited role rewards.
 
 ### Version 2.7.3
 - Fixed a bug where commands with reactions attached to them would not execute.
