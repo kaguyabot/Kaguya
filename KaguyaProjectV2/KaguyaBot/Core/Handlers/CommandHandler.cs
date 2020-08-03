@@ -11,11 +11,14 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.TypeReaders;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -38,6 +41,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public async Task InitializeAsync()
         {
+            _commands.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTr());
+            _commands.AddTypeReader(typeof(Emote), new EmoteTr());
             await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
         }
 
@@ -77,7 +82,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             await _commands.ExecuteAsync(context, argPos, _services);
         }
 
-        public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
+        private static async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
             //command is unspecified when there was a search failure (command not found); we don't care about these errors
             if (!command.IsSpecified)
@@ -86,27 +91,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             Server server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
             User user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
 
-            if (result.IsSuccess)
-            {
-                server.TotalCommandCount++;
-                user.ActiveRateLimit++;
-
-                // Providing context as a parameter will automatically log all information about an executed command.
-                await ConsoleLogger.LogAsync(context);
-
-                await DatabaseQueries.InsertAsync(new CommandHistory
-                {
-                    Command = command.Value.Aliases[0],
-                    Timestamp = DateTime.Now,
-                    UserId = context.User.Id,
-                    ServerId = context.Guild.Id
-                });
-                await DatabaseQueries.UpdateAsync(server);
-                await DatabaseQueries.UpdateAsync(user);
-                return;
-            }
-
-            await HandleCommandResult(context, server, result);
+            await HandleCommandResult(command, context, user, server, result);
         }
 
         public async Task<bool> IsFilteredPhrase(ICommandContext context, Server server, IMessage message)
@@ -133,37 +118,104 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             return false;
         }
 
-        private static async Task HandleCommandResult(ICommandContext context, Server server, IResult result)
+        private static async Task HandleCommandResult(Optional<CommandInfo> command, ICommandContext context, User user, 
+            Server server, IResult result)
         {
             string cmdPrefix = server.CommandPrefix;
-            await ConsoleLogger.LogAsync($"Command Failed [Command: {context.Message} | User: {context.User} | Guild: {context.Guild.Id}]", LogLvl.DEBUG);
+            await ConsoleLogger.LogAsync($"Command Failed [Command: {context.Message} | User: {context.User} | " +
+                                         $"Guild: {context.Guild.Id}]", LogLvl.DEBUG);
 
-            if (!result.IsSuccess)
+            if (result.IsSuccess)
             {
-                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
-                {
-                    Title = "Command Failed",
-                    Description = $"Failed to execute command `{context.Message}` \nReason: {result.ErrorReason}\n",
-                    Footer = new EmbedFooterBuilder
-                    {
-                        Text = $"Use {cmdPrefix}h <command> for information on how to use a command!",
-                    },
-                };
-                embed.SetColor(EmbedColor.RED);
+                server.TotalCommandCount++;
+                user.ActiveRateLimit++;
 
-                try
+                // Providing context as a parameter will automatically log all information about an executed command.
+                await ConsoleLogger.LogAsync(context);
+
+                await DatabaseQueries.InsertAsync(new CommandHistory
                 {
-                    await context.Channel.SendEmbedAsync(embed);
-                }
-                catch (Discord.Net.HttpException e)
+                    Command = command.Value.Aliases[0],
+                    Timestamp = DateTime.Now,
+                    UserId = context.User.Id,
+                    ServerId = context.Guild.Id
+                });
+                await DatabaseQueries.UpdateAsync(server);
+                await DatabaseQueries.UpdateAsync(user);
+            }
+            else
+            {
+                if (result is ExecuteResult executeResult && executeResult.Exception != null 
+                && executeResult.Exception.GetType() == typeof(KaguyaSupportException))
                 {
-                    await ConsoleLogger.LogAsync(
-                        $"An exception was thrown when trying to send a command result into a text channel.\n" +
-                        $"Channel: {context.Channel.Id} in guild {context.Guild.Id}\n" +
-                        $"Message: {e.Message}\n" +
-                        $"Stack Trace: {e.StackTrace}",
-                        LogLvl.WARN);
+                    await DisplayKaguyaSupportException(context, result, cmdPrefix);
                 }
+                else
+                {
+                    // The command error isn't a KaguyaSupportException, so throw a generic error message.
+                    await DisplayGenericErrorEmbed(context, result, cmdPrefix);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates and sends an error message to the user upon failed command.
+        /// </summary>
+        private static async Task DisplayGenericErrorEmbed(ICommandContext context, IResult result, string cmdPrefix)
+        {
+            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder(EmbedColor.RED)
+            {
+                Title = "Command Failed",
+                Description = $"Failed to execute command `{context.Message}`\n\nReason: `{result.ErrorReason}`\n",
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = $"Use {cmdPrefix}h <command> for information on how to use a command!",
+                }
+            };
+
+            try
+            {
+                await context.Channel.SendEmbedAsync(embed);
+            }
+            catch (Discord.Net.HttpException e)
+            {
+                await ConsoleLogger.LogAsync(
+                    $"An exception was thrown when trying to send a command error notification into a text channel.\n" +
+                    $"Channel: {context.Channel.Id} in guild {context.Guild.Id}\n" +
+                    $"User Message: {context.Message}\n" +
+                    $"Exception Message: {e.Message}\n" +
+                    $"Stack Trace: {e.StackTrace}",
+                    LogLvl.WARN);
+            }
+        }
+
+        private static async Task DisplayKaguyaSupportException(ICommandContext context, IResult result, string cmdPrefix)
+        {
+            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder(EmbedColor.RED)
+            {
+                Title = "Command Failed",
+                Description = $"Failed to execute command `{context.Message}`\n\nReason: `{result.ErrorReason}`\n\n" +
+                              $"[Kaguya Support](https://discord.gg/aumCJhr)\n" +
+                              $"[Report a bug](https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Bug&template=bug-report.md&title=)",
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = $"Use {cmdPrefix}h <command> for information on how to use a command!",
+                }
+            };
+
+            try
+            {
+                await context.Channel.SendEmbedAsync(embed);
+            }
+            catch (Discord.Net.HttpException e)
+            {
+                await ConsoleLogger.LogAsync(
+                    $"An exception was thrown when trying to send a command error notification into a text channel.\n" +
+                    $"Channel: {context.Channel.Id} in guild {context.Guild.Id}\n" +
+                    $"User Message: {context.Message}\n" +
+                    $"Exception Message: {e.Message}\n" +
+                    $"Stack Trace: {e.StackTrace}",
+                    LogLvl.WARN);
             }
         }
 

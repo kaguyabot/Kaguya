@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using OsuSharp;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.Utility;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.Statistics;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
@@ -187,9 +188,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private async Task InitializeTimers(bool allShardsLoggedIn)
         {
             if (!allShardsLoggedIn) return;
-            await AntiRaidService.Initialize();
+
 #if !DEBUG
-            CachedPopularCommandHandler.Initialize();
+            CachedPopularCommandTimer.Initialize();
+            await AntiRaidService.Initialize();
             await KaguyaPremiumRoleHandler.Initialize();
             await StatsUpdater.Initialize();
             await KaguyaStatsLogger.Initialize();
@@ -206,11 +208,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void InitializeEventHandlers()
         {
+            var reactionHandler = new ReactionHandler();
+            
             WarnEvent.OnWarn += WarnHandler.OnWarn;
             FishEvent.OnFish += async args => await FishHandler.OnFish(args);
+            
             _client.UserJoined += GreetingService.Trigger;
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;
             _client.JoinedGuild += NewOwnerNotificationService.Trigger;
+
+            _client.ReactionAdded += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, true);
+            _client.ReactionRemoved += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, false);
+            
             _lavaNode.OnTrackEnded += MusicService.OnTrackEnd;
         }
 
