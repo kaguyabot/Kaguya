@@ -15,6 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
     public class Config
     {
         private static readonly string resourcesPath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\";
+        private const int CORRECT_ARG_COUNT = 15;
 
         /// <summary>
         /// Retreives a populated <see cref="ConfigModel"/> and also re-populates any necessary data from the Resources folder.
@@ -63,28 +64,30 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 }
             }
 
-            ConfigModel model = new ConfigModel();
-
-            if (args.Length == 14)
+            if (args.Length != CORRECT_ARG_COUNT)
             {
-                model = new ConfigModel
-                {
-                    Token = args[0],
-                    BotOwnerId = args[1].AsUlong(),
-                    LogLevelNumber = args[2].AsInteger(),
-                    DefaultPrefix = args[3],
-                    OsuApiKey = args[4],
-                    TopGGApiKey = args[5],
-                    MySQL_Username = args[6],
-                    MySQL_Password = args[7],
-                    MySQL_Server = args[8],
-                    MySQL_Database = args[9],
-                    TwitchClientId = args[10],
-                    TwitchAuthToken = args[11],
-                    DanbooruUsername = args[12],
-                    DanbooruApiKey = args[13]
-                };
+                throw new Exception("The correct amount of arguments was not specified. " +
+                                    $"Expected {CORRECT_ARG_COUNT}, received {args.Length}");
             }
+            
+            var model = new ConfigModel
+            {
+                Token = args[0],
+                BotOwnerId = args[1].AsUlong(),
+                LogLevelNumber = args[2].AsInteger(),
+                DefaultPrefix = args[3],
+                OsuApiKey = args[4],
+                TopGGApiKey = args[5],
+                MySQL_Username = args[6],
+                MySQL_Password = args[7],
+                MySQL_Server = args[8],
+                MySQL_Database = args[9],
+                TwitchClientId = args[10],
+                TwitchAuthToken = args[11],
+                DanbooruUsername = args[12],
+                DanbooruApiKey = args[13],
+                TopGGWebhookPort = args[14].AsInteger()
+            };
 
             if (!File.Exists(configFilePath) || !model.Equals(new ConfigModel()))
             {
@@ -166,6 +169,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         public string TwitchAuthToken { get; set; }
         public string DanbooruUsername { get; set; }
         public string DanbooruApiKey { get; set; }
+        public int TopGGWebhookPort { get; set; }
     }
     #endregion
 }

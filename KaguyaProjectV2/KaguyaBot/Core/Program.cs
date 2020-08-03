@@ -32,17 +32,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 {
     internal class Program
     {
+        private DiscordShardedClient _client;
+        private LavaNode _lavaNode;
+        private TwitchAPI _api;
+        private static ConfigModel _config;
+        
         private static async Task Main(string[] args)
         {
+            _config = await Config.GetOrCreateConfigAsync(args);
+
             var task1 = CreateHostBuilder(args).Build().RunAsync();
             var task2 = new Program().MainAsync(args);
 
             Task.WaitAll(task1, task2);
         }
-
-        private DiscordShardedClient _client;
-        private LavaNode _lavaNode;
-        private TwitchAPI _api;
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -54,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://+:80", "http://+:160");
+                    webBuilder.UseUrls($"http://+:{_config.TopGGWebhookPort}");
                     webBuilder.UseKestrel();
                 });
 
@@ -93,7 +96,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 try
                 {
-                    var _config = await Config.GetOrCreateConfigAsync(args);
                     GlobalPropertySetup(_config);
 
                     SetupTwitch();
