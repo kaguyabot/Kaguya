@@ -1,3 +1,6 @@
+### Version 2.7.2
+- Updated the Discord.NET Library to the development build which solves the "Server requested a reconnect" issue. This issue effected each shard independently and would cancel any active music players and leave them in a broken state. This issue would occur once every hour on average, per shard.
+
 ### Version 2.7.1
 - Updated Victoria (music service). Hopefully will be more stable/have bugs fixed.
 
