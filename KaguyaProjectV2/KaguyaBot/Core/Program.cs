@@ -188,9 +188,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private async Task InitializeTimers(bool allShardsLoggedIn)
         {
             if (!allShardsLoggedIn) return;
-            await AntiRaidService.Initialize();
+
 #if !DEBUG
-            CachedPopularCommandHandler.Initialize();
+            CachedPopularCommandTimer.Initialize();
+            await AntiRaidService.Initialize();
             await KaguyaPremiumRoleHandler.Initialize();
             await StatsUpdater.Initialize();
             await KaguyaStatsLogger.Initialize();

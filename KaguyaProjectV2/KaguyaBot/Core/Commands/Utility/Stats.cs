@@ -63,7 +63,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             var cmdsLastDay = await DatabaseQueries.GetAllAsync<CommandHistory>(h => 
                 h.Timestamp >= DateTime.Now.AddHours(-24));
-            Dictionary<string, int> mostPopCommand = CachedPopularCommandHandler.MostPopularCommand;
+            Dictionary<string, int> mostPopCommand = CachedPopularCommandTimer.MostPopularCommand;
 
             string mostPopCommandName = mostPopCommand?.Keys.First();
             string mostPopCommandCount = mostPopCommand?.Values.First().ToString("N0");

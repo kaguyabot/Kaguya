@@ -7,7 +7,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Statistics
 {
-    public class CachedPopularCommandHandler
+    public class CachedPopularCommandTimer
     {
         /// <summary>
         /// The <see cref="string"/> Key of this <see cref="Dictionary{TKey,TValue}"/>
