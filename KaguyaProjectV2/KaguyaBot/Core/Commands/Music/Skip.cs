@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 {
                     Title = $"Kaguya Music: Skip {Centvrio.Emoji.AudioVideo.FastForward}",
                     Description = $"Successfully skipped `{player.Track.Title}`.\n" +
-                                  $"Now playing: `{((LavaTrack)player.Queue.Items.ToList()[0]).Title}`"
+                                  $"Now playing: `{((LavaTrack)player.Queue.Peek()).Title}`"
                 };
 
                 await SendEmbedAsync(skipEmbed);

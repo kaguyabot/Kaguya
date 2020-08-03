@@ -1,3 +1,6 @@
+### Version 2.7.1
+- Updated Victoria (music service). Hopefully will be more stable/have bugs fixed.
+
 ### Version 2.7
 - New feature: Reaction Roles.
 - Create a reaction role through the $createreactionrole [crr] command!

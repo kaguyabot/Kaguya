@@ -19,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             var player = e.Player;
             var queue = player.Queue;
 
-            if(queue.Count > 0 && e.Reason.ShouldPlayNext())
+            if(player != null && queue.Count > 0 && e.Reason.ShouldPlayNext())
             {
                 var success = queue.TryDequeue(out var val);
                 if(success)

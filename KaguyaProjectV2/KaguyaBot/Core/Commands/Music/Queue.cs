@@ -59,8 +59,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                                     $"**Up Next: {Centvrio.Emoji.AudioVideo.FastDown}\n**";
                 for (int i = 0; i < (player.Queue.Count < 50 ? player.Queue.Count : 50); i++)
                 {
-                    embed.Description += $"`#{i + 1}.` [{((LavaTrack)player.Queue.Items.ToList()[i]).Title}]" +
-                                         $"({((LavaTrack)player.Queue.Items.ToList()[i]).Url})\n";
+                    embed.Description += $"`#{i + 1}.` [{((LavaTrack)player.Queue.ToList()[i]).Title}]" +
+                                         $"({((LavaTrack)player.Queue.ToList()[i]).Url})\n";
                 }
             }
 

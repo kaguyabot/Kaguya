@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 return;
             }
 
-            if (num > player.Queue.Items.Count())
+            if (num > player.Queue.Count(x => x.GetType() == typeof(LavaTrack)))
             {
                 await SendBasicErrorEmbedAsync($"The requested track doesn't exist in your queue. Please use " +
                                                $"the `{server.CommandPrefix}queue` command to see all " +
@@ -59,7 +59,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 return;
             }
 
-            var oldQueueTracks = player.Queue.Items.Where(x => x.GetType() == typeof(LavaTrack)).ToList();
+            var oldQueueTracks = player.Queue.Where(x => x.GetType() == typeof(LavaTrack)).ToList();
             var track = (LavaTrack)oldQueueTracks[num - 1];
 
             player.Queue.Clear();
