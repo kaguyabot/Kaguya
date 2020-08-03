@@ -54,7 +54,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://+:80");
+                    try
+                    {
+                        webBuilder.UseUrls("http://+:80");
+                    }
+                    catch (Exception e)
+                    {
+#pragma warning disable 4014
+                        ConsoleLogger.LogAsync("Webhook port 80 already in use! " +
+#pragma warning restore 4014
+                                               "Attempting to use port 160...", LogLvl.WARN);
+                        webBuilder.UseUrls("http://+:160");
+                    }
                     webBuilder.UseKestrel();
                 });
 
