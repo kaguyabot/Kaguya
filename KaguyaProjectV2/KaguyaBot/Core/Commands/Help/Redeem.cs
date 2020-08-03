@@ -55,8 +55,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             }
 
             IKey newKey;
-            var typeString = "";
-            var nameSwitch = "";
             double expirationDate = 0;
 
             if (!string.IsNullOrEmpty(premiumKey?.Key))
@@ -71,8 +69,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     Expiration = DateTime.Now.AddSeconds(premiumKey.LengthInSeconds).ToOADate()
                 };
 
-                typeString = "Kaguya Premium";
-                nameSwitch = "This server's";
                 expirationDate = server.PremiumExpirationDate;
 
                 await DatabaseQueries.InsertOrReplaceAsync((PremiumKey)newKey);
@@ -85,13 +81,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             }
 
             TimeSpan ts = $"{newKey.LengthInSeconds}s".ParseToTimespan();
-            expirationDate += DateTime.Now.AddSeconds(newKey.LengthInSeconds).ToOADate();
 
-            if (existingPremiumKeys.All(x => x.ServerId != Context.Guild.Id) &&
-                typeString == "Kaguya Premium")
-            {
-                expirationDate += DateTime.Now.ToOADate();
-            }
+            if (expirationDate == 0)
+                expirationDate += DateTime.Now.AddSeconds(newKey.LengthInSeconds).ToOADate();
+            else
+                expirationDate += DateTime.FromOADate(0).AddSeconds(newKey.LengthInSeconds).ToOADate();
 
             user.TotalDaysSupported += (int)TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
             int totalDaysSupported = user.TotalDaysSupported;
@@ -99,8 +93,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully redeemed `" +
-                              $"{ts.Humanize(maxUnit: TimeUnit.Day)}` of {typeString}!\n" +
-                              $"{nameSwitch} subscription will expire on: `{DateTime.FromOADate(expirationDate).ToLongDateString()}`\n" +
+                              $"{ts.Humanize(maxUnit: TimeUnit.Day)}` of Kaguya Premium!\n" +
+                              $"This server's subscription will expire on: `{DateTime.FromOADate(expirationDate).ToLongDateString()}`\n" +
                               $"You've supported for `{totalDaysSupported:N0}` days! " +
                               $"That's `{ServerUptimeCalcInDays(totalDaysSupported):N2} days` of server uptime 💙",
                 Footer = new EmbedFooterBuilder
