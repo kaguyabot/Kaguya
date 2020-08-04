@@ -29,7 +29,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     new Tuple<string, ActivityType>($"Version {ConfigProperties.Version}", ActivityType.Streaming),
                     new Tuple<string, ActivityType>($"{client.TotalUsers():N0} users", ActivityType.Watching),
                     new Tuple<string, ActivityType>($"{client.Guilds.Count:N0} servers", ActivityType.Watching),
-                    new Tuple<string, ActivityType>($"$help", ActivityType.Listening)
+                    new Tuple<string, ActivityType>($"$help | @Kaguya help", ActivityType.Listening),
+                    new Tuple<string, ActivityType>("$vote for bonuses!", ActivityType.CustomStatus)
                 };
 
                 if (index >= games.Count)

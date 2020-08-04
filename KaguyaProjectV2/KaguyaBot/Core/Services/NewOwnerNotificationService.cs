@@ -24,6 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                               $"Example: `$prefix k!`.\n" +
                               $"- If you forget the prefix, tag me at anytime to use commands.\n\n" +
                               $"If you need assistance, [click here to join my support server.](https://discord.gg/aumCJhr)\n\n" +
+                              $"**[Click here to watch a tutorial on how to use me!!](https://www.youtube.com/watch?v=uNqiYOSSTYI)**\n\n" +
                               $"Enjoy!"
             };
 
