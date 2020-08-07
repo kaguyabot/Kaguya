@@ -18,9 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             var user = await DatabaseQueries.GetOrCreateUserAsync(userId);
 
             var discUser = Client.GetUser(userId);
-            string nameString;
-
-            nameString = discUser != null ? $"{discUser.Username}'s" : userId.ToString();
+            string nameString = discUser != null ? $"{discUser.Username}'s" : userId.ToString();
             
             var embed = new KaguyaEmbedBuilder(EmbedColor.GREEN)
             {

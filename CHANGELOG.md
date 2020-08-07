@@ -1,3 +1,6 @@
+### Version 2.7.5
+- Fixed an issue with $rlog VoiceChannelConnections where the command would not execute.
+
 ### Version 2.7.4
 - Fixed a bug where the expiration date when using $redeem on a Premium Key would be incorrect.
 - Adjusted the ratelimit so that it works better with the actual Discord rate limit.

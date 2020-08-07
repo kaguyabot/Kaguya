@@ -55,7 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "userleaves": server.LogUserLeaves = channel.Id; break;
                         case "bans": server.LogBans = channel.Id; break;
                         case "unbans": server.LogUnbans = channel.Id; break;
-                        case "voiceconnections": server.LogVoiceChannelConnections = channel.Id; break;
+                        case "voicechannelconnections": server.LogVoiceChannelConnections = channel.Id; break;
                         case "levelannouncements": server.LogLevelAnnouncements = channel.Id; break;
                         case "fishlevels": server.LogFishLevels = channel.Id; break;
                         case "antiraid": server.LogAntiraids = channel.Id; break;
@@ -94,7 +94,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "userleaves": server.LogUserLeaves = 0; break;
                         case "bans": server.LogBans = 0; break;
                         case "unbans": server.LogUnbans = 0; break;
-                        case "voiceconnections": server.LogVoiceChannelConnections = 0; break;
+                        case "voicechannelconnections": server.LogVoiceChannelConnections = 0; break;
                         case "levelannouncements": server.LogLevelAnnouncements = 0; break;
                         case "fishlevels": server.LogFishLevels = 0; break;
                         case "antiraid": server.LogAntiraids = 0; break;
