@@ -5,12 +5,19 @@ using KaguyaProjectV2.KaguyaBot.Core;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using Discord.WebSocket;
 using Victoria.Enums;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using Humanizer;
+using MoreLinq;
+using MoreLinq.Extensions;
+using TwitchLib.Api.Core.Extensions.System;
+using Victoria;
+using Victoria.Interfaces;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
@@ -18,6 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
     {
         [MusicCommand]
         [Command("Loop")]
+        [Alias("repeat")]
         [Summary("Allows a user to repeat the song a certain number of times. Default is 1. " + 
                  "The song will be appended to the end of the queue as many times " + 
                  "as is specified, up to a maximum of 10.")]
@@ -60,17 +68,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
             var curTrack = player.Track;
 
+            var queueList = new List<IQueueable>();
+            
+            
             for(int i = 0; i < amount; i++)
-            {
-                player.Queue.Enqueue(curTrack);
-            }
+                queueList.Add(curTrack);
+            
+            queueList.AddRange(player.Queue);
+            player.Queue.Clear();
 
+            foreach(var track in queueList)
+                player.Queue.Enqueue(track);
+            
             var sb = new StringBuilder();
             sb.AppendLine($"Successfully enqueued track for looping.");
             sb.AppendLine("");
             sb.AppendLine($"Title: `{curTrack.Title}`");
             sb.AppendLine($"Duration: `{curTrack.Duration.Humanize(2)}`");
-            sb.AppendLine($"Track Name: `{curTrack.Title}`");
 
             bool s = amount > 1;
             var embed = new KaguyaEmbedBuilder

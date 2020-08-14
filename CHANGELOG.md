@@ -1,3 +1,13 @@
+### Version 2.8
+- Fixed a bug where '$h inrole' would throw an error.
+- Fixed a bug where the "dev invite" for Kaguya was not assigned to the correct link (owner only).
+- New command: $coinflip - flip a coin!
+- Users may now give their $daily loot to someone else by mentioning them or typing their name.
+- $loop now has an alias of 'repeat'
+- $loop will now place the looped song(s) directly after the currently playing track instead of at the end of the queue.
+- Removed extra line ("Track Name") in $loop response. It was a duplicate of the "Title" line.
+- $h crr has been updated to be a little more readable.
+
 ### Version 2.7.5
 - Fixed an issue with $rlog VoiceChannelConnections where the command would not execute.
 

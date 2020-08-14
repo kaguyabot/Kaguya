@@ -30,10 +30,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                  "Standard Emojis are not supported.\n\n" +
                  "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
                  "Subsequent emote-role pairs can be added seamlessly.")]
-        [Remarks("<message ID> [channel] <emote> <role> {emote role} {...}\n" +
+        [Remarks("<message ID> [channel] <emote> <role> {...}\n" +
                  "588369719132684296 :Banger: OG\n" +
-                 "588369719132684296 :PepeJam: \"DJ Master\" :PepeLaugh: Comedian\n" +
-                 "685369725551652584 #role-channel :color-blue: \"Aqua Blue\" :color-red: Crimson")]
+                 "588369719132684296 :PepeJam: \"DJ Master\" :PepeLaugh: @Comedian\n" +
+                 "685369725551652584 #role-channel :color-blue: @Aqua Blue :color-red: @Crimson")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.AddReactions)]
@@ -47,19 +47,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [UtilityCommand]
         [Command("CreateReactionRole")]
         [Alias("crr")]
-        [Summary("Allows a user to add a emote-role pair to a message in the form of a reaction. Users who click on " +
-                 "the reaction will then be given the role paired to the emote. When a user removes " +
+        [Summary("Allows a user to add an emote-role pair to a message in the form of a reaction. Users who click on " +
+                 "the reaction will then be given the role paired to the reaction. When a user removes " +
                  "their reaction, the role will be removed from them.\n\n" +
-                 "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
-                 "together on a new line.\n\n" +
-                 "Note: The emote assigned must be a Discord emote uploaded to this server. " +
+                 "Multiple reaction roles can be created at once by adding the emote-role assignments together.\n\n" +
+                 "**Note:** The emote assigned must be a Discord emote uploaded to this server. " +
                  "Standard Emojis are not supported.\n\n" +
-                 "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
-                 "Subsequent emote-role pairs can be added seamlessly.")]
-        [Remarks("<message ID> [channel] <emote> <role> {emote role} {...}\n" +
+                 "If your role has spaces, don't forget to wrap it in double quotes: `\"My Role\"`. " +
+                 "You can also mention your role instead of typing the name out: `@My Role`")]
+        [Remarks("<message ID> [channel] <emote> <role> {...}\n" +
                  "588369719132684296 :Banger: OG\n" +
-                 "588369719132684296 :PepeJam: \"DJ Master\" :PepeLaugh: Comedian\n" +
-                 "685369725551652584 #role-channel :color-blue: \"Aqua Blue\" :color-red: Crimson")]
+                 "<msg ID> :PepeJam: \"DJ Master\" :PepeLaugh: @Comedian\n" +
+                 "<msg ID> #role-channel :color-blue: @Aqua Blue")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.AddReactions)]

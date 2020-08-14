@@ -18,6 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Command("InRole")]
         [Alias("ir")]
         [Summary("Displays an alphabetized list of who has the specified role.")]
+        [Remarks("<role>")]
         public async Task Find([Remainder]string roleName)
         {
             var guild = Context.Guild;
