@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Discord.Net;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using MoreLinq;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
@@ -102,13 +103,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
                     foreach (var key in keys)
                     {
-                        writer.Write($"{key.Key}\n");
+                        await writer.WriteAsync($"{key.Key}\n");
                     }
 
                     await writer.FlushAsync();
                     memoryStream.Seek(0, SeekOrigin.Begin);
 
-                    await Context.User.SendFileAsync(memoryStream, $"{keys.Count} Keys.txt");
+                    await Context.User.SendFileAsync(memoryStream, $"{keys.Count} {day}d-{hour}h-{min}m-{sec}s Keys.txt");
                     await SendBasicSuccessEmbedAsync(
                         $"{Context.User.Mention}, I DM'd you a file with `{amount:N0}` new `{keyDuration}` premium keys.");
                 }
@@ -141,10 +142,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         }
 
         // We could use a prettier LINQ expression, but this is twice as fast.
-        private static string RandomString(int length = 20)
+        private static string RandomString(int length = 35)
         {
-            const string chars = @"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789!@#$%^&()+=-\{}[]';~";
-            var stringChars = new char[length];
+            const string chars = @"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789!@#$%^&()+=-{}[]';";
+            char[] stringChars = new char[length];
 
             for (int i = 0; i < stringChars.Length; i++)
             {
