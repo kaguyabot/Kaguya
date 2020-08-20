@@ -7,7 +7,6 @@ using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Configurations.Models;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -73,6 +72,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public double LastRatelimited { get; set; }
         [Column(Name = "LastFished"), NotNull]
         public double LastFished { get; set; }
+        [Column(Name = "PremiumExpiration")]
+        public double PremiumExpiration { get; set; }
 
         /// <summary>
         /// If a user wants to receive level-up notifications in chat, what type should it be?
@@ -91,46 +92,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public ExpType ExpDmNotificationType => (ExpType)ExpDmNotificationTypeNum;
         public FishHandler.FishLevelBonuses FishLevelBonuses => new FishHandler.FishLevelBonuses(FishExp);
 
-        public double PremiumExpirationDate
-        {
-            get
-            {
-                var allKeys = DatabaseQueries
-                .GetAllAsync<PremiumKey>(x => x.UserId == UserId && x.Expiration > DateTime.Now.ToOADate()).Result
-                .ToArray();
-
-                if(allKeys.Length == 0)
-                    return DateTime.MinValue.ToOADate();
-
-                var expiration = allKeys[0].Expiration;
-                if(allKeys.Length > 1)
-                {
-                    foreach(var key in allKeys[1..])
-                    {
-                        expiration += DateTime.FromOADate(0).AddMinutes((double)key.LengthInSeconds / 60).ToOADate();
-                    }
-                }
-
-                return expiration;
-            }
-        }
 
         public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetDailyPoints => LastDailyBonus < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetWeeklyPoints => LastWeeklyBonus < DateTime.Now.AddDays(-7).ToOADate();
-        public Inventory Inventory => new Inventory(UserId);
         public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
         
-        //todo: Test
-        public bool HasActiveBonus(ConsumableItem consumableItem)
-        {
-            var matches = DatabaseQueries.GetAllForUserAsync<UserConsumable>(UserId,
-                x => x.HasConsumed && x.Expiration > DateTime.Now.ToOADate() && x.ConsumableItem == consumableItem).Result;
-
-            return matches.Count > 0;
-        }
-
         /// <summary>
         /// Adds the specified number of points to the user.
         /// </summary>

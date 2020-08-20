@@ -117,7 +117,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 string suppString = await user.IsPremiumAsync()
                     ? ""
                     : "If you are " +
-                      $"not a [Kaguya Premium Subscriber]({GlobalProperties.KAGUYA_STORE_URL}), " +
+                      $"not a [Kaguya Premium Subscriber]({ConfigProperties.KaguyaStore}), " +
                       $"you are only limited to playing songs less than `10 minutes` in duration.";
 
                 await context.Channel.SendBasicErrorEmbedAsync($"Your requested search returned no results. {suppString}");
@@ -215,7 +215,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     {
                         await ConsoleLogger.LogAsync($"Queue is full in {context.Guild.Id}, sending error.", LogLvl.TRACE);
                         await SendBasicErrorEmbedAsync("Your queue is full! `50 songs` is the maximum " +
-                                                       $"for non [Kaguya Premium]({GlobalProperties.KAGUYA_STORE_URL}) " +
+                                                       $"for non [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
                                                        "servers.");
                     }
                     else
@@ -292,7 +292,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                         {
                             await ConsoleLogger.LogAsync($"Queue was full in guild {context.Guild.Id}. Sending error message.", LogLvl.TRACE);
                             await SendBasicErrorEmbedAsync($"Your queue is full! `50 songs` is the maximum " +
-                                                           $"for non [Kaguya Premium]({GlobalProperties.KAGUYA_STORE_URL}) " +
+                                                           $"for non [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
                                                            $"servers.");
                             return;
                         }

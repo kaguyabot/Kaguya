@@ -232,9 +232,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <returns></returns>
         public static async Task<bool> IsPremiumAsync(this User user)
         {
-            var allKeys = await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId, 
-                x => x.Expiration > DateTime.Now.ToOADate());
-
+            var allKeys = await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId);
             return allKeys.Count > 0;
         }
 
@@ -243,7 +241,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public static async Task<List<PremiumKey>> GetPremiumKeysAsync(this User user)
+        public static async Task<List<PremiumKey>> GetActivePremiumKeysAsync(this User user)
         {
             return (await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId,
                 x => x.Expiration > DateTime.Now.ToOADate())).ToList();

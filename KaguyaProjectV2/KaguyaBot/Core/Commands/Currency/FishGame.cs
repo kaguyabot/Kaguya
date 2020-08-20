@@ -8,10 +8,8 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Configurations.Models;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
@@ -25,8 +23,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                  "the `buybait` command.\n\n" +
                  "Information:\n\n" +
                  "- You must have bait to fish. One bait costs 50 points " +
-                 "(25% off for [Kaguya Supporters](https://the-kaguya-project.myshopify.com/)).\n" +
-                 "- You may only fish once every 15 seconds (5 seconds for supporters).\n" +
+                 "(25% off for [Kaguya Premium subscribers](https://sellix.io/KaguyaStore)).\n" +
+                 "- You may only fish once every 15 seconds (5 seconds for premium subscribers).\n" +
                  "- Fish may be sold with the `sell` command!\n" +
                  "- View your fish collection with the `myfish` command!\n\n" +
                  "Happy fishing, and good luck catching the **Legendary `Big Kahuna`**!")]

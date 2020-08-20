@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [Command("Soundcloud")]
         [Alias("sc")]
         [Summary("Allows either a " +
-                 "[Kaguya Premium](https://the-kaguya-project.myshopify.com/products/kaguya-premium) server or subscriber " +
+                 "[Kaguya Premium](https://sellix.io/KaguyaStore) server or subscriber " +
                  "to search Soundcloud for a desired song.")]
         [Remarks("<search>")]
         [RequireUserPermission(GuildPermission.Connect)]
@@ -35,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             }
             else
             {
-                throw new KaguyaSupportException($"This feature is restricted to `Kaguya Supporters` and " +
+                throw new KaguyaSupportException($"This feature is restricted to `Kaguya Premium Subscribers` and " +
                                                  $"servers with `Kaguya Premium` status.");
             }
         }

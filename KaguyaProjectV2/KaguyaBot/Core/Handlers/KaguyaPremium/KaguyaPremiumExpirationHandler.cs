@@ -44,7 +44,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
                                               $"`{ConfigProperties.Client.GetGuild(premKey.ServerId).Name}` has " +
                                               $"just expired.** If you would " +
                                               $"like to continue this subscription, you may purchase another " +
-                                              $"key [at this online store.]({GlobalProperties.KAGUYA_STORE_URL})\n\n" +
+                                              $"key [at this online store.]({ConfigProperties.KaguyaStore})\n\n" +
                                               $"Thank you for supporting my development while you have!",
                                 Footer = new EmbedFooterBuilder
                                 {

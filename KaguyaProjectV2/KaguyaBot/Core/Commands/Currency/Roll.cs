@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             if (bet > MAX_BET && !await user.IsPremiumAsync())
             {
-                await SendBasicErrorEmbedAsync($"Sorry, but only supporters may bet more than " +
+                await SendBasicErrorEmbedAsync($"Sorry, but only premium subscribers may bet more than " +
                                                                $"`{MAX_BET:N0}` points.");
                 return;
             }

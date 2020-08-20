@@ -20,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                  "Rules:\n" +
                  "- Betting on the outcome of two 6-sided die (outcomes range from 2-12)\n" +
                  "- Minimum bet of 100 points\n" +
-                 "- Maximum bet of 50,000 points (500,000 if supporter)\n" +
+                 "- Maximum bet of 50,000 points (500,000 if premium)\n" +
                  "- Players may bet that the roll will be `higher` than, `lower` than, or exactly `7`.\n" +
                  "- Winning a `higher` or `lower` roll will award you with `2x` your bet.\n" +
                  "- Winning a `7` roll (if called) will award you with `4x` your bet.\n" +

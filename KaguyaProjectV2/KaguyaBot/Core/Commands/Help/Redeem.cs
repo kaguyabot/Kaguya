@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Net;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -90,11 +91,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             user.TotalDaysSupported += (int)TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
             int totalDaysSupported = user.TotalDaysSupported;
 
+            var userPremiumExpiration = user.PremiumExpiration;
+            if (userPremiumExpiration < DateTime.Now.ToOADate())
+            {
+                userPremiumExpiration = DateTime.Now.ToOADate();
+            }
+
+            userPremiumExpiration = DateTime.FromOADate(userPremiumExpiration).AddSeconds(premiumKey.LengthInSeconds).ToOADate();
+            user.PremiumExpiration = userPremiumExpiration;
+            
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully redeemed `" +
                               $"{ts.Humanize(maxUnit: TimeUnit.Day)}` of Kaguya Premium!\n" +
                               $"This server's subscription will expire on: `{DateTime.FromOADate(expirationDate).ToLongDateString()}`\n" +
+                              $"Your personal subscription will expire on: `{DateTime.FromOADate(userPremiumExpiration).ToLongDateString()}`\n" +
                               $"You've supported for `{totalDaysSupported:N0}` days! " +
                               $"That's `{ServerUptimeCalcInDays(totalDaysSupported):N2} days` of server uptime 💙",
                 Footer = new EmbedFooterBuilder
@@ -107,6 +118,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             await ReplyAsync(embed: embed.Build());
             await SendEmbedToBotOwner(Context, newKey);
             await DatabaseQueries.UpdateAsync(user);
+
+            await ApplyRewardsToUser(user, Context.User, premiumKey);
         }
 
         private async Task SendEmbedToBotOwner(ICommandContext context, IKey key)
@@ -145,6 +158,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             }
         }
 
+        private async Task ApplyRewardsToUser(User user, IUser discordUser, IKey key)
+        {
+            int points = (int)(25000 * (TimeSpan.FromSeconds(key.LengthInSeconds).TotalDays / 30));
+            user.AddPoints(points);
+
+            var embed = new KaguyaEmbedBuilder(EmbedColor.GOLD)
+            {
+                Description = $"{discordUser.Mention} You have been awarded `{points:N0}` points!"
+            };
+
+            await DatabaseQueries.UpdateAsync(user);
+            await discordUser.SendMessageAsync(embed: embed.Build());
+        }
+        
         private double ServerUptimeCalcInDays(int totalDaysSupported)
         {
             // 13 cents per day for supporter.

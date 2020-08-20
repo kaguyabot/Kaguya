@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         [Command("Nsfw", RunMode = RunMode.Async)]
         [Alias("n")]
         [Summary("Posts an NSFW image into chat. The `bomb` tag may be used to post 3 images at once. Normal users are limited to 12 NSFW images per day. " +
-                 "[Kaguya Supporters](https://the-kaguya-project.myshopify.com/) " +
+                 "[Kaguya Premium Subscribers](https://sellix.io/KaguyaStore) " +
                  "may specify one or multiple tags and have no limit on how many images they can post per day. " +
                  "A complete list of tags may be found [here (SFW link)](https://konachan.com/tag).\n\n" +
                  "Voting online [here](https://top.gg/bot/538910393918160916/vote)")]
@@ -60,7 +60,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                     tags.Length > 0 && tags[0].ToLower() != "bomb" && !await user.IsPremiumAsync() && !server.IsPremium)
                 {
                     throw new KaguyaPremiumException("Tagged NSFW searches are for " +
-                                                       "Kaguya Supporters only.");
+                                                       "Kaguya Premium Subscribers only.");
                 }
 
                 if (tags.Intersect(blacklistedTags).Any())
@@ -79,8 +79,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                             {
                                 await SendBasicErrorEmbedAsync(
                                     $"You do not have enough NSFW images to process this command. " +
-                                    $"[Kaguya Supporters]({GlobalProperties.KAGUYA_STORE_URL}) have " +
-                                    $"unlimited NSFW command uses. For non-supporters, 1 NSFW image is " +
+                                    $"[Kaguya Premium Subscribers]({ConfigProperties.KaguyaStore}) have " +
+                                    $"unlimited NSFW command uses. For non-premium subscribers, 1 NSFW image is " +
                                     $"earned automatically every 2 hours.");
                                 return;
                             }

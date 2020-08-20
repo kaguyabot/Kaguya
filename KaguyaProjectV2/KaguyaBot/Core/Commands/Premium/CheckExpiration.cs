@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -32,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
                 var field = new EmbedFieldBuilder();
                 field.Name = "Kaguya Premium";
 
-                foreach (var key in await user.GetPremiumKeysAsync())
+                foreach (var key in await user.GetActivePremiumKeysAsync())
                 {
                     var guild = Client.GetGuild(key.ServerId);
                     field.Value += $"Server: `{(guild == null ? $"Unknown Server: (ID {key.ServerId})" : guild.Name)}`\n" +
@@ -49,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
             else
             {
                 await SendBasicErrorEmbedAsync($"You currently have no active subscriptions. You may " +
-                                               $"purchase one [here]({GlobalProperties.KAGUYA_STORE_URL}).");
+                                               $"purchase one [here]({ConfigProperties.KaguyaStore}).");
             }
         }
     }

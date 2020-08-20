@@ -14,8 +14,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [MusicCommand]
         [Command("TwitchAudio")]
         [Alias("ta")]
-        [Summary("Allows either a [Kaguya Supporter](https://the-kaguya-project.myshopify.com/products/kaguya-supporter-tag) " +
-                 "or [Kaguya Premium](https://the-kaguya-project.myshopify.com/products/kaguya-premium) server " +
+        [Summary("Allows either a [Kaguya Supporter](https://sellix.io/KaguyaStoreproducts/kaguya-supporter-tag) " +
+                 "or [Kaguya Premium](https://sellix.io/KaguyaStore) server " +
                  "to stream audio live from Twitch.")]
         [Remarks("<search>")]
         [RequireUserPermission(GuildPermission.Connect)]
@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             }
             else
             {
-                throw new KaguyaSupportException($"This feature is restricted to `Kaguya Supporters` and " +
+                throw new KaguyaSupportException($"This feature is restricted to `Kaguya Premium Subscribers` and " +
                                                  $"servers with `Kaguya Premium` status.");
             }
         }

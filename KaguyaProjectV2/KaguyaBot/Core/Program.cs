@@ -191,17 +191,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             if (!allShardsLoggedIn) return;
 
-            await RateLimitService.Initialize();
 #if !DEBUG
             CachedPopularCommandTimer.Initialize();
-            await AntiRaidService.Initialize();
             await KaguyaPremiumRoleHandler.Initialize();
+            await KaguyaPremiumExpirationHandler.Initialize();
+            await RateLimitService.Initialize();
+            await AntiRaidService.Initialize();
             await StatsUpdater.Initialize();
             await KaguyaStatsLogger.Initialize();
             await AutoUnmuteHandler.Initialize();
             await RemindService.Initialize();
             await NSFWImageHandler.Initialize();
-            await KaguyaPremiumExpirationHandler.Initialize();
             await UpvoteExpirationNotifier.Initialize();
             await GameRotationService.Initialize();
 #endif

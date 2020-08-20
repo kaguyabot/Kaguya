@@ -1,3 +1,10 @@
+### Version 2.9
+- Rewrote lots of inconsistent wording of the Kaguya premium subscription.
+- 
+
+### Version 2.8.1
+- Updated the algorithm for $pgen (owner only)
+
 ### Version 2.8
 - Fixed a bug where '$h inrole' would throw an error.
 - Fixed a bug where the "dev invite" for Kaguya was not assigned to the correct link (owner only).
