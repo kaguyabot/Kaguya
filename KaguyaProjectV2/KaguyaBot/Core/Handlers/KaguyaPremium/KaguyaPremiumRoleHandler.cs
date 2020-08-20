@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
                     var client = ConfigProperties.Client;
                     var kaguyaSupportServer = client.GetGuild(546880579057221644); //Kaguya Support Discord Server
                     
-                    var premiumRole = kaguyaSupportServer.Roles.First(x => x.Id == 657104752559259659);
+                    var premiumRole = kaguyaSupportServer.Roles.FirstOrDefault(x => x.Id == 657104752559259659);
                     if (premiumRole == null)
                     {
                         await ConsoleLogger.LogAsync("The Kaguya Premium role was null when trying " +
