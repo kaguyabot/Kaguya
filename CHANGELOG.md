@@ -1,6 +1,6 @@
 ### Version 2.9
 - Rewrote lots of inconsistent wording of the Kaguya premium subscription.
-- 
+- Enhanced $checkexpiration
 
 ### Version 2.8.1
 - Updated the algorithm for $pgen (owner only)

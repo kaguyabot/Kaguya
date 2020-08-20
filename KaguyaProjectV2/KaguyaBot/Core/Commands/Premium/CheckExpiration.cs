@@ -23,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
         public async Task Command()
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var expiration = new KaguyaEmbedBuilder();
+            var expiration = new KaguyaEmbedBuilder(EmbedColor.GOLD);
 
             if (await user.IsPremiumAsync())
             {
@@ -37,8 +37,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
                                    $"\tExpiration: `{DateTime.FromOADate(key.Expiration).Humanize(false)}`\n\n";
                 }
 
+                field.Value += $"User Benefits Expiration: `{DateTime.FromOADate(user.PremiumExpiration).Humanize(false)}`";
                 expiration.AddField(field);
             }
+            
 
             if (expiration.Fields.Count != 0)
             {
