@@ -1,3 +1,7 @@
+### Version 2.9.1
+- Changed some commands and responses to mention users (not ping them) instead of having user data written as plain text.
+- Fixed formatting of some error responses.
+
 ### Version 2.9
 - Rewrote lots of inconsistent wording of the Kaguya premium subscription.
 - Enhanced $checkexpiration

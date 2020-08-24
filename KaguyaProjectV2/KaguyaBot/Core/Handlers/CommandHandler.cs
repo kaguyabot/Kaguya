@@ -166,7 +166,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder(EmbedColor.RED)
             {
                 Title = "Command Failed",
-                Description = $"Failed to execute command `{context.Message}`\n\nReason: `{result.ErrorReason}`\n",
+                Description = $"Failed to execute command `{context.Message}`\n\nReason: {result.ErrorReason}\n",
                 Footer = new EmbedFooterBuilder
                 {
                     Text = $"Use {cmdPrefix}h <command> for information on how to use a command!",

@@ -81,7 +81,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
             {
                 Description = $"I found `{matchCount.ToWords()}` roles that match this name. Please " +
-                              $"select the role that you want.",
+                              $"select the role that you want to display.",
                 Fields = new List<EmbedFieldBuilder>()
             };
 
@@ -167,7 +167,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                     break;
                 }
 
-                currentPage.Description += $"`{usersList.ElementAt(i)} | {usersList.ElementAt(i).Id}`\n";
+                currentPage.Description += $"{usersList.ElementAt(i).Mention}\n";
             }
 
             return pages;
