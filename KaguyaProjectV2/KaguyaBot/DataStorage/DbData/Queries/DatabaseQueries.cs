@@ -69,31 +69,36 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                User user;
-                try
+                bool exists = db.Users.Any(x => x.UserId == Id);
+
+                if (!exists)
                 {
-                    user = await db.Users
-                        .LoadWith(x => x.Blacklist)
-                        .LoadWith(x => x.CommandHistory)
-                        .LoadWith(x => x.Fish)
-                        .LoadWith(x => x.GambleHistory)
-                        .LoadWith(x => x.Quotes)
-                        .LoadWith(x => x.Reminders)
-                        .LoadWith(x => x.Rep)
-                        .LoadWith(x => x.ServerExp)
-                        .Where(u => u.UserId == Id).FirstAsync();
-                }
-                catch (InvalidOperationException)
-                {
-                    user = new User
+                    try
                     {
-                        UserId = Id
-                    };
-                    await db.InsertAsync(user);
+                        await db.InsertAsync(new User
+                        {
+                            UserId = Id
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        await ConsoleLogger.LogAsync($"Failed to create User with ID {Id}\nException: {e}", LogLvl.ERROR);
+                        throw;
+                    }
+                    
                     await ConsoleLogger.LogAsync($"User {Id} created.", LogLvl.DEBUG);
                 }
-
-                return user;
+                
+                return await db.Users
+                    .LoadWith(x => x.Blacklist)
+                    .LoadWith(x => x.CommandHistory)
+                    .LoadWith(x => x.Fish)
+                    .LoadWith(x => x.GambleHistory)
+                    .LoadWith(x => x.Quotes)
+                    .LoadWith(x => x.Reminders)
+                    .LoadWith(x => x.Rep)
+                    .LoadWith(x => x.ServerExp)
+                    .Where(u => u.UserId == Id).FirstAsync();
             }
         }
 
