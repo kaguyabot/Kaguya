@@ -59,22 +59,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public bool LevelAnnouncementsEnabled { get; set; }
         [Column(Name = "OsuLinkParsingEnabled"), NotNull]
         public bool OsuLinkParsingEnabled { get; set; } = true;
-        public double PremiumExpirationDate
-        {
-            get
-            {
-                var now = DateTime.Now.ToOADate();
-                var allUserKeys = DatabaseQueries.GetAllForServerAsync<PremiumKey>(ServerId).Result;
-                if (allUserKeys.Count > 0)
-                    return now + allUserKeys.Sum(key => key.Expiration - now);
-                return DateTime.MinValue.ToOADate();
-            }
-        }
+        [Column(Name = "PremiumExpirationDate"), NotNull]
+        public double PremiumExpirationDate { get; set; }
 
         /// <summary>
         /// Whether or not the server currently has an active premium subscription.
         /// </summary>
-        public bool IsPremium => PremiumExpirationDate > DateTime.Now.ToOADate() && ServerId != 546880579057221644;
+        public bool IsPremium => PremiumExpirationDate > DateTime.Now.ToOADate();
 
         [Column(Name = "AutoWarnOnBlacklistedPhrase"), NotNull]
         public bool AutoWarnOnBlacklistedPhrase { get; set; } = false;
