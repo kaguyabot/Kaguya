@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Net;
-using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -41,88 +40,95 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             {
                 var premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == keyString && x.UserId == 0 && x.ServerId == 0);
             
-            if (premiumKey == null)
-            {
-                await Context.Message.DeleteAsync();
-                var embed0 = new KaguyaEmbedBuilder
+                if (premiumKey == null)
                 {
-                    Description = "Key does not exist or has already been redeemed.",
+                    await Context.Message.DeleteAsync();
+                    var embed0 = new KaguyaEmbedBuilder
+                    {
+                        Description = "Key does not exist or has already been redeemed.",
+                        Footer = new EmbedFooterBuilder
+                        {
+                            Text = $"If you need assistance, please join the server provided in {server.CommandPrefix}invite"
+                        }
+
+                    };
+                    embed0.SetColor(EmbedColor.RED);
+
+                    await ReplyAsync(embed: embed0.Build());
+                    return;
+                }
+
+                IKey newKey;
+
+                if (!string.IsNullOrEmpty(premiumKey?.Key))
+                {
+                    newKey = new PremiumKey
+                    {
+                        Key = premiumKey.Key,
+                        LengthInSeconds = premiumKey.LengthInSeconds,
+                        KeyCreatorId = premiumKey.KeyCreatorId,
+                        UserId = Context.User.Id,
+                        ServerId = Context.Guild.Id,
+                    };
+
+                    await DatabaseQueries.InsertOrReplaceAsync((PremiumKey)newKey);
+                }
+                else
+                {
+                    await Context.Message.DeleteAsync();
+                    throw new KaguyaSupportException("Failed to redeem your key. Please " +
+                                                       "join our support server for assistance.");
+                }
+
+                TimeSpan ts = $"{newKey.LengthInSeconds}s".ParseToTimespan();
+
+                user.TotalDaysSupported += (int)TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
+                int totalDaysSupported = user.TotalDaysSupported;
+
+                var userPremiumExpiration = user.PremiumExpiration;
+                if (userPremiumExpiration < DateTime.Now.ToOADate())
+                {
+                    userPremiumExpiration = DateTime.Now.ToOADate();
+                }
+
+                userPremiumExpiration = DateTime.FromOADate(userPremiumExpiration).AddSeconds(premiumKey.LengthInSeconds).ToOADate();
+                user.PremiumExpiration = userPremiumExpiration;
+
+                // If the server has never been premium before, or was but it has expired, 
+                // we need to reset the expiration to Now + the key's length.
+                if (server.PremiumExpiration < DateTime.Now.ToOADate())
+                {
+                    server.PremiumExpiration = DateTime.Now.AddSeconds(premiumKey.LengthInSeconds).ToOADate();
+                }
+                else
+                {
+                    server.PremiumExpiration = DateTime.FromOADate(server.PremiumExpiration)
+                        .AddSeconds(premiumKey.LengthInSeconds).ToOADate();
+                }
+                
+                var embed = new KaguyaEmbedBuilder
+                {
+                    Description = $"Successfully redeemed `" +
+                                  $"{ts.Humanize(maxUnit: TimeUnit.Day)}` of Kaguya Premium!\n" +
+                                  $"This server's subscription will expire on: `{DateTime.FromOADate(server.PremiumExpiration).ToLongDateString()}`\n" +
+                                  $"Your personal subscription will expire on: `{DateTime.FromOADate(userPremiumExpiration).ToLongDateString()}`\n" +
+                                  $"You've supported for `{totalDaysSupported:N0}` days! " +
+                                  $"That's `{ServerUptimeCalcInDays(totalDaysSupported):N2} days` of server uptime 💙",
                     Footer = new EmbedFooterBuilder
                     {
-                        Text = $"If you need assistance, please join the server provided in {server.CommandPrefix}invite"
+                        Text = "It may not seem like a lot, but it all adds up. Thanks for your support!"
                     }
-
                 };
-                embed0.SetColor(EmbedColor.RED);
+                embed.SetColor(EmbedColor.GOLD);
 
-                await ReplyAsync(embed: embed0.Build());
-                return;
-            }
-
-            IKey newKey;
-            double expirationDate = 0;
-
-            if (!string.IsNullOrEmpty(premiumKey?.Key))
-            {
-                newKey = new PremiumKey
-                {
-                    Key = premiumKey.Key,
-                    LengthInSeconds = premiumKey.LengthInSeconds,
-                    KeyCreatorId = premiumKey.KeyCreatorId,
-                    UserId = Context.User.Id,
-                    ServerId = Context.Guild.Id,
-                };
-
-                expirationDate = server.PremiumExpiration;
-
-                await DatabaseQueries.InsertOrReplaceAsync((PremiumKey)newKey);
-            }
-            else
-            {
-                await Context.Message.DeleteAsync();
-                throw new KaguyaSupportException("Failed to redeem your key. Please " +
-                                                   "join our support server for assistance.");
-            }
-
-            TimeSpan ts = $"{newKey.LengthInSeconds}s".ParseToTimespan();
-
-            if (expirationDate == 0)
-                expirationDate += DateTime.Now.AddSeconds(newKey.LengthInSeconds).ToOADate();
-            else
-                expirationDate += DateTime.FromOADate(0).AddSeconds(newKey.LengthInSeconds).ToOADate();
-
-            user.TotalDaysSupported += (int)TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
-            int totalDaysSupported = user.TotalDaysSupported;
-
-            var userPremiumExpiration = user.PremiumExpiration;
-            if (userPremiumExpiration < DateTime.Now.ToOADate())
-            {
-                userPremiumExpiration = DateTime.Now.ToOADate();
-            }
-
-            userPremiumExpiration = DateTime.FromOADate(userPremiumExpiration).AddSeconds(premiumKey.LengthInSeconds).ToOADate();
-            user.PremiumExpiration = userPremiumExpiration;
-            
-            var embed = new KaguyaEmbedBuilder
-            {
-                Description = $"Successfully redeemed `" +
-                              $"{ts.Humanize(maxUnit: TimeUnit.Day)}` of Kaguya Premium!\n" +
-                              $"This server's subscription will expire on: `{DateTime.FromOADate(expirationDate).ToLongDateString()}`\n" +
-                              $"Your personal subscription will expire on: `{DateTime.FromOADate(userPremiumExpiration).ToLongDateString()}`\n" +
-                              $"You've supported for `{totalDaysSupported:N0}` days! " +
-                              $"That's `{ServerUptimeCalcInDays(totalDaysSupported):N2} days` of server uptime 💙",
-                Footer = new EmbedFooterBuilder
-                {
-                    Text = "It may not seem like a lot, but it all adds up. Thanks for your support!"
-                }
-            };
-            embed.SetColor(EmbedColor.GOLD);
-
-            await ReplyAsync(embed: embed.Build());
-            await SendEmbedToBotOwner(Context, newKey);
-            await DatabaseQueries.UpdateAsync(user);
-
-            await ApplyRewardsToUser(user, Context.User, premiumKey);
+                await ReplyAsync(embed: embed.Build());
+#if !DEBUG
+                await SendEmbedToBotOwner(Context, newKey);
+#endif
+                await DatabaseQueries.UpdateAsync(user);
+                await DatabaseQueries.UpdateAsync(server);
+                
+                await ApplyRewardsToUser(user, Context.User, premiumKey);
             }
         }
 
