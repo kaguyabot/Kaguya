@@ -55,11 +55,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel)message.Channel).Guild.Id);
             User user = await DatabaseQueries.GetOrCreateUserAsync(message.Author.Id);
 
+            // Never blacklist the bot owner.
             if (user.IsBlacklisted && user.UserId != ConfigProperties.BotConfig.BotOwnerId) return;
             if (server.IsBlacklisted) return;
 
             var context = new ShardedCommandContext(_client, message);
-            await IsFilteredPhrase(context, server, message); // If filtered phrase (and user isn't admin), return.
+            
+            if(await IsFilteredPhrase(context, server, message))
+                return; // If filtered phrase (and user isn't admin), return.
 
             await ExperienceHandler.TryAddExp(user, server, context);
             await ServerSpecificExpHandler.TryAddExp(user, server, context);

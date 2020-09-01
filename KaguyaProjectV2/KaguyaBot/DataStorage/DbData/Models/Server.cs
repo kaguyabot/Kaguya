@@ -59,7 +59,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public bool LevelAnnouncementsEnabled { get; set; }
         [Column(Name = "OsuLinkParsingEnabled"), NotNull]
         public bool OsuLinkParsingEnabled { get; set; } = true;
-        [Column(Name = "PremiumExpirationDate"), NotNull]
+        [Column(Name = "PremiumExpiration"), NotNull]
         public double PremiumExpiration { get; set; }
 
         /// <summary>
