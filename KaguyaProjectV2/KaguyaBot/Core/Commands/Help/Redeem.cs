@@ -23,19 +23,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     public class Redeem : KaguyaBase
     {
         private const double MONTHLY_SERVER_FEE = 80.99;
-        private const double AVERAGE_MONTHLY_SUPPORTER_PAYMENT = 3.99;
+        private const double PREMIUM_COST = 4.99;
 
         [HelpCommand]
         [Command("Redeem")]
-        [Summary("Allows a user to redeem a Kaguya Supporter or Kaguya Premium key. Supporter Keys may be " +
-                 "purchased [at this link](https://stageosu.selly.store/)")]
+        [Summary("Allows a user to redeem a Kaguya Premium key in a server. Premium keys may be " +
+                 "purchased [at this link](https://sellix.io/KaguyaStore). Be sure to execute this " +
+                 "command in the server where you want to redeem your premium key!")]
         [Remarks("<key>")]
-        public async Task RedeemKey(string keyString)
+        public async Task RedeemKey(params string[] keys)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var existingPremiumKeys = await DatabaseQueries.GetAllAsync<PremiumKey>();
-            var premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == keyString && x.UserId == 0 && x.ServerId == 0);
+
+            foreach (var keyString in keys)
+            {
+                var premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == keyString && x.UserId == 0 && x.ServerId == 0);
             
             if (premiumKey == null)
             {
@@ -119,6 +123,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             await DatabaseQueries.UpdateAsync(user);
 
             await ApplyRewardsToUser(user, Context.User, premiumKey);
+            }
         }
 
         private async Task SendEmbedToBotOwner(ICommandContext context, IKey key)
@@ -176,7 +181,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             // 13 cents per day for supporter.
             // $2.69 per day for the server.
             // 1 day of supporter = 0.04 days of server uptime
-            return AVERAGE_MONTHLY_SUPPORTER_PAYMENT / 30 / (MONTHLY_SERVER_FEE / 30) * totalDaysSupported;
+            return PREMIUM_COST / 30 / (MONTHLY_SERVER_FEE / 30) * totalDaysSupported;
         }
     }
 }

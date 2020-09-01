@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -28,16 +28,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
 
             if (user.IsPremium)
             {
-                var field = new EmbedFieldBuilder();
-                field.Name = "Kaguya Premium";
+                var field = new EmbedFieldBuilder {Name = "Kaguya Premium"};
 
                 //todo: Figure out the user's active premium keys manually.
+                var includedServers = new List<Server>();
                 foreach (var key in await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId, x => x.ServerId != 0))
                 {
                     var guild = Client.GetGuild(key.ServerId);
                     var server = await DatabaseQueries.GetOrCreateServerAsync(key.ServerId);
+
+                    if (includedServers.Contains(server) || server.PremiumExpiration < DateTime.Now.ToOADate())
+                        continue;
+                    
                     field.Value += $"Server: `{(guild == null ? $"Unknown Server: (ID {key.ServerId})" : guild.Name)}`\n" +
                                    $"\tExpiration: `{DateTime.FromOADate(server.PremiumExpiration).Humanize(false)}`\n\n";
+                    
+                    includedServers.Add(server); // Skips duplicates
                 }
 
                 field.Value += $"User Benefits Expiration: `{DateTime.FromOADate(user.PremiumExpiration).Humanize(false)}`";
