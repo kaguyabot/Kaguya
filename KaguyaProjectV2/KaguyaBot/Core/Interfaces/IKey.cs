@@ -6,6 +6,5 @@
         long LengthInSeconds { get; set; }
         ulong KeyCreatorId { get; set; }
         ulong UserId { get; set; }
-        double Expiration { get; set; }
     }
 }

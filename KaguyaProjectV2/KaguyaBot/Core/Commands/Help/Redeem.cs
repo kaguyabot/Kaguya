@@ -67,7 +67,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     KeyCreatorId = premiumKey.KeyCreatorId,
                     UserId = Context.User.Id,
                     ServerId = Context.Guild.Id,
-                    Expiration = DateTime.Now.AddSeconds(premiumKey.LengthInSeconds).ToOADate()
                 };
 
                 expirationDate = server.PremiumExpirationDate;
@@ -131,8 +130,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 {
                     IsInline = false,
                     Name = "Key Properties",
-                    Value = $"Key: `{key.Key}`\nCreated by: `{owner}`\nExpires " +
-                            $"`{DateTime.FromOADate(key.Expiration).Humanize(false)}`"
+                    Value = $"Key: `{key.Key}`\nCreated by: `{owner}`\nExpires: " +
+                            $"`{DateTime.Now.AddSeconds(key.LengthInSeconds).Humanize(false)}`"
                 }
             };
 

@@ -30,6 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
                 var field = new EmbedFieldBuilder();
                 field.Name = "Kaguya Premium";
 
+                //todo: Figure out the user's active premium keys manually.
                 foreach (var key in await user.GetActivePremiumKeysAsync())
                 {
                     var guild = Client.GetGuild(key.ServerId);

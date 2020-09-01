@@ -236,17 +236,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
             return allKeys.Count > 0;
         }
 
-        /// <summary>
-        /// Returns all unexpired, active premium keys for this user.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public static async Task<List<PremiumKey>> GetActivePremiumKeysAsync(this User user)
-        {
-            return (await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId,
-                x => x.Expiration > DateTime.Now.ToOADate())).ToList();
-        }
-
         public static async Task<List<DatabaseUpvoteWebhook>> GetRecentUpvotesAsync(this User user, int days = 7)
         {
             return (await DatabaseQueries.GetAllForUserAsync<DatabaseUpvoteWebhook>(user.UserId,
