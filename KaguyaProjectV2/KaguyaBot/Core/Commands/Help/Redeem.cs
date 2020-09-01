@@ -69,7 +69,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     ServerId = Context.Guild.Id,
                 };
 
-                expirationDate = server.PremiumExpirationDate;
+                expirationDate = server.PremiumExpiration;
 
                 await DatabaseQueries.InsertOrReplaceAsync((PremiumKey)newKey);
             }

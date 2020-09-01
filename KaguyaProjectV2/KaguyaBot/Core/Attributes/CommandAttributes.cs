@@ -74,7 +74,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         {
             var server = DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id).Result;
             var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id).Result;
-            return Task.FromResult(server.IsPremium || user.IsBotOwner || user.IsPremiumAsync().Result
+            return Task.FromResult(server.IsPremium || user.IsBotOwner || user.IsPremium
                 ? PreconditionResult.FromSuccess()
                 : PreconditionResult.FromError($"Sorry, but this server must be of [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
                                                "status in order to use this command. This command may be used anywhere by " +
@@ -88,7 +88,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id).Result;
-            return Task.FromResult(user.IsBotOwner || user.IsPremiumAsync().Result
+            return Task.FromResult(user.IsBotOwner || user.IsPremium
                 ? PreconditionResult.FromSuccess()
                 : PreconditionResult.FromError("This command may only be executed by the redeemer of a " +
                                                $"[Kaguya Premium]({ConfigProperties.KaguyaStore}) key."));

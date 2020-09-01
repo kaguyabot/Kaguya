@@ -102,7 +102,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             }
 
             IReadOnlyList<LavaTrack> tracks;
-            if (await user.IsPremiumAsync() || server.IsPremium)
+            if (user.IsPremium || server.IsPremium)
             {
                 tracks = result.Tracks;
             }
@@ -114,7 +114,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
             if (tracks.Count == 0)
             {
-                string suppString = await user.IsPremiumAsync()
+                string suppString = user.IsPremium
                     ? ""
                     : "If you are " +
                       $"not a [Kaguya Premium Subscriber]({ConfigProperties.KaguyaStore}), " +

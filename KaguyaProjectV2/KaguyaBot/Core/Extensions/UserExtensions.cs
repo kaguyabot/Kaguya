@@ -220,20 +220,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
         public static int FishbaitCost(this User user)
         {
-            return user.IsPremiumAsync().Result 
+            return user.IsPremium 
                 ? (int)(Fish.SUPPORTER_BAIT_COST * (1 + user.FishLevelBonuses.BaitCostIncreasePercent / 100))
                 : (int)(Fish.BAIT_COST * (1 + (user.FishLevelBonuses.BaitCostIncreasePercent / 100)));
-        }
-
-        /// <summary>
-        /// Returns whether the user has any active Kaguya Premium keys.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public static async Task<bool> IsPremiumAsync(this User user)
-        {
-            var allKeys = await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId);
-            return allKeys.Count > 0;
         }
 
         public static async Task<List<DatabaseUpvoteWebhook>> GetRecentUpvotesAsync(this User user, int days = 7)

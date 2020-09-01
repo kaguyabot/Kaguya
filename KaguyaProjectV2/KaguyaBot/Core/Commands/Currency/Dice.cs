@@ -38,7 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
             
-            if (points > 50000 && !await user.IsPremiumAsync() && !server.IsPremium)
+            if (points > 50000 && !user.IsPremium && !server.IsPremium)
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} Sorry, you must be either an active " +
                                                $"[Kaguya Premium]({ConfigProperties.KaguyaStore}) subscriber " +
@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            if (points > 500000 && (await user.IsPremiumAsync() || server.IsPremium))
+            if (points > 500000 && (user.IsPremium || server.IsPremium))
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} Sorry, the maximum points you may bet regardless " +
                                                $"of [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +

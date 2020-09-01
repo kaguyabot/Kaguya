@@ -60,12 +60,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "OsuLinkParsingEnabled"), NotNull]
         public bool OsuLinkParsingEnabled { get; set; } = true;
         [Column(Name = "PremiumExpirationDate"), NotNull]
-        public double PremiumExpirationDate { get; set; }
+        public double PremiumExpiration { get; set; }
 
         /// <summary>
         /// Whether or not the server currently has an active premium subscription.
         /// </summary>
-        public bool IsPremium => PremiumExpirationDate > DateTime.Now.ToOADate();
+        public bool IsPremium => PremiumExpiration > DateTime.Now.ToOADate();
 
         [Column(Name = "AutoWarnOnBlacklistedPhrase"), NotNull]
         public bool AutoWarnOnBlacklistedPhrase { get; set; } = false;

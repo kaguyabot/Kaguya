@@ -46,8 +46,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         return; // The user has been rate limited within the last 30 seconds.
                                 // Don't accidentally double-rate-limit them.
 
-                    if (registeredUser.ActiveRateLimit >= THRESHOLD_REG && !await registeredUser.IsPremiumAsync() ||
-                        registeredUser.ActiveRateLimit >= THRESHOLD_PREMIUM && await registeredUser.IsPremiumAsync())
+                    if (registeredUser.ActiveRateLimit >= THRESHOLD_REG && !registeredUser.IsPremium ||
+                        registeredUser.ActiveRateLimit >= THRESHOLD_PREMIUM && registeredUser.IsPremium)
                     {
                         registeredUser.LastRatelimited = DateTime.Now.ToOADate();
                         registeredUser.RateLimitWarnings++;
@@ -84,7 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                             await DatabaseQueries.UpdateAsync(registeredUser);
                             await DatabaseQueries.InsertOrReplaceAsync(bl);
 
-                            await ConsoleLogger.LogAsync($"User [Name: {socketUser.Username} | ID: {socketUser.Id} | Supporter: {await registeredUser.IsPremiumAsync()}] " +
+                            await ConsoleLogger.LogAsync($"User [Name: {socketUser.Username} | ID: {socketUser.Id} | Supporter: {registeredUser.IsPremium}] " +
                                                     "has been permanently blacklisted. Reason: Excessive Ratelimiting", LogLvl.WARN);
                             return;
                         }
@@ -141,7 +141,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                             dm = false;
                         }
 
-                        await ConsoleLogger.LogAsync($"User [Name: {user?.Username} | ID: {user?.Id} | Supporter: {await registeredUser.IsPremiumAsync()}] " +
+                        await ConsoleLogger.LogAsync($"User [Name: {user?.Username} | ID: {user?.Id} | Supporter: {registeredUser.IsPremium}] " +
                                                 $"has been ratelimited. Duration: {humanizedTime} Direct Message Sent: {dm}", LogLvl.INFO);
                     }
 

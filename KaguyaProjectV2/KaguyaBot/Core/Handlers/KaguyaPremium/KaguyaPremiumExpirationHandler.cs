@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
             //     {
             //         if (premKey.Expiration < DateTime.Now.ToOADate() && premKey.Expiration > 1)
             //         {
-            //             if (await (await DatabaseQueries.GetOrCreateUserAsync(premKey.UserId)).IsPremiumAsync())
+            //             if (await (await DatabaseQueries.GetOrCreateUserAsync(premKey.UserId)).IsPremium)
             //                 continue;
             //             var socketUser = ConfigProperties.Client.GetUser(premKey.UserId);
             //

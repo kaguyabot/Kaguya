@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
                         exp *= 2;
                     }
 
-                    if (await user.IsPremiumAsync())
+                    if (user.IsPremium)
                     {
                         points *= 2;
                         exp *= 2;

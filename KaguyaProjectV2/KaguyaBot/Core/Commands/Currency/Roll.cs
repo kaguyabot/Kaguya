@@ -28,13 +28,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
-            if (bet > MAX_BET && !await user.IsPremiumAsync())
+            if (bet > MAX_BET && !user.IsPremium)
             {
                 await SendBasicErrorEmbedAsync($"Sorry, but only premium subscribers may bet more than " +
                                                                $"`{MAX_BET:N0}` points.");
                 return;
             }
-            if (bet > MAX_PREMIUM_BET && await user.IsPremiumAsync())
+            if (bet > MAX_PREMIUM_BET && user.IsPremium)
             {
                 await SendBasicErrorEmbedAsync($"Sorry, but you may not bet more than " +
                                                                $"`{MAX_PREMIUM_BET:N0}` points.");
@@ -54,7 +54,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             if (roll > 100)
                 roll = 100;
 
-            if (await user.IsPremiumAsync())
+            if (user.IsPremium)
                 roll = (int)(roll * 1.05);
             
             var rollResult = GetRollResult(roll);

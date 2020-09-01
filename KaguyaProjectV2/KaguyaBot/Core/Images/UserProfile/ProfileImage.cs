@@ -116,7 +116,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             gBar.Mutate(x => x.DrawKaguyaTemplatePanelText(profile.Xp.RightPanel));
 
             // Draw supporter badge.
-            if (await user.IsPremiumAsync())
+            if (user.IsPremium)
             {
                 gBar.Mutate(x => x.DrawImage(suppBadge,
                     new Point((int)profile.Xp.SupporterBadge.Loc.X, (int)profile.Xp.SupporterBadge.Loc.Y), 1));

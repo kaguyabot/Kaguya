@@ -39,7 +39,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
                 ((double)guild.Users.Count(x => x.Status != UserStatus.Offline && x.Status != UserStatus.Invisible) /
                  guild.MemberCount) * 100;
 
-            double premiumExpiration = server.PremiumExpirationDate;
+            double premiumExpiration = server.PremiumExpiration;
 
             var genSb = new StringBuilder();
             genSb.AppendLine($"Name: `{guild}`");

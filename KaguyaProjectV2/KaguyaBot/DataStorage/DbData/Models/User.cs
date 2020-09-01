@@ -94,6 +94,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 
 
         public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
+        public bool IsPremium => PremiumExpiration > DateTime.Now.ToOADate();
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetDailyPoints => LastDailyBonus < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetWeeklyPoints => LastWeeklyBonus < DateTime.Now.AddDays(-7).ToOADate();

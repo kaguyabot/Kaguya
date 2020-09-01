@@ -134,7 +134,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
             canvas.Mutate(x => x.DrawImage(image, 1));
             canvas.Mutate(x => x.DrawKaguyaXpPanelText(xp));
 
-            if (await user.IsPremiumAsync())
+            if (user.IsPremium)
             {
                 canvas.Mutate(x => x.DrawImage(suppBadge, new Point((int)xp.SupporterBadge.Loc.X, (int)xp.SupporterBadge.Loc.Y), 1));
             }

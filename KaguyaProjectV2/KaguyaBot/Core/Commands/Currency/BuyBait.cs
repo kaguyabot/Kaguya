@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             const int baitCapacity = 100;
             const int suppBaitCapacity = 1000;
 
-            if (amount + user.FishBait > baitCapacity && !await user.IsPremiumAsync())
+            if (amount + user.FishBait > baitCapacity && !user.IsPremium)
             {
                 if (user.FishBait == baitCapacity)
                 {
@@ -47,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            if (amount + user.FishBait > suppBaitCapacity && await user.IsPremiumAsync())
+            if (amount + user.FishBait > suppBaitCapacity && user.IsPremium)
             {
                 if (user.FishBait == suppBaitCapacity)
                 {
@@ -62,7 +62,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            if (await user.IsPremiumAsync())
+            if (user.IsPremium)
                 totalCost = Fish.SUPPORTER_BAIT_COST * amount;
 
             var bonuses = new FishHandler.FishLevelBonuses(user.FishExp);

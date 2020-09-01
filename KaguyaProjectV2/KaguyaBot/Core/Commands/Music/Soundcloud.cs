@@ -25,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
-            if (server.IsPremium || await user.IsPremiumAsync())
+            if (server.IsPremium || user.IsPremium)
             {
                 var playInstance = new Search();
                 var data = await playInstance.SearchAndPlayAsync(Context, query, false, SearchProvider.Soundcloud);

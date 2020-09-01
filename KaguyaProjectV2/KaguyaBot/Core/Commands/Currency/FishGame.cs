@@ -52,7 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
             
-            bool premium = await user.IsPremiumAsync();
+            bool premium = user.IsPremium;
             
             if (user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN).ToOADate() && !premium ||
                 user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN_PREMIUM).ToOADate() && premium)
