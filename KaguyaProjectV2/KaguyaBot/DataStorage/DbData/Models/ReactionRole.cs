@@ -1,4 +1,5 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using Discord;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
@@ -22,9 +23,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "serverid"), NotNull]
         public ulong ServerId { get; set; }
         /// <summary>
-        /// The ID of the emote that this reaction role is assigned to.
+        /// The ID of the emote that this reaction role is assigned to. If the reaction itself is
+        /// actually a standard <see cref="Emoji"/>, we need to store its name instead. i.e. :joy: :beach:
         /// </summary>
-        [Column(Name = "emoteid"), NotNull]
-        public ulong EmoteId { get; set; }
+        [Column(Name = "emotenameid"), Nullable]
+        public string EmoteNameorId { get; set; }
     }
 }

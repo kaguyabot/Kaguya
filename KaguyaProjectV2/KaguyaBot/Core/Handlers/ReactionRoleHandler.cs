@@ -15,12 +15,12 @@ using MoreLinq.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
-    public class ReactionHandler
+    public class ReactionRoleHandler
     {
         private readonly bool CacheTimerEnabled = false;
         private List<ReactionRole> _reactionRoleCache;
 
-        public ReactionHandler()
+        public ReactionRoleHandler()
         {
             ConsoleLogger.LogAsync("Populating reaction role cache...", LogLvl.DEBUG);
             // We have this as synchronus during initial setup.
@@ -56,10 +56,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 return;
 
             IMessage msg;
-
-            Emote emote = (Emote)reaction.Emote;
+            IEmote emote = reaction.Emote;
+            
             if (emote == null)
                 return;
+
+            bool isEmoji = emote is Emoji;
             
             if (!reaction.Message.IsSpecified)
             {
@@ -69,9 +71,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             {
                 msg = reaction.Message.Value;
             }
-            
-            var rrCacheMatch = _reactionRoleCache.FirstOrDefault(x => x.MessageId == msg.Id &&
-                                                                      x.EmoteId == emote.Id);
+
+            ReactionRole rrCacheMatch;
+
+            if (!isEmoji)
+            {
+                rrCacheMatch = _reactionRoleCache.FirstOrDefault(x => x.MessageId == msg.Id &&
+                                                                      x.EmoteNameorId == (emote as Emote).Id.ToString());
+            }
+            else
+            {
+                rrCacheMatch = _reactionRoleCache.FirstOrDefault(x => x.MessageId == msg.Id &&
+                                                                      x.EmoteNameorId == emote.Name);
+            }
+           
             if (rrCacheMatch == null)
                 return;
 
@@ -81,7 +94,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 var rrLogSb = new StringBuilder();
                 rrLogSb.Append($"[Server ID: {rrCacheMatch.ServerId} | ");
                 rrLogSb.Append($"Role ID: {rrCacheMatch.RoleId} | ");
-                rrLogSb.Append($"Emote ID: {rrCacheMatch.EmoteId} | ");
+                rrLogSb.Append($"Emote ID: {rrCacheMatch.EmoteNameorId} | ");
                 rrLogSb.Append($"Message ID: {rrCacheMatch.MessageId}]");
 
                 _reactionRoleCache.Remove(rrCacheMatch);

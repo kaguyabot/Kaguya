@@ -1,5 +1,13 @@
+### Version 2.9.3
+- Both custom Discord emotes and standard emojis are now supported as reaction role icons.
+
 ### Version 2.9.2
-- Changed the way servers and users are determined to be premium. This fixes a bug where servers that had multiple keys redeemed in them would not have their time stack. Users also could not stack Kaguya Premium time properly. This was because a user was determined to be premium based on the Key's expiration date. If you redeemed 2 30-day keys at the same time, they would expire at the same time. Now each user and server has a premium expiration time that will stack for each key redeemed instead of the times being tied to the keys themselves.
+- Changed the way servers and users are determined to be premium. 
+    This fixes a bug where servers that had multiple keys redeemed in them would not have their time stack. 
+    Users also could not stack Kaguya Premium time properly. This was because a user was determined to be premium 
+    based on the Key's expiration date. If you redeemed 2 30-day keys at the same time, they would expire at the same time. 
+    Now each user and server has a premium expiration time that will stack for each key redeemed 
+    instead of the times being tied to the keys themselves.
 
 ### Version 2.9.1
 - Changed some commands and responses to mention users (not ping them) instead of having user data written as plain text.

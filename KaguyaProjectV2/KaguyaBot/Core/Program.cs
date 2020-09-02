@@ -210,7 +210,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private void InitializeEventHandlers()
         {
-            var reactionHandler = new ReactionHandler();
+            var reactionHandler = new ReactionRoleHandler();
             
             WarnEvent.OnWarn += WarnHandler.OnWarn;
             FishEvent.OnFish += async args => await FishHandler.OnFish(args);
