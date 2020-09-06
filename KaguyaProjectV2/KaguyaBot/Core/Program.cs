@@ -10,8 +10,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
-using KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.AspNetCore.Hosting;
@@ -21,10 +19,12 @@ using Microsoft.Extensions.Logging;
 using OsuSharp;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Utility;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.Statistics;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices;
 using TwitchLib.Api;
 using Victoria;
 
@@ -190,7 +190,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private async Task InitializeTimers(bool allShardsLoggedIn)
         {
             if (!allShardsLoggedIn) return;
-
+            
+            // We need to load the cache on program start.
+            await MemoryCache.Initialize();
 #if !DEBUG
             CachedPopularCommandTimer.Initialize();
             await KaguyaPremiumRoleHandler.Initialize();
@@ -218,6 +220,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             _client.UserJoined += GreetingService.Trigger;
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;
             _client.JoinedGuild += NewOwnerNotificationService.Trigger;
+
+            _client.ReactionAdded += OwnerGiveawayReactionHandlerService.ReactionAdded;
 
             _client.ReactionAdded += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, true);
             _client.ReactionRemoved += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, false);

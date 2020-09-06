@@ -2,7 +2,7 @@
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent

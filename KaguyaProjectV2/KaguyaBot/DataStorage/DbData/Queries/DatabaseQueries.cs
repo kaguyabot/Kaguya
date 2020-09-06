@@ -1,5 +1,4 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -11,6 +10,7 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {

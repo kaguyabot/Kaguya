@@ -7,7 +7,7 @@ using System.Timers;
 using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Utility;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -17,6 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public class ReactionRoleHandler
     {
+        //todo: Have all cached variables be migrated to the MemoryCache class.
         private readonly bool CacheTimerEnabled = false;
         private List<ReactionRole> _reactionRoleCache;
 
@@ -137,8 +138,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             }
         }
         
-        private async Task<List<ReactionRole>> GetReactionRoleCache()
-            => await DatabaseQueries.GetAllAsync<ReactionRole>();
+        private async Task<List<ReactionRole>> GetReactionRoleCache() => await DatabaseQueries.GetAllAsync<ReactionRole>();
 
         private void AddToCache(IEnumerable<ReactionRole> reactionRoles) => _reactionRoleCache.AddRange(reactionRoles);
         private void AddToCache(ReactionRole reactionRole) => _reactionRoleCache.Add(reactionRole);

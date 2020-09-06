@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.Statistics;
+using KaguyaProjectV2.KaguyaBot.Core.Application;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -63,7 +63,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             var cmdsLastDay = await DatabaseQueries.GetAllAsync<CommandHistory>(h => 
                 h.Timestamp >= DateTime.Now.AddHours(-24));
-            Dictionary<string, int> mostPopCommand = CachedPopularCommandTimer.MostPopularCommand;
+            Dictionary<string, int> mostPopCommand = MemoryCache.MostPopularCommandCache;
 
             string mostPopCommandName = mostPopCommand?.Keys.First();
             string mostPopCommandCount = mostPopCommand?.Values.First().ToString("N0");

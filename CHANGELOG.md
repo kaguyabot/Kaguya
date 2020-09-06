@@ -1,3 +1,6 @@
+### Version 2.10
+- Added functionality for owner points/exp giveaways (reaction-based).
+
 ### Version 2.9.3
 - Both custom Discord emotes and standard emojis are now supported as reaction role icons.
 

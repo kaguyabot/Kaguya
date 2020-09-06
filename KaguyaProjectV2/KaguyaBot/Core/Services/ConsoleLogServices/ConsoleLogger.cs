@@ -1,13 +1,13 @@
-﻿using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
+namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
 {
     public class ConsoleLogger
     {

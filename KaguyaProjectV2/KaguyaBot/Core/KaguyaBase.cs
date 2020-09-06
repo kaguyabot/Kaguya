@@ -4,27 +4,29 @@ using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System.Threading.Tasks;
+using Discord.Rest;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
     public abstract class KaguyaBase : InteractiveBase<ShardedCommandContext>
     {
-        public static readonly DiscordShardedClient Client = ConfigProperties.Client;
+        protected static readonly DiscordShardedClient Client = ConfigProperties.Client;
 
         /// <summary>
-        /// Sends an unbuilt <see cref="EmbedBuilder"/> to the current <see cref="ICommandContext"/>'s <see cref="ITextChannel"/>.
+        /// Builds and sends an <see cref="EmbedBuilder"/> to the current <see cref="ICommandContext"/>'s <see cref="ITextChannel"/>.
         /// </summary>
         /// <param name="embed"></param>
         /// <returns></returns>
-        protected async Task SendEmbedAsync(EmbedBuilder embed)
+        protected async Task<RestUserMessage> SendEmbedAsync(EmbedBuilder embed)
         {
             try
             {
-                await Context.Channel.SendMessageAsync(embed: embed.Build());
+                var msg = await Context.Channel.SendMessageAsync(embed: embed.Build());
+                return msg;
             }
             catch (Exception)
             {
@@ -38,10 +40,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                                          "executed from! Commands do not work through DMs!!\n\n" +
                                          "Please report this to this server's Administration.**";
                     await Context.User.SendMessageAsync(embed: embed.Build());
+                    return null;
                 }
                 catch (Exception)
                 {
                     await ConsoleLogger.LogAsync("I was unable to send the user the embed through their DMs either!", LogLvl.ERROR);
+                    return null;
                 }
             }
         }

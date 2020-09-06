@@ -10,7 +10,6 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System.Text;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {

@@ -5,7 +5,7 @@ using KaguyaProjectV2.KaguyaApi.Database.Context;
 using KaguyaProjectV2.KaguyaApi.Database.Models;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using LinqToDB;
 using Microsoft.AspNetCore.Mvc;

@@ -1,10 +1,10 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using System;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService
+namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
 {
     public class LogEventListener
     {
