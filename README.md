@@ -1,99 +1,84 @@
 # [Kaguya](https://top.gg/bot/538910393918160916)
-#### Your all in one Discord Bot.
+## Your all in one Discord Bot.
+
+The Kaguya Discord Bot provides the pinnacle of what a general-purpose Discord bot can offer. Recently rewritten from the ground up, Kaguya strikes a perfect balance between ease of use and power.
 
 ## Main Featues:
+* Anti-Raid features to protect your server!
+    - Protects your server from mass raids by allowing Administrators to configure whether to action a 
+    certain amount of users who join within a specified time limit.
+    - Example: `$antiraid 5 20 ban` - Bans 5 (or more) users if they join within 20 seconds of eachother.
+* **FREE** Level Up Role Rewards
+    - Allows Server Administrators to configure a role to be given when a user reaches a certain server level.
+* Powerful logging features.
+    - Kaguya can log:
+    	- User banned/unbanned
+        - User joined/left
+        - Filtered phrase detected
+        - User connected to/disconnected from/changed voice channel
+        - Server/global/fishing level announcements
+        - Antiraid events with who was actioned
+        - Greetings
+    - and MORE!
+* Powerful moderation features.
+    - Kaguya can:
+        - Take action on a user who has been warned more than once.
+        - Word and Phrase filtering
+        - Create / Delete / Assign roles all without having to go into server settings. Just one command and you can make a new role.
+        - Delete Unused Roles.
+        - HyperBans: Permanently bans a user from this server and from **any other server that the command executor is an Administrator in.** *Kaguya must be present in all mutual servers for this to work properly.* (Use this command with caution)
+        - Shadow bans
+    - and more!
+* Super fun and addicting fishing game, as well as other games! (First person to catch a **Legendary Big Kahuna** and DM a screenshot to `mmatt#0001` will get 1 month of Discord Nitro! **Not Claimed Yet** [Offer expires 1/1/2021])
+* Fun economy system (With global and server specific levels.)
+* Easy to remember command names and aliases.
+* Extensive customization. (Don't like a command? Just toggle it off!)
+* Customizable welcome messages
+* High quality music commands.
+* osu! integrations and features (including link parsing)
+* Auto-assigned roles
+* Give rep to users
+* Praise servers
+* NSFW Commands
+* Rewards for upvoting Kaguya on [Top.gg.](https://top.gg/bot/538910393918160916/vote)
+* **NEW** Reaction Roles
 
-## New Commands:
+## [Kaguya Supporter](https://sellix.io/KaguyaStore) (Monthly Subscription):
+The standard Kaguya Premium option unlocks many features for both individuals and their servers. Any server-wide premium benefits, marked as **(SW)** below, apply to all servers you own and have Kaguya in. If you want to redeem multiple Kaguya Premium keys, the time will stack for every server you redeem the key in, as well as the personal benefits will stack on your account. Please note that redeeming 3 separate 30 day keys will grant you and all of your servers 90 days of premium benefits, but will grant the individual servers 30 days of benefits each.
 
-*Note: Some commands here may be exclusive to supporters/premium servers.
-- `$move` - Moves users between voice channels.
-- `$deleteunusedroles` - Deletes all roles that currently aren't used by anyone, except roles managed by bots and integrations.
-- `$hyperban` - Bans a target from any server where the **command executor** is an *Administrator* that Kaguya also shares with the user and target.
-- `$serverstats` - Very detailed statistics about the server.
-- `$toggleosulinks` - Toggles the automatic osu! link parsing feature.
-- `$buybait` - Bait purchasing for new fish game.
-- `$dailyloot` - Replacement for `$timely` - now earns both points and exp, and the amounts fluctuate.
-- `$fish` - Awesome new fishing game!
-- `$myfish` - View all of your fish and other fish stats.
-- `$sellfish` - Allows you to sell your fish for points.
-- `$addrolereward` - Allows server admins to add a new role reward (based on the new server-specific exp system). Very similar to Mee6's *premium-only* role rewards feature (except this is free!)
-- `$removerolereward`
-- `$viewrolerewards`
-- `$exppreferences` - Allows users to determine where they want their EXP level-up messages sent (Chat, DM, Both, or None at all) as well as what types to send where (Server or Global). Very customizable.
-- `$praise` - Rep but for servers. Server admins can modify a user's praise at anytime.
+One-time currency infusions described below (such as point bonuses) will stack if multiple keys were purchased. Benefits such as bonus luck or increased gambling limit do not stack.
 
+All perks below will last until your time as a premium subscriber runs out.
 
-## Command Changes: Administration
+* Bet many more points than usual on gambling games.
+* 25,000 points for every 30 days of premium time purchased.
+* 2x points and exp from $daily
+* 2x points and exp from $vote
+* 25% off $bait cost
+* Special $profile badge
+* Significantly reduced $fish cooldown
+* More lenient rate limit (able to use commands more frequently than other users).
+* Access to $doujin
+* Access to $react
+* Access to $weekly
+* Access to $serverstats
+* Access to $hyperban
+* Access to $deleteunusedroles
+* Access to $soundcloud, $twitchaudio
+* Bonus luck on all gambling commands (including $fish)
+* Store up to 1,000 fish bait instead of 100
+* Deleted messages logged via "$log DeletedMessages " will now include archives of deleted images and attachments. **(SW)**
+* Unlimited role rewards **(SW)**
+* Access to the $logtype "ModLog" - logs many various administrative actions **(SW)**
+* View more of a user's warn history via $unwarn **(SW)**
+* Unlimited song duration (compared to 10 minutes) **(SW)**
+* Unlimited music queue size **(SW)**
+* Unlimited + enhanced $nsfw usage **(SW)**
 
-- `$antiraid` no longer has the intuitive setup that V1 has. This way changes to the anti-raid config may be made on the fly.
-- `$antiraidoff` has been **removed.** Using `$antiraid` by itself will disable it.
-- `$channelblacklist [cbl]` has been completely reworked (it's awesome).
-- `$channelunblacklist [cubl]`, `$channelwhitelist [cwl]`, and `$channelunwhitelist [cuwl]` have been **removed.**
-- `$clear [c] [purge]` may now clear up to `1,000` messages (was 100).
-- `$createrole [cr]` may now create a list of roles, separated by periods.
-- `$filterclear [clearfilter]` has been replaced with `$filterremoveall [fra]`
-- `$inspect` has been **removed.**
-- `$kaguyaexit` has been **removed.**
-- `$kick` and `$ban` may now action multiple users at once.
-- `$masskick` and `$massban` have been removed.
-- `$mute [m]` will now mute users immediately, even if the `kaguya-mute` role does not exist when using the command.
-- Music commands no longer start with `$m`.
-- `$removeallroles [rar]` may now target multiple users.
-- `$warnoptions [wo]` has been **removed**.
-- `$warnset [ws]` has been renamed to `$warnsettings [warnset] [ws]`
-- `$warnpunishments [wp]` has been removed. `$warnset` used without any arguments displays the server's warn-punishment scheme.
+### Purchase Kaguya Premium at the [Kaguya Store](https://sellix.io/KaguyaStore) for only $4.99 a month!
 
-## Other Command Changes:
-
-- New server-specific `$praise` feature added. This is essentially `$rep` but for servers. There is more functionality with this that server administrators have control over, such as the cooldown.
-- **New game: `$fish`!** Collect fish and hunt for the **Legendary Big Kahuna!** Fish may be caught, collected, and sold for KP and **global** EXP. Dedicated fishermen may level up their fishing skill by fishing often, and bonuses can be earned for fishing a certain amount of times per day! The higher your fishing level, the more likely you are to catch 
-rarer fish! Be wary though, as better bait will be needed to catch rarer fish more easily, which will be more expensive!
-- `Critical hits` removed from all games.
-- `$tictactoe` removed (it was terrible anyway)
-- `$bugreport` will now simply reply with a link to the bug report Github form.
-- `$masspointsdistribute` has been removed.
-- `$redeem` will now support keys of all types (Kaguya Supporter, Kaguya Premium, etc.) instead of there being separate `$redeem` commands for each key type.
-- `$nsfw bomb` command removed. **Note:** Although this individual command is removed, using `$nsfw bomb` by itself will still trigger the same function as V1. It is just not present in the command list.
-- `$exp` and `$points` have been removed - `$profile` is now the official replacement for these commands.
-- `$timely` and `$weekly` removed.
-- `$profile` is now a programatically generated image ontop of a template that displays various stats, such as your exp rank, points, level (both global and server), etc.
-
-## Quality of life Changes:
-
-- 1-4 points are now earned automatically for typing in chat at the same time you earn exp. *Only being able to earn points through betting and "timely" claims was unfun. Now, points can be earned passively so that you can buy fish bait, bet, etc. whenever it's convenient!*
-- NSFW age verification requirement has been removed. *It's implied that anyone with access to a NSFW-marked channel is already of age.*
-- All upvote rewards are now automatically given soon after you upvote online (top.gg, search for Kaguya).
-- A small amount of EXP is now given for votes.
-- If you haven't recently used NSFW commands (within the last 7 days), you won't be reminded that your NSFW image cooldown reset has triggered when voting.
-
-## Kaguya Supporter (Monthly Subscription):
-#### Supporter Only Features
-*Kaguya Supporter is a user-bound monthly subscription that grants access to special commands and features.*
-- Unlimited `$nsfw` command uses (compared to 12 images per day).
-- `$nsfw` may now have tags appended to it (`$nsfw long_hair swimsuit`). Tag count is unlimited.
-- Significantly more lenient rate limit when using commands.
-- Higher priority suggestions for new features.
-- Special **Supporter** role in the Kaguya Support Discord Server.
-- Special badge on your `$profile`
-- Access to supporter only commands, including `$react`.
-- Reduced fishing cooldown (15s => 5s).
-- 25% off fishing bait purchase price.
-- Carry 1,000 fish bait at a time (compared to 100)
-- Increased maximum betting range for games (50,000 => 500,000)
-- Access to $soundcloud music streaming in any server shared with Kaguya.
-- Access to $twitchaudio music streaming in any server shared with Kaguya.
-- Unlimited duration on songs (compared to 10 minutes).
+## Support:
+Join the [Kaguya Support Server](https://discord.gg/aumCJhr) and ask our support staff if you need help!
 
 
-## Kaguya Premium (Monthly Subscription):
-#### Kaguya Premium Features
-*Kaguya Premium is a server-bound monthly subscription that grants access to many special utilities. The following features are restricted to premium servers only.*
-- Access to the `logtype` `ModLog`. This logtype will automatically log events for `AutoBan`, `AutoKick`, `AutoMute`, `AutoShadowban`, `Shadowban`, `Unshadowban`, `Mute`, `Unmute`, `Warn`, `UnWarn`, `Bulk deletion of messages ($clear 100)`.
-- If a message is deleted and the `DeletedMessages` logtype is enabled, the log will now display **permanent links** to any attachments or files that were uploaded and included with the deleted message, 
-including images and anything else that a user may upload to the server.
-- View the **9** most recent warnings for users when using the $unwarn command (instead of the 4 most recent). This is especially useful if you want to remove a warning that was made a long time ago, or just view the user's warn history.
-- Access to `$serverstats` command which displays many stats about your server.
-- Server-wide access to $soundcloud music searching.
-- Server-wide access to $twitchaudio audio streaming.
-- Server-wide unlimited duration on songs (compared to 10 minutes).
-- Unlimited song queue size (compared to 50 songs).
+##### Original V2 changes can be viewed [here.](https://github.com/stageosu/Kaguya/blob/master/v2.md)
