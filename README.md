@@ -1,5 +1,5 @@
 # [Kaguya](https://top.gg/bot/538910393918160916)
-## Your all in one Discord Bot.
+## An all-in-one Discord bot solution!
 
 The Kaguya Discord Bot provides the pinnacle of what a general-purpose Discord bot can offer. Recently rewritten from the ground up, Kaguya strikes a perfect balance between ease of use and power.
 
