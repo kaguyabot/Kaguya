@@ -17,6 +17,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "message_id"), NotNull]
         public ulong MessageId { get; set; }
         /// <summary>
+        /// The id of the channel that the giveaway's message lives in.
+        /// </summary>
+        [Column(Name = "channel_id"), NotNull]
+        public ulong ChannelId { get; set; }
+        /// <summary>
         /// The amount of Exp each user is awarded by participating in this giveaway.
         /// </summary>
         [Column(Name = "exp"), NotNull]

@@ -53,6 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             var giveawayObj = new OwnerGiveaway
             {
                 MessageId = embedMsg.Id,
+                ChannelId = embedMsg.Channel.Id,
                 Exp = exp,
                 Points = points,
                 Expiration = DateTime.Now.AddSeconds(giveawayTimespan.TotalSeconds).ToOADate()
@@ -76,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             return titleSb;
         }
 
-        private static StringBuilder DescriptionStringBuilder(string duration, bool pointsGiveaway, bool expGiveaway, 
+        public static StringBuilder DescriptionStringBuilder(string duration, bool pointsGiveaway, bool expGiveaway, 
             int points, int exp, out TimeSpan parsedTimeSpan)
         {
             var timeSpan = duration.ParseToTimespan();

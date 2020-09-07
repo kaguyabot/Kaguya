@@ -193,6 +193,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             
             // We need to load the cache on program start.
             await MemoryCache.Initialize();
+            await OwnerGiveawayMessageUpdaterService.Initialize();
 #if !DEBUG
             CachedPopularCommandTimer.Initialize();
             await KaguyaPremiumRoleHandler.Initialize();

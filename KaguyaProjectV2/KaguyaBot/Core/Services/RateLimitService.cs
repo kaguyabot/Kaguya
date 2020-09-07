@@ -1,19 +1,17 @@
-﻿using Discord;
-using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Discord;
 using Discord.Net;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
-using User = KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models.User;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {

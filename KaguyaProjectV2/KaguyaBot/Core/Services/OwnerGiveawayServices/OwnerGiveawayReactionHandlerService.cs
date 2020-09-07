@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
             _validCache = _ownerGiveawayCache.Where(x => x.Expiration > DateTime.Now.ToOADate());
             _validIds = _validCache.Select(x => x.MessageId).ToHashSet();
             
-            ulong msgId = _validIds.First(x => x == reaction.MessageId);
+            ulong msgId = _validIds.FirstOrDefault(x => x == reaction.MessageId);
             bool giveawayReaction = msgId != 0;
 
             if (!giveawayReaction)
