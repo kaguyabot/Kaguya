@@ -12,7 +12,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
 {
-    public class OwnerGiveawayReactionHandlerService
+    public class OwnerGiveawayReactionService
     {
         // Un-expired owner giveaways.
         private static IEnumerable<OwnerGiveaway> _ownerGiveawayCache = MemoryCache.OwnerGiveawaysCache;
@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
             _ownerGiveawayCache = MemoryCache.OwnerGiveawaysCache;
             _previousReactions = MemoryCache.OwnerGiveawayReactions;
 
-            _validCache = _ownerGiveawayCache.Where(x => x.Expiration > DateTime.Now.ToOADate());
+            _validCache = _ownerGiveawayCache.Where(x => !x.HasExpired);
             _validIds = _validCache.Select(x => x.MessageId).ToHashSet();
             
             ulong msgId = _validIds.FirstOrDefault(x => x == reaction.MessageId);

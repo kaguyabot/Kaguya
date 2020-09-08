@@ -222,7 +222,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;
             _client.JoinedGuild += NewOwnerNotificationService.Trigger;
 
-            _client.ReactionAdded += OwnerGiveawayReactionHandlerService.ReactionAdded;
+            _client.ReactionAdded += OwnerGiveawayReactionService.ReactionAdded;
 
             _client.ReactionAdded += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, true);
             _client.ReactionRemoved += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, false);

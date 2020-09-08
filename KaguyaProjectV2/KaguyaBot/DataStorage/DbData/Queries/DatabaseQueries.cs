@@ -37,7 +37,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 bool exists = db.Servers.Any(x => x.ServerId == Id);
-
                 if (!exists)
                 {
                     await db.InsertAsync(new Server
@@ -220,6 +219,23 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 {
                     await db.InsertAsync(element);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Inserts the <see cref="T"/> <see cref="arg"/> into the database and returns the <see cref="T"/> <see cref="arg"/>
+        /// with it's updated auto-incremented identifier. Use this only if the database table has an auto-incremented ID.
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>The id of the <see cref="T"/>.</returns>
+        public static async Task<int> InsertWithIdentityAsync<T>(T arg) where T : class, 
+            IKaguyaQueryable<T>, IKaguyaUnique<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                var val = await db.InsertWithInt32IdentityAsync(arg);
+                return val;
             }
         }
 

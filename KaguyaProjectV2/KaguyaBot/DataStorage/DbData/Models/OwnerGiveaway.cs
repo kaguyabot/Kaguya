@@ -4,13 +4,15 @@ using LinqToDB.Mapping;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     [Table(Name = "owner_giveaway")]
-    public class OwnerGiveaway : IKaguyaQueryable<OwnerGiveaway>, IMemoryCacheable<OwnerGiveaway>
+    public class OwnerGiveaway : IKaguyaQueryable<OwnerGiveaway>, 
+        IKaguyaUnique<OwnerGiveaway>, 
+        IMemoryCacheable<OwnerGiveaway>
     {
         /// <summary>
         /// The id of the owner giveaway. This is solely managed by the database.
         /// </summary>
-        [Column(Name = "id"), PrimaryKey, NotNull]
-        public int Id { get; }
+        [Column(Name = "id"), PrimaryKey, NotNull, Identity]
+        public int Id { get; set; }
         /// <summary>
         /// The id of the message that this giveaway is attached to.
         /// </summary>
@@ -36,5 +38,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Column(Name = "expiration"), NotNull]
         public double Expiration { get; set; }
+        /// <summary>
+        /// Whether or not the embedded message has been marked as expired.
+        /// </summary>
+        [Column(Name = "has_expired"), NotNull]
+        public bool HasExpired { get; set; }
     }
 }

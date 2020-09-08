@@ -7,11 +7,13 @@ using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
 using Humanizer;
+using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
@@ -24,9 +26,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
     {
         private static IEnumerable<OwnerGiveaway> _ownerGiveawayCache = MemoryCache.OwnerGiveawaysCache;
         private static IEnumerable<OwnerGiveaway> _activeGiveaways =
-            _ownerGiveawayCache.Where(x => x.Expiration > DateTime.Now.ToOADate());
+            _ownerGiveawayCache.Where(x => !x.HasExpired);
         
-        public static async Task Initialize(int milliseconds = 5000) // 30 seconds
+        public static async Task Initialize(int milliseconds = 15000) // 15 seconds
         {
             var timer = new Timer(milliseconds);
             timer.Enabled = true;
@@ -34,7 +36,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
             timer.Elapsed += async (s, e) =>
             {
                 _ownerGiveawayCache = MemoryCache.OwnerGiveawaysCache;
-                _activeGiveaways = _ownerGiveawayCache.Where(x => x.Expiration > DateTime.Now.ToOADate());
+                _activeGiveaways = _ownerGiveawayCache.Where(x => !x.HasExpired).ToHashSet();
+
+                if (!_activeGiveaways.Any())
+                    return;
                 
                 foreach (var giveaway in _activeGiveaways)
                 {
@@ -47,7 +52,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
                     }
                     
                     var msg = await (guildChannel as SocketTextChannel).GetMessageAsync(giveaway.MessageId);
-                    var userMessage = msg as RestUserMessage;
+                    IUserMessage userMessage = msg as IUserMessage;
                     
                     if (userMessage == null)
                     {
@@ -56,13 +61,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
                             $"RestUserMessage could not be found.", LogLvl.WARN);
                         continue;
                     }
+
+                    if (String.IsNullOrWhiteSpace(userMessage.Content) && !userMessage.Embeds.Any())
+                        return;
                     
-                    await userMessage.ModifyAsync(msg =>
+                    await userMessage.ModifyAsync(async m =>
                     {
-                        if (!msg.Content.IsSpecified && !msg.Embed.IsSpecified)
+                        var cacheEmbed = userMessage.Embeds.FirstOrDefault();
+
+                        if (cacheEmbed == null)
+                        {
+                            await ConsoleLogger.LogAsync("The embed for an owner giveaway message was null!!",
+                                LogLvl.WARN);
                             return;
-                        
-                        var cacheEmbed = msg.Embed.Value;
+                        }
                         var embed = new KaguyaEmbedBuilder(EmbedColor.GOLD)
                         {
                             Title = cacheEmbed.Title,
@@ -75,11 +87,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
                         var descSb = OwnerGiveawayCommand.DescriptionStringBuilder("1s", pointsGiveaway,
                             expGiveaway,
                             giveaway.Points, giveaway.Exp, out TimeSpan timeSpan);
-                    
-                        embed.Description = descSb.ToString().Replace("1s", 
-                            (DateTime.FromOADate(giveaway.Expiration) - DateTime.Now).Humanize(2));
-                    
-                        msg.Embed = embed.Build();
+
+                        string lastLine = descSb.ToString().Split("\r\n")[^2];
+                        if (!giveaway.HasExpired && giveaway.Expiration < DateTime.Now.ToOADate() || 
+                            giveaway.Expiration < DateTime.Now.ToOADate())
+                        {
+                            descSb = descSb.Replace(lastLine, "This giveaway has ended.");
+
+                            giveaway.HasExpired = true;
+                            await DatabaseQueries.UpdateAsync(giveaway);
+                        }
+                        else
+                        {
+                            string humanizedTimeRemaining = (DateTime.FromOADate(giveaway.Expiration) - DateTime.Now).Humanize(2, minUnit: TimeUnit.Second);
+                            string endString = $"This giveaway will end in `{humanizedTimeRemaining}`.";
+                            
+                            descSb = descSb.Replace(lastLine, endString);
+                        }
+
+                        embed.Description = descSb.ToString();
+                        m.Embed = embed.Build();
                     });
                 }
             };

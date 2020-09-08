@@ -56,10 +56,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 ChannelId = embedMsg.Channel.Id,
                 Exp = exp,
                 Points = points,
-                Expiration = DateTime.Now.AddSeconds(giveawayTimespan.TotalSeconds).ToOADate()
+                Expiration = DateTime.Now.AddSeconds(giveawayTimespan.TotalSeconds).ToOADate(),
+                HasExpired = false
             };
-            await DatabaseQueries.InsertAsync(giveawayObj);
-            MemoryCache.OwnerGiveawaysCache.Add(giveawayObj);
+            int id = await DatabaseQueries.InsertWithIdentityAsync(giveawayObj);
+            var cachedObj = giveawayObj;
+            cachedObj.Id = id;
+            MemoryCache.OwnerGiveawaysCache.Add(cachedObj);
             
             await ConsoleLogger.LogAsync($"Owner giveaway created.", LogLvl.DEBUG);
         }
