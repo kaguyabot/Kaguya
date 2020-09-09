@@ -200,7 +200,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             user.Points -= user.FishCost();
             user.LastFished = DateTime.Now.ToOADate();
 
-            value = (int)(value * (1 + bonuses.BonusFishValuePercent / 100));
             var fish = new Fish
             {
                 FishId = fishId,
@@ -213,6 +212,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 Exp = fishExp,
                 Sold = false
             };
+            value = Fish.GetPayoutForFish(fish, user.FishExp);
 
             await DatabaseQueries.InsertAsync(fish);
             await DatabaseQueries.UpdateAsync(user);
