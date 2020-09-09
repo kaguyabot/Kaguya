@@ -30,7 +30,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
             {
                 var field = new EmbedFieldBuilder {Name = "Kaguya Premium"};
 
-                //todo: Figure out the user's active premium keys manually.
                 var includedServers = new List<Server>();
                 foreach (var key in await DatabaseQueries.GetAllForUserAsync<PremiumKey>(user.UserId, x => x.ServerId != 0))
                 {

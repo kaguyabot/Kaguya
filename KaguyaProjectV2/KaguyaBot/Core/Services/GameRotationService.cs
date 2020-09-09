@@ -1,12 +1,12 @@
 ﻿using Discord;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     new Tuple<string, ActivityType>($"{client.TotalUsers():N0} users", ActivityType.Watching),
                     new Tuple<string, ActivityType>($"{client.Guilds.Count:N0} servers", ActivityType.Watching),
                     new Tuple<string, ActivityType>($"$help | @Kaguya help", ActivityType.Listening),
-                    new Tuple<string, ActivityType>("$vote for bonuses!", ActivityType.Watching)
+                    new Tuple<string, ActivityType>("$vote for bonuses", ActivityType.Watching)
                 };
 
                 if (index >= games.Count)

@@ -1,5 +1,4 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaApi.Database.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 #pragma warning disable 4014
 
@@ -218,11 +218,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                 .Any(x => x.Timestamp > DateTime.Now.AddDays(-days)) ?? false;
         }
 
-        public static int FishbaitCost(this User user)
+        /// <summary>
+        /// The cost, in points, for a user to play the fishing game one time.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="plays">The amount of times the game would be played.</param>
+        /// <returns></returns>
+        public static int FishCost(this User user, int plays = 1)
         {
-            return user.IsPremium 
-                ? (int)(Fish.SUPPORTER_BAIT_COST * (1 + user.FishLevelBonuses.BaitCostIncreasePercent / 100))
-                : (int)(Fish.BAIT_COST * (1 + (user.FishLevelBonuses.BaitCostIncreasePercent / 100)));
+            var basePoints = user.IsPremium 
+                ? (int)(Fish.PREMIUM_BAIT_COST * (1 + user.FishLevelBonuses.PlayCostIncreasePercent / 100))
+                : (int)(Fish.BAIT_COST * (1 + (user.FishLevelBonuses.PlayCostIncreasePercent / 100)));
+            return basePoints * plays;
         }
 
         public static async Task<List<DatabaseUpvoteWebhook>> GetRecentUpvotesAsync(this User user, int days = 7)

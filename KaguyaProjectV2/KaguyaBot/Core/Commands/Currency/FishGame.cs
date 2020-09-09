@@ -19,15 +19,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [CurrencyCommand]
         [Command("Fish")]
         [Alias("f")]
-        [Summary("Allows you to play the fishing game! Requires one bait per play. Bait may be purchased with " +
-                 "the `buybait` command.\n\n" +
+        [Summary("Allows you to play the fishing game! Requires 75 points to play (play cost scales up " +
+                 "with your fishing level, 25% off for [Kaguya Premium subscribers](https://sellix.io/KaguyaStore)).\n\n" +
                  "Information:\n\n" +
-                 "- You must have bait to fish. One bait costs 50 points " +
-                 "(25% off for [Kaguya Premium subscribers](https://sellix.io/KaguyaStore)).\n" +
-                 "- You may only fish once every 15 seconds (5 seconds for premium subscribers).\n" +
+                 "- You may only fish once every 15 seconds (5 seconds for " +
+                 "[Kaguya Premium subscribers](https://sellix.io/KaguyaStore)).\n" +
                  "- Fish may be sold with the `sell` command!\n" +
                  "- View your fish collection with the `myfish` command!\n\n" +
-                 "Happy fishing, and good luck catching the **Legendary `Big Kahuna`**!")]
+                 "Happy fishing, and good luck catching the ultra rare **Legendary Big Kahuna**!")]
         [Remarks("")]
         public async Task Command()
         {
@@ -37,29 +36,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             
-            if (user.FishBait < 1)
+            if (user.Points < user.FishCost())
             {
                 var baitEmbed = new KaguyaEmbedBuilder(EmbedColor.RED)
                 {
-                    Description = $"You are out of bait. Please buy more bait with the " +
-                                  $"`{server.CommandPrefix}buybait` command!",
+                    Description = $"You do not have enough points to play the fishing game.",
                     Footer = new EmbedFooterBuilder
                     {
-                        Text = $"One bait will cost you {user.FishbaitCost():N0} points."
+                        Text = $"You need {user.FishCost()} points to play. You have {user.Points} points."
                     }
                 };
                 await SendEmbedAsync(baitEmbed);
                 return;
             }
             
-            bool premium = user.IsPremium;
+            bool isPremium = user.IsPremium;
             
-            if (user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN).ToOADate() && !premium ||
-                user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN_PREMIUM).ToOADate() && premium)
+            if (user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN).ToOADate() && !isPremium ||
+                user.LastFished >= DateTime.Now.AddSeconds(-FISHING_COOLDOWN_PREMIUM).ToOADate() && isPremium)
             {
                 var ts = DateTime.FromOADate(user.LastFished) - DateTime.Now.AddSeconds(-15);
 
-                if (premium)
+                if (isPremium)
                     ts -= TimeSpan.FromSeconds(10);
 
                 var errorEmbed = new KaguyaEmbedBuilder(EmbedColor.RED)
@@ -90,7 +88,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var bonuses = new FishHandler.FishLevelBonuses(user.FishExp);
             roll *= 1 - (bonuses.BonusLuckPercent / 100);
 
-            if (premium)
+            if (isPremium)
                 roll *= 0.95;
             
             var fishType = GetFishType(roll);
@@ -199,10 +197,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
 
             user.FishExp += fishExp;
-            user.FishBait -= 1;
+            user.Points -= user.FishCost();
             user.LastFished = DateTime.Now.ToOADate();
 
-            value = (int)(value * (1 + bonuses.BonusFishValuePercent / 100));
             var fish = new Fish
             {
                 FishId = fishId,
@@ -215,6 +212,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 Exp = fishExp,
                 Sold = false
             };
+            value = Fish.GetPayoutForFish(fish, user.FishExp);
 
             await DatabaseQueries.InsertAsync(fish);
             await DatabaseQueries.UpdateAsync(user);
@@ -228,14 +226,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 var fishString = fishType.ToString().Replace("_", " ").ToLower();
 
                 embed.Description += $"\n\nFish ID: `{fishId}`\n" +
-                                     $"Fish Value (excluding tax): `{value:N0}` points.\n" +
+                                     $"Fish Value: `{value:N0}` points.\n" +
                                      $"Fishing Exp Earned: `{fishExp:N0} exp`\n" +
-                                     $"Bait Remaining: `{user.FishBait:N0}`\n\n" +
+                                     $"Points Remaining: `{user.Points:N0} (-{user.FishCost()})`\n\n" +
                                      $"You now have `{fishCount}` `{fishString}`";
             }
             else
             {
-                embed.Description += $"\nBait Remaining: `{user.FishBait:N0}`";
+                embed.Description += $"\nPoints Remaining: `{user.Points:N0} (-{user.FishCost()})`";
             }
 
             embed.Footer = new EmbedFooterBuilder

@@ -1,11 +1,11 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 #region This file will load all Config file data into memory for the bot to use. This file contains very important credentials.
 #endregion

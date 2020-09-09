@@ -1,4 +1,8 @@
-﻿using Discord;
+﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
@@ -6,12 +10,8 @@ using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
+namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
     public class GuildLogger
     {
@@ -31,7 +31,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.GuildLogService
             //FilteredPhrase
             _client.UserVoiceStateUpdated += _client_UserVoiceStateUpdated;
             //LevelUps
-            //Twitch notifications
         }
 
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)

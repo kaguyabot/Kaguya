@@ -74,7 +74,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             foreach (var dic in countFishDicts)
             {
                 ownedFishString += $"Fish: `{dic.Keys.First().ToString()}` - Count: `{dic.Values.First():N0}` - " +
-                                   $"Taxed Value: `{Fish.GetPayoutForFish(userFish.Where(x => x.FishType == dic.Keys.First() && !x.Sold).ToList(), user.FishExp):N0}` points\n";
+                                   $"Value: `{Fish.GetPayoutForFish(userFish.Where(x => x.FishType == dic.Keys.First() && !x.Sold).ToList(), user.FishExp):N0}` points\n";
             }
 
             if (ownedFishString.IsNullOrEmpty())
@@ -104,7 +104,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                         Name = "Fish Level",
                         Value = $"Fish Exp: `{user.FishExp:N0}` exp.\n" +
                                 $"Fish Level: `{(int)FishHandler.GetFishLevel(user.FishExp):N0}`\n" +
-                                $"{FishHandler.GetRewardString(user.FishExp)}"
+                                $"{FishHandler.GetRewardString(user.FishExp, user, false)}"
                     },
                     new EmbedFieldBuilder
                     {

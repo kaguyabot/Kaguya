@@ -1,19 +1,17 @@
-﻿using Discord;
-using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Discord;
 using Discord.Net;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using User = KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models.User;
+using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -41,10 +39,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                                           $"due to not being ratelimited for 30 days.", LogLvl.INFO);
                     }
 
+                    // The user has been rate limited within the last 30 seconds.
+                    // Don't accidentally double-rate-limit them.
                     if (registeredUser.LastRatelimited > DateTime.Now.AddSeconds(-30).ToOADate() &&
                         registeredUser.RateLimitWarnings > 0)
-                        return; // The user has been rate limited within the last 30 seconds.
-                                // Don't accidentally double-rate-limit them.
+                        return; 
 
                     if (registeredUser.ActiveRateLimit >= THRESHOLD_REG && !registeredUser.IsPremium ||
                         registeredUser.ActiveRateLimit >= THRESHOLD_PREMIUM && registeredUser.IsPremium)

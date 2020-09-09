@@ -1,5 +1,4 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -11,6 +10,7 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -37,7 +37,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             using (var db = new KaguyaDb())
             {
                 bool exists = db.Servers.Any(x => x.ServerId == Id);
-
                 if (!exists)
                 {
                     await db.InsertAsync(new Server
@@ -135,8 +134,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// </summary>
         /// <param name="fish">The fish to sell.</param>
         /// <param name="userId">The ID of the user to add the value of the fish to.</param>
-        /// <returns></returns>
-        public static void SellFish(Fish fish, ulong userId)
+        /// <returns>The new total amount of points the user has.</returns>
+        public static int SellFish(Fish fish, ulong userId)
         {
             var user = GetOrCreateUserAsync(userId).Result;
 
@@ -147,7 +146,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 db.UpdateAsync(fish);
                 db.UpdateAsync(user);
-            }    
+            }
+
+            return user.Points;
         }
 
         /// <summary>
@@ -220,6 +221,23 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 {
                     await db.InsertAsync(element);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Inserts the <see cref="T"/> <see cref="arg"/> into the database and returns the <see cref="T"/> <see cref="arg"/>
+        /// with it's updated auto-incremented identifier. Use this only if the database table has an auto-incremented ID.
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>The id of the <see cref="T"/>.</returns>
+        public static async Task<int> InsertWithIdentityAsync<T>(T arg) where T : class, 
+            IKaguyaQueryable<T>, IKaguyaUnique<T>
+        {
+            using (var db = new KaguyaDb())
+            {
+                var val = await db.InsertWithInt32IdentityAsync(arg);
+                return val;
             }
         }
 

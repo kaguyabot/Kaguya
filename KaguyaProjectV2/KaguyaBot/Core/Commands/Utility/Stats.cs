@@ -11,7 +11,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.Statistics;
+using Humanizer.Localisation;
+using KaguyaProjectV2.KaguyaBot.Core.Application;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -63,7 +64,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             var cmdsLastDay = await DatabaseQueries.GetAllAsync<CommandHistory>(h => 
                 h.Timestamp >= DateTime.Now.AddHours(-24));
-            Dictionary<string, int> mostPopCommand = CachedPopularCommandTimer.MostPopularCommand;
+            Dictionary<string, int> mostPopCommand = MemoryCache.MostPopularCommandCache;
 
             string mostPopCommandName = mostPopCommand?.Keys.First();
             string mostPopCommandCount = mostPopCommand?.Values.First().ToString("N0");
@@ -108,7 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 new EmbedFieldBuilder
                 {
                     Name = "Global Stats",
-                    Value = $"Uptime: `{(DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(precision: 4)}`\n" +
+                    Value = $"Uptime: `{(DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(precision: 4, minUnit: TimeUnit.Second)}`\n" +
                             $"Guilds: `{totalGuilds:N0}`\n" +
                             $"Text Channels: `{totalTextChannels:N0}`\n" +
                             $"Voice Channels: `{totalVoiceChannels:N0}`\n" +

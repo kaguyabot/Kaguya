@@ -1,7 +1,6 @@
 ﻿using Discord;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogService;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -9,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using System.Timers;
 using Discord.Net;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 #pragma warning disable 1998
 

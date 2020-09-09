@@ -1,3 +1,11 @@
+### Version 2.10
+- Added functionality for owner points/exp giveaways (reaction-based).
+- Reworded some of the values in $myfish to more clearly state what each value actually modifies.
+- Removed the tax mechanic from the fishing game altogether.
+- Fixed some wording in the $fish and $sellfish responses. Improves user experience and clarity on how many points they got/have now.
+- Removed $buybait - it now simply costs you points each time you fish, instead of having to take the extra step of buying bait!
+- Fish luck increases (and other bonuses) now only change every time you level up your fishing level, instead of scaling with your fishing exp directly.
+
 ### Version 2.9.3
 - Both custom Discord emotes and standard emojis are now supported as reaction role icons.
 

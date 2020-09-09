@@ -27,7 +27,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         /// </summary>
         public static string KaguyaMainFolder { get; } = Directory.GetCurrentDirectory();
         public static string KaguyaSupportDiscordServer { get; } = "https://discord.gg/aumCJhr";
-        public static string Version { get; } = "2.9.3";
+        // Github contributors, please do not edit the Version number.
+        public static string Version { get; } = "2.10";
         public static string KaguyaStore = "https://sellix.io/KaguyaStore";
     }
 }
