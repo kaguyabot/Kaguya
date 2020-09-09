@@ -191,11 +191,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             if (!allShardsLoggedIn) return;
             
-            // We need to load the cache on program start.
             await MemoryCache.Initialize();
+
+#if DEBUG
+            // We need to load the cache on program start.
             await OwnerGiveawayMessageUpdaterService.Initialize();
-#if !DEBUG
-            CachedPopularCommandTimer.Initialize();
             await KaguyaPremiumRoleHandler.Initialize();
             await KaguyaPremiumExpirationHandler.Initialize();
             await RateLimitService.Initialize();
