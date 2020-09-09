@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Humanizer;
+using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
@@ -92,7 +93,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 descSb.AppendLine($"- `{exp:N0} exp`");
 
             descSb.AppendLine();
-            descSb.AppendLine($"This giveaway will end in `{timeSpan.Humanize(2)}`.");
+            descSb.AppendLine($"This giveaway will end in `{timeSpan.Humanize(2, minUnit: TimeUnit.Second)}`.");
 
             parsedTimeSpan = timeSpan;
             return descSb;
