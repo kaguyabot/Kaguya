@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
         public static Task Initialize()
         {
             Timer timer = new Timer(300000); //5 mins = 300000ms
-            timer.Start();
+            timer.Enabled = true;
             timer.AutoReset = true;
             timer.Elapsed += async (sender, e) =>
             {

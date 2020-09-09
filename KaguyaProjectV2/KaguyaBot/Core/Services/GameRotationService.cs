@@ -23,6 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             {
                 if (!Enabled)
                     return;
+                
                 var client = ConfigProperties.Client;
                 var games = new List<Tuple<string, ActivityType>>
                 {

@@ -36,6 +36,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private LavaNode _lavaNode;
         private TwitchAPI _api;
         private static ConfigModel _config;
+
+        private static int _shardsLoggedIn = 0;
         
         private static async Task Main(string[] args)
         {
@@ -113,12 +115,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                     await _client.SetGameAsync($"v{ConfigProperties.Version}: Booting up!");
                     _client.ShardReady += async c => { await _lavaNode.ConnectAsync(); };
+                    _client.ShardReady += async c =>
+                    {
+                        _shardsLoggedIn += 1;
+                        await InitializeTimers(AllShardsLoggedIn(_client, config));
+                    };
+                    
                     _lavaNode.OnLog += async message =>
                     {
                         await ConsoleLogger.LogAsync("[Kaguya Music]: " + message.Message, LogLvl.INFO);
                     };
 
-                    await InitializeTimers(AllShardsLoggedIn(_client, config));
                     InitializeEventHandlers();
 
                     if (AllShardsLoggedIn(_client, config))
@@ -191,22 +198,35 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             if (!allShardsLoggedIn) return;
             
-            await MemoryCache.Initialize();
-
-#if DEBUG
             // We need to load the cache on program start.
+            await MemoryCache.Initialize();
+            await ConsoleLogger.LogAsync("Memory Cache timer initialized", LogLvl.INFO);
+#if !DEBUG
             await OwnerGiveawayMessageUpdaterService.Initialize();
+            await ConsoleLogger.LogAsync("Owner giveaway message updater initialized", LogLvl.INFO);
             await KaguyaPremiumRoleHandler.Initialize();
-            await KaguyaPremiumExpirationHandler.Initialize();
+            await ConsoleLogger.LogAsync("Kaguya Premium role handler initialized", LogLvl.INFO);
+            await KaguyaPremiumExpirationHandler.Initialize(); //todo: rewrite
+            await ConsoleLogger.LogAsync("Kaguya Premium expiration handler initialized", LogLvl.INFO);
             await RateLimitService.Initialize();
+            await ConsoleLogger.LogAsync("Ratelimit service initialized", LogLvl.INFO);
             await AntiRaidService.Initialize();
+            await ConsoleLogger.LogAsync("Antiraid service initialized", LogLvl.INFO);
             await StatsUpdater.Initialize();
+            await ConsoleLogger.LogAsync("Top.gg stats updater initialized", LogLvl.INFO);
             await KaguyaStatsLogger.Initialize();
+            await ConsoleLogger.LogAsync("Kaguya stats logger initialized", LogLvl.INFO);
             await AutoUnmuteHandler.Initialize();
+            await ConsoleLogger.LogAsync("Unmute handler initialized", LogLvl.INFO);
             await RemindService.Initialize();
+            await ConsoleLogger.LogAsync("Remind service initialized", LogLvl.INFO);
             await NSFWImageHandler.Initialize();
+            await ConsoleLogger.LogAsync("Nsfw image timer initialized", LogLvl.INFO);
             await UpvoteExpirationNotifier.Initialize();
+            await ConsoleLogger.LogAsync("Upvote expiration notification timer initialized", LogLvl.INFO);
             await GameRotationService.Initialize();
+            await ConsoleLogger.LogAsync("Game rotation timer initialized", LogLvl.INFO);
+
 #endif
             await ConsoleLogger.LogAsync($"All timers initialized.", LogLvl.INFO);
         }
@@ -232,7 +252,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)
         {
-            return client.Shards.Count == config.TotalShards;
+            return _shardsLoggedIn == config.TotalShards;
         }
     }
 }
