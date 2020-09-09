@@ -37,8 +37,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private TwitchAPI _api;
         private static ConfigModel _config;
 
-        private static int _shardsLoggedIn = 0;
-        
         private static async Task Main(string[] args)
         {
             _config = await Config.GetOrCreateConfigAsync(args);
@@ -115,11 +113,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                     await _client.SetGameAsync($"v{ConfigProperties.Version}: Booting up!");
                     _client.ShardReady += async c => { await _lavaNode.ConnectAsync(); };
-                    _client.ShardReady += async c =>
-                    {
-                        _shardsLoggedIn += 1;
-                        await InitializeTimers(AllShardsLoggedIn(_client, config));
-                    };
+                    
+                    await InitializeTimers(AllShardsLoggedIn(_client, config));
                     
                     _lavaNode.OnLog += async message =>
                     {
@@ -252,7 +247,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)
         {
-            return _shardsLoggedIn == config.TotalShards;
+            return client.Shards.Count == config.TotalShards;
         }
     }
 }
