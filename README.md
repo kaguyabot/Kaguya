@@ -43,7 +43,7 @@ The Kaguya Discord Bot provides the pinnacle of what a general-purpose Discord b
 * Rewards for upvoting Kaguya on [Top.gg.](https://top.gg/bot/538910393918160916/vote)
 * **NEW** Reaction Roles
 
-## [Kaguya Supporter](https://sellix.io/KaguyaStore) (Monthly Subscription):
+## [Kaguya Premium](https://sellix.io/KaguyaStore) (Monthly Subscription):
 The standard Kaguya Premium option unlocks many features for both individuals and their servers. Any server-wide premium benefits, marked as **(SW)** below, apply to all servers you own and have Kaguya in. If you want to redeem multiple Kaguya Premium keys, the time will stack for every server you redeem the key in, as well as the personal benefits will stack on your account. Please note that redeeming 3 separate 30 day keys will grant you and all of your servers 90 days of premium benefits, but will grant the individual servers 30 days of benefits each.
 
 One-time currency infusions described below (such as point bonuses) will stack if multiple keys were purchased. Benefits such as bonus luck or increased gambling limit do not stack.
