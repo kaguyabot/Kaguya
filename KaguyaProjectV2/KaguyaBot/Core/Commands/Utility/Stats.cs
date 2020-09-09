@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
@@ -108,7 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 new EmbedFieldBuilder
                 {
                     Name = "Global Stats",
-                    Value = $"Uptime: `{(DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(precision: 4)}`\n" +
+                    Value = $"Uptime: `{(DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(precision: 4, minUnit: TimeUnit.Second)}`\n" +
                             $"Guilds: `{totalGuilds:N0}`\n" +
                             $"Text Channels: `{totalTextChannels:N0}`\n" +
                             $"Voice Channels: `{totalVoiceChannels:N0}`\n" +
