@@ -45,56 +45,59 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 fishId = Id;
             }
-            else if (args.Length == 3)
+            else switch (args.Length)
             {
-                fishType = $"{args[0].ToUpper()}_{args[1].ToUpper()}_{args[2].ToUpper()}";
-            }
-            else if (args.Length == 2)
-            {
-                fishType = $"{args[0].ToUpper()}_{args[1].ToUpper()}";
-            }
-            else if (args.Length == 1 && args[0].ToLower() == "all")
-            {
-                var allFishToSell = await DatabaseQueries.GetUnsoldFishForUserAsync(Context.User.Id);
-
-                if (allFishToSell.Count == 0)
+                case 3:
+                    fishType = $"{args[0].ToUpper()}_{args[1].ToUpper()}_{args[2].ToUpper()}";
+                    break;
+                case 2:
+                    fishType = $"{args[0].ToUpper()}_{args[1].ToUpper()}";
+                    break;
+                case 1 when args[0].ToLower() == "all":
                 {
-                    await SendBasicErrorEmbedAsync("You have no fish to sell!");
+                    var allFishToSell = await DatabaseQueries.GetUnsoldFishForUserAsync(Context.User.Id);
+
+                    if (allFishToSell.Count == 0)
+                    {
+                        await SendBasicErrorEmbedAsync("You have no fish to sell!");
+                        return;
+                    }
+
+                    var sellAllConfirmEmbed = new KaguyaEmbedBuilder
+                    {
+                        Description = $"{Context.User.Mention} Are you sure you want " +
+                                      $"to sell all `{allFishToSell.Count:N0}` of your fish?"
+                    };
+
+                    await InlineReactionReplyAsync(new ReactionCallbackData("", sellAllConfirmEmbed.Build(), true,
+                            true, TimeSpan.FromSeconds(180))
+                        .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
+                        {
+                            foreach (var fish in allFishToSell)
+                            {
+                                DatabaseQueries.SellFish(fish, Context.User.Id);
+                            }
+
+                            user = await DatabaseQueries.GetOrCreateUserAsync(user.UserId);
+                            await SendBasicSuccessEmbedAsync($"Successfully sold all " +
+                                                             $"`{allFishToSell.Count:N0}` fish!\n\n" +
+                                                             $"New total points: `{user.Points:N0} " +
+                                                             $"(+{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0})`");
+                        
+                            await ConsoleLogger.LogAsync(
+                                $"User {user.UserId} has mass sold all of their fish for a payout of " +
+                                $"{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}. New " +
+                                $"total points: {user.Points:N0}.", LogLvl.INFO);
+                        })
+                        .AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
+                            await c.Channel.SendBasicErrorEmbedAsync("Okay, I won't take any action.")));
                     return;
                 }
-
-                var sellAllConfirmEmbed = new KaguyaEmbedBuilder
-                {
-                    Description = $"{Context.User.Mention} Are you sure you want " +
-                                  $"to sell all `{allFishToSell.Count:N0}` of your fish?"
-                };
-
-                await InlineReactionReplyAsync(new ReactionCallbackData("", sellAllConfirmEmbed.Build(), true,
-                    true, TimeSpan.FromSeconds(180))
-                    .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
-                    {
-                        foreach (var fish in allFishToSell)
-                        {
-                            DatabaseQueries.SellFish(fish, Context.User.Id);
-                        }
-                        
-                        await SendBasicSuccessEmbedAsync($"Successfully sold all " +
-                                                         $"`{allFishToSell.Count:N0}` fish!\n\n" +
-                                                         $"`{Fish.GetPayoutForFish(allFishToSell, user.FishExp):N0}` " +
-                                                         $"points have been added to your balance.\n" +
-                                                         $"New total points: `{user.Points:N0}`");
-                    })
-                    .AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
-                        await c.Channel.SendBasicErrorEmbedAsync("Okay, I won't take any action.")));
-                return;
-            }
-            else if (args.Length == 1)
-            {
-                fishType = args[0].ToUpper();
-            }
-            else
-            {
-                throw new KaguyaSupportException("Something broke when trying to sell your fish.");
+                case 1:
+                    fishType = args[0].ToUpper();
+                    break;
+                default:
+                    throw new KaguyaSupportException("Something broke when trying to sell your fish.");
             }
 
             if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId) && fishId != 0)
@@ -144,16 +147,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                         {
                             DatabaseQueries.SellFish(fish, user.UserId);
                         }
-                        
+
+                        user = await DatabaseQueries.GetOrCreateUserAsync(user.UserId);
                         var payout = Fish.GetPayoutForFish(unsoldFishToSell, user.FishExp);
                         await ConsoleLogger.LogAsync($"User {user.UserId} has mass-sold all of their {ft.Humanize()} " +
                                                      $"for a payout of {payout:N0} points.", LogLvl.INFO);
                         
                         await c.Channel.SendBasicSuccessEmbedAsync($"Great! I was able to find a buyer for " +
-                                                                   $"all of your `{ft.Humanize()}`, resulting " +
-                                                                   $"in a payout of `{payout:N0}` " +
-                                                                   $"points after taxes.");
-                        
+                                                                   $"all of your `{ft.Humanize()}`.\n\n" +
+                                                                   $"New total points: `{user.Points:N0} (+{payout:N0})`");
                     })
                     .AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
                         await c.Channel.SendBasicErrorEmbedAsync("Okay, no action will be taken.")));
@@ -174,11 +176,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully sold your `{fishToSell.FishType.Humanize()}`!\n\n" +
-                              $"Payout: `{Fish.GetPayoutForFish(fishToSell, user.FishExp):N0}` points",
-                Footer = new EmbedFooterBuilder
-                {
-                    Text = "Note: This fish is now inelligible for sale."
-                }
+                              $"New total points: `{Fish.GetPayoutForFish(fishToSell, user.FishExp):N0}` points"
             };
             await ReplyAsync(embed: embed.Build());
         }

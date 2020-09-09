@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             var user = await DatabaseQueries.GetOrCreateUserAsync(userId);
             var recentFish = user.Fish.OrderByDescending(x => x.TimeCaught).Take(amount);
             var value = recentFish.Select(x => x.Value).Sum();
-            var baitCost = user.FishbaitCost() * amount;
+            var baitCost = user.FishCost() * amount;
 
             var embed = new KaguyaEmbedBuilder
             {

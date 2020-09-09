@@ -134,8 +134,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// </summary>
         /// <param name="fish">The fish to sell.</param>
         /// <param name="userId">The ID of the user to add the value of the fish to.</param>
-        /// <returns></returns>
-        public static void SellFish(Fish fish, ulong userId)
+        /// <returns>The new total amount of points the user has.</returns>
+        public static int SellFish(Fish fish, ulong userId)
         {
             var user = GetOrCreateUserAsync(userId).Result;
 
@@ -146,7 +146,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             {
                 db.UpdateAsync(fish);
                 db.UpdateAsync(user);
-            }    
+            }
+
+            return user.Points;
         }
 
         /// <summary>

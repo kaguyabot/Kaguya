@@ -56,8 +56,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int TotalQuickdrawWins { get; set; }
         [Column(Name = "QuickdrawLosses"), NotNull]
         public int TotalQuickdrawLosses { get; set; }
-        [Column(Name = "FishBait"), NotNull]
-        public int FishBait { get; set; }
         [Column(Name = "TotalUpvotes"), NotNull]
         public int TotalUpvotes { get; set; }
         [Column(Name = "LastGivenExp"), NotNull]

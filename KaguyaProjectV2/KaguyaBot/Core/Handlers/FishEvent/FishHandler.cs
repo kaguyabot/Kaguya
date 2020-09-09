@@ -4,7 +4,9 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.Currency;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
@@ -12,10 +14,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 {
     public static class FishHandler // Fish level-up handler.
     {
-        public const int MAX_LUCK = 36;
-        public const int MAX_VALUE = 245;
-        public const int MAX_BAIT = 1200;
-        public const int MAX_TAX = 100;
+        public const int MAX_LUCK = 30; // Up to x% bonus luck.
+        public const int MAX_VALUE = 200; // Up to x% increased base fish value.
+        public const int MAX_PLAY_COST_INCREASE = 270; // Up to x% increased cost to play the $fish game.
         public static async Task OnFish(FishHandlerEventArgs args)
         {
             var context = args.Context;
@@ -45,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                     Title = "Kaguya Fishing: Level Up!",
                     Description = $"Congratulations, {context.User.Mention}! Your fishing level is now `level {level:N0}`! " +
                                   $"You now have access to the following perks:\n\n" +
-                                  $"{GetRewardString(oldFishExp, newFishExp)}"
+                                  $"{GetRewardString(oldFishExp, await DatabaseQueries.GetOrCreateUserAsync(context.User.Id), true)}"
                 };
 
                 await channel.SendEmbedAsync(embed);
@@ -59,88 +60,96 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 
         public static double GetFishLevel(int exp)
         {
-            if (exp < 64)
+            if (exp <= 64)
                 return 0;
-            return Math.Sqrt((exp / 8) + -8); // Same as normal EXP.
+            return Math.Sqrt((exp / 8) - 8); // Same as normal EXP.
         }
 
         /// <summary>
         /// Returns a string that has the "fish rewards" for the current user.
         /// </summary>
         /// <param name="oldFishExp"></param>
+        /// <param name="user"></param>
         /// <param name="fishExp"></param>
+        /// <param name="hasLeveledUp"></param>
         /// <returns></returns>
-        public static string GetRewardString(int oldFishExp, int fishExp = -1)
+        public static string GetRewardString(int oldFishExp, User user, bool hasLeveledUp)
         {
             const string rare = "increased chance to catch a rare fish";
-            const string value = "base increased fish value";
-            const string tax = "decreased tax penalty when selling a fish";
+            const string value = "increased fish value";
             const string bait = "increased bait cost";
 
             var oldBonuses = new FishLevelBonuses(oldFishExp);
 
-            if (fishExp == -1)
+            if (!hasLeveledUp) // This gets called from $myfish...
             {
-                return $"`{oldBonuses.BonusLuckPercent:N2}%` {rare}\n" +
-                       $"`{oldBonuses.BonusFishValuePercent:N2}%` {value}\n" +
-                       $"`{oldBonuses.TaxReductionPercent:N2}%` {tax}\n" +
-                       $"`{oldBonuses.BaitCostIncreasePercent:N2}%` {bait}";
+                // how much more than the base bait cost is this %?
+                string finalStr = $"`{oldBonuses.BonusLuckPercent:N2}%` {rare}\n" +
+                                  $"`{oldBonuses.BonusFishValuePercent:N2}%` {value}\n" +
+                                  $"`{oldBonuses.PlayCostIncreasePercent:N2}%` {bait}";
+
+                int fishBaitCost = user.IsPremium ? Fish.PREMIUM_BAIT_COST : Fish.BAIT_COST;
+                int extraBaitCost = (int)(fishBaitCost * (user.FishLevelBonuses.PlayCostIncreasePercent / 100));
+                if (extraBaitCost > 0)
+                {
+                    var line2 = finalStr.Split("\n")[2];
+                    var editedLine2 = line2.Replace("%`", $"% (+{extraBaitCost:N0})`");
+
+                    finalStr = finalStr.Replace(line2, editedLine2);
+                }
+
+                return finalStr;
             }
 
-            var newBonuses = new FishLevelBonuses(fishExp);
+            #region If the user has leveled up
+            var newBonuses = new FishLevelBonuses(user.FishExp);
 
             #region Sometimes you just need some if statements...
 
             string oldLuck = $"{oldBonuses.BonusLuckPercent:N2}%";
             string oldValue = $"{oldBonuses.BonusFishValuePercent:N2}%";
-            string oldTax = $"{oldBonuses.TaxReductionPercent:N2}%";
-            string oldBait = $"{oldBonuses.BaitCostIncreasePercent:N2}%";
+            string oldBait = $"{oldBonuses.PlayCostIncreasePercent:N2}%";
             string newLuck = $"{newBonuses.BonusLuckPercent:N2}%";
             string newValue = $"{newBonuses.BonusFishValuePercent:N2}%";
-            string newTax = $"{newBonuses.TaxReductionPercent:N2}%";
-            string newBait = $"{newBonuses.BaitCostIncreasePercent:N2}%";
+            string newBait = $"{newBonuses.PlayCostIncreasePercent:N2}%";
 
             if (oldBonuses.BonusLuckPercent == MAX_LUCK)
                 oldLuck = "MAX";
             if (oldBonuses.BonusFishValuePercent == MAX_VALUE)
                 oldValue = "MAX";
-            if (oldBonuses.TaxReductionPercent == MAX_TAX)
-                oldTax = "MAX";
-            if (oldBonuses.BaitCostIncreasePercent == MAX_BAIT)
+            if (oldBonuses.PlayCostIncreasePercent == MAX_PLAY_COST_INCREASE)
                 oldBait = "MAX";
             if (newBonuses.BonusLuckPercent == MAX_LUCK)
                 newLuck = "MAX";
             if (newBonuses.BonusFishValuePercent == MAX_VALUE)
                 newValue = "MAX";
-            if (newBonuses.TaxReductionPercent == MAX_TAX)
-                newTax = "MAX";
-            if (newBonuses.BaitCostIncreasePercent == MAX_BAIT)
+            if (newBonuses.PlayCostIncreasePercent == MAX_PLAY_COST_INCREASE)
                 newBait = "MAX";
 
             #endregion
 
+            // This gets displayed to the user when they have leveled up.
             return $"`{oldLuck}` 👉 **`{newLuck}`** {rare}\n" +
                    $"`{oldValue}` 👉 **`{newValue}`** {value}\n" +
-                   $"`{oldTax}` 👉 **`{newTax}`** {tax}\n" +
                    $"`{oldBait}` 👉 **`{newBait}`** {bait}";
+            #endregion
         }
 
         public class FishLevelBonuses
         {
             public double BonusLuckPercent { get; }
             public double BonusFishValuePercent { get; }
-            public double TaxReductionPercent { get; }
-            public double BaitCostIncreasePercent { get; }
+            public double PlayCostIncreasePercent { get; }
 
             public FishLevelBonuses(int fishExp)
             {
                 var fishLvl = (int)GetFishLevel(fishExp);
 
-                // Fish level bonus modifier formulas.
-                BonusLuckPercent = Math.Sqrt((double)fishExp / 10000) * 13.5;
-                BonusFishValuePercent = Math.Sqrt((double)fishExp / 210) * 8;
-                BaitCostIncreasePercent = Math.Sqrt(fishExp) * 3;
-                TaxReductionPercent = fishLvl / 1.50;
+                // Fish level bonus modifier formulas. Everything caps at level 100.
+                // todo: Recalc
+                BonusLuckPercent = fishLvl / 2;
+                BonusFishValuePercent = fishLvl * 2;
+                PlayCostIncreasePercent = fishLvl * 2.7;
 
                 if (BonusLuckPercent > MAX_LUCK)
                 {
@@ -152,14 +161,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                     BonusFishValuePercent = MAX_VALUE;
                 }
 
-                if (BaitCostIncreasePercent > MAX_BAIT)
+                if (PlayCostIncreasePercent > MAX_PLAY_COST_INCREASE)
                 {
-                    BaitCostIncreasePercent = MAX_BAIT;
-                }
-
-                if (TaxReductionPercent > MAX_TAX)
-                {
-                    TaxReductionPercent = MAX_TAX;
+                    PlayCostIncreasePercent = MAX_PLAY_COST_INCREASE;
                 }
             }
         }

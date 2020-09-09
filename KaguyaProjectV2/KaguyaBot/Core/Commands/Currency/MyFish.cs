@@ -104,7 +104,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                         Name = "Fish Level",
                         Value = $"Fish Exp: `{user.FishExp:N0}` exp.\n" +
                                 $"Fish Level: `{(int)FishHandler.GetFishLevel(user.FishExp):N0}`\n" +
-                                $"{FishHandler.GetRewardString(user.FishExp)}"
+                                $"{FishHandler.GetRewardString(user.FishExp, user, false)}"
                     },
                     new EmbedFieldBuilder
                     {
