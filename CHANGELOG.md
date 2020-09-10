@@ -1,3 +1,7 @@
+### Version 2.11
+- Added $masskick
+- Added $massban
+
 ### Version 2.10
 - Added functionality for owner points/exp giveaways (reaction-based).
 - Reworded some of the values in $myfish to more clearly state what each value actually modifies.
