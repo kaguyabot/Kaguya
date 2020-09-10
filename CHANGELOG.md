@@ -4,6 +4,8 @@
 - $osutop results are now guaranteed to be ordered by performance points.
 - The profile picture shown from $profile is now more precisely and more consistently centered and sized.
 - Added $favoritetrack - Users can "favorite" the currently playing song in a playlist.
+- Added $favoriteslist - Users can see all of the tracks they have favorited via this command.
+- Added $playfavorite - Users can play songs from their favorites playlist via this command.
 
 ### Version 2.11
 - Added $masskick

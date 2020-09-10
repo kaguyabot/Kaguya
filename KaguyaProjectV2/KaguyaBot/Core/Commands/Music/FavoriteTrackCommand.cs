@@ -15,8 +15,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [Command("FavoriteTrack")]
         [Alias("fav", "favorite")]
         [Summary("Allows any user to `favorite` the currently playing track. This will save the track " +
-                 "in a playlist that can be listened to later.\n\n" +
-                 "Limit: `50 tracks.\n" +
+                 "in a playlist that can be accessed by the `favls` command.\n\n" +
+                 "Limit: `50 tracks`.\n" +
                  "[Kaguya Premium](" + ConfigProperties.KaguyaStore + ") limit: `500 tracks`.")]
         [Remarks("")]
         public async Task Command()
@@ -36,16 +36,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             }
 
             var curTrack = player.Track;
-            var trackId = curTrack.Id;
             var userFavorites = await DatabaseQueries.GetAllForUserAsync<FavoriteTrack>(user.UserId);
             
             var favTrack = new FavoriteTrack
             {
                 UserId = user.UserId,
-                TrackId = trackId
+                TrackId = curTrack.Id,
+                TrackTitle = curTrack.Title,
+                TrackAuthor = curTrack.Author,
+                TrackDuration = curTrack.Duration.TotalSeconds
             };
 
-            if (userFavorites.Any(x => x.UserId == user.UserId && x.TrackId == trackId))
+            if (userFavorites.Any(x => x.UserId == user.UserId && x.TrackId == curTrack.Id))
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} You have already favorited this track!");
                 return;
