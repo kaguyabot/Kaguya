@@ -4,6 +4,7 @@
 - $osutop results are now guaranteed to be ordered by performance points.
 - The profile picture shown from $profile is now more precisely and more consistently centered and sized.
 
+
 ### Version 2.11
 - Added $masskick
 - Added $massban
