@@ -10,6 +10,7 @@ using OsuSharp;
 using OsuSharp.Oppai;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
@@ -78,6 +79,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             }
 
             var playerBestObjectList = await OsuBase.client.GetUserBestsByUserIdAsync(osuUser.UserId, GameMode.Standard, num);
+            playerBestObjectList = playerBestObjectList.OrderByDescending(x => x.PerformancePoints).ToList().AsReadOnly();
+            
             var playerUserObject = await OsuBase.client.GetUserByUserIdAsync(osuUser.UserId, GameMode.Standard);
 
             string s = num == 1 ? "" : "s";
@@ -100,7 +103,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 
                 Debug.Assert(playerBestObject.Date != null, "playerBestObject.Date != null");
                 topPlayString += $"\n{i}: ▸ **{OsuBase.OsuGrade(playerBestObject.Rank)}" +
-                                 $"{playerBestObject.Mods.ToModeString(OsuBase.client).Replace("No Mode", "No Mod")}** ▸ " +
+                                 $@"{playerBestObject.Mods.ToModeString(OsuBase.client)
+                                     .Replace("No Mode", "No Mod")
+                                     .Replace("DTNC", "NC")}** ▸ " +
                                  $"{beatmap.BeatmapId} ▸ **[{beatmap.Title} " +
                                  $"[{beatmap.Difficulty}]](https://osu.ppy.sh/b/{beatmap.BeatmapId})** " +
                                  $"\n▸ **☆{beatmap.StarRating:N2}** ▸ **{playerBestObject.Accuracy:F}%** " +
