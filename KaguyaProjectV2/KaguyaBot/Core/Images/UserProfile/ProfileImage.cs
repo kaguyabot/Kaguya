@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
                     GlobalBar = GlobalBarData.Bar(user),
                     GuildBar = GuildBarData.Bar(user, server),
                     IconAndUsername = ProfilePictureData.ProfileIcon(guildUser),
-                    SupporterBadge = new PremiumBadge(user).Data,
+                    PremiumBadge = new PremiumBadge(user).Data,
                     LeftPanel = await ProfilePanelData.LeftPanel(user, server),
                     RightPanel = ProfilePanelData.RightPanel(user)
                 }
@@ -56,7 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
                 var pfpImg = await wc.DownloadDataTaskAsync(avatarURL);
                 pfpStream = new MemoryStream(pfpImg);
 
-                var badgeImg = await wc.DownloadDataTaskAsync(profile.Xp.SupporterBadge.Emote.Url);
+                var badgeImg = await wc.DownloadDataTaskAsync(profile.Xp.PremiumBadge.Emote.Url);
                 badgeStream = new MemoryStream(badgeImg);
             }
 
@@ -86,13 +86,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             const double resizeScalar = 0.75;
             suppBadge.Mutate(x => x.Resize((int)(x.GetCurrentSize().Width * resizeScalar), (int)(x.GetCurrentSize().Height * resizeScalar)));
 
-            if (isDefaultPfp)
-                profilePicture.Mutate(x => x.Resize(132, 132));
-
+            // If the user has the default Discord profile picture, fix the width to 132 x 132 px.
+            profilePicture.Mutate(x => x.Resize(new ResizeOptions
+            {
+                Position = AnchorPositionMode.Center,
+                Size = new Size(116, 116)
+            }));
+                                
+            
             // Draw the profile picture on top of the global bar. Global bar will serve as the base layer 
             // that we continually add onto, even if it doesn't directly overlap it, as it's a layer 
             // with the same size of our template. Think of it as a canvas.
-            gBar.Mutate(x => x.DrawImage(profilePicture, new Point(13, 15), 1));
+            gBar.Mutate(x => x.DrawImage(profilePicture, new Point(22, 23), 1));
             gBar.Mutate(x => x.FillPolygon(profile.Xp.GlobalBar.Color, gFillPoints));
             gBar.Mutate(x => x.FillPolygon(profile.Xp.GuildBar.Color, sFillPoints));
             gBar.Mutate(x => x.DrawImage(image, 1));
@@ -119,7 +124,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             if (user.IsPremium)
             {
                 gBar.Mutate(x => x.DrawImage(suppBadge,
-                    new Point((int)profile.Xp.SupporterBadge.Loc.X, (int)profile.Xp.SupporterBadge.Loc.Y), 1));
+                    new Point((int)profile.Xp.PremiumBadge.Loc.X, (int)profile.Xp.PremiumBadge.Loc.Y), 1));
             }
 
             // Save the completed drawing to a MemoryStream so that we can send it to Discord elsewhere.
