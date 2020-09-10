@@ -3,7 +3,7 @@
     - Example: $osutop <player> now works. Previously you had to specify a playcount to display like so: $osutop <num> <player>
 - $osutop results are now guaranteed to be ordered by performance points.
 - The profile picture shown from $profile is now more precisely and more consistently centered and sized.
-- 
+- Added $favoritetrack - Users can "favorite" the currently playing song in a playlist.
 
 ### Version 2.11
 - Added $masskick
