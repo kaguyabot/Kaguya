@@ -25,7 +25,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                  "they do not need to specify a player. The command used " +
                  "by itself returns 5 top plays for the current user. " +
                  "The amount of requested plays must be between 1 and 7.")]
-        [Remarks("\n[index] [player]\n6 SomePlayer")]
+        [Remarks("\n<player>\n<index> <player>\nSomePlayer\n6 SomePlayer")]
+        public async Task TopOsuPlaysNoNum([Remainder] string player)
+            => TopOsuPlays(5, player);
+        
+        [OsuCommand]
+        [Command("osuTop")]
+        [Summary("Displays the reqested amount of top plays for a player. " +
+                 "If a user has their osu! username set with the `osuset` command, " +
+                 "they do not need to specify a player. The command used " +
+                 "by itself returns 5 top plays for the current user. " +
+                 "The amount of requested plays must be between 1 and 7.")]
+        [Remarks("\n<player>\n<index> <player>\nSomePlayer\n6 SomePlayer")]
         public async Task TopOsuPlays(int num = 5, [Remainder]string player = null)
         {
             DataStorage.DbData.Models.User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);

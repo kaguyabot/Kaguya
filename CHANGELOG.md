@@ -1,3 +1,8 @@
+### Version 2.12
+- $osutop now no longer requires the number of plays to be passed into the command.
+    - Example: $osutop <player> now works. Previously you had to specify a playcount to display like so: $osutop <num> <player>
+
+
 ### Version 2.11
 - Added $masskick
 - Added $massban
