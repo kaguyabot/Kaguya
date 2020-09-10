@@ -29,6 +29,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         public static string KaguyaSupportDiscordServer { get; } = "https://discord.gg/aumCJhr";
         // Github contributors, please do not edit the Version number.
         public static string Version { get; } = "2.12";
-        public static string KaguyaStore = "https://sellix.io/KaguyaStore";
+        public const string KaguyaStore = "https://sellix.io/KaguyaStore";
     }
 }

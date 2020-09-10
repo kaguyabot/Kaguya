@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿#nullable enable
+using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -12,6 +13,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -47,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         /// <param name="playFirst"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public async Task<ReactionCallbackData> SearchAndPlayAsync(ShardedCommandContext context, string query, bool playFirst = false, SearchProvider provider = SearchProvider.YouTube)
+        public async Task<ReactionCallbackData?> SearchAndPlayAsync(ShardedCommandContext context, string query, bool playFirst = false, SearchProvider provider = SearchProvider.YouTube)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
@@ -101,18 +103,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 }
             }
 
-            IReadOnlyList<LavaTrack> tracks;
+            var tracks = new List<LavaTrack>();
             if (user.IsPremium || server.IsPremium)
             {
-                tracks = result.Tracks;
+                if(result.Tracks.Any())
+                    tracks.AddRange(result.Tracks);
             }
             else
             {
                 // Limit track duration to 10 minutes for non-premium servers/users.
-                tracks = result.Tracks.Where(x => x.Duration.TotalMinutes < 10).ToList();
+                if(result.Tracks.Any())
+                    tracks.AddRange(result.Tracks.Where(x => x.Duration.TotalMinutes < 10).ToList());
             }
 
-            if (tracks.Count == 0)
+            if (!tracks.Any())
             {
                 string suppString = user.IsPremium
                     ? ""
@@ -123,7 +127,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 await context.Channel.SendBasicErrorEmbedAsync($"Your requested search returned no results. {suppString}");
                 await ConsoleLogger.LogAsync($"Search request returned no usable " +
                                              $"results in guild {Context.Guild.Id} for query {query}", LogLvl.TRACE);
-                return null;
             }
 
             var fields = new List<EmbedFieldBuilder>();
@@ -194,7 +197,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             #endregion
 
             #region If we have chosen to only play the default track (via $play).
-            if (playFirst)
+            if (playFirst && tracks.Any())
             {
                 var trackSel = tracks[0];
                 var field = new EmbedFieldBuilder
