@@ -29,4 +29,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Exceptions
             return $"\nSorry, only servers with an active [Kaguya Premium]({ConfigProperties.KaguyaStore}) subscription are allowed to use this feature.\n\n{msg}";
         }
     }
+
+    class KaguyaVoteException : Exception
+    {
+        public KaguyaVoteException(string message = null) : base(KaguyaVoteExceptionMessage(message))
+        {
+        }
+
+        private static string KaguyaVoteExceptionMessage(string msg = null)
+        {
+            return $"\nSorry, you need to [vote on top.gg](https://top.gg/bot/538910393918160916) in order " +
+                   $"to use this feature. After voting, you will have access to this feature for 12 hours.";
+        }
+    }
 }

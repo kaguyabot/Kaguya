@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaApi.Database.Models;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using TopGgWebhook = KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models.TopGgWebhook;
 
 #pragma warning disable 4014
 
@@ -236,6 +237,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             return (await DatabaseQueries.GetAllForUserAsync<DatabaseUpvoteWebhook>(user.UserId,
                 x => x.TimeVoted > DateTime.Now.AddHours(days * 24).ToOADate())).ToList();
+        }
+
+        public static async Task<bool> HasRecentlyVotedAsync(this User user)
+        {
+            return await DatabaseQueries.GetCountAsync<TopGgWebhook>(x =>
+                x.UserId == user.UserId && x.TimeVoted > DateTime.Now.AddHours(-12).ToOADate()) > 0;
         }
     }
 }

@@ -6,6 +6,10 @@
 - Added $favoritetrack - Users can "favorite" the currently playing song in a playlist.
 - Added $favoriteslist - Users can see all of the tracks they have favorited via this command.
 - Added $playfavorite - Users can play songs from their favorites playlist via this command.
+- Altered command error messages to be a little more helpful.
+- $nsfw now will only invoke if the user has recently voted on top.gg, but there is no longer an image limit. Premium users still have unlimited NSFW access with tags.
+- Added $premium
+- Some commands now require a recent upvote in order to use them.
 
 ### Version 2.11
 - Added $masskick

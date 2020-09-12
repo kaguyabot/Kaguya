@@ -122,4 +122,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
             return PreconditionResult.FromError("As this is a dangerous command, the user must be an Administrator to use this command.");
         }
     }
+
+    internal class RequireVoteCommandAttribute : PreconditionAttribute
+    {
+        public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
+        {
+            var user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
+            var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
+            if (await user.HasRecentlyVotedAsync() || user.IsPremium)
+            {
+                return PreconditionResult.FromSuccess();
+            }
+            return PreconditionResult.FromError($"You need to [vote online](https://top.gg/bot/538910393918160916/vote) " +
+                                                $"in order to use this feature. Voting will grant access to this feature " +
+                                                $"until you are able to vote again.\n\n" +
+                                                $"`{server.CommandPrefix}premium` members automatically bypass vote checks.");
+        }
+    }
 }

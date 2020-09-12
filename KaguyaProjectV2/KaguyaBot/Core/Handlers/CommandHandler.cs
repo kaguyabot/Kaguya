@@ -156,7 +156,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 else
                 {
                     // The command error isn't a KaguyaSupportException, so throw a generic error message.
-                    await DisplayGenericErrorEmbed(context, result, cmdPrefix);
+                    await DisplayGenericErrorEmbed(command, context, result, cmdPrefix);
                 }
             }
         }
@@ -164,16 +164,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         /// <summary>
         /// Creates and sends an error message to the user upon failed command.
         /// </summary>
-        private static async Task DisplayGenericErrorEmbed(ICommandContext context, IResult result, string cmdPrefix)
+        private static async Task DisplayGenericErrorEmbed(Optional<CommandInfo> command, ICommandContext context, IResult result, string cmdPrefix)
         {
+            string cmdName = command.IsSpecified ? command.Value.Name.ToLower() : "<command>";
             KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder(EmbedColor.RED)
             {
-                Title = "Command Failed",
-                Description = $"Failed to execute command `{context.Message}`\n\nReason: {result.ErrorReason}\n",
-                Footer = new EmbedFooterBuilder
-                {
-                    Text = $"Use {cmdPrefix}h <command> for information on how to use a command!",
-                }
+                Title = "Error",
+                Description = $"Command: `{context.Message}`\nReason: {result.ErrorReason}\n\n" +
+                              $"Help: Use `{cmdPrefix}h {cmdName}` to learn how to use this command.",
             };
 
             try

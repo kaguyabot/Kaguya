@@ -16,6 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
     public class FishGame : KaguyaBase
     {
+        [RequireVoteCommand]
         [CurrencyCommand]
         [Command("Fish")]
         [Alias("f")]
@@ -30,12 +31,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Remarks("")]
         public async Task Command()
         {
+            // Cooldown in seconds.
             const int FISHING_COOLDOWN = 15;
             const int FISHING_COOLDOWN_PREMIUM = 5;
             
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            
+
             if (user.Points < user.FishCost())
             {
                 var baitEmbed = new KaguyaEmbedBuilder(EmbedColor.RED)
