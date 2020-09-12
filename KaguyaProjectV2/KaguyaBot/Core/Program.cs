@@ -215,8 +215,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Unmute handler initialized", LogLvl.INFO);
             await RemindService.Initialize();
             await ConsoleLogger.LogAsync("Remind service initialized", LogLvl.INFO);
-            await NSFWImageHandler.Initialize();
-            await ConsoleLogger.LogAsync("Nsfw image timer initialized", LogLvl.INFO);
             await UpvoteExpirationNotifier.Initialize();
             await ConsoleLogger.LogAsync("Upvote expiration notification timer initialized", LogLvl.INFO);
             await GameRotationService.Initialize();
