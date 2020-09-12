@@ -55,6 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             
             var pager = new PaginatedMessage
             {
+                Title = $"Favorite Tracks for {Context.User.Username}",
                 Pages = pages,
                 Color = KaguyaEmbedBuilder.LightBlueColor
             };
