@@ -201,7 +201,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Owner giveaway message updater initialized", LogLvl.INFO);
             await KaguyaPremiumRoleHandler.Initialize();
             await ConsoleLogger.LogAsync("Kaguya Premium role handler initialized", LogLvl.INFO);
-            await KaguyaPremiumExpirationHandler.Initialize(); //todo: rewrite
+            await KaguyaPremiumExpirationHandler.Initialize();
             await ConsoleLogger.LogAsync("Kaguya Premium expiration handler initialized", LogLvl.INFO);
             await RateLimitService.Initialize();
             await ConsoleLogger.LogAsync("Ratelimit service initialized", LogLvl.INFO);

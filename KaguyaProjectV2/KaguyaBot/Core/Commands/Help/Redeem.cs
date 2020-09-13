@@ -82,8 +82,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
                 TimeSpan ts = $"{newKey.LengthInSeconds}s".ParseToTimespan();
 
-                user.TotalDaysSupported += (int)TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
-                int totalDaysSupported = user.TotalDaysSupported;
+                user.TotalDaysPremium += (int)TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
+                int totalDaysSupported = user.TotalDaysPremium;
 
                 var userPremiumExpiration = user.PremiumExpiration;
                 if (userPremiumExpiration < DateTime.Now.ToOADate())

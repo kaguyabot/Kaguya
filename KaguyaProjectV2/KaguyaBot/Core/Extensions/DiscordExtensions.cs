@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System.Threading.Tasks;
@@ -70,5 +71,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
             return users;
         }
+
+        public static string UsernameAndDescriminator(this IUser user)
+            => $"{user.Username}#{user.Discriminator}";
     }
 }

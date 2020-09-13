@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Discord;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 {
@@ -80,6 +82,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                 RoundDirection.Up => (int)Math.Ceiling(num),
                 _ => throw new InvalidEnumArgumentException()
             };
+        }
+
+        public static bool IsRedeemed(this PremiumKey key)
+        {
+            return key.UserId != 0 || key.ServerId != 0;
         }
     }
 

@@ -1,77 +1,106 @@
-﻿using Discord;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Timers;
+using Discord;
+using Discord.WebSocket;
+using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using System;
-using System.Threading.Tasks;
-using System.Timers;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
 {
     public static class KaguyaPremiumExpirationHandler
     {
+        private static readonly DiscordShardedClient _client = KaguyaBase.Client;
+        private static readonly List<Server> _serverNotificationCache = new List<Server>();
+        private static readonly List<PremiumKey> _keysCache = new List<PremiumKey>();
+
         public static Task Initialize()
         {
             Timer timer = new Timer
             {
-                Interval = 300000, // 5 minutes
+                Interval = 900000, // 15 minutes
                 Enabled = true,
                 AutoReset = true
             };
 
-            //todo: Rewrite the timer to check for when the individual server or user's premium expiration time has 
-            //todo: been passed by the current time.
-            // timer.Elapsed += async (sender, args) =>
-            // {
-            //     var allPremKeys = await DatabaseQueries.GetAllAsync<PremiumKey>(x => x.Expiration < DateTime.Now.ToOADate());
-            //     foreach (var premKey in allPremKeys)
-            //     {
-            //         if (premKey.Expiration < DateTime.Now.ToOADate() && premKey.Expiration > 1)
-            //         {
-            //             if (await (await DatabaseQueries.GetOrCreateUserAsync(premKey.UserId)).IsPremium)
-            //                 continue;
-            //             var socketUser = ConfigProperties.Client.GetUser(premKey.UserId);
-            //
-            //             try
-            //             {
-            //                 var embed = new KaguyaEmbedBuilder
-            //                 {
-            //                     Title = "Kaguya Premium Expiration",
-            //                     Description = $"Hello {socketUser.Username},\n\n" +
-            //                                   $"**The Kaguya Premium key you redeemed for " +
-            //                                   $"`{ConfigProperties.Client.GetGuild(premKey.ServerId).Name}` has " +
-            //                                   $"just expired.** If you would " +
-            //                                   $"like to continue this subscription, you may purchase another " +
-            //                                   $"key [at this online store.]({ConfigProperties.KaguyaStore})\n\n" +
-            //                                   $"Thank you for supporting my development while you have!",
-            //                     Footer = new EmbedFooterBuilder
-            //                     {
-            //                         Text = "As a reminder, supporter and premium keys do stack, " +
-            //                                "so you may buy more than one and extend your subscription!"
-            //                     }
-            //                 };
-            //                 embed.SetColor(EmbedColor.RED);
-            //
-            //                 await socketUser.SendMessageAsync(embed: embed.Build());
-            //                 await ConsoleLogger.LogAsync($"User [Name: {socketUser} | ID: {socketUser.Id}] has been notified" +
-            //                                   $" in DM that their Kaguya Premium key has just expired for " +
-            //                                   $"guild {premKey.ServerId}", LogLvl.INFO);
-            //             }
-            //             catch (Exception)
-            //             {
-            //                 if (premKey.UserId == 0) return;
-            //                 await ConsoleLogger.LogAsync($"I tried to send a DM to User [Name: {socketUser?.Username ?? "USER RETURNED NULL"} " +
-            //                                   $"| ID: {socketUser?.Id}] about their expired Kaguya Premium key for " +
-            //                                   $"guild {premKey.ServerId}, but their DMs appear to be closed.", LogLvl.WARN);
-            //             }
-            //
-            //             await DatabaseQueries.DeleteAsync(premKey);
-            //         }
-            //     }
-            // };
+            timer.Elapsed += async (s, e) =>
+            {
+                var allUnexpiredKeys = await DatabaseQueries.GetAllAsync<PremiumKey>(x => !x.HasExpired && x.UserId != 0);
+                var premiumServers = await DatabaseQueries.GetAllAsync<Server>(x => x.PremiumExpiration < DateTime.Now.ToOADate());
+                
+                foreach (var key in allUnexpiredKeys)
+                {
+                    if(_keysCache.Contains(key))
+                        continue;
+                    
+                    var serverToCheck = premiumServers.FirstOrDefault(x => x.ServerId == key.ServerId);
+                    
+                    if (serverToCheck == null || _serverNotificationCache.Contains(serverToCheck))
+                    {
+                        continue;
+                    }
+                    
+                    var kaguyaUser = await DatabaseQueries.GetOrCreateUserAsync(key.UserId);
+
+                    var keyRedeemSocketUser = _client.GetUser(key.UserId);
+                    var keyGuild = _client.GetGuild(key.ServerId);
+                    
+                    var descSb = new StringBuilder($"Your [Kaguya Premium]({ConfigProperties.KaguyaStore}) benefits have expired " +
+                                                   $"in the server `{keyGuild.Name}`.");
+                    if (kaguyaUser.IsPremium)
+                    {
+                        descSb.AppendLine("\n\nYour personal Kaguya Premium benefits will expire in " +
+                                          $"`{DateTime.FromOADate(kaguyaUser.PremiumExpiration).Humanize(false)}`.");
+                    }
+                    else
+                    {
+                        descSb.AppendLine("\n\nYour personal Kaguya Premium benefits have run out as well.");
+                    }
+
+                    descSb.AppendLine($"\n___***[Click here to resubscribe for $4.99/month!](https://sellix.io/KaguyaStore)***___");
+                    
+                    var embed = new KaguyaEmbedBuilder(EmbedColor.ORANGE)
+                    {
+                        Title = "Kaguya Premium Expiration Notification",
+                        Description = descSb.ToString(),
+                        Footer = new EmbedFooterBuilder
+                        {
+                            Text = $"You have subscribed for {kaguyaUser.TotalDaysPremium} days. Thank you for your support!"
+                        }
+                    };
+
+                    try
+                    {
+                        await keyRedeemSocketUser.SendMessageAsync(embed: embed.Build());
+                        _serverNotificationCache.Add(serverToCheck);
+                    }
+                    catch (Exception ex)
+                    {
+                        await ConsoleLogger.LogAsync(ex,
+                            $"Failed to DM user {keyRedeemSocketUser.UsernameAndDescriminator()} " +
+                            $"about a key expiration for guild [{keyGuild.Name} | {keyGuild.Id}]", LogLvl.WARN);
+                    }
+                    foreach (var key2 in allUnexpiredKeys.Where(x => x.ServerId == serverToCheck.ServerId))
+                    {
+                        key2.HasExpired = true;
+                        _keysCache.Add(key2);
+                    }
+                    
+                    await DatabaseQueries.UpdateAsync(_keysCache);
+                }
+                
+                _serverNotificationCache.Clear();
+                _keysCache.Clear();
+            };
             return Task.CompletedTask;
         }
     }

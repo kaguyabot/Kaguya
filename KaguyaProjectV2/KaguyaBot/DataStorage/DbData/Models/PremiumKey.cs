@@ -11,15 +11,17 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         IUserSearchable<PremiumKey>
     {
         [PrimaryKey]
-        [Column(Name = "Key"), NotNull]
+        [Column(Name = "key"), NotNull]
         public string Key { get; set; }
-        [Column(Name = "LengthInSeconds"), NotNull]
+        [Column(Name = "length_in_seconds"), NotNull]
         public long LengthInSeconds { get; set; }
-        [Column(Name = "KeyCreatorId"), NotNull]
+        [Column(Name = "key_creator_id"), NotNull]
         public ulong KeyCreatorId { get; set; }
-        [Column(Name = "UserId"), Nullable]
+        [Column(Name = "user_id"), Nullable]
         public ulong UserId { get; set; }
-        [Column(Name = "ServerId"), Nullable]
+        [Column(Name = "server_id"), Nullable]
         public ulong ServerId { get; set; }
+        [Column(Name = "has_expired")]
+        public bool HasExpired { get; set; }
     }
 }

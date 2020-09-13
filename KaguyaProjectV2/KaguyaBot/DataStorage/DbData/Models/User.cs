@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "CommandUses"), NotNull]
         public int TotalCommandUses { get; set; }
         [Column(Name = "TotalDaysSupported"), NotNull]
-        public int TotalDaysSupported { get; set; }
+        public int TotalDaysPremium { get; set; }
         /// <summary>
         /// Whenever a user uses a command, increase this by one.
         /// The ratelimit service will check for whether the user
