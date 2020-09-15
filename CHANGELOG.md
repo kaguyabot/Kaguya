@@ -1,4 +1,4 @@
-### Version 2.13
+### Version 2.12.1
 - Reimplements Kaguya Premium expiration notification service.
 
 ### Version 2.12
