@@ -54,7 +54,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
                     {
                         var dmCh = await socketUser.GetOrCreateDMChannelAsync();
 
-                        string nsfwStr = $"Your NSFW images have been reset to 12.";
                         string weekendStr = $"Because you voted on the weekend, you have been given " +
                                             $"double points and double exp!";
 
@@ -64,7 +63,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
                             Description =
                                 $"Thanks for upvoting me on [top.gg](https://top.gg/bot/538910393918160916/vote)! " +
                                 $"You have been awarded `{points:N0} points` and `{exp:N0} exp`. " +
-                                $"{(user.HasRecentlyUsedNSFWCommands(3) ? nsfwStr : "")} " +
                                 $"{(vote.IsWeekend ? weekendStr : "")}"
                         };
 
