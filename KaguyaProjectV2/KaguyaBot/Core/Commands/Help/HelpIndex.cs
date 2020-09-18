@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
     public class HelpIndex : KaguyaBase
     {
-        [HelpCommand]
+        [ReferenceCommand]
         [Command("Help")]
         [Alias("h")]
         [Summary("Returns the help command for a specific command if specified. If no command is specified, " +

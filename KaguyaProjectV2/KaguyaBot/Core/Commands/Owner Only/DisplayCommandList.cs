@@ -25,7 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             {
                 new AdminCommandAttribute(), new CurrencyCommandAttribute(),
                 new ExpCommandAttribute(), new FunCommandAttribute(),
-                new HelpCommandAttribute(), new MusicCommandAttribute(),
+                new ReferenceCommandAttribute(), new MusicCommandAttribute(),
                 new NsfwCommandAttribute(), new OsuCommandAttribute(),
                 new UtilityCommandAttribute(), new PremiumServerCommandAttribute(),
                 new PremiumUserCommandAttribute(), new OwnerCommandAttribute()

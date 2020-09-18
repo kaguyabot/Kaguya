@@ -10,7 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
     public class FAQ : KaguyaBase
     {
-        [HelpCommand]
+        [ReferenceCommand]
         [Command("Faq")]
         [Summary("Displays a link to the Kaguya FAQ.")]
         [Remarks("")]

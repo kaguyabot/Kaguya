@@ -16,6 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
         public static readonly Color LightPurpleColor = new Color(189, 74, 255);
         public static readonly Color LightBlueColor = new Color(82, 229, 255);
         public static readonly Color GrayColor = new Color(117, 117, 117);
+        public static readonly Color MagentaColor = new Color(235, 44, 140);
 
         public KaguyaEmbedBuilder()
         {
@@ -68,6 +69,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
                 case EmbedColor.GRAY:
                     color = GrayColor;
                     break;
+                case EmbedColor.MAGENTA:
+                    color = MagentaColor;
+                    break;
                 default:
                     color = RedColor;
                     break;
@@ -89,6 +93,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
         LIGHT_PURPLE,
         LIGHT_BLUE,
         ORANGE,
-        GRAY
+        GRAY,
+        MAGENTA
     }
 }

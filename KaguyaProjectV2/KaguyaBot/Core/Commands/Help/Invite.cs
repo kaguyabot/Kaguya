@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
     public class Invite : KaguyaBase
     {
-        [HelpCommand]
+        [ReferenceCommand]
         [Command("Invite")]
         [Summary("DMs the user with a link to invite the bot to their own server, as " +
                  "well as a link to the Kaguya Support Discord server.")]

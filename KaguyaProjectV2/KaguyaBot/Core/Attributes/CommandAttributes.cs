@@ -36,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    internal class HelpCommandAttribute : Attribute
+    internal class ReferenceCommandAttribute : Attribute
     {
 
     }

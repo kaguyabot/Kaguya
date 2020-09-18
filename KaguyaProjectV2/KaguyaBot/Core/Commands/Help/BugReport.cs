@@ -6,7 +6,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
     public class BugReport : KaguyaBase
     {
-        [HelpCommand]
+        [ReferenceCommand]
         [Command("BugReport")]
         [Summary("Responds with a link to the bug report template. Requires a GitHub account.")]
         [Remarks("")]

@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         private const double MONTHLY_SERVER_FEE = 80.99;
         private const double PREMIUM_COST = 4.99;
 
-        [HelpCommand]
+        [ReferenceCommand]
         [Command("Redeem")]
         [Summary("Allows a user to redeem a Kaguya Premium key in a server. Premium keys may be " +
                  "purchased [at this link](https://sellix.io/KaguyaStore). Be sure to execute this " +

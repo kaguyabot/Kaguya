@@ -9,7 +9,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
     public class PremiumInfo : KaguyaBase
     {
-        [HelpCommand]
+        [ReferenceCommand]
         [Command("Premium")]
         [Summary("Displays information on the [Kaguya Premium](" + ConfigProperties.KaguyaStore + "subscription.")]
         [Remarks("")]

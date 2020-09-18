@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
 {
     public class CheckExpiration : KaguyaBase
     {
-        [HelpCommand]
+        [ReferenceCommand]
         [Command("CheckExpiration")]
         [Alias("ce")]
         [Summary("Allows a user with active Kaguya Premium keys " +
