@@ -180,13 +180,50 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             }
             catch (Discord.Net.HttpException e)
             {
-                await ConsoleLogger.LogAsync(
-                    $"An exception was thrown when trying to send a command error notification into a text channel.\n" +
-                    $"Channel: {context.Channel.Id} in guild {context.Guild.Id}\n" +
-                    $"User Message: {context.Message}\n" +
-                    $"Exception Message: {e.Message}\n" +
-                    $"Stack Trace: {e.StackTrace}",
-                    LogLvl.WARN);
+                bool logLeave = true;
+                if (e.DiscordCode.HasValue && e.DiscordCode == 50013) // missing permissions
+                {
+                    if (context.Guild.Id == 264445053596991498)
+                        return;
+                    
+                    IGuildUser owner = await context.Guild.GetOwnerAsync();
+                    var missPermEmbed = new KaguyaEmbedBuilder(EmbedColor.ORANGE)
+                    {
+                        Description = "__**Error: Missing Permissions**__\n\n" +
+                                      $"I have left `{context.Guild.Name}` because I did not have " +
+                                      $"permission to send messages in your server!\n\n" +
+                                      $"You may add me back to your server [here.](https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=469101694)"
+                    };
+
+                    try
+                    {
+                        await owner.SendMessageAsync(embed: missPermEmbed.Build());
+                    }
+                    catch (Exception ex)
+                    {
+                        await ConsoleLogger.LogAsync(ex, $"Failed to DM owner of guild {context.Guild.Id} " +
+                                                         $"as I was leaving the server [ID: {context.Guild.Id} | " +
+                                                         $"Name: {context.Guild.Name}].", LogLvl.WARN);
+                    }
+                    finally
+                    {
+                        await context.Guild.LeaveAsync();
+                        await ConsoleLogger.LogAsync($"Self-ejected from guild {context.Guild.Id} due to missing " +
+                                                     $"permissions (Discord Error: 50013)", LogLvl.INFO);
+                        logLeave = false;
+                    }
+                }
+
+                if (logLeave)
+                {
+                    await ConsoleLogger.LogAsync(
+                        $"An exception was thrown when trying to send a command error notification into a text channel.\n" +
+                        $"Channel: {context.Channel.Id} in guild {context.Guild.Id}\n" +
+                        $"User Message: {context.Message}\n" +
+                        $"Exception Message: {e.Message}\n" +
+                        $"Stack Trace: {e.StackTrace}",
+                        LogLvl.WARN);
+                }
             }
         }
 
