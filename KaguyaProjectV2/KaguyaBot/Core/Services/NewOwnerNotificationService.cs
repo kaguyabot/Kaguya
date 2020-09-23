@@ -23,8 +23,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                               $"- Change my prefix to something else using `$prefix <new prefix>`. " +
                               $"Example: `$prefix k!`.\n" +
                               $"- If you forget the prefix, tag me at anytime to use commands.\n\n" +
+                              $"- Don't like something? Turn it off!\n" +
+                              $"Example to disable levels: `$togglelevels`\n\n" +
                               $"If you need assistance, [click here to join my support server.](https://discord.gg/aumCJhr)\n\n" +
-                              $"**[Click here to watch a tutorial on how to use me!!](https://www.youtube.com/watch?v=uNqiYOSSTYI)**\n\n" +
+                              $"**[Click here to watch a tutorial on how to use me.](https://www.youtube.com/watch?v=uNqiYOSSTYI)**\n\n" +
                               $"Enjoy!"
             };
 
