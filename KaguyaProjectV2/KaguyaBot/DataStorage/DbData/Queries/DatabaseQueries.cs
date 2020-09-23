@@ -695,7 +695,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 var command = from h in db.GetTable<CommandHistory>() select h;
                 var descending = command.GroupBy(x => x.Command);
                 descending = descending.OrderByDescending(x => x.Count());
-                var name = descending.First().Key;
+                var name = descending.FirstOrDefault()?.Key;
+
+                if (String.IsNullOrWhiteSpace(name))
+                {
+                    return new Dictionary<string, int>();
+                }
                     
                 var count = from c in db.GetTable<CommandHistory>()
                     group c by c.Command
