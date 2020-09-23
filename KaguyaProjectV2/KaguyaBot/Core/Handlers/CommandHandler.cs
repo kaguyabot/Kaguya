@@ -125,8 +125,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             Server server, IResult result)
         {
             string cmdPrefix = server.CommandPrefix;
-            await ConsoleLogger.LogAsync($"Command Failed [Command: {context.Message} | User: {context.User} | " +
-                                         $"Guild: {context.Guild.Id}]", LogLvl.DEBUG);
+
+            if (!result.IsSuccess)
+            {
+                await ConsoleLogger.LogAsync($"Command Failed [Command: {context.Message} | User: {context.User} | " +
+                                             $"Guild: {context.Guild.Id}]", LogLvl.DEBUG);
+            }
 
             if (result.IsSuccess)
             {
