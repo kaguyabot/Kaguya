@@ -1,5 +1,6 @@
 ### Version 2.12.2
 - Kaguya will now auto-eject from Discord Servers who do not give her permission to send messages.
+- Attempts to fix an issue with some servers being unable to $mute or $unmute users.
 
 ### Version 2.12.1
 - Reimplements Kaguya Premium expiration notification service.

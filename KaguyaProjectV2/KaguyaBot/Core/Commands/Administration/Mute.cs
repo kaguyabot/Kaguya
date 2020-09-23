@@ -176,6 +176,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 await ReplyAsync(embed: waitEmbed.Build());
             }
 
+            int failCount = 0;
             foreach (var channel in guild.Channels)
             {
                 if (channel.GetPermissionOverwrite(muteRole).HasValue)
@@ -183,18 +184,42 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     continue;
                 }
 
-                await channel.AddPermissionOverwriteAsync(muteRole, OverwritePermissions.InheritAll);
-                await channel.AddPermissionOverwriteAsync(muteRole, new OverwritePermissions(
-                    addReactions: PermValue.Deny, speak: PermValue.Deny,
-                    sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
-                    sendMessages: PermValue.Deny));
+                try
+                {
+                    await channel.AddPermissionOverwriteAsync(muteRole, OverwritePermissions.InheritAll);
+                    await channel.AddPermissionOverwriteAsync(muteRole, new OverwritePermissions(
+                        addReactions: PermValue.Deny, speak: PermValue.Deny,
+                        sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
+                        sendMessages: PermValue.Deny));
 
-                await ConsoleLogger.LogAsync($"Permission overwrite added for guild channel.\n" +
-                                             $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
-                                             $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
+                    await ConsoleLogger.LogAsync($"Permission overwrite added for guild channel.\n" +
+                                                 $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
+                                                 $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
+                }
+                catch (Exception e)
+                {
+                    if (failCount >= 3)
+                    {
+                        await ReplyAsync($"{Context.User.Mention} Could not update permissions for several channels! " +
+                                         $"**Aborting mute!**");
+                        return;
+                    }
+                    
+                    await ReplyAsync($"{Context.User.Mention} Could not update permissions for {channel}! Muted user " +
+                                     $"can still type in this channel.");
+                    failCount++;
+                }
             }
 
-            await user.AddRoleAsync(muteRole);
+            try
+            {
+                await user.AddRoleAsync(muteRole);
+            }
+            catch (Exception e)
+            {
+                await ReplyAsync($"{Context.User.Mention} Failed to mute user!!\n\n" +
+                                 $"Error Log: ```{e}```");
+            }
 
             await ConsoleLogger.LogAsync($"User muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
                                     $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
@@ -256,19 +281,35 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 foreach (var channel in guild.Channels)
                 {
-                    await channel.AddPermissionOverwriteAsync(muteRole, OverwritePermissions.InheritAll);
-                    await channel.AddPermissionOverwriteAsync(muteRole, new OverwritePermissions(
-                        addReactions: PermValue.Deny, speak: PermValue.Deny,
-                        sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
-                        sendMessages: PermValue.Deny));
+                    try
+                    {
+                        await channel.AddPermissionOverwriteAsync(muteRole, OverwritePermissions.InheritAll);
+                        await channel.AddPermissionOverwriteAsync(muteRole, new OverwritePermissions(
+                            addReactions: PermValue.Deny, speak: PermValue.Deny,
+                            sendTTSMessages: PermValue.Deny, connect: PermValue.Deny, createInstantInvite: PermValue.Deny,
+                            sendMessages: PermValue.Deny));
 
-                    await ConsoleLogger.LogAsync($"Mute permission overwrite added for guild channel.\n" +
-                                            $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
-                                            $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
+                        await ConsoleLogger.LogAsync($"Mute permission overwrite added for guild channel.\n" +
+                                                     $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
+                                                     $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignored
+                    }
                 }
             }
 
-            await user.AddRoleAsync(muteRole);
+            try
+            {
+                await user.AddRoleAsync(muteRole);
+            }
+            catch (Exception e)
+            {
+                await ReplyAsync($"{Context.User.Mention} Failed to mute user!!\n\n" +
+                                 $"Error Log: ```{e}```");
+            }
+            
             await ConsoleLogger.LogAsync($"User auto-muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
                                     $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
         }

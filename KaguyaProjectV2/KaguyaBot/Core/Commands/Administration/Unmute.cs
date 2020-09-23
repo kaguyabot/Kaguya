@@ -9,6 +9,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -72,6 +73,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 errorEmbed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: errorEmbed.Build());
+            }
+            catch (Exception e)
+            {
+                throw new KaguyaSupportException($"An unexpected error occurred.\n\nError Log: {e}");
             }
         }
     }
