@@ -19,7 +19,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     {
         public Server Server { get; set; }
         public IUser Moderator { get; set; }
-
         public IUser ActionRecipient { get; set; }
         public PremiumModActionHandler Action { get; set; }
         public string Reason { get; set; }
@@ -30,6 +29,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 return;
 
             var logChannel = ConfigProperties.Client.GetGuild(log.Server.ServerId).GetTextChannel(log.Server.ModLog);
+            if (logChannel == null)
+                return;
+            
             string actionTitle = "User ";
             string embedUrl = "";
             string reason = log.Reason ?? "None specified";

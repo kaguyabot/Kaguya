@@ -1,3 +1,9 @@
+### Version 2.12.3
+- Fixes a bug where Kaguya Premium servers could not use basic administration tools (mute, ban, unmute, shadowban, etc.) if any of the following applied to the server:
+    - Invalid ModLog channel
+    - Unset ModLog channel
+        - (ModLog = $log modlog <channel>)
+
 ### Version 2.12.2
 - Kaguya will now auto-eject from Discord Servers who do not give her permission to send messages.
 - Attempts to fix an issue with some servers being unable to $mute or $unmute users.
