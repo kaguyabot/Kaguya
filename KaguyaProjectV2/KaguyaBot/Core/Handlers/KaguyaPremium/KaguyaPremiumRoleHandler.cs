@@ -32,11 +32,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
                         return;
                     }
                     
+                    // We can't say x.IsPremium as the ORM doesn't like this.
                     var validPremium = await DatabaseQueries.GetAllAsync<User>(x => x.PremiumExpiration > DateTime.Now.ToOADate());
                     foreach (var premUser in validPremium)
                     {
-                        var guildUser = kaguyaSupportServer.GetUser(premUser.UserId); 
+                        var guildUser = kaguyaSupportServer.GetUser(premUser.UserId);
 
+                        if (guildUser == null)
+                            continue;
+                        
                         if (guildUser.Roles.Contains(premiumRole))
                             continue;
 
