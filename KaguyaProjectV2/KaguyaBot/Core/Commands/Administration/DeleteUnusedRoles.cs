@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             var confirmEmbed = new KaguyaEmbedBuilder
             {
-                Description = $"Admin {Context.User.Username}, are you sure you " +
+                Description = $"{Context.User.Username}, are you sure you " +
                               $"wish to preform this action?"
             };
             confirmEmbed.SetColor(EmbedColor.VIOLET);
@@ -42,15 +42,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
             timeoutEmbed.SetColor(EmbedColor.RED);
 
-            await InlineReactionReplyAsync(new ReactionCallbackData("", confirmEmbed.Build(), true, true, TimeSpan.FromSeconds(60), c =>
-                c.Channel.SendEmbedAsync(timeoutEmbed))
+            await InlineReactionReplyAsync(new ReactionCallbackData("", confirmEmbed.Build(), true, true, TimeSpan.FromSeconds(60))
                 .WithCallback(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
                 {
                     int i = 0;
                     int j = 0;
                     string failString = "";
 
-                    foreach (var role in Context.Guild.Roles.Where(x => !x.Members.Any()))
+                    foreach (var role in Context.Guild.Roles.Where(x => !x.Members.Any() && x.Name.ToLower() != "kaguya-mute"))
                     {
                         try
                         {
