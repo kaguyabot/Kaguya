@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord.Addons.Interactive;
@@ -20,10 +21,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         public async Task Command()
         {
             const int pageTrackCount = 25;
-            
+
+            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var favoriteTracks = await DatabaseQueries.GetAllForUserAsync<FavoriteTrack>(user.UserId);
-            
+
+            if (!favoriteTracks.Any())
+            {
+                await SendBasicErrorEmbedAsync($"You do not have any favorited tracks. Go out and " +
+                                               $"get some with `{server.CommandPrefix}favorite`!");
+                return;
+            }
             double pageCountWithRemainder = (double)favoriteTracks.Count / pageTrackCount;
             if (pageCountWithRemainder - Math.Floor(pageCountWithRemainder) > 0)
             {
