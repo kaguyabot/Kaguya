@@ -1,6 +1,7 @@
-### Version 2.12.5
+### Version 2.13
 - $deleteunusedroles no longer sends an unnecessary notification about the confirmation message's reactions. The admin has 60s to make a decision.
 - $deleteunusedroles now ignores the "kaguya-mute" role.
+- Added $deletetrack - removes tracks from the music queue.
 
 ### Version 2.12.4
 - Fixed annoying error message with $clear (it would display itself nearly every time.) This will now only display if the user attempts to delete messages older than 14 days.
