@@ -35,11 +35,11 @@
 //             }
 //
 //             int failedAttempts = 0;
-//             int limitAttempts = 3; // Maximum amount of error messages to send in one session.
+//             const int limitAttempts = 3; // Maximum amount of error messages to send in one session.
 //
 //             var descSb = new StringBuilder();
 //             
-//             foreach (var num in args)
+//             foreach (var num in args.OrderByDescending(x => x))
 //             {
 //                 if (failedAttempts >= limitAttempts) return;
 //
@@ -60,7 +60,6 @@
 //             {
 //                 player.Queue.Enqueue(track);
 //             }
-//
 //             
 //             var embed = new KaguyaEmbedBuilder
 //             {

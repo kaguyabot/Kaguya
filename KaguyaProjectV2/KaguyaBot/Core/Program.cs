@@ -65,7 +65,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
             {
-                await ConsoleLogger.LogAsync($"Unhandled Exception: {eventArgs.ExceptionObject}\n" + 
+                await ConsoleLogger.LogAsync($"Unhandled Exception: {(Exception)eventArgs.ExceptionObject}\n" + 
                 $"Inner Exception: {((Exception)eventArgs.ExceptionObject).InnerException}", LogLvl.ERROR);
             };
 
