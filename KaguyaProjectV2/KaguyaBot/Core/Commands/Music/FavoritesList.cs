@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                         break;
                         
                     var track = favoriteTracks[trackIndex];
-                    descSb.AppendLine($"{i + 1}. `{track.TrackTitle}`");
+                    descSb.AppendLine($"`#{trackIndex + 1}.` `{track.TrackTitle}`");
                 }
 
                 page.Description = descSb.ToString();
