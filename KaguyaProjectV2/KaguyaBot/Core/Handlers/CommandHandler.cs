@@ -19,6 +19,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.Core.TypeReaders;
+using LinqToDB.Common;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -168,16 +169,36 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         /// <summary>
         /// Creates and sends an error message to the user upon failed command.
         /// </summary>
-        private static async Task DisplayGenericErrorEmbed(Optional<CommandInfo> command, ICommandContext context, IResult result, string cmdPrefix)
+        private static async Task DisplayGenericErrorEmbed(Optional<CommandInfo> command, ICommandContext context, 
+            IResult result, string cmdPrefix)
         {
             string cmdName = command.IsSpecified ? command.Value.Name.ToLower() : "<command>";
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder(EmbedColor.RED)
-            {
-                Title = "Error",
-                Description = $"Command: `{context.Message}`\nReason: {result.ErrorReason}\n\n" +
-                              $"Help: Use `{cmdPrefix}h {cmdName}` to learn how to use this command.",
-            };
 
+            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder(EmbedColor.RED) { Title = "Error" };
+            string reason = "";
+            
+            // ReSharper disable once PossibleInvalidOperationException
+            switch (result.Error.Value)
+            {
+                case CommandError.BadArgCount:
+                    int paramCount = command.Value.Parameters.Count;
+                    reason = "You passed in too few or too many parameters to this command.\n" +
+                             $"This command accepts up to " +
+                             $"`{(command.Value.HasVarArgs ? "Unlimited" : paramCount.ToString("N0"))}` parameter{(paramCount == 1 ? "" : "s")}.";
+                    break;
+                case CommandError.ParseFailed:
+                    reason = "This command requires a different type of data than what you provided it with.";
+                    break;
+                default:
+                    reason = result.ErrorReason;
+                    break;
+            }
+
+            if (reason.IsNullOrEmpty())
+                reason = result.ErrorReason;
+            
+            embed.Description = $"Command: `{context.Message}`\nReason: {reason}\n\n" +
+                                $"Help: Use `{cmdPrefix}h {cmdName}` to learn how to use this command.";
             try
             {
                 await context.Channel.SendEmbedAsync(embed);
@@ -185,7 +206,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             catch (Discord.Net.HttpException e)
             {
                 bool logLeave = true;
-                if (e.DiscordCode.HasValue && e.DiscordCode == 50013) // missing permissions
+                if (e.DiscordCode.HasValue && e.DiscordCode == 50013) // Missing permissions
                 {
                     if (context.Guild.Id == 264445053596991498)
                         return;
