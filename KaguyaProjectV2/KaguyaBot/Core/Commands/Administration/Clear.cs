@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             if (amount > 1000)
             {
-                await SendBasicErrorEmbedAsync("You may not clear more than `1,000` messages " +
+                await SendBasicErrorEmbedAsync("You may not attempt to clear more than `1,000` messages " +
                                                                "at a time.");
                 return;
             }
@@ -45,17 +45,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             server.IsCurrentlyPurgingMessages = true;
             await DatabaseQueries.UpdateAsync(server);
 
-            var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
-            var invalidMessages = messages.Where(x => x.Timestamp.DateTime > DateTime.Now.AddDays(-14));
+            IMessage[] messages = (await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync()).ToArray();
+            var invalidMessages = messages.Where(x => x.Timestamp.DateTime < DateTime.Now.AddDays(-14));
 
-            var msgsList = messages.ToList(); //Avoiding multiple enumeration.
-            await ((SocketTextChannel)Context.Channel).DeleteMessagesAsync(msgsList);
+            await ((SocketTextChannel)Context.Channel).DeleteMessagesAsync(messages);
 
-            if (msgsList.Count == amount + 1)
+            if (!invalidMessages.Any())
             {
                 embed = new KaguyaEmbedBuilder
                 {
-                    Description = $"Successfully deleted `{amount}` messages."
+                    Description = $"Successfully deleted `{messages.Length}` messages."
                 };
 
                 await ReplyAndDeleteAsync("", false, embed.Build(), TimeSpan.FromSeconds(4));
@@ -64,8 +63,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 embed = new KaguyaEmbedBuilder
                 {
-                    Description = $"Successfully deleted `{msgsList.Count}` messages. Failed to delete " +
-                                  $"`{amount - msgsList.Count}` messages. This is likely because those " +
+                    Description = $"Successfully deleted `{messages.Length}` messages. Failed to delete " +
+                                  $"`{amount - messages.Length}` messages. This is likely because those " +
                                   "messages were posted more than two weeks ago. Messages posted more than two " +
                                   "weeks ago may not be deleted by Discord bots (this is a Discord-imposed limitation).",
                     Footer = new EmbedFooterBuilder
