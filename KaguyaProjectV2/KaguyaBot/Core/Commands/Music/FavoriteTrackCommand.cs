@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using Victoria;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
@@ -24,14 +26,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             
-            var node = ConfigProperties.LavaNode;
-            var player = node.GetPlayer(Context.Guild);
-            
-            if (player == null)
+            LavaNode node = ConfigProperties.LavaNode;
+            if (!node.TryGetPlayer(Context.Guild, out LavaPlayer player) || player == null)
             {
                 await SendBasicErrorEmbedAsync($"There needs to be an active music player in the " +
                                                $"server for this command to work. Start one " +
                                                $"by using `{server.CommandPrefix}play <song>`!");
+                return;
+            }
+            
+            if (!player.IsPlaying() && !player.IsPaused())
+            {
+                await SendBasicErrorEmbedAsync($"The music player must either be paused or actively playing " +
+                                               $"in order to favorite a track.");
                 return;
             }
 

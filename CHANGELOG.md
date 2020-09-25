@@ -3,6 +3,7 @@
 - $deleteunusedroles now ignores the "kaguya-mute" role.
 - Added $deletetrack - removes tracks from the music queue.
 - Added $delfav - removes tracks from your $favls list.
+- Cleared up some ambiguous (technical) error messages with some of the music commands.
 
 ### Version 2.12.4
 - Fixed annoying error message with $clear (it would display itself nearly every time.) This will now only display if the user attempts to delete messages older than 14 days.
