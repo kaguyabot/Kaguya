@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
+    //todo: Add properties for collections such as IEnumerable<FavoriteTrack>
     [Table(Name = "kaguyauser")]
     public class User : IKaguyaQueryable<User>, IKaguyaUnique<User>, IUserSearchable<User>
     {
