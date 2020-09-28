@@ -34,7 +34,18 @@ namespace KaguyaProjectV2.KaguyaApi
             services.AddScoped<KaguyaDb>();
 
             var dbSettings = services.BuildServiceProvider().GetRequiredService<KaguyaSettings>();
-
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
+            
             // Initialize connection to database.
             DataConnection.DefaultSettings = dbSettings;
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
@@ -49,6 +60,11 @@ namespace KaguyaProjectV2.KaguyaApi
             }
 
             //app.UseHttpsRedirection();
+
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseRouting();
 
