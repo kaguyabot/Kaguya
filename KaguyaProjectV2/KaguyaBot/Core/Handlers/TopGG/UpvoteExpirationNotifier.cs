@@ -21,32 +21,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
             upvoteResetTimer.AutoReset = true;
             upvoteResetTimer.Elapsed += async (sender, e) =>
             {
-                var now = DateTime.Now;
-                var firstDayOfMonth = new DateTime(now.Year, now.Month, 1, 0, 0, 0);
-                var monthlyVoters = await DatabaseQueries.GetAllAsync<TopGgWebhook>(x => x.TimeVoted > firstDayOfMonth.ToOADate()
-                                                                                         && x.UpvoteType.ToLower() != "test");
+                var allVotes = await DatabaseQueries.GetAllAsync<TopGgWebhook>(x => x.TimeVoted > 0 && !x.ReminderSent
+                    && x.UpvoteType.ToLower() != "test");
 
-                foreach (var voter in monthlyVoters)
+                foreach (var vote in allVotes)
                 {
-                    var votes = monthlyVoters.Where(x => x.UserId == voter.UserId).OrderByDescending(x => x.TimeVoted).ToList();
+                    var votes = allVotes.Where(x => x.UserId == vote.UserId).OrderByDescending(x => x.TimeVoted).ToList();
                     var mostRecentVote = !votes.Any() ? null : votes[0];
 
                     if (mostRecentVote == null)
                     {
-                        await ConsoleLogger.LogAsync($"User {voter.UserId} may now vote again, but " +
+                        await ConsoleLogger.LogAsync($"User {vote.UserId} may now vote again, but " +
                                                      $"their most recent vote was null in the database. " +
                                                      $"No DM has been sent, and nothing has been " +
-                                                     $"updated in the database.", LogLvl.DEBUG);
+                                                     $"updated in the database.", LogLvl.WARN);
                         continue;
                     }
 
                     if (mostRecentVote.TimeVoted > DateTime.Now.AddHours(-12).ToOADate())
                         continue;
 
-                    if (mostRecentVote.ReminderSent)
-                        continue;
-
-                    var socketUser = ConfigProperties.Client.GetUser(voter.UserId);
+                    var socketUser = ConfigProperties.Client.GetUser(vote.UserId);
                     if (socketUser == null) goto UpdateInDB;
 
                     var embed = new KaguyaEmbedBuilder(EmbedColor.PINK)
@@ -82,11 +77,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
 
                     if (socketUser == null)
                     {
-                        await ConsoleLogger.LogAsync($"User {voter.UserId} can now upvote Kaguya. DM NOT sent.", LogLvl.DEBUG);
+                        await ConsoleLogger.LogAsync($"User {vote.UserId} can now upvote Kaguya. DM NOT sent.", LogLvl.DEBUG);
                         continue;
                     }
 
-                    await ConsoleLogger.LogAsync($"User {voter.UserId} has been reminded to upvote Kaguya.", LogLvl.DEBUG);
+                    await ConsoleLogger.LogAsync($"User {vote.UserId} has been reminded to upvote Kaguya.", LogLvl.DEBUG);
                 }
             };
         }

@@ -30,7 +30,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
                     var user = await DatabaseQueries.GetOrCreateUserAsync(vote.UserId);
                     var socketUser = ConfigProperties.Client.GetUser(user.UserId);
 
-                    var r = new Random();
                     var points = 750;
                     var exp = 500;
 

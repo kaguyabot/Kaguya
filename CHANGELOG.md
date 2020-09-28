@@ -1,3 +1,6 @@
+### Version 2.13.1
+- Fixed a bug where users would not be reminded to $vote for Kaguya on the first day of each month.
+
 ### Version 2.13
 - $deleteunusedroles no longer sends an unnecessary notification about the confirmation message's reactions. The admin has 60s to make a decision.
 - $deleteunusedroles now ignores the "kaguya-mute" role.
