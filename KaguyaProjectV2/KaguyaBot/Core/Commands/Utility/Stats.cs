@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -28,27 +29,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             var client = Client;
             var owner = client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
             var curShard = client.GetShardFor(Context.Guild);
 
             int curTextChannels = 0;
             int curVoiceChannels = 0;
-            int curUsers = 0;
             int curOnline = 0;
 
             foreach (var guild in curShard.Guilds)
             {
                 curTextChannels += guild.TextChannels.Count;
                 curVoiceChannels += guild.VoiceChannels.Count;
-                curUsers += guild.Users.Count;
                 curOnline += guild.Users.Count(x => x.Status != UserStatus.Offline);
             }
 
             int totalGuilds = 0;
             int totalTextChannels = 0;
             int totalVoiceChannels = 0;
-            int totalUsers = 0;
 
             foreach (var shard in client.Shards)
             {
@@ -58,7 +55,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 {
                     totalTextChannels += guild.TextChannels.Count;
                     totalVoiceChannels += guild.VoiceChannels.Count;
-                    totalUsers += guild.Users.Count;
                 }
             }
 
@@ -102,7 +98,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                             $"Guilds: `{curShard.Guilds.Count:N0}`\n" +
                             $"Text Channels: `{curTextChannels:N0}`\n" +
                             $"Voice Channels: `{curVoiceChannels:N0}`\n" +
-                            $"Total Users: `{curUsers:N0}`\n" +
+                            $"Total Users: `{client.TotalUsersForShard(curShard.ShardId):N0}`\n" +
                             $"Online Users: `{curOnline:N0}`\n" +
                             $"Latency: `{curShard.Latency:N0}ms`\n"
                 },
@@ -113,7 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                             $"Guilds: `{totalGuilds:N0}`\n" +
                             $"Text Channels: `{totalTextChannels:N0}`\n" +
                             $"Voice Channels: `{totalVoiceChannels:N0}`\n" +
-                            $"Users: `{totalUsers:N0}`\n" +
+                            $"Users: `{client.TotalUsers():N0}`\n" +
                             $"RAM Usage: `{(double)curProcess.PrivateMemorySize64 / 1000000:N2} Megabytes`\n" +
                             $"Current Version: `{ConfigProperties.Version}`"
                 },
