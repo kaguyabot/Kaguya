@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Discord;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Currency;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions

@@ -1,8 +1,8 @@
-﻿using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
@@ -37,5 +37,4 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
             this.Context = context;
         }
     }
-
 }

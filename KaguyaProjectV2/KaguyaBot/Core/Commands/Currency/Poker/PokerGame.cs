@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Interactive;
@@ -16,14 +15,18 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
+namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 {
     public class PokerGame : KaguyaBase
     {
         private const int SUIT_LEN = 13;
+        private const int TIMEOUT = 60;
+        private const EmbedColor POKER_COLOR = EmbedColor.MAGENTA;
+        
+        private static int _pointsToDeductFromUser = 0;
         
         [CurrencyCommand]
-        [Command("Poker")]
+        [Command("Poker", RunMode = RunMode.Async)]
         [Alias("pk")]
         [Summary("Starts a game of Texas Hold'em Poker between you and me, the dealer!\n\n" +
                  "Rules:\n" +
@@ -76,66 +79,239 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             }
             #endregion
 
-            double multiplier = 2.2;
-            double pot = points * multiplier;
+            PokerData.pot = points * PokerData.multiplier;
             Hand playerHand = GeneratePlayerHand();
             Hand dealerHand = GeneratePlayerHand();
             
-            List<Card> communityCards = GenerateFlop(5).ToList(); // We start with a flop, then add onto this later.
-            Hand communityCardsAsHand = new Hand(communityCards);
+            List<Card> communityCards = GenerateFlop().ToList(); // We start with a flop, then add onto this later.
+            Hand communityHand = new Hand(communityCards);
 
-            HandRanking playerHandRanking = PokerData.IdentifyRanking(playerHand, communityCardsAsHand);
-            HandRanking dealerHandRanking = PokerData.IdentifyRanking(dealerHand, communityCardsAsHand);
-            
-            KaguyaEmbedBuilder embed = GameEmbed(playerHand, communityCards, (int)pot);
-            await SendEmbedAsync(embed);
+            await GameLoop(playerHand, dealerHand, communityHand);
         }
 
-        private static KaguyaEmbedBuilder GameEmbed(Hand playerHand, IEnumerable<Card> communityCards, int pot)
+        /// <summary>
+        /// The method that iterates through all turns in the game and then determines a winner.
+        /// </summary>
+        /// <returns></returns>
+        private async Task GameLoop(Hand playerHand, Hand dealerHand, Hand communityHand)
         {
-            var embed = new KaguyaEmbedBuilder(EmbedColor.MAGENTA)
+            // Turn 1 - display basic information to user (their hand + the flop)
+            var embed = OverviewEmbed(playerHand, dealerHand, communityHand, true, false, true, true, false);
+            var data = EmbedReactionData(embed, TIMEOUT, true, false, true, true, false);
+            await InlineReactionReplyAsync(data);
+
+            // Subsequent turns
+            PokerEvent.OnTurnEnd += async e =>
+            {
+                bool lastTurn = communityHand.Length == 5;
+
+                if (!lastTurn && e.Action == PokerGameAction.FOLD)
+                    lastTurn = true;
+
+                //todo: GenerateRandomCard() cannot generate the same card twice.
+                if(!lastTurn)
+                    communityHand.AddCard(GenerateRandomCard());
+
+                switch (e.Action)
+                {
+                    case PokerGameAction.CHECK:
+                        await Context.Channel.SendMessageAsync($"{Context.User.Mention} You have decided to check.");
+
+                        //todo: If last turn, don't include footer.
+                        var checkEmbed = CheckEmbed(playerHand, dealerHand, communityHand, lastTurn);
+                        var callData = EmbedReactionData(checkEmbed, TIMEOUT, true, false, true, true, lastTurn);
+                        await InlineReactionReplyAsync(callData);
+                        break;
+                    default:
+                        return;
+                }
+
+                if (lastTurn) ;
+                // payout logic
+            };
+        }
+
+        #region Embed helper methods {...}
+        private static KaguyaEmbedBuilder OverviewEmbed(Hand playerHand, Hand dealerHand, Hand communityHand,
+            bool canCheck, bool canCall, bool canRaise, bool canFold, bool showDealerHand)
+        {
+            var embed = new KaguyaEmbedBuilder(POKER_COLOR)
             {
                 Title = "Kaguya Poker",
-                Fields = new List<EmbedFieldBuilder>
-                {
-                    // We hide the dealer's hand from view.
-                    new EmbedFieldBuilder
-                    {
-                        Name = "Dealer Hand",
-                        Value = $"{PokerData.cardbackEmote}? {PokerData.cardbackEmote}?",
-                        IsInline = true
-                    },
-                    new EmbedFieldBuilder
-                    {
-                        Name = "Player Hand",
-                        Value = playerHand.ToString(),
-                        IsInline = true
-                    },
-                    new EmbedFieldBuilder
-                    {
-                        Name = "Table Cards",
-                        Value = communityCards.ToReadable(),
-                        IsInline = false
-                    }
-                },
+                Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, showDealerHand),
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = $"Current Pot: {pot:N0}"
+                    Text = GetOptionsFooter(canCheck, canCall, canRaise, canFold)
                 }
             };
             return embed;
         }
 
+        private static KaguyaEmbedBuilder CheckEmbed(Hand playerHand, Hand dealerHand, 
+            Hand communityHand, bool lastTurn)
+        {
+            return new KaguyaEmbedBuilder(POKER_COLOR)
+            {
+                Title = "Kaguya Poker",
+                Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, lastTurn),
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = GetOptionsFooter(true, false, true, true)
+                }
+            };
+        }
+        
+        private static List<EmbedFieldBuilder> PokerTableEmbedFields(Hand playerHand, Hand dealerHand, 
+            Hand communityHand, bool showDealerHand)
+        {
+            var dealerField = new EmbedFieldBuilder
+            {
+                Name = "Dealer Hand",
+                IsInline = true
+            };
+
+            dealerField.Value = showDealerHand
+                ? dealerHand.ToString()
+                : $"{PokerData.cardbackEmote}? {PokerData.cardbackEmote}?";
+            
+            return new List<EmbedFieldBuilder>
+            {
+                // We hide the dealer's hand from view.
+                dealerField,
+                new EmbedFieldBuilder
+                {
+                    Name = "Player Hand",
+                    Value = playerHand.ToString(),
+                    IsInline = true
+                },
+                new EmbedFieldBuilder
+                {
+                    Name = "Table Cards",
+                    Value = communityHand.HandCards.ToReadable(),
+                    IsInline = false
+                }
+            };
+        }
+
+        private static string GetOptionsFooter(bool canCheck, bool canCall, bool canRaise, bool canFold)
+        {
+            string potStr = $"Current Pot: {(int) PokerData.pot:N0}\n";
+            var sb = new StringBuilder();
+            if (canCheck)
+                sb.Append(PokerData.rcCheck + "Check,");
+            if (canCall)
+                sb.Append(PokerData.rcCall + "Call,");
+            if (canRaise)
+                sb.Append(PokerData.rcRaise + "Raise,");
+            if (canFold)
+                sb.Append(PokerData.rcFold + "Fold,");
+
+            var fSb = new StringBuilder(potStr);
+            fSb.AppendLine(sb.Replace(",", " | ").ToString()[..^3]);
+
+            return fSb.ToString();
+        }
+        #endregion
+
+        #region ReactionCallback Methods {...}
+
+        private static ReactionCallbackData EmbedReactionData(EmbedBuilder embed, int timeoutSeconds, bool canCheck, bool canCall, 
+            bool canRaise, bool canFold, bool lastTurn, User user = null, int raise = 0, int initialBet = 0)
+        {
+            if(lastTurn)
+                return new ReactionCallbackData("", embed.Build());
+            
+            var data = new ReactionCallbackData("", embed.Build(), true, true, TimeSpan.FromSeconds(timeoutSeconds));
+            var callbacks = new List<(IEmote, Func<SocketCommandContext, SocketReaction, Task>)>();
+            
+            if(canCheck)
+                callbacks.Add(CheckActionCallback());
+            if (canCall)
+            {
+                if (user == null || raise == 0 || initialBet == 0)
+                {
+                    throw new InvalidOperationException("In order for there to be a Call in this poker game, " +
+                                                        "the user, raise, and inital bet values must be set!!");
+                }
+                callbacks.Add(CallActionCallback(user, raise, initialBet));
+            }
+            if (canRaise)
+            {
+                callbacks.Add(RaiseActionCallback(raise));
+            }
+            if (canFold)
+            {
+                callbacks.Add(FoldActionCallback());
+            }
+
+            data.SetCallbacks(callbacks.ToArray());
+            return data;
+        }
+        
         private static (IEmote, Func<SocketCommandContext, SocketReaction, Task>) CallActionCallback(User user, 
-            int raise, double multiplier, int pot)
+            int amountToCall, int initialBet)
         {
             (IEmote, Func<SocketCommandContext, SocketReaction, Task>) callback = (PokerData.rcCall, async (c, r) =>
             {
-                //todo: Come back and make a callback item for a 'call' poker event.
+                if (user.Points < amountToCall + initialBet)
+                {
+                    PokerData.pot += user.Points;
+                    _pointsToDeductFromUser = user.Points;
+                    await c.Channel.SendMessageAsync($"{c.User.Mention} You do not have enough points to call. " +
+                                                             $"You are now all in!");
+                }
+                
+                PokerData.pot += amountToCall;
+                _pointsToDeductFromUser += amountToCall;
+
+                await c.Channel.SendMessageAsync($"{c.User.Mention} You have decided to call the dealer's " +
+                                                 $"raise of `{amountToCall:N0}` points.");
+                
+                PokerEvent.TurnTrigger(new PokerGameEventArgs(user, amountToCall, PokerGameAction.CALL));
             });
 
             return callback;
         }
+
+        private static (IEmote, Func<SocketCommandContext, SocketReaction, Task>) CheckActionCallback()
+        {
+            (IEmote, Func<SocketCommandContext, SocketReaction, Task>) callback = (PokerData.rcCheck, async (c, r) =>
+            {
+                //todo: Create embeds that are prettier.
+
+                PokerEvent.TurnTrigger(new PokerGameEventArgs(null, 0, PokerGameAction.CHECK));
+            });
+
+            return callback;
+        }
+        
+        private static (IEmote, Func<SocketCommandContext, SocketReaction, Task>) RaiseActionCallback(int amount)
+        {
+            (IEmote, Func<SocketCommandContext, SocketReaction, Task>) callback = (PokerData.rcRaise, async (c, r) =>
+            {
+                //todo: Create embeds that are prettier.
+                //todo: Gather user input for how much they want to raise.
+                await c.Channel.SendMessageAsync($"{c.User.Mention} You have decided to raise the pot!");
+                PokerEvent.TurnTrigger(new PokerGameEventArgs(null, 0, PokerGameAction.RAISE));
+            });
+
+            return callback;
+        }
+        
+        private static (IEmote, Func<SocketCommandContext, SocketReaction, Task>) FoldActionCallback()
+        {
+            (IEmote, Func<SocketCommandContext, SocketReaction, Task>) callback = (PokerData.rcFold, async (c, r) =>
+            {
+                //todo: Create embeds that are prettier.
+
+                await c.Channel.SendMessageAsync($"{c.User.Mention} You have decided to forfeit and fold your hand!");
+                PokerEvent.TurnTrigger(new PokerGameEventArgs(null, 0, PokerGameAction.FOLD));
+            });
+
+            return callback;
+        }
+
+        #endregion
 
         public static Card[] GenerateSuit(IEmote emoji)
         {
@@ -280,6 +456,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         public static readonly Card[] suitSpades = PokerGame.GenerateSuit(spadeEmote);
         public static readonly Card[] suitClubs = PokerGame.GenerateSuit(clubEmote);
 
+        public static double multiplier = 2.2;
+        public static double pot = 0;
+
+        public static int userPointsBet = 0;
+        public static int dealerPointsBet = 0;
+
         public static Card[] GetCardsForSuit(Suit suit)
         {
             switch (suit)
@@ -408,11 +590,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         /// <param name="card"></param>
         public void AddCard(Card card)
         {
-            Card[] newHandCards = { };
-            Array.Copy(HandCards, newHandCards, HandCards.Length + 1);
+            List<Card> newHandCards = HandCards.ToList();
 
-            newHandCards[^1] = card;
-            this.HandCards = newHandCards;
+            newHandCards.Add(card);
+            this.HandCards = newHandCards.ToArray();
         }
     }
 
@@ -514,5 +695,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         DIAMONDS,
         SPADES,
         CLUBS
+    }
+
+    public enum PokerGameAction
+    {
+        CHECK,
+        CALL,
+        RAISE,
+        FOLD
     }
 }
