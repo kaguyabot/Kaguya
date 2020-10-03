@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         private static int _pointsToDeductFromUser = 0;
         
         [CurrencyCommand]
-        [Command("Poker", RunMode = RunMode.Async)]
+        [Command("Poker")]
         [Alias("pk")]
         [Summary("Starts a game of Texas Hold'em Poker between you and me, the dealer!\n\n" +
                  "Rules:\n" +
@@ -43,6 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         [Remarks("<points>")]
         public async Task Command(int points)
         {
+            //todo: When launching a second poker game after one has completed, 2x messages are sent.
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var cardBackEmote = Context.Guild.Emotes.FirstOrDefault(x => x.Id == 761212621676085278);
 
@@ -126,8 +127,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                         return;
                 }
 
-                if (lastTurn) ;
-                // payout logic
+                if (lastTurn)
+                {
+                    HandRanking playerRanking = PokerData.IdentifyRanking(playerHand, communityHand);
+                    HandRanking dealerRanking = PokerData.IdentifyRanking(dealerHand, communityHand);
+                    if ((int)playerRanking < (int)dealerRanking) // The less it is, the higher the ranking.
+                    {
+                        await SendEmbedAsync(PlayerWinnerEmbed(playerHand, dealerHand, communityHand, playerRanking,
+                            dealerRanking));
+                    }
+                    else
+                    {
+                        // Player loses.
+                    }
+                }
             };
         }
 
@@ -147,6 +160,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             return embed;
         }
 
+        private static KaguyaEmbedBuilder PlayerWinnerEmbed(Hand playerHand, Hand dealerHand, Hand communityHand, 
+            HandRanking playerHandRanking, HandRanking dealerHandRanking)
+        {
+            return new KaguyaEmbedBuilder(POKER_COLOR)
+            {
+                Title = "Kaguya Poker: Winner!",
+                Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, true),
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = GetOptionsFooter(false, false, false, false) + "\n" +
+                           $"Your hand: {playerHandRanking.Humanize(LetterCasing.Title)}\n" +
+                           $"Dealer's hand: {dealerHandRanking.Humanize(LetterCasing.Title)}"
+                }
+            };
+        }
+        
         private static KaguyaEmbedBuilder CheckEmbed(Hand playerHand, Hand dealerHand, 
             Hand communityHand, bool lastTurn)
         {
@@ -355,35 +384,45 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         public static Card GenerateRandomCard()
         {
             Card[] suitCards;
-
+            List<Card> invalidCards = PokerData.cardsDrawn;
+            
             Random r = new Random();
-            int suitNum = r.Next(4);
-            int cardNum = r.Next(13);
             
             var cardGenException = new KaguyaSupportException("An unexpected error occurred when trying " +
                                                               "to generate a card. Please report this error.");
-            switch (suitNum)
+            Card card;
+            do
             {
-                case 0:
-                    suitCards = PokerData.suitHearts;
-                    break;
-                case 1:
-                    suitCards = PokerData.suitDiamonds;
-                    break;
-                case 2:
-                    suitCards = PokerData.suitSpades;
-                    break;
-                case 3:
-                    suitCards = PokerData.suitClubs;
-                    break;
-                default:
-                    throw cardGenException;
-            }
+                int suitNum = r.Next(4);
+                int cardNum = r.Next(13);
 
-            var card = suitCards[cardNum];
+                switch (suitNum)
+                {
+                    case 0:
+                        suitCards = PokerData.suitHearts;
+                        break;
+                    case 1:
+                        suitCards = PokerData.suitDiamonds;
+                        break;
+                    case 2:
+                        suitCards = PokerData.suitSpades;
+                        break;
+                    case 3:
+                        suitCards = PokerData.suitClubs;
+                        break;
 
+                    default:
+                        throw cardGenException;
+                }
+
+                card = suitCards[cardNum];
+            } while (invalidCards.Contains(card));
+            
             if (card.Equals(null))
                 throw cardGenException;
+            
+            invalidCards.Add(card);
+            PokerData.cardsDrawn = invalidCards;
             
             return card;
         }
@@ -434,7 +473,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         }
     }
 
-    struct PokerData
+    public struct PokerData
     {
         // This may be inefficient.
         private static readonly SocketGuild Guild = KaguyaBase.Client.GetGuild(546880579057221644);
@@ -461,6 +500,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
         public static int userPointsBet = 0;
         public static int dealerPointsBet = 0;
+
+        public static List<Card> cardsDrawn = new List<Card>();
 
         public static Card[] GetCardsForSuit(Suit suit)
         {
@@ -489,14 +530,44 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         /// <returns></returns>
         public static HandRanking IdentifyRanking(Hand playerHand, Hand communityCards)
         {
-            if (HasRoyalFlush(playerHand, communityCards))
+            List<Card> cardsAggregate = playerHand.HandCards.ToList();
+            cardsAggregate.AddRange(communityCards.HandCards);
+            
+            if (IsRoyalFlush(playerHand, communityCards))
                 return HandRanking.ROYAL_FLUSH;
-            return HandRanking.PAIR;
+
+            // todo: Double check if IsStraight() should in-fact take
+            // todo: in just a collection of cards (or player/community hands instead).
+            if (IsStraight(cardsAggregate) && IsFlush(playerHand, communityCards))
+                return HandRanking.STRAIGHT_FLUSH;
+
+            if (IsOfKind(cardsAggregate, 4))
+                return HandRanking.FOUR_OF_A_KIND;
+            
+            if(IsFullHouse(playerHand, communityCards))
+                return HandRanking.FULL_HOUSE;
+
+            if (IsFlush(playerHand, communityCards))
+                return HandRanking.FLUSH;
+
+            if (IsStraight(cardsAggregate))
+                return HandRanking.STRAIGHT;
+
+            if (IsOfKind(cardsAggregate, 3)) //todo: Again, we must take the player's hand into account.
+                return HandRanking.THREE_OF_A_KIND;
+
+            if (IsPair(playerHand, communityCards, 2))
+                return HandRanking.TWO_PAIR;
+
+            if (IsPair(playerHand, communityCards, 1))
+                return HandRanking.PAIR;
+
+            return HandRanking.HIGH_CARD;
         }
 
-        public static bool HasRoyalFlush(Hand playerHand, Hand communityCards)
+        public static bool IsRoyalFlush(Hand playerHand, Hand communityCards)
         {
-            if (!HasFlush(playerHand, communityCards))
+            if (!IsFlush(playerHand, communityCards))
                 return false;
             
             //Determining 'royal straight'
@@ -513,7 +584,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             return IsRoyalStraight(royalStraightCheck);
         }
 
-        public static bool HasFlush(Hand playerHand, Hand communityCards)
+        public static bool IsFullHouse(Hand playerHand, Hand communityCards)
+        {
+            int matchCount = 0;
+            foreach (var card in playerHand.HandCards)
+            {
+                if (!communityCards.HandCards.Contains(card))
+                    return false;
+
+                matchCount += communityCards.HandCards.Count(x => x.NumericValue == card.NumericValue);
+            }
+
+            return matchCount == 5;
+        }
+        
+        public static bool IsFlush(Hand playerHand, Hand communityCards)
         {
             var cardCollection = new List<Card>();
             cardCollection.AddRange(playerHand.HandCards);
@@ -530,6 +615,35 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             return true;
         }
 
+        public static bool IsOfKind(IEnumerable<Card> cards, int amount)
+        {
+            var cardArr = cards as Card[] ?? cards.ToArray();
+            if (cardArr.Length < amount)
+                return false;
+
+            var mostCommonCard = FindMostCommonNumericValue(cardArr);
+            return cardArr.Count(x => x.NumericValue == mostCommonCard) == amount; //todo: Test
+        }
+
+        public static bool IsPair(Hand playerHand, Hand communityHand, int amount)
+        {
+            int totalPairs = 0;
+            foreach (var card in playerHand.HandCards)
+            {
+                if (communityHand.HandCards.Count(x => x.NumericValue == card.NumericValue) >= 1)
+                {
+                    totalPairs++;
+                }
+            }
+
+            return totalPairs == amount;
+        }
+
+        public static int HighestCard(Hand playerHand)
+        {
+            return playerHand.HandCards.OrderByDescending(x => x.NumericValue).First().NumericValue;
+        }
+
         public static Suit FindMostCommonSuit(IEnumerable<Card> cards)
         {
             Suit mostCommonSuit = cards.OrderByDescending(x => x.Suit)
@@ -538,6 +652,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             return mostCommonSuit;
         }
 
+        public static int FindMostCommonNumericValue(IEnumerable<Card> cards)
+        {
+            int mostCommonNum = cards.OrderByDescending(x => x.NumericValue)
+                .GroupBy(x => x.NumericValue)
+                .Select(grp => grp.Key).First();
+            return mostCommonNum; //todo: Test
+        }
+        
         /// <summary>
         /// Returns whether or not the collection of cards provided is a 'royal straight' - a striaght consisting
         /// of a 10, Jack, Queen, King, and Ace only. Suit is not taken into account here.
@@ -556,17 +678,40 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
         public static bool IsStraight(IEnumerable<Card> cards)
         {
+            //todo: Does not work 100% properly (player hand values aren't taken into account...just all 7 cards 
+            //todo: at the end of the river draw. The community cards could be A, 2, 3, 4, 5 and the player's cards 
+            //todo: could be J and Q, yet a straight would still be determined for the player.
             Card[] collection = cards as Card[] ?? cards.ToArray();
-            if(collection.Length != 5)
-                throw new PokerStraightException("There must be exactly 5 cards to check against when determining " +
-                                                 "whether a collection is a straight!");
+            // if(collection.Length != 5)
+            //     throw new PokerStraightException("There must be exactly 5 cards to check against when determining " +
+            //                                      "whether a collection is a straight!");
             
-            var numericCollection = collection.OrderByDescending(x => x.NumericValue).ToArray();
-            
-            // A delta of 5 here means the collection is a straight.
-            // A delta of 9 here means the collection is a 'royal straight' (Face card [10] - Ace [1] = 9)
-            int delta = numericCollection[0].NumericValue - numericCollection[4].NumericValue;
-            return delta == 5 || delta == 9;
+            var numericCollection = collection.OrderBy(x => x.NumericValue).ToArray();
+            int matches = 0;
+            for (int i = numericCollection.Length; i > 0; i--)
+            {
+                int delta = 0;
+                try
+                {
+                    delta = numericCollection[i - 1].NumericValue - numericCollection[i].NumericValue;
+                }
+                catch (Exception e)
+                {
+                    delta = 0;
+                }
+                
+                // delta 0 means face card/10, delta of 1 means next card is numerically 1 lower than the previous,
+                // and a delta of 9 means the card is an ace.
+                if (delta == 0 || delta == 1 || delta == 9) //todo: Test if delta 9 is (face card) --> (ace)
+                    matches++;
+                else
+                    matches = 0;
+
+                if (matches == 5)
+                    return true;
+            }
+
+            return false;
         }
     }
 
@@ -593,6 +738,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             List<Card> newHandCards = HandCards.ToList();
 
             newHandCards.Add(card);
+            this.HandCards = newHandCards.ToArray();
+        }
+
+        public void AddCards(IEnumerable<Card> cards)
+        {
+            var newHandCards = HandCards.ToList();
+            
+            newHandCards.AddRange(cards);
             this.HandCards = newHandCards.ToArray();
         }
     }
@@ -675,7 +828,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         }
     }
 
-    enum HandRanking
+    public enum HandRanking
     {
         ROYAL_FLUSH,
         STRAIGHT_FLUSH,
