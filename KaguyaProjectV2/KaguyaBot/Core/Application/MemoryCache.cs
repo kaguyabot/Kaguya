@@ -25,6 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application
         public static Dictionary<string, int>? MostPopularCommandCache { get; private set; }
         public static List<OwnerGiveaway> OwnerGiveawaysCache { get; private set; }
         public static List<OwnerGiveawayReaction> OwnerGiveawayReactions { get; private set; }
+        public static HashSet<ulong> ActivePokerSessions { get; set; } = new HashSet<ulong>();
 
         /// <summary>
         /// Initializes the memory cache for various values that need to be refreshed often.

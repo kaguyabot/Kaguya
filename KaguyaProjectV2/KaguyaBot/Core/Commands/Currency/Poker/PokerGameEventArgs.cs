@@ -10,9 +10,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
         public static void TurnTrigger(PokerGameEventArgs e)
         {
+            // todo: Revoke invocation of the event when a player is finished with a game of poker.
             OnTurnEnd?.Invoke(e);
         }
-        
     }
     public class PokerGameEventArgs : EventArgs
     {
