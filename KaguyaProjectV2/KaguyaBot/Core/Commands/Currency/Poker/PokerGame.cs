@@ -45,6 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         public async Task Command(int points)
         {
             //todo: When launching a second poker game after one has completed, 2x messages are sent.
+
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var cardBackEmote = Context.Guild.Emotes.FirstOrDefault(x => x.Id == 761212621676085278);
 
@@ -96,29 +97,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             List<Card> communityCards = GenerateFlop().ToList(); // We start with a flop, then add onto this later.
             Hand communityHand = new Hand(communityCards);
 
-            await GameLoop(playerHand, dealerHand, communityHand);
-        }
-
-        /// <summary>
-        /// The method that iterates through all turns in the game and then determines a winner.
-        /// </summary>
-        /// <returns></returns>
-        private async Task GameLoop(Hand playerHand, Hand dealerHand, Hand communityHand)
-        {
             // Turn 1 - display basic information to user (their hand + the flop)
             var embed = OverviewEmbed(playerHand, dealerHand, communityHand, true, false, true, true, false);
             var data = EmbedReactionData(embed, TIMEOUT, true, false, true, true, false);
             await InlineReactionReplyAsync(data);
 
             // Subsequent turns
-            PokerEvent.OnTurnEnd += async e =>
+            Func<PokerGameEventArgs, Task> pokerEventHandler = PokerTurnHandler(playerHand, dealerHand, communityHand);
+            PokerEvent.OnTurnEnd += pokerEventHandler;
+            PokerEvent.OnGameFinished += () => Task.Run(() => PokerEvent.OnTurnEnd -= pokerEventHandler);
+        }
+
+        private Func<PokerGameEventArgs, Task> PokerTurnHandler(Hand playerHand, Hand dealerHand, Hand communityHand)
+        {
+            Func<PokerGameEventArgs, Task> pokerEventHandler = async e =>
             {
                 bool lastTurn = communityHand.Length == 5;
-                
+
                 if (!lastTurn && e.Action == PokerGameAction.FOLD)
                     lastTurn = true;
 
-                if(!lastTurn)
+                if (!lastTurn)
                     communityHand.AddCard(GenerateRandomCard());
 
                 switch (e.Action)
@@ -126,9 +125,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                     case PokerGameAction.CHECK:
                         if (lastTurn)
                             break;
-                        
+
                         await Context.Channel.SendMessageAsync($"{Context.User.Mention} You have decided to check.");
-                    
+
                         //todo: If last turn, don't include footer.
                         var checkEmbed = ResponseEmbed(playerHand, dealerHand, communityHand, lastTurn, e.Action);
                         var callData = EmbedReactionData(checkEmbed, TIMEOUT, true, false, true, true, lastTurn);
@@ -139,12 +138,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 if (lastTurn)
                 {
                     MemoryCache.ActivePokerSessions.Remove(Context.User.Id);
-                    
+
                     HandRanking playerRanking = PokerData.IdentifyRanking(playerHand, communityHand);
                     HandRanking dealerRanking = PokerData.IdentifyRanking(dealerHand, communityHand);
-                    
+
                     bool playerWinner = playerRanking > dealerRanking;
                     bool tie = playerRanking == dealerRanking;
+                    
+                    PokerEvent.GameFinishedTrigger();
 
                     if (tie)
                     {
@@ -153,6 +154,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                             playerWinner = PlayerIsHighCardWinner(playerHand, dealerHand);
                         }
                     }
+
                     if (!playerWinner && !tie) // The player wins...
                     {
                         await SendEmbedAsync(PlayerWinnerEmbed(playerHand, dealerHand, communityHand, playerRanking,
@@ -170,6 +172,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                     }
                 }
             };
+            return pokerEventHandler;
         }
 
         #region Embed helper methods {...}
