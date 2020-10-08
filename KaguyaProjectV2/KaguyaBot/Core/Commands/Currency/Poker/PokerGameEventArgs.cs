@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             OnTurnEnd?.Invoke(e);
         }
 
-        public static void GameFinishedTrigger () => OnGameFinished?.Invoke();
+        public static void GameFinishedTrigger() => OnGameFinished?.Invoke();
     }
     public class PokerGameEventArgs : EventArgs
     {

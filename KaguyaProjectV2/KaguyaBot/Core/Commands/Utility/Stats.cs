@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {

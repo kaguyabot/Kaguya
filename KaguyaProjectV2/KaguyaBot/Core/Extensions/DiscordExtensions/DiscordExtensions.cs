@@ -1,10 +1,9 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
+namespace KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions
 {
     public static class DiscordExtensions
     {

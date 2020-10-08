@@ -201,6 +201,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 Footer = new EmbedFooterBuilder
                 {
                     Text = GetOptionsFooter(false, false, false, false, true) + "\n" +
+                           "" +
                            $"Your hand: {playerHandRanking.Humanize(LetterCasing.Title)}\n" +
                            $"Dealer's hand: {dealerHandRanking.Humanize(LetterCasing.Title)}"
                 }
