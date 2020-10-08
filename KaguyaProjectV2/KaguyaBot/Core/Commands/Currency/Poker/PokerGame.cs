@@ -54,7 +54,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                                                $"Finish the first one to play again!");
                 return;
             }
-            MemoryCache.ActivePokerSessions.Add(user.UserId);
             
             #region Input Serialization {...}
             if (cardBackEmote == null)
@@ -88,6 +87,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 return;
             }
             #endregion
+            
+            // We must only add to the cache after the intial serialization has occurred.
+            // Otherwise, the user will be unable to start a new Poker game.
+            MemoryCache.ActivePokerSessions.Add(user.UserId);
 
             // We don't set PokerData.dealerPointsBet yet because the pot already multiplies the user's bet 
             // by the multiplier. That value should only be set when the dealer AI makes a decision to bet/raise.
@@ -143,29 +146,36 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
                 if (lastTurn)
                 {
-                    MemoryCache.ActivePokerSessions.Remove(Context.User.Id);
+                    RemoveGameFromCache(Context.User.Id);
 
                     HandRanking playerRanking = PokerData.IdentifyRanking(playerHand, communityHand);
                     HandRanking dealerRanking = PokerData.IdentifyRanking(dealerHand, communityHand);
 
-                    bool playerWinner = playerRanking > dealerRanking;
+                    // Here, '<' is used because the stronger hands are of a lower integer value.
+                    bool playerWinner = playerRanking < dealerRanking;
                     bool rankingTie = playerRanking == dealerRanking;
+                    bool push = false;
                     
                     if (rankingTie)
                     {
-                        if (playerRanking == HandRanking.HIGH_CARD && dealerRanking == HandRanking.HIGH_CARD)
+                        playerWinner = PokerData.PlayerHasHighestCard(playerHand, dealerHand);
+
+                        if (!playerWinner)
                         {
-                            playerWinner = PokerData.PlayerHasHighestCard(playerHand, dealerHand);
+                            // This basically says: "The player and the dealer
+                            // have the exact same hand with different suits".
+                            if (playerHand.Cards.Sum(x => x.NumericValue) == dealerHand.Cards.Sum(x => x.NumericValue))
+                                push = true;
                         }
                     }
 
                     // todo: Determine logic for a "push" scenario, such as two flush draws, two straight draws, etc.
-                    if (playerWinner) // The player wins...
+                    if (playerWinner)
                     {
                         await SendEmbedAsync(PlayerWinnerEmbed(playerHand, dealerHand, communityHand, playerRanking,
                             dealerRanking, user));
                     }
-                    else if (playerRanking == dealerRanking)
+                    else if (push)
                     {
                         await SendEmbedAsync(TieEmbed(playerHand, dealerHand, communityHand, playerRanking,
                             dealerRanking, user));
@@ -175,7 +185,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                         await SendEmbedAsync(LoseEmbed(playerHand, dealerHand, communityHand, playerRanking,
                             dealerRanking, user));
                     }
-                    
+
                     PokerEvent.GameFinishedTrigger();
                 }
             };
@@ -574,6 +584,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             }
 
             return false;
+        }
+
+        private static void RemoveGameFromCache(ulong userId)
+        {
+            MemoryCache.ActivePokerSessions.Remove(userId);
         }
     }
 
