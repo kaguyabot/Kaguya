@@ -743,7 +743,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             
             foreach (var card in playerHand.Cards)
             {
-                // was 2 for 2 kings.
                 int matchCount = playerHand.Cards.Count(x => x.ValueText == card.ValueText);
                 int cMatches = communityCards.Cards.Count(x => x.ValueText == card.ValueText);
 
