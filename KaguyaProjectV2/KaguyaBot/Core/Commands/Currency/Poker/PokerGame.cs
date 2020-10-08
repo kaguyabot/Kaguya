@@ -137,7 +137,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
                         await Context.Channel.SendMessageAsync($"{Context.User.Mention} You have decided to check.");
 
-                        //todo: If last turn, don't include footer.
                         var checkEmbed = ResponseEmbed(playerHand, dealerHand, communityHand, false, e.Action);
                         var callData = EmbedReactionData(checkEmbed, TIMEOUT, true, false, true, true, false);
                         await InlineReactionReplyAsync(callData);
@@ -657,8 +656,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             if (IsRoyalFlush(playerHand, communityCards))
                 return HandRanking.ROYAL_FLUSH;
 
-            // todo: Double check if IsStraight() should in-fact take
-            // todo: in just a collection of cards (or player/community hands instead).
             if (IsStraight(playerHand, communityCards) && IsFlush(playerHand, communityCards))
                 return HandRanking.STRAIGHT_FLUSH;
 
@@ -674,7 +671,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             if (IsStraight(playerHand, communityCards))
                 return HandRanking.STRAIGHT;
 
-            if (IsOfKind(playerHand, communityCards, 3)) //todo: Again, we must take the player's hand into account.
+            if (IsOfKind(playerHand, communityCards, 3))
                 return HandRanking.THREE_OF_A_KIND;
 
             if (IsPair(playerHand, communityCards, 2))
@@ -733,7 +730,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         /// <param name="communityCards"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        // todo: Test
         public static bool IsOfKind(Hand playerHand, Hand communityCards, int amount)
         {
             if(amount < 2 || amount > 4)
@@ -797,14 +793,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 .GroupBy(x => x.Suit)
                 .Select(grp => grp.Key).First();
             return mostCommonSuit;
-        }
-
-        public static int FindMostCommonNumericValue(IEnumerable<Card> cards)
-        {
-            int mostCommonNum = cards.OrderByDescending(x => x.NumericValue)
-                .GroupBy(x => x.NumericValue)
-                .Select(grp => grp.Key).First();
-            return mostCommonNum; //todo: Test
         }
 
         /// <summary>
@@ -957,7 +945,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         {
             get
             {
-                int suitNum = (int) Suit; //todo: Ensure (int)Suit is range 0-3 inclusive.
+                int suitNum = (int) Suit;
                 return (suitNum * 13) + NumericValue;
             }
         }
@@ -996,7 +984,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         THREE_OF_A_KIND,
         TWO_PAIR,
         PAIR,
-        HIGH_CARD //todo: research?
+        HIGH_CARD
     }
 
     public enum Suit
