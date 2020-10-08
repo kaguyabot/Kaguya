@@ -741,18 +741,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                                                     "a player's hand contains a 3 of a kind or 4 of a kind " +
                                                     "when compared against the community cards.");
             
-            int matchCount = 0;
             foreach (var card in playerHand.Cards)
             {
+                // was 2 for 2 kings.
+                int matchCount = playerHand.Cards.Count(x => x.ValueText == card.ValueText);
                 int cMatches = communityCards.Cards.Count(x => x.ValueText == card.ValueText);
-                if (cMatches > 2)
-                {
-                    matchCount = cMatches;
-                    break;
-                }
+
+                if (matchCount + cMatches == amount)
+                    return true;
             }
 
-            return matchCount == amount;
+            return false;
         }
 
         public static bool IsPair(Hand playerHand, Hand communityHand, int amount)
