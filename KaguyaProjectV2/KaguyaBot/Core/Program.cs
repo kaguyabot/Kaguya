@@ -10,6 +10,8 @@ using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium; // DO NOT REMOVE
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG; // DO NOT REMOVE
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
