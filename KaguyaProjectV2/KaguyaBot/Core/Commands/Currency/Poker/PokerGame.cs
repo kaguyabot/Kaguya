@@ -15,7 +15,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using LinqToDB.Common;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 {
@@ -86,7 +85,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             }
             #endregion
 
-            var pokerData = new PokerData(points);
+            PokerData pokerData = new PokerData(points);
             // We must only add to the cache after the intial serialization has occurred.
             // Otherwise, the user will be unable to start a new Poker game.
             MemoryCache.ActivePokerSessions.Add(user.UserId);
@@ -113,8 +112,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             PokerEvent.OnGameFinished += () => Task.Run(() => PokerEvent.OnTurnEnd -= pokerEventHandler);
         }
 
-        private Func<PokerGameEventArgs, Task> PokerTurnHandler(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand,
-            User user)
+        private Func<PokerGameEventArgs, Task> PokerTurnHandler(PokerData pokerData, Hand playerHand, 
+            Hand dealerHand, Hand communityHand, User user)
         {
             Func<PokerGameEventArgs, Task> pokerEventHandler = async e =>
             {
@@ -193,9 +192,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                         await InlineReactionReplyAsync(raiseData);
                         break;
                     case PokerGameAction.FOLD:
-                        await SendEmbedAsync(FoldEmbed(pokerData, playerHand, dealerHand, communityHand, user, Context));
                         await InsertGambleHistory(user, false, pokerData);
                         await SetUserPoints(user, false, pokerData);
+                        await SendEmbedAsync(FoldEmbed(pokerData, playerHand, dealerHand, communityHand, user, Context));
                         RemoveGameFromCache(user.UserId);
                         PokerEvent.GameFinishedTrigger();
                         return;
@@ -226,7 +225,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                         }
                     }
 
-                    // todo: Determine logic for a "push" scenario, such as two flush draws, two straight draws, etc.
+                    await InsertGambleHistory(user, playerWinner, pokerData);
+                    await SetUserPoints(user, playerWinner, pokerData);
+                    
                     if (playerWinner)
                     {
                         await SendEmbedAsync(PlayerWinnerEmbed(pokerData, playerHand, dealerHand, communityHand, playerRanking,
@@ -242,9 +243,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                         await SendEmbedAsync(LoseEmbed(pokerData, playerHand, dealerHand, communityHand, playerRanking,
                             dealerRanking, user, Context));
                     }
-
-                    await InsertGambleHistory(user, playerWinner, pokerData);
-                    await SetUserPoints(user, playerWinner, pokerData);
 
                     PokerEvent.GameFinishedTrigger();
                 }
@@ -307,7 +305,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, true),
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = GetOptionsFooter(pokerData, false, false, false, false, true, false, true, true, user) + "\n" +
+                    Text = GetOptionsFooter(pokerData, false, false, false, false, true, true, true, true, user) + "\n" +
                            $"Your hand: {playerHandRanking.Humanize(LetterCasing.Title)}\n" +
                            $"Dealer's hand: {dealerHandRanking.Humanize(LetterCasing.Title)}"
                 }
@@ -492,7 +490,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         #endregion
 
         #region ReactionCallback Methods {...}
-
         private static ReactionCallbackData EmbedReactionData(EmbedBuilder embed, PokerData pokerData, int timeoutSeconds, bool canCheck, bool canCall, 
             bool canRaise, bool canFold, bool lastTurn, User user = null, int raise = 0, int initialBet = 0)
         {
