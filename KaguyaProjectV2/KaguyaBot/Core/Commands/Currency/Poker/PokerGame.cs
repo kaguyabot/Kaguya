@@ -41,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         public async Task Command(int points)
         {
             User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            GuildEmote cardBackEmote = Context.Guild.Emotes.FirstOrDefault(x => x.Id == 761212621676085278);
+            GuildEmote cardBackEmote = PokerData.Guild.Emotes.FirstOrDefault(x => x.Id == 761212621676085278);
 
             if (MemoryCache.ActivePokerSessions.Contains(Context.User.Id))
             {
@@ -668,7 +668,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
     public class PokerData
     {
-        private static readonly SocketGuild Guild = KaguyaBase.Client.GetGuild(546880579057221644);
+        public static readonly SocketGuild Guild = KaguyaBase.Client.GetGuild(546880579057221644);
 
         public static readonly Emote cardbackEmote = Guild.Emotes.FirstOrDefault(x => x.Id == 761212621676085278);
         
