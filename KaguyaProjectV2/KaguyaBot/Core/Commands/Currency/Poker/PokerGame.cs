@@ -15,6 +15,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using LinqToDB.Common;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 {
@@ -84,15 +85,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 return;
             }
             #endregion
-            
+
+            var pokerData = new PokerData(points);
             // We must only add to the cache after the intial serialization has occurred.
             // Otherwise, the user will be unable to start a new Poker game.
             MemoryCache.ActivePokerSessions.Add(user.UserId);
 
             // We don't set PokerData.dealerPointsBet yet because the pot already multiplies the user's bet 
             // by the multiplier. That value should only be set when the dealer AI makes a decision to bet/raise.
-            PokerData.userPointsBet += points;
-            PokerData.UpdatePot();
+            pokerData.userPointsBet += points;
+            pokerData.UpdatePot();
 
             Hand playerHand = GeneratePlayerHand();
             Hand dealerHand = GeneratePlayerHand();
@@ -101,17 +103,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             Hand communityHand = new Hand(communityCards);
 
             // Turn 1 - display basic information to user (their hand + the flop)
-            var embed = OverviewEmbed(playerHand, dealerHand, communityHand, true, false, true, true, false);
-            var data = EmbedReactionData(embed, TIMEOUT, true, false, true, true, false);
+            var embed = OverviewEmbed(pokerData, playerHand, dealerHand, communityHand, true, false, true, true, false);
+            var data = EmbedReactionData(embed, pokerData, TIMEOUT, true, false, true, true, false);
             await InlineReactionReplyAsync(data);
 
             // Subsequent turns
-            Func<PokerGameEventArgs, Task> pokerEventHandler = PokerTurnHandler(playerHand, dealerHand, communityHand, user);
+            Func<PokerGameEventArgs, Task> pokerEventHandler = PokerTurnHandler(pokerData, playerHand, dealerHand, communityHand, user);
             PokerEvent.OnTurnEnd += pokerEventHandler;
             PokerEvent.OnGameFinished += () => Task.Run(() => PokerEvent.OnTurnEnd -= pokerEventHandler);
         }
 
-        private Func<PokerGameEventArgs, Task> PokerTurnHandler(Hand playerHand, Hand dealerHand, Hand communityHand,
+        private Func<PokerGameEventArgs, Task> PokerTurnHandler(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand,
             User user)
         {
             Func<PokerGameEventArgs, Task> pokerEventHandler = async e =>
@@ -124,7 +126,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 if (!lastTurn)
                     communityHand.AddCard(GenerateRandomCard());
 
-                PokerData.UpdatePot();
+                pokerData.UpdatePot();
 
                 switch (e.Action)
                 {
@@ -134,12 +136,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
                         await Context.Channel.SendMessageAsync($"{Context.User.Mention} You have decided to check.");
 
-                        var checkEmbed = ResponseEmbed(playerHand, dealerHand, communityHand, false, e.Action);
-                        var callData = EmbedReactionData(checkEmbed, TIMEOUT, true, false, true, true, false);
+                        var checkEmbed = CheckEmbed(pokerData, playerHand, dealerHand, communityHand, false, Context);
+                        var callData = EmbedReactionData(checkEmbed, pokerData, TIMEOUT, true, false, true, true, false);
                         await InlineReactionReplyAsync(callData);
                         break;
                     case PokerGameAction.RAISE:
-                        int raisePointsDelta = user.Points - PokerData.userPointsBet;
+                        int raisePointsDelta = user.Points - pokerData.userPointsBet;
                         // todo: Make pretty
                         await ReplyAsync($"{Context.User.Mention} how many additional points do you want to raise?\n" +
                                          $"You may bet a maximum of `{raisePointsDelta:N0}` points.\n\n" +
@@ -175,8 +177,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                             break;
                         }
 
-                        PokerData.userPointsBet += raisePoints;
-                        PokerData.UpdatePot();
+                        pokerData.userPointsBet += raisePoints;
+                        pokerData.UpdatePot();
 
                         if (lastTurn)
                         {
@@ -185,12 +187,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                             break;
                         }
                         
-                        var raiseEmbed = RaiseEmbed(playerHand, dealerHand, communityHand, raisePoints);
-                        var raiseData = EmbedReactionData(raiseEmbed, TIMEOUT, true, false, true, true, false, user,
+                        var raiseEmbed = RaiseEmbed(pokerData, playerHand, dealerHand, communityHand, raisePoints, Context);
+                        var raiseData = EmbedReactionData(raiseEmbed, pokerData, TIMEOUT, true, false, true, true, false, user,
                             raisePoints);
                         await InlineReactionReplyAsync(raiseData);
                         break;
-                }        
+                    case PokerGameAction.FOLD:
+                        await SendEmbedAsync(FoldEmbed(pokerData, playerHand, dealerHand, communityHand, user, Context));
+                        await InsertGambleHistory(user, false, pokerData);
+                        await SetUserPoints(user, false, pokerData);
+                        RemoveGameFromCache(user.UserId);
+                        PokerEvent.GameFinishedTrigger();
+                        return;
+                }
 
                 if (lastTurn)
                 {
@@ -220,19 +229,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                     // todo: Determine logic for a "push" scenario, such as two flush draws, two straight draws, etc.
                     if (playerWinner)
                     {
-                        await SendEmbedAsync(PlayerWinnerEmbed(playerHand, dealerHand, communityHand, playerRanking,
-                            dealerRanking, user));
+                        await SendEmbedAsync(PlayerWinnerEmbed(pokerData, playerHand, dealerHand, communityHand, playerRanking,
+                            dealerRanking, user, Context));
                     }
                     else if (push)
                     {
-                        await SendEmbedAsync(TieEmbed(playerHand, dealerHand, communityHand, playerRanking,
-                            dealerRanking, user));
+                        await SendEmbedAsync(TieEmbed(pokerData, playerHand, dealerHand, communityHand, playerRanking,
+                            dealerRanking, user, Context));
                     }
                     else
                     {
-                        await SendEmbedAsync(LoseEmbed(playerHand, dealerHand, communityHand, playerRanking,
-                            dealerRanking, user));
+                        await SendEmbedAsync(LoseEmbed(pokerData, playerHand, dealerHand, communityHand, playerRanking,
+                            dealerRanking, user, Context));
                     }
+
+                    await InsertGambleHistory(user, playerWinner, pokerData);
+                    await SetUserPoints(user, playerWinner, pokerData);
 
                     PokerEvent.GameFinishedTrigger();
                 }
@@ -240,8 +252,37 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             return pokerEventHandler;
         }
 
+        private static async Task SetUserPoints(User user, bool playerWinner, PokerData pokerData)
+        {
+            user.Points -= pokerData.userPointsBet;
+
+            if (!playerWinner)
+            {
+                await DatabaseQueries.UpdateAsync(user);
+                return;
+            }
+            
+            user.Points += (int) pokerData.pot;
+            await DatabaseQueries.UpdateAsync(user);
+        }
+
+        private static async Task InsertGambleHistory(User user, bool playerWinner, PokerData pokerData)
+        {
+            var gh = new GambleHistory
+            {
+                UserId = user.UserId,
+                Action = GambleAction.POKER,
+                Bet = pokerData.userPointsBet,
+                Payout = playerWinner ? (int)pokerData.pot : -pokerData.userPointsBet,
+                Roll = -1,
+                Time = DateTime.Now.ToOADate(),
+                Winner = playerWinner
+            };
+            await DatabaseQueries.InsertAsync(gh);
+        }
+
         #region Embed helper methods {...}
-        private static KaguyaEmbedBuilder OverviewEmbed(Hand playerHand, Hand dealerHand, Hand communityHand,
+        private static KaguyaEmbedBuilder OverviewEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand,
             bool canCheck, bool canCall, bool canRaise, bool canFold, bool lastTurn)
         {
             var embed = new KaguyaEmbedBuilder(POKER_COLOR)
@@ -250,71 +291,89 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, lastTurn),
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = GetOptionsFooter(canCheck, canCall, canRaise, canFold, lastTurn)
+                    Text = GetOptionsFooter(pokerData, canCheck, canCall, canRaise, canFold, lastTurn, null)
                 }
             };
             return embed;
         }
 
-        private static KaguyaEmbedBuilder PlayerWinnerEmbed(Hand playerHand, Hand dealerHand, Hand communityHand, 
-            HandRanking playerHandRanking, HandRanking dealerHandRanking, User user)
+        private static KaguyaEmbedBuilder PlayerWinnerEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand, 
+            HandRanking playerHandRanking, HandRanking dealerHandRanking, User user, ICommandContext context)
         {
             return new KaguyaEmbedBuilder(EmbedColor.GREEN)
             {
                 Title = "Kaguya Poker: Winner!",
+                Description = $"{context.User.Mention} You won!",
                 Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, true),
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = GetOptionsFooter(false, false, false, false, true, false) + "\n" +
+                    Text = GetOptionsFooter(pokerData, false, false, false, false, true, false, true, true, user) + "\n" +
                            $"Your hand: {playerHandRanking.Humanize(LetterCasing.Title)}\n" +
                            $"Dealer's hand: {dealerHandRanking.Humanize(LetterCasing.Title)}"
                 }
             };
         }
         
-        // Yes...this doesn't happen in real life, but for simplicity, we will implement the possibility of a tie.
-        private static KaguyaEmbedBuilder TieEmbed(Hand playerHand, Hand dealerHand, Hand communityHand,
-            HandRanking playerHr, HandRanking dealerHr, User user)
+        private static KaguyaEmbedBuilder TieEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand,
+            HandRanking playerHr, HandRanking dealerHr, User user, ICommandContext context)
         {
             return new KaguyaEmbedBuilder(EmbedColor.GOLD)
             {
-                Title = "Kaguya Poker: Tie!",
+                Title = "Kaguya Poker: Push!",
+                Description = $"{context.User.Mention} There was a tie! How extraordinary!",
                 Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, true),
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = GetOptionsFooter(false, false, false, false, true, true, true, user) + "\n" +
+                    Text = GetOptionsFooter(pokerData, false, false, false, false, true, null, true, true, user) + "\n" +
                            $"Your hand: {playerHr.Humanize(LetterCasing.Title)}\n" +
                            $"Dealer's hand: {dealerHr.Humanize(LetterCasing.Title)}"
                 }
             };
         }
         
-        private static KaguyaEmbedBuilder LoseEmbed(Hand playerHand, Hand dealerHand, Hand communityHand,
-            HandRanking playerHr, HandRanking dealerHr, User user)
+        private static KaguyaEmbedBuilder LoseEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand,
+            HandRanking playerHr, HandRanking dealerHr, User user, ICommandContext context)
         {
             return new KaguyaEmbedBuilder(EmbedColor.LIGHT_PURPLE)
             {
                 Title = "Kaguya Poker: Loser!",
+                Description = $"{context.User.Mention} You lost! Better luck next time...",
                 Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, true),
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = GetOptionsFooter(false, false, false, false, true, true, true, user) + "\n" +
+                    Text = GetOptionsFooter(pokerData, false, false, false, false, true, null, true, true, user) + "\n" +
                            $"Your hand: {playerHr.Humanize(LetterCasing.Title)}\n" +
                            $"Dealer's hand: {dealerHr.Humanize(LetterCasing.Title)}"
                 }
             };
         }
 
-        private static KaguyaEmbedBuilder RaiseEmbed(Hand pHand, Hand dHand, Hand cHand, int raisePoints)
+        private static KaguyaEmbedBuilder RaiseEmbed(PokerData pokerData, Hand pHand, Hand dHand, Hand cHand, int raisePoints,
+            ICommandContext context)
         {
             return new KaguyaEmbedBuilder(EmbedColor.LIGHT_BLUE)
             {
                 Title = "Kaguya Poker: Raise!",
-                Description = $"You have raised the pot by {raisePoints:N0} points!",
+                Description = $"{context.User.Mention} You have raised the pot by {raisePoints:N0} points!",
                 Fields = PokerTableEmbedFields(pHand, dHand, cHand, false),
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = GetOptionsFooter(true, false, true, true, false)
+                    Text = GetOptionsFooter(pokerData, true, false, true, true, false, null)
+                }
+            };
+        }
+        
+        private static KaguyaEmbedBuilder FoldEmbed(PokerData pokerData, Hand pHand, Hand dHand, Hand cHand, User user, ICommandContext context)
+        {
+            return new KaguyaEmbedBuilder(EmbedColor.GRAY)
+            {
+                //todo: Better phrasing? lol
+                Title = "Kaguya Poker: Fold!",
+                Description = $"{context.User.Mention} You have folded your hand!",
+                Fields = PokerTableEmbedFields(pHand, dHand, cHand, true),
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = GetOptionsFooter(pokerData, false, false, false, false, true, false, true, true, user)
                 }
             };
         }
@@ -328,17 +387,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         /// <param name="lastTurn"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        private static KaguyaEmbedBuilder ResponseEmbed(Hand playerHand, Hand dealerHand, 
-            Hand communityHand, bool lastTurn, PokerGameAction action)
+        private static KaguyaEmbedBuilder CheckEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, 
+            Hand communityHand, bool lastTurn, ICommandContext context)
         {
-            string actionStr = action.Humanize(LetterCasing.Sentence);
             var embed = new KaguyaEmbedBuilder(POKER_COLOR)
             {
-                Title = $"Kaguya Poker: {actionStr}",
+                Title = $"Kaguya Poker: Check!",
+                Description = $"{context.User.Mention} You have decided to check. Let's keep going!",
                 Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, lastTurn),
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = GetOptionsFooter(true, false, true, true, lastTurn)
+                    Text = GetOptionsFooter(pokerData, true, false, true, true, lastTurn, null)
                 }
             };
 
@@ -377,10 +436,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             };
         }
 
-        private static string GetOptionsFooter(bool canCheck, bool canCall, bool canRaise, bool canFold, bool lastTurn, 
-            bool showPot = true, bool showUserPoints = false, User user = null)
+        private static string GetOptionsFooter(PokerData pokerData, bool canCheck, bool canCall, bool canRaise, 
+            bool canFold, bool lastTurn, bool? winner, bool showPot = true, bool showUserPoints = false, User user = null)
         {
-            string potStr = $"Current Pot: {(int) PokerData.pot:N0}\n";
+            string potStr = $"Current Pot: {(int) pokerData.pot:N0}\n";
             var sb = new StringBuilder();
             if (canCheck)
                 sb.Append(PokerData.rcCheck + "Check,");
@@ -401,12 +460,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                                                      "if showUserPoints is equal to true.");
                 }
 
-                string? modifier = PokerData.userWinnings == 0 
-                    ? string.Empty : PokerData.userWinnings < 0 
-                        ? "-" : "+";
+                char? modifier = null;
+                if (winner.HasValue)
+                {
+                    // If there's a winner, we give '+' earnings. Else '-' earnings.
+                    modifier = winner.Value ? '+' : '-';
+                }
 
-                string? changeStr = string.IsNullOrEmpty(modifier) ? null : $"({modifier}{PokerData.userWinnings:N0})";
-                fSb.AppendLine($"Points Balance: {user.Points:N0} {changeStr}");
+                bool nullMod = !modifier.HasValue;
+                if(nullMod)
+                    fSb.AppendLine($"Points Balance: {user.Points:N0}");
+                else
+                {
+                    // If winner, we display "+(entire pot)"...else display "-(user points bet)".
+                    string pointsVariance = winner.Value ? pokerData.pot.ToString("N0") : pokerData.userPointsBet.ToString("N0");
+                    string changeStr = $"({modifier}{pointsVariance})"; //todo: Ensure proper values.
+                    fSb.AppendLine($"Points Balance: {user.Points:N0} {changeStr}");
+                }
             }
             
             if (showPot)
@@ -423,7 +493,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
         #region ReactionCallback Methods {...}
 
-        private static ReactionCallbackData EmbedReactionData(EmbedBuilder embed, int timeoutSeconds, bool canCheck, bool canCall, 
+        private static ReactionCallbackData EmbedReactionData(EmbedBuilder embed, PokerData pokerData, int timeoutSeconds, bool canCheck, bool canCall, 
             bool canRaise, bool canFold, bool lastTurn, User user = null, int raise = 0, int initialBet = 0)
         {
             if(lastTurn)
@@ -441,7 +511,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                     throw new InvalidOperationException("In order for there to be a Call in this poker game, " +
                                                         "the user, raise, and inital bet values must be set!!");
                 }
-                callbacks.Add(CallActionCallback(user, raise, initialBet));
+                callbacks.Add(CallActionCallback(pokerData, user, raise, initialBet));
             }
             if (canRaise)
             {
@@ -456,19 +526,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             return data;
         }
         
-        private static (IEmote, Func<SocketCommandContext, SocketReaction, Task>) CallActionCallback(User user, 
-            int amountToCall, int initialBet)
+        private static (IEmote, Func<SocketCommandContext, SocketReaction, Task>) CallActionCallback(PokerData pokerData, 
+            User user, int amountToCall, int initialBet)
         {
             (IEmote, Func<SocketCommandContext, SocketReaction, Task>) callback = (PokerData.rcCall, async (c, r) =>
             {
                 if (user.Points < amountToCall + initialBet)
                 {
-                    PokerData.userPointsBet += user.Points;
+                    pokerData.userPointsBet += user.Points;
                     await c.Channel.SendMessageAsync($"{c.User.Mention} You do not have enough points to call. " +
                                                      $"You are now all in!");
                 }
                 
-                PokerData.userPointsBet += amountToCall;
+                pokerData.userPointsBet += amountToCall;
                 await c.Channel.SendMessageAsync($"{c.User.Mention} You have decided to call the dealer's " +
                                                  $"raise of `{amountToCall:N0}` points.");
                 
@@ -653,7 +723,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         }
     }
 
-    public struct PokerData
+    public class PokerData
     {
         // This may be inefficient.
         private static readonly SocketGuild Guild = KaguyaBase.Client.GetGuild(546880579057221644);
@@ -677,17 +747,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
         public const double multiplier = 2.15;
         
-        public static int userPointsBet;
-        public static int dealerPointsBet;
+        public int userPointsBet;
+        public int dealerPointsBet;
 
-        public static double pot;
-
-        public static readonly double userWinnings = pot - userPointsBet;
+        public double pot;
 
         public static List<Card> cardsDrawn = new List<Card>();
 
-        public static void UpdatePot() => pot = (userPointsBet * multiplier) + dealerPointsBet;
-        
+        public void UpdatePot() => pot = (userPointsBet * multiplier) + dealerPointsBet;
+
+        public PokerData(int userPointsBet)
+        {
+            userPointsBet = userPointsBet;
+            dealerPointsBet = 0;
+            UpdatePot();
+        }
         public static Card[] GetCardsForSuit(Suit suit)
         {
             switch (suit)
