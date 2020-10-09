@@ -871,6 +871,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
         public static bool IsStraight(Hand playerHand, Hand communityCards)
         {
+            playerHand = new Hand(new []
+            {
+                new Card(spadeEmote, "6"), new Card(heartEmoji, "4") 
+            });
+            
+            communityCards = new Hand(new []
+            {
+                new Card(clubEmote, "7"), new Card(diamondEmoji, "5"), new Card(clubEmote, "5"), 
+                new Card(spadeEmote, "3"), new Card(spadeEmote, "K"), 
+            });
+            
             var pHandCopy = playerHand.Cards.OrderByDescending(x => x.NumericValue).ToArray();
             var cHandCopy = communityCards.Cards.OrderByDescending(x => x.NumericValue).ToArray();
 
@@ -882,11 +893,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 {
                     int deltaAbs = Math.Abs(card.NumericValue - card2.NumericValue);
 
+                   
+                    
                     if (deltaAbs - offset == 1)
                     {
                         deltaSum++;
                         offset++;
                     }
+                    else if (deltaAbs == 0) // We have a duplicate
+                        offset++;
                     else
                         deltaSum = 0;
 
