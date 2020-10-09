@@ -1,3 +1,6 @@
+### Version 2.14.1
+- Reverted implementation of $poker. It's too buggy to be in production.
+
 ### Version 2.14
 - The $clear response message was displaying +1 message cleared than the user requested. Ex: $c 4 -> "You cleared 5 messages". This has been fixed.
 - The users count in $stats (for both total count and per-shard counts) were inconsistent with what was shown in the GameRotationService.
