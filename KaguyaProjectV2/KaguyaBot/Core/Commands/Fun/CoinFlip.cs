@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun

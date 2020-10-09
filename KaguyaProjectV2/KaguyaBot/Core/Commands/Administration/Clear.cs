@@ -50,11 +50,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             await ((SocketTextChannel)Context.Channel).DeleteMessagesAsync(messages);
 
+            // We take away 1 because the bot's own message is included in the collection.
+            int msgDisplayCount = messages.Length - 1;
+            string s = msgDisplayCount == 1 ? string.Empty : "s";
             if (!invalidMessages.Any())
             {
                 embed = new KaguyaEmbedBuilder
                 {
-                    Description = $"Successfully deleted `{messages.Length}` messages."
+                    Description = $"Successfully deleted `{msgDisplayCount}` message{s}."
                 };
 
                 await ReplyAndDeleteAsync("", false, embed.Build(), TimeSpan.FromSeconds(4));
@@ -63,8 +66,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 embed = new KaguyaEmbedBuilder
                 {
-                    Description = $"Successfully deleted `{messages.Length}` messages. Failed to delete " +
-                                  $"`{amount - messages.Length}` messages. This is likely because those " +
+                    Description = $"Successfully deleted `{msgDisplayCount}` messages. Failed to delete " +
+                                  $"`{amount - msgDisplayCount}` message{s}. This is likely because those " +
                                   "messages were posted more than two weeks ago. Messages posted more than two " +
                                   "weeks ago may not be deleted by Discord bots (this is a Discord-imposed limitation).",
                     Footer = new EmbedFooterBuilder

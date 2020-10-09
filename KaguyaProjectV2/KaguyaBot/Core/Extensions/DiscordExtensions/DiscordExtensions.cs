@@ -1,10 +1,9 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using System.Threading.Tasks;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
+namespace KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions
 {
     public static class DiscordExtensions
     {
@@ -67,6 +66,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                 {
                     users += guild.MemberCount;
                 }
+            }
+
+            return users;
+        }
+
+        public static int TotalUsersForShard(this DiscordShardedClient client, int shardId)
+        {
+            int users = 0;
+            var shard = client.GetShard(shardId);
+            foreach (var guild in shard.Guilds)
+            {
+                users += guild.MemberCount;
             }
 
             return users;

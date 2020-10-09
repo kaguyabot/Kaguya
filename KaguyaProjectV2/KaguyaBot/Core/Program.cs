@@ -1,15 +1,23 @@
-﻿using Discord;
+﻿using System;
+using System.Threading.Tasks;
+using Discord;
 using Discord.Net;
 using Discord.WebSocket;
 using DiscordBotsList.Api;
 using KaguyaProjectV2.KaguyaApi;
+using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium; // DO NOT REMOVE
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG; // DO NOT REMOVE
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Microsoft.AspNetCore.Hosting;
@@ -17,14 +25,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OsuSharp;
-using System;
-using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Application;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.Utility;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
-using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
-using KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices;
 using TwitchLib.Api;
 using Victoria;
 
@@ -167,7 +167,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             try
             {
-                var _ = new KaguyaBot.DataStorage.DbData.Context.Init();
+                var _ = new Init();
                 if (await DatabaseQueries.TestConnection())
                 {
                     await ConsoleLogger.LogAsync("Database connection successfully established.", LogLvl.INFO);

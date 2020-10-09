@@ -1,3 +1,8 @@
+### Version 2.14
+- The $clear response message was displaying +1 message cleared than the user requested. Ex: $c 4 -> "You cleared 5 messages". This has been fixed.
+- The users count in $stats (for both total count and per-shard counts) were inconsistent with what was shown in the GameRotationService.
+- Created a new $poker game - Play Texas Hold'em against Kaguya!
+
 ### Version 2.13.1
 - Fixed a bug where users would not be reminded to $vote for Kaguya on the first day of each month.
 

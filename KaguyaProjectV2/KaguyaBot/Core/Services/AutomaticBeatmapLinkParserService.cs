@@ -9,6 +9,7 @@ using OsuSharp;
 using OsuSharp.Oppai;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services

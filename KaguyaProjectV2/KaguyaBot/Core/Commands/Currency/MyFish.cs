@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {

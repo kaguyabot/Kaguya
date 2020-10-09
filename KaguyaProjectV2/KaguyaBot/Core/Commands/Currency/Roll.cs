@@ -22,7 +22,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Remarks("<points>")]
         public async Task Command(int bet)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             if (bet < 5)
                 throw new ArgumentOutOfRangeException(nameof(bet), "Your bet must be at least `5` points.");
 
@@ -94,8 +93,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 Winner = winner,
             };
 
-            await DatabaseQueries.UpdateAsync(user);
             await DatabaseQueries.InsertAsync(gh);
+            await DatabaseQueries.UpdateAsync(user);
             var allGh = await DatabaseQueries.GetAllForUserAsync<GambleHistory>(user.UserId);
 
             var footer = new EmbedFooterBuilder

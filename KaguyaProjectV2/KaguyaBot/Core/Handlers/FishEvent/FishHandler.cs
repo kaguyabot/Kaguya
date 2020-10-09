@@ -1,12 +1,12 @@
-﻿using Discord.WebSocket;
+﻿using System;
+using System.Threading.Tasks;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
-using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.Currency;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 

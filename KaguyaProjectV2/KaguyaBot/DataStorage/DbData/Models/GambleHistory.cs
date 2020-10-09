@@ -48,6 +48,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     public enum GambleAction
     {
         BET_ROLL,
-        DICE_ROLL
+        DICE_ROLL,
+        POKER
     }
 }

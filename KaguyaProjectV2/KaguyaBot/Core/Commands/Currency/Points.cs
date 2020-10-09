@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             var points = user.Points;
 
-            await SendBasicSuccessEmbedAsync($"{Context.User.Mention} currently has " +
+            await SendBasicSuccessEmbedAsync($"{Context.User.Mention} you have " +
                                                              $"`{points:N0}` points.");
         }
     }

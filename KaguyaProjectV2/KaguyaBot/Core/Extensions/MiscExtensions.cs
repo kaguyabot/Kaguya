@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Discord;
+using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.Currency;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
@@ -87,6 +92,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         public static bool IsRedeemed(this PremiumKey key)
         {
             return key.UserId != 0 || key.ServerId != 0;
+        }
+        
+        public static string ToReadable(this IEnumerable<Card> cards)
+        {
+            return cards.Humanize(x => x.ToString(), "").Replace(",", "");
         }
     }
 
