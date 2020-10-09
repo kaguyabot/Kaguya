@@ -185,7 +185,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                                              $"{raisePoints:N0} points! This is the last turn, good luck...!");
                             break;
                         }
-                        
+                        // Re-raise / call AI could go here.
                         var raiseEmbed = RaiseEmbed(pokerData, playerHand, dealerHand, communityHand, raisePoints, Context);
                         var raiseData = EmbedReactionData(raiseEmbed, pokerData, TIMEOUT, true, false, true, true, false, user,
                             raisePoints);
