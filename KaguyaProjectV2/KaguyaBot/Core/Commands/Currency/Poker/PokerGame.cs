@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
@@ -14,7 +12,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -31,17 +28,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         [Command("Poker", RunMode = RunMode.Async)]
         [Alias("pk")]
         [Summary("Starts a game of Texas Hold'em Poker between you and me, the dealer!\n\n" +
-                 "Rules:\n" +
+                 "__**How to Play:**__\n" +
                  "- In order to play, you must bet at least 500 points, up to 50,000 points. The dealer will also match " +
-                 "your bet, so if you win, you will win `2.2x` whatever you put into the pot.\n" +
+                 "your bet, so if you win, you will win `2.15x` whatever you put into the pot.\n" +
                  "- Each player (you and the dealer) will be dealt two cards. You will not know what the dealer's hand is.\n" +
                  "- After the hands are dealt, there will be a `flop` of 3 random cards. At this point, you can either " +
                  "`fold`, `raise`, `call`, or `check` if you were raised. " +
                  "Be careful - if the dealer thinks they have a good hand, they will raise you! " +
                  "If you fail to `call` the dealer's raise, you forfeit your winnings and automatically fold.\n" +
-                 "- After you have `called` or `checked`, the next round of betting will begin with a new card displayed: " +
+                 "- After you have made a decision, the next round of betting will begin with a new card displayed: " +
                  "the `turn card`. The same options will be displayed again.\n" +
-                 "- Finally, the `river card` will be displayed. This is the last round of betting.")]
+                 "- Finally, the `river card` will be displayed. This is the last round of betting.\n\n")]
         [Remarks("<points>")]
         public async Task Command(int points)
         {
@@ -141,7 +138,59 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                         var callData = EmbedReactionData(checkEmbed, TIMEOUT, true, false, true, true, false);
                         await InlineReactionReplyAsync(callData);
                         break;
-                }
+                    case PokerGameAction.RAISE:
+                        int raisePointsDelta = user.Points - PokerData.userPointsBet;
+                        // todo: Make pretty
+                        await ReplyAsync($"{Context.User.Mention} how many additional points do you want to raise?\n" +
+                                         $"You may bet a maximum of `{raisePointsDelta:N0}` points.\n\n" +
+                                         "*You have 60 seconds to reply.*\n" +
+                                         "*Enter an exact integer.*");
+                        int raisePoints;
+                        while (true)
+                        {
+                            SocketMessage response = await NextMessageAsync(timeout: TimeSpan.FromSeconds(60));
+                            bool validResponse = int.TryParse(response.Content, out int res);
+                            if(!validResponse)
+                            {
+                                await ReplyAsync($"{Context.User.Mention} you must enter an exact integer! You have 60 seconds. " +
+                                                 $"Please try again.");
+                                continue;
+                            }
+
+                            if(res > raisePointsDelta)
+                            {
+                                await ReplyAsync($"{Context.User.Mention} this number of points is greater than your " +
+                                                 $"total points balance! Please enter a smaller number! " +
+                                                 $"(Minimum: `500`, Maximum: `{raisePointsDelta:N0}`)");
+                                continue;
+                            }
+
+                            if (res < 500)
+                            {
+                                await ReplyAsync($"{Context.User.Mention} you must bet at least 500 points!");
+                                continue;
+                            }
+
+                            raisePoints = res;
+                            break;
+                        }
+
+                        PokerData.userPointsBet += raisePoints;
+                        PokerData.UpdatePot();
+
+                        if (lastTurn)
+                        {
+                            await ReplyAsync($"{Context.User.Mention} you have raised the pot by " +
+                                             $"{raisePoints:N0} points! This is the last turn, good luck...!");
+                            break;
+                        }
+                        
+                        var raiseEmbed = RaiseEmbed(playerHand, dealerHand, communityHand, raisePoints);
+                        var raiseData = EmbedReactionData(raiseEmbed, TIMEOUT, true, false, true, true, false, user,
+                            raisePoints);
+                        await InlineReactionReplyAsync(raiseData);
+                        break;
+                }        
 
                 if (lastTurn)
                 {
@@ -252,6 +301,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                     Text = GetOptionsFooter(false, false, false, false, true, true, true, user) + "\n" +
                            $"Your hand: {playerHr.Humanize(LetterCasing.Title)}\n" +
                            $"Dealer's hand: {dealerHr.Humanize(LetterCasing.Title)}"
+                }
+            };
+        }
+
+        private static KaguyaEmbedBuilder RaiseEmbed(Hand pHand, Hand dHand, Hand cHand, int raisePoints)
+        {
+            return new KaguyaEmbedBuilder(EmbedColor.LIGHT_BLUE)
+            {
+                Title = "Kaguya Poker: Raise!",
+                Description = $"You have raised the pot by {raisePoints:N0} points!",
+                Fields = PokerTableEmbedFields(pHand, dHand, cHand, false),
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = GetOptionsFooter(true, false, true, true, false)
                 }
             };
         }
@@ -382,7 +445,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             }
             if (canRaise)
             {
-                callbacks.Add(RaiseActionCallback(raise));
+                callbacks.Add(RaiseActionCallback());
             }
             if (canFold)
             {
@@ -427,13 +490,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             return callback;
         }
         
-        private static (IEmote, Func<SocketCommandContext, SocketReaction, Task>) RaiseActionCallback(int amount)
+        private static (IEmote, Func<SocketCommandContext, SocketReaction, Task>) RaiseActionCallback()
         {
             (IEmote, Func<SocketCommandContext, SocketReaction, Task>) callback = (PokerData.rcRaise, async (c, r) =>
             {
                 //todo: Create embeds that are prettier.
                 //todo: Gather user input for how much they want to raise.
-                await c.Channel.SendMessageAsync($"{c.User.Mention} You have decided to raise the pot!");
                 PokerEvent.TurnTrigger(new PokerGameEventArgs(null, 0, PokerGameAction.RAISE));
             });
 
@@ -613,7 +675,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         public static readonly Card[] suitSpades = PokerGame.GenerateSuit(spadeEmote);
         public static readonly Card[] suitClubs = PokerGame.GenerateSuit(clubEmote);
 
-        public const double multiplier = 2.2;
+        public const double multiplier = 2.15;
         
         public static int userPointsBet;
         public static int dealerPointsBet;
