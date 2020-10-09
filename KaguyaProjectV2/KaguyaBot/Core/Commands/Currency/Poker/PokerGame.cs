@@ -30,12 +30,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         [Summary("Starts a game of Texas Hold'em Poker between you and me, the dealer!\n\n" +
                  "__**How to Play:**__\n" +
                  "- In order to play, you must bet at least 500 points, up to 50,000 points. The dealer will also match " +
-                 "your bet, so if you win, you will win `2.15x` whatever you put into the pot.\n" +
+                 "your bets and raises, so if you win, you will win `2.15x` whatever you put into the pot.\n" +
                  "- Each player (you and the dealer) will be dealt two cards. You will not know what the dealer's hand is.\n" +
                  "- After the hands are dealt, there will be a `flop` of 3 random cards. At this point, you can either " +
-                 "`fold`, `raise`, `call`, or `check` if you were raised. " +
-                 "Be careful - if the dealer thinks they have a good hand, they will raise you! " +
-                 "If you fail to `call` the dealer's raise, you forfeit your winnings and automatically fold.\n" +
+                 "`fold` (forfeit), `raise` (increase your gamble), or `check` (do nothing/continue). " +
                  "- After you have made a decision, the next round of betting will begin with a new card displayed: " +
                  "the `turn card`. The same options will be displayed again.\n" +
                  "- Finally, the `river card` will be displayed. This is the last round of betting.\n\n")]
@@ -48,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             if (MemoryCache.ActivePokerSessions.Contains(Context.User.Id))
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} You are already in a poker game. " +
-                                               $"Finish the first one to play again!");
+                                               "Finish the first one to play again!");
                 return;
             }
             
@@ -62,7 +60,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             if (user.Points < points)
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} you do not have enough points.\n\n" +
-                                               $"You have {user.Points:N0} points.");
+                                               $"You have `{user.Points:N0}` points.");
                 return;
             }
 
@@ -141,10 +139,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                         break;
                     case PokerGameAction.RAISE:
                         int raisePointsDelta = user.Points - pokerData.userPointsBet;
-                        // todo: Make pretty
                         await ReplyAsync($"{Context.User.Mention} how many additional points do you want to raise?\n" +
                                          $"You may bet a maximum of `{raisePointsDelta:N0}` points.\n\n" +
-                                         "*You have 60 seconds to reply.*\n" +
+                                         "*You have 60 seconds to reply.* " +
                                          "*Enter an exact integer.*");
                         int raisePoints;
                         while (true)
@@ -154,14 +151,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                             if(!validResponse)
                             {
                                 await ReplyAsync($"{Context.User.Mention} you must enter an exact integer! You have 60 seconds. " +
-                                                 $"Please try again.");
+                                                 "Please try again.");
                                 continue;
                             }
 
                             if(res > raisePointsDelta)
                             {
                                 await ReplyAsync($"{Context.User.Mention} this number of points is greater than your " +
-                                                 $"total points balance! Please enter a smaller number! " +
+                                                 "total points balance! Please enter a smaller number! " +
                                                  $"(Minimum: `500`, Maximum: `{raisePointsDelta:N0}`)");
                                 continue;
                             }
@@ -185,10 +182,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                                              $"{raisePoints:N0} points! This is the last turn, good luck...!");
                             break;
                         }
-                        // Re-raise / call AI could go here.
                         var raiseEmbed = RaiseEmbed(pokerData, playerHand, dealerHand, communityHand, raisePoints, Context);
-                        var raiseData = EmbedReactionData(raiseEmbed, pokerData, TIMEOUT, true, false, true, true, false, user,
-                            raisePoints);
+                        var raiseData = EmbedReactionData(raiseEmbed, pokerData, TIMEOUT, true, false, 
+                            true, true, false, user, raisePoints);
                         await InlineReactionReplyAsync(raiseData);
                         break;
                     case PokerGameAction.FOLD:
@@ -230,18 +226,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                     
                     if (playerWinner)
                     {
-                        await SendEmbedAsync(PlayerWinnerEmbed(pokerData, playerHand, dealerHand, communityHand, playerRanking,
-                            dealerRanking, user, Context));
+                        await SendEmbedAsync(PlayerWinnerEmbed(pokerData, playerHand, dealerHand, 
+                            communityHand, playerRanking, dealerRanking, user, Context));
                     }
                     else if (push)
                     {
-                        await SendEmbedAsync(TieEmbed(pokerData, playerHand, dealerHand, communityHand, playerRanking,
-                            dealerRanking, user, Context));
+                        await SendEmbedAsync(TieEmbed(pokerData, playerHand, dealerHand, 
+                            communityHand, playerRanking, dealerRanking, user, Context));
                     }
                     else
                     {
-                        await SendEmbedAsync(LoseEmbed(pokerData, playerHand, dealerHand, communityHand, playerRanking,
-                            dealerRanking, user, Context));
+                        await SendEmbedAsync(LoseEmbed(pokerData, playerHand, dealerHand, communityHand, 
+                            playerRanking, dealerRanking, user, Context));
                     }
 
                     PokerEvent.GameFinishedTrigger();
@@ -280,8 +276,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         }
 
         #region Embed helper methods {...}
-        private static KaguyaEmbedBuilder OverviewEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand,
-            bool canCheck, bool canCall, bool canRaise, bool canFold, bool lastTurn)
+        private static KaguyaEmbedBuilder OverviewEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, 
+            Hand communityHand, bool canCheck, bool canCall, bool canRaise, bool canFold, bool lastTurn)
         {
             var embed = new KaguyaEmbedBuilder(POKER_COLOR)
             {
@@ -295,8 +291,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             return embed;
         }
 
-        private static KaguyaEmbedBuilder PlayerWinnerEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand, 
-            HandRanking playerHandRanking, HandRanking dealerHandRanking, User user, ICommandContext context)
+        private static KaguyaEmbedBuilder PlayerWinnerEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, 
+            Hand communityHand, HandRanking playerHandRanking, HandRanking dealerHandRanking, 
+            User user, ICommandContext context)
         {
             return new KaguyaEmbedBuilder(EmbedColor.GREEN)
             {
@@ -312,8 +309,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             };
         }
         
-        private static KaguyaEmbedBuilder TieEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand,
-            HandRanking playerHr, HandRanking dealerHr, User user, ICommandContext context)
+        private static KaguyaEmbedBuilder TieEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, 
+            Hand communityHand, HandRanking playerHr, HandRanking dealerHr, User user, ICommandContext context)
         {
             return new KaguyaEmbedBuilder(EmbedColor.GOLD)
             {
@@ -329,8 +326,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             };
         }
         
-        private static KaguyaEmbedBuilder LoseEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, Hand communityHand,
-            HandRanking playerHr, HandRanking dealerHr, User user, ICommandContext context)
+        private static KaguyaEmbedBuilder LoseEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, 
+            Hand communityHand, HandRanking playerHr, HandRanking dealerHr, User user, ICommandContext context)
         {
             return new KaguyaEmbedBuilder(EmbedColor.LIGHT_PURPLE)
             {
@@ -346,13 +343,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             };
         }
 
-        private static KaguyaEmbedBuilder RaiseEmbed(PokerData pokerData, Hand pHand, Hand dHand, Hand cHand, int raisePoints,
-            ICommandContext context)
+        private static KaguyaEmbedBuilder RaiseEmbed(PokerData pokerData, Hand pHand, Hand dHand, Hand cHand, 
+            int raisePoints, ICommandContext context)
         {
             return new KaguyaEmbedBuilder(EmbedColor.LIGHT_BLUE)
             {
                 Title = "Kaguya Poker: Raise!",
-                Description = $"{context.User.Mention} You have raised the pot by {raisePoints:N0} points!",
+                Description = $"{context.User.Mention} You have raised the pot by `{raisePoints:N0}` points!",
                 Fields = PokerTableEmbedFields(pHand, dHand, cHand, false),
                 Footer = new EmbedFooterBuilder
                 {
@@ -361,13 +358,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             };
         }
         
-        private static KaguyaEmbedBuilder FoldEmbed(PokerData pokerData, Hand pHand, Hand dHand, Hand cHand, User user, ICommandContext context)
+        private static KaguyaEmbedBuilder FoldEmbed(PokerData pokerData, Hand pHand, Hand dHand, Hand cHand, User user, 
+            ICommandContext context)
         {
             return new KaguyaEmbedBuilder(EmbedColor.GRAY)
             {
-                //todo: Better phrasing? lol
                 Title = "Kaguya Poker: Fold!",
-                Description = $"{context.User.Mention} You have folded your hand!",
+                Description = $"{context.User.Mention} You have folded your hand and forfeited the game!",
                 Fields = PokerTableEmbedFields(pHand, dHand, cHand, true),
                 Footer = new EmbedFooterBuilder
                 {
@@ -379,11 +376,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         /// <summary>
         /// The embed sent after each response from the user (check, fold, etc.)
         /// </summary>
-        /// <param name="playerHand"></param>
-        /// <param name="dealerHand"></param>
-        /// <param name="communityHand"></param>
-        /// <param name="lastTurn"></param>
-        /// <param name="action"></param>
         /// <returns></returns>
         private static KaguyaEmbedBuilder CheckEmbed(PokerData pokerData, Hand playerHand, Hand dealerHand, 
             Hand communityHand, bool lastTurn, ICommandContext context)
@@ -435,7 +427,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         }
 
         private static string GetOptionsFooter(PokerData pokerData, bool canCheck, bool canCall, bool canRaise, 
-            bool canFold, bool lastTurn, bool? winner, bool showPot = true, bool showUserPoints = false, User user = null)
+            bool canFold, bool lastTurn, bool? winner, bool showPot = true, 
+            bool showUserPoints = false, User user = null)
         {
             string potStr = $"Current Pot: {(int) pokerData.pot:N0}\n";
             var sb = new StringBuilder();
@@ -471,8 +464,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 else
                 {
                     // If winner, we display "+(entire pot)"...else display "-(user points bet)".
-                    string pointsVariance = winner.Value ? pokerData.pot.ToString("N0") : pokerData.userPointsBet.ToString("N0");
-                    string changeStr = $"({modifier}{pointsVariance})"; //todo: Ensure proper values.
+                    string pointsVariance = winner.Value 
+                        ? pokerData.pot.ToString("N0") 
+                        : pokerData.userPointsBet.ToString("N0");
+                    string changeStr = $"({modifier}{pointsVariance})";
                     fSb.AppendLine($"Points Balance: {user.Points:N0} {changeStr}");
                 }
             }
@@ -490,8 +485,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         #endregion
 
         #region ReactionCallback Methods {...}
-        private static ReactionCallbackData EmbedReactionData(EmbedBuilder embed, PokerData pokerData, int timeoutSeconds, bool canCheck, bool canCall, 
-            bool canRaise, bool canFold, bool lastTurn, User user = null, int raise = 0, int initialBet = 0)
+        private static ReactionCallbackData EmbedReactionData(EmbedBuilder embed, PokerData pokerData, 
+            int timeoutSeconds, bool canCheck, bool canCall, bool canRaise, bool canFold, bool lastTurn, 
+            User user = null, int raise = 0, int initialBet = 0)
         {
             if(lastTurn)
                 return new ReactionCallbackData("", embed.Build());
@@ -549,8 +545,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         {
             (IEmote, Func<SocketCommandContext, SocketReaction, Task>) callback = (PokerData.rcCheck, async (c, r) =>
             {
-                //todo: Create embeds that are prettier.
-
                 PokerEvent.TurnTrigger(new PokerGameEventArgs(null, 0, PokerGameAction.CHECK));
             });
 
@@ -561,8 +555,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         {
             (IEmote, Func<SocketCommandContext, SocketReaction, Task>) callback = (PokerData.rcRaise, async (c, r) =>
             {
-                //todo: Create embeds that are prettier.
-                //todo: Gather user input for how much they want to raise.
                 PokerEvent.TurnTrigger(new PokerGameEventArgs(null, 0, PokerGameAction.RAISE));
             });
 
@@ -573,8 +565,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         {
             (IEmote, Func<SocketCommandContext, SocketReaction, Task>) callback = (PokerData.rcFold, async (c, r) =>
             {
-                //todo: Create embeds that are prettier.
-
                 await c.Channel.SendMessageAsync($"{c.User.Mention} You have decided to forfeit and fold your hand!");
                 PokerEvent.TurnTrigger(new PokerGameEventArgs(null, 0, PokerGameAction.FOLD));
             });
@@ -589,7 +579,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             Card[] suit = new Card[SUIT_LEN];
             for (int i = 0; i < SUIT_LEN; i++)
             {
-                string cardText = String.Empty;
+                string cardText;
                 if (i == 0)
                 {
                     cardText = "A";
@@ -600,21 +590,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 }
                 else
                 {
-                    switch (i)
+                    cardText = i switch
                     {
-                        case 10:
-                            cardText = "J";
-                            break;
-                        case 11:
-                            cardText = "Q";
-                            break;
-                        case 12:
-                            cardText = "K";
-                            break;
-                        default:
-                            throw new KaguyaSupportException("An unexpected error occured when " +
-                                                             "generating a card. Please report this error.");
-                    }
+                        10 => "J",
+                        11 => "Q",
+                        12 => "K",
+                        _ => throw new KaguyaSupportException("An unexpected error occured when " +
+                                                              "generating a card. Please report this error.")
+                    };
                 }
 
                 suit[i] = new Card(emoji, cardText);
@@ -625,7 +608,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
         public static Card GenerateRandomCard()
         {
-            Card[] suitCards;
             List<Card> invalidCards = PokerData.cardsDrawn;
             
             Random r = new Random();
@@ -638,24 +620,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 int suitNum = r.Next(4);
                 int cardNum = r.Next(13);
 
-                switch (suitNum)
+                Card[] suitCards = suitNum switch
                 {
-                    case 0:
-                        suitCards = PokerData.suitHearts;
-                        break;
-                    case 1:
-                        suitCards = PokerData.suitDiamonds;
-                        break;
-                    case 2:
-                        suitCards = PokerData.suitSpades;
-                        break;
-                    case 3:
-                        suitCards = PokerData.suitClubs;
-                        break;
-
-                    default:
-                        throw cardGenException;
-                }
+                    0 => PokerData.suitHearts,
+                    1 => PokerData.suitDiamonds,
+                    2 => PokerData.suitSpades,
+                    3 => PokerData.suitClubs,
+                    _ => throw cardGenException
+                };
 
                 card = suitCards[cardNum];
             } while (invalidCards.Contains(card));
@@ -672,11 +644,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         /// <summary>
         /// Generates a 2-card hand for a player.
         /// </summary>
-        /// <param name="suitNum">A number that determines what suit the card will be in.
-        /// 0 = hearts
-        /// 1 = diamonds
-        /// 2 = spades
-        /// 3 = clubs</param>
         /// <returns></returns>
         private static Hand GeneratePlayerHand()
         {
@@ -687,31 +654,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             return new Hand(handCards);
         }
 
-        private static Card[] GenerateFlop(int length = 3)
+        private static IEnumerable<Card> GenerateFlop(int length = 3)
         {
             Card[] flop = new Card[length];
             for (int i = 0; i < length; i++)
                 flop[i] = GenerateRandomCard();
 
             return flop;
-        }
-
-        /// <summary>
-        /// Returns whether or not the hand has any "of a kind" matching values in the communityCards.
-        /// Example: 2 of a kind means the hand has 2 matches between itself and the community cards.
-        /// </summary>
-        /// <param name="hand"></param>
-        /// <param name="communityCards"></param>
-        /// <returns></returns>
-        private static bool HasOfAKind(string[] hand, string[] communityCards)
-        {
-            foreach (var card in hand)
-            {
-                if (communityCards.Contains(card))
-                    return true;
-            }
-
-            return false;
         }
 
         private static void RemoveGameFromCache(ulong userId)
@@ -722,7 +671,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
     public class PokerData
     {
-        // This may be inefficient.
         private static readonly SocketGuild Guild = KaguyaBase.Client.GetGuild(546880579057221644);
 
         public static readonly Emote cardbackEmote = Guild.Emotes.FirstOrDefault(x => x.Id == 761212621676085278);
@@ -745,37 +693,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         public const double multiplier = 2.15;
         
         public int userPointsBet;
-        public int dealerPointsBet;
-
         public double pot;
 
         public static List<Card> cardsDrawn = new List<Card>();
 
-        public void UpdatePot() => pot = (userPointsBet * multiplier) + dealerPointsBet;
+        public void UpdatePot() => pot = userPointsBet * multiplier;
 
         public PokerData(int userPointsBet)
         {
-            userPointsBet = userPointsBet;
-            dealerPointsBet = 0;
+            this.userPointsBet = userPointsBet;
             UpdatePot();
-        }
-        public static Card[] GetCardsForSuit(Suit suit)
-        {
-            switch (suit)
-            {
-                case Suit.HEARTS:
-                    return suitHearts;
-                case Suit.DIAMONDS:
-                    return suitDiamonds;
-                case Suit.SPADES:
-                    return suitSpades;
-                case Suit.CLUBS:
-                    return suitClubs;
-                default:
-                    throw new KaguyaSupportException("An unexpected error occurred when trying to gather cards " +
-                                                     $"for this particular suit: `{suit.Humanize()}`. Please report " +
-                                                     $"this error in our support Discord.");
-            }
         }
 
         /// <summary>
@@ -818,10 +745,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
 
         public static bool IsRoyalFlush(Hand playerHand, Hand communityCards)
         {
-            if (!IsFlush(playerHand, communityCards))
-                return false;
-            
-            return IsRoyalStraight(playerHand, communityCards);
+            return IsFlush(playerHand, communityCards) && IsRoyalStraight(playerHand, communityCards);
         }
 
         public static bool IsFullHouse(Hand playerHand, Hand communityCards)
@@ -935,7 +859,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
         /// <param name="playerHand"></param>
         /// <param name="communityCards"></param>
         /// <returns></returns>
-        /// <exception cref="PokerStraightException">Thrown if more than 5 cards are passed into the function.</exception>
         public static bool IsRoyalStraight(Hand playerHand, Hand communityCards)
         {
             var collection = new List<Card>();
@@ -945,6 +868,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             if (!IsStraight(playerHand, communityCards))
                 return false;
 
+            // This might be a wrong way of determining A, K, Q, J, 10...? idk.
             return collection.Count(x => x.NumericValue >= 10) == 5;
         }
 
@@ -1003,14 +927,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             newHandCards.Add(card);
             this.Cards = newHandCards.ToArray();
         }
-
-        public void AddCards(IEnumerable<Card> cards)
-        {
-            var newHandCards = Cards.ToList();
-            
-            newHandCards.AddRange(cards);
-            this.Cards = newHandCards.ToArray();
-        }
     }
 
     public class Card
@@ -1052,47 +968,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                     return num; // If the card is a 2-10, return it's value. Otherwise, calculate other value.
                 }
 
-                switch (ValueText)
+                return ValueText switch
                 {
-                    case "J":
-                        return 11;
-                    case "Q":
-                        return 12;
-                    case "K":
-                        return 13;
-                    case "A":
-                        return 14;
-                    default:
-                        throw new KaguyaSupportException("An unexpected error occurred when determining the numeric " +
-                                                         "value for a card.");
-                }
+                    "J" => 11,
+                    "Q" => 12,
+                    "K" => 13,
+                    "A" => 14,
+                    _ => throw new KaguyaSupportException("An unexpected error occurred when determining the numeric " +
+                                                          "value for a card.")
+                };
             }
         }
-        
-        /// <summary>
-        /// Gathers the card's numeric value *with account for the suit.*
-        /// This range is 1-52 inclusive.
-        /// </summary>
-        /// <exception cref="KaguyaSupportException"></exception>
-        public int NumericValueWithSuit
-        {
-            get
-            {
-                int suitNum = (int) Suit;
-                return (suitNum * 13) + NumericValue;
-            }
-        }
-        
-        public bool IsFaceCard
-        {
-            get
-            {
-                string v = this.ValueText;
-                return v == "J" || v == "Q" || v == "K";
-            }
-        }
-
-        public bool IsAce => this.ValueText == "A";
         
         public override string ToString()
         {
