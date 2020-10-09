@@ -88,9 +88,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
             // Otherwise, the user will be unable to start a new Poker game.
             MemoryCache.ActivePokerSessions.Add(user.UserId);
 
-            // We don't set PokerData.dealerPointsBet yet because the pot already multiplies the user's bet 
-            // by the multiplier. That value should only be set when the dealer AI makes a decision to bet/raise.
-            pokerData.userPointsBet += points;
             pokerData.UpdatePot();
 
             Hand playerHand = GeneratePlayerHand();
@@ -336,7 +333,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency.Poker
                 Fields = PokerTableEmbedFields(playerHand, dealerHand, communityHand, true),
                 Footer = new EmbedFooterBuilder
                 {
-                    Text = GetOptionsFooter(pokerData, false, false, false, false, true, null, true, true, user) + "\n" +
+                    Text = GetOptionsFooter(pokerData, false, false, false, false, true, false, true, true, user) + "\n" +
                            $"Your hand: {playerHr.Humanize(LetterCasing.Title)}\n" +
                            $"Dealer's hand: {dealerHr.Humanize(LetterCasing.Title)}"
                 }
