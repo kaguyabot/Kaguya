@@ -51,7 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         public async Task HandleCommandAsync(SocketMessage msg)
         {
             if (!(msg is SocketUserMessage message) || message.Author.IsBot) return;
-            if (msg.Channel.GetType() != typeof(SocketTextChannel))
+            if (message.Channel.GetType() != typeof(SocketTextChannel))
                 return;
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel)message.Channel).Guild.Id);
@@ -62,7 +62,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (server.IsBlacklisted) return;
 
             var context = new ShardedCommandContext(_client, message);
-            
             if(await IsFilteredPhrase(context, server, message))
                 return; // If filtered phrase (and user isn't admin), return.
 
