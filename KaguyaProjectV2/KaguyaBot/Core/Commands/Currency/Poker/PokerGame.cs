@@ -881,14 +881,12 @@
 //                 foreach (var card2 in cHandCopy)
 //                 {
 //                     int deltaAbs = Math.Abs(card.NumericValue - card2.NumericValue);
-//                     
+//
 //                     if (deltaAbs - offset == 1)
 //                     {
 //                         deltaSum++;
 //                         offset++;
 //                     }
-//                     else if (deltaAbs == 0) // We have a duplicate
-//                         offset++;
 //                     else
 //                         deltaSum = 0;
 //
