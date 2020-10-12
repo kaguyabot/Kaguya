@@ -6,11 +6,11 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
 {
-    public class LogEventListener
+    public class DiscordEventLogger
     {
         private static DiscordShardedClient _client = ConfigProperties.Client;
 
-        public static void Listener()
+        public static void InitLogger()
         {
             _client.ShardConnected += async (DiscordSocketClient client) => await ConsoleLogger.LogAsync($"Shard {client.ShardId} connected.", LogLvl.TRACE);
             _client.ShardDisconnected += async (Exception ex, DiscordSocketClient client) => await ConsoleLogger.LogAsync($"Shard {client.ShardId} disconnected. Exception: {ex.Message}", LogLvl.ERROR);
