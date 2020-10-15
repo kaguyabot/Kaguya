@@ -121,61 +121,61 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: Administration (Page 1/9)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: Currency (Page 2/9)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: EXP (Page 3/9)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: Fun (Page 4/9)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: Reference (Page 5/9)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: Music (Page 6/9)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: NSFW (Page 7/9)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: osu! (Page 8/9)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: Utility (Page 9/9)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 },
 
                 new PaginatedMessage.Page
                 {
                     Title = "Command List: Owner Only (Page 10: Hidden)",
-                    Description = $"```css\n"
+                    Description = "```css\n"
                 }
             };
 
