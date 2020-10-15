@@ -10,6 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class PlayFavorite : KaguyaBase
     {
+        [DisabledCommand]
         [RequireVoteCommand]
         [MusicCommand]
         [Command("PlayFavorite")]

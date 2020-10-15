@@ -100,7 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                     SetupTwitch();
 
-                    LogEventListener.Listener();
+                    DiscordEventLogger.InitLogger();
                     GuildLogger.InitializeGuildLogListener();
 
                     await TestDatabaseConnection();

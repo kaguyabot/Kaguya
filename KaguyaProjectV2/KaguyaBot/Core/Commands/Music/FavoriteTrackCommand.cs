@@ -13,13 +13,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class FavoriteTrackCommand : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("FavoriteTrack")]
         [Alias("fav", "favorite")]
         [Summary("Allows any user to `favorite` the currently playing track. This will save the track " +
                  "in a playlist that can be accessed by the `favls` command.\n\n" +
                  "Limit: `50 tracks`.\n" +
-                 "[Kaguya Premium](" + ConfigProperties.KaguyaStore + ") limit: `500 tracks`.")]
+                 "[Kaguya Premium](" + ConfigProperties.KaguyaStoreURL + ") limit: `500 tracks`.")]
         [Remarks("")]
         public async Task Command()
         {

@@ -1,28 +1,23 @@
+using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Centvrio.Emoji;
 using Discord;
 using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core;
+using Discord.WebSocket;
+using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using Discord.WebSocket;
-using Victoria.Enums;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using Humanizer;
-using MoreLinq;
-using MoreLinq.Extensions;
-using TwitchLib.Api.Core.Extensions.System;
-using Victoria;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using Victoria.Enums;
 using Victoria.Interfaces;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Loop : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("Loop")]
         [Alias("repeat")]
@@ -89,7 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             bool s = amount > 1;
             var embed = new KaguyaEmbedBuilder
             {
-                Title = $"Loop Track {Centvrio.Emoji.Arrow.CounterClockwise}",
+                Title = $"Loop Track {Arrow.CounterClockwise}",
                 Description = sb.ToString(),
                 Footer = new EmbedFooterBuilder
                 {

@@ -12,6 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class DeleteTrack : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("DeleteTrack")]
         [Alias("deltrack", "dt")]

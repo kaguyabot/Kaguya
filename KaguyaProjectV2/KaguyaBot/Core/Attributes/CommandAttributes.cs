@@ -6,6 +6,8 @@ using System;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 #pragma warning disable 1998
 
@@ -76,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
             var user = DatabaseQueries.GetOrCreateUserAsync(context.User.Id).Result;
             return Task.FromResult(server.IsPremium || user.IsBotOwner || user.IsPremium
                 ? PreconditionResult.FromSuccess()
-                : PreconditionResult.FromError($"Sorry, but this server must be of [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
+                : PreconditionResult.FromError($"Sorry, but this server must be of [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) " +
                                                "status in order to use this command. This command may be used anywhere by " +
                                                "the key redeemer."));
         }
@@ -91,7 +93,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
             return Task.FromResult(user.IsBotOwner || user.IsPremium
                 ? PreconditionResult.FromSuccess()
                 : PreconditionResult.FromError("This command may only be executed by the redeemer of a " +
-                                               $"[Kaguya Premium]({ConfigProperties.KaguyaStore}) key."));
+                                               $"[Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) key."));
         }
     }
 
@@ -112,7 +114,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
             return PreconditionResult.FromError("RequireOwnerAttribute is not supported by this TokenType.");
         }
     }
+    
+    [AttributeUsage(AttributeTargets.Method)]
+    internal class DisabledCommandAttribute : PreconditionAttribute
+    {
+        public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
+        {
+            var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
 
+#if !DEBUG
+            // Disable command for everyone except the bot owner.
+            if(context.User.Id == ConfigProperties.BotConfig.BotOwnerId)
+                return PreconditionResult.FromSuccess();
+# endif
+
+            await ConsoleLogger.LogAsync($"Disabled command attempted to be executed: " +
+                                         $"[Command: {command.Name} | Guild: {context.Guild.Id} | User: {context.User.Id}]",LogLvl.INFO);
+            return PreconditionResult.FromError("This command has been disabled. Please visit our support Discord server " +
+                                                $"({server.CommandPrefix}invite) for more information. We apologize for " +
+                                                $"any inconvenience this may present you, the developer is working dilligently " +
+                                                $"to resolve the issue.");
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
     internal class DangerousCommandAttribute : PreconditionAttribute
     {
         public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
@@ -123,6 +148,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         }
     }
 
+    [AttributeUsage(AttributeTargets.Method)]
     internal class RequireVoteCommandAttribute : PreconditionAttribute
     {
         public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)

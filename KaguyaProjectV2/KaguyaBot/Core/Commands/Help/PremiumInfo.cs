@@ -11,7 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     {
         [ReferenceCommand]
         [Command("Premium")]
-        [Summary("Displays information on the [Kaguya Premium](" + ConfigProperties.KaguyaStore + "subscription.")]
+        [Summary("Displays information on the [Kaguya Premium](" + ConfigProperties.KaguyaStoreURL + "subscription.")]
         [Remarks("")]
         public async Task Command()
         {

@@ -10,6 +10,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Resume : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("Resume")]
         [Summary("Resumes the music player if it was previously paused.")]

@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                             if (!user.IsPremium && !server.IsPremium)
                             {
                                 await SendBasicErrorEmbedAsync(
-                                    $"You must be a [Kaguya Premium]({ConfigProperties.KaguyaStore}) subscriber to " +
+                                    $"You must be a [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) subscriber to " +
                                     $"use tagged NSFW searches.");
                                 return;
                             }
