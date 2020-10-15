@@ -13,6 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Queue : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("Queue")]
         [Alias("q")]

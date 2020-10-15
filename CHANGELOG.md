@@ -1,3 +1,7 @@
+### Version 2.14.2
+- Added the ability to disable individual commands (only at compile-time).
+- Added some more helpful information to the bottom of the $help command.
+
 ### Version 2.14.1
 - Reverted implementation of $poker. It's too buggy to be in production.
 

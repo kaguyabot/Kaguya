@@ -1,26 +1,27 @@
-﻿using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.Core.Services;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+using Discord.Net;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.Core.Services;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.Core.TypeReaders;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using LinqToDB.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -73,6 +74,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
                 return;
 
+            // Parsing of osu! beatmaps.
             if (Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/beatmapsets/[0-9]*#\b(?:osu|taiko|mania|fruits)\b/[0-9]*") ||
                Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/b/[0-9]*"))
                 await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, context);
@@ -88,16 +90,57 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         private static async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
-            //command is unspecified when there was a search failure (command not found); we don't care about these errors
+            // Command is unspecified when there was a search failure (command not found); we don't care about these errors
             if (!command.IsSpecified)
                 return;
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
             User user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
-
+            
             await HandleCommandResult(command, context, user, server, result);
         }
 
+        private static async Task HandleCommandResult(Optional<CommandInfo> command, ICommandContext context, User user, 
+            Server server, IResult result)
+        {
+            string cmdPrefix = server.CommandPrefix;
+
+            if (result.IsSuccess)
+            {
+                server.TotalCommandCount++;
+                user.ActiveRateLimit++;
+
+                // Providing context as a parameter will automatically log all information about an executed command.
+                await ConsoleLogger.LogAsync(context);
+
+                await DatabaseQueries.InsertAsync(new CommandHistory
+                {
+                    Command = command.Value.Aliases[0],
+                    Timestamp = DateTime.Now,
+                    UserId = context.User.Id,
+                    ServerId = context.Guild.Id
+                });
+                await DatabaseQueries.UpdateAsync(server);
+                await DatabaseQueries.UpdateAsync(user);
+            }
+            else
+            { 
+                await ConsoleLogger.LogAsync($"Command Failed [Command: {context.Message} | User: {context.User} | " +
+                                             $"Guild: {context.Guild.Id}]", LogLvl.DEBUG);
+
+                if (result is ExecuteResult executeResult && executeResult.Exception != null 
+                && executeResult.Exception.GetType() == typeof(KaguyaSupportException))
+                {
+                    await DisplayKaguyaSupportException(context, result, cmdPrefix);
+                }
+                else
+                {
+                    // The command error isn't a KaguyaSupportException, so throw a generic error message.
+                    await DisplayGenericErrorEmbed(command, context, result, cmdPrefix);
+                }
+            }
+        }
+        
         public async Task<bool> IsFilteredPhrase(ICommandContext context, Server server, IMessage message)
         {
             var userPerms = (await context.Guild.GetUserAsync(context.User.Id)).GuildPermissions;
@@ -122,50 +165,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             return false;
         }
 
-        private static async Task HandleCommandResult(Optional<CommandInfo> command, ICommandContext context, User user, 
-            Server server, IResult result)
-        {
-            string cmdPrefix = server.CommandPrefix;
-
-            if (!result.IsSuccess)
-            {
-                await ConsoleLogger.LogAsync($"Command Failed [Command: {context.Message} | User: {context.User} | " +
-                                             $"Guild: {context.Guild.Id}]", LogLvl.DEBUG);
-            }
-
-            if (result.IsSuccess)
-            {
-                server.TotalCommandCount++;
-                user.ActiveRateLimit++;
-
-                // Providing context as a parameter will automatically log all information about an executed command.
-                await ConsoleLogger.LogAsync(context);
-
-                await DatabaseQueries.InsertAsync(new CommandHistory
-                {
-                    Command = command.Value.Aliases[0],
-                    Timestamp = DateTime.Now,
-                    UserId = context.User.Id,
-                    ServerId = context.Guild.Id
-                });
-                await DatabaseQueries.UpdateAsync(server);
-                await DatabaseQueries.UpdateAsync(user);
-            }
-            else
-            {
-                if (result is ExecuteResult executeResult && executeResult.Exception != null 
-                && executeResult.Exception.GetType() == typeof(KaguyaSupportException))
-                {
-                    await DisplayKaguyaSupportException(context, result, cmdPrefix);
-                }
-                else
-                {
-                    // The command error isn't a KaguyaSupportException, so throw a generic error message.
-                    await DisplayGenericErrorEmbed(command, context, result, cmdPrefix);
-                }
-            }
-        }
-
         /// <summary>
         /// Creates and sends an error message to the user upon failed command.
         /// </summary>
@@ -180,6 +179,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             // ReSharper disable once PossibleInvalidOperationException
             switch (result.Error.Value)
             {
+                case CommandError.UnmetPrecondition:
+                    reason = command.Value.Preconditions.FirstOrDefault()?.ErrorMessage;
+                    break;
                 case CommandError.BadArgCount:
                     int paramCount = command.Value.Parameters.Count;
                     reason = "You passed in too few or too many parameters to this command.\n" +
@@ -203,7 +205,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             {
                 await context.Channel.SendEmbedAsync(embed);
             }
-            catch (Discord.Net.HttpException e)
+            catch (HttpException e)
             {
                 bool logLeave = true;
                 if (e.DiscordCode.HasValue && e.DiscordCode == 50013) // Missing permissions
@@ -270,7 +272,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             {
                 await context.Channel.SendEmbedAsync(embed);
             }
-            catch (Discord.Net.HttpException e)
+            catch (HttpException e)
             {
                 await ConsoleLogger.LogAsync(
                     $"An exception was thrown when trying to send a command error notification into a text channel.\n" +

@@ -10,7 +10,9 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -33,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new PremiumUserCommandAttribute(), new OwnerCommandAttribute()
             };
 
-            var pages = ReturnPages().ToList();
+            var pages = ReturnPages(server.CommandPrefix).ToList();
 
             foreach (var cmd in cmdInfo.Commands.OrderBy(x => x.Name))
             {
@@ -46,22 +48,42 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     if (attr.GetType() == typeof(PremiumUserCommandAttribute) || attr.GetType() == typeof(PremiumServerCommandAttribute))
                         continue;
                     
-                    string warn = "";
+                    string dangerous = "";
                     string premium = "";
+                    string disabled = "";
+
+                    if (cmd.Preconditions.Any(x => x.GetType() == typeof(DangerousCommandAttribute)))
+                        dangerous = "(Dangerous)";
                     
                     if (cmd.Preconditions.Contains(attributes[9]) || cmd.Preconditions.Contains(attributes[10]))
                         premium = "{$}";
+
+                    if (cmd.Preconditions.Any(x => x.GetType() == typeof(DisabledCommandAttribute)))
+                        disabled = "<DISABLED>";
                     
                     if (cmd.Attributes.Contains(attr) || cmd.Preconditions.Contains(attr))
                     {
-                        if (!pages[i].Description.Contains($"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}{warn}"))
+                        if (!pages[i].Description.Contains($"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}"))
                         {
                             if (!string.IsNullOrWhiteSpace(aliases))
                             {
                                 aliases = aliases.Insert(0, " ");
                             }
                             
-                            pages[i].Description += $"{server.CommandPrefix}{cmd.Name.ToLower()}{aliases} {premium}";
+                            // All commands are displayed using this String Builder.
+                            // Future command parameters
+                            var descSb = new StringBuilder($"{server.CommandPrefix}{cmd.Name.ToLower()}{aliases}");
+
+                            if (!string.IsNullOrWhiteSpace(dangerous))
+                                descSb.Append(" " + dangerous);
+                            
+                            if(!string.IsNullOrWhiteSpace(premium))
+                                descSb.Append(" " + premium);
+
+                            if (!string.IsNullOrWhiteSpace(disabled))
+                                descSb.Append(" " + disabled);
+
+                            pages[i].Description += descSb.ToString();
                             pages[i].Description += "\n";
                         }
                     }
@@ -71,9 +93,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             }
 
             foreach (var pg in pages)
-            {
                 pg.Description += "```";
-            }
 
             if (Context.User.Id != ConfigProperties.BotConfig.BotOwnerId)
                 pages.RemoveAt(pages.Count - 1);
@@ -81,11 +101,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             var pager = new PaginatedMessage
             {
                 Pages = pages,
-                FooterOverride = new EmbedFooterBuilder
-                {
-                    Text = $"Use {server.CommandPrefix}h <command> for more information on a command.\n" +
-                           $"Press the square numbers and then type a number in chat to jump to a page."
-                },
                 Color = KaguyaEmbedBuilder.BlueColor
             };
 
@@ -99,7 +114,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             });
         }
 
-        private IEnumerable<PaginatedMessage.Page> ReturnPages()
+        private IEnumerable<PaginatedMessage.Page> ReturnPages(string cmdPrefix)
         {
             var pages = new[]
             {
@@ -163,6 +178,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     Description = $"```css\n"
                 }
             };
+
+            // Additional description information that is applied to ALL command pages.
+            foreach (var page in pages)
+            {
+                var descCopy = page.Description;
+                page.Description = ""; // Resetting the description.
+
+                var descSb = new StringBuilder();
+                descSb.AppendLine($"- Use **`{cmdPrefix}h <command>`** for additional command information.");
+                descSb.AppendLine("- A **`{$}`** icon indicates the command is for premium users.");
+                descSb.AppendLine("- A **`(Dangerous)`** indicator indicates the command should be executed with caution.");
+                descSb.AppendLine();
+                descSb.AppendLine("Helpful Links:".ToDiscordBold());
+                descSb.Append($"*[Kaguya Support]({ConfigProperties.KaguyaSupportDiscordURL})*, ");
+                descSb.Append($"*[Kaguya Premium]({ConfigProperties.KaguyaStoreURL})*, ");
+                descSb.Append($"*[Invite Kaguya]({ConfigProperties.KaguyaInviteURL})*");
+
+                page.Description = descSb + "\n" + descCopy;
+            }
 
             return pages;
         }

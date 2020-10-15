@@ -12,6 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Skip : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("Skip")]
         [Summary("Skips the currently playing song, if there is one.")]

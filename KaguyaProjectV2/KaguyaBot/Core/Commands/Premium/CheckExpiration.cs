@@ -56,7 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
             else
             {
                 await SendBasicErrorEmbedAsync($"You currently have no active subscriptions. You may " +
-                                               $"purchase one [here]({ConfigProperties.KaguyaStore}).");
+                                               $"purchase one [here]({ConfigProperties.KaguyaStoreURL}).");
             }
         }
     }

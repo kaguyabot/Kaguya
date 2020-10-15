@@ -41,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             if (points > 50000 && !user.IsPremium && !server.IsPremium)
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} Sorry, you must be either an active " +
-                                               $"[Kaguya Premium]({ConfigProperties.KaguyaStore}) subscriber " +
+                                               $"[Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) subscriber " +
                                                $"or be present in a server in which Kaguya Premium is active to bet " +
                                                $"more than `50,000` points.");
                 return;
@@ -50,7 +50,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             if (points > 500000 && (user.IsPremium || server.IsPremium))
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} Sorry, the maximum points you may bet regardless " +
-                                               $"of [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
+                                               $"of [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) " +
                                                $"status is `500,000` points.");
                 return;
             }

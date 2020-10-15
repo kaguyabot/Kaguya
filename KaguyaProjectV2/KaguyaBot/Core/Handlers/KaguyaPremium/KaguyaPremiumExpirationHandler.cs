@@ -55,7 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
                     var keyRedeemSocketUser = _client.GetUser(key.UserId);
                     var keyGuild = _client.GetGuild(key.ServerId);
                     
-                    var descSb = new StringBuilder($"Your [Kaguya Premium]({ConfigProperties.KaguyaStore}) benefits have expired " +
+                    var descSb = new StringBuilder($"Your [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) benefits have expired " +
                                                    $"in the server `{keyGuild.Name}`.");
                     if (kaguyaUser.IsPremium)
                     {

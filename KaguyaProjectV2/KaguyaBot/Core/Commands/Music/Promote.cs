@@ -11,6 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Promote : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("Promote")]
         [Summary("Promotes a track from the queue to the top of the queue. This would " +

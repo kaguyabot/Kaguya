@@ -7,6 +7,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Play : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("Play")]
         [Summary("Searches YouTube for the provided song and plays/queues the first " +

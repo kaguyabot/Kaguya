@@ -11,6 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Leave : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("Leave")]
         [Summary("Makes Kaguya exit whatever voice channel it is currently in and " +

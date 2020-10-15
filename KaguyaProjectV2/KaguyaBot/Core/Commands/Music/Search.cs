@@ -26,6 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Search : KaguyaBase
     {
+        [DisabledCommand]
         [MusicCommand]
         [Command("Search")]
         [Summary("Searches YouTube for the provided song and returns a list of up to 7 songs to choose from.")]
@@ -122,7 +123,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 string suppString = user.IsPremium
                     ? ""
                     : "If you are " +
-                      $"not a [Kaguya Premium Subscriber]({ConfigProperties.KaguyaStore}), " +
+                      $"not a [Kaguya Premium Subscriber]({ConfigProperties.KaguyaStoreURL}), " +
                       $"you are only limited to playing songs less than `10 minutes` in duration.";
 
                 await context.Channel.SendBasicErrorEmbedAsync($"Your requested search returned no results. {suppString}");
@@ -219,7 +220,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     {
                         await ConsoleLogger.LogAsync($"Queue is full in {context.Guild.Id}, sending error.", LogLvl.TRACE);
                         await SendBasicErrorEmbedAsync("Your queue is full! `50 songs` is the maximum " +
-                                                       $"for non [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
+                                                       $"for non [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) " +
                                                        "servers.");
                     }
                     else
@@ -296,7 +297,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                         {
                             await ConsoleLogger.LogAsync($"Queue was full in guild {context.Guild.Id}. Sending error message.", LogLvl.TRACE);
                             await SendBasicErrorEmbedAsync($"Your queue is full! `50 songs` is the maximum " +
-                                                           $"for non [Kaguya Premium]({ConfigProperties.KaguyaStore}) " +
+                                                           $"for non [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) " +
                                                            $"servers.");
                             return;
                         }
