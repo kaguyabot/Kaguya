@@ -39,8 +39,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
             if (!StringIsMatch(seconds) && !StringIsMatch(minutes) && !StringIsMatch(hours) &&
                 !StringIsMatch(days))
             {
-                throw new FormatException("You did not specify a proper mute time. \nThe proper format is " +
-                                          "`<user> <dhms>`. \nExample: `<user> 30m`");
+                throw new FormatException("You did not specify a proper duration. \nThe proper format is " +
+                                          "`<xdxhxmxs>` where `x` is a number and `d, h, m, or s` " +
+                                          "represents `days`, `hours`, `minutes`, or `seconds` respectively. " +
+                                          "Any combination of times are acceptable.\nExample: `30m`");
             }
 
             int.TryParse(seconds, out sec);
