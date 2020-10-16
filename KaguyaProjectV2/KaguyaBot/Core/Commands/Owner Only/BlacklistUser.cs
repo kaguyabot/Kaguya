@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -18,6 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
     public class BlacklistUser : KaguyaBase
     {
+        [OwnerCommand]
         [Command("BlacklistUser")]
         [Alias("UserBlacklist", "ubl")]
         [Summary("Allows a bot owner to blacklist a user temporarily.")]
