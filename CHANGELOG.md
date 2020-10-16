@@ -1,3 +1,8 @@
+### Version 2.15
+- Attempted to fix issue with random TimeoutExceptions being thrown in OwnerGiveawayMessageUpdaterService.cs (fatal error)
+- Added $ardm - Anti-raid direct message configuration. Allows server administrators to configure a message that will be sent 
+    to all users actioned by the Kaguya Anti-Raid Service for their server. Use $h ardm for more information.
+
 ### Version 2.14.3
 - $userblacklist is now marked as OwnerOnly (...oops!)
 
