@@ -1,3 +1,6 @@
+### Version 2.14.3
+- $userblacklist is now marked as OwnerOnly (...oops!)
+
 ### Version 2.14.2
 - Added the ability to disable individual commands (only at compile-time).
 - Added some more helpful information to the bottom of the $help command.
