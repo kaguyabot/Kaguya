@@ -117,7 +117,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 new EmbedFieldBuilder
                 {
                     Name = "Kaguya User Stats",
-                    Value = $"Registered Users: `{await DatabaseQueries.GetCountAsync<User>():N0}`\n" +
+                    Value = $"Unique Interactions (Users): `{await DatabaseQueries.GetCountAsync<User>():N0}`\n" +
                             $"Total Points in Circulation: `{DatabaseQueries.GetTotalCurrency():N0}`\n" +
                             $"Total Gambles: `{await DatabaseQueries.GetCountAsync<GambleHistory>():N0}`"
                 }
