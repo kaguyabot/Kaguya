@@ -1,15 +1,21 @@
-﻿using Discord.WebSocket;
-using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Discord.Net;
+using Discord.WebSocket;
+using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -25,22 +31,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     var guild = u.Guild;
                     var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
 
-                    if (server.AntiRaid == null || !server.AntiRaid.Any())
+                    if (server.AntiRaid == null)
                         return;
 
-                    var ar = server.AntiRaid.First();
-
-                    if (server.AntiRaid.Count() > 1)
-                    {
-                        // Checks for duplicate antiraid entries in the database. There can only be one.
-                        for (int i = 0; i < server.AntiRaid.Count() - 1; i++)
-                        {
-                            await DatabaseQueries.DeleteAsync(server.AntiRaid.ToList()[i]);
-                        }
-
-                        await ConsoleLogger.LogAsync($"Server {server.ServerId} had multiple antiraid configurations. " +
-                                                     $"I have deleted all except one.", LogLvl.WARN);
-                    }
+                    var ar = server.AntiRaid;
 
                     if (!ServerTimers.CachedTimers.Any(x => x.ServerId == server.ServerId))
                     {
@@ -96,6 +90,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         private static async Task ActionUsers(HashSet<ulong> userIds, ulong guildId, string action)
         {
+            var server = await DatabaseQueries.GetOrCreateServerAsync(guildId);
             var guild = ConfigProperties.Client.GetGuild(guildId);
             var guildUsers = new List<SocketGuildUser>();
 
@@ -107,7 +102,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     guildUsers.Add(guildUser);
             }
 
-            AntiRaidEvent.Trigger(guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
+            AntiRaidEvent.Trigger(server, guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
 
             if(guildUsers.Count == 0)
             {
@@ -115,8 +110,61 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 "but no guild users were found from the provided set of IDs!", LogLvl.WARN);
                 return;
             }
+            
+            // We need to message the actioned users, if applicable, before actioning.
+            string content = server.AntiraidPunishmentDirectMessage;
+           
+            // todo: Test
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var embed = new KaguyaEmbedBuilder(EmbedColor.ORANGE)
+                {
+                    Title = "Kaguya Anti-Raid Notification",
+                    Description = content
+                };
+                
+                var sb = new StringBuilder(content);
+                foreach (var guildUser in guildUsers)
+                {
+                    action = action.ToLower() switch
+                    {
+                        "ban" => "banned",
+                        "mute" => "muted",
+                        "kick" => "kicked",
+                        "shadowban" => "shadowbanned",
+                        _ => throw new KaguyaSupportException("An unexpected value was encountered when determining the " +
+                                                              "past-tense value for this server's anti-raid action. Please " +
+                                                              "reconfigure your anti-raid and join our Support Discord if " +
+                                                              "this error continues to occur.")
+                    };
+                    
+                    sb = sb.Replace("{USERNAME}", guildUser.UsernameAndDescriminator());
+                    sb = sb.Replace("{USERMENTION}", guildUser.Mention);
+                    sb = sb.Replace("{SERVER}", guild.Name);
+                    sb = sb.Replace("{PUNISHMENT}", action.ToLower());
 
-            switch (action.ToLower())
+                    embed.Description = sb.ToString();
+
+                    try
+                    {
+                        await guildUser.SendEmbedAsync(embed);
+                    }
+                    catch (HttpException httpEx)
+                    {
+                        await ConsoleLogger.LogAsync(
+                            $"Tried to send user {guildUser.Id} a custom anti-raid DM notification " +
+                            $"from guild [Name: {guild.Name} | ID: {guild.Id}] but failed to do so due to " +
+                            $"an Http Exception (Failure Reason: {httpEx.Reason})", LogLvl.WARN);
+                    }
+                    catch (Exception ex)
+                    {
+                        await ConsoleLogger.LogAsync(ex, $"An unexpected error occurred when attempting to send user {guildUser.Id} a custom " +
+                                                         $"anti-raid DM notification from guild [Name: {guild.Name} | ID: {guild.Id}].\n");
+                    }
+                }
+            }
+
+            switch (server.AntiRaid.Action.ToLower())
             {
                 case "mute":
                     var mute = new Mute();
@@ -232,9 +280,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static event Func<AntiRaidEventArgs, Task> OnRaid;
 
-        public static void Trigger(List<SocketGuildUser> users, SocketGuild guild, string punishment)
+        public static void Trigger(Server server, List<SocketGuildUser> users, SocketGuild guild, string punishment)
         {
-            AntiRaidEventTrigger(new AntiRaidEventArgs(users, guild, punishment));
+            AntiRaidEventTrigger(new AntiRaidEventArgs(server, users, guild, punishment));
         }
 
         private static void AntiRaidEventTrigger(AntiRaidEventArgs e)
@@ -245,12 +293,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
     public class AntiRaidEventArgs : EventArgs
     {
+        public Server Server { get; }
         public List<SocketGuildUser> GuildUsers { get; }
         public SocketGuild SocketGuild { get; }
         public string Punishment { get; }
 
-        public AntiRaidEventArgs(List<SocketGuildUser> users, SocketGuild guild, string punishment)
+        public AntiRaidEventArgs(Server server, List<SocketGuildUser> users, SocketGuild guild, string punishment)
         {
+            this.Server = server;
             this.GuildUsers = users;
             this.SocketGuild = guild;
             this.Punishment = punishment;

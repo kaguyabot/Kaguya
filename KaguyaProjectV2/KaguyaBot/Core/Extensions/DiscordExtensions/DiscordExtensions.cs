@@ -11,6 +11,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions
         {
             await textChannel.SendMessageAsync(embed: embed.Build());
         }
+        
+        public static async Task SendEmbedAsync(this IUser user, EmbedBuilder embed)
+        {
+            await user.SendMessageAsync(embed: embed.Build());
+        }
 
         /*
          * Some extensions here are also present in KaguyaBase. It is important they are

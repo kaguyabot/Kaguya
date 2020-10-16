@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task Command(int users = 0, int seconds = 0, string action = null)
         {
             var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var antiraid = server.AntiRaid?.FirstOrDefault();
+            var antiraid = server.AntiRaid;
 
             if (users == 0 && seconds == 0 && action == null)
             {

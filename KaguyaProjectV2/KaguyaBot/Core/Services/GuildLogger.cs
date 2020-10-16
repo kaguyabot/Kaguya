@@ -164,7 +164,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             foreach (var user in e.GuildUsers)
             {
                 actionedUsers +=
-                    $"Name: `{user}` | ID: `{user.Id}` | Account Created: `{(DateTime.Now - user.CreatedAt).Humanize()}`\n";
+                    $"Name: `{user}` | ID: `{user.Id}`\n";
             }
 
             if (actionedUsers.Length > 1750)
