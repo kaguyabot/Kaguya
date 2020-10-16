@@ -114,7 +114,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             // We need to message the actioned users, if applicable, before actioning.
             string content = server.AntiraidPunishmentDirectMessage;
            
-            // todo: Test
             if (!string.IsNullOrWhiteSpace(content))
             {
                 var embed = new KaguyaEmbedBuilder(EmbedColor.ORANGE)
