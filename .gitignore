@@ -4,7 +4,7 @@
 /KaguyaProjectV2/.vs/*/
 /KaguyaProjectV2/bin
 /KaguyaProjectV2/obj
-/KaguyaProjectV2/Resources
+/KaguyaProjectV2/Resources/
 /Kaguya/KaguyaWebBlazor/*
 
 *.suo
@@ -23,3 +23,4 @@ KaguyaProjectV2/appsettings.json
 **/.idea
 KaguyaProjectV2/KaguyaProjectV2.csproj.user
 **/LavalinkServer/logs
+**/.DS_Store
