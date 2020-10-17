@@ -125,14 +125,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 var sb = new StringBuilder(content);
                 foreach (var guildUser in guildUsers)
                 {
-                    action = action.ToLower() switch
-                    {
-                        "ban" => "banned",
-                        "mute" => "muted",
-                        "kick" => "kicked",
-                        "shadowban" => "shadowbanned"
-                    };
-                    
                     sb = sb.Replace("{USERNAME}", guildUser.UsernameAndDescriminator());
                     sb = sb.Replace("{USERMENTION}", guildUser.Mention);
                     sb = sb.Replace("{SERVER}", guild.Name);
