@@ -155,7 +155,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Attributes
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
-            if (await user.HasRecentlyVotedAsync() || user.IsPremium)
+            if (await user.HasRecentlyVotedAsync() || user.IsPremium || user.IsBotOwner)
             {
                 return PreconditionResult.FromSuccess();
             }

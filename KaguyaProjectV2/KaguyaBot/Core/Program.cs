@@ -196,10 +196,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             // We need to load the cache on program start.
             await MemoryCache.Initialize();
             await ConsoleLogger.LogAsync("Memory Cache timer initialized", LogLvl.INFO);
-            
+#if !DEBUG
             await AntiRaidService.Initialize();
             await ConsoleLogger.LogAsync("Antiraid service initialized", LogLvl.INFO);
-#if !DEBUG
             await OwnerGiveawayMessageUpdaterService.Initialize();
             await ConsoleLogger.LogAsync("Owner giveaway message updater initialized", LogLvl.INFO);
             await KaguyaPremiumRoleHandler.Initialize();
@@ -221,9 +220,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Upvote expiration notification timer initialized", LogLvl.INFO);
             await GameRotationService.Initialize();
             await ConsoleLogger.LogAsync("Game rotation timer initialized", LogLvl.INFO);
-
 #endif
-            await ConsoleLogger.LogAsync($"All timers initialized.", LogLvl.INFO);
+            await ConsoleLogger.LogAsync("All timers initialized.", LogLvl.INFO);
         }
 
         private void InitializeEventHandlers()

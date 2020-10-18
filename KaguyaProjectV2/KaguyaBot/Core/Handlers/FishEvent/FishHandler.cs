@@ -21,8 +21,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
         {
             var context = args.Context;
             var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
-            var oldFishExp = args.User.FishExp;
-            var newFishExp = oldFishExp + args.Fish.Exp;
+            var oldFishExp = args.User.FishExp - args.Fish.Exp;
+            var newFishExp = args.User.FishExp;
 
             if (HasLeveledUp(oldFishExp, newFishExp))
             {
@@ -60,9 +60,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 
         public static double GetFishLevel(int exp)
         {
-            if (exp <= 64)
+            // Basically saying, properLevel defined below is less than 1.
+            // If properLevel is less than 1, they are level 0 and earn no rewards.
+            if (exp <= 64) 
                 return 0;
-            return Math.Sqrt((exp / 8) - 8); // Same as normal EXP.
+
+            // Same formula as standard EXP.
+            double properLevel = Math.Sqrt((double)exp / 8 - 8);
+
+            /*
+             * We don't want to return a double value for 1 (e.g. 1.5029) because
+             * of how the "Kaguya Fishing: Level Up!" notification is displayed from level
+             * 0 -> 1. If we returned properLevel instead, the level-up notification would not
+             * display 0.00% -> x.xx% reward from levels 0 -> 1, but would instead display
+             * x.xx% -> y.yy% where x and y are > 0.
+             */
+            
+            if (Math.Floor(properLevel) == 1)
+                return 1;
+
+            return properLevel;
         }
 
         /// <summary>
@@ -101,7 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                 return finalStr;
             }
 
-            #region If the user has leveled up
+            #region If the user has leveled up 
             var newBonuses = new FishLevelBonuses(user.FishExp);
 
             #region Sometimes you just need some if statements...
@@ -143,7 +160,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 
             public FishLevelBonuses(int fishExp)
             {
-                var fishLvl = (int)GetFishLevel(fishExp);
+                double fishLvl = GetFishLevel(fishExp);
 
                 // Fish level bonus modifier formulas. Everything caps at level 100.
                 // todo: Recalc

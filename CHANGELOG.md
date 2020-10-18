@@ -1,5 +1,8 @@
 ### Version 2.15.1
 - Fixed a bug where $log antiraids would not work but $log antiraid would. Correct usage is $log antiraids, as shown in $logs.
+- Fixed a bug with the $fish level-up notification service where either:
+    - Fish level up notifications would not get sent at all
+    - The fish level up notification would be sent, but the "value increase display" would show the same values for both the 'to' and 'from' values.
 - Reminders will no longer have their text altered in some cases.
 
 ### Version 2.15
