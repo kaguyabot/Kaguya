@@ -1,3 +1,6 @@
+### Version 2.15.1
+- Fixed a bug where $log antiraids would not work but $log antiraid would. Correct usage is $log antiraids, as shown in $logs.
+
 ### Version 2.15
 - Attempted to fix issue with random TimeoutExceptions being thrown in OwnerGiveawayMessageUpdaterService.cs (fatal error)
 - Added $ardm - Anti-raid direct message configuration. Allows server administrators to configure a message that will be sent 

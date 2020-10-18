@@ -58,7 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "voicechannelconnections": server.LogVoiceChannelConnections = channel.Id; break;
                         case "levelannouncements": server.LogLevelAnnouncements = channel.Id; break;
                         case "fishlevels": server.LogFishLevels = channel.Id; break;
-                        case "antiraid": server.LogAntiraids = channel.Id; break;
+                        case "antiraids": server.LogAntiraids = channel.Id; break;
                         case "greetings": server.LogGreetings = channel.Id; break;
                         case "all":
                             {
@@ -97,7 +97,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                         case "voicechannelconnections": server.LogVoiceChannelConnections = 0; break;
                         case "levelannouncements": server.LogLevelAnnouncements = 0; break;
                         case "fishlevels": server.LogFishLevels = 0; break;
-                        case "antiraid": server.LogAntiraids = 0; break;
+                        case "antiraids": server.LogAntiraids = 0; break;
                         case "greetings": server.LogGreetings = 0; break;
                         case "all":
                             {
