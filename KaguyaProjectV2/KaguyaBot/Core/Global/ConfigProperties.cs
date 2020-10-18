@@ -33,6 +33,5 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         
         // Github contributors, please do not edit the Version number.
         public static string Version { get; } = "2.15.1";
-        
     }
 }
