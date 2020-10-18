@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Discord;
-using Discord.Rest;
 using Discord.WebSocket;
 using Humanizer;
 using Humanizer.Localisation;
@@ -48,7 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
                     {
                         await ConsoleLogger.LogAsync("Failed to find channel for active reaction role " +
                                                      "giveaway!!", LogLvl.ERROR);
-                        return;
+                        continue;
                     }
 
                     if (!(guildChannel is SocketTextChannel textCh))

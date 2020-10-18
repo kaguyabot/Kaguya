@@ -89,7 +89,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 {
                     Name = "Command Stats",
                     Value = $"Commands Run (Last 24 Hours): `{cmdsLastDay.Count:N0}`\n" +
-                            $"Commands Run (All-time): `{await DatabaseQueries.GetCountAsync<CommandHistory>():N0}`\n" +
+                            $"Commands Run (All-time): `{MemoryCache.AllTimeCommandCount:N0}`\n" +
                             $"Most Popular Command: `{mostPopCommandText}`"
                 },
                 new EmbedFieldBuilder
@@ -106,7 +106,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 new EmbedFieldBuilder
                 {
                     Name = "Global Stats",
-                    Value = $"Uptime: `{(DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(precision: 4, minUnit: TimeUnit.Second)}`\n" +
+                    Value = $"Uptime: `{(DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(4, minUnit: TimeUnit.Second)}`\n" +
                             $"Guilds: `{totalGuilds:N0}`\n" +
                             $"Text Channels: `{totalTextChannels:N0}`\n" +
                             $"Voice Channels: `{totalVoiceChannels:N0}`\n" +

@@ -1,4 +1,9 @@
 ### Version 2.15.1
+Developer Changes:
+- Added additional logging for OwnerGiveawayMessageUpdaterService.
+- Fixed issue where the OwnerGiveawayMessageUpdaterService would not remove a giveaway if it had been deleted before the time had expired.
+
+User Changes:
 - Fixed a bug where $log antiraids would not work but $log antiraid would. Correct usage is $log antiraids, as shown in $logs.
 - Fixed a bug with the $fish level-up notification service where either:
     - Fish level up notifications would not get sent at all

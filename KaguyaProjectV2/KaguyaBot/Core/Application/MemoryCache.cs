@@ -23,9 +23,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application
         /// value is equal to how many times this command has been used successfully.
         /// </summary>
         public static Dictionary<string, int>? MostPopularCommandCache { get; private set; }
+        /// <summary>
+        /// A cache of all <see cref="OwnerGiveaway"/> objects in the database.
+        /// </summary>
         public static List<OwnerGiveaway> OwnerGiveawaysCache { get; private set; }
+        /// <summary>
+        /// A cache of all <see cref="OwnerGiveawayReaction"/> items in the database.
+        /// </summary>
         public static List<OwnerGiveawayReaction> OwnerGiveawayReactions { get; private set; }
-        public static HashSet<ulong> ActivePokerSessions { get; set; } = new HashSet<ulong>();
+        /// <summary>
+        /// A cache of all currently active poker sessions, based on user ID.
+        /// todo: Assign value.
+        /// </summary>
+        public static HashSet<ulong> ActivePokerSessions { get; private set; }
+        /// <summary>
+        /// A cache of the count of all commands used.
+        /// </summary>
+        public static int AllTimeCommandCount { get; private set; }
+        /// <summary>
+        /// A cache of the count of all caught fish. Does not include <see cref="FishType.BAIT_STOLEN"/> events.
+        /// </summary>
+        public static int AllTimeFishCount { get; private set; }
+        /// <summary>
+        /// A cache of the count of all points in circulation.
+        /// </summary>
+        public static int AllPointsCount { get; private set; }
 
         /// <summary>
         /// Initializes the memory cache for various values that need to be refreshed often.
@@ -39,9 +61,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application
             await ConsoleLogger.LogAsync("Memory Cache: Owner giveaways cache populated.", LogLvl.DEBUG);
             OwnerGiveawayReactions = await DatabaseQueries.GetAllAsync<OwnerGiveawayReaction>();
             await ConsoleLogger.LogAsync("Memory Cache: Owner giveaway previous reactions cache populated.", LogLvl.DEBUG);
+            AllTimeCommandCount = await DatabaseQueries.GetCountAsync<CommandHistory>();
+            await ConsoleLogger.LogAsync("Memory Cache: All time command count populated.", LogLvl.DEBUG);
+            AllTimeFishCount = await DatabaseQueries.GetCountAsync<Fish>(x => x.FishType != FishType.BAIT_STOLEN);
             
             StartMostPopCommandCacheTimer();
             StartOwnerGiveawayCacheTimer();
+            StartDbStatisticsTimer();
         }
 
         /// <summary>
@@ -65,46 +91,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application
                 { OwnerGiveawaysCache = (await DatabaseQueries.GetAllAsync<OwnerGiveaway>()).ToList(); };
         }
 
-        /// <summary>
-        /// Sets the first property in the <see cref="MemoryCache"/> class whose type
-        /// matches that of <see cref="T"/>
-        /// </summary>
-        /// <param name="arg">The value at which to set </param>
-        /// <param name="propertyName">If there are multiple cached properties that type
-        /// equals <see cref="T"/>, this value must be specified, else an exception will be thrown. </param>
-        /// <typeparam name="T"></typeparam>
-        /// <exception cref="ArgumentException">Thrown if there are multiple static variables in the
-        /// <see cref="MemoryCache"/> class whose type matches that of <see cref="T"/>.
-        /// </exception>
-        private static void SetCache<T>(T arg, string propertyName = null) where T : IMemoryCacheable<T>
+        private static void StartDbStatisticsTimer()
         {
-            PropertyInfo[] pInfo = typeof(MemoryCache).GetProperties();
-            PropertyInfo pMatch = null;
-
-            int matchCount = pInfo.Count(x => x.GetType() == typeof(T));
-            
-            if(matchCount > 1 && propertyName == null)
+            Timer timer = new Timer(300000); // 5 minutes
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            timer.Elapsed += async (s, e) =>
             {
-                throw new ArgumentException("There is more than one static varible in the MemoryCache class " +
-                                            "that matches the type of the argument passed into this method. The " +
-                                            "name of the property must be specified.");
-            }
-            
-            if(matchCount == 1)
-            {
-                pMatch = pInfo.FirstOrDefault(x => x.GetType() == typeof(T));
-            }
-            
-            if (propertyName != null)
-            {
-                pMatch = pInfo.FirstOrDefault(x => x.Name == propertyName);
-            }
-            
-            if(pMatch == null)
-                throw new ArgumentException("The argument passed into this method does not match any " +
-                                            "of the static variables in the MemoryCache class.");
-            
-            pMatch.SetValue(pMatch, arg);
+                AllTimeCommandCount = await DatabaseQueries.GetCountAsync<CommandHistory>();
+                AllTimeFishCount = await DatabaseQueries.GetCountAsync<Fish>(x => x.FishType != FishType.BAIT_STOLEN);
+                AllPointsCount = DatabaseQueries.GetTotalCurrency();
+            };
         }
     }
 }
