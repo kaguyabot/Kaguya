@@ -50,26 +50,43 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
                                                      "giveaway!!", LogLvl.ERROR);
                         return;
                     }
-                    
-                    var msg = await (guildChannel as SocketTextChannel).GetMessageAsync(giveaway.MessageId);
+
+                    if (!(guildChannel is SocketTextChannel textCh))
+                    {
+                        await ConsoleLogger.LogAsync($"The owner giveaway with message ID {giveaway.MessageId} " +
+                                                     $"and channel ID {giveaway.ChannelId} did not have a " +
+                                                     $"guildChannel marked as SocketTextChannel. Removing from database!", LogLvl.WARN);
+                        await DatabaseQueries.DeleteAsync(giveaway);
+                        continue;
+                    }
+                    IMessage msg = await textCh.GetMessageAsync(giveaway.MessageId);
                     IUserMessage userMessage = msg as IUserMessage;
                     
                     if (userMessage == null)
                     {
                         await ConsoleLogger.LogAsync(
-                            $"Failed to update owner giveaway message with ID {giveaway.MessageId}. The " +
-                            $"RestUserMessage could not be found.", LogLvl.WARN);
+                            $"Failed to update owner giveaway message with message ID {giveaway.MessageId}. The " +
+                            "RestUserMessage could not be found.", LogLvl.WARN);
+                        
+                        await DatabaseQueries.DeleteAsync(giveaway);
+                        await ConsoleLogger.LogAsync($"Owner giveaway with message ID {giveaway.MessageId} " +
+                                                     $"removed from database.", LogLvl.WARN);
                         continue;
                     }
 
                     if (String.IsNullOrWhiteSpace(userMessage.Content) && !userMessage.Embeds.Any())
-                        return;
+                    {
+                        await ConsoleLogger.LogAsync($"Ownergiveaway with message ID {giveaway.MessageId} did not " +
+                                                     "have any content or any embeds. Removing from Database.", LogLvl.WARN);
+                        await DatabaseQueries.DeleteAsync(giveaway);
+                        continue;
+                    }
                     
                     await userMessage.ModifyAsync(async m =>
                     {
                         try
                         {
-                                var cacheEmbed = userMessage.Embeds.FirstOrDefault();
+                            var cacheEmbed = userMessage.Embeds.FirstOrDefault();
 
                             if (cacheEmbed == null)
                             {
