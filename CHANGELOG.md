@@ -3,7 +3,9 @@
 - Fixed a bug with the $fish level-up notification service where either:
     - Fish level up notifications would not get sent at all
     - The fish level up notification would be sent, but the "value increase display" would show the same values for both the 'to' and 'from' values.
+- Fixed a typo with the syntax in $kick
 - Reminders will no longer have their text altered in some cases.
+- Updated $kick and $ban help commands to also suggest $masskick and $massban respectively for kicking or banning multiple users at once.
 
 ### Version 2.15
 - Attempted to fix issue with random TimeoutExceptions being thrown in OwnerGiveawayMessageUpdaterService.cs (fatal error)

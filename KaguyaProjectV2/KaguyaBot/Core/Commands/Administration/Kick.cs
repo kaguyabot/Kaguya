@@ -15,8 +15,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [AdminCommand]
         [Command("Kick")]
         [Alias("k")]
-        [Summary("Kicks a user, or a list of users, from the server.")]
-        [Remarks("<user>\n<user> {...}")]
+        [Summary("Kicks a user from the server. The moderator may also provide a reason after " +
+                 "the user's name.\n\n" +
+                 "*Use the `masskick` command to kick multiple users at once.*")]
+        [Remarks("<user> [reason]")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
         public async Task KickUser(SocketGuildUser user, [Remainder]string reason = null)

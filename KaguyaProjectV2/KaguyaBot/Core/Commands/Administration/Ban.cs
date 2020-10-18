@@ -15,7 +15,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [AdminCommand]
         [Command("Ban")]
         [Alias("b")]
-        [Summary("Permanently bans a user from the server.")]
+        [Summary("Permanently bans a user from the server.\n\n" +
+                 "*Use the `massban` command to ban multiple users at once.*")]
         [Remarks("<user> [reason]")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
@@ -31,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     embed.Description = $"Successfully banned `{user}` with reason `{reason}`\n";
                 else // Easter egg lol
                     embed.Description = $"Successfully banned `{user}` with reason `{reason}`\n" +
-                                         $"Nice choice <:Kaguya:581581938884608001> 👍";
+                                         $"*Nice choice* <:Kaguya:581581938884608001> 👍";
             }
             catch (Exception)
             {
