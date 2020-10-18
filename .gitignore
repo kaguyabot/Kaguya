@@ -4,7 +4,9 @@
 /KaguyaProjectV2/.vs/*/
 /KaguyaProjectV2/bin
 /KaguyaProjectV2/obj
-/KaguyaProjectV2/Resources/
+/KaguyaProjectV2/Resources/Images
+/KaguyaProjectV2/Resources/Logs
+/KaguyaProjectV2/Resources/config.json
 /Kaguya/KaguyaWebBlazor/*
 /KaguyaProjectV2/appsettings.json
 /KaguyaProjectV2/Properties/launchSettings.json
