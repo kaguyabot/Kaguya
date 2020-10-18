@@ -23,9 +23,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             var time = timeString.ParseToTimespan();
             KaguyaEmbedBuilder embed;
 
-            text = Regex.Replace(text, "[mM][yY]", "your");
-            text = text.Humanize(LetterCasing.Sentence);
-            
             if (time.TotalSeconds < 10)
             {
                 embed = new KaguyaEmbedBuilder

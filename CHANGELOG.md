@@ -1,5 +1,6 @@
 ### Version 2.15.1
 - Fixed a bug where $log antiraids would not work but $log antiraid would. Correct usage is $log antiraids, as shown in $logs.
+- Reminders will no longer have their text altered in some cases.
 
 ### Version 2.15
 - Attempted to fix issue with random TimeoutExceptions being thrown in OwnerGiveawayMessageUpdaterService.cs (fatal error)
