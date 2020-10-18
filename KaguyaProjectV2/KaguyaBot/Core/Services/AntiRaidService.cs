@@ -102,7 +102,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     guildUsers.Add(guildUser);
             }
 
-            AntiRaidEvent.Trigger(server, guildUsers, guild, action.ApplyCase(LetterCasing.Sentence));
+            AntiRaidEvent.Trigger(server, guildUsers, guild, action);
 
             if(guildUsers.Count == 0)
             {
@@ -125,18 +125,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 var sb = new StringBuilder(content);
                 foreach (var guildUser in guildUsers)
                 {
-                    action = action.ToLower() switch
-                    {
-                        "ban" => "banned",
-                        "mute" => "muted",
-                        "kick" => "kicked",
-                        "shadowban" => "shadowbanned",
-                        _ => throw new KaguyaSupportException("An unexpected value was encountered when determining the " +
-                                                              "past-tense value for this server's anti-raid action. Please " +
-                                                              "reconfigure your anti-raid and join our Support Discord if " +
-                                                              "this error continues to occur.")
-                    };
-                    
                     sb = sb.Replace("{USERNAME}", guildUser.UsernameAndDescriminator());
                     sb = sb.Replace("{USERMENTION}", guildUser.Mention);
                     sb = sb.Replace("{SERVER}", guild.Name);
@@ -279,9 +267,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static event Func<AntiRaidEventArgs, Task> OnRaid;
 
-        public static void Trigger(Server server, List<SocketGuildUser> users, SocketGuild guild, string punishment)
+        public static void Trigger(Server server, List<SocketGuildUser> users, SocketGuild guild, string action)
         {
-            AntiRaidEventTrigger(new AntiRaidEventArgs(server, users, guild, punishment));
+            AntiRaidEventTrigger(new AntiRaidEventArgs(server, users, guild, action));
         }
 
         private static void AntiRaidEventTrigger(AntiRaidEventArgs e)

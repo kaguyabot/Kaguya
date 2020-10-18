@@ -1,18 +1,16 @@
 # KaguyaBot
-/.vs/Kaguya/v16
+/Properties
 /Kaguya/obj/Debug
 /KaguyaProjectV2/.vs/*/
 /KaguyaProjectV2/bin
 /KaguyaProjectV2/obj
-/KaguyaProjectV2/Resources/
+/KaguyaProjectV2/Resources/Images
+/KaguyaProjectV2/Resources/Logs
+/KaguyaProjectV2/Resources/config.json
 /Kaguya/KaguyaWebBlazor/*
-
-*.suo
-KaguyaProjectV2/appsettings.json
-KaguyaProjectV2/Properties/launchSettings.json
-KaguyaProjectV2/LavalinkServer/logs/spring.log
-KaguyaProjectV2/LavalinkServer/logs/spring.log.2020-02-10.0.gz
-KaguyaProjectV2/appsettings.json
+/KaguyaProjectV2/appsettings.json
+/KaguyaProjectV2/Properties/launchSettings.json
+/KaguyaProjectV2/LavalinkServer/logs/
 
 # Other
 **/bin
@@ -21,6 +19,7 @@ KaguyaProjectV2/appsettings.json
 **/.vs
 **/.vscode
 **/.idea
+*.run
+*.suo
 KaguyaProjectV2/KaguyaProjectV2.csproj.user
 **/LavalinkServer/logs
-**/.DS_Store
