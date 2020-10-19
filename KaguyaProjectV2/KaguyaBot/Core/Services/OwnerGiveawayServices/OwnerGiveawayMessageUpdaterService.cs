@@ -58,6 +58,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
                         await DatabaseQueries.DeleteAsync(giveaway);
                         continue;
                     }
+                    
                     IMessage msg = await textCh.GetMessageAsync(giveaway.MessageId);
                     IUserMessage userMessage = msg as IUserMessage;
                     
