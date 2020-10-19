@@ -12,12 +12,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Remarks("")]
         public async Task Command()
         {
-            var formLink = "https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Bug&template=bug-report.md&title=";
+            string formLink = "https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Bug&template=bug-report.md&title=";
             await SendBasicSuccessEmbedAsync($"[[Click Here]]({formLink}) to file a new bug-report issue " +
-                                                             $"on the Kaguya Github repository. This is the fastest possible " +
-                                                             $"way the bug will be fixed.\n\n" +
-                                                             $"Requires a GitHub account. Don't have one? " +
-                                                             $"[[Create a GitHub account]](https://github.com/join)");
+                                             $"on the Kaguya Github repository. This is the fastest possible " +
+                                             $"way the bug will be fixed.\n\n" +
+                                             $"Requires a GitHub account. Don't have one? " +
+                                             $"[[Create a GitHub account]](https://github.com/join)");
         }
     }
 }

@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 // ReSharper disable PossibleNullReferenceException
 // ReSharper disable SwitchStatementMissingSomeCases
-
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class WarnSettings : KaguyaBase
@@ -20,15 +19,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("WarnSettings")]
         [Alias("warnset", "ws")]
         [Summary("Allows a server Administrator to configure the server's warn-punishment scheme. " +
-                 "Admins have the ability to configure up to `four` actions that get triggered " +
-                 "when a user reaches a set amount of warnings. These four options are `mute`, " +
-                 "`kick`, `shadowban`, and `ban`.\n\n" +
-                 "Configure the action by typing the name of the action followed by the amount of " +
-                 "warnings that should trigger the action, ranging from `1-99` warnings.\n\n" +
-                 "If you want to `mute` users after `3` warnings, you would type the command " +
-                 "followed by `mute 3`.\n\n" +
-                 "__**To disable a trigger**__, set the number of warnings to `0`.\n" +
-                 "__**To view your current settings**__, use the command without any arguments.")]
+            "Admins have the ability to configure up to `four` actions that get triggered " +
+            "when a user reaches a set amount of warnings. These four options are `mute`, " +
+            "`kick`, `shadowban`, and `ban`.\n\n" +
+            "Configure the action by typing the name of the action followed by the amount of " +
+            "warnings that should trigger the action, ranging from `1-99` warnings.\n\n" +
+            "If you want to `mute` users after `3` warnings, you would type the command " +
+            "followed by `mute 3`.\n\n" +
+            "__**To disable a trigger**__, set the number of warnings to `0`.\n" +
+            "__**To view your current settings**__, use the command without any arguments.")]
         [Remarks("\n<action> <warnings>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.KickMembers)]
@@ -37,7 +36,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task Command(string action = null, int warnings = 0)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var serverActions = await DatabaseQueries.GetFirstForServerAsync<WarnSetting>(server.ServerId);
 
             if (action == null && warnings == 0)
@@ -48,9 +47,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     {
                         Description = "Nothing has been configured."
                     };
+
                     nullErrorEmbed.SetColor(EmbedColor.RED);
 
                     await ReplyAsync(embed: nullErrorEmbed.Build());
+
                     return;
                 }
 
@@ -62,11 +63,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                   $"`Shadowban`: After `{(serverActions.Shadowban.IsZero() ? "N/A" : serverActions.Shadowban.ToString().Humanize())}` warnings.\n" +
                                   $"`Ban`: After `{(serverActions.Ban.IsZero() ? "N/A" : serverActions.Ban.ToString().Humanize())}` warnings.\n"
                 };
+
                 await ReplyAsync(embed: curSettingsEmbed.Build());
+
                 return;
             }
 
-            var actions = new string[] { "mute", "kick", "shadowban", "ban" };
+            var actions = new string[]
+            {
+                "mute",
+                "kick",
+                "shadowban",
+                "ban"
+            };
 
             if (actions.All(x => x.ToLower() != action))
             {
@@ -75,9 +84,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Description = $"`{Context.Message.Content}` is not a valid action. The only valid " +
                                   $"actions are `mute`, `kick`, `shadowban`, and `ban`."
                 };
+
                 errorEmbed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: errorEmbed.Build());
+
                 return;
             }
 
@@ -87,9 +98,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     Description = "The amount of warnings must be between `0` and `99`."
                 };
+
                 numError.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: numError.Build());
+
                 return;
             }
 
@@ -99,20 +112,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
 
             if (serverActions != null)
-            {
                 newSetting = serverActions;
-            }
 
             switch (action.ToLower())
             {
                 case "mute":
-                    newSetting.Mute = warnings; break;
+                    newSetting.Mute = warnings;
+
+                    break;
                 case "kick":
-                    newSetting.Kick = warnings; break;
+                    newSetting.Kick = warnings;
+
+                    break;
                 case "shadowban":
-                    newSetting.Shadowban = warnings; break;
+                    newSetting.Shadowban = warnings;
+
+                    break;
                 case "ban":
                     newSetting.Ban = warnings;
+
                     break;
             }
 
@@ -127,6 +145,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                               $"`Shadowban`: After `{(newSetting.Shadowban.IsZero() ? "N/A" : newSetting.Shadowban.ToString().Humanize())}` warnings.\n" +
                               $"`Ban`: After `{(newSetting.Ban.IsZero() ? "N/A" : newSetting.Ban.ToString().Humanize())}` warnings.\n"
             };
+
             successEmbed.SetColor(EmbedColor.PINK);
 
             await ReplyAsync(embed: successEmbed.Build());

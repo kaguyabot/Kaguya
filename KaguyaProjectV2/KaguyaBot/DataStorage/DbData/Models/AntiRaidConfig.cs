@@ -10,10 +10,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     {
         [PrimaryKey]
         public ulong ServerId { get; set; }
+
         [Column(Name = "Users")]
         public int Users { get; set; }
+
         [Column(Name = "Seconds")]
         public int Seconds { get; set; }
+
         [Column(Name = "Action")]
         public string Action { get; set; }
 

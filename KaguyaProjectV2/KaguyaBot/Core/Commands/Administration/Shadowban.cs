@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Collections.Generic;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
@@ -14,21 +15,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("Shadowban", RunMode = RunMode.Async)]
         [Alias("sb")]
         [Summary("Shadowbans a user, denying them of every possible channel permission, meaning " +
-                 "they will no longer be able to view or interact with any voice channels. " +
-                 "This command also strips the user of any roles they may have.")]
+            "they will no longer be able to view or interact with any voice channels. " +
+            "This command also strips the user of any roles they may have.")]
         [Remarks("<user>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task ShadowbanUser(SocketGuildUser user)
         {
             await ReplyAsync($"{Context.User.Mention} Executing, please wait...");
-            var roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
+            IEnumerable<SocketRole> roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
             await user.RemoveRolesAsync(roles);
 
-            foreach (var channel in Context.Guild.Channels)
-            {
+            foreach (SocketGuildChannel channel in Context.Guild.Channels)
                 await channel.AddPermissionOverwriteAsync(user, OverwritePermissions.DenyAll(channel));
-            }
 
             var successEmbed = new KaguyaEmbedBuilder
             {
@@ -53,14 +52,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task AutoShadowbanUserAsync(SocketGuildUser user)
         {
             // Not try-catched as the exception is handled elsewhere.
-            
-            var roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
+
+            IEnumerable<SocketRole> roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
             await user.RemoveRolesAsync(roles);
 
-            foreach (var channel in user.Guild.Channels)
-            {
+            foreach (SocketGuildChannel channel in user.Guild.Channels)
                 await channel.AddPermissionOverwriteAsync(user, OverwritePermissions.DenyAll(channel));
-            }
         }
     }
 }

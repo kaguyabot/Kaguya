@@ -16,11 +16,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Command("swaploglevel")]
         [Alias("swaplog", "sll")]
         [Summary("Switches the current console log severity to the specified severity. " +
-                 "Valid severities are `Trace, Debug, Info, Warn, Error`")]
+            "Valid severities are `Trace, Debug, Info, Warn, Error`")]
         [Remarks("<severity>")]
         public async Task SwapLogLevel(string level)
         {
-            var curLog = ConfigProperties.LogLevel;
+            LogLvl curLog = ConfigProperties.LogLevel;
             string validSeverities = "Trace, Debug, Info, Warn, Error";
 
             ConfigProperties.LogLevel = level.ToLower() switch
@@ -30,8 +30,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 "info" => LogLvl.INFO,
                 "warn" => LogLvl.WARN,
                 "error" => LogLvl.ERROR,
-                _ => throw new ArgumentOutOfRangeException($"Valid logtypes are `{validSeverities}`", new Exception()),
+                _ => throw new ArgumentOutOfRangeException($"Valid logtypes are `{validSeverities}`", new Exception())
             };
+
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully changed LogLevel from `{curLog.Humanize()}` to `{ConfigProperties.LogLevel.Humanize()}`",
@@ -40,6 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     Text = $"Note: This loglevel will return back to `{curLog.Humanize()}` after a restart."
                 }
             };
+
             embed.SetColor(EmbedColor.VIOLET);
 
             await ReplyAsync(embed: embed.Build());

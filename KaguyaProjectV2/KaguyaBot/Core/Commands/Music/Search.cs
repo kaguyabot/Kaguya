@@ -20,8 +20,9 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Victoria;
 using Victoria.Enums;
-// ReSharper disable PossibleNullReferenceException
+using Victoria.Responses.Rest;
 
+// ReSharper disable PossibleNullReferenceException
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Search : KaguyaBase
@@ -34,9 +35,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]
         [RequireContext(ContextType.Guild)]
-        public async Task Command([Remainder]string query)
+        public async Task Command([Remainder] string query)
         {
-            var data = await SearchAndPlayAsync(Context, query);
+            ReactionCallbackData? data = await SearchAndPlayAsync(Context, query);
             if (data != null)
                 await InlineReactionReplyAsync(data);
         }
@@ -51,7 +52,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         /// <param name="playFirst"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public async Task<ReactionCallbackData?> SearchAndPlayAsync(ShardedCommandContext context, string query, bool playFirst = false, SearchProvider provider = SearchProvider.YouTube)
+        public async Task<ReactionCallbackData?> SearchAndPlayAsync(ShardedCommandContext context,
+            string query,
+            bool playFirst = false,
+            SearchProvider provider = SearchProvider.YOU_TUBE)
         {
             var user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
             var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
@@ -65,41 +69,45 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             {
                 await context.Channel.SendMessageAsync($"{context.User.Mention} You must be in a voice " +
                                                        $"channel to use this command.");
+
                 await ConsoleLogger.LogAsync($"User was not in voice channel, cancelling music search operation.", LogLvl.TRACE);
+
                 return null;
             }
 
-            var result = provider switch
+            SearchResponse result = provider switch
             {
-                SearchProvider.YouTube => await node.SearchYouTubeAsync(query),
-                SearchProvider.Soundcloud => await node.SearchSoundCloudAsync(query),
+                SearchProvider.YOU_TUBE => await node.SearchYouTubeAsync(query),
+                SearchProvider.SOUNDCLOUD => await node.SearchSoundCloudAsync(query),
                 _ => await node.SearchAsync(query)
             };
 
-            if (provider == SearchProvider.Twitch)
+            if (provider == SearchProvider.TWITCH)
             {
-                const string providerURL = "www.twitch.tv";
+                const string PROVIDER_URL = "www.twitch.tv";
                 string errorString = $"Your search returned no results. Ensure you are only " +
                                      $"typing the name of the streamer who you want to watch or a direct link to their stream.\n\n" +
                                      $"Note: The streamer must be live for this feature to work.";
 
-                if (!query.ToLower().Contains(providerURL))
+                if (!query.ToLower().Contains(PROVIDER_URL))
                 {
-                    result = await node.SearchAsync($"https://{providerURL}/{query}");
+                    result = await node.SearchAsync($"https://{PROVIDER_URL}/{query}");
                     if (result.Tracks.Count == 0)
                     {
                         await context.Channel.SendBasicErrorEmbedAsync(errorString);
                         await ConsoleLogger.LogAsync($"No livestream found for search {query} in guild {context.Guild.Id}.", LogLvl.TRACE);
+
                         return null;
                     }
                 }
                 else
                 {
-                    if ((await node.SearchAsync($"https://{providerURL}/{query.Split('\\').Last()}")).Tracks.Count == 0 &&
+                    if ((await node.SearchAsync($"https://{PROVIDER_URL}/{query.Split('\\').Last()}")).Tracks.Count == 0 &&
                         (await node.SearchAsync(query)).Tracks.Count == 0)
                     {
                         await context.Channel.SendBasicErrorEmbedAsync(errorString);
                         await ConsoleLogger.LogAsync($"No livestream found for search {query} in guild {context.Guild.Id}.", LogLvl.TRACE);
+
                         return null;
                     }
                 }
@@ -108,13 +116,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             var tracks = new List<LavaTrack>();
             if (user.IsPremium || server.IsPremium)
             {
-                if(result.Tracks.Any())
+                if (result.Tracks.Any())
                     tracks.AddRange(result.Tracks);
             }
             else
             {
                 // Limit track duration to 10 minutes for non-premium servers/users.
-                if(result.Tracks.Any())
+                if (result.Tracks.Any())
                     tracks.AddRange(result.Tracks.Where(x => x.Duration.TotalMinutes < 10).ToList());
             }
 
@@ -123,7 +131,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 string suppString = user.IsPremium
                     ? ""
                     : "If you are " +
-                      $"not a [Kaguya Premium Subscriber]({ConfigProperties.KaguyaStoreURL}), " +
+                      $"not a [Kaguya Premium Subscriber]({ConfigProperties.KAGUYA_STORE_URL}), " +
                       $"you are only limited to playing songs less than `10 minutes` in duration.";
 
                 await context.Channel.SendBasicErrorEmbedAsync($"Your requested search returned no results. {suppString}");
@@ -136,12 +144,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             var emojiNums = GlobalProperties.EmojisOneThroughNine();
 
             var player = node.HasPlayer(context.Guild)
-                ? node.GetPlayer(context.Guild) 
+                ? node.GetPlayer(context.Guild)
                 : await node.JoinAsync(curVc);
 
             await ConsoleLogger.LogAsync($"Player found for guild {context.Guild.Id}. Connected to voice channel.", LogLvl.TRACE);
 
-            #region If the track is a livestream:
+#region If the track is a livestream:
             if (tracks.Any(x => x.IsStream))
             {
                 var trackSel = tracks.First(x => x.IsStream); // Gathers the first stream from the collection.
@@ -191,14 +199,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
                 var embed = new KaguyaEmbedBuilder
                 {
-                    Fields = new List<EmbedFieldBuilder> { field }
+                    Fields = new List<EmbedFieldBuilder>
+                    {
+                        field
+                    }
                 };
+
                 await context.Channel.SendEmbedAsync(embed);
+
                 return null;
             }
-            #endregion
+#endregion
 
-            #region If we have chosen to only play the default track (via $play).
+#region If we have chosen to only play the default track (via $play).
             if (playFirst && tracks.Any())
             {
                 var trackSel = tracks[0];
@@ -220,7 +233,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     {
                         await ConsoleLogger.LogAsync($"Queue is full in {context.Guild.Id}, sending error.", LogLvl.TRACE);
                         await SendBasicErrorEmbedAsync("Your queue is full! `50 songs` is the maximum " +
-                                                       $"for non [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) " +
+                                                       $"for non [Kaguya Premium]({ConfigProperties.KAGUYA_STORE_URL}) " +
                                                        "servers.");
                     }
                     else
@@ -263,13 +276,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     Title = $"Kaguya Music {Centvrio.Emoji.Music.Notes}",
                     Description = playString,
                     ThumbnailUrl = await trackSel.FetchArtworkAsync(),
-                    Fields = new List<EmbedFieldBuilder> { field }
+                    Fields = new List<EmbedFieldBuilder>
+                    {
+                        field
+                    }
                 };
 
                 await SendEmbedAsync(embed, context);
+
                 return null;
             }
-            #endregion
+#endregion
 
             int h = tracks.Count;
             for (int i = 0; i < (h < 7 ? h : 7); i++)
@@ -286,68 +303,72 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
                 fields.Add(field);
                 callbacks.Add((emojiNums[i], async (c, r) =>
-                {
-                    string playString = player.PlayerState == PlayerState.Playing && !player.Track.IsStream
-                        ? $"Queued track #{i1 + 1} into position {player.Queue.Count + 1}."
-                        : $"Now playing track #{i1 + 1}.";
-
-                    if (player.PlayerState == PlayerState.Playing)
-                    {
-                        if (player.Queue.Count() == 50 && !server.IsPremium)
                         {
-                            await ConsoleLogger.LogAsync($"Queue was full in guild {context.Guild.Id}. Sending error message.", LogLvl.TRACE);
-                            await SendBasicErrorEmbedAsync($"Your queue is full! `50 songs` is the maximum " +
-                                                           $"for non [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) " +
-                                                           $"servers.");
-                            return;
-                        }
-                        else
-                        {
-                            player.Queue.Enqueue(trackSel);
-                            await ConsoleLogger.LogAsync($"Enqueued track {trackSel} in guild {context.Guild.Id}", LogLvl.TRACE);
+                            string playString = player.PlayerState == PlayerState.Playing && !player.Track.IsStream
+                                ? $"Queued track #{i1 + 1} into position {player.Queue.Count + 1}."
+                                : $"Now playing track #{i1 + 1}.";
 
-                            if (player.Track.IsStream)
+                            if (player.PlayerState == PlayerState.Playing)
                             {
-                                await player.SkipAsync();
-                                await ConsoleLogger.LogAsync($"Automatically skipped livestream to play" +
-                                                             $" incoming track in guild {context.Guild.Id}", LogLvl.TRACE);
+                                if (player.Queue.Count() == 50 && !server.IsPremium)
+                                {
+                                    await ConsoleLogger.LogAsync($"Queue was full in guild {context.Guild.Id}. Sending error message.", LogLvl.TRACE);
+                                    await SendBasicErrorEmbedAsync($"Your queue is full! `50 songs` is the maximum " +
+                                                                   $"for non [Kaguya Premium]({ConfigProperties.KAGUYA_STORE_URL}) " +
+                                                                   $"servers.");
+
+                                    return;
+                                }
+                                else
+                                {
+                                    player.Queue.Enqueue(trackSel);
+                                    await ConsoleLogger.LogAsync($"Enqueued track {trackSel} in guild {context.Guild.Id}", LogLvl.TRACE);
+
+                                    if (player.Track.IsStream)
+                                    {
+                                        await player.SkipAsync();
+                                        await ConsoleLogger.LogAsync($"Automatically skipped livestream to play" +
+                                                                     $" incoming track in guild {context.Guild.Id}", LogLvl.TRACE);
+                                    }
+                                }
                             }
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            await player.PlayAsync(trackSel);
-                            await ConsoleLogger.LogAsync($"Playing track {trackSel.Title} in guild {context.Guild.Id}",
-                                LogLvl.TRACE);
-                        }
-                        catch (Exception e)
-                        {
-                            await ConsoleLogger.LogAsync($"An exception was thrown when trying to play track " +
-                                                         $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
-                                                         $"Exception Message: {e.Message}\n" +
-                                                         $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
-                        }
-                    }
+                            else
+                            {
+                                try
+                                {
+                                    await player.PlayAsync(trackSel);
+                                    await ConsoleLogger.LogAsync($"Playing track {trackSel.Title} in guild {context.Guild.Id}",
+                                        LogLvl.TRACE);
+                                }
+                                catch (Exception e)
+                                {
+                                    await ConsoleLogger.LogAsync($"An exception was thrown when trying to play track " +
+                                                                 $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
+                                                                 $"Exception Message: {e.Message}\n" +
+                                                                 $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
+                                }
+                            }
 
-                    if (player.Volume == 0 && player.PlayerState == PlayerState.Playing)
-                    {
-                        await player.UpdateVolumeAsync(75); // Sets the volume back to default if it is muted.
-                        await ConsoleLogger.LogAsync($"Automatically set volume to 75 in guild {context.Guild.Id}", LogLvl.TRACE);
-                    }
+                            if (player.Volume == 0 && player.PlayerState == PlayerState.Playing)
+                            {
+                                await player.UpdateVolumeAsync(75); // Sets the volume back to default if it is muted.
+                                await ConsoleLogger.LogAsync($"Automatically set volume to 75 in guild {context.Guild.Id}", LogLvl.TRACE);
+                            }
 
-                    var embed = new KaguyaEmbedBuilder
-                    {
-                        Title = $"Kaguya Music {Centvrio.Emoji.Music.Notes}",
-                        Description = playString,
-                        ThumbnailUrl = await trackSel.FetchArtworkAsync(),
-                        Fields = new List<EmbedFieldBuilder> { field }
-                    };
+                            var embed = new KaguyaEmbedBuilder
+                            {
+                                Title = $"Kaguya Music {Centvrio.Emoji.Music.Notes}",
+                                Description = playString,
+                                ThumbnailUrl = await trackSel.FetchArtworkAsync(),
+                                Fields = new List<EmbedFieldBuilder>
+                                {
+                                    field
+                                }
+                            };
 
-                    await SendEmbedAsync(embed);
-                }
-                ));
+                            await SendEmbedAsync(embed);
+                        }
+                    ));
             }
 
             callbacks.Add((GlobalProperties.NoEntryEmoji(), async (c, r) =>
@@ -365,18 +386,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                               $"Please select a track to play.",
                 Fields = fields
             };
+
             var data = new ReactionCallbackData("", songDisplayEmbed.Build(), false, false,
-                timeout: TimeSpan.FromSeconds(60));
+                TimeSpan.FromSeconds(60));
 
             data.SetCallbacks(callbacks);
+
             return data;
         }
     }
 
     public enum SearchProvider
     {
-        YouTube,
-        Soundcloud,
-        Twitch
+        YOU_TUBE,
+        SOUNDCLOUD,
+        TWITCH
     }
 }

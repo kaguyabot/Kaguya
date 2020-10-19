@@ -31,8 +31,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task Command(int users = 0, int seconds = 0, string action = null)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var antiraid = server.AntiRaid;
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            AntiRaidConfig antiraid = server.AntiRaid;
 
             if (users == 0 && seconds == 0 && action == null)
             {
@@ -40,29 +40,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     await DatabaseQueries.DeleteAllForServerAsync<AntiRaidConfig>(server.ServerId);
                     await SendBasicSuccessEmbedAsync("Successfully disabled this server's antiraid protection.");
+
                     return;
                 }
 
                 await SendBasicErrorEmbedAsync("This server has not setup the antiraid service, therefore " +
-                                                    "there is nothing to disable.");
+                                               "there is nothing to disable.");
+
                 return;
             }
 
             if (users < 1 || seconds < 5 && action != null)
             {
                 if (users < 3)
-                    throw new ArgumentOutOfRangeException(nameof(users), "There must be at least `3` users to action before " +
-                                                                   "it is classified as a raid.");
-                if (seconds < 5)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(seconds), "The seconds parameter must be at least `5`.");
+                    throw new ArgumentOutOfRangeException(nameof(users), "There must be at least `3` users to action before " +
+                                                                         "it is classified as a raid.");
                 }
+
+                if (seconds < 5)
+                    throw new ArgumentOutOfRangeException(nameof(seconds), "The seconds parameter must be at least `5`.");
             }
 
             if (users > 200)
-            {
                 throw new ArgumentOutOfRangeException(nameof(users), "The users count must not be greater than `200`.");
-            }
 
             if (seconds > 999)
             {
@@ -73,10 +74,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             if (action == null)
             {
                 throw new ArgumentNullException(nameof(action), "The action must not be null and must be either " +
-                                                          "`mute`, `kick`, `shadowban`, or `ban`.");
+                                                                "`mute`, `kick`, `shadowban`, or `ban`.");
             }
 
-            string[] actions = { "mute", "kick", "shadowban", "ban" };
+            string[] actions =
+            {
+                "mute",
+                "kick",
+                "shadowban",
+                "ban"
+            };
+
             if (!actions.Any(x => x.Equals(action.ToLower())))
             {
                 throw new ArgumentOutOfRangeException(nameof(action),
@@ -102,6 +110,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             if (antiraid != null)
             {
                 await DatabaseQueries.InsertOrReplaceAsync(ar);
+
                 return;
             }
 

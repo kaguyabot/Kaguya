@@ -13,13 +13,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.TypeReaders
         public override async Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
         {
             var result = new List<SocketGuildUser>();
-            var allGuildUsers = await context.Guild.GetUsersAsync();
+            IReadOnlyCollection<IGuildUser> allGuildUsers = await context.Guild.GetUsersAsync();
 
             string[] users = input
-                .ToLower()
-                .Split(' ');
+                             .ToLower()
+                             .Split(' ');
 
-            foreach (var baseUser in users)
+            foreach (string baseUser in users)
             {
                 SocketGuildUser user;
                 ulong id;
@@ -31,11 +31,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.TypeReaders
                     user = await context.Channel.GetUserAsync(id) as SocketGuildUser;
 
                 else
+                {
                     user = allGuildUsers
                             .FirstOrDefault(u =>
                                 u.Username?.ToLower() == baseUser ||
                                 u.Nickname?.ToLower() == baseUser)
                         as SocketGuildUser;
+                }
 
                 if (user == null)
                     return TypeReaderResult.FromError(CommandError.ParseFailed, $"User ID: {baseUser} could not be found.");

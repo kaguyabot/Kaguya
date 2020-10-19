@@ -4,9 +4,11 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -16,14 +18,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("ViewFilteredPhrases")]
         [Alias("vfp", "fv", "filterview")]
         [Summary("Displays all currently filtered phrases. If the character count of all phrases total to more than " +
-                 "1,750 characters, they will be sent as a text file.")]
+            "1,750 characters, they will be sent as a text file.")]
         [Remarks("")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task Command()
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var fp = server.FilteredPhrases.ToList();
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            List<FilteredPhrase> fp = server.FilteredPhrases.ToList();
 
             int chars = fp.Sum(phrase => phrase.Phrase.Length);
 
@@ -35,6 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (chars == 0)
                 {
                     await SendBasicErrorEmbedAsync("This server currently has no registered filtered phrases.");
+
                     return;
                 }
 
@@ -45,6 +48,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 };
 
                 await SendEmbedAsync(embed);
+
                 return;
             }
 
@@ -52,10 +56,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 var sr = new StreamWriter(stream);
 
-                foreach (var phrase in fp)
-                {
+                foreach (FilteredPhrase phrase in fp)
                     await sr.WriteLineAsync(phrase.Phrase);
-                }
 
                 stream.Seek(0, SeekOrigin.Begin);
                 await stream.FlushAsync();
@@ -66,6 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Description = $"{Context.User.Mention}, your filtered phrases were too long to send in one message, " +
                                   $"so I put them in a text file for you!"
                 };
+
                 await Context.Channel.SendFileAsync(stream,
                     $"Filtered_Phrases_{Context.Guild.Name}_{DateTime.Now.ToLongDateString()}.txt",
                     embed: embed.Build());

@@ -2,6 +2,7 @@
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -13,11 +14,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Remarks("")]
         public async Task Command()
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var points = user.Points;
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            int points = user.Points;
 
             await SendBasicSuccessEmbedAsync($"{Context.User.Mention} you have " +
-                                                             $"`{points:N0}` points.");
+                                             $"`{points:N0}` points.");
         }
     }
 }

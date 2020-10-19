@@ -9,6 +9,7 @@
         public static string[] ReturnParams(string args)
         {
             string[] newArgs = args.Split('.');
+
             return newArgs;
         }
     }

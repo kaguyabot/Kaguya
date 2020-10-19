@@ -18,11 +18,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Summary("DMs the user with a link to invite the bot to their own server, as " +
                  "well as a link to the Kaguya Support Discord server.")]
         [Remarks("")]
-        public async Task InviteDM()
+        public async Task InviteDm()
         {
-            string devInviteUrl = $"[[Kaguya Dev Invite]]({ConfigProperties.KaguyaDevInviteURL})\n";
-            string inviteUrl = $"[[Invite Kaguya to your server]]({ConfigProperties.KaguyaInviteURL})\n";
-            string discordUrl = $"[[Kaguya Support Discord]]({ConfigProperties.KaguyaSupportDiscordURL})\n";
+            string devInviteUrl = $"[[Kaguya Dev Invite]]({ConfigProperties.KAGUYA_DEV_INVITE_URL})\n";
+            string inviteUrl = $"[[Invite Kaguya to your server]]({ConfigProperties.KAGUYA_INVITE_URL})\n";
+            string discordUrl = $"[[Kaguya Support Discord]]({ConfigProperties.KAGUYA_SUPPORT_DISCORD_URL})\n";
 
             if (Context.User.Id != ConfigProperties.BotConfig.BotOwnerId)
                 devInviteUrl = null;
@@ -40,14 +40,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             catch (HttpException)
             {
                 await ConsoleLogger.LogAsync("Tried to DM a user the Kaguya invite links " +
-                                       "but an HttpException was thrown.", LogLvl.WARN);
+                                             "but an HttpException was thrown.", LogLvl.WARN);
             }
 
             await ReplyAsync(embed: new KaguyaEmbedBuilder
-            {
-                Description = "Links sent! Check your DM <:Kaguya:581581938884608001>"
-            }
-            .Build());
+                {
+                    Description = "Links sent! Check your DM <:Kaguya:581581938884608001>"
+                }
+                .Build());
         }
     }
 }

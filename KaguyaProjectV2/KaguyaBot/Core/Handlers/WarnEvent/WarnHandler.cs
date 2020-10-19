@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
@@ -17,11 +19,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             if (currentSettings == null)
                 return;
 
-            var currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.WarnedUser.UserId, args.Server.ServerId);
-            var warnCount = currentWarnings.Count;
+            List<WarnedUser> currentWarnings =
+                await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.WarnedUser.UserId, args.Server.ServerId);
 
-            var guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.ServerId).GetUser(args.WarnedUser.UserId);
-            var kaguya = ConfigProperties.Client.CurrentUser;
+            int warnCount = currentWarnings.Count;
+
+            SocketGuildUser guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.ServerId).GetUser(args.WarnedUser.UserId);
+            SocketSelfUser kaguya = ConfigProperties.Client.CurrentUser;
 
             int? muteNum = currentSettings.Mute;
             int? kickNum = currentSettings.Kick;
@@ -45,6 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                     await ban.AutoBanUserAsync(guildUser, "User has been automatically banned due to " +
                                                           $"reaching the specified warning threshold for bans " +
                                                           $"({warnCount} warnings).");
+
                     await PremiumModerationLog.SendModerationLog(modLog);
                     await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                                  $"automatically banned in guild " +
@@ -92,7 +97,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
                                                  $"Guild: {args.Server.ServerId}", LogLvl.WARN);
                 }
-                
+
                 return;
             }
 
@@ -113,6 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                     await kick.AutoKickUserAsync(guildUser, $"User has been automatically kicked due to " +
                                                             $"reaching the specified warning threshold for kicks " +
                                                             $"({warnCount} warnings).");
+
                     await PremiumModerationLog.SendModerationLog(modLog);
                     await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                                  $"automatically kicked in guild " +
@@ -127,7 +133,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
                                                  $"Guild: {args.Server.ServerId}", LogLvl.WARN);
                 }
-                
+
                 return;
             }
 

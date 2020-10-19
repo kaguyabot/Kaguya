@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class DeleteRole : KaguyaBase
@@ -24,9 +23,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("<role>\nPenguins\nSome role with spaces")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task RemoveRole([Remainder]string targetRole)
+        public async Task RemoveRole([Remainder] string targetRole)
         {
-            List<SocketRole> roles = new List<SocketRole>();
+            var roles = new List<SocketRole>();
 
             roles = Context.Guild.Roles.Where(r => r.Name.ToLower() == targetRole.ToLower()).ToList();
 
@@ -34,9 +33,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 var emojis = new Emoji[]
                 {
-                    new Emoji("1⃣"), new Emoji("2⃣"), new Emoji("3⃣"),
-                    new Emoji("4⃣"), new Emoji("5⃣"), new Emoji("6⃣"), new Emoji("7⃣"),
-                    new Emoji("8⃣"), new Emoji("9⃣")
+                    new Emoji("1⃣"),
+                    new Emoji("2⃣"),
+                    new Emoji("3⃣"),
+                    new Emoji("4⃣"),
+                    new Emoji("5⃣"),
+                    new Emoji("6⃣"),
+                    new Emoji("7⃣"),
+                    new Emoji("8⃣"),
+                    new Emoji("9⃣")
                 };
 
                 var embed = new KaguyaEmbedBuilder
@@ -52,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 for (int i = 0; i < roles.Count; i++)
                 {
                     int roleIndex = i + 1;
-                    var role = roles.ElementAt(i);
+                    SocketRole role = roles.ElementAt(i);
 
                     embed.Fields.Add(new EmbedFieldBuilder
                     {
@@ -66,23 +71,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     });
 
                     callbacks.Add((emojis[i], async (c, r) =>
-                    {
-                        await role.DeleteAsync();
-                        await ReplyAsync($"{Context.User.Mention} `Successfully deleted Role #{roleIndex}`");
-                    }
-                    ));
+                            {
+                                await role.DeleteAsync();
+                                await ReplyAsync($"{Context.User.Mention} `Successfully deleted Role #{roleIndex}`");
+                            }
+                        ));
                 }
 
                 callbacks.Add((new Emoji("⛔"), async (c, r) =>
-                {
-                    foreach (var role in roles)
-                    {
-                        await role.DeleteAsync();
-                    }
+                        {
+                            foreach (SocketRole role in roles)
+                                await role.DeleteAsync();
 
-                    await ReplyAsync($"{Context.User.Mention} Successfully deleted `{roles.Count.ToWords()}` roles.");
-                }
-                ));
+                            await ReplyAsync($"{Context.User.Mention} Successfully deleted `{roles.Count.ToWords()}` roles.");
+                        }
+                    ));
 
                 var data = new ReactionCallbackData("", embed.Build(), false, false, TimeSpan.FromSeconds(120));
                 data.SetCallbacks(callbacks);
@@ -90,11 +93,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
             else if (roles.Count == 1)
             {
-                var role = roles.First();
+                SocketRole role = roles.First();
                 var embed = new KaguyaEmbedBuilder
                 {
                     Description = $"{Context.User.Mention} Successfully deleted role `{role.Name}`"
                 };
+
                 await role.DeleteAsync();
 
                 await ReplyAsync(embed: embed.Build());
@@ -105,6 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     Description = $"I could not find the specified role."
                 };
+
                 embed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: embed.Build());

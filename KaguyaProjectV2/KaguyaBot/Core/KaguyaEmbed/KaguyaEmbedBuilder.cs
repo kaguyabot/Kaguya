@@ -17,16 +17,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
         public static readonly Color LightBlueColor = new Color(82, 229, 255);
         public static readonly Color GrayColor = new Color(117, 117, 117);
         public static readonly Color MagentaColor = new Color(235, 44, 140);
-
-        public KaguyaEmbedBuilder()
-        {
-            SetColor();
-        }
-
-        public KaguyaEmbedBuilder(EmbedColor type)
-        {
-            SetColor(type);
-        }
+        public KaguyaEmbedBuilder() { SetColor(); }
+        public KaguyaEmbedBuilder(EmbedColor type) { SetColor(type); }
 
         public void SetColor(EmbedColor type = EmbedColor.BLUE)
         {
@@ -35,47 +27,62 @@ namespace KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed
             {
                 case EmbedColor.VIOLET:
                     color = VioletColor;
+
                     break;
                 case EmbedColor.GOLD:
                     color = GoldColor;
+
                     break;
                 case EmbedColor.PINK:
                     color = PinkColor;
+
                     break;
                 case EmbedColor.RED:
                     color = RedColor;
+
                     break;
                 case EmbedColor.BLUE:
                     color = BlueColor;
+
                     break;
                 case EmbedColor.GREEN:
                     color = GreenColor;
+
                     break;
                 case EmbedColor.YELLOW:
                     color = YellowColor;
+
                     break;
                 case EmbedColor.BLACK:
                     color = BlackColor;
+
                     break;
                 case EmbedColor.LIGHT_PURPLE:
                     color = LightPurpleColor;
+
                     break;
                 case EmbedColor.LIGHT_BLUE:
                     color = LightBlueColor;
+
                     break;
                 case EmbedColor.ORANGE:
                     color = OrangeColor;
+
                     break;
                 case EmbedColor.GRAY:
                     color = GrayColor;
+
                     break;
                 case EmbedColor.MAGENTA:
                     color = MagentaColor;
+
                     break;
                 default:
                     color = RedColor;
+
                     break;
             }
+
             WithColor(color);
         }
     }

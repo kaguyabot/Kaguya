@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using Victoria;
 using Victoria.Enums;
 
@@ -24,15 +25,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var node = ConfigProperties.LavaNode;
-            var player = node.GetPlayer(Context.Guild);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            LavaNode node = ConfigProperties.LavaNode;
+            LavaPlayer player = node.GetPlayer(Context.Guild);
 
             if (player == null)
             {
                 await SendBasicErrorEmbedAsync($"There needs to be an active music player in the " +
                                                $"server for this command to work. Start one " +
                                                $"by using `{server.CommandPrefix}play <song>`!");
+
                 return;
             }
 
@@ -45,6 +47,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             if (player.Queue.Count == 0 && player.PlayerState != PlayerState.Playing)
             {
                 await SendBasicErrorEmbedAsync($"The current player is not playing a song and has nothing in the queue.");
+
                 return;
             }
 
@@ -58,10 +61,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             {
                 embed.Description = $"**Now Playing:** [{player.Track.Title}]({player.Track.Url})\n\n" +
                                     $"**Up Next: {Centvrio.Emoji.AudioVideo.FastDown}\n**";
+
                 for (int i = 0; i < (player.Queue.Count < 50 ? player.Queue.Count : 50); i++)
                 {
-                    embed.Description += $"`#{i + 1}.` [{((LavaTrack)player.Queue.ToList()[i]).Title}]" +
-                                         $"({((LavaTrack)player.Queue.ToList()[i]).Url})\n";
+                    embed.Description += $"`#{i + 1}.` [{((LavaTrack) player.Queue.ToList()[i]).Title}]" +
+                                         $"({((LavaTrack) player.Queue.ToList()[i]).Url})\n";
                 }
             }
 

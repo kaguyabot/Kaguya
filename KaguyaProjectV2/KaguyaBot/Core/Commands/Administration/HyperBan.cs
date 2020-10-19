@@ -24,37 +24,32 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("<user>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
-        public async Task DestroyThem(IGuildUser user)
-        {
-            await ActuallyBanThem(Context, user.Id);
-        }
+        public async Task DestroyThem(IGuildUser user) => await ActuallyBanThem(Context, user.Id);
 
         [PremiumUserCommand]
         [DangerousCommand]
         [AdminCommand]
         [Command("HyperBan")]
         [Summary("Permanently bans a user from this server and from **any other server " +
-                 "that the command executor is an `Administrator` in.** Kaguya must be present in all mutual " +
-                 "servers for this to work properly.")]
+            "that the command executor is an `Administrator` in.** Kaguya must be present in all mutual " +
+            "servers for this to work properly.")]
         [Remarks("<user>\n<ID>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
-        public async Task DestroyThem(ulong Id)
-        {
-            await ActuallyBanThem(Context, Id);
-        }
+        public async Task DestroyThem(ulong id) => await ActuallyBanThem(Context, id);
 
-        private async Task ActuallyBanThem(ICommandContext context, ulong Id)
+        private async Task ActuallyBanThem(ICommandContext context, ulong id)
         {
-            var mutualGuilds = ((SocketUser)context.User).MutualGuilds.Where(x =>
-               x.GetUser(context.User.Id).GuildPermissions.Administrator ||
-               x.GetUser(context.User.Id) == x.Owner &&
-               x.GetUser(Id) != null).ToList();
+            List<SocketGuild> mutualGuilds = ((SocketUser) context.User).MutualGuilds.Where(x =>
+                x.GetUser(context.User.Id).GuildPermissions.Administrator ||
+                x.GetUser(context.User.Id) == x.Owner &&
+                x.GetUser(id) != null).ToList();
+
             var targets = new List<SocketGuildUser>();
 
-            foreach (var guild in mutualGuilds)
+            foreach (SocketGuild guild in mutualGuilds)
             {
-                var selection = guild.Users.FirstOrDefault(x => x.Id == Id);
+                SocketGuildUser selection = guild.Users.FirstOrDefault(x => x.Id == id);
                 if (selection != null)
                     targets.Add(selection);
             }
@@ -62,10 +57,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             if (!targets.Any())
             {
                 await SendBasicErrorEmbedAsync($"User is not present in any mutual servers.");
+
                 return;
             }
 
-            foreach (var target in targets)
+            foreach (SocketGuildUser target in targets)
             {
                 try
                 {

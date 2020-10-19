@@ -13,11 +13,7 @@ namespace KaguyaProjectV2.KaguyaApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
+        public Startup(IConfiguration configuration) { Configuration = configuration; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -45,7 +41,7 @@ namespace KaguyaProjectV2.KaguyaApi
                             .AllowAnyHeader();
                     });
             });
-            
+
             // Initialize connection to database.
             DataConnection.DefaultSettings = dbSettings;
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
@@ -55,16 +51,14 @@ namespace KaguyaProjectV2.KaguyaApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
 
             //app.UseHttpsRedirection();
 
             app.UseCors(builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+                                   .AllowAnyOrigin()
+                                   .AllowAnyMethod()
+                                   .AllowAnyHeader());
 
             app.UseRouting();
 

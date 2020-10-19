@@ -19,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task SetPrefix(string prefix)
         {
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
+            var embed = new KaguyaEmbedBuilder();
 
             if (prefix.Length > 5)
             {
@@ -28,6 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 embed.WithDescription("Your command prefix may not be longer than 5 characters.");
                 embed.SetColor(EmbedColor.RED);
                 await ReplyAsync(embed: embed.Build());
+
                 return;
             }
 

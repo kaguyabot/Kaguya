@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
@@ -26,18 +27,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Remarks("")]
         public async Task Command()
         {
-            Process curProcess = Process.GetCurrentProcess();
+            var curProcess = Process.GetCurrentProcess();
 
-            var client = Client;
-            var owner = client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
+            DiscordShardedClient client = Client;
+            SocketUser owner = client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
 
-            var curShard = client.GetShardFor(Context.Guild);
+            DiscordSocketClient curShard = client.GetShardFor(Context.Guild);
 
             int curTextChannels = 0;
             int curVoiceChannels = 0;
             int curOnline = 0;
 
-            foreach (var guild in curShard.Guilds)
+            foreach (SocketGuild guild in curShard.Guilds)
             {
                 curTextChannels += guild.TextChannels.Count;
                 curVoiceChannels += guild.VoiceChannels.Count;
@@ -48,19 +49,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             int totalTextChannels = 0;
             int totalVoiceChannels = 0;
 
-            foreach (var shard in client.Shards)
+            foreach (DiscordSocketClient shard in client.Shards)
             {
                 totalGuilds += shard.Guilds.Count;
 
-                foreach (var guild in shard.Guilds)
+                foreach (SocketGuild guild in shard.Guilds)
                 {
                     totalTextChannels += guild.TextChannels.Count;
                     totalVoiceChannels += guild.VoiceChannels.Count;
                 }
             }
 
-            var cmdsLastDay = await DatabaseQueries.GetAllAsync<CommandHistory>(h => 
+            List<CommandHistory> cmdsLastDay = await DatabaseQueries.GetAllAsync<CommandHistory>(h =>
                 h.Timestamp >= DateTime.Now.AddHours(-24));
+
             Dictionary<string, int> mostPopCommand = MemoryCache.MostPopularCommandCache;
 
             string mostPopCommandName = mostPopCommand?.Keys.First();
@@ -69,14 +71,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             string mostPopCommandText = "";
 
             if (mostPopCommandName == null || String.IsNullOrWhiteSpace(mostPopCommandCount))
-            {
                 mostPopCommandText = "Data not loaded into cache yet.";
-            }
             else
-            {
                 mostPopCommandText = $"{mostPopCommandName} with {int.Parse(mostPopCommandCount.Replace(",", "")):N0} uses.";
-            }
-            
+
             var fields = new List<EmbedFieldBuilder>
             {
                 new EmbedFieldBuilder
@@ -111,7 +109,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                             $"Text Channels: `{totalTextChannels:N0}`\n" +
                             $"Voice Channels: `{totalVoiceChannels:N0}`\n" +
                             $"Users: `{client.TotalUsers():N0}`\n" +
-                            $"RAM Usage: `{(double)curProcess.PrivateMemorySize64 / 1000000:N2} Megabytes`\n" +
+                            $"RAM Usage: `{(double) curProcess.PrivateMemorySize64 / 1000000:N2} Megabytes`\n" +
                             $"Current Version: `{ConfigProperties.Version}`"
                 },
                 new EmbedFieldBuilder
@@ -128,6 +126,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 Title = "Kaguya Statistics",
                 Fields = fields
             };
+
             embed.SetColor(EmbedColor.GOLD);
             await ReplyAsync(embed: embed.Build());
         }

@@ -22,8 +22,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            var node = ConfigProperties.LavaNode;
-            var player = node.GetPlayer(Context.Guild);
+            LavaNode node = ConfigProperties.LavaNode;
+            LavaPlayer player = node.GetPlayer(Context.Guild);
 
             if (player.Queue.Count > 0)
             {
@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 {
                     Title = $"Kaguya Music: Skip {Centvrio.Emoji.AudioVideo.FastForward}",
                     Description = $"Successfully skipped `{player.Track.Title}`.\n" +
-                                  $"Now playing: `{((LavaTrack)player.Queue.Peek()).Title}`"
+                                  $"Now playing: `{((LavaTrack) player.Queue.Peek()).Title}`"
                 };
 
                 await SendEmbedAsync(skipEmbed);
@@ -49,6 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     Description = $"Successfully skipped `{player.Track.Title}`.\n" +
                                   $"There are no more tracks in the queue."
                 };
+
                 await SendEmbedAsync(skipEmbed);
 
                 await player.StopAsync();

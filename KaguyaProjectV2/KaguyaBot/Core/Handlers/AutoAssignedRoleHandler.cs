@@ -3,9 +3,11 @@ using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -13,11 +15,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     {
         public static async Task Trigger(SocketGuildUser u)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(u.Guild.Id);
-            var aars = server.AutoAssignedRoles.ToList();
-            var guild = u.Guild;
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(u.Guild.Id);
+            List<AutoAssignedRole> aars = server.AutoAssignedRoles.ToList();
+            SocketGuild guild = u.Guild;
 
-            foreach (var r in aars)
+            foreach (AutoAssignedRole r in aars)
             {
                 try
                 {
@@ -31,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                                  $"this auto assigned role from the database to " +
                                                  $"prevent further errors.", LogLvl.ERROR);
 
-                    var roleToDelete = aars.First(x => x.RoleId == r.RoleId);
+                    AutoAssignedRole roleToDelete = aars.First(x => x.RoleId == r.RoleId);
                     await DatabaseQueries.DeleteAsync(roleToDelete);
                 }
                 catch (Exception e)

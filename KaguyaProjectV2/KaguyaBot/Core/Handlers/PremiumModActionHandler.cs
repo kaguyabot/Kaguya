@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
@@ -29,10 +30,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             if (!log.Server.IsPremium)
                 return;
 
-            var logChannel = ConfigProperties.Client.GetGuild(log.Server.ServerId).GetTextChannel(log.Server.ModLog);
+            SocketTextChannel logChannel = ConfigProperties.Client.GetGuild(log.Server.ServerId).GetTextChannel(log.Server.ModLog);
+
             if (logChannel == null)
                 return;
-            
+
             string actionTitle = "User ";
             string embedUrl = "";
             string reason = log.Reason ?? "None specified";
@@ -42,46 +44,57 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 case PremiumModActionHandler.AUTOBAN:
                     actionTitle += "Auto-Banned ";
                     embedUrl = "https://i.imgur.com/P6Cgm8Z.png";
+
                     break;
                 case PremiumModActionHandler.AUTOKICK:
                     actionTitle += "Auto-Kicked ";
                     embedUrl = "https://i.imgur.com/lUjW0uu.png";
+
                     break;
                 case PremiumModActionHandler.AUTOMUTE:
                     actionTitle += "Auto-Muted ";
                     embedUrl = "https://i.imgur.com/nnc3h7D.png";
+
                     break;
                 case PremiumModActionHandler.AUTOSHADOWBAN:
                     actionTitle += "Auto-Shadowbanned ";
                     embedUrl = "https://i.imgur.com/hCHifVn.png";
+
                     break;
                 case PremiumModActionHandler.SHADOWBAN:
                     actionTitle += "Shadowbanned ";
                     embedUrl = "https://i.imgur.com/hCHifVn.png";
+
                     break;
                 case PremiumModActionHandler.UNSHADOWBAN:
                     actionTitle += "UnShadowbanned ";
                     embedUrl = "https://i.imgur.com/NmLwYJB.png";
+
                     break;
                 case PremiumModActionHandler.MUTE:
                     actionTitle += "Muted ";
                     embedUrl = "https://i.imgur.com/nnc3h7D.png";
+
                     break;
                 case PremiumModActionHandler.UNMUTE:
                     actionTitle += "Unmuted ";
                     embedUrl = "https://i.imgur.com/eIBBSMw.png";
+
                     break;
                 case PremiumModActionHandler.WARN:
                     actionTitle += "Warned ";
                     embedUrl = "https://i.imgur.com/IXvCjEg.png";
+
                     break;
                 case PremiumModActionHandler.UNWARN:
                     actionTitle += "Unwarned ";
                     embedUrl = "https://i.imgur.com/QyNpRuW.png";
+
                     break;
                 case PremiumModActionHandler.MESSAGEPURGE:
                     actionTitle = "Messages Bulk-Deleted ";
                     embedUrl = "https://i.imgur.com/2uqH08b.png";
+
                     break;
             }
 
@@ -98,7 +111,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     new EmbedFieldBuilder
                     {
                         Name = "Action Recipient",
-                        Value = $"`[Name: {log.ActionRecipient} | ID: { log.ActionRecipient.Id}]`"
+                        Value = $"`[Name: {log.ActionRecipient} | ID: {log.ActionRecipient.Id}]`"
                     },
                     new EmbedFieldBuilder
                     {

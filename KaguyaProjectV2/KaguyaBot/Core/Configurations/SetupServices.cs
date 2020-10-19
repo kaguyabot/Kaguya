@@ -9,16 +9,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Configurations
 {
     public class SetupServices
     {
-        public ServiceProvider ConfigureServices(DiscordSocketConfig config, DiscordShardedClient client)
-        {
-            return new ServiceCollection()
-                .AddSingleton(client)
-                .AddSingleton(new InteractiveService(client))
-                .AddSingleton<CommandService>()
-                .AddSingleton<CommandHandler>()
-                .AddSingleton<LavaConfig>()
-                .AddSingleton<LavaNode>()
-                .BuildServiceProvider();
-        }
+        public ServiceProvider ConfigureServices(DiscordSocketConfig config, DiscordShardedClient client) => new ServiceCollection()
+                                                                                                             .AddSingleton(client)
+                                                                                                             .AddSingleton(new InteractiveService(client))
+                                                                                                             .AddSingleton<CommandService>()
+                                                                                                             .AddSingleton<CommandHandler>()
+                                                                                                             .AddSingleton<LavaConfig>()
+                                                                                                             .AddSingleton<LavaNode>()
+                                                                                                             .BuildServiceProvider();
     }
 }

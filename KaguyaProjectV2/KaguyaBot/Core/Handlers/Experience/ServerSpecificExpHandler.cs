@@ -10,19 +10,19 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 // ReSharper disable RedundantAssignment
-
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
     public class ServerSpecificExpHandler
     {
         public static async Task TryAddExp(User user, Server server, ICommandContext context)
         {
-            var specificExps = await DatabaseQueries.GetAllForServerAsync<ServerExp>(server.ServerId);
+            List<ServerExp> specificExps = await DatabaseQueries.GetAllForServerAsync<ServerExp>(server.ServerId);
             var userExpObj = new ServerExp();
 
             // If the user can receive exp, give them between 5 and 8.
@@ -76,10 +76,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 $"[Server Exp]: User {user.UserId}] has received {exp} exp. [Guild: {server.ServerId}] " +
                 $"Total Exp: {expObject.Exp:N0}]", LogLvl.TRACE);
 
-            if (HasLeveledUp((int)oldLevel, (int)newLevel))
+            if (HasLeveledUp((int) oldLevel, (int) newLevel))
             {
                 await ConsoleLogger.LogAsync(
-                    $"[Server Exp]: [Server {server.ServerId} | User {user.UserId}] has leveled up! [Level: {(int)newLevel} | Experience: {GetExpForUser(server, user)}]",
+                    $"[Server Exp]: [Server {server.ServerId} | User {user.UserId}] has leveled up! [Level: {(int) newLevel} | Experience: {GetExpForUser(server, user)}]",
                     LogLvl.INFO);
 
                 // Don't send announcement if the channel is blacklisted.
@@ -90,30 +90,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                     return;
 
                 var xp = new XpImage();
-                if (user.ExpChatNotificationType == ExpType.Server || user.ExpChatNotificationType == ExpType.Both)
+                if (user.ExpChatNotificationType == ExpType.SERVER || user.ExpChatNotificationType == ExpType.BOTH)
                 {
-                    var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User, server);
+                    Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User, server);
                     if (levelAnnouncementChannel != null)
                         await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
                     else
                         await context.Channel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
                 }
-                if (user.ExpDmNotificationType == ExpType.Server || user.ExpDmNotificationType == ExpType.Both)
+
+                if (user.ExpDmNotificationType == ExpType.SERVER || user.ExpDmNotificationType == ExpType.BOTH)
                 {
-                    var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User, server);
+                    Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User, server);
                     await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
                 }
 
                 // Server level-up reward stuffs.
 
-                var serverRoleRewards = server.RoleRewards.ToList();
+                List<ServerRoleReward> serverRoleRewards = server.RoleRewards.ToList();
                 if (serverRoleRewards.Count > 0)
                 {
-                    foreach (var item in serverRoleRewards)
+                    foreach (ServerRoleReward item in serverRoleRewards)
                     {
-                        if (user.ServerLevel(server).Rounded(RoundDirection.Down) == item.Level)
+                        if (user.ServerLevel(server).Rounded(RoundDirection.DOWN) == item.Level)
                         {
-                            var targetRole = context.Guild.Roles.First(x => x.Id == item.RoleId);
+                            IRole targetRole = context.Guild.Roles.First(x => x.Id == item.RoleId);
                             // ReSharper disable PossibleNullReferenceException
                             await (context.User as SocketGuildUser).AddRoleAsync(targetRole);
                             await ConsoleLogger.LogAsync($"User {user.UserId} received level-up role reward in guild " +
@@ -127,10 +128,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 
         private static async Task<bool> CanGetExperience(IReadOnlyCollection<ServerExp> serverExp, Server server, User user)
         {
-            var match = serverExp?.FirstOrDefault(x => x?.UserId == user?.UserId);
+            ServerExp match = serverExp?.FirstOrDefault(x => x?.UserId == user?.UserId);
             if (match != null)
             {
                 double twoMinutesAgo = DateTime.Now.AddSeconds(-120).ToOADate();
+
                 // ReSharper disable PossibleNullReferenceException
                 return twoMinutesAgo >= serverExp.FirstOrDefault(x => x.UserId == user.UserId).LatestExp;
                 // ReSharper restore PossibleNullReferenceException
@@ -143,19 +145,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 ServerId = server.ServerId,
                 UserId = user.UserId
             });
+
             return true;
         }
 
         private static double ReturnLevel(Server server, User user)
         {
             int exp = GetExpForUser(server, user);
+
             return GlobalProperties.CalculateLevelFromExp(exp);
         }
 
-        private static bool HasLeveledUp(int oldLevel, int newLevel)
-        {
-            return oldLevel < newLevel;
-        }
+        private static bool HasLeveledUp(int oldLevel, int newLevel) => oldLevel < newLevel;
 
         /// <summary>
         /// Returns the number of EXP the user has in the specified server.
@@ -163,9 +164,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         /// <param name="server"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        private static int GetExpForUser(Server server, User user)
-        {
-            return server.ServerExp?.FirstOrDefault(x => x.UserId == user.UserId)?.Exp ?? 0;
-        }
+        private static int GetExpForUser(Server server, User user) => server.ServerExp?.FirstOrDefault(x => x.UserId == user.UserId)?.Exp ?? 0;
     }
 }

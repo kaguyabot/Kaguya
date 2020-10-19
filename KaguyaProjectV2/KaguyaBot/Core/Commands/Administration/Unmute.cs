@@ -25,9 +25,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("<user>")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task UnmuteUser(IGuildUser user, [Remainder]string reason = null)
+        public async Task UnmuteUser(IGuildUser user, [Remainder] string reason = null)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var mutedObject =
                 await DatabaseQueries.GetFirstMatchAsync<MutedUser>(x => x.UserId == user.Id && x.ServerId == server.ServerId);
 
@@ -42,7 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     Server = server,
                     Moderator = Context.Client.GetGuild(server.ServerId).GetUser(538910393918160916),
-                    ActionRecipient = (SocketGuildUser)user,
+                    ActionRecipient = (SocketGuildUser) user,
                     Action = PremiumModActionHandler.UNMUTE,
                     Reason = reason
                 });
@@ -50,7 +50,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             try
             {
-                var muteRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
+                SocketRole muteRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
                 await user.RemoveRoleAsync(muteRole);
 
                 var embed = new KaguyaEmbedBuilder
@@ -70,6 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         Text = "Use the mute command to generate the mute role."
                     }
                 };
+
                 errorEmbed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: errorEmbed.Build());

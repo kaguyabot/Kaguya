@@ -5,12 +5,12 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System.Linq;
 
 // ReSharper disable AccessToDisposedClosure
-
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.Models
 {
     public class TemplateUserData
     {
         private SocketGuildUser User { get; }
+
         public TemplateUserData(User user, Server server)
         {
             User = ConfigProperties.Client.GetGuild(server.ServerId).GetUser(user.UserId);
@@ -24,6 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.Models
             TotalServerXpUsers = user.GetServerXpRank(server).Item2;
             TotalGlobalXpUsers = user.GetGlobalXpRankAsync().Result.Item2;
         }
+
         public string Username { get; set; }
         public string Discriminator { get; set; }
         public int ServerXp { get; set; }

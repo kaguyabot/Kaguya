@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
@@ -15,11 +17,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Remarks("<points amount> <user ID>")]
         public async Task Command(int points, ulong userId)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(userId);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(userId);
 
-            var discUser = Client.GetUser(userId);
+            SocketUser discUser = Client.GetUser(userId);
             string nameString = discUser != null ? $"{discUser.Username}'s" : userId.ToString();
-            
+
             var embed = new KaguyaEmbedBuilder(EmbedColor.GREEN)
             {
                 Title = "Add Points",
@@ -27,9 +29,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                               $"Old points value: `{user.Points:N0}`\n" +
                               $"New points value: `{user.Points + points:N0}`"
             };
-            
+
             user.AddPoints(points);
-            
+
             await DatabaseQueries.UpdateAsync(user);
             await SendEmbedAsync(embed);
         }

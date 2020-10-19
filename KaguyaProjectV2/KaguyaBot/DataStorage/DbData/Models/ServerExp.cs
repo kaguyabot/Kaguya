@@ -10,19 +10,28 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         IUserSearchable<ServerExp>
     {
         [PrimaryKey]
-        [Column(Name = "ServerId"), NotNull]
+        [Column(Name = "ServerId")]
+        [NotNull]
         public ulong ServerId { get; set; }
-        [Column(Name = "UserId"), NotNull]
+
+        [Column(Name = "UserId")]
+        [NotNull]
         public ulong UserId { get; set; }
-        [Column(Name = "Exp"), NotNull]
+
+        [Column(Name = "Exp")]
+        [NotNull]
         public int Exp { get; set; }
-        [Column(Name = "LatestExp"), NotNull]
+
+        [Column(Name = "LatestExp")]
+        [NotNull]
         public double LatestExp { get; set; }
+
         /// <summary>
         /// FK_KaguyaServer_ServerExp
         /// </summary>
         [Association(ThisKey = "ServerId", OtherKey = "Id", CanBeNull = false)]
         public Server Server { get; set; }
+
         /// <summary>
         /// FK_KaguyaUser_ServerExp
         /// </summary>

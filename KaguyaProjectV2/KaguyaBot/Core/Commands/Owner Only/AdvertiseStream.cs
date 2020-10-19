@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Humanizer;
@@ -18,17 +19,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [RequireBotPermission(GuildPermission.Connect)]
         public async Task Command(string url, string timeStr)
         {
-            var time = timeStr.ParseToTimespan();
-            
+            TimeSpan time = timeStr.ParseToTimespan();
+
             if (!url.Contains("https://www.twitch.tv"))
             {
                 await SendBasicErrorEmbedAsync("The input must be a *complete* Twitch URL.");
+
                 return;
             }
 
             await Client.SetGameAsync("LIVE NOW!!", url, ActivityType.Streaming);
             GameRotationService.Pause(time);
-            
+
             await SendBasicSuccessEmbedAsync($"Successfully set the stream to `{url}`.\n" +
                                              $"This will remain active for `{time.Humanize(2)}`");
         }

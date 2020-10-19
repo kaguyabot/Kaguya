@@ -20,10 +20,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             var r = new Random();
             int flip = r.Next();
 
-            bool heads = flip % 2 == 0;
+            bool heads = (flip % 2) == 0;
 
-            string emote = heads 
-                ? "<:CoinHeads:743919521965801472>" 
+            string emote = heads
+                ? "<:CoinHeads:743919521965801472>"
                 : "<:CoinTails:743919521936572456>";
 
             var embed = new KaguyaEmbedBuilder(heads ? EmbedColor.LIGHT_BLUE : EmbedColor.LIGHT_PURPLE)

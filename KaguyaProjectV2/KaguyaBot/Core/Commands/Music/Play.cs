@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]
         [RequireContext(ContextType.Guild)]
-        public async Task Command([Remainder]string query)
+        public async Task Command([Remainder] string query)
         {
             var s = new Search();
             await s.SearchAndPlayAsync(Context, query, true);

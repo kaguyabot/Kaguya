@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
@@ -22,20 +23,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Alias("UserBlacklist", "ubl")]
         [Summary("Allows a bot owner to blacklist a user temporarily.")]
         [Remarks("<id> <duration> [reason]")]
-
-        public async Task Command(ulong id, string duration, [Remainder]string reason = "No reason provided.")
+        public async Task Command(ulong id, string duration, [Remainder] string reason = "No reason provided.")
         {
-            var target = await DatabaseQueries.GetOrCreateUserAsync(id);
-            var socketTarget = Client.GetUser(target.UserId);
+            User target = await DatabaseQueries.GetOrCreateUserAsync(id);
+            SocketUser socketTarget = Client.GetUser(target.UserId);
 
-            var expiration = (DateTime.Now + duration.ParseToTimespan()).ToOADate();
-            var humanizedExpiration = duration.ParseToTimespan().Humanize(3);
+            double expiration = (DateTime.Now + duration.ParseToTimespan()).ToOADate();
+            string humanizedExpiration = duration.ParseToTimespan().Humanize(3);
 
             if (target.IsBlacklisted)
             {
                 await SendBasicErrorEmbedAsync($"This user is already blacklisted.\n\n" +
                                                $"Reason: `{target.Blacklist.Reason}`\n" +
                                                $"Expires `{DateTime.FromOADate(target.Blacklist.Expiration).Humanize()}`");
+
                 return;
             }
 
@@ -51,8 +52,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             await ConsoleLogger.LogAsync($"User {target.UserId} has been blacklisted for " +
                                          $"{humanizedExpiration}", LogLvl.INFO);
 
-            if(socketTarget != null && 
-               await socketTarget.GetOrCreateDMChannelAsync() != null)
+            if (socketTarget != null &&
+                await socketTarget.GetOrCreateDMChannelAsync() != null)
             {
                 var embed = new KaguyaEmbedBuilder
                 {

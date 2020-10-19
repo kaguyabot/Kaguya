@@ -19,10 +19,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             {
                 await SendBasicErrorEmbedAsync("Please provide at least two options to choose from.\n" +
                                                "Example: `eggs toast` results in `eggs` or `toast` being selected.");
+
                 return;
             }
 
-            Random r = new Random();
+            var r = new Random();
             int index = r.Next(options.Length);
 
             var embed = new KaguyaEmbedBuilder(EmbedColor.GREEN)
@@ -30,6 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                 Title = "Random Selection",
                 Description = $"{Context.User.Mention} I choose `{options[index]}`!"
             };
+
             await SendEmbedAsync(embed);
         }
     }

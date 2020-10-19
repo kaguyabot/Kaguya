@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Centvrio.Emoji;
 using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
@@ -29,40 +30,44 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Remarks("<points> <outcome>\n500 higher\n500 lower\n1000 7")]
         public async Task Command(int points, string input)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
             if (points < 100)
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} The minimum bet for this game is `100` points.");
+
                 return;
             }
-            
+
             if (points > 50000 && !user.IsPremium && !server.IsPremium)
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} Sorry, you must be either an active " +
-                                               $"[Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) subscriber " +
+                                               $"[Kaguya Premium]({ConfigProperties.KAGUYA_STORE_URL}) subscriber " +
                                                $"or be present in a server in which Kaguya Premium is active to bet " +
                                                $"more than `50,000` points.");
+
                 return;
             }
 
             if (points > 500000 && (user.IsPremium || server.IsPremium))
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} Sorry, the maximum points you may bet regardless " +
-                                               $"of [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) " +
+                                               $"of [Kaguya Premium]({ConfigProperties.KAGUYA_STORE_URL}) " +
                                                $"status is `500,000` points.");
+
                 return;
             }
-            
+
             if (user.Points < points)
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} You do not have enough points to perform this action.\n\n" +
                                                $"Attempted to bet: `{points:N0}` points.\n" +
                                                $"Available balance: `{user.Points:N0}`");
+
                 return;
             }
-            
+
             var r = new Random();
             int rollOne = r.Next(2, 7); //upper-bound integer is exclusive while lower-bound is inclusive.
             int rollTwo = r.Next(2, 7);
@@ -73,19 +78,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             bool winner = (int) prediction == (int) outcome;
             int payout = GetWinningPayout(points, outcome);
-            
+
             EmbedColor eColor = winner ? EmbedColor.GOLD : EmbedColor.GRAY;
 
             if (winner)
-            {
                 user.Points += payout;
-            }
             else
             {
                 payout = -points;
                 user.Points += payout; // We are adding a negative number.
             }
-            
+
             var gambleH = new GambleHistory
             {
                 UserId = user.UserId,
@@ -97,6 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 Winner = winner,
                 User = user
             };
+
             await DatabaseQueries.InsertAsync(gambleH);
 
             string formattedPayout = winner ? $"+{payout:N0}" : $"-{points:N0}";
@@ -114,51 +118,46 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             await DatabaseQueries.UpdateAsync(user);
         }
 
-        private DicePrediction GetDicePrediction(string outcome)
+        private DicePrediction GetDicePrediction(string outcome) => outcome.ToLower() switch
         {
-            return outcome.ToLower() switch
-            {
-                "higher" => DicePrediction.Higher,
-                "lower" => DicePrediction.Lower,
-                "7" => DicePrediction.Seven,
-                "seven" => DicePrediction.Seven,
-                _ => throw new KaguyaSupportException("Valid options are `higher`, `lower`, `seven`, or `7`.")
-            };
-        }
+            "higher" => DicePrediction.HIGHER,
+            "lower" => DicePrediction.LOWER,
+            "7" => DicePrediction.SEVEN,
+            "seven" => DicePrediction.SEVEN,
+            _ => throw new KaguyaSupportException("Valid options are `higher`, `lower`, `seven`, or `7`.")
+        };
 
-        private DiceOutcome GetDiceOutcome(int score)
+        private DiceOutcome GetDiceOutcome(int score) => score switch
         {
-            return score switch
-            {
-                { } n when n < 7 => DiceOutcome.Lower,
-                { } n when n == 7 => DiceOutcome.Seven,
-                { } n when n > 7 => DiceOutcome.Higher,
-            };
-        }
+            { } n when n < 7 => DiceOutcome.LOWER,
+            { } n when n == 7 => DiceOutcome.SEVEN,
+            { } n when n > 7 => DiceOutcome.HIGHER
+        };
 
-        private int GetWinningPayout(int points, DiceOutcome outcome)
+        private int GetWinningPayout(int points, DiceOutcome outcome) => outcome switch
         {
-            return outcome switch
-            {
-                DiceOutcome.Higher => points * 2,
-                DiceOutcome.Lower => points * 2,
-                DiceOutcome.Seven => points * 4
-            };
-        }
-        
-        private string DiceDescription(int rollOne, int rollTwo, int points, bool winner, DiceOutcome outcome, 
+            DiceOutcome.HIGHER => points * 2,
+            DiceOutcome.LOWER => points * 2,
+            DiceOutcome.SEVEN => points * 4
+        };
+
+        private string DiceDescription(int rollOne,
+            int rollTwo,
+            int points,
+            bool winner,
+            DiceOutcome outcome,
             DicePrediction prediction)
         {
-            var diceEmoji = Centvrio.Emoji.Game.GameDie;
-            
+            UnicodeString diceEmoji = Centvrio.Emoji.Game.GameDie;
+
             if (winner)
             {
                 int payout = GetWinningPayout(points, outcome);
                 string outcomeString = outcome switch
                 {
-                    DiceOutcome.Higher => "higher than 7",
-                    DiceOutcome.Lower => "lower than 7",
-                    DiceOutcome.Seven => "exactly 7!"
+                    DiceOutcome.HIGHER => "higher than 7",
+                    DiceOutcome.LOWER => "lower than 7",
+                    DiceOutcome.SEVEN => "exactly 7!"
                 };
 
                 return $"{diceEmoji} Roll One: `{rollOne}`\n" +
@@ -171,11 +170,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 string lossString = prediction switch
                 {
-                    DicePrediction.Higher => "not higher than 7.",
-                    DicePrediction.Lower => "not lower than 7.",
-                    DicePrediction.Seven => "not exactly 7."
+                    DicePrediction.HIGHER => "not higher than 7.",
+                    DicePrediction.LOWER => "not lower than 7.",
+                    DicePrediction.SEVEN => "not exactly 7."
                 };
-                
+
                 return $"{diceEmoji} Roll One: `{rollOne}`\n" +
                        $"{diceEmoji} Roll Two: `{rollTwo}`\n" +
                        $"Combined Score: `{rollOne + rollTwo}`\n\n" +
@@ -187,15 +186,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
     public enum DicePrediction
     {
-        Higher,
-        Lower,
-        Seven
+        HIGHER,
+        LOWER,
+        SEVEN
     }
 
     public enum DiceOutcome
     {
-        Higher,
-        Lower,
-        Seven
+        HIGHER,
+        LOWER,
+        SEVEN
     }
 }

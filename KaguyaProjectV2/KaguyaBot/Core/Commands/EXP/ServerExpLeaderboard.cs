@@ -9,6 +9,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
@@ -22,26 +23,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            var top50 = await DatabaseQueries.GetLimitAsync<ServerExp>(50,
+            List<ServerExp> top50 = await DatabaseQueries.GetLimitAsync<ServerExp>(50,
                 x => x.Exp > 0 && x.ServerId == Context.Guild.Id,
                 x => x.Exp, true);
 
             int i = 1;
 
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             var embed = new KaguyaEmbedBuilder
             {
                 Title = $"Exp Leaderboard for {Context.Guild}",
                 Fields = new List<EmbedFieldBuilder>()
             };
 
-            foreach (var element in top50)
+            foreach (ServerExp element in top50)
             {
                 if (i > 10)
                     break;
 
-                var socketUser = Client.GetUser(element.UserId);
-                var user = await DatabaseQueries.GetOrCreateUserAsync(element.UserId);
+                SocketUser socketUser = Client.GetUser(element.UserId);
+                User user = await DatabaseQueries.GetOrCreateUserAsync(element.UserId);
 
                 embed.Fields.Add(new EmbedFieldBuilder
                 {

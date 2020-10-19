@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         public async Task SetChannel(string logType, SocketTextChannel channel = null)
         {
             if (channel == null)
-                channel = (SocketTextChannel)Context.Channel;
+                channel = (SocketTextChannel) Context.Channel;
 
             KaguyaEmbedBuilder embed;
             List<string> logTypes = await LogQuery.LogSwitcher(logType, true, channel.Guild.Id, channel);
@@ -32,7 +32,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                 {
                     Description = $"Please specify a valid log type."
                 };
+
                 embed.SetColor(EmbedColor.RED);
+
                 goto Reply;
             }
 
@@ -71,7 +73,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                 {
                     Description = $"Please specify a valid log type."
                 };
+
                 embed.SetColor(EmbedColor.RED);
+
                 goto Reply;
             }
 

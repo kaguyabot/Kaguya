@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("MassKick")]
         [Alias("mk")]
         [Summary("Allows a server moderator with the `Kick Members` permission to kick a user, or list of users, " +
-                 "out of the server. A default reason will be provided in the Audit Log.")]
+            "out of the server. A default reason will be provided in the Audit Log.")]
         [Remarks("<user> {...}")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             var kickSb = new StringBuilder();
             var errorSb = new StringBuilder();
-            foreach (var user in args)
+            foreach (SocketGuildUser user in args)
             {
                 try
                 {
@@ -40,21 +40,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             var finalSb = new StringBuilder();
             if (!String.IsNullOrWhiteSpace(kickSb.ToString()))
-            {
                 finalSb.AppendLine(kickSb.ToString());
-            }
-            
-            if(!String.IsNullOrWhiteSpace(errorSb.ToString()))
-            {
+
+            if (!String.IsNullOrWhiteSpace(errorSb.ToString()))
                 finalSb.AppendLine($"\n\n{errorSb}");
-            }
-            
+
             var embed = new KaguyaEmbedBuilder
             {
                 Title = "Masskick",
                 Description = finalSb.ToString()
             };
-            
+
             await SendEmbedAsync(embed);
         }
     }

@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Timers;
+using Discord.WebSocket;
+using DiscordBotsList.Api;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -10,16 +12,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
     {
         public static async Task Initialize()
         {
-            Timer timer = new Timer(900000);
+            var timer = new Timer(900000);
             timer.Enabled = true;
             timer.AutoReset = true;
             timer.Elapsed += async (s, e) =>
             {
-                var client = ConfigProperties.Client;
-                var api = ConfigProperties.TopGGApi;
+                DiscordShardedClient client = ConfigProperties.Client;
+                AuthDiscordBotListApi api = ConfigProperties.TopGgApi;
 
-                var guildCount = client.Guilds.Count;
-                var shardCount = client.Shards.Count;
+                int guildCount = client.Guilds.Count;
+                int shardCount = client.Shards.Count;
 
                 await api.UpdateStats(guildCount, shardCount);
 

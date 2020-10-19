@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -18,16 +19,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
         [Summary("Ask a yes or no question and Kaguya will use her divine powers to " +
                  "answer your question with perfect accuracy!")]
         [Remarks("<question>")]
-        public async Task Command([Remainder]string question)
+        public async Task Command([Remainder] string question)
         {
-            var responses = await DatabaseQueries.GetAllAsync<EightBall>();
+            List<EightBall> responses = await DatabaseQueries.GetAllAsync<EightBall>();
 
-            Random r = new Random();
+            var r = new Random();
             int val = r.Next(responses.Count);
 
-            var response = responses[val];
+            EightBall response = responses[val];
 
-            Regex[] suicidePreventionRegexArray = new[]
+            var suicidePreventionRegexArray = new[]
             {
                 new Regex(@"should i \b(?:kill|end|hang)\b \b(myself|it all)\b"),
                 new Regex(@"should i \b(commit|hang)\b \b(?:myself|suicide)\b"),

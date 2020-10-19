@@ -10,9 +10,10 @@ using SixLabors.Primitives;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
 using Image = SixLabors.ImageSharp.Image;
-// ReSharper disable AccessToDisposedClosure
 
+// ReSharper disable AccessToDisposedClosure
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
 {
     public class ProfileImage
@@ -46,27 +47,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
                 }
             };
 
-            var pfpIcon = ProfilePictureData.ProfileIcon(guildUser);
+            TemplateIcon pfpIcon = ProfilePictureData.ProfileIcon(guildUser);
 
             using (var wc = new WebClient())
             {
-                var avatarURL = guildUser.GetAvatarUrl(ImageFormat.Png);
-                avatarURL = string.IsNullOrEmpty(avatarURL) ? guildUser.GetDefaultAvatarUrl() : avatarURL;
+                string avatarUrl = guildUser.GetAvatarUrl(ImageFormat.Png);
+                avatarUrl = string.IsNullOrEmpty(avatarUrl) ? guildUser.GetDefaultAvatarUrl() : avatarUrl;
 
-                var pfpImg = await wc.DownloadDataTaskAsync(avatarURL);
+                byte[] pfpImg = await wc.DownloadDataTaskAsync(avatarUrl);
                 pfpStream = new MemoryStream(pfpImg);
 
-                var badgeImg = await wc.DownloadDataTaskAsync(profile.Xp.PremiumBadge.Emote.Url);
+                byte[] badgeImg = await wc.DownloadDataTaskAsync(profile.Xp.PremiumBadge.Emote.Url);
                 badgeStream = new MemoryStream(badgeImg);
             }
 
-            using var image = Image.Load(ImageBase.PROFILE_TEMPLATE_PATH);
-            using var profilePicture = Image.Load(pfpStream);
-            using var suppBadge = Image.Load(badgeStream);
+            using Image image = Image.Load(ImageBase.PROFILE_TEMPLATE_PATH);
+            using Image profilePicture = Image.Load(pfpStream);
+            using Image suppBadge = Image.Load(badgeStream);
             using var gBar = new Image<Rgba32>(image.Width, image.Height);
 
-            var gFillPoints = GlobalBarData.GlobalXpBarCoordinates(user, profile.Xp);
-            var sFillPoints = GuildBarData.GuildXpBarCoordinates(user, server, profile.Xp);
+            PointF[] gFillPoints = GlobalBarData.GlobalXpBarCoordinates(user, profile.Xp);
+            PointF[] sFillPoints = GuildBarData.GuildXpBarCoordinates(user, server, profile.Xp);
 
             /*
                  * In order to avoid clipping and artifacts, we render a completely new image
@@ -83,8 +84,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             */
 
             // Resize downloaded supporter image, she's a little too chonky <(^-^)>
-            const double resizeScalar = 0.75;
-            suppBadge.Mutate(x => x.Resize((int)(x.GetCurrentSize().Width * resizeScalar), (int)(x.GetCurrentSize().Height * resizeScalar)));
+            const double RESIZE_SCALAR = 0.75;
+            suppBadge.Mutate(x => x.Resize((int) (x.GetCurrentSize().Width * RESIZE_SCALAR), (int) (x.GetCurrentSize().Height * RESIZE_SCALAR)));
 
             // If the user has the default Discord profile picture, fix the width to 132 x 132 px.
             profilePicture.Mutate(x => x.Resize(new ResizeOptions
@@ -92,8 +93,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
                 Position = AnchorPositionMode.Center,
                 Size = new Size(116, 116)
             }));
-                                
-            
+
             // Draw the profile picture on top of the global bar. Global bar will serve as the base layer 
             // that we continually add onto, even if it doesn't directly overlap it, as it's a layer 
             // with the same size of our template. Think of it as a canvas.
@@ -124,12 +124,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
             if (user.IsPremium)
             {
                 gBar.Mutate(x => x.DrawImage(suppBadge,
-                    new Point((int)profile.Xp.PremiumBadge.Loc.X, (int)profile.Xp.PremiumBadge.Loc.Y), 1));
+                    new Point((int) profile.Xp.PremiumBadge.Loc.X, (int) profile.Xp.PremiumBadge.Loc.Y), 1));
             }
 
             // Save the completed drawing to a MemoryStream so that we can send it to Discord elsewhere.
             gBar.SaveAsPng(templateStream);
             templateStream.Seek(0, SeekOrigin.Begin);
+
             return templateStream;
         }
     }

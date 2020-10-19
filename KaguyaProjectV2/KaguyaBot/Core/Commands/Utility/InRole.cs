@@ -19,10 +19,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Alias("ir")]
         [Summary("Displays an alphabetized list of who has the specified role.")]
         [Remarks("<role>")]
-        public async Task Find([Remainder]string roleName)
+        public async Task Find([Remainder] string roleName)
         {
-            var guild = Context.Guild;
-            var roles = guild.Roles;
+            SocketGuild guild = Context.Guild;
+            IReadOnlyCollection<SocketRole> roles = guild.Roles;
             KaguyaEmbedBuilder embed;
 
             if (roles.All(x => x.Name.ToLower() != roleName.ToLower()))
@@ -31,24 +31,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 {
                     Description = $"The role `{roleName.ToUpper()}` could not be found."
                 };
+
                 embed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: embed.Build());
+
                 return;
             }
 
-            var matchCount = roles.Count(x => x.Name.ToLower() == roleName.ToLower());
+            int matchCount = roles.Count(x => x.Name.ToLower() == roleName.ToLower());
 
             if (matchCount > 1)
             {
                 await MultipleMatchingRolesHandler(guild, roleName, roles);
+
                 return;
             }
 
-            var matchingRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
+            SocketRole matchingRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
 
-            var pages = Pages(guild, matchingRole);
-            var pager = new PaginatedMessage { Pages = pages, Color = Color.Blue };
+            List<PaginatedMessage.Page> pages = Pages(guild, matchingRole);
+            var pager = new PaginatedMessage
+            {
+                Pages = pages,
+                Color = Color.Blue
+            };
 
             await PagedReplyAsync(pager, new ReactionList
             {
@@ -63,22 +70,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
         private async Task MultipleMatchingRolesHandler(SocketGuild guild, string roleName, IReadOnlyCollection<SocketRole> roles)
         {
-            var matchingRoles = roles.Where(x => x.Name.ToLower() == roleName.ToLower()).ToList();
-            var matchCount = matchingRoles.Count;
+            List<SocketRole> matchingRoles = roles.Where(x => x.Name.ToLower() == roleName.ToLower()).ToList();
+            int matchCount = matchingRoles.Count;
 
             if (matchCount > 9)
-            {
                 matchCount = 9;
-            }
 
             var emojis = new Emoji[]
             {
-                new Emoji("1⃣"), new Emoji("2⃣"), new Emoji("3⃣"),
-                new Emoji("4⃣"), new Emoji("5⃣"), new Emoji("6⃣"), new Emoji("7⃣"),
-                new Emoji("8⃣"), new Emoji("9⃣")
+                new Emoji("1⃣"),
+                new Emoji("2⃣"),
+                new Emoji("3⃣"),
+                new Emoji("4⃣"),
+                new Emoji("5⃣"),
+                new Emoji("6⃣"),
+                new Emoji("7⃣"),
+                new Emoji("8⃣"),
+                new Emoji("9⃣")
             };
 
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+            var embed = new KaguyaEmbedBuilder
             {
                 Description = $"I found `{matchCount.ToWords()}` roles that match this name. Please " +
                               $"select the role that you want to display.",
@@ -93,9 +104,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 if (i1 == matchCount)
                     i1 = matchCount - 1;
 
-                var role = matchingRoles.ElementAt(i1);
-                var rolePerms = matchingRoles[i].Permissions.ToList();
-                var usersWithRole = guild.Users.Where(x => x.Roles.Contains(role));
+                SocketRole role = matchingRoles.ElementAt(i1);
+                List<GuildPermission> rolePerms = matchingRoles[i].Permissions.ToList();
+                IEnumerable<SocketGuildUser> usersWithRole = guild.Users.Where(x => x.Roles.Contains(role));
 
                 embed.Fields.Add(new EmbedFieldBuilder
                 {
@@ -107,24 +118,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 });
 
                 callbacks.Add((emojis[i], async (c, r) =>
-                {
-                    var pager = new PaginatedMessage
-                    {
-                        Pages = Pages(guild, role),
-                        Color = Color.Blue
-                    };
+                        {
+                            var pager = new PaginatedMessage
+                            {
+                                Pages = Pages(guild, role),
+                                Color = Color.Blue
+                            };
 
-                    await PagedReplyAsync(pager, new ReactionList
-                    {
-                        Backward = true,
-                        First = true,
-                        Forward = true,
-                        Jump = true,
-                        Last = true,
-                        Trash = true
-                    });
-                }
-                ));
+                            await PagedReplyAsync(pager, new ReactionList
+                            {
+                                Backward = true,
+                                First = true,
+                                Forward = true,
+                                Jump = true,
+                                Last = true,
+                                Trash = true
+                            });
+                        }
+                    ));
             }
 
             var data = new ReactionCallbackData("", embed.Build(), false, false, TimeSpan.FromSeconds(120),
@@ -136,14 +147,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
         private List<PaginatedMessage.Page> Pages(SocketGuild guild, IRole role)
         {
-            var usersWithRole = guild.Users.Where(x => x.Roles.Contains(role));
-            var usersList = usersWithRole.OrderBy(x => x.Username).ToList();
-            var count = usersList.Count;
+            IEnumerable<SocketGuildUser> usersWithRole = guild.Users.Where(x => x.Roles.Contains(role));
+            List<SocketGuildUser> usersList = usersWithRole.OrderBy(x => x.Username).ToList();
+            int count = usersList.Count;
 
             if (count == 0)
                 count = 1;
 
-            var totalPageCount = (count + 24) / 25;
+            int totalPageCount = (count + 24) / 25;
 
             var pages = new List<PaginatedMessage.Page>();
 
@@ -152,18 +163,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             for (int i = 0; i < count; i++)
             {
-                var pageCount = (i + 24) / 25;
+                int pageCount = (i + 24) / 25;
 
                 if (pageCount == 0)
                     pageCount = 1;
 
-                var currentPage = pages.ElementAt(pageCount - 1);
+                PaginatedMessage.Page currentPage = pages.ElementAt(pageCount - 1);
 
                 currentPage.Title = $"All users with role {role.Name}";
 
                 if (usersList.Count == 0)
                 {
                     currentPage.Description = "`No users have the role.`";
+
                     break;
                 }
 

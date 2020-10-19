@@ -9,10 +9,13 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Models
     {
         [JsonProperty(PropertyName = "registered_user_count")]
         public int RegisteredUserCount;
+
         [JsonProperty(PropertyName = "server_count")]
         public int ServerCount;
+
         [JsonProperty(PropertyName = "commands_used_alltime")]
         public int CommandsUsedAllTime;
+
         [JsonProperty(PropertyName = "currency_in_circulation")]
         public int CurrencyInCirculation;
 

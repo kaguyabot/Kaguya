@@ -6,6 +6,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
@@ -28,39 +29,44 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command(string type = null, string channel = null)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
             if (type == null && channel == null)
             {
-                var curChatType = user.ExpChatNotificationType;
-                var curDmType = user.ExpDmNotificationType;
+                ExpType curChatType = user.ExpChatNotificationType;
+                ExpType curDmType = user.ExpDmNotificationType;
 
-                var userPref = $"{Context.User.Mention}, here are your current EXP level-up notification preferences:\n\n" +
-                               $"Chat reply: `{curChatType.Humanize(LetterCasing.Title)}`\n" +
-                               $"DM: `{curDmType.Humanize(LetterCasing.Title)}`";
+                string userPref = $"{Context.User.Mention}, here are your current EXP level-up notification preferences:\n\n" +
+                                  $"Chat reply: `{curChatType.Humanize(LetterCasing.Title)}`\n" +
+                                  $"DM: `{curDmType.Humanize(LetterCasing.Title)}`";
 
                 await SendBasicSuccessEmbedAsync(userPref);
+
                 return;
             }
 
-            var expType = GetExpType(type);
-            var expChannel = GetChannelPref(channel);
+            ExpType expType = GetExpType(type);
+            ExpChannel expChannel = GetChannelPref(channel);
 
             switch (expChannel)
             {
-                case ExpChannel.Chat:
-                    user.ExpChatNotificationTypeNum = (int)expType;
+                case ExpChannel.CHAT:
+                    user.ExpChatNotificationTypeNum = (int) expType;
+
                     break;
                 case ExpChannel.DM:
-                    user.ExpDmNotificationTypeNum = (int)expType;
+                    user.ExpDmNotificationTypeNum = (int) expType;
+
                     break;
-                case ExpChannel.Both:
-                    user.ExpChatNotificationTypeNum = (int)expType;
-                    user.ExpDmNotificationTypeNum = (int)expType;
+                case ExpChannel.BOTH:
+                    user.ExpChatNotificationTypeNum = (int) expType;
+                    user.ExpDmNotificationTypeNum = (int) expType;
+
                     break;
-                case ExpChannel.Disabled:
-                    user.ExpChatNotificationTypeNum = (int)ExpType.None;
-                    user.ExpDmNotificationTypeNum = (int)ExpType.None;
+                case ExpChannel.DISABLED:
+                    user.ExpChatNotificationTypeNum = (int) ExpType.NONE;
+                    user.ExpDmNotificationTypeNum = (int) ExpType.NONE;
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -68,52 +74,46 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 
             await DatabaseQueries.UpdateAsync(user);
             await Context.Channel.SendBasicSuccessEmbedAsync($"Successfully updated your " +
-                 $"EXP notification preferences.\n" +
-                 $"New configuration:\n\n" +
-                 $"Chat reply: `{user.ExpChatNotificationType.Humanize(LetterCasing.Title)}`\n" +
-                 $"DM: `{user.ExpDmNotificationType.Humanize(LetterCasing.Title)}`");
+                                                             $"EXP notification preferences.\n" +
+                                                             $"New configuration:\n\n" +
+                                                             $"Chat reply: `{user.ExpChatNotificationType.Humanize(LetterCasing.Title)}`\n" +
+                                                             $"DM: `{user.ExpDmNotificationType.Humanize(LetterCasing.Title)}`");
         }
 
-        private ExpChannel GetChannelPref(string channel)
+        private ExpChannel GetChannelPref(string channel) => channel.ToLower() switch
         {
-            return channel.ToLower() switch
-            {
-                "chat" => ExpChannel.Chat,
-                "dm" => ExpChannel.DM,
-                "both" => ExpChannel.Both,
-                "disabled" => ExpChannel.Disabled,
-                _ => throw new ArgumentOutOfRangeException("The route parameter must be set " +
-                                                           "to either `chat`, `dm`, `both`, or `disabled`.")
-            };
-        }
+            "chat" => ExpChannel.CHAT,
+            "dm" => ExpChannel.DM,
+            "both" => ExpChannel.BOTH,
+            "disabled" => ExpChannel.DISABLED,
+            _ => throw new ArgumentOutOfRangeException("The route parameter must be set " +
+                                                       "to either `chat`, `dm`, `both`, or `disabled`.")
+        };
 
-        private ExpType GetExpType(string type)
+        private ExpType GetExpType(string type) => type.ToLower() switch
         {
-            return type.ToLower() switch
-            {
-                "global" => ExpType.Global,
-                "server" => ExpType.Server,
-                "both" => ExpType.Both,
-                "none" => ExpType.None,
-                _ => throw new ArgumentOutOfRangeException("The level-up type parameter must be either " +
-                                                           "`server`, `global`, `both`, or `none`.")
-            };
-        }
+            "global" => ExpType.GLOBAL,
+            "server" => ExpType.SERVER,
+            "both" => ExpType.BOTH,
+            "none" => ExpType.NONE,
+            _ => throw new ArgumentOutOfRangeException("The level-up type parameter must be either " +
+                                                       "`server`, `global`, `both`, or `none`.")
+        };
     }
 
     public enum ExpType
     {
-        Global,
-        Server,
-        Both,
-        None
+        GLOBAL,
+        SERVER,
+        BOTH,
+        NONE
     }
 
     public enum ExpChannel
     {
-        Chat,
+        CHAT,
         DM,
-        Both,
-        Disabled
+        BOTH,
+        DISABLED
     }
 }

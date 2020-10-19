@@ -27,16 +27,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Remarks("")]
         public async Task Command()
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
-            var userFish = await DatabaseQueries.GetAllForUserAsync<Fish>(user.UserId);
+            List<Fish> userFish = await DatabaseQueries.GetAllForUserAsync<Fish>(user.UserId);
             var countFishDicts = new List<Dictionary<FishType, int>>();
 
             if (userFish.Count == 0)
             {
                 await SendBasicErrorEmbedAsync($"You have never fished before. Try it out with " +
-                                                               $"`{server.CommandPrefix}fish`!");
+                                               $"`{server.CommandPrefix}fish`!");
+
                 return;
             }
 
@@ -48,12 +49,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 // Creates a new dictionary of how many unsold fish the user has of the given type.
                 var dic = new Dictionary<FishType, int>();
-                var fishMatchingType = await DatabaseQueries.GetUnsoldFishForUserAsync(user.UserId);
+                List<Fish> fishMatchingType = await DatabaseQueries.GetUnsoldFishForUserAsync(user.UserId);
                 fishMatchingType = fishMatchingType.Where(x => x.FishType == type).ToList(); // Filter the fish.
 
                 if (userFish.Count == 0)
                 {
                     ownedFishString = $"You currently don't own any fish, go catch some!";
+
                     goto StatsEmbed;
                 }
 
@@ -65,34 +67,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 }
             }
 
-            foreach (var fish in userFish)
+            foreach (Fish fish in userFish)
             {
                 allTimeFishValue += fish.Value;
                 if (!fish.Sold)
                     curFishValue += Fish.GetPayoutForFish(fish, user.FishExp);
             }
 
-            foreach (var dic in countFishDicts)
+            foreach (Dictionary<FishType, int> dic in countFishDicts)
             {
                 ownedFishString += $"Fish: `{dic.Keys.First().ToString()}` - Count: `{dic.Values.First():N0}` - " +
                                    $"Value: `{Fish.GetPayoutForFish(userFish.Where(x => x.FishType == dic.Keys.First() && !x.Sold).ToList(), user.FishExp):N0}` points\n";
             }
 
             if (ownedFishString.IsNullOrEmpty())
-            {
                 ownedFishString = "`No fish currently owned.`";
-            }
-
 
             StatsEmbed:
             string rarestFish = null;
             if (userFish.Count(x => !x.Sold && x.FishType != FishType.BAIT_STOLEN) != 0)
             {
                 rarestFish = userFish
-                    .OrderBy(x => x.FishType)
-                    .First(x => x.Sold == false && x.FishType != FishType.BAIT_STOLEN)
-                    .FishType
-                    .ToString();
+                             .OrderBy(x => x.FishType)
+                             .First(x => x.Sold == false && x.FishType != FishType.BAIT_STOLEN)
+                             .FishType
+                             .ToString();
             }
 
             var embed = new KaguyaEmbedBuilder
@@ -104,7 +103,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                     {
                         Name = "Fish Level",
                         Value = $"Fish Exp: `{user.FishExp:N0}` exp.\n" +
-                                $"Fish Level: `{(int)FishHandler.GetFishLevel(user.FishExp):N0}`\n" +
+                                $"Fish Level: `{(int) FishHandler.GetFishLevel(user.FishExp):N0}`\n" +
                                 $"{FishHandler.GetRewardString(user.FishExp, user, false)}"
                     },
                     new EmbedFieldBuilder
@@ -135,31 +134,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 embed.Fields.RemoveAt(1);
 
             await InlineReactionReplyAsync(new ReactionCallbackData("",
-                embed.Build(), true, true, TimeSpan.FromSeconds(90))
-                .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
-                {
-                    using (var stream = new MemoryStream())
-                    {
-                        var writer = new StreamWriter(stream);
-                        foreach (var fish in userFish.Where(x => x.FishType != FishType.BAIT_STOLEN && !x.Sold))
-                        {
-                            await writer.WriteLineAsync($"Fish ID: {fish.FishId} - " +
-                                                        $"Fish Type: {fish.FishType.ToString()} - " +
-                                                        $"Value: {fish.Value}");
-                        }
+                                               embed.Build(), true, true, TimeSpan.FromSeconds(90))
+                                           .AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) =>
+                                           {
+                                               using (var stream = new MemoryStream())
+                                               {
+                                                   var writer = new StreamWriter(stream);
+                                                   foreach (Fish fish in userFish.Where(x => x.FishType != FishType.BAIT_STOLEN && !x.Sold))
+                                                   {
+                                                       await writer.WriteLineAsync($"Fish ID: {fish.FishId} - " +
+                                                                                   $"Fish Type: {fish.FishType.ToString()} - " +
+                                                                                   $"Value: {fish.Value}");
+                                                   }
 
-                        await writer.FlushAsync();
-                        stream.Seek(0, SeekOrigin.Begin);
+                                                   await writer.FlushAsync();
+                                                   stream.Seek(0, SeekOrigin.Begin);
 
-                        await c.User.SendFileAsync(stream, $"Fish for {c.User}.txt");
-                        await c.Channel.SendBasicSuccessEmbedAsync($"{c.User.Mention} Alright, I've gone ahead " +
-                                                                   $"and DM'd you all of your fish!");
-                    }
-                })
-                .AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
-                {
-                    await SendBasicErrorEmbedAsync("Okay, no action will be taken.");
-                }));
+                                                   await c.User.SendFileAsync(stream, $"Fish for {c.User}.txt");
+                                                   await c.Channel.SendBasicSuccessEmbedAsync($"{c.User.Mention} Alright, I've gone ahead " +
+                                                                                              $"and DM'd you all of your fish!");
+                                               }
+                                           })
+                                           .AddCallBack(GlobalProperties.NoEntryEmoji(),
+                                               async (c, r) => { await SendBasicErrorEmbedAsync("Okay, no action will be taken."); }));
         }
     }
 }

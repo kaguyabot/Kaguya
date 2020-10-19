@@ -26,17 +26,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
                 new Regex("(([0-9])*d)")
             };
 
-            var s = regexs[0].Match(duration).Value;
-            var m = regexs[1].Match(duration).Value;
-            var h = regexs[2].Match(duration).Value;
-            var d = regexs[3].Match(duration).Value;
+            string s = regexs[0].Match(duration).Value;
+            string m = regexs[1].Match(duration).Value;
+            string h = regexs[2].Match(duration).Value;
+            string d = regexs[3].Match(duration).Value;
 
-            var seconds = s.Split('s').First();
-            var minutes = m.Split('m').First();
-            var hours = h.Split('h').First();
-            var days = d.Split('d').First();
+            string seconds = s.Split('s').First();
+            string minutes = m.Split('m').First();
+            string hours = h.Split('h').First();
+            string days = d.Split('d').First();
 
-            if (!StringIsMatch(seconds) && !StringIsMatch(minutes) && !StringIsMatch(hours) &&
+            if (!StringIsMatch(seconds) &&
+                !StringIsMatch(minutes) &&
+                !StringIsMatch(hours) &&
                 !StringIsMatch(days))
             {
                 throw new FormatException("You did not specify a proper duration. \nThe proper format is " +
@@ -67,28 +69,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         public static TimeSpan ParseToTimespan(this string duration)
         {
             Parse(duration, out int sec, out int min, out int hour, out int day);
+
             return new TimeSpan(day, hour, min, sec);
         }
 
-        private static bool StringIsMatch(string s)
-        {
-            return !s.IsNullOrEmpty();
-        }
-
-        public static string FormattedTimeString(string duration)
-        {
-            return HumanizedString(ParseToTimespan(duration));
-        }
+        private static bool StringIsMatch(string s) => !s.IsNullOrEmpty();
+        public static string FormattedTimeString(string duration) => HumanizedString(ParseToTimespan(duration));
 
         public static string FormattedTimeString(int d, int h, int m, int s)
         {
-            TimeSpan ts = new TimeSpan(d, h, m, s);
+            var ts = new TimeSpan(d, h, m, s);
+
             return HumanizedString(ts);
         }
 
-        public static string HumanizedString(TimeSpan ts)
-        {
-            return ts.Humanize(4, maxUnit: TimeUnit.Day, minUnit: TimeUnit.Second);
-        }
+        public static string HumanizedString(TimeSpan ts) => ts.Humanize(4, maxUnit: TimeUnit.Day, minUnit: TimeUnit.Second);
     }
 }

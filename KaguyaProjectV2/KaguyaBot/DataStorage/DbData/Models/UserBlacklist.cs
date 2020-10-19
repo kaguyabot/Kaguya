@@ -8,9 +8,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     {
         [PrimaryKey]
         public ulong UserId { get; set; }
-        [Column(Name = "Expiration"), NotNull]
+
+        [Column(Name = "Expiration")]
+        [NotNull]
         public double Expiration { get; set; }
-        [Column(Name = "Reason"), NotNull]
+
+        [Column(Name = "Reason")]
+        [NotNull]
         public string Reason { get; set; }
 
         [Association(ThisKey = "UserId", OtherKey = "UserId")]

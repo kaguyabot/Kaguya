@@ -8,9 +8,6 @@
         public string Username { get; set; }
         public string Password { get; set; }
         public string CharSet { get; } = "utf8mb4";
-
-        public DatabaseConfig()
-        {
-        }
+        public DatabaseConfig() { }
     }
 }

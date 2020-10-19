@@ -9,6 +9,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
@@ -58,6 +59,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                              $"warned in guild {server.ServerId}. " +
                                              $"Database updated regardless.", LogLvl.DEBUG);
             }
+
             await ReplyAsync(embed: (await Reply(wu, user)).Build());
 
             if (server.IsPremium && server.ModLog != 0)
@@ -65,7 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 var premLog = new PremiumModerationLog
                 {
                     Server = server,
-                    Moderator = (SocketGuildUser)Context.User,
+                    Moderator = (SocketGuildUser) Context.User,
                     ActionRecipient = user,
                     Reason = reason,
                     Action = PremiumModActionHandler.WARN
@@ -79,8 +81,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
         private static async Task<KaguyaEmbedBuilder> WarnEmbed(WarnedUser user, ICommandContext context)
         {
-            var curWarns = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.UserId, context.Guild.Id);
-            var curCount = curWarns.Count;
+            List<WarnedUser> curWarns = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.UserId, context.Guild.Id);
+            int curCount = curWarns.Count;
             var embed = new KaguyaEmbedBuilder
             {
                 Title = "⚠️ Warning Received",
@@ -93,14 +95,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                         $"You currently have {curCount} warnings."
                 }
             };
+
             embed.SetColor(EmbedColor.RED);
+
             return embed;
         }
 
         private static async Task<KaguyaEmbedBuilder> Reply(WarnedUser user, SocketGuildUser warnedUser)
         {
-            var curWarns = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.UserId, warnedUser.Guild.Id);
-            var curCount = curWarns.Count;
+            List<WarnedUser> curWarns = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.UserId, warnedUser.Guild.Id);
+            int curCount = curWarns.Count;
 
             var embed = new KaguyaEmbedBuilder
             {
@@ -110,6 +114,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     Text = $"{warnedUser.Username} now has {curCount} warnings."
                 }
             };
+
             return embed;
         }
     }

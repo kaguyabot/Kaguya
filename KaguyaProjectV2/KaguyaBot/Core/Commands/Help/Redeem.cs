@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Net;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
@@ -32,14 +33,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Remarks("<key>")]
         public async Task RedeemKey(params string[] keys)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var existingPremiumKeys = await DatabaseQueries.GetAllAsync<PremiumKey>();
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            List<PremiumKey> existingPremiumKeys = await DatabaseQueries.GetAllAsync<PremiumKey>();
 
-            foreach (var keyString in keys)
+            foreach (string keyString in keys)
             {
-                var premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == keyString && x.UserId == 0 && x.ServerId == 0);
-            
+                PremiumKey premiumKey = existingPremiumKeys.FirstOrDefault(x => x.Key == keyString && x.UserId == 0 && x.ServerId == 0);
+
                 if (premiumKey == null)
                 {
                     await Context.Message.DeleteAsync();
@@ -50,11 +51,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                         {
                             Text = $"If you need assistance, please join the server provided in {server.CommandPrefix}invite"
                         }
-
                     };
+
                     embed0.SetColor(EmbedColor.RED);
 
                     await ReplyAsync(embed: embed0.Build());
+
                     return;
                 }
 
@@ -68,28 +70,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                         LengthInSeconds = premiumKey.LengthInSeconds,
                         KeyCreatorId = premiumKey.KeyCreatorId,
                         UserId = Context.User.Id,
-                        ServerId = Context.Guild.Id,
+                        ServerId = Context.Guild.Id
                     };
 
-                    await DatabaseQueries.InsertOrReplaceAsync((PremiumKey)newKey);
+                    await DatabaseQueries.InsertOrReplaceAsync((PremiumKey) newKey);
                 }
                 else
                 {
                     await Context.Message.DeleteAsync();
+
                     throw new KaguyaSupportException("Failed to redeem your key. Please " +
-                                                       "join our support server for assistance.");
+                                                     "join our support server for assistance.");
                 }
 
                 TimeSpan ts = $"{newKey.LengthInSeconds}s".ParseToTimespan();
 
-                user.TotalDaysPremium += (int)TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
+                user.TotalDaysPremium += (int) TimeSpan.FromSeconds(newKey.LengthInSeconds).TotalDays;
                 int totalDaysSupported = user.TotalDaysPremium;
 
-                var userPremiumExpiration = user.PremiumExpiration;
+                double userPremiumExpiration = user.PremiumExpiration;
                 if (userPremiumExpiration < DateTime.Now.ToOADate())
-                {
                     userPremiumExpiration = DateTime.Now.ToOADate();
-                }
 
                 userPremiumExpiration = DateTime.FromOADate(userPremiumExpiration).AddSeconds(premiumKey.LengthInSeconds).ToOADate();
                 user.PremiumExpiration = userPremiumExpiration;
@@ -97,15 +98,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 // If the server has never been premium before, or was but it has expired, 
                 // we need to reset the expiration to Now + the key's length.
                 if (server.PremiumExpiration < DateTime.Now.ToOADate())
-                {
                     server.PremiumExpiration = DateTime.Now.AddSeconds(premiumKey.LengthInSeconds).ToOADate();
-                }
                 else
                 {
                     server.PremiumExpiration = DateTime.FromOADate(server.PremiumExpiration)
-                        .AddSeconds(premiumKey.LengthInSeconds).ToOADate();
+                                                       .AddSeconds(premiumKey.LengthInSeconds).ToOADate();
                 }
-                
+
                 var embed = new KaguyaEmbedBuilder
                 {
                     Description = $"Successfully redeemed `" +
@@ -119,6 +118,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                         Text = "It may not seem like a lot, but it all adds up. Thanks for your support!"
                     }
                 };
+
                 embed.SetColor(EmbedColor.GOLD);
 
                 await ReplyAsync(embed: embed.Build());
@@ -127,14 +127,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 #endif
                 await DatabaseQueries.UpdateAsync(user);
                 await DatabaseQueries.UpdateAsync(server);
-                
+
                 await ApplyRewardsToUser(user, Context.User, premiumKey);
             }
         }
 
         private async Task SendEmbedToBotOwner(ICommandContext context, IKey key)
         {
-            var owner = Client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
+            SocketUser owner = Client.GetUser(ConfigProperties.BotConfig.BotOwnerId);
             var fields = new List<EmbedFieldBuilder>
             {
                 new EmbedFieldBuilder
@@ -170,7 +170,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
         private async Task ApplyRewardsToUser(User user, IUser discordUser, IKey key)
         {
-            int points = (int)(25000 * (TimeSpan.FromSeconds(key.LengthInSeconds).TotalDays / 30));
+            int points = (int) (25000 * (TimeSpan.FromSeconds(key.LengthInSeconds).TotalDays / 30));
             user.AddPoints(points);
 
             var embed = new KaguyaEmbedBuilder(EmbedColor.GOLD)
@@ -181,13 +181,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             await DatabaseQueries.UpdateAsync(user);
             await discordUser.SendMessageAsync(embed: embed.Build());
         }
-        
-        private double ServerUptimeCalcInDays(int totalDaysSupported)
-        {
+
+        private double ServerUptimeCalcInDays(int totalDaysSupported) =>
             // 13 cents per day for supporter.
             // $2.69 per day for the server.
             // 1 day of supporter = 0.04 days of server uptime
-            return PREMIUM_COST / 30 / (MONTHLY_SERVER_FEE / 30) * totalDaysSupported;
-        }
+            (PREMIUM_COST / 30 / (MONTHLY_SERVER_FEE / 30)) * totalDaysSupported;
     }
 }

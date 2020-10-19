@@ -16,10 +16,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             if (num > 20)
             {
                 await SendBasicErrorEmbedAsync("You cannot request a spam of more than 20 messages.");
+
                 return;
             }
 
-            Random r = new Random();
+            var r = new Random();
             for (int i = 0; i < num; i++)
             {
                 int numMsg = r.Next();

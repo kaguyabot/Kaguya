@@ -11,7 +11,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium; // DO NOT REMOVE
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG; // DO NOT REMOVE
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;         // DO NOT REMOVE
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
@@ -41,32 +41,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             _config = await Config.GetOrCreateConfigAsync(args);
 
-            var task1 = CreateHostBuilder(args).Build().RunAsync();
-            var task2 = new Program().MainAsync(args);
+            Task task1 = CreateHostBuilder(args).Build().RunAsync();
+            Task task2 = new Program().MainAsync(args);
 
             Task.WaitAll(task1, task2);
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls($"http://+:{_config.TopGGWebhookPort}");
-                    webBuilder.UseKestrel();
-                });
+        public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaultBuilder(args)
+                                                                           .ConfigureLogging(logging =>
+                                                                           {
+                                                                               logging.ClearProviders();
+                                                                               logging.AddConsole();
+                                                                           })
+                                                                           .ConfigureWebHostDefaults(webBuilder =>
+                                                                           {
+                                                                               webBuilder.UseStartup<Startup>();
+                                                                               webBuilder.UseUrls($"http://+:{_config.TopGgWebhookPort}");
+                                                                               webBuilder.UseKestrel();
+                                                                           });
 
         public async Task MainAsync(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
             {
-                await ConsoleLogger.LogAsync($"Unhandled Exception: {(Exception)eventArgs.ExceptionObject}\n" + 
-                $"Inner Exception: {((Exception)eventArgs.ExceptionObject).InnerException}", LogLvl.ERROR);
+                await ConsoleLogger.LogAsync($"Unhandled Exception: {(Exception) eventArgs.ExceptionObject}\n" +
+                                             $"Inner Exception: {((Exception) eventArgs.ExceptionObject).InnerException}", LogLvl.ERROR);
             };
 
             var config = new DiscordSocketConfig
@@ -92,7 +91,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             _lavaNode = new LavaNode(_client, lavaConfig);
 
             await SetupKaguya();
-            using (var services = new SetupServices().ConfigureServices(config, _client))
+            using (ServiceProvider services = new SetupServices().ConfigureServices(config, _client))
             {
                 try
                 {
@@ -113,20 +112,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
                     await _client.SetGameAsync($"v{ConfigProperties.Version}: Booting up!");
                     _client.ShardReady += async c => { await _lavaNode.ConnectAsync(); };
-                    
+
                     await InitializeTimers(AllShardsLoggedIn(_client, config));
-                    
-                    _lavaNode.OnLog += async message =>
-                    {
-                        await ConsoleLogger.LogAsync("[Kaguya Music]: " + message.Message, LogLvl.INFO);
-                    };
+
+                    _lavaNode.OnLog += async message => { await ConsoleLogger.LogAsync("[Kaguya Music]: " + message.Message, LogLvl.INFO); };
 
                     InitializeEventHandlers();
 
                     if (AllShardsLoggedIn(_client, config))
                     {
                         ConfigProperties.LavaNode = _lavaNode;
-                        OsuBase.client = new OsuClient(new OsuSharpConfiguration
+                        OsuBase.Client = new OsuClient(new OsuSharpConfiguration
                         {
                             ApiKey = _config.OsuApiKey
                         });
@@ -138,29 +134,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 catch (HttpException e)
                 {
                     await ConsoleLogger.LogAsync($"Error when logging into Discord:\n" +
-                                            $"-Have you configured your config file?\n" +
-                                            $"-Is your token correct? Exception: {e.Message}", LogLvl.ERROR);
+                                                 $"-Have you configured your config file?\n" +
+                                                 $"-Is your token correct? Exception: {e.Message}", LogLvl.ERROR);
+
                     Console.ReadLine();
                 }
                 catch (Exception e)
                 {
                     await ConsoleLogger.LogAsync("Something really important broke!\n" +
-                                            $"Exception: {e.Message}", LogLvl.ERROR);
+                                                 $"Exception: {e.Message}", LogLvl.ERROR);
                 }
             }
         }
-        public async Task SetupKaguya()
-        {
-            await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========", LogLvl.INFO, true,
-                ConsoleColor.Cyan, ConsoleColor.Black, false, false);
-        }
 
-        private void GlobalPropertySetup(ConfigModel _config)
+        public async Task SetupKaguya() => await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========",
+            LogLvl.INFO, true,
+            ConsoleColor.Cyan, ConsoleColor.Black, false, false);
+
+        private void GlobalPropertySetup(ConfigModel config)
         {
             ConfigProperties.Client = _client;
-            ConfigProperties.BotConfig = _config;
-            ConfigProperties.LogLevel = (LogLvl)_config.LogLevelNumber;
-            ConfigProperties.TopGGApi = new AuthDiscordBotListApi(538910393918160916, _config.TopGGApiKey);
+            ConfigProperties.BotConfig = config;
+            ConfigProperties.LogLevel = (LogLvl) config.LogLevelNumber;
+            ConfigProperties.TopGgApi = new AuthDiscordBotListApi(538910393918160916, config.TopGgApiKey);
         }
 
         private async Task TestDatabaseConnection()
@@ -169,9 +165,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 var _ = new Init();
                 if (await DatabaseQueries.TestConnection())
-                {
                     await ConsoleLogger.LogAsync("Database connection successfully established.", LogLvl.INFO);
-                }
             }
             catch (Exception e)
             {
@@ -192,7 +186,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private async Task InitializeTimers(bool allShardsLoggedIn)
         {
             if (!allShardsLoggedIn) return;
-            
+
             // We need to load the cache on program start.
             await MemoryCache.Initialize();
             await ConsoleLogger.LogAsync("Memory Cache timer initialized", LogLvl.INFO);
@@ -227,10 +221,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private void InitializeEventHandlers()
         {
             var reactionHandler = new ReactionRoleHandler();
-            
+
             WarnEvent.OnWarn += WarnHandler.OnWarn;
             FishEvent.OnFish += async args => await FishHandler.OnFish(args);
-            
+
             _client.UserJoined += GreetingService.Trigger;
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;
             _client.JoinedGuild += NewOwnerNotificationService.Trigger;
@@ -239,13 +233,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
             _client.ReactionAdded += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, true);
             _client.ReactionRemoved += (cache, ch, e) => reactionHandler.ReactionChanged(cache, ch, e, false);
-            
+
             _lavaNode.OnTrackEnded += MusicService.OnTrackEnd;
         }
 
-        private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config)
-        {
-            return client.Shards.Count == config.TotalShards;
-        }
+        private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config) => client.Shards.Count == config.TotalShards;
     }
 }

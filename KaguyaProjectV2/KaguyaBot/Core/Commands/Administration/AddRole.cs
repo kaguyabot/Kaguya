@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -27,9 +28,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             int i = 0;
             foreach (string roleName in args)
             {
-                var role = roleName.AsUlong(false) != 0 ?
-                    Context.Guild.GetRole(roleName.AsUlong()) :
-                    Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
+                SocketRole role = roleName.AsUlong(false) != 0
+                    ? Context.Guild.GetRole(roleName.AsUlong())
+                    : Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
+
                 try
                 {
                     await user.AddRoleAsync(role);
@@ -41,7 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 }
             }
 
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+            var embed = new KaguyaEmbedBuilder
             {
                 Description = $"`{user.Username}` has been given `{i.ToWords()}` roles."
             };

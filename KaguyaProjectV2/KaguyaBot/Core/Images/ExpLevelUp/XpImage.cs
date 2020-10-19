@@ -11,8 +11,8 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Image = SixLabors.ImageSharp.Image;
-// ReSharper disable AccessToDisposedClosure
 
+// ReSharper disable AccessToDisposedClosure
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
 {
     public class XpImage : ImageBase
@@ -41,15 +41,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
                     Font = Font(server is null ? 60 : 48),
                     HasStroke = true,
                     Loc = server is null
-                    ? new TemplateLoc
-                    {
-                        X = 210,
-                        Y = 125
-                    } : new TemplateLoc
-                    {
-                        X = 160,
-                        Y = 125
-                    },
+                        ? new TemplateLoc
+                        {
+                            X = 210,
+                            Y = 125
+                        }
+                        : new TemplateLoc
+                        {
+                            X = 160,
+                            Y = 125
+                        },
                     Show = true,
                     StrokeColor = Rgba32.LightSalmon,
                     StrokeWidth = 1.4f,
@@ -77,16 +78,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
                     HasStroke = true,
                     Loc = new TemplateLoc
                     {
-                        X = user.GlobalLevel().Rounded(RoundDirection.Down).ToString().Length == 1
-                            ? 300 : user.GlobalLevel().Rounded(RoundDirection.Down).ToString().Length > 2 ? 270 : 288,
+                        X = user.GlobalLevel().Rounded(RoundDirection.DOWN).ToString().Length == 1
+                            ? 300
+                            : user.GlobalLevel().Rounded(RoundDirection.DOWN).ToString().Length > 2
+                                ? 270
+                                : 288,
                         Y = 200
                     },
                     Show = true,
                     StrokeColor = Rgba32.DarkSalmon,
                     StrokeWidth = 1,
                     Text = server is null
-                        ? user.GlobalLevel().Rounded(RoundDirection.Down).ToString()
-                        : user.ServerLevel(server).Rounded(RoundDirection.Down).ToString()
+                        ? user.GlobalLevel().Rounded(RoundDirection.DOWN).ToString()
+                        : user.ServerLevel(server).Rounded(RoundDirection.DOWN).ToString()
                 },
                 SupporterBadge = new TemplateBadge
                 {
@@ -104,25 +108,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
             {
                 string pfpLink = xp.ProfilePicture?.ProfileUrl ?? guildUser.GetDefaultAvatarUrl();
 
-                var pfpImg = await wc.DownloadDataTaskAsync(pfpLink);
+                byte[] pfpImg = await wc.DownloadDataTaskAsync(pfpLink);
                 pfpStream = new MemoryStream(pfpImg);
 
-                var badgeImg = await wc.DownloadDataTaskAsync(xp.SupporterBadge.Emote.Url);
+                byte[] badgeImg = await wc.DownloadDataTaskAsync(xp.SupporterBadge.Emote.Url);
                 badgeStream = new MemoryStream(badgeImg);
             }
 
-            using var image = Image.Load(XP_TEMPLATE_PATH);
+            using Image image = Image.Load(XP_TEMPLATE_PATH);
             using var canvas = new Image<Rgba32>(image.Width, image.Height);
-            using var profilePicture = Image.Load(pfpStream);
-            using var suppBadge = Image.Load(badgeStream);
+            using Image profilePicture = Image.Load(pfpStream);
+            using Image suppBadge = Image.Load(badgeStream);
 
-            const double resizeScalar = 0.82;
-            suppBadge.Mutate(x => x.Resize((int)(suppBadge.Width * resizeScalar), (int)(suppBadge.Height * resizeScalar)));
+            const double RESIZE_SCALAR = 0.82;
+            suppBadge.Mutate(x => x.Resize((int) (suppBadge.Width * RESIZE_SCALAR), (int) (suppBadge.Height * RESIZE_SCALAR)));
 
             if (xp.ProfilePicture.ProfileUrl == null)
-            {
                 profilePicture.Mutate(x => x.Resize(132, 132));
-            }
+
             // The reason why we draw the template onto the profile picture here is because 
             // the profile picture is beneath the template. Our template contains a cutout for this, 
             // so we draw everything ontop of our virtual base layer (in this case, our profile pic).
@@ -130,17 +133,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
             // More documentation can be found in ProfileImage.cs
             //
             // Unlike ProfileImage.cs, however, I decided to go with a deliberate blank canvas to draw ontop of.
-            canvas.Mutate(x => x.DrawImage(profilePicture, new Point((int)xp.ProfilePicture.Loc.X, (int)xp.ProfilePicture.Loc.Y), 1));
+            canvas.Mutate(x => x.DrawImage(profilePicture, new Point((int) xp.ProfilePicture.Loc.X, (int) xp.ProfilePicture.Loc.Y), 1));
             canvas.Mutate(x => x.DrawImage(image, 1));
             canvas.Mutate(x => x.DrawKaguyaXpPanelText(xp));
 
             if (user.IsPremium)
-            {
-                canvas.Mutate(x => x.DrawImage(suppBadge, new Point((int)xp.SupporterBadge.Loc.X, (int)xp.SupporterBadge.Loc.Y), 1));
-            }
+                canvas.Mutate(x => x.DrawImage(suppBadge, new Point((int) xp.SupporterBadge.Loc.X, (int) xp.SupporterBadge.Loc.Y), 1));
 
             canvas.SaveAsPng(templateStream);
             templateStream.Seek(0, SeekOrigin.Begin);
+
             return templateStream;
         }
     }

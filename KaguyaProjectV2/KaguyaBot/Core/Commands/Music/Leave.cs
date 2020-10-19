@@ -6,6 +6,9 @@ using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using Victoria;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
@@ -21,17 +24,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [RequireBotPermission(GuildPermission.Connect)]
         public async Task Command()
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var node = ConfigProperties.LavaNode;
-            var curUser = Context.Guild.CurrentUser;
-            var curVc = curUser.VoiceChannel;
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            LavaNode node = ConfigProperties.LavaNode;
+            SocketGuildUser curUser = Context.Guild.CurrentUser;
+            SocketVoiceChannel curVc = curUser.VoiceChannel;
             if (node.HasPlayer(Context.Guild))
             {
                 if (curVc == null)
                 {
                     await SendBasicErrorEmbedAsync($"{Context.User.Mention} Please ensure I " +
-                                                                   $"am actively in a voice channel before using " +
-                                                                   $"this command.");
+                                                   $"am actively in a voice channel before using " +
+                                                   $"this command.");
                 }
                 else
                 {
@@ -55,9 +58,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             else
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} I must be in a voice channel via " +
-                                                               $"the `{server.CommandPrefix}join` command for this " +
-                                                               $"command to work. Please try **joining a new voice channel** via " +
-                                                               $"`{server.CommandPrefix}join` if I am refusing to connect/disconnect.");
+                                               $"the `{server.CommandPrefix}join` command for this " +
+                                               $"command to work. Please try **joining a new voice channel** via " +
+                                               $"`{server.CommandPrefix}join` if I am refusing to connect/disconnect.");
             }
         }
     }

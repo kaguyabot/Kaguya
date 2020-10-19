@@ -21,20 +21,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [Remarks("")]
         public async Task Command()
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var quotes = server.Quotes;
-            var quoteCount = quotes.Count();
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            IEnumerable<Quote> quotes = server.Quotes;
+            int quoteCount = quotes.Count();
 
-            if(quoteCount < 1)
+            if (quoteCount < 1)
             {
                 await SendBasicErrorEmbedAsync("This server does not have any quotes saved.");
+
                 return;
             }
 
             var rand = new Random();
-            var quoteIndex = rand.Next(0, quoteCount);
+            int quoteIndex = rand.Next(0, quoteCount);
 
-            var quote = quotes.ElementAt(quoteIndex);
+            Quote quote = quotes.ElementAt(quoteIndex);
             SocketUser quoteAuthor = Client.GetUser(quote.UserId);
 
             var embed = new KaguyaEmbedBuilder
@@ -46,10 +47,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                         Name = $"Quote #{quote.Id}",
                         Value = $"{quote.Text}"
                     }
-                },
+                }
             };
 
-            if(quoteAuthor != null)
+            if (quoteAuthor != null)
             {
                 embed.Footer = new EmbedFooterBuilder
                 {

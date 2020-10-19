@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Collections.Generic;
+using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -6,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB.Common;
 using System.Linq;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
@@ -21,12 +23,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var rr = server.RoleRewards.ToList();
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            List<ServerRoleReward> rr = server.RoleRewards.ToList();
 
             string rrStr = "";
             int i = 0;
-            foreach (var r in rr)
+            foreach (ServerRoleReward r in rr)
             {
                 i++;
                 rrStr += $"**#{i}.** Level {r.Level} - Role: <@&{r.RoleId}>\n";

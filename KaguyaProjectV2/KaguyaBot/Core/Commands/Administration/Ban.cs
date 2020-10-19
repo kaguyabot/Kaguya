@@ -20,19 +20,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("<user> [reason]")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
-        public async Task BanUser(SocketGuildUser user, [Remainder]string reason = null)
+        public async Task BanUser(SocketGuildUser user, [Remainder] string reason = null)
         {
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
+            var embed = new KaguyaEmbedBuilder();
             reason ??= "<No reason provided>";
-            
+
             try
             {
                 await user.BanAsync(reason: reason);
                 if (user.Id != 159985870458322944)
                     embed.Description = $"Successfully banned `{user}` with reason `{reason}`\n";
                 else // Easter egg lol
+                {
                     embed.Description = $"Successfully banned `{user}` with reason `{reason}`\n" +
-                                         $"*Nice choice* <:Kaguya:581581938884608001> 👍";
+                                        $"*Nice choice* <:Kaguya:581581938884608001> 👍";
+                }
             }
             catch (Exception)
             {

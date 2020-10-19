@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
 {
@@ -24,20 +25,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Command()
         {
-            var guild = Context.Guild;
-            var server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
-            var fish = await DatabaseQueries.GetAllForServerAsync<Fish>(server.ServerId);
-            var praise = await DatabaseQueries.GetAllForServerAsync<Praise>(server.ServerId);
-            var warnedUsers = await DatabaseQueries.GetAllForServerAsync<WarnedUser>(server.ServerId);
-            var commandHistory = await DatabaseQueries.GetAllForServerAsync<CommandHistory>(server.ServerId);
-            var autoAssignedRoles = await DatabaseQueries.GetAllForServerAsync<AutoAssignedRole>(server.ServerId);
+            SocketGuild guild = Context.Guild;
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
+            List<Fish> fish = await DatabaseQueries.GetAllForServerAsync<Fish>(server.ServerId);
+            List<Praise> praise = await DatabaseQueries.GetAllForServerAsync<Praise>(server.ServerId);
+            List<WarnedUser> warnedUsers = await DatabaseQueries.GetAllForServerAsync<WarnedUser>(server.ServerId);
+            List<CommandHistory> commandHistory = await DatabaseQueries.GetAllForServerAsync<CommandHistory>(server.ServerId);
+            List<AutoAssignedRole> autoAssignedRoles = await DatabaseQueries.GetAllForServerAsync<AutoAssignedRole>(server.ServerId);
             var antiRaidConfig = await DatabaseQueries.GetFirstForServerAsync<AntiRaidConfig>(server.ServerId);
-            var mutedUsers = await DatabaseQueries.GetAllForServerAsync<MutedUser>(server.ServerId);
-            var premiumKeys = await DatabaseQueries.GetAllForServerAsync<PremiumKey>(server.ServerId);
+            List<MutedUser> mutedUsers = await DatabaseQueries.GetAllForServerAsync<MutedUser>(server.ServerId);
+            List<PremiumKey> premiumKeys = await DatabaseQueries.GetAllForServerAsync<PremiumKey>(server.ServerId);
 
-            var percentageOnline =
-                ((double)guild.Users.Count(x => x.Status != UserStatus.Offline && x.Status != UserStatus.Invisible) /
-                 guild.MemberCount) * 100;
+            double percentageOnline =
+                ((double) guild.Users.Count(x => x.Status != UserStatus.Offline && x.Status != UserStatus.Invisible) /
+                 guild.MemberCount) *
+                100;
 
             double premiumExpiration = server.PremiumExpiration;
 
@@ -54,7 +56,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
             genSb.AppendLine($"Verification Level: `{guild.VerificationLevel}`");
             genSb.AppendLine($"Total Member Count: `{guild.MemberCount:N0}`");
             genSb.AppendLine($"Percentage of users online: `{percentageOnline:F}%`");
-            genSb.AppendLine($"Voice-Channel AFK Timeout: `{(guild.AFKTimeout != 0 ? TimeSpan.FromSeconds(guild.AFKTimeout).Humanize() : "Disabled")}`");
+            genSb.AppendLine(
+                $"Voice-Channel AFK Timeout: `{(guild.AFKTimeout != 0 ? TimeSpan.FromSeconds(guild.AFKTimeout).Humanize() : "Disabled")}`");
+
             genSb.AppendLine($"AFK Voice Channel: `{(guild.AFKChannel is null ? "Disabled." : guild.AFKChannel.Name)}`");
 
             var embed = new KaguyaEmbedBuilder
@@ -82,6 +86,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
                     }
                 }
             };
+
             await SendEmbedAsync(embed);
         }
     }

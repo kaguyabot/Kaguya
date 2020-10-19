@@ -25,8 +25,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <returns></returns>
         public static (int, int) GetServerXpRank(this User user, Server server)
         {
-            var exp = server.ServerExp.FirstOrDefault(x => x.UserId == user.UserId);
-            var rank = server.ServerExp.OrderByDescending(x => x.Exp).ToList().IndexOf(exp);
+            ServerExp exp = server.ServerExp.FirstOrDefault(x => x.UserId == user.UserId);
+            int rank = server.ServerExp.OrderByDescending(x => x.Exp).ToList().IndexOf(exp);
 
             return (rank + 1, server.ServerExp.Count());
         }
@@ -39,8 +39,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <returns></returns>
         public static async Task<(int, int)> GetGlobalXpRankAsync(this User user)
         {
-            var allExp = (await DatabaseQueries.GetAllAsync<User>()).OrderByDescending(x => x.Experience).ToList();
-            var rank = allExp.IndexOf(allExp.First(x => x.UserId == user.UserId)) + 1;
+            List<User> allExp = (await DatabaseQueries.GetAllAsync<User>()).OrderByDescending(x => x.Experience).ToList();
+            int rank = allExp.IndexOf(allExp.First(x => x.UserId == user.UserId)) + 1;
 
             return (rank, allExp.Count);
         }
@@ -50,25 +50,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public static double GlobalLevel(this User user)
-        {
-            return GlobalProperties.CalculateLevelFromExp(user.Experience);
-        }
+        public static double GlobalLevel(this User user) => GlobalProperties.CalculateLevelFromExp(user.Experience);
 
-        public static double FishLevel(this User user)
-        {
-            return GlobalProperties.CalculateLevelFromExp(user.FishExp);
-        }
+        public static double FishLevel(this User user) => GlobalProperties.CalculateLevelFromExp(user.FishExp);
 
         /// <summary>
         /// Returns the lowest possible amount of EXP needed to reach this <see cref="User"/>'s next level.
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public static int NextGlobalLevelExp(this User user)
-        {
-            return GlobalProperties.CalculateExpFromLevel(Math.Floor(user.GlobalLevel() + 1));
-        }
+        public static int NextGlobalLevelExp(this User user) => GlobalProperties.CalculateExpFromLevel(Math.Floor(user.GlobalLevel() + 1));
 
         /// <summary>
         /// Returns the current exact level of the user in the given server.
@@ -76,10 +67,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <param name="user"></param>
         /// <param name="server"></param>
         /// <returns></returns>
-        public static double ServerLevel(this User user, Server server)
-        {
-            return GlobalProperties.CalculateLevelFromExp(user.ServerExp(server));
-        }
+        public static double ServerLevel(this User user, Server server) => GlobalProperties.CalculateLevelFromExp(user.ServerExp(server));
 
         /// <summary>
         /// Returns the exact value of the next level this user will reach.
@@ -88,10 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <param name="user"></param>
         /// <param name="server"></param>
         /// <returns></returns>
-        public static double NextServerLevel(this User user, Server server)
-        {
-            return ServerLevel(user, server) + 1;
-        }
+        public static double NextServerLevel(this User user, Server server) => ServerLevel(user, server) + 1;
 
         /// <summary>
         /// Returns the integer value of the very next server level the user will reach if they continue to earn EXP.
@@ -99,10 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <param name="user"></param>
         /// <param name="server"></param>
         /// <returns></returns>
-        public static int NextServerLevelRoundedDown(this User user, Server server)
-        {
-            return (int)Math.Floor(ServerLevel(user, server) + 1);
-        }
+        public static int NextServerLevelRoundedDown(this User user, Server server) => (int) Math.Floor(ServerLevel(user, server) + 1);
 
         /// <summary>
         /// Returns the minimum required amount of EXP needed to reach the next level in the given server.
@@ -110,10 +92,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <param name="user"></param>
         /// <param name="server"></param>
         /// <returns></returns>
-        public static int NextServerLevelExp(this User user, Server server)
-        {
-            return GlobalProperties.CalculateExpFromLevel(Math.Floor(user.NextServerLevel(server)));
-        }
+        public static int NextServerLevelExp(this User user, Server server) => GlobalProperties.CalculateExpFromLevel(Math.Floor(user.NextServerLevel(server)));
 
         public static int ServerExp(this User user, Server server)
         {
@@ -137,48 +116,49 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
                     if (server.ServerExp != null && server.ServerExp.Any(x => x.UserId == exp.UserId))
                         DatabaseQueries.InsertOrReplaceAsync(exp);
+
                     ConsoleLogger.LogAsync($"User {user.UserId} in {server.ServerId} was not present " +
-                                                 $"in the guild's ServerExp list when attempting to load this value. " +
-                                                 $"They have now been added into the database under the ServerExp table.", LogLvl.DEBUG);
+                                           $"in the guild's ServerExp list when attempting to load this value. " +
+                                           $"They have now been added into the database under the ServerExp table.", LogLvl.DEBUG);
 
                     return 0;
                 }
             }
+
             return 0;
         }
 
         public static double PercentToNextLevel(this User user)
         {
-            var curLevel = user.GlobalLevel();
-            var curLevelExpRoundedDown = GlobalProperties.CalculateExpFromLevel(Math.Floor(curLevel));
-            var minMaxDifference = XpDifferenceBetweenLevels(user);
+            double curLevel = user.GlobalLevel();
+            int curLevelExpRoundedDown = GlobalProperties.CalculateExpFromLevel(Math.Floor(curLevel));
+            int minMaxDifference = XpDifferenceBetweenLevels(user);
 
-            if (curLevel.Rounded(RoundDirection.Down) == 0)
+            if (curLevel.Rounded(RoundDirection.DOWN) == 0)
             {
                 curLevelExpRoundedDown = 0;
                 minMaxDifference = GlobalProperties.CalculateExpFromLevel(1);
             }
 
-            return (((double)user.Experience - curLevelExpRoundedDown) / minMaxDifference);
+            return ((double) user.Experience - curLevelExpRoundedDown) / minMaxDifference;
         }
 
         public static double PercentToNextServerLevel(this User user, Server server)
         {
-            var curLevel = user.ServerLevel(server);
-            var curLevelExpRoundedDown = GlobalProperties.CalculateExpFromLevel(curLevel.Rounded(RoundDirection.Down));
-            var minMaxDifference = XpDifferenceBetweenLevels(user, server);
+            double curLevel = user.ServerLevel(server);
+            int curLevelExpRoundedDown = GlobalProperties.CalculateExpFromLevel(curLevel.Rounded(RoundDirection.DOWN));
+            int minMaxDifference = XpDifferenceBetweenLevels(user, server);
 
-            if (curLevel.Rounded(RoundDirection.Down) == 0)
+            if (curLevel.Rounded(RoundDirection.DOWN) == 0)
             {
                 curLevelExpRoundedDown = 0;
                 minMaxDifference = GlobalProperties.CalculateExpFromLevel(1);
             }
 
-            return (((double)user.ServerExp(server) - curLevelExpRoundedDown) / minMaxDifference);
+            return ((double) user.ServerExp(server) - curLevelExpRoundedDown) / minMaxDifference;
         }
 
-        #region Helper function for PercentToNextLevel -- NOT public.
-
+#region Helper function for PercentToNextLevel -- NOT public.
         /// <summary>
         /// Calculates the difference of EXP between the user's current level (rounded
         /// down to the nearest integer) and one level above this value.
@@ -186,10 +166,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <returns></returns>
         private static int XpDifferenceBetweenLevels(User user)
         {
-            var curLevel = user.GlobalLevel().Rounded(RoundDirection.Down);
-            var nextLevel = (user.GlobalLevel() + 1).Rounded(RoundDirection.Down);
-            var curLevelExp = GlobalProperties.CalculateExpFromLevel(curLevel);
-            var nextLevelExp = GlobalProperties.CalculateExpFromLevel(nextLevel);
+            int curLevel = user.GlobalLevel().Rounded(RoundDirection.DOWN);
+            int nextLevel = (user.GlobalLevel() + 1).Rounded(RoundDirection.DOWN);
+            int curLevelExp = GlobalProperties.CalculateExpFromLevel(curLevel);
+            int nextLevelExp = GlobalProperties.CalculateExpFromLevel(nextLevel);
 
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (curLevel == 0)
@@ -200,10 +180,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
         private static int XpDifferenceBetweenLevels(User user, Server server)
         {
-            var curLevel = Math.Floor(user.ServerLevel(server));
-            var nextLevel = Math.Floor(user.ServerLevel(server) + 1);
-            var curLevelExp = GlobalProperties.CalculateExpFromLevel(curLevel);
-            var nextLevelExp = GlobalProperties.CalculateExpFromLevel(nextLevel);
+            double curLevel = Math.Floor(user.ServerLevel(server));
+            double nextLevel = Math.Floor(user.ServerLevel(server) + 1);
+            int curLevelExp = GlobalProperties.CalculateExpFromLevel(curLevel);
+            int nextLevelExp = GlobalProperties.CalculateExpFromLevel(nextLevel);
 
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (curLevel == 0)
@@ -211,13 +191,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
             return nextLevelExp - curLevelExp;
         }
-        #endregion
+#endregion
 
-        public static bool HasRecentlyUsedNSFWCommands(this User user, int days = 7)
-        {
-            return user.CommandHistory?.Where(x => x.Command == "nsfw")
-                .Any(x => x.Timestamp > DateTime.Now.AddDays(-days)) ?? false;
-        }
+        public static bool HasRecentlyUsedNsfwCommands(this User user, int days = 7) => user.CommandHistory?.Where(x => x.Command == "nsfw")
+                                                                                            .Any(x => x.Timestamp > DateTime.Now.AddDays(-days)) ??
+                                                                                        false;
 
         /// <summary>
         /// The cost, in points, for a user to play the fishing game one time.
@@ -227,22 +205,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// <returns></returns>
         public static int FishCost(this User user, int plays = 1)
         {
-            var basePoints = user.IsPremium 
-                ? (int)(Fish.PREMIUM_BAIT_COST * (1 + user.FishLevelBonuses.PlayCostIncreasePercent / 100))
-                : (int)(Fish.BAIT_COST * (1 + (user.FishLevelBonuses.PlayCostIncreasePercent / 100)));
+            int basePoints = user.IsPremium
+                ? (int) (Fish.PREMIUM_BAIT_COST * (1 + (user.FishLevelBonuses.PlayCostIncreasePercent / 100)))
+                : (int) (Fish.BAIT_COST * (1 + (user.FishLevelBonuses.PlayCostIncreasePercent / 100)));
+
             return basePoints * plays;
         }
 
-        public static async Task<List<DatabaseUpvoteWebhook>> GetRecentUpvotesAsync(this User user, int days = 7)
-        {
-            return (await DatabaseQueries.GetAllForUserAsync<DatabaseUpvoteWebhook>(user.UserId,
-                x => x.TimeVoted > DateTime.Now.AddHours(days * 24).ToOADate())).ToList();
-        }
+        public static async Task<List<DatabaseUpvoteWebhook>> GetRecentUpvotesAsync(this User user, int days = 7) => (await DatabaseQueries.GetAllForUserAsync<DatabaseUpvoteWebhook>(user.UserId,
+            x => x.TimeVoted > DateTime.Now.AddHours(days * 24).ToOADate())).ToList();
 
-        public static async Task<bool> HasRecentlyVotedAsync(this User user)
-        {
-            return await DatabaseQueries.GetCountAsync<TopGgWebhook>(x =>
-                x.UserId == user.UserId && x.TimeVoted > DateTime.Now.AddHours(-12).ToOADate()) > 0;
-        }
+        public static async Task<bool> HasRecentlyVotedAsync(this User user) => await DatabaseQueries.GetCountAsync<TopGgWebhook>(x =>
+                                                                                    x.UserId == user.UserId &&
+                                                                                    x.TimeVoted > DateTime.Now.AddHours(-12).ToOADate()) >
+                                                                                0;
     }
 }

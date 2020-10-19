@@ -5,6 +5,5 @@
     /// this <see cref="IKaguyaUnique{T}"/> interface must have a [PrimaryKey] tag.
     /// </summary>
     public interface IKaguyaUnique<T> where T : class, IKaguyaQueryable<T>
-    {
-    }
+    { }
 }

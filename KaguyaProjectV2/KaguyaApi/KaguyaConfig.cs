@@ -2,9 +2,7 @@
 {
     public class KaguyaConfig
     {
-        public string TopGGAuthorization { get; set; }
-        public KaguyaConfig()
-        {
-        }
+        public string TopGgAuthorization { get; set; }
+        public KaguyaConfig() { }
     }
 }

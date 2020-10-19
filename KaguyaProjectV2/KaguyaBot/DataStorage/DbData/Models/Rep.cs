@@ -6,13 +6,20 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     [Table(Name = "rep")]
     public class Rep : IKaguyaQueryable<Rep>, IKaguyaUnique<Rep>, IUserSearchable<Rep>
     {
-        [Column(Name = "UserId"), NotNull]
+        [Column(Name = "UserId")]
+        [NotNull]
         public ulong UserId { get; set; }
-        [Column(Name = "GivenBy"), NotNull]
+
+        [Column(Name = "GivenBy")]
+        [NotNull]
         public ulong GivenBy { get; set; }
-        [Column(Name = "TimeGiven"), NotNull]
+
+        [Column(Name = "TimeGiven")]
+        [NotNull]
         public double TimeGiven { get; set; }
-        [Column(Name = "Reason"), NotNull]
+
+        [Column(Name = "Reason")]
+        [NotNull]
         public string Reason { get; set; }
     }
 }

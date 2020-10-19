@@ -6,9 +6,10 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-// ReSharper disable PossibleNullReferenceException
 
+// ReSharper disable PossibleNullReferenceException
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
     public class AddRep : KaguyaBase
@@ -21,10 +22,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                  "This rep is stored in your account and is carried with you globally. " +
                  "The `praise` command is server-specific.")]
         [Remarks("\n<user>\n<user> <reason>")]
-        public async Task Command(IGuildUser guildUser = null, [Remainder]string reason = null)
+        public async Task Command(IGuildUser guildUser = null, [Remainder] string reason = null)
         {
             User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var rep = await DatabaseQueries.GetAllForUserAsync<Rep>(user.UserId);
+            List<Rep> rep = await DatabaseQueries.GetAllForUserAsync<Rep>(user.UserId);
             int repCount = rep.Count;
 
             if (guildUser == null)
@@ -33,7 +34,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 {
                     Description = $"You have `{repCount}` rep."
                 };
+
                 await ReplyAsync(embed: curRepEmbed.Build());
+
                 return;
             }
 
@@ -45,9 +48,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                                   $"`{(DateTime.FromOADate(user.LastGivenRep) - DateTime.Now.AddHours(-24)).Humanize()}` " +
                                   $"before giving rep again."
                 };
+
                 denyEmbed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: denyEmbed.Build());
+
                 return;
             }
 
@@ -57,9 +62,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 {
                     Description = $"You may not rep yourself!"
                 };
+
                 invalidUserEmbed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: invalidUserEmbed.Build());
+
                 return;
             }
 
@@ -69,9 +76,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 {
                     Description = $"Sorry, rep can't be given to bots."
                 };
+
                 invalidUserEmbed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: invalidUserEmbed.Build());
+
                 return;
             }
 
@@ -85,9 +94,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                                   $"This person may appeal their blacklist by filling " +
                                   $"out [this form](https://forms.gle/bnLFWbNiEyF4uE9E9)"
                 };
+
                 invalidUserEmbed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: invalidUserEmbed.Build());
+
                 return;
             }
 
@@ -104,7 +115,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 
             await DatabaseQueries.UpdateAsync(user);
 
-            var targetRepList = await DatabaseQueries.GetAllForUserAsync<Rep>(target.UserId);
+            List<Rep> targetRepList = await DatabaseQueries.GetAllForUserAsync<Rep>(target.UserId);
 
             var embed = new KaguyaEmbedBuilder
             {
@@ -114,6 +125,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                     Text = $"{guildUser.Username} now has {targetRepList.Count} rep. You have {repCount} rep."
                 }
             };
+
             embed.SetColor(EmbedColor.GOLD);
 
             await ReplyAsync(embed: embed.Build());

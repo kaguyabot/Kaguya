@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
@@ -17,14 +18,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [Remarks("")]
         public async Task Command()
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
-            var userExp = user.Experience;
-            var userServerExp = await user.GetServerExp(Context.Guild.Id);
+            int userExp = user.Experience;
+            ServerExp userServerExp = await user.GetServerExp(Context.Guild.Id);
 
-            var globalRank = (await user.GetGlobalXpRankAsync()).Item1;
-            var serverRank = user.GetServerXpRank(server).Item1;
+            int globalRank = (await user.GetGlobalXpRankAsync()).Item1;
+            int serverRank = user.GetServerXpRank(server).Item1;
 
             var dSb = new StringBuilder();
             dSb.AppendLine(Context.User.Mention);

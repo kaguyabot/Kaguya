@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
@@ -14,14 +16,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Command("FishCalc")]
         [Alias("fc")]
         [Summary("Displays how many points the user earned for their last `<amount>` fish as well as " +
-                 "how much they paid to play.")]
+            "how much they paid to play.")]
         [Remarks("<user id> [amount]")]
         public async Task Command(ulong userId, int amount = 100)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(userId);
-            var recentFish = user.Fish.OrderByDescending(x => x.TimeCaught).Take(amount);
-            var value = recentFish.Select(x => x.Value).Sum();
-            var baitCost = user.FishCost() * amount;
+            User user = await DatabaseQueries.GetOrCreateUserAsync(userId);
+            IEnumerable<Fish> recentFish = user.Fish.OrderByDescending(x => x.TimeCaught).Take(amount);
+            int value = recentFish.Select(x => x.Value).Sum();
+            int baitCost = user.FishCost() * amount;
 
             var embed = new KaguyaEmbedBuilder
             {

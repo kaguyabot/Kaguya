@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
@@ -9,25 +10,25 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
-
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 {
     public static class FishHandler // Fish level-up handler.
     {
-        public const int MAX_LUCK = 30; // Up to x% bonus luck.
-        public const int MAX_VALUE = 200; // Up to x% increased base fish value.
+        public const int MAX_LUCK = 30;                // Up to x% bonus luck.
+        public const int MAX_VALUE = 200;              // Up to x% increased base fish value.
         public const int MAX_PLAY_COST_INCREASE = 270; // Up to x% increased cost to play the $fish game.
+
         public static async Task OnFish(FishHandlerEventArgs args)
         {
-            var context = args.Context;
-            var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
-            var oldFishExp = args.User.FishExp - args.Fish.Exp;
-            var newFishExp = args.User.FishExp;
+            ICommandContext context = args.Context;
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
+            int oldFishExp = args.User.FishExp - args.Fish.Exp;
+            int newFishExp = args.User.FishExp;
 
             if (HasLeveledUp(oldFishExp, newFishExp))
             {
-                var channel = (SocketTextChannel)context.Channel;
-                var level = (int)GetFishLevel(newFishExp);
+                var channel = (SocketTextChannel) context.Channel;
+                int level = (int) GetFishLevel(newFishExp);
 
                 if (server.LogFishLevels != 0)
                 {
@@ -37,7 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                     }
                     catch (Exception)
                     {
-                        channel = (SocketTextChannel)context.Channel;
+                        channel = (SocketTextChannel) context.Channel;
                     }
                 }
 
@@ -53,20 +54,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
             }
         }
 
-        private static bool HasLeveledUp(int oldExp, int newExp)
-        {
-            return Math.Floor(GetFishLevel(oldExp)) < Math.Floor(GetFishLevel(newExp));
-        }
+        private static bool HasLeveledUp(int oldExp, int newExp) => Math.Floor(GetFishLevel(oldExp)) < Math.Floor(GetFishLevel(newExp));
 
         public static double GetFishLevel(int exp)
         {
             // Basically saying, properLevel defined below is less than 1.
             // If properLevel is less than 1, they are level 0 and earn no rewards.
-            if (exp <= 64) 
+            if (exp <= 64)
                 return 0;
 
             // Same formula as standard EXP.
-            double properLevel = Math.Sqrt((double)exp / 8 - 8);
+            double properLevel = Math.Sqrt(((double) exp / 8) - 8);
 
             /*
              * We don't want to return a double value for 1 (e.g. 1.5029) because
@@ -75,7 +73,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
              * display 0.00% -> x.xx% reward from levels 0 -> 1, but would instead display
              * x.xx% -> y.yy% where x and y are > 0.
              */
-            
+
             if (Math.Floor(properLevel) == 1)
                 return 1;
 
@@ -92,25 +90,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
         /// <returns></returns>
         public static string GetRewardString(int oldFishExp, User user, bool hasLeveledUp)
         {
-            const string rare = "increased chance to catch a rare fish";
-            const string value = "increased fish value";
-            const string bait = "increased bait cost";
+            const string RARE = "increased chance to catch a rare fish";
+            const string VALUE = "increased fish value";
+            const string BAIT = "increased bait cost";
 
             var oldBonuses = new FishLevelBonuses(oldFishExp);
 
             if (!hasLeveledUp) // This gets called from $myfish...
             {
                 // how much more than the base bait cost is this %?
-                string finalStr = $"`{oldBonuses.BonusLuckPercent:N2}%` {rare}\n" +
-                                  $"`{oldBonuses.BonusFishValuePercent:N2}%` {value}\n" +
-                                  $"`{oldBonuses.PlayCostIncreasePercent:N2}%` {bait}";
+                string finalStr = $"`{oldBonuses.BonusLuckPercent:N2}%` {RARE}\n" +
+                                  $"`{oldBonuses.BonusFishValuePercent:N2}%` {VALUE}\n" +
+                                  $"`{oldBonuses.PlayCostIncreasePercent:N2}%` {BAIT}";
 
                 int fishBaitCost = user.IsPremium ? Fish.PREMIUM_BAIT_COST : Fish.BAIT_COST;
-                int extraBaitCost = (int)(fishBaitCost * (user.FishLevelBonuses.PlayCostIncreasePercent / 100));
+                int extraBaitCost = (int) (fishBaitCost * (user.FishLevelBonuses.PlayCostIncreasePercent / 100));
                 if (extraBaitCost > 0)
                 {
-                    var line2 = finalStr.Split("\n")[2];
-                    var editedLine2 = line2.Replace("%`", $"% (+{extraBaitCost:N0})`");
+                    string line2 = finalStr.Split("\n")[2];
+                    string editedLine2 = line2.Replace("%`", $"% (+{extraBaitCost:N0})`");
 
                     finalStr = finalStr.Replace(line2, editedLine2);
                 }
@@ -118,11 +116,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                 return finalStr;
             }
 
-            #region If the user has leveled up 
+#region If the user has leveled up
             var newBonuses = new FishLevelBonuses(user.FishExp);
 
-            #region Sometimes you just need some if statements...
-
+#region Sometimes you just need some if statements...
             string oldLuck = $"{oldBonuses.BonusLuckPercent:N2}%";
             string oldValue = $"{oldBonuses.BonusFishValuePercent:N2}%";
             string oldBait = $"{oldBonuses.PlayCostIncreasePercent:N2}%";
@@ -132,24 +129,28 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
 
             if (oldBonuses.BonusLuckPercent == MAX_LUCK)
                 oldLuck = "MAX";
+
             if (oldBonuses.BonusFishValuePercent == MAX_VALUE)
                 oldValue = "MAX";
+
             if (oldBonuses.PlayCostIncreasePercent == MAX_PLAY_COST_INCREASE)
                 oldBait = "MAX";
+
             if (newBonuses.BonusLuckPercent == MAX_LUCK)
                 newLuck = "MAX";
+
             if (newBonuses.BonusFishValuePercent == MAX_VALUE)
                 newValue = "MAX";
+
             if (newBonuses.PlayCostIncreasePercent == MAX_PLAY_COST_INCREASE)
                 newBait = "MAX";
-
-            #endregion
+#endregion
 
             // This gets displayed to the user when they have leveled up.
-            return $"`{oldLuck}` 👉 **`{newLuck}`** {rare}\n" +
-                   $"`{oldValue}` 👉 **`{newValue}`** {value}\n" +
-                   $"`{oldBait}` 👉 **`{newBait}`** {bait}";
-            #endregion
+            return $"`{oldLuck}` 👉 **`{newLuck}`** {RARE}\n" +
+                   $"`{oldValue}` 👉 **`{newValue}`** {VALUE}\n" +
+                   $"`{oldBait}` 👉 **`{newBait}`** {BAIT}";
+#endregion
         }
 
         public class FishLevelBonuses
@@ -169,19 +170,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
                 PlayCostIncreasePercent = fishLvl * 2.7;
 
                 if (BonusLuckPercent > MAX_LUCK)
-                {
                     BonusLuckPercent = MAX_LUCK;
-                }
 
                 if (BonusFishValuePercent > MAX_VALUE)
-                {
                     BonusFishValuePercent = MAX_VALUE;
-                }
 
                 if (PlayCostIncreasePercent > MAX_PLAY_COST_INCREASE)
-                {
                     PlayCostIncreasePercent = MAX_PLAY_COST_INCREASE;
-                }
             }
         }
     }

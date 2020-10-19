@@ -28,7 +28,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} I couldn't find a text channel " +
                                                $"that matched the input you gave me.");
             }
-
         }
     }
 }

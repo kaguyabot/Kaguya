@@ -4,7 +4,9 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using Discord.Addons.Interactive;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
@@ -21,15 +23,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [Remarks("<search>")]
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]
-        public async Task Command([Remainder]string query)
+        public async Task Command([Remainder] string query)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
             if (server.IsPremium || user.IsPremium)
             {
                 var playInstance = new Search();
-                var data = await playInstance.SearchAndPlayAsync(Context, query, false, SearchProvider.Soundcloud);
+                ReactionCallbackData? data = await playInstance.SearchAndPlayAsync(Context, query, false, SearchProvider.SOUNDCLOUD);
 
                 if (data != null)
                     await InlineReactionReplyAsync(data);

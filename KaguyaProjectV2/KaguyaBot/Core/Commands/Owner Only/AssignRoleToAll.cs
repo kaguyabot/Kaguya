@@ -24,7 +24,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             int i = 0;
 
             await Context.Guild.DownloadUsersAsync();
-            foreach (var user in Context.Guild.Users.Where(x => !x.Roles.Contains(role)))
+            foreach (SocketGuildUser user in Context.Guild.Users.Where(x => !x.Roles.Contains(role)))
             {
                 await user.AddRoleAsync(role);
                 i++;

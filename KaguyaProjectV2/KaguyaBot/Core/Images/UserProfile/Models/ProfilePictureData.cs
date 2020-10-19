@@ -11,10 +11,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
     {
         public static TemplateIcon ProfileIcon(SocketGuildUser user)
         {
-            var name = user.Username.IsNullOrEmpty() ? $"User Id: {user.Id}" : user.Username;
-            var writtenUsername = "";
+            string name = user.Username.IsNullOrEmpty() ? $"User Id: {user.Id}" : user.Username;
+            string writtenUsername = "";
 
-            foreach (var c in name)
+            foreach (char c in name)
             {
                 if (!c.ToString().ContainsEmoji())
                     writtenUsername += c;

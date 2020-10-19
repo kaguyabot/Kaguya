@@ -8,13 +8,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     {
         [PrimaryKey]
         public ulong ServerId { get; set; }
-        [Column(Name = "Mute"), NotNull]
+
+        [Column(Name = "Mute")]
+        [NotNull]
         public int Mute { get; set; }
-        [Column(Name = "Kick"), NotNull]
+
+        [Column(Name = "Kick")]
+        [NotNull]
         public int Kick { get; set; }
-        [Column(Name = "Shadowban"), NotNull]
+
+        [Column(Name = "Shadowban")]
+        [NotNull]
         public int Shadowban { get; set; }
-        [Column(Name = "Ban"), NotNull]
+
+        [Column(Name = "Ban")]
+        [NotNull]
         public int Ban { get; set; }
     }
 }

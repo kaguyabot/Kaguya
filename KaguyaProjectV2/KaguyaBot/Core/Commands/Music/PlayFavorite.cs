@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
@@ -16,18 +17,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [Command("PlayFavorite")]
         [Alias("playfav", "pf")]
         [Summary("Allows a user to play a song from their `favorites` playlist. To get this " +
-                 "list, execute the `favls` command. You also need to have favorited at least one " +
-                 "track before.")]
+            "list, execute the `favls` command. You also need to have favorited at least one " +
+            "track before.")]
         [Remarks("<trackNum>")]
         public async Task Command(int trackNum)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var userFavorites = await DatabaseQueries.GetAllForUserAsync<FavoriteTrack>(user.UserId);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            List<FavoriteTrack> userFavorites = await DatabaseQueries.GetAllForUserAsync<FavoriteTrack>(user.UserId);
 
             if (!userFavorites.Any())
             {
                 await SendBasicErrorEmbedAsync("You have not favorited any tracks. Use the `h favorite` and " +
                                                "`h favls` commands for more information on how to use this system.");
+
                 return;
             }
 
@@ -41,6 +43,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             {
                 await SendBasicErrorEmbedAsync($"The track number you provided doesn't match a track in " +
                                                $"your playlist.");
+
                 return;
             }
 

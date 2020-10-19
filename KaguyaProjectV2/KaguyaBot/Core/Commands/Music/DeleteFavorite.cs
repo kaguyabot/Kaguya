@@ -29,40 +29,45 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             {
                 await SendBasicErrorEmbedAsync($"You need to specify at least one `tracknum` to remove. " +
                                                $"These can be found via the `favls` command.");
+
                 return;
             }
-            
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var userFavoriteTracks = await DatabaseQueries.GetAllForUserAsync<FavoriteTrack>(user.UserId);
+
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            List<FavoriteTrack> userFavoriteTracks = await DatabaseQueries.GetAllForUserAsync<FavoriteTrack>(user.UserId);
 
             if (!userFavoriteTracks.Any())
             {
                 await SendBasicErrorEmbedAsync($"{Context.User.Mention} You do not have any favorited tracks.");
+
                 return;
             }
 
-            const int limitAttempts = 3;
+            const int LIMIT_ATTEMPTS = 3;
             int failedAttempts = 0;
-            
+
             var successSb = new StringBuilder();
             var errorSb = new StringBuilder();
             var toRemove = new List<FavoriteTrack>(args.Length);
             int i = 0;
-            foreach (var num in args)
+            foreach (int num in args)
             {
-                if (failedAttempts >= limitAttempts)
+                if (failedAttempts >= LIMIT_ATTEMPTS)
                 {
                     errorSb.AppendLine($"{Context.User.Mention} Too many failed attempts. Aborting further execution.");
+
                     break;
                 }
-                
-                var match = userFavoriteTracks.ElementAtOrDefault(num - 1);
+
+                FavoriteTrack match = userFavoriteTracks.ElementAtOrDefault(num - 1);
                 if (match == null)
                 {
                     errorSb.AppendLine($"{Context.User.Mention} Track `#{num}` does not exist in your " +
                                        $"`{server.CommandPrefix}favls` list.");
+
                     failedAttempts++;
+
                     continue;
                 }
 
@@ -74,11 +79,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             await DatabaseQueries.DeleteAsync(toRemove);
             await ConsoleLogger.LogAsync($"Deleted {args.Length} tracks from user's favorites list [ID: {user.UserId}]",
                 LogLvl.DEBUG);
-            
+
             var finalSb = new StringBuilder();
             if (successSb.Length > 0)
-                finalSb.AppendLine(successSb.ToString()); 
-            
+                finalSb.AppendLine(successSb.ToString());
+
             if (errorSb.Length > 0)
                 finalSb.AppendLine(errorSb.ToString());
 

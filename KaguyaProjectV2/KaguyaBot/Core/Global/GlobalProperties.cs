@@ -13,31 +13,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         /// EmojisOneThroughNine[0] returns the Emoji for "1".
         /// </summary>
         /// <returns></returns>
-        public static Emoji[] EmojisOneThroughNine()
+        public static Emoji[] EmojisOneThroughNine() => new Emoji[]
         {
-            return new Emoji[] { new Emoji("1⃣"), new Emoji("2⃣"), new Emoji("3⃣"),
-                new Emoji("4⃣"),  new Emoji("5⃣"),  new Emoji("6⃣"),  new Emoji("7⃣"),
-                new Emoji("8⃣"),  new Emoji("9⃣")
-            };
-        }
+            new Emoji("1⃣"),
+            new Emoji("2⃣"),
+            new Emoji("3⃣"),
+            new Emoji("4⃣"),
+            new Emoji("5⃣"),
+            new Emoji("6⃣"),
+            new Emoji("7⃣"),
+            new Emoji("8⃣"),
+            new Emoji("9⃣")
+        };
 
         /// <summary>
         /// The default emoji with reaction replies that use a check mark.
         /// </summary>
         /// <returns></returns>
-        public static Emoji CheckMarkEmoji()
-        {
-            return new Emoji("✅");
-        }
+        public static Emoji CheckMarkEmoji() => new Emoji("✅");
 
         /// <summary>
         /// The "no-entry" emoji. Default "cancel" emoji reaction for reaction replies.
         /// </summary>
         /// <returns></returns>
-        public static Emoji NoEntryEmoji()
-        {
-            return new Emoji("⛔");
-        }
+        public static Emoji NoEntryEmoji() => new Emoji("⛔");
 
         /// <summary>
         /// Calculates the Kaguya Exp/Fish level for the provided exp.
@@ -47,9 +46,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         public static double CalculateLevelFromExp(int userExp)
         {
             if (userExp < 65) // Can't have the square root of a negative!!
-            {
                 return 0;
-            }
+
             return Math.Sqrt((userExp / 8) - 8);
         }
 
@@ -58,9 +56,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
         /// </summary>
         /// <param name="level"></param>
         /// <returns></returns>
-        public static int CalculateExpFromLevel(double level)
-        {
-            return (int)(8 * Math.Pow(level, 2)) + 64; // Inverse of CalculateLevel()
-        }
+        public static int CalculateExpFromLevel(double level) => (int) (8 * Math.Pow(level, 2)) + 64; // Inverse of CalculateLevel()
     }
 }

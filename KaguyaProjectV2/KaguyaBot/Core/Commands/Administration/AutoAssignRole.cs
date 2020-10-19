@@ -7,6 +7,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
@@ -27,18 +28,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task Command(params SocketRole[] roles)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var aars = server.AutoAssignedRoles.ToList();
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            List<AutoAssignedRole> aars = server.AutoAssignedRoles.ToList();
             int limit = server.IsPremium ? 15 : 3;
 
-            if (roles.Length > limit - aars.Count)
+            if (roles.Length > (limit - aars.Count))
             {
                 throw new KaguyaPremiumException("Adding more than the allotted number of auto-assigned roles.\n" +
                                                  "For premium servers, this value is 15. For non-premium " +
                                                  "servers, this value is 3.");
             }
 
-            foreach (var role in roles)
+            foreach (SocketRole role in roles)
             {
                 try
                 {
@@ -69,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 : "as a role";
 
             await SendBasicSuccessEmbedAsync($"Successfully added `{roles.Humanize()}` {plural} that will " +
-                             $"automatically be assigned to users upon join.");
+                                             $"automatically be assigned to users upon join.");
         }
     }
 }

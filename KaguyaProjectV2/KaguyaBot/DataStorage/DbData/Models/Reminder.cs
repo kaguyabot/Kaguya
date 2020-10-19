@@ -6,13 +6,20 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     [Table(Name = "reminders")]
     public class Reminder : IKaguyaQueryable<Reminder>, IUserSearchable<Reminder>
     {
-        [Column(Name = "UserId"), NotNull]
+        [Column(Name = "UserId")]
+        [NotNull]
         public ulong UserId { get; set; }
-        [Column(Name = "Expiration"), NotNull]
+
+        [Column(Name = "Expiration")]
+        [NotNull]
         public double Expiration { get; set; }
-        [Column(Name = "Text"), NotNull]
+
+        [Column(Name = "Text")]
+        [NotNull]
         public string Text { get; set; }
-        [Column(Name = "HasTriggered"), NotNull]
+
+        [Column(Name = "HasTriggered")]
+        [NotNull]
         public bool HasTriggered { get; set; }
 
         /// <summary>

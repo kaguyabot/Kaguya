@@ -18,9 +18,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Summary("Reminds you to do something after a certain amount of time has passed. Specify " +
                  "the time using this format (order doesn't matter): `0d0h0m0s`")]
         [Remarks("<time> <text>\n2h35m Walk the dog.\n18d12h30m Watch the game!")]
-        public async Task Remind(string timeString, [Remainder]string text)
+        public async Task Remind(string timeString, [Remainder] string text)
         {
-            var time = timeString.ParseToTimespan();
+            TimeSpan time = timeString.ParseToTimespan();
             KaguyaEmbedBuilder embed;
 
             if (time.TotalSeconds < 10)
@@ -29,9 +29,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 {
                     Description = "You must set a reminder for at least 10 seconds from now."
                 };
+
                 embed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: embed.Build());
+
                 return;
             }
 
@@ -49,6 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             {
                 Description = $"Okay! I'll remind you in `{time.Humanize(3)}` to `{text}`"
             };
+
             await ReplyAsync(embed: embed.Build());
         }
     }

@@ -8,7 +8,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
-    public class FAQ : KaguyaBase
+    public class Faq : KaguyaBase
     {
         [ReferenceCommand]
         [Command("Faq")]

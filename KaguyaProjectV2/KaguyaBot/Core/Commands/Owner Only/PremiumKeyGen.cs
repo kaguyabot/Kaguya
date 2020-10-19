@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
     public class PremiumKeyGen : KaguyaBase
     {
-        private static readonly Random Random = new Random();
+        private static readonly Random _random = new Random();
 
         [OwnerCommand]
         [Command("PremiumGen", RunMode = RunMode.Async)]
@@ -39,10 +39,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             RegexTimeParser.Parse(duration, out int sec, out int min, out int hour, out int day);
 
             TimeSpan timeSpan = duration.ParseToTimespan();
-            long timeInSeconds = (long)timeSpan.TotalSeconds;
+            long timeInSeconds = (long) timeSpan.TotalSeconds;
 
-            List<PremiumKey> keys = new List<PremiumKey>();
-            var existingKeys = await DatabaseQueries.GetAllAsync<PremiumKey>();
+            var keys = new List<PremiumKey>();
+            List<PremiumKey> existingKeys = await DatabaseQueries.GetAllAsync<PremiumKey>();
 
             for (int i = 0; i < amount; i++)
             {
@@ -56,11 +56,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                     };
 
                     if (existingKeys.Exists(x => x.Key == key.Key))
-                    {
                         continue;
-                    }
 
                     keys.Add(key);
+
                     break;
                 }
             }
@@ -70,10 +69,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             if (amount < 25)
             {
                 string keyStr = "";
-                foreach (var key in keys)
-                {
+                foreach (PremiumKey key in keys)
                     keyStr += $"`{key.Key}`\n";
-                }
 
                 var embed = new KaguyaEmbedBuilder
                 {
@@ -99,10 +96,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                 {
                     var writer = new StreamWriter(memoryStream);
 
-                    foreach (var key in keys)
-                    {
+                    foreach (PremiumKey key in keys)
                         await writer.WriteAsync($"{key.Key}\n");
-                    }
 
                     await writer.FlushAsync();
                     memoryStream.Seek(0, SeekOrigin.Begin);
@@ -119,16 +114,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 
         private async Task ChatReply(string formattedTimeString, int amount)
         {
-            #region Grammar
-
+#region Grammar
             string s = "";
 
             if (amount != 1)
-            {
                 s = "s";
-            }
-
-            #endregion
+#endregion
 
             var embed = new KaguyaEmbedBuilder
             {
@@ -136,19 +127,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
                               $"Duration: `{formattedTimeString}`\n" +
                               $"Creator: `[Name: {Context.User} | ID: {Context.User.Id}]`\n"
             };
+
             await ReplyAsync(embed: embed.Build());
         }
 
         // We could use a prettier LINQ expression, but this is twice as fast.
         private static string RandomString(int length = 35)
         {
-            const string chars = @"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789!@#$%^&()+=-{}[];";
-            char[] stringChars = new char[length];
+            const string CHARS = @"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789!@#$%^&()+=-{}[];";
+            var stringChars = new char[length];
 
             for (int i = 0; i < stringChars.Length; i++)
-            {
-                stringChars[i] = chars[Random.Next(chars.Length)];
-            }
+                stringChars[i] = CHARS[_random.Next(CHARS.Length)];
 
             return new string(stringChars);
         }

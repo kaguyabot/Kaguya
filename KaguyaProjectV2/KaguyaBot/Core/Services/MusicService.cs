@@ -10,6 +10,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using Victoria.Interfaces;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -17,18 +18,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static async Task OnTrackEnd(TrackEndedEventArgs e)
         {
-            var player = e.Player;
-            var queue = player.Queue;
+            LavaPlayer player = e.Player;
+            DefaultQueue<IQueueable> queue = player.Queue;
 
-            if(player != null && queue?.Count > 0 && e.Reason.ShouldPlayNext())
+            if (player != null && queue?.Count > 0 && e.Reason.ShouldPlayNext())
             {
-                var success = queue.TryDequeue(out var val);
-                if(success)
+                bool success = queue.TryDequeue(out IQueueable val);
+                if (success)
                 {
-                    var track = (LavaTrack)val;
+                    var track = (LavaTrack) val;
                     await player.PlayAsync(track);
 
-                    if(player.TextChannel != null)
+                    if (player.TextChannel != null)
                     {
                         var sb = new StringBuilder();
                         sb.AppendLine($"Songs left in queue: `{queue.Count:N0}`");
@@ -52,8 +53,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         await player.TextChannel.SendEmbedAsync(embed);
                     }
 
-                    await ConsoleLogger.LogAsync("Successfully continued the music " + 
-                    $"queue in guild {e.Player.VoiceChannel.Guild}", LogLvl.DEBUG);
+                    await ConsoleLogger.LogAsync("Successfully continued the music " +
+                                                 $"queue in guild {e.Player.VoiceChannel.Guild}", LogLvl.DEBUG);
                 }
             }
         }

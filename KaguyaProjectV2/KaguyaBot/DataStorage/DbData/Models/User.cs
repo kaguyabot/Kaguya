@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
-
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     //todo: Add properties for collections such as IEnumerable<FavoriteTrack>
@@ -18,85 +17,132 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     {
         [PrimaryKey]
         public ulong UserId { get; set; }
-        [Column(Name = "Experience"), NotNull]
+
+        [Column(Name = "Experience")]
+        [NotNull]
         public int Experience { get; set; }
-        [Column(Name = "FishExp"), NotNull]
+
+        [Column(Name = "FishExp")]
+        [NotNull]
         public int FishExp { get; set; }
-        [Column(Name = "Points"), NotNull]
+
+        [Column(Name = "Points")]
+        [NotNull]
         public int Points { get; set; }
-        [Column(Name = "OsuId"), NotNull]
+
+        [Column(Name = "OsuId")]
+        [NotNull]
         public int OsuId { get; set; }
-        [Column(Name = "OsuBeatmapsLinked"), NotNull]
+
+        [Column(Name = "OsuBeatmapsLinked")]
+        [NotNull]
         public int OsuBeatmapsLinked { get; set; }
-        [Column(Name = "CommandUses"), NotNull]
+
+        [Column(Name = "CommandUses")]
+        [NotNull]
         public int TotalCommandUses { get; set; }
-        [Column(Name = "TotalDaysSupported"), NotNull]
+
+        [Column(Name = "TotalDaysSupported")]
+        [NotNull]
         public int TotalDaysPremium { get; set; }
+
         /// <summary>
         /// Whenever a user uses a command, increase this by one.
         /// The ratelimit service will check for whether the user
         /// has too many commands allowed by the ratelimit (x cmds in y seconds).
         /// </summary>
-        [Column(Name = "ActiveRateLimit"), NotNull]
+        [Column(Name = "ActiveRateLimit")]
+        [NotNull]
         public int ActiveRateLimit { get; set; }
-        [Column(Name = "RateLimitWarnings"), NotNull]
+
+        [Column(Name = "RateLimitWarnings")]
+        [NotNull]
         public int RateLimitWarnings { get; set; }
-        [Column(Name = "GamblingWins"), NotNull]
+
+        [Column(Name = "GamblingWins")]
+        [NotNull]
         public int TotalGamblingWins { get; set; }
-        [Column(Name = "GamblingLosses"), NotNull]
+
+        [Column(Name = "GamblingLosses")]
+        [NotNull]
         public int TotalGamblingLosses { get; set; }
-        [Column(Name = "CurrencyAwarded"), NotNull]
+
+        [Column(Name = "CurrencyAwarded")]
+        [NotNull]
         public int TotalCurrencyAwarded { get; set; }
-        [Column(Name = "CurrencyLost"), NotNull]
+
+        [Column(Name = "CurrencyLost")]
+        [NotNull]
         public int TotalCurrencyLost { get; set; }
-        [Column(Name = "RollWins"), NotNull]
+
+        [Column(Name = "RollWins")]
+        [NotNull]
         public int TotalRollWins { get; set; }
-        [Column(Name = "QuickdrawWins"), NotNull]
+
+        [Column(Name = "QuickdrawWins")]
+        [NotNull]
         public int TotalQuickdrawWins { get; set; }
-        [Column(Name = "QuickdrawLosses"), NotNull]
+
+        [Column(Name = "QuickdrawLosses")]
+        [NotNull]
         public int TotalQuickdrawLosses { get; set; }
-        [Column(Name = "TotalUpvotes"), NotNull]
+
+        [Column(Name = "TotalUpvotes")]
+        [NotNull]
         public int TotalUpvotes { get; set; }
-        [Column(Name = "LastGivenExp"), NotNull]
+
+        [Column(Name = "LastGivenExp")]
+        [NotNull]
         public double LastGivenExp { get; set; }
-        [Column(Name = "LastDailyBonus"), NotNull]
+
+        [Column(Name = "LastDailyBonus")]
+        [NotNull]
         public double LastDailyBonus { get; set; }
-        [Column(Name = "LastWeeklyBonus"), NotNull]
+
+        [Column(Name = "LastWeeklyBonus")]
+        [NotNull]
         public double LastWeeklyBonus { get; set; }
-        [Column(Name = "LastGivenRep"), NotNull]
+
+        [Column(Name = "LastGivenRep")]
+        [NotNull]
         public double LastGivenRep { get; set; }
-        [Column(Name = "LastRatelimited"), NotNull]
+
+        [Column(Name = "LastRatelimited")]
+        [NotNull]
         public double LastRatelimited { get; set; }
-        [Column(Name = "LastFished"), NotNull]
+
+        [Column(Name = "LastFished")]
+        [NotNull]
         public double LastFished { get; set; }
+
         [Column(Name = "PremiumExpiration")]
         public double PremiumExpiration { get; set; }
 
         /// <summary>
         /// If a user wants to receive level-up notifications in chat, what type should it be?
         /// </summary>
-        [Column(Name = "ExpChatNotificationType"), NotNull]
+        [Column(Name = "ExpChatNotificationType")]
+        [NotNull]
         public int ExpChatNotificationTypeNum { private get; set; } = 2;
 
         /// <summary>
         /// If a user wants to receive level-up notifications in their DMs, what type should it be?
         /// </summary>
-        [Column(Name = "ExpDMNotificationType"), NotNull]
+        [Column(Name = "ExpDMNotificationType")]
+        [NotNull]
         public int ExpDmNotificationTypeNum { private get; set; } = 3;
 
-        public bool IsBlacklisted => Blacklist != null && Blacklist.Expiration - DateTime.Now.ToOADate() > 0;
-        public ExpType ExpChatNotificationType => (ExpType)ExpChatNotificationTypeNum;
-        public ExpType ExpDmNotificationType => (ExpType)ExpDmNotificationTypeNum;
+        public bool IsBlacklisted => Blacklist != null && (Blacklist.Expiration - DateTime.Now.ToOADate()) > 0;
+        public ExpType ExpChatNotificationType => (ExpType) ExpChatNotificationTypeNum;
+        public ExpType ExpDmNotificationType => (ExpType) ExpDmNotificationTypeNum;
         public FishHandler.FishLevelBonuses FishLevelBonuses => new FishHandler.FishLevelBonuses(FishExp);
-
-
         public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
         public bool IsPremium => PremiumExpiration > DateTime.Now.ToOADate();
         public bool CanGiveRep => LastGivenRep < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetDailyPoints => LastDailyBonus < DateTime.Now.AddHours(-24).ToOADate();
         public bool CanGetWeeklyPoints => LastWeeklyBonus < DateTime.Now.AddDays(-7).ToOADate();
         public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
-        
+
         /// <summary>
         /// Adds the specified number of points to the user.
         /// </summary>
@@ -105,7 +151,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// <returns></returns>
         public User AddPoints(uint points)
         {
-            this.Points += (int)points;
+            Points += (int) points;
+
             return this;
         }
 
@@ -117,7 +164,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// <returns></returns>
         public User AddPoints(int points)
         {
-            this.Points += points;
+            Points += points;
+
             return this;
         }
 
@@ -129,25 +177,30 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// <returns></returns>
         public User RemovePoints(uint points)
         {
-            this.Points -= (int)points;
+            Points -= (int) points;
+
             return this;
         }
 
         public User AddGlobalExp(uint exp)
         {
-            this.Experience += (int)exp;
+            Experience += (int) exp;
+
             return this;
         }
 
         public User RemoveGlobalExp(uint exp)
         {
-            this.Experience -= (int)exp;
+            Experience -= (int) exp;
+
             return this;
         }
 
-        public async Task<ServerExp> GetServerExp(ulong serverId) {
-            var expCol = (await DatabaseQueries.GetAllForServerAndUserAsync<ServerExp>(this.UserId, serverId));
-            var curExp = expCol[0];
+        public async Task<ServerExp> GetServerExp(ulong serverId)
+        {
+            List<ServerExp> expCol = await DatabaseQueries.GetAllForServerAndUserAsync<ServerExp>(UserId, serverId);
+            ServerExp curExp = expCol[0];
+
             return curExp;
         }
 

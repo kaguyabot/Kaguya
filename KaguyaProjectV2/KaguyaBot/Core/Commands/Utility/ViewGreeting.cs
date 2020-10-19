@@ -4,6 +4,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -17,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Command()
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
             var embed = new KaguyaEmbedBuilder
             {
@@ -30,6 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                            $"this setting with the {server.CommandPrefix}tg command."
                 }
             };
+
             await ReplyAsync(embed: embed.Build());
         }
     }

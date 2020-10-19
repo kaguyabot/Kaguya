@@ -16,9 +16,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Command("DailyLoot")]
         [Alias("daily", "d", "timely")]
         [Summary("Claim your daily loot or give it to somebody else! Rewards increased " +
-                 "if given to another user.")]
+            "if given to another user.")]
         [Remarks("<user>")]
-        public async Task Command([Remainder]SocketGuildUser guildUser = null)
+        public async Task Command([Remainder] SocketGuildUser guildUser = null)
         {
             User targetUser = null;
             User curUser = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
@@ -26,6 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             if (guildUser != null && guildUser.IsBot)
             {
                 await SendBasicErrorEmbedAsync("Your daily loot cannot be given to a bot.");
+
                 return;
             }
 
@@ -33,17 +34,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 await SendBasicErrorEmbedAsync("You cannot award yourself with bonus loot. You must execute this command " +
                                                "without mentioning yourself.");
+
                 return;
             }
-            
+
             if (guildUser != null)
                 targetUser = await DatabaseQueries.GetOrCreateUserAsync(guildUser.Id);
-            
+
             if (!curUser.CanGetDailyPoints)
             {
-                var ts = DateTime.FromOADate(curUser.LastDailyBonus).AddHours(24) - DateTime.Now;
+                TimeSpan ts = DateTime.FromOADate(curUser.LastDailyBonus).AddHours(24) - DateTime.Now;
                 await SendBasicErrorEmbedAsync($"You must wait `{ts.Humanize(2)}` " +
                                                $"before you may claim this bonus.");
+
                 return;
             }
 
@@ -59,10 +62,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 
             if (targetUser != null)
             {
-                points = (int)(points * 1.07);
-                exp = (int)(exp * 1.07);
+                points = (int) (points * 1.07);
+                exp = (int) (exp * 1.07);
             }
-            
+
             if (targetUser == null)
             {
                 curUser.Points += points;
@@ -73,7 +76,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 targetUser.Points += points;
                 targetUser.Experience += exp;
             }
-            
+
             curUser.LastDailyBonus = DateTime.Now.ToOADate();
 
             if (targetUser == null)
@@ -85,9 +88,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             {
                 await SendBasicSuccessEmbedAsync($"{guildUser.Mention} You have received " +
                                                  $"`+{points:N0} points` and `+{exp:N0} exp` from {Context.User.Mention}!");
+
                 await DatabaseQueries.UpdateAsync(targetUser);
             }
-         
+
             await DatabaseQueries.UpdateAsync(curUser);
         }
     }

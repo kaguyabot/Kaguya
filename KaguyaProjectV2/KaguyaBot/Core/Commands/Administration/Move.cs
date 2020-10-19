@@ -21,9 +21,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("<user> <voice channel>")]
         [RequireUserPermission(GuildPermission.MoveMembers)]
         [RequireBotPermission(GuildPermission.MoveMembers)]
-        public async Task Command(SocketGuildUser user, [Remainder]string voiceChannel)
+        public async Task Command(SocketGuildUser user, [Remainder] string voiceChannel)
         {
-            var currentChannel = user.VoiceChannel;
+            SocketVoiceChannel currentChannel = user.VoiceChannel;
             SocketVoiceChannel destinationChannel = null;
             try
             {
@@ -37,20 +37,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
 
             if (currentChannel == null)
+            {
                 throw new KaguyaSupportException(
                     "The user must be present in a voice channel in order for this command to work.");
+            }
+
             if (destinationChannel == null)
+            {
                 throw new KaguyaSupportException("The voice channel you specified either doesn't exist in the server or " +
                                                  "I don't have permissions to access it.");
+            }
+
             if (destinationChannel == currentChannel)
             {
                 await SendBasicErrorEmbedAsync($"The user is already in this voice channel.");
+
                 return;
             }
 
             await user.ModifyAsync(x => x.Channel = destinationChannel);
             await SendBasicSuccessEmbedAsync($"User `{user}` has been moved from `{currentChannel.Name}` " +
-                                                             $"into `{destinationChannel.Name}`.");
+                                             $"into `{destinationChannel.Name}`.");
         }
     }
 }

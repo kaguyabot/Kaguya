@@ -5,9 +5,11 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using Discord.Net;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 #pragma warning disable 1998
@@ -18,31 +20,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static async Task Initialize()
         {
-            Timer timer = new Timer(5000);
+            var timer = new Timer(5000);
             timer.AutoReset = true;
             timer.Enabled = true;
             timer.Elapsed += async (sender, args) =>
             {
-                var unTriggeredReminders = await DatabaseQueries.GetAllAsync<Reminder>(r => r.HasTriggered == false && r.Expiration < DateTime.Now.ToOADate());
-                if (unTriggeredReminders == null)
-                {
-                    return;
-                }
+                List<Reminder> unTriggeredReminders =
+                    await DatabaseQueries.GetAllAsync<Reminder>(r => r.HasTriggered == false && r.Expiration < DateTime.Now.ToOADate());
 
-                foreach (var reminder in unTriggeredReminders)
+                if (unTriggeredReminders == null)
+                    return;
+
+                foreach (Reminder reminder in unTriggeredReminders)
                 {
-                    var user = ConfigProperties.Client.GetUser(reminder.UserId);
+                    SocketUser user = ConfigProperties.Client.GetUser(reminder.UserId);
                     var embed = new KaguyaEmbedBuilder
                     {
                         Title = "Kaguya Reminder",
                         Description = $"`{reminder.Text}`"
                     };
+
                     try
                     {
                         if (user != null)
-                        {
                             await user.SendMessageAsync(embed: embed.Build());
-                        }
                         else
                         {
                             await ConsoleLogger.LogAsync($"Attempted to send user {reminder.UserId} a reminder to " +

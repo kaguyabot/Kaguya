@@ -14,6 +14,7 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
         public async Task<string> Get()
         {
             var data = new KaguyaWebData();
+
             return JsonConvert.SerializeObject(data, Formatting.Indented);
         }
     }

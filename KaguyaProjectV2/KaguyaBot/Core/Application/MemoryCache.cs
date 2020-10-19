@@ -23,27 +23,33 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application
         /// value is equal to how many times this command has been used successfully.
         /// </summary>
         public static Dictionary<string, int>? MostPopularCommandCache { get; private set; }
+
         /// <summary>
         /// A cache of all <see cref="OwnerGiveaway"/> objects in the database.
         /// </summary>
         public static List<OwnerGiveaway> OwnerGiveawaysCache { get; private set; }
+
         /// <summary>
         /// A cache of all <see cref="OwnerGiveawayReaction"/> items in the database.
         /// </summary>
         public static List<OwnerGiveawayReaction> OwnerGiveawayReactions { get; private set; }
+
         /// <summary>
         /// A cache of all currently active poker sessions, based on user ID.
         /// todo: Assign value.
         /// </summary>
         public static HashSet<ulong> ActivePokerSessions { get; private set; }
+
         /// <summary>
         /// A cache of the count of all commands used.
         /// </summary>
         public static int AllTimeCommandCount { get; private set; }
+
         /// <summary>
         /// A cache of the count of all caught fish. Does not include <see cref="FishType.BAIT_STOLEN"/> events.
         /// </summary>
         public static int AllTimeFishCount { get; private set; }
+
         /// <summary>
         /// A cache of the count of all points in circulation.
         /// </summary>
@@ -64,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application
             AllTimeCommandCount = await DatabaseQueries.GetCountAsync<CommandHistory>();
             await ConsoleLogger.LogAsync("Memory Cache: All time command count populated.", LogLvl.DEBUG);
             AllTimeFishCount = await DatabaseQueries.GetCountAsync<Fish>(x => x.FishType != FishType.BAIT_STOLEN);
-            
+
             StartMostPopCommandCacheTimer();
             StartOwnerGiveawayCacheTimer();
             StartDbStatisticsTimer();
@@ -75,25 +81,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Application
         /// </summary>
         private static void StartMostPopCommandCacheTimer(long milliseconds = 600000)
         {
-            Timer timer = new Timer(milliseconds);
+            var timer = new Timer(milliseconds);
             timer.AutoReset = true;
             timer.Enabled = true;
-            timer.Elapsed += async (s, e) => 
-                { MostPopularCommandCache = DatabaseQueries.GetMostPopularCommandAsync(); };
+            timer.Elapsed += async (s, e) => { MostPopularCommandCache = DatabaseQueries.GetMostPopularCommandAsync(); };
         }
 
         private static void StartOwnerGiveawayCacheTimer(long milliseconds = 600000)
         {
-            Timer timer = new Timer(milliseconds);
+            var timer = new Timer(milliseconds);
             timer.AutoReset = true;
             timer.Enabled = true;
-            timer.Elapsed += async (s, e) => 
-                { OwnerGiveawaysCache = (await DatabaseQueries.GetAllAsync<OwnerGiveaway>()).ToList(); };
+            timer.Elapsed += async (s, e) => { OwnerGiveawaysCache = (await DatabaseQueries.GetAllAsync<OwnerGiveaway>()).ToList(); };
         }
 
         private static void StartDbStatisticsTimer()
         {
-            Timer timer = new Timer(300000); // 5 minutes
+            var timer = new Timer(300000); // 5 minutes
             timer.AutoReset = true;
             timer.Enabled = true;
             timer.Elapsed += async (s, e) =>

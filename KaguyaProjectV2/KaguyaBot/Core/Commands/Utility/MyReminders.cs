@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
@@ -23,24 +24,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Remarks("")]
         public async Task Command()
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
-            var reminders = user.Reminders.Where(x => x.Expiration > DateTime.Now.ToOADate()).ToArray();
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            Reminder[] reminders = user.Reminders.Where(x => x.Expiration > DateTime.Now.ToOADate()).ToArray();
             var embed = new KaguyaEmbedBuilder();
 
             int i = 0;
 
-            if(!(reminders.Length == 0))
+            if (!(reminders.Length == 0))
             {
-                foreach (var reminder in reminders)
+                foreach (Reminder reminder in reminders)
                 {
                     i++;
 
-                    var expirationStr = DateTime.FromOADate(reminder.Expiration).Humanize(false);
+                    string expirationStr = DateTime.FromOADate(reminder.Expiration).Humanize(false);
 
                     var fSb = new StringBuilder();
                     fSb.AppendLine($"Reminder: `{reminder.Text}`");
                     fSb.AppendLine($"Expires: `{expirationStr}`");
-                    
+
                     var field = new EmbedFieldBuilder
                     {
                         IsInline = false,
@@ -70,14 +71,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             int j = 0;
             var data = new ReactionCallbackData("", embed.Build());
-            foreach (var reminder in reminders)
+            foreach (Reminder reminder in reminders)
             {
-                data.AddCallBack(GlobalProperties.EmojisOneThroughNine()[j], 
-                async (c, r) =>
-                {
-                    await DatabaseQueries.DeleteAsync(reminder);
-                    await ReplyAsync($"{Context.User.Mention} Successfully deleted reminder #{j}.");
-                });
+                data.AddCallBack(GlobalProperties.EmojisOneThroughNine()[j],
+                    async (c, r) =>
+                    {
+                        await DatabaseQueries.DeleteAsync(reminder);
+                        await ReplyAsync($"{Context.User.Mention} Successfully deleted reminder #{j}.");
+                    });
 
                 j++;
             }

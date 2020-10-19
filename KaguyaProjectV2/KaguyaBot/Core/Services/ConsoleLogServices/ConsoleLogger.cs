@@ -11,8 +11,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
 {
     public class ConsoleLogger
     {
-        private static readonly string LogDirectory = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\Logs";
-        private static readonly string LogFileName = $"KaguyaLog_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
+        private static readonly string _logDirectory = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\Logs";
+        private static readonly string _logFileName = $"KaguyaLog_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
 
         /// <summary>
         /// Logs a message to the console and the log file.
@@ -26,8 +26,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
         /// <param name="displaySeverity">Whether to display the date and time in the console.</param>
         /// <param name="showDate">Whether to display the date and time in the console.</param>
         /// <returns></returns>
-        public static async Task LogAsync(string message, LogLvl logLevel, bool colorOverride = false,
-             ConsoleColor backgroundColor = ConsoleColor.Black, ConsoleColor foregroundColor = ConsoleColor.White, bool displaySeverity = true,
+        public static async Task LogAsync(string message,
+            LogLvl logLevel,
+            bool colorOverride = false,
+            ConsoleColor backgroundColor = ConsoleColor.Black,
+            ConsoleColor foregroundColor = ConsoleColor.White,
+            bool displaySeverity = true,
             bool showDate = true)
         {
             string logP = LogPrefix(logLevel);
@@ -55,9 +59,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
 
             int shardId = ConfigProperties.Client.GetShardIdFor(context.Guild);
             string contents = $"\n{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} {logP} " +
-                       $"Command: [{context.Message}]\nUser: [Name: {context.User} | ID: {context.User.Id}]\n" +
-                       $"Guild: [Name: {context.Guild} | ID: {context.Guild.Id} | Shard: {shardId}]\n" +
-                       $"Channel: [Name: {context.Channel.Name} | ID: {context.Channel.Id}]\n";
+                              $"Command: [{context.Message}]\nUser: [Name: {context.User} | ID: {context.User.Id}]\n" +
+                              $"Guild: [Name: {context.Guild} | ID: {context.Guild.Id} | Shard: {shardId}]\n" +
+                              $"Channel: [Name: {context.Channel.Name} | ID: {context.Channel.Id}]\n";
 
             await LogFinisher(logLevel, contents);
         }
@@ -76,61 +80,64 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
                               $"{cmdException.Command.Name} in guild {cmdException.Context.Guild.Id} by user {cmdException.Context.User.Id}:\n" +
                               $"Inner Exception Message: {cmdException.InnerException?.Message ?? "NULL"}\n" +
                               $"Stack Trace: {logMsg.Exception.StackTrace ?? "NULL"}";
+
             await LogFinisher(LogLvl.ERROR, contents);
         }
 
         public static async Task LogAsync(Exception e, LogLvl logLvl = LogLvl.ERROR)
         {
-            var type = e.GetType();
+            Type type = e.GetType();
+
             if (type == typeof(KaguyaSupportException) || type == typeof(KaguyaPremiumException))
                 return;
-            
+
             string logP = LogPrefix(LogLvl.ERROR);
             string contents = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} {logP} Exception thrown: " +
                               $"{e.Message}.\nInner Exception Message: {e.InnerException?.Message ?? "NULL"}\n" +
                               $"Stack Trace: {e.StackTrace ?? "NULL"}";
+
             await LogFinisher(logLvl, contents);
         }
-        
+
         public static async Task LogAsync(Exception e, string additionalInfo, LogLvl logLvl = LogLvl.ERROR)
         {
-            var type = e.GetType();
+            Type type = e.GetType();
+
             if (type == typeof(KaguyaSupportException) || type == typeof(KaguyaPremiumException))
                 return;
-            
+
             string logP = LogPrefix(LogLvl.ERROR);
             string contents = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} {logP} Exception thrown: " +
                               $"{e.Message}.\nInner Exception Message: {e.InnerException?.Message ?? "NULL"}\n" +
                               $"Stack Trace: {e.StackTrace ?? "NULL"}\nAdditional Information: {additionalInfo}";
+
             await LogFinisher(logLvl, contents);
         }
 
-        private static string LogPrefix(LogLvl logLevel)
+        private static string LogPrefix(LogLvl logLevel) => logLevel switch
         {
-            return logLevel switch
-            {
-                LogLvl.TRACE => "[TRACE]:",
-                LogLvl.DEBUG => "[DEBUG]:",
-                LogLvl.INFO => "[INFO]:",
-                LogLvl.WARN => "[WARNING]:",
-                LogLvl.ERROR => "[ERROR]:",
-                _ => null
-            };
-        }
+            LogLvl.TRACE => "[TRACE]:",
+            LogLvl.DEBUG => "[DEBUG]:",
+            LogLvl.INFO => "[INFO]:",
+            LogLvl.WARN => "[WARNING]:",
+            LogLvl.ERROR => "[ERROR]:",
+            _ => null
+        };
 
         private static bool LogFileExists()
         {
-            if (!Directory.Exists(LogDirectory))
+            if (!Directory.Exists(_logDirectory))
             {
-                Directory.CreateDirectory(LogDirectory);
+                Directory.CreateDirectory(_logDirectory);
+
                 return false;
             }
 
-            if (File.Exists($"{LogDirectory}\\{LogFileName}")) return true;
+            if (File.Exists($"{_logDirectory}\\{_logFileName}")) return true;
 
-            File.WriteAllText($"{LogDirectory}\\{LogFileName}", "");
+            File.WriteAllText($"{_logDirectory}\\{_logFileName}", "");
+
             return false;
-
         }
 
         private static void SetConsoleColor(LogLvl level)
@@ -140,30 +147,38 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
                 case LogLvl.TRACE:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     Console.BackgroundColor = ConsoleColor.Black;
+
                     break;
                 case LogLvl.DEBUG:
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Console.BackgroundColor = ConsoleColor.Black;
+
                     break;
                 case LogLvl.INFO:
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.BackgroundColor = ConsoleColor.Black;
+
                     break;
                 case LogLvl.WARN:
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.DarkYellow;
+
                     break;
                 case LogLvl.ERROR:
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.DarkRed;
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
         }
 
-        private static async Task LogFinisher(LogLvl logLevel, string contents, bool colorOverride = false,
-            ConsoleColor backgroundColor = ConsoleColor.Black, ConsoleColor foregroundColor = ConsoleColor.White)
+        private static async Task LogFinisher(LogLvl logLevel,
+            string contents,
+            bool colorOverride = false,
+            ConsoleColor backgroundColor = ConsoleColor.Black,
+            ConsoleColor foregroundColor = ConsoleColor.White)
         {
             //Logs to console only if the log level is less or equally severe to what is specified in the config.
             SetConsoleColor(logLevel);
@@ -180,7 +195,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
             {
                 try
                 {
-                    await File.AppendAllTextAsync($"{LogDirectory}\\{LogFileName}", $"{contents}\n");
+                    await File.AppendAllTextAsync($"{_logDirectory}\\{_logFileName}", $"{contents}\n");
                 }
                 catch (Exception)
                 {

@@ -15,11 +15,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
         [Command("Reverse")]
         [Summary("Takes the text you provide and returns it's reversed value.")]
         [Remarks("<text>\nracecar")]
-        public async Task Command([Remainder]string text)
+        public async Task Command([Remainder] string text)
         {
             char[] chars = text.ToCharArray();
             Array.Reverse(chars);
-            
+
             string reversedText = new string(chars);
 
             var embed = new KaguyaEmbedBuilder
@@ -36,11 +36,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
             };
 
             // ReSharper disable once PossibleNullReferenceException
-            if (embed.Description.Length + embed.Fields[0].Value.ToString().Length > 1800)
-            {
+            if ((embed.Description.Length + embed.Fields[0].Value.ToString().Length) > 1800)
                 await SendBasicErrorEmbedAsync("Sorry, you're at the character limit! Please try something shorter.");
-            }
-            
+
             await SendEmbedAsync(embed);
         }
     }

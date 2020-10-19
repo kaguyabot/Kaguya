@@ -6,10 +6,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     [Table(Name = "autoassignedroles")]
     public class AutoAssignedRole : IKaguyaQueryable<AutoAssignedRole>, IServerSearchable<AutoAssignedRole>
     {
-        [Column(Name = "ServerId"), NotNull]
+        [Column(Name = "ServerId")]
+        [NotNull]
         public ulong ServerId { get; set; }
-        [Column(Name = "RoleId"), NotNull]
+
+        [Column(Name = "RoleId")]
+        [NotNull]
         public ulong RoleId { get; set; }
+
         /// <summary>
         /// FK_KaguyaServer_AutoAssignedRoles
         /// </summary>

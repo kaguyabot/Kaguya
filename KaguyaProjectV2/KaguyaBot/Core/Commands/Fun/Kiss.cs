@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NekosSharp;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
 {
@@ -19,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
         [Remarks("<user> {...}")]
         public async Task Command(params SocketGuildUser[] users)
         {
-            var kissGif = await ConfigProperties.NekoClient.Action_v3.KissGif();
+            Request kissGif = await ConfigProperties.NekoClient.Action_v3.KissGif();
 
             if (users.Length == 1)
             {
@@ -31,6 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Fun
                 };
 
                 await ReplyAsync(embed: embed.Build());
+
                 return;
             }
             else

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -14,18 +15,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     {
         public static async Task Initialize()
         {
-            var client = ConfigProperties.Client;
+            DiscordShardedClient client = ConfigProperties.Client;
 
-            Timer timer = new Timer(300000);
+            var timer = new Timer(300000);
             timer.Enabled = true;
             timer.AutoReset = true;
             timer.Elapsed += async (s, e) =>
             {
-                var guildUserCount = 0;
-                foreach (var guild in client.Guilds)
-                {
+                int guildUserCount = 0;
+                foreach (SocketGuild guild in client.Guilds)
                     guildUserCount += guild.MemberCount;
-                }
 
                 var stats = new KaguyaStatistics
                 {

@@ -1,7 +1,6 @@
 ﻿using SixLabors.ImageSharp.PixelFormats;
 
 // ReSharper disable AccessToDisposedClosure
-
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.Models
 {
     /*
@@ -19,18 +18,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.Models
         /// The color of the bar's fill.
         /// </summary>
         public Rgba32 Color { get; set; }
+
         /// <summary>
         /// The length of the bar, in pixels.
         /// </summary>
         public int Length { get; set; }
+
         /// <summary>
         /// The top-left coordinate of this bar.
         /// </summary>
         public TemplateLoc LocA { get; set; }
+
         /// <summary>
         /// The bottom-left coordinate of this bar.
         /// </summary>
         public TemplateLoc LocB { get; set; }
+
         public TemplateText TopLeftText { get; set; }
         public TemplateText BottomRightText { get; set; }
         public TemplateText CenterText { get; set; }

@@ -25,26 +25,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 };
 
                 await ReplyAsync(embed: errorEmbed.Build());
+
                 return;
             }
 
             await ReplyAsync($"{Context.User.Mention} Processing, please wait...");
 
-            var roles = Context.Guild.Roles.Where(x => !x.IsManaged && x.Name != "@everyone").ToList();
+            List<SocketRole> roles = Context.Guild.Roles.Where(x => !x.IsManaged && x.Name != "@everyone").ToList();
             var namesList = new List<string>(users.Length);
 
             int errorRoles = Context.Guild.Roles.Count(x => x.IsManaged);
-            foreach (var user in users)
+            foreach (SocketGuildUser user in users)
             {
                 namesList.Add(user.ToString());
                 await user.RemoveRolesAsync(roles);
             }
 
-            var nameString = $"";
-            foreach (var name in namesList)
-            {
+            string nameString = $"";
+            foreach (string name in namesList)
                 nameString += $"`{name}`, ";
-            }
 
             nameString = nameString.Substring(0, nameString.Length - 2);
 

@@ -6,10 +6,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
     public class PremiumBadge
     {
-        public PremiumBadge(User user)
-        {
-            Data.User = user;
-        }
+        public PremiumBadge(User user) { Data.User = user; }
 
         public readonly TemplateBadge Data = new TemplateBadge
         {

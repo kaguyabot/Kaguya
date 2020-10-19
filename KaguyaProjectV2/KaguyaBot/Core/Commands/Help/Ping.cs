@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            var ping = Client.Latency;
+            int ping = Client.Latency;
             await SendBasicSuccessEmbedAsync($"{Context.User.Mention} pong! {Centvrio.Emoji.Sport.PingPong}\n" +
                                              $"Latency: `{ping:N0}ms`");
         }

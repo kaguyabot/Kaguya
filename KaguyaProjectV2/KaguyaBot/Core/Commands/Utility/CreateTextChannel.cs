@@ -15,7 +15,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [RequireUserPermission(GuildPermission.ManageChannels)]
         [RequireBotPermission(GuildPermission.ManageChannels)]
         [RequireContext(ContextType.Guild)]
-        public async Task Command([Remainder]string name)
+        public async Task Command([Remainder] string name)
         {
             await Context.Guild.CreateTextChannelAsync(name);
             await SendBasicSuccessEmbedAsync($"Successfully created a new text channel named `{name}`.");

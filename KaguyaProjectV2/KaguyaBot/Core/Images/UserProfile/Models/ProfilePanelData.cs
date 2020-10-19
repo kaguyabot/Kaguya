@@ -11,125 +11,120 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
     {
         private static float HeaderFontSize { get; } = 12;
         private static float BodyFontSize { get; } = 20;
-        private static readonly Rgba32 HeaderColor = Rgba32.WhiteSmoke;
-        private static readonly Rgba32 BodyColor = Rgba32.WhiteSmoke;
+        private static readonly Rgba32 _headerColor = Rgba32.WhiteSmoke;
+        private static readonly Rgba32 _bodyColor = Rgba32.WhiteSmoke;
 
-        public static async Task<ProfileTemplatePanel> LeftPanel(User user, Server server)
+        public static async Task<ProfileTemplatePanel> LeftPanel(User user, Server server) => new ProfileTemplatePanel
         {
-            return new ProfileTemplatePanel
+            TopTextHeader = new TemplateText
             {
-                TopTextHeader = new TemplateText
+                Color = _headerColor,
+                Font = ImageBase.Font(HeaderFontSize),
+                HasStroke = false,
+                Loc = new TemplateLoc
                 {
-                    Color = HeaderColor,
-                    Font = ImageBase.Font(HeaderFontSize),
-                    HasStroke = false,
-                    Loc = new TemplateLoc
-                    {
-                        X = 182,
-                        Y = 87
-                    },
-                    Show = true,
-                    Text = $"Global Rank"
+                    X = 182,
+                    Y = 87
                 },
-                TopTextBody = new TemplateText
+                Show = true,
+                Text = $"Global Rank"
+            },
+            TopTextBody = new TemplateText
+            {
+                Color = _bodyColor,
+                Font = ImageBase.Font(BodyFontSize),
+                HasStroke = false,
+                Loc = new TemplateLoc
                 {
-                    Color = BodyColor,
-                    Font = ImageBase.Font(BodyFontSize),
-                    HasStroke = false,
-                    Loc = new TemplateLoc
-                    {
-                        X = 178,
-                        Y = 98
-                    },
-                    Show = true,
-                    Text = $"#{(await user.GetGlobalXpRankAsync()).Item1.ToAbbreviatedForm()} / {(await user.GetGlobalXpRankAsync()).Item2.ToAbbreviatedForm()}"
+                    X = 178,
+                    Y = 98
                 },
-                BottomTextHeader = new TemplateText
+                Show = true,
+                Text =
+                    $"#{(await user.GetGlobalXpRankAsync()).Item1.ToAbbreviatedForm()} / {(await user.GetGlobalXpRankAsync()).Item2.ToAbbreviatedForm()}"
+            },
+            BottomTextHeader = new TemplateText
+            {
+                Color = _headerColor,
+                Font = ImageBase.Font(HeaderFontSize),
+                HasStroke = false,
+                Loc = new TemplateLoc
                 {
-                    Color = HeaderColor,
-                    Font = ImageBase.Font(HeaderFontSize),
-                    HasStroke = false,
-                    Loc = new TemplateLoc
-                    {
-                        X = 175,
-                        Y = 115
-                    },
-                    Show = true,
-                    Text = "Server Rank"
+                    X = 175,
+                    Y = 115
                 },
-                BottomTextBody = new TemplateText
+                Show = true,
+                Text = "Server Rank"
+            },
+            BottomTextBody = new TemplateText
+            {
+                Color = _bodyColor,
+                Font = ImageBase.Font(BodyFontSize),
+                HasStroke = false,
+                Loc = new TemplateLoc
                 {
-                    Color = BodyColor,
-                    Font = ImageBase.Font(BodyFontSize),
-                    HasStroke = false,
-                    Loc = new TemplateLoc
-                    {
-                        X = 171,
-                        Y = 126
-                    },
-                    Show = true,
-                    Text = $"#{user.GetServerXpRank(server).Item1.ToAbbreviatedForm()} / {user.GetServerXpRank(server).Item2.ToAbbreviatedForm()}"
-                }
-            };
-        }
+                    X = 171,
+                    Y = 126
+                },
+                Show = true,
+                Text = $"#{user.GetServerXpRank(server).Item1.ToAbbreviatedForm()} / {user.GetServerXpRank(server).Item2.ToAbbreviatedForm()}"
+            }
+        };
 
-        public static ProfileTemplatePanel RightPanel(User user)
+        public static ProfileTemplatePanel RightPanel(User user) => new ProfileTemplatePanel
         {
-            return new ProfileTemplatePanel
+            TopTextHeader = new TemplateText
             {
-                TopTextHeader = new TemplateText
+                Color = _headerColor,
+                Font = ImageBase.Font(HeaderFontSize),
+                HasStroke = false,
+                Loc = new TemplateLoc
                 {
-                    Color = HeaderColor,
-                    Font = ImageBase.Font(HeaderFontSize),
-                    HasStroke = false,
-                    Loc = new TemplateLoc
-                    {
-                        X = 368,
-                        Y = 87
-                    },
-                    Show = true,
-                    Text = $"Points"
+                    X = 368,
+                    Y = 87
                 },
-                TopTextBody = new TemplateText
+                Show = true,
+                Text = $"Points"
+            },
+            TopTextBody = new TemplateText
+            {
+                Color = _headerColor,
+                Font = ImageBase.Font(BodyFontSize),
+                HasStroke = false,
+                Loc = new TemplateLoc
                 {
-                    Color = HeaderColor,
-                    Font = ImageBase.Font(BodyFontSize),
-                    HasStroke = false,
-                    Loc = new TemplateLoc
-                    {
-                        X = 364,
-                        Y = 99
-                    },
-                    Show = true,
-                    Text = $"{user.Points.ToAbbreviatedForm()}"
+                    X = 364,
+                    Y = 99
                 },
-                BottomTextHeader = new TemplateText
+                Show = true,
+                Text = $"{user.Points.ToAbbreviatedForm()}"
+            },
+            BottomTextHeader = new TemplateText
+            {
+                Color = _headerColor,
+                Font = ImageBase.Font(HeaderFontSize),
+                HasStroke = false,
+                Loc = new TemplateLoc
                 {
-                    Color = HeaderColor,
-                    Font = ImageBase.Font(HeaderFontSize),
-                    HasStroke = false,
-                    Loc = new TemplateLoc
-                    {
-                        X = 362,
-                        Y = 116
-                    },
-                    Show = true,
-                    Text = $"Rep"
+                    X = 362,
+                    Y = 116
                 },
-                BottomTextBody = new TemplateText
+                Show = true,
+                Text = $"Rep"
+            },
+            BottomTextBody = new TemplateText
+            {
+                Color = _headerColor,
+                Font = ImageBase.Font(BodyFontSize),
+                HasStroke = false,
+                Loc = new TemplateLoc
                 {
-                    Color = HeaderColor,
-                    Font = ImageBase.Font(BodyFontSize),
-                    HasStroke = false,
-                    Loc = new TemplateLoc
-                    {
-                        X = 363,
-                        Y = 127
-                    },
-                    Show = true,
-                    Text = $"{user.Rep.Count().ToAbbreviatedForm()}"
-                }
-            };
-        }
+                    X = 363,
+                    Y = 127
+                },
+                Show = true,
+                Text = $"{user.Rep.Count().ToAbbreviatedForm()}"
+            }
+        };
     }
 }

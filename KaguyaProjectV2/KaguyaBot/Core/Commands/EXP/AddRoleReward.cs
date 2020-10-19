@@ -9,8 +9,8 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Linq;
 using System.Threading.Tasks;
-// ReSharper disable RedundantIfElseBlock
 
+// ReSharper disable RedundantIfElseBlock
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
     public class AddRoleReward : KaguyaBase
@@ -25,29 +25,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         [RequireContext(ContextType.Guild)]
-        public async Task Command(int level, [Remainder]SocketRole role)
+        public async Task Command(int level, [Remainder] SocketRole role)
         {
-            const int premiumLimit = Int32.MaxValue;
-            const int regLimit = 3;
-            
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            int limit = server.IsPremium ? premiumLimit : regLimit;
+            const int PREMIUM_LIMIT = Int32.MaxValue;
+            const int REG_LIMIT = 3;
+
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            int limit = server.IsPremium ? PREMIUM_LIMIT : REG_LIMIT;
 
             if (level < 1)
             {
                 await SendBasicErrorEmbedAsync("The `level` parameter must be at least `1`.");
+
                 return;
             }
 
             if (level > 100000)
             {
                 await SendBasicErrorEmbedAsync($"The maximum level for a role reward is `{100000:N0}`");
+
                 return;
             }
 
             if (server.RoleRewards.Count() == limit)
             {
-                string limitStr = (server.IsPremium ? $"Your premium limit: {premiumLimit:N0}." : $"Your non-premium limit: {regLimit}.");
+                string limitStr = server.IsPremium ? $"Your premium limit: {PREMIUM_LIMIT:N0}." : $"Your non-premium limit: {REG_LIMIT}.";
                 string baseLimitStr = "You have reached your limit of allowed " +
                                       $"concurrent role rewards. Please delete one " +
                                       $"if you still wish to create this reward.\n\n {limitStr}";
@@ -55,7 +57,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 if (server.IsPremium)
                     throw new KaguyaSupportException(baseLimitStr);
                 else
-                    throw new KaguyaPremiumException($"More than {regLimit} role rewards.\n" + baseLimitStr);
+                    throw new KaguyaPremiumException($"More than {REG_LIMIT} role rewards.\n" + baseLimitStr);
             }
 
             var rr = new ServerRoleReward

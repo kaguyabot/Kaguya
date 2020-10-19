@@ -4,6 +4,8 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using Victoria;
 using Victoria.Enums;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
@@ -20,15 +22,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var node = ConfigProperties.LavaNode;
-            var player = node.GetPlayer(Context.Guild);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            LavaNode node = ConfigProperties.LavaNode;
+            LavaPlayer player = node.GetPlayer(Context.Guild);
 
             if (player == null)
             {
                 await SendBasicErrorEmbedAsync($"There needs to be an active music player in the " +
                                                $"server for this command to work. Start one " +
                                                $"by using `{server.CommandPrefix}play <song>`!");
+
                 return;
             }
 
@@ -38,9 +41,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 await SendBasicSuccessEmbedAsync($"Successfully resumed the player.");
             }
             else
-            {
                 await SendBasicErrorEmbedAsync($"The player is already actively playing.");
-            }
         }
     }
 }

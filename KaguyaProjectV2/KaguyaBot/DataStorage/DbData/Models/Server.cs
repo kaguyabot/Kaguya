@@ -14,52 +14,98 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [PrimaryKey]
         [Column(Name = "server_id")]
         public ulong ServerId { get; set; }
-        [Column(Name = "command_prefix"), Nullable]
+
+        [Column(Name = "command_prefix")]
+        [Nullable]
         public string CommandPrefix { get; set; } = "$";
-        [Column(Name = "command_count"), NotNull]
+
+        [Column(Name = "command_count")]
+        [NotNull]
         public int TotalCommandCount { get; set; }
-        [Column(Name = "total_admin_actions"), NotNull]
+
+        [Column(Name = "total_admin_actions")]
+        [NotNull]
         public int TotalAdminActions { get; set; }
+
         [Column(Name = "praise_cooldown")]
         public int PraiseCooldown { get; set; } = 24;
-        [Column(Name = "mod_log"), Nullable]
+
+        [Column(Name = "mod_log")]
+        [Nullable]
         public ulong ModLog { get; set; }
-        [Column(Name = "deleted_messages_log"), Nullable]
+
+        [Column(Name = "deleted_messages_log")]
+        [Nullable]
         public ulong LogDeletedMessages { get; set; }
-        [Column(Name = "updated_messages_log"), Nullable]
+
+        [Column(Name = "updated_messages_log")]
+        [Nullable]
         public ulong LogUpdatedMessages { get; set; }
-        [Column(Name = "filtered_phrases_log"), Nullable]
+
+        [Column(Name = "filtered_phrases_log")]
+        [Nullable]
         public ulong LogFilteredPhrases { get; set; }
-        [Column(Name = "user_joins_log"), Nullable]
+
+        [Column(Name = "user_joins_log")]
+        [Nullable]
         public ulong LogUserJoins { get; set; }
-        [Column(Name = "user_leaves_log"), Nullable]
+
+        [Column(Name = "user_leaves_log")]
+        [Nullable]
         public ulong LogUserLeaves { get; set; }
-        [Column(Name = "bans_log"), Nullable]
+
+        [Column(Name = "bans_log")]
+        [Nullable]
         public ulong LogBans { get; set; }
-        [Column(Name = "unbans_log"), Nullable]
+
+        [Column(Name = "unbans_log")]
+        [Nullable]
         public ulong LogUnbans { get; set; }
-        [Column(Name = "voice_channel_connections_log"), Nullable]
+
+        [Column(Name = "voice_channel_connections_log")]
+        [Nullable]
         public ulong LogVoiceChannelConnections { get; set; }
-        [Column(Name = "level_announcements_log"), Nullable]
+
+        [Column(Name = "level_announcements_log")]
+        [Nullable]
         public ulong LogLevelAnnouncements { get; set; }
-        [Column(Name = "fish_levels_log"), NotNull]
+
+        [Column(Name = "fish_levels_log")]
+        [NotNull]
         public ulong LogFishLevels { get; set; }
-        [Column(Name = "anti_raids_log"), Nullable]
+
+        [Column(Name = "anti_raids_log")]
+        [Nullable]
         public ulong LogAntiraids { get; set; }
-        [Column(Name = "greetings_log"), NotNull]
+
+        [Column(Name = "greetings_log")]
+        [NotNull]
         public ulong LogGreetings { get; set; }
-        [Column(Name = "is_blacklisted"), Nullable]
+
+        [Column(Name = "is_blacklisted")]
+        [Nullable]
         public bool IsBlacklisted { get; set; }
-        [Column(Name = "custom_greeting"), Nullable]
+
+        [Column(Name = "custom_greeting")]
+        [Nullable]
         public string CustomGreeting { get; set; }
-        [Column(Name = "custom_greeting_enabled"), NotNull]
+
+        [Column(Name = "custom_greeting_enabled")]
+        [NotNull]
         public bool CustomGreetingIsEnabled { get; set; }
-        [Column(Name = "level_announcements_enabled"), NotNull]
+
+        [Column(Name = "level_announcements_enabled")]
+        [NotNull]
         public bool LevelAnnouncementsEnabled { get; set; }
-        [Column(Name = "osu_link_parsing_enabled"), NotNull]
+
+        [Column(Name = "osu_link_parsing_enabled")]
+        [NotNull]
         public bool OsuLinkParsingEnabled { get; set; } = true;
-        [Column(Name = "premium_expiration"), NotNull]
+
+        [Column(Name = "premium_expiration")]
+        [NotNull]
         public double PremiumExpiration { get; set; }
+
         /// <summary>
         /// Upon anti-raid execution, if this value is set, Kaguya will send a DM to whoever was punished
         /// by the anti-raid service with this property as the message's content.
@@ -79,10 +125,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// log event. We log bulk-deletion of messages by checking the audit log instead. This
         /// value is not in the database.
         /// </summary>
-        [Column(Name = "is_currently_purging_messages"), NotNull]
+        [Column(Name = "is_currently_purging_messages")]
+        [NotNull]
         public bool IsCurrentlyPurgingMessages { get; set; } = false;
 
-        [Column(Name = "next_quote_id"), NotNull]
+        [Column(Name = "next_quote_id")]
+        [NotNull]
         public int NextQuoteId { get; set; } = 1;
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static async Task Trigger(SocketGuild newGuild)
         {
-            var owner = newGuild.Owner;
+            SocketGuildUser owner = newGuild.Owner;
             var embed = new KaguyaEmbedBuilder
             {
                 Title = $"Salutations!",

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using LinqToDB.Linq;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
@@ -27,48 +28,50 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 catch (Exception e)
                 {
                     await ConsoleLogger.LogAsync($"Failed to establish database connection!! {e.Message}", LogLvl.ERROR);
+
                     return false;
                 }
             }
         }
 
-        public static async Task<Server> GetOrCreateServerAsync(ulong Id)
+        public static async Task<Server> GetOrCreateServerAsync(ulong id)
         {
             using (var db = new KaguyaDb())
             {
-                bool exists = db.Servers.Any(x => x.ServerId == Id);
+                bool exists = db.Servers.Any(x => x.ServerId == id);
                 if (!exists)
                 {
                     await db.InsertAsync(new Server
                     {
-                        ServerId = Id
+                        ServerId = id
                     });
-                    await ConsoleLogger.LogAsync($"Server {Id} created.", LogLvl.DEBUG);
+
+                    await ConsoleLogger.LogAsync($"Server {id} created.", LogLvl.DEBUG);
                 }
 
                 return await db.Servers
-                    .LoadWith(x => x.AntiRaid)
-                    .LoadWith(x => x.AutoAssignedRoles)
-                    .LoadWith(x => x.BlackListedChannels)
-                    .LoadWith(x => x.CommandHistory)
-                    .LoadWith(x => x.FilteredPhrases)
-                    .LoadWith(x => x.Fish)
-                    .LoadWith(x => x.MutedUsers)
-                    .LoadWith(x => x.Praise)
-                    .LoadWith(x => x.Quotes)
-                    .LoadWith(x => x.RoleRewards)
-                    .LoadWith(x => x.ServerExp)
-                    .LoadWith(x => x.WarnedUsers)
-                    .LoadWith(x => x.WarnSettings)
-                    .Where(s => s.ServerId == Id).FirstAsync();
+                               .LoadWith(x => x.AntiRaid)
+                               .LoadWith(x => x.AutoAssignedRoles)
+                               .LoadWith(x => x.BlackListedChannels)
+                               .LoadWith(x => x.CommandHistory)
+                               .LoadWith(x => x.FilteredPhrases)
+                               .LoadWith(x => x.Fish)
+                               .LoadWith(x => x.MutedUsers)
+                               .LoadWith(x => x.Praise)
+                               .LoadWith(x => x.Quotes)
+                               .LoadWith(x => x.RoleRewards)
+                               .LoadWith(x => x.ServerExp)
+                               .LoadWith(x => x.WarnedUsers)
+                               .LoadWith(x => x.WarnSettings)
+                               .Where(s => s.ServerId == id).FirstAsync();
             }
         }
 
-        public static async Task<User> GetOrCreateUserAsync(ulong Id)
+        public static async Task<User> GetOrCreateUserAsync(ulong id)
         {
             using (var db = new KaguyaDb())
             {
-                bool exists = db.Users.Any(x => x.UserId == Id);
+                bool exists = db.Users.Any(x => x.UserId == id);
 
                 if (!exists)
                 {
@@ -76,37 +79,36 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     {
                         await db.InsertAsync(new User
                         {
-                            UserId = Id
+                            UserId = id
                         });
                     }
                     catch (Exception e)
                     {
-                        await ConsoleLogger.LogAsync($"Failed to create User with ID {Id}\nException: {e}", LogLvl.ERROR);
+                        await ConsoleLogger.LogAsync($"Failed to create User with ID {id}\nException: {e}", LogLvl.ERROR);
+
                         throw;
                     }
-                    
-                    await ConsoleLogger.LogAsync($"User {Id} created.", LogLvl.DEBUG);
+
+                    await ConsoleLogger.LogAsync($"User {id} created.", LogLvl.DEBUG);
                 }
-                
+
                 return await db.Users
-                    .LoadWith(x => x.Blacklist)
-                    .LoadWith(x => x.CommandHistory)
-                    .LoadWith(x => x.Fish)
-                    .LoadWith(x => x.GambleHistory)
-                    .LoadWith(x => x.Quotes)
-                    .LoadWith(x => x.Reminders)
-                    .LoadWith(x => x.Rep)
-                    .LoadWith(x => x.ServerExp)
-                    .Where(u => u.UserId == Id).FirstAsync();
+                               .LoadWith(x => x.Blacklist)
+                               .LoadWith(x => x.CommandHistory)
+                               .LoadWith(x => x.Fish)
+                               .LoadWith(x => x.GambleHistory)
+                               .LoadWith(x => x.Quotes)
+                               .LoadWith(x => x.Reminders)
+                               .LoadWith(x => x.Rep)
+                               .LoadWith(x => x.ServerExp)
+                               .Where(u => u.UserId == id).FirstAsync();
             }
         }
 
         public static int GetGlobalExpRankIndex(User user)
         {
             using (var db = new KaguyaDb())
-            {
                 return db.Users.OrderByDescending(x => x.Experience).ToList().FindIndex(x => x.UserId == user.UserId);
-            }
         }
 
         public static double GetLastPraiseTime(ulong userId, ulong serverId)
@@ -137,7 +139,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <returns>The new total amount of points the user has.</returns>
         public static int SellFish(Fish fish, ulong userId)
         {
-            var user = GetOrCreateUserAsync(userId).Result;
+            User user = GetOrCreateUserAsync(userId).Result;
 
             user.Points += Fish.GetPayoutForFish(fish, user.FishExp);
             fish.Sold = true;
@@ -193,9 +195,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task InsertOrReplaceAsync<T>(T arg) where T : class, IKaguyaQueryable<T>, IKaguyaUnique<T>
         {
             using (var db = new KaguyaDb())
-            {
                 await db.InsertOrReplaceAsync(arg);
-            }
         }
 
         /// <summary>
@@ -208,19 +208,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task InsertAsync<T>(T arg) where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
-            {
                 await db.InsertAsync(arg);
-            }
         }
 
         public static async Task InsertAsync<T>(IEnumerable<T> arg) where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
             {
-                foreach (var element in arg)
-                {
+                foreach (T element in arg)
                     await db.InsertAsync(element);
-                }
             }
         }
 
@@ -231,12 +227,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <param name="arg"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns>The id of the <see cref="T"/>.</returns>
-        public static async Task<int> InsertWithIdentityAsync<T>(T arg) where T : class, 
+        public static async Task<int> InsertWithIdentityAsync<T>(T arg) where T : class,
             IKaguyaQueryable<T>, IKaguyaUnique<T>
         {
             using (var db = new KaguyaDb())
             {
-                var val = await db.InsertWithInt32IdentityAsync(arg);
+                int val = await db.InsertWithInt32IdentityAsync(arg);
+
                 return val;
             }
         }
@@ -352,7 +349,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
         }
 
-
         /// <summary>
         /// Bulk copies (inserts) the <see cref="IEnumerable{T}"/> into the database.
         /// </summary>
@@ -362,12 +358,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task BulkCopy<T>(IEnumerable<T> args) where T :
             class,
             IKaguyaQueryable<T>
-            // IKaguyaUnique<T> may be necessary, but we'll see.
+        // IKaguyaUnique<T> may be necessary, but we'll see.
         {
             using (var db = new KaguyaDb())
-            {
                 await Task.Run(() => { db.BulkCopy(args); });
-            }
         }
 
         /// <summary>
@@ -379,23 +373,19 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task DeleteAsync<T>(T arg) where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
-            {
                 await db.DeleteAsync(arg);
-            }
         }
 
         public static async Task DeleteAllAsync<T>() where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
             {
-                var records = await db.GetTable<T>().ToListAsync();
+                List<T> records = await db.GetTable<T>().ToListAsync();
 
                 if (records.Count > 0)
                 {
-                    foreach (var record in records)
-                    {
+                    foreach (T record in records)
                         await db.DeleteAsync(record);
-                    }
                 }
 
                 await ConsoleLogger.LogAsync($"Deleted all records of type {typeof(T)}", LogLvl.WARN);
@@ -412,10 +402,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                foreach (var arg in args)
-                {
+                foreach (T arg in args)
                     await db.DeleteAsync(arg);
-                }
             }
         }
 
@@ -427,9 +415,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task<List<T>> GetAllAsync<T>() where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
-            {
                 return await db.GetTable<T>().ToListAsync();
-            }
         }
 
         /// <summary>
@@ -463,13 +449,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         /// <param name="selector"></param>
         /// <param name="orderByDescending"></param>
         /// <returns></returns>
-        public static async Task<List<T>> GetLimitAsync<T>(uint limit, Expression<Func<T, bool>> predicate = null,
-            Expression<Func<T, object>> selector = null, bool orderByDescending = false) where T : class, IKaguyaQueryable<T>
+        public static async Task<List<T>> GetLimitAsync<T>(uint limit,
+            Expression<Func<T, bool>> predicate = null,
+            Expression<Func<T, object>> selector = null,
+            bool orderByDescending = false) where T : class, IKaguyaQueryable<T>
         {
             // ReSharper disable once PossibleInvalidOperationException
             using (var db = new KaguyaDb())
             {
-                var baseQuery = db.GetTable<T>().AsQueryable();
+                IQueryable<T> baseQuery = db.GetTable<T>().AsQueryable();
 
                 baseQuery = predicate == null
                     ? baseQuery
@@ -481,13 +469,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                         ? baseQuery.OrderByDescending(selector)
                         : baseQuery.OrderBy(selector);
 
-                    return await baseQuery.Take((int)limit).ToListAsync();
+                    return await baseQuery.Take((int) limit).ToListAsync();
                 }
 
                 if (orderByDescending)
                     throw new InvalidOperationException("Unable to apply descendant ordering with a null selector parameter.");
 
-                return await baseQuery.Take((int)limit).ToListAsync();
+                return await baseQuery.Take((int) limit).ToListAsync();
             }
         }
 
@@ -538,9 +526,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task UpdateAsync<T>(T arg) where T : class, IKaguyaQueryable<T>, IKaguyaUnique<T>
         {
             using (var db = new KaguyaDb())
-            {
                 await db.UpdateAsync(arg);
-            }
         }
 
         /// <summary>
@@ -554,10 +540,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         {
             using (var db = new KaguyaDb())
             {
-                foreach (var arg in args)
-                {
+                foreach (T arg in args)
                     await db.UpdateAsync(arg);
-                }
             }
         }
 
@@ -569,9 +553,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task<int> ExecuteSqlAsync(string sql)
         {
             using (var db = new KaguyaDb())
-            {
                 return await db.ExecuteAsync(sql);
-            }
         }
 
         /// <summary>
@@ -604,9 +586,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
-            {
                 return await db.GetTable<T>().AnyAsync(x => x.Equals(arg));
-            }
         }
 
         /// <summary>
@@ -621,18 +601,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
-            {
                 return await db.GetTable<T>().Where(predicate).AnyAsync();
-            }
         }
 
         public static async Task<bool> ItemExists<T>(IEnumerable<T> args, Expression<Func<T, bool>> predicate) where T :
             class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
-            {
                 return await db.GetTable<T>().Where(predicate).AnyAsync(x => args.Contains(x));
-            }
         }
 
         /// <summary>
@@ -651,6 +627,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                     if (throwExceptionIfPresent)
                         throw new Exception("Item already exists in the database.");
                 }
+
                 await db.InsertAsync(arg);
             }
         }
@@ -663,9 +640,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static async Task<int> GetCountAsync<T>() where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
-            {
                 return await db.GetTable<T>().CountAsync();
-            }
         }
 
         /// <summary>
@@ -678,9 +653,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             where T : class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
-            {
                 return await db.GetTable<T>().Where(predicate).CountAsync();
-            }
         }
 
         /// <summary>
@@ -692,23 +665,22 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             var dic = new Dictionary<string, int>();
             using (var db = new KaguyaDb())
             {
-                var command = from h in db.GetTable<CommandHistory>() select h;
-                var descending = command.GroupBy(x => x.Command);
+                IQueryable<CommandHistory> command = from h in db.GetTable<CommandHistory>() select h;
+                IQueryable<IGrouping<string, CommandHistory>> descending = command.GroupBy(x => x.Command);
                 descending = descending.OrderByDescending(x => x.Count());
-                var name = descending.FirstOrDefault()?.Key;
+                string name = descending.FirstOrDefault()?.Key;
 
                 if (String.IsNullOrWhiteSpace(name))
-                {
                     return new Dictionary<string, int>();
-                }
-                    
-                var count = from c in db.GetTable<CommandHistory>()
-                    group c by c.Command
-                    into grp
-                    orderby grp.Count() descending
-                    select grp.Count();
+
+                IQueryable<int> count = from c in db.GetTable<CommandHistory>()
+                                        group c by c.Command
+                                        into grp
+                                        orderby grp.Count() descending
+                                        select grp.Count();
 
                 dic.Add(name, count.Select(x => x).First());
+
                 return dic;
             }
         }
@@ -720,9 +692,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         public static int GetTotalCurrency()
         {
             using (var db = new KaguyaDb())
-            {
                 return Enumerable.Sum(db.Users, user => user.Points);
-            }
         }
 
         public static async Task<int> SafeAddQuote(Server server, Quote quote)
@@ -732,20 +702,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 await db.BeginTransactionAsync();
                 try
                 {
-                    var id = await (db.Servers
-                            .Where(s => s.ServerId == server.ServerId)
-                            .Select(s => s.NextQuoteId)).FirstOrDefaultAsync();
+                    int id = await db.Servers
+                                     .Where(s => s.ServerId == server.ServerId)
+                                     .Select(s => s.NextQuoteId).FirstOrDefaultAsync();
 
                     quote.Id = id;
-                    var updateQuote = await db.InsertAsync(quote);
-                    var statement = db.Servers
-                                    .Where(s => s.ServerId == server.ServerId)
-                                    .Set(i => i.NextQuoteId, id + 1);
+                    int updateQuote = await db.InsertAsync(quote);
+                    IUpdatable<Server> statement = db.Servers
+                                                     .Where(s => s.ServerId == server.ServerId)
+                                                     .Set(i => i.NextQuoteId, id + 1);
 
                     await db.CommitTransactionAsync();
+
                     return id;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     await ConsoleLogger.LogAsync(e);
                     await db.RollbackTransactionAsync();

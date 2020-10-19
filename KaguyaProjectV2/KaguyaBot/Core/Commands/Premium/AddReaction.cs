@@ -22,28 +22,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Premium
             IMessage message = null;
             if (msgId == 0)
                 message = Context.Message;
+
             if (msgId != 0)
                 message = await Context.Channel.GetMessageAsync(msgId);
 
             if (text.Length > 10)
             {
-                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+                var embed = new KaguyaEmbedBuilder
                 {
                     Description = "Your reaction may not be more than 10 characters long."
                 };
+
                 embed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: embed.Build());
+
                 return;
             }
 
             text.Replace(" ", "");
-            List<Emoji> emojis = new List<Emoji>();
+            var emojis = new List<Emoji>();
 
             foreach (char letter in text)
-            {
                 emojis.Add(new Emoji($"{ReturnEmoji(letter)}"));
-            }
 
             await (message as IUserMessage).AddReactionsAsync(emojis.ToArray());
         }

@@ -9,14 +9,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
     public static class GlobalBarData
     {
-        public static string FontPath = ImageBase.FONT_PATH;
+        public static string FontPath = ImageBase.FontPath;
 
         public static TemplateXpBar Bar(User user)
         {
-            const float aX = 37f;
-            const float aY = 174.5f;
-            const float bX = aX;
-            const float bY = aY + 26;
+            const float A_X = 37f;
+            const float A_Y = 174.5f;
+            const float B_X = A_X;
+            const float B_Y = A_Y + 26;
 
             return new TemplateXpBar
             {
@@ -25,13 +25,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
                 Length = 277,
                 LocA = new TemplateLoc
                 {
-                    X = aX,
-                    Y = aY
+                    X = A_X,
+                    Y = A_Y
                 },
                 LocB = new TemplateLoc
                 {
-                    X = bX,
-                    Y = bY
+                    X = B_X,
+                    Y = B_Y
                 },
                 TopLeftText = new TemplateText
                 {
@@ -82,16 +82,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
         }
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local
-        public static PointF[] GlobalXpBarCoordinates(User user, ProfileTemplateXp xp)
+        public static PointF[] GlobalXpBarCoordinates(User user, ProfileTemplateXp xp) => new PointF[]
         {
-            return new PointF[]
-            {
-                new PointF(xp.GlobalBar.LocA.X, xp.GlobalBar.LocA.Y), // Base point, top left.
-                new PointF(xp.GlobalBar.LocB.X, xp.GlobalBar.LocB.Y), // Base point, bottom left.
-                new PointF(GetGlobalXpBarFillCoordinate(user, xp.GlobalBar), xp.GlobalBar.LocB.Y),
-                new PointF(GetGlobalXpBarFillCoordinate(user, xp.GlobalBar), xp.GlobalBar.LocA.Y)
-            };
-        }
+            new PointF(xp.GlobalBar.LocA.X, xp.GlobalBar.LocA.Y), // Base point, top left.
+            new PointF(xp.GlobalBar.LocB.X, xp.GlobalBar.LocB.Y), // Base point, bottom left.
+            new PointF(GetGlobalXpBarFillCoordinate(user, xp.GlobalBar), xp.GlobalBar.LocB.Y),
+            new PointF(GetGlobalXpBarFillCoordinate(user, xp.GlobalBar), xp.GlobalBar.LocA.Y)
+        };
 
         /// <summary>
         /// Returns the x-coordinate for how far we should fill the xp bar based on the user's
@@ -100,8 +97,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
         /// <returns></returns>
         private static float GetGlobalXpBarFillCoordinate(User user, TemplateXpBar bar)
         {
-            var percentToNextLevel = user.PercentToNextLevel();
-            return (float)((percentToNextLevel * bar.Length) + bar.LocA.X);
+            double percentToNextLevel = user.PercentToNextLevel();
+
+            return (float) ((percentToNextLevel * bar.Length) + bar.LocA.X);
         }
     }
 }

@@ -9,6 +9,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
@@ -22,7 +23,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command()
         {
-            var top50 = (await DatabaseQueries.GetLimitAsync<User>(50, x => x.Experience > 0,
+            List<User> top50 = (await DatabaseQueries.GetLimitAsync<User>(50, x => x.Experience > 0,
                 x => x.Experience, true)).Where(x => !x.IsBlacklisted).ToList();
 
             int i = 1;
@@ -32,12 +33,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 Fields = new List<EmbedFieldBuilder>()
             };
 
-            foreach (var user in top50)
+            foreach (User user in top50)
             {
                 if (i > 10)
                     break;
 
-                var socketUser = Client.GetUser(user.UserId);
+                SocketUser socketUser = Client.GetUser(user.UserId);
 
                 embed.Fields.Add(new EmbedFieldBuilder
                 {

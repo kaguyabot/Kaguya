@@ -17,18 +17,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 {
     public class CreateReactionRole : KaguyaBase
     {
-        public static event Action<IEnumerable<ReactionRole>> UpdatedCache; 
-        
+        public static event Action<IEnumerable<ReactionRole>> UpdatedCache;
+
         [UtilityCommand]
         [Command("CreateReactionRole")]
         [Alias("crr")]
         [Summary("Allows a user to add a emote-role pair to a message in the form of a reaction. Users who click on " +
-                 "the reaction will then be given the role paired to the emote. When a user removes " +
-                 "their reaction, the role will be removed from them.\n\n" +
-                 "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
-                 "together on a new line.\n This emote may either be a custom Emote or standard Emoji.\n\n" +
-                 "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
-                 "Subsequent emote-role pairs can be added seamlessly.")]
+            "the reaction will then be given the role paired to the emote. When a user removes " +
+            "their reaction, the role will be removed from them.\n\n" +
+            "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
+            "together on a new line.\n This emote may either be a custom Emote or standard Emoji.\n\n" +
+            "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
+            "Subsequent emote-role pairs can be added seamlessly.")]
         [Remarks("<message ID> [channel] <emote> <role> {...}\n" +
                  "588369719132684296 :sunglasses: OG\n" +
                  "588369719132684296 :PepeJam: \"DJ Master\" :PepeLaugh: @Comedian\n" +
@@ -39,20 +39,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [RequireBotPermission(ChannelPermission.ManageRoles)]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
         [RequireBotPermission(ChannelPermission.AddReactions)]
-        public async Task Command(ulong messageId, string emote, IRole role, params string[] args)
-            => await Command(messageId, (ITextChannel)Context.Channel, emote, role, args);
-        
+        public async Task Command(ulong messageId, string emote, IRole role, params string[] args) => await Command(messageId, (ITextChannel) Context.Channel, emote, role, args);
+
         // Main command logic
         [UtilityCommand]
         [Command("CreateReactionRole")]
         [Alias("crr")]
         [Summary("Allows a user to add a emote-role pair to a message in the form of a reaction. Users who click on " +
-                 "the reaction will then be given the role paired to the emote. When a user removes " +
-                 "their reaction, the role will be removed from them.\n\n" +
-                 "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
-                 "together on a new line.\n This emote may either be a custom Emote or standard Emoji.\n\n" +
-                 "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
-                 "Subsequent emote-role pairs can be added seamlessly.")]
+            "the reaction will then be given the role paired to the emote. When a user removes " +
+            "their reaction, the role will be removed from them.\n\n" +
+            "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
+            "together on a new line.\n This emote may either be a custom Emote or standard Emoji.\n\n" +
+            "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
+            "Subsequent emote-role pairs can be added seamlessly.")]
         [Remarks("<message ID> [channel] <emote> <role> {...}\n" +
                  "588369719132684296 :Banger: OG\n" +
                  "<msg ID> :PepeJam: \"DJ Master\" :PepeLaugh: @Comedian\n" +
@@ -69,27 +68,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             IEmote emoteRes;
             if (Emote.TryParse(emote, out Emote result))
-            {
                 emoteRes = result;
-            }
             else
-            {
                 emoteRes = new Emoji(emote);
-            }
-            
-            var emoteRolePair = new Dictionary<IEmote, IRole> { {emoteRes, role} };
-            
+
+            var emoteRolePair = new Dictionary<IEmote, IRole>
+            {
+                {emoteRes, role}
+            };
+
             if (args.Any())
             {
                 // If there aren't an even amount of args, we know the user messed up.
-                if (args.Length % 2 != 0)
+                if ((args.Length % 2) != 0)
                 {
                     throw new KaguyaSupportException("There were an invalid amount of additional arguments provided. " +
                                                      "Note that for each additional entry, there must be an " +
                                                      "emote followed by a role.");
                 }
 
-                string[][] emoteRolePairs = new string[args.Length / 2][];
+                var emoteRolePairs = new string[args.Length / 2][];
 
                 int count = 0;
                 for (int i = 0; i < args.Length; i += 2)
@@ -101,12 +99,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                     emoteRolePairs[count] = rolePair;
                     count++;
                 }
-                
-                foreach (var pair in emoteRolePairs)
+
+                foreach (string[] pair in emoteRolePairs)
                 {
                     string emoteText = pair[0];
                     string roleText = pair[1];
-                    
+
                     bool validEmote = false;
                     bool validRole = false;
 
@@ -115,10 +113,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
                     IRole roleResult = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleText.ToLower());
                     if (roleResult != null)
-                    {
                         validRole = true;
-                    }
-                    
+
                     if (validEmote == false)
                     {
                         throw new KaguyaSupportException("Failed to parse a valid emote from the provided " +
@@ -132,7 +128,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                         throw new KaguyaSupportException("Failed to parse a valid role from the provided " +
                                                          $"input: Role: '{roleText}'");
                     }
-                    
+
                     emoteRolePair.Add(emoteResult, Context.Guild.GetRole(roleResult.Id));
                 }
             }
@@ -149,13 +145,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             int cacheListIndex = 0;
             var respSb = new StringBuilder();
-            foreach (var pair in emoteRolePair)
+            foreach (KeyValuePair<IEmote, IRole> pair in emoteRolePair)
             {
                 bool isEmoji = false;
                 IEmote pEmote = pair.Key;
                 IRole pRole = pair.Value;
                 ReactionRole rr;
-                
+
                 if (pEmote is Emote customEmote)
                 {
                     rr = new ReactionRole
@@ -179,9 +175,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                     isEmoji = true;
                 }
                 else
-                {
                     throw new KaguyaSupportException("The reaction role isn't an Emoji or Emote!!");
-                }
 
                 if (pRole.IsManaged)
                 {
@@ -195,20 +189,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 if (isEmoji)
                 {
                     possibleMatch = await DatabaseQueries.GetFirstMatchAsync<ReactionRole>(x =>
-                        x.EmoteNameorId == pEmote.Name && x.RoleId == pRole.Id &&
+                        x.EmoteNameorId == pEmote.Name &&
+                        x.RoleId == pRole.Id &&
                         x.MessageId == rr.MessageId);
                 }
                 else
                 {
                     possibleMatch = await DatabaseQueries.GetFirstMatchAsync<ReactionRole>(x =>
-                        x.EmoteNameorId == (pEmote as Emote).Id.ToString() && x.RoleId == pRole.Id &&
+                        x.EmoteNameorId == (pEmote as Emote).Id.ToString() &&
+                        x.RoleId == pRole.Id &&
                         x.MessageId == rr.MessageId);
                 }
-                    
-                var messageReactions = message.Reactions;
-                
+
+                IReadOnlyDictionary<IEmote, ReactionMetadata> messageReactions = message.Reactions;
+
                 // If the reaction is in the database, and Kaguya has a emote-role pair for this emote, throw an error.
-                if (possibleMatch != null && messageReactions.Keys.Contains(pEmote) && 
+                if (possibleMatch != null &&
+                    messageReactions.Keys.Contains(pEmote) &&
                     messageReactions.GetValueOrDefault(pEmote).IsMe)
                 {
                     throw new KaguyaSupportException($"The emote '{emote}' has already been assigned to role {role} " +
@@ -219,7 +216,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                 {
                     await message.AddReactionAsync(pEmote);
                     await DatabaseQueries.InsertAsync(rr);
-                    
+
                     cacheToSend.Insert(cacheListIndex, rr);
                     respSb.AppendLine($"Successfully linked {pEmote} to {pRole.Mention}");
                 }
@@ -250,7 +247,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
             var embed = new KaguyaEmbedBuilder(EmbedColor.YELLOW)
             {
                 Title = "Kaguya Reaction Roles",
-                Description = respSb.ToString(),
+                Description = respSb.ToString()
             };
 
             UpdatedCache?.Invoke(cacheToSend);

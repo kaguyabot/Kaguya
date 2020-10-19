@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaBot.Core;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System.Text;
@@ -23,13 +24,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireUserPermission(GuildPermission.ManageMessages)]
         public async Task Command(int id)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var quotes = server.Quotes;
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            IEnumerable<Quote> quotes = server.Quotes;
             int quoteCount = quotes.Count();
 
-            if(quoteCount == 0)
+            if (quoteCount == 0)
             {
                 await SendBasicErrorEmbedAsync("This server does not have any quotes, there is nothing to remove.");
+
                 return;
             }
 
@@ -38,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             {
                 match = quotes.First(x => x.Id == id && x.ServerId == server.ServerId);
             }
-            catch(ArgumentNullException)
+            catch (ArgumentNullException)
             {
                 var eSb = new StringBuilder();
                 eSb.AppendLine("The ID you specified does not exist in this server's quote collection.");
@@ -46,11 +48,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 await SendBasicErrorEmbedAsync(eSb.ToString());
             }
 
-            if(match == null)
+            if (match == null)
             {
                 var eSb = new StringBuilder();
                 eSb.AppendLine("The quote object returned null. This is most likely because the quote ID ");
                 eSb.Append("you provided did not match any quotes for this server.");
+
                 throw new KaguyaSupportException(eSb.ToString());
             }
 

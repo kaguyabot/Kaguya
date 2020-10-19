@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
@@ -60,17 +61,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 return;
 
             var xp = new XpImage();
-            if (user.ExpChatNotificationType == ExpType.Global || user.ExpChatNotificationType == ExpType.Both)
+            if (user.ExpChatNotificationType == ExpType.GLOBAL || user.ExpChatNotificationType == ExpType.BOTH)
             {
                 if (levelAnnouncementChannel != null)
                 {
-                    var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User);
+                    Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
                     await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
                 }
             }
-            if (user.ExpDmNotificationType == ExpType.Global || user.ExpDmNotificationType == ExpType.Both)
+
+            if (user.ExpDmNotificationType == ExpType.GLOBAL || user.ExpDmNotificationType == ExpType.BOTH)
             {
-                var xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser)context.User);
+                Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
                 await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
             }
         }
@@ -78,17 +80,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
         private static bool CanGetExperience(User user)
         {
             double twoMinutesAgo = DateTime.Now.AddSeconds(-120).ToOADate();
+
             return twoMinutesAgo >= user.LastGivenExp;
         }
 
-        private static double ReturnLevel(User user)
-        {
-            return GlobalProperties.CalculateLevelFromExp(user.Experience);
-        }
-
-        private static bool HasLeveledUp(double oldLevel, double newLevel)
-        {
-            return Math.Floor(oldLevel) < Math.Floor(newLevel);
-        }
+        private static double ReturnLevel(User user) => GlobalProperties.CalculateLevelFromExp(user.Experience);
+        private static bool HasLeveledUp(double oldLevel, double newLevel) => Math.Floor(oldLevel) < Math.Floor(newLevel);
     }
 }

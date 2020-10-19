@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("MassBan")]
         [Alias("mb")]
         [Summary("Allows a server moderator with the `Ban Members` permission to ban a user, or list of users, " +
-                 "from the server. A default reason will be provided in the Audit Log.")]
+            "from the server. A default reason will be provided in the Audit Log.")]
         [Remarks("<user> {...}")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
@@ -24,13 +24,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             var banSb = new StringBuilder();
             var errorSb = new StringBuilder();
-            foreach (var user in args)
+            foreach (SocketGuildUser user in args)
             {
                 try
                 {
                     banSb.AppendLine($"Banned user `{user}`.");
                     await user.BanAsync(5, $"Massban operation from user " +
-                                         $"@{Context.User.Username}#{Context.User.Discriminator}");
+                                           $"@{Context.User.Username}#{Context.User.Discriminator}");
                 }
                 catch (Exception e)
                 {
@@ -40,21 +40,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
             var finalSb = new StringBuilder();
             if (!String.IsNullOrWhiteSpace(banSb.ToString()))
-            {
                 finalSb.AppendLine(banSb.ToString());
-            }
-            
-            if(!String.IsNullOrWhiteSpace(errorSb.ToString()))
-            {
+
+            if (!String.IsNullOrWhiteSpace(errorSb.ToString()))
                 finalSb.AppendLine($"\n\n{errorSb}");
-            }
-            
+
             var embed = new KaguyaEmbedBuilder
             {
                 Title = "Massban",
                 Description = finalSb.ToString()
             };
-            
+
             await SendEmbedAsync(embed);
         }
     }

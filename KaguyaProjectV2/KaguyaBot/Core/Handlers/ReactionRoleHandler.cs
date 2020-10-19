@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
     public class ReactionRoleHandler
     {
         //todo: Have all cached variables be migrated to the MemoryCache class.
-        private readonly bool CacheTimerEnabled = false;
+        private readonly bool _cacheTimerEnabled = false;
         private List<ReactionRole> _reactionRoleCache;
 
         public ReactionRoleHandler()
@@ -29,10 +29,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             ConsoleLogger.LogAsync("Reaction role cache populated.", LogLvl.DEBUG);
 
             CreateReactionRole.UpdatedCache += AddToCache;
-            
-            if (!CacheTimerEnabled)
+
+            if (!_cacheTimerEnabled)
             {
-                CacheTimerEnabled = true;
+                _cacheTimerEnabled = true;
 
                 var t = new Timer(60000);
                 t.AutoReset = true;
@@ -44,34 +44,33 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 };
             }
         }
-        
+
         /// <summary>
         /// Handles the processing of reaction roles when a new reaction is added to a message.
         /// </summary>
         public async Task ReactionChanged(Cacheable<IUserMessage, ulong> cache,
-            ISocketMessageChannel channel, SocketReaction reaction, bool added)
+            ISocketMessageChannel channel,
+            SocketReaction reaction,
+            bool added)
         {
             if (!(channel is SocketGuildChannel guildChannel))
                 return; // The reaction was sent via DM, return.
+
             if (!reaction.User.IsSpecified)
                 return;
 
             IMessage msg;
             IEmote emote = reaction.Emote;
-            
+
             if (emote == null)
                 return;
 
             bool isEmoji = emote is Emoji;
-            
+
             if (!reaction.Message.IsSpecified)
-            {
                 msg = await ((SocketTextChannel) guildChannel).GetMessageAsync(reaction.MessageId);
-            }
             else
-            {
                 msg = reaction.Message.Value;
-            }
 
             ReactionRole rrCacheMatch;
 
@@ -85,12 +84,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 rrCacheMatch = _reactionRoleCache.FirstOrDefault(x => x.MessageId == msg.Id &&
                                                                       x.EmoteNameorId == emote.Name);
             }
-           
+
             if (rrCacheMatch == null)
                 return;
 
-            var guild = guildChannel.Guild;
-            if(!guild.Roles.Any(x => x.Id == rrCacheMatch.RoleId))
+            SocketGuild guild = guildChannel.Guild;
+            if (!guild.Roles.Any(x => x.Id == rrCacheMatch.RoleId))
             {
                 var rrLogSb = new StringBuilder();
                 rrLogSb.Append($"[Server ID: {rrCacheMatch.ServerId} | ");
@@ -101,19 +100,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 _reactionRoleCache.Remove(rrCacheMatch);
                 await DatabaseQueries.DeleteAsync(rrCacheMatch);
                 await ConsoleLogger.LogAsync($"Deleted reaction role with properties {rrLogSb} from database because " +
-                                       $"the role no longer exists.", LogLvl.DEBUG);
+                                             $"the role no longer exists.", LogLvl.DEBUG);
+
                 return;
             }
 
-            var role = guild.Roles.First(x => x.Id == rrCacheMatch.RoleId);
+            SocketRole role = guild.Roles.First(x => x.Id == rrCacheMatch.RoleId);
             var user = reaction.User.Value as SocketGuildUser;
 
-            if (user == null || user.IsBot) 
+            if (user == null || user.IsBot)
                 return; // We sort of already check for this above, this is here just to be safe.
 
-            if(added && user.Roles.Any(x => x.Id == role.Id))
+            if (added && user.Roles.Any(x => x.Id == role.Id))
                 return; // The user already has the role, no need to re-assign.
-            
+
             try
             {
                 if (added)
@@ -137,13 +137,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 await ConsoleLogger.LogAsync(e);
             }
         }
-        
-        private async Task<List<ReactionRole>> GetReactionRoleCache() => await DatabaseQueries.GetAllAsync<ReactionRole>();
 
+        private async Task<List<ReactionRole>> GetReactionRoleCache() => await DatabaseQueries.GetAllAsync<ReactionRole>();
         private void AddToCache(IEnumerable<ReactionRole> reactionRoles) => _reactionRoleCache.AddRange(reactionRoles);
         private void AddToCache(ReactionRole reactionRole) => _reactionRoleCache.Add(reactionRole);
-        private void RemoveFromCache(IEnumerable<ReactionRole> reactionRoles) => 
-            reactionRoles.ForEach(x => _reactionRoleCache.Remove(x));
+        private void RemoveFromCache(IEnumerable<ReactionRole> reactionRoles) => reactionRoles.ForEach(x => _reactionRoleCache.Remove(x));
         private void RemoveFromCache(ReactionRole reactionRole) => _reactionRoleCache.Remove(reactionRole);
     }
 }

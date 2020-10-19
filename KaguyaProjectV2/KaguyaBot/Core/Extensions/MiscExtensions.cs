@@ -19,6 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             if (num == 0)
                 return true;
+
             return false;
         }
 
@@ -26,8 +27,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             if (int.TryParse(numString, out int result))
                 return result;
+
             if (throwException)
                 throw new NullReferenceException("Could not parse string to integer.");
+
             return 0;
         }
 
@@ -41,8 +44,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         {
             if (ulong.TryParse(numString, out ulong result))
                 return result;
+
             if (throwExceptionIfNull)
                 throw new NullReferenceException("Could not parse string to ulong.");
+
             return 0;
         }
 
@@ -52,20 +57,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        public static string ToAbbreviatedForm(this int num)
-        {
-            return num > 1000000
-                ? $"{((double)num / 1000000):N2}M"
-                : num > 100000
-                    ? $"{((double)num / 1000):N1}K"
-                    : num > 1000
-                        ? $"{((double)num / 1000):N2}K"
-                        : num.ToString();
-        }
+        public static string ToAbbreviatedForm(this int num) => num > 1000000
+            ? $"{(double) num / 1000000:N2}M"
+            : num > 100000
+                ? $"{(double) num / 1000:N1}K"
+                : num > 1000
+                    ? $"{(double) num / 1000:N2}K"
+                    : num.ToString();
 
         public static bool ContainsEmoji(this string text)
         {
-            Regex rgx = new Regex(@"[\uD83C-\uDBFF\uDC00-\uDFFF]+");
+            var rgx = new Regex(@"[\uD83C-\uDBFF\uDC00-\uDFFF]+");
+
             return rgx.IsMatch(text);
         }
 
@@ -74,26 +77,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static string FilterEmojis(this string text)
-        {
-            return text.Where(c => !c.ToString().ContainsEmoji()).Aggregate("", (current, c) => current + c);
-        }
+        public static string FilterEmojis(this string text) => text.Where(c => !c.ToString().ContainsEmoji()).Aggregate("", (current, c) => current + c);
 
-        public static int Rounded(this double num, RoundDirection dir)
+        public static int Rounded(this double num, RoundDirection dir) => dir switch
         {
-            return dir switch
-            {
-                RoundDirection.Down => (int)Math.Floor(num),
-                RoundDirection.Up => (int)Math.Ceiling(num),
-                _ => throw new InvalidEnumArgumentException()
-            };
-        }
+            RoundDirection.DOWN => (int) Math.Floor(num),
+            RoundDirection.UP => (int) Math.Ceiling(num),
+            _ => throw new InvalidEnumArgumentException()
+        };
 
-        public static bool IsRedeemed(this PremiumKey key)
-        {
-            return key.UserId != 0 || key.ServerId != 0;
-        }
-        
+        public static bool IsRedeemed(this PremiumKey key) => key.UserId != 0 || key.ServerId != 0;
+
         // public static string ToReadable(this IEnumerable<Card> cards)
         // {
         //     return cards.Humanize(x => x.ToString(), "").Replace(",", "");
@@ -102,7 +96,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
 
     public enum RoundDirection
     {
-        Down,
-        Up
+        DOWN,
+        UP
     }
 }

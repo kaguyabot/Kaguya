@@ -5,7 +5,6 @@ using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class CreateRole : KaguyaBase
@@ -14,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("CreateRole")]
         [Alias("cr")]
         [Summary("Creates a role, or a list of roles. New roles are separated by spaces. If a role " +
-                 "has spaces in the name, surround it with `\"\"`.")]
+            "has spaces in the name, surround it with `\"\"`.")]
         [Remarks("<role> {...}\n\"Some long role\" Moofins")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
@@ -22,16 +21,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             if (roleNames.Length > 1)
             {
-                KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder
+                var embed = new KaguyaEmbedBuilder
                 {
                     Title = "Roles Created"
                 };
 
-                foreach (var role in roleNames)
+                foreach (string role in roleNames)
                 {
                     embed.AddField("Role Created", $"`{role}` has been created.");
                     await Context.Guild.CreateRoleAsync(role, GuildPermissions.None, Color.Default, false, false, null);
                 }
+
                 await ReplyAsync(embed: embed.Build());
             }
             else if (roleNames.Count() == 1)
@@ -40,6 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     Description = $"**{Context.User.Mention} Successfully created role `{roleNames[0]}`**"
                 };
+
                 await Context.Guild.CreateRoleAsync(roleNames[0], GuildPermissions.None, Color.Default, false, false, null);
 
                 await ReplyAsync(embed: embed.Build());
@@ -50,6 +51,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     Description = $"Please specify a role to create."
                 };
+
                 embed.SetColor(EmbedColor.RED);
 
                 await ReplyAsync(embed: embed.Build());

@@ -21,12 +21,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("<user> [reason]")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
-        public async Task KickUser(SocketGuildUser user, [Remainder]string reason = null)
+        public async Task KickUser(SocketGuildUser user, [Remainder] string reason = null)
         {
-            KaguyaEmbedBuilder embed = new KaguyaEmbedBuilder();
+            var embed = new KaguyaEmbedBuilder();
 
             reason ??= "<No reason provided>";
-            
+
             try
             {
                 await user.KickAsync(reason);

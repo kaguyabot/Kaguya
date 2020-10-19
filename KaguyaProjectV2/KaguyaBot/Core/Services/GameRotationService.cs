@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
@@ -13,19 +14,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
     public static class GameRotationService
     {
-        private static byte index;
-        private static bool Enabled = true;
+        private static byte _index;
+        private static bool _enabled = true;
+
         public static async Task Initialize()
         {
-            Timer timer = new Timer(600000); // 10 Minutes
+            var timer = new Timer(600000); // 10 Minutes
             timer.Enabled = true;
             timer.AutoReset = true;
             timer.Elapsed += async (sender, e) =>
             {
-                if (!Enabled)
+                if (!_enabled)
                     return;
-                
-                var client = ConfigProperties.Client;
+
+                DiscordShardedClient client = ConfigProperties.Client;
                 var games = new List<Tuple<string, ActivityType>>
                 {
                     new Tuple<string, ActivityType>($"Version {ConfigProperties.Version}", ActivityType.Streaming),
@@ -36,14 +38,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     new Tuple<string, ActivityType>("$premium", ActivityType.Watching)
                 };
 
-                if (index >= games.Count)
-                    index = 0;
+                if (_index >= games.Count)
+                    _index = 0;
 
-                var curGame = games[index];
+                Tuple<string, ActivityType> curGame = games[_index];
                 await client.SetGameAsync(curGame.Item1 + ".", null, curGame.Item2);
                 await ConsoleLogger.LogAsync($"Switched game to: {curGame.Item2} {curGame.Item1}", LogLvl.INFO);
 
-                index++;
+                _index++;
             };
         }
 
@@ -53,11 +55,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         /// <param name="duration"></param>
         public static void Pause(TimeSpan duration)
         {
-            Enabled = false;
-            Timer timer = new Timer(duration.TotalMilliseconds);
+            _enabled = false;
+            var timer = new Timer(duration.TotalMilliseconds);
             timer.Enabled = true;
             timer.AutoReset = false;
-            timer.Elapsed += (s, e) => Enabled = true;
+            timer.Elapsed += (s, e) => _enabled = true;
         }
     }
 }

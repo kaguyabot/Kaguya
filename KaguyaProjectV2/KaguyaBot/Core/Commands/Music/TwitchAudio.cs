@@ -4,7 +4,9 @@ using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Threading.Tasks;
+using Discord.Addons.Interactive;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
@@ -16,21 +18,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [Command("TwitchAudio")]
         [Alias("ta")]
         [Summary("Allows either a [Kaguya Supporter](https://sellix.io/KaguyaStoreproducts/kaguya-supporter-tag) " +
-                 "or [Kaguya Premium](https://sellix.io/KaguyaStore) server " +
-                 "to stream audio live from Twitch.")]
+            "or [Kaguya Premium](https://sellix.io/KaguyaStore) server " +
+            "to stream audio live from Twitch.")]
         [Remarks("<search>")]
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]
         [RequireContext(ContextType.Guild)]
-        public async Task Command([Remainder]string query)
+        public async Task Command([Remainder] string query)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
             if (server.IsPremium || user.IsPremium)
             {
                 var playInstance = new Search();
-                var data = await playInstance.SearchAndPlayAsync(Context, query, false, SearchProvider.Twitch);
+                ReactionCallbackData? data = await playInstance.SearchAndPlayAsync(Context, query, false, SearchProvider.TWITCH);
 
                 if (data != null)
                     await InlineReactionReplyAsync(data);

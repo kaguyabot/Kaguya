@@ -19,8 +19,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Remarks("<fish string> <user> <points> [count] [exp]")]
         public async Task Command(string fishStr, SocketGuildUser target, int pointsVal, int count = 1, int exp = 0)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(target.Id);
-            FishType fishEnum = (FishType)Enum.Parse(typeof(FishType), fishStr.ToUpper());
+            User user = await DatabaseQueries.GetOrCreateUserAsync(target.Id);
+            var fishEnum = (FishType) Enum.Parse(typeof(FishType), fishStr.ToUpper());
 
             var r = new Random();
             for (int i = 0; i < count; i++)
@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
             sb.AppendLine($"FishType: `{fishEnum}`");
             sb.AppendLine($"Exp: `{exp}`");
             sb.AppendLine($"Value: `{pointsVal}`");
-            
+
             var embed = new KaguyaEmbedBuilder
             {
                 Description = sb.ToString()

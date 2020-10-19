@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Discord;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaApi.Database.Models;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
@@ -16,23 +19,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
     {
         private static readonly BlockingCollection<DatabaseUpvoteWebhook> _voteQueue = new BlockingCollection<DatabaseUpvoteWebhook>();
         private Task _runner;
-
-        public UpvoteNotifier()
-        { 
-            _runner = Task.Run(async () => await Run());
-        }
+        public UpvoteNotifier() { _runner = Task.Run(async () => await Run()); }
 
         private async Task Run()
         {
-            foreach (var vote in _voteQueue.GetConsumingEnumerable())
+            foreach (DatabaseUpvoteWebhook vote in _voteQueue.GetConsumingEnumerable())
             {
                 try
                 {
-                    var user = await DatabaseQueries.GetOrCreateUserAsync(vote.UserId);
-                    var socketUser = ConfigProperties.Client.GetUser(user.UserId);
+                    User user = await DatabaseQueries.GetOrCreateUserAsync(vote.UserId);
+                    SocketUser socketUser = ConfigProperties.Client.GetUser(user.UserId);
 
-                    var points = 750;
-                    var exp = 500;
+                    int points = 750;
+                    int exp = 500;
 
                     if (vote.IsWeekend)
                     {
@@ -45,14 +44,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
                         points *= 2;
                         exp *= 2;
                     }
-                    
+
                     user.Points += points;
                     user.Experience += exp;
                     user.TotalUpvotes++;
 
                     if (socketUser != null)
                     {
-                        var dmCh = await socketUser.GetOrCreateDMChannelAsync();
+                        IDMChannel dmCh = await socketUser.GetOrCreateDMChannelAsync();
 
                         string weekendStr = $"Because you voted on the weekend, you have been given " +
                                             $"double points and double exp!";
@@ -81,9 +80,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
             }
         }
 
-        public void Enqueue(DatabaseUpvoteWebhook item)
-        {
-            _voteQueue.Add(item);
-        }
+        public void Enqueue(DatabaseUpvoteWebhook item) => _voteQueue.Add(item);
     }
 }

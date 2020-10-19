@@ -22,17 +22,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         {
             await ReplyAsync($"{Context.User.Mention} Executing, please wait...");
 
-            var guild = Context.Guild;
-            foreach (var channel in guild.Channels)
-            {
+            SocketGuild guild = Context.Guild;
+            foreach (SocketGuildChannel channel in guild.Channels)
                 await channel.RemovePermissionOverwriteAsync(user);
-            }
 
             var successEmbed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully removed all channel-specific permission overwrites for `{user}`. " +
                               $"They now have the same permissions as a new member who has no special roles."
             };
+
             await ReplyAsync(embed: successEmbed.Build());
         }
     }

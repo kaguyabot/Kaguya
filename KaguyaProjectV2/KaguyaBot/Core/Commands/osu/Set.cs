@@ -17,23 +17,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                  "This way, users may use the other osu! commands without having to specify a " +
                  "player, assuming they want information about themselves.")]
         [Remarks("<username or ID>\nSomeUser\nSome user with spaces")]
-        public async Task OsuSetCommand([Remainder]string username)
+        public async Task OsuSetCommand([Remainder] string username)
         {
             KaguyaEmbedBuilder embed;
             User playerObject = username.AsUlong(false) == 0
-                ? await OsuBase.client.GetUserByUsernameAsync(username, GameMode.Standard)
-                : await OsuBase.client.GetUserByUserIdAsync((long)username.AsUlong(), GameMode.Standard);
+                ? await OsuBase.Client.GetUserByUsernameAsync(username, GameMode.Standard)
+                : await OsuBase.Client.GetUserByUserIdAsync((long) username.AsUlong(), GameMode.Standard);
 
             if (playerObject == null)
             {
                 await SendBasicErrorEmbedAsync($"The username you provided doesn't match an existing osu! player.");
+
                 return;
             }
 
             //Getting user profile database object and updating it.
-            var user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
+            DataStorage.DbData.Models.User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
 
-            user.OsuId = (int)playerObject.UserId;
+            user.OsuId = (int) playerObject.UserId;
             await DatabaseQueries.UpdateAsync(user);
 
             embed = new KaguyaEmbedBuilder

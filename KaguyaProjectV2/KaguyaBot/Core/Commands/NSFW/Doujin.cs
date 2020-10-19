@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NHentaiSharp.Search;
+using SearchResult = NHentaiSharp.Search.SearchResult;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 {
@@ -21,9 +23,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         public async Task Command()
         {
             bool isBlacklisted = true;
-            string[] wildcardBlacklist = new[]
+            var wildcardBlacklist = new[]
             {
-                "loli", "con", "shota", "rape"
+                "loli",
+                "con",
+                "shota",
+                "rape"
             };
 
             string[] tags = new[]
@@ -39,21 +44,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
 
             while (isBlacklisted)
             {
-                Random r = new Random();
+                var r = new Random();
 
-                var result = await SearchClient.SearchWithTagsAsync(tags.ToArray());
+                SearchResult result = await SearchClient.SearchWithTagsAsync(tags.ToArray());
                 int page = r.Next(0, result.numPages) + 1; // Page count begins at 1.
 
                 result = await SearchClient.SearchWithTagsAsync(tags.ToArray(), page);
-                var selection = result.elements[r.Next(0, result.elements.Length)];
+                GalleryElement selection = result.elements[r.Next(0, result.elements.Length)];
 
-                var tagString = selection.tags.Aggregate("", (current, tag) => current + $"`{tag.name}`, ");
+                string tagString = selection.tags.Aggregate("", (current, tag) => current + $"`{tag.name}`, ");
                 tagString = tagString.Substring(0, tagString.Length - 2);
 
                 if (wildcardBlacklist.Any(tagString.Contains))
-                {
                     continue;
-                }
+
                 isBlacklisted = false;
 
                 var embed = new KaguyaEmbedBuilder
@@ -83,7 +87,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                             Value = tagString
                         }
                     },
-                    ImageUrl = selection.thumbnail.imageUrl.ToString(),
+                    ImageUrl = selection.thumbnail.imageUrl.ToString()
                 };
 
                 await ReplyAsync(embed: embed.Build());

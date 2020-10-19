@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Collections.Generic;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
@@ -23,9 +24,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         [RequireContext(ContextType.Guild)]
-        public async Task Command([Remainder]string arg)
+        public async Task Command([Remainder] string arg)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             SocketRole role = null;
             int level = 0;
 
@@ -33,35 +34,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             {
                 await DatabaseQueries.DeleteAllForServerAsync<ServerRoleReward>(server.ServerId);
                 await SendBasicSuccessEmbedAsync($"Successfully cleared this server's role-reward configuration(s).");
+
                 return;
             }
 
             if (arg.AsInteger(false) == 0 && arg.AsUlong(false) == 0)
-            {
                 role = Context.Guild.Roles.First(x => x.Name.ToLower() == arg.ToLower());
-            }
 
             if (arg.AsUlong(false) != 0 && arg.AsInteger(false) > 100000)
-            {
                 role = Context.Guild.Roles.First(x => x.Id == arg.AsUlong());
-            }
 
             if (arg.AsInteger(false) != 0 && arg.AsInteger(false) <= 100000)
-            {
                 level = arg.AsInteger();
-            }
 
             if (role == null && level == 0 && server.RoleRewards.Any(x => x.RoleId != arg.AsUlong()))
             {
                 await SendBasicErrorEmbedAsync("You did not reply with a proper level or role name/ID.");
+
                 return;
             }
 
             if (role != null && level == 0 || server.RoleRewards.Any(x => x.RoleId == arg.AsUlong()))
             {
-                ServerRoleReward toRemove = role == null ?
-                    server.RoleRewards.ToList().First(x => x.RoleId == arg.AsUlong()) :
-                    server.RoleRewards.First(x => x.RoleId == role.Id);
+                ServerRoleReward toRemove = role == null
+                    ? server.RoleRewards.ToList().First(x => x.RoleId == arg.AsUlong())
+                    : server.RoleRewards.First(x => x.RoleId == role.Id);
 
                 if (toRemove == null)
                 {
@@ -73,12 +70,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 await SendBasicSuccessEmbedAsync($"{Context.User.Mention} Successfully removed role " +
                                                  $"{(role == null ? $"`{toRemove.RoleId}`" : role.Mention)} at `level " +
                                                  $"{toRemove.Level}` from this server's role rewards.");
+
                 return;
             }
 
             if (role == null && level != 0)
             {
-                var toRemove = server.RoleRewards.Where(x => x.Level == level).ToList();
+                List<ServerRoleReward> toRemove = server.RoleRewards.Where(x => x.Level == level).ToList();
                 if (toRemove.Count != 0)
                 {
                     await DatabaseQueries.DeleteAsync(toRemove);
@@ -86,6 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                     await SendBasicSuccessEmbedAsync($"{Context.User.Mention} Successfully deleted " +
                                                      $"all roles for the server that were given " +
                                                      $"at `level {level:N0}`.");
+
                     return;
                 }
 

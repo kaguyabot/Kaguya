@@ -6,7 +6,10 @@ using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -20,13 +23,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Command()
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var logTypes = LogQuery.AllLogTypes;
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            string[] logTypes = LogQuery.AllLogTypes;
 
             string logSettingString = "";
 
-            foreach (var prop in server.GetType().GetProperties()
-                .Where(x => x.PropertyType == typeof(ulong) && !x.Name.Contains("Id")))
+            foreach (PropertyInfo prop in server.GetType().GetProperties()
+                                                .Where(x => x.PropertyType == typeof(ulong) && !x.Name.Contains("Id")))
             {
                 if (!server.IsPremium && prop.Name.ToLower() == "modlog")
                     continue;
@@ -34,10 +37,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 if (prop.Name.ToLower().Contains("twitch"))
                     continue;
 
-                var matchChannel = (ulong)prop.GetValue(server);
+                ulong matchChannel = (ulong) prop.GetValue(server);
 
-                var channel = Client.GetGuild(Context.Guild.Id).GetTextChannel(matchChannel);
-                var deletedChannel = channel == null && matchChannel != 0;
+                SocketTextChannel channel = Client.GetGuild(Context.Guild.Id).GetTextChannel(matchChannel);
+                bool deletedChannel = channel == null && matchChannel != 0;
 
                 logSettingString +=
                     $"**{(prop.Name == "ModLog" ? "ModLog (Kaguya Premium Only)" : prop.Name.Replace("Log", ""))}** - {(channel == null && !deletedChannel ? "`Not assigned.`" : " ")} " +
@@ -51,7 +54,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Footer = new EmbedFooterBuilder
                 {
                     Text = $"To enable a log type, use the {server.CommandPrefix}log command. " +
-                        $"To disable, use the {server.CommandPrefix}rlog command."
+                           $"To disable, use the {server.CommandPrefix}rlog command."
                 }
             };
 

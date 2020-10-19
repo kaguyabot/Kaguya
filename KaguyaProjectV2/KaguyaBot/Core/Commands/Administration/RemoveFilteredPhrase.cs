@@ -19,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("FilterRemove")]
         [Alias("fr")]
         [Summary("Removes one phrase or a list of filtered phrases from your server's word filter. Phrases are separated by spaces. " +
-                 "If a phrase is longer than one word, surround it with `\"\"`.")]
+            "If a phrase is longer than one word, surround it with `\"\"`.")]
         [Remarks("<phrase> {...}\nMyPhrase \"My phrase with spaces\"")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         public async Task RemovePhrase(params string[] args)
@@ -27,8 +27,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             string s = "s";
             if (args.Length == 1) s = "";
 
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var allFp = server.FilteredPhrases.ToList();
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            List<FilteredPhrase> allFp = server.FilteredPhrases.ToList();
 
             if (args.Length == 0)
             {
@@ -36,9 +36,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 {
                     Description = "Please specify at least one phrase."
                 };
+
                 embed0.SetColor(EmbedColor.RED);
 
                 await Context.Channel.SendEmbedAsync(embed0);
+
                 return;
             }
 
@@ -53,8 +55,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 
                 matches = true;
                 remCount++;
-                
-                await ConsoleLogger.LogAsync($"Server {server.ServerId} has removed the phrase \"{element}\" from their word filter.", 
+
+                await ConsoleLogger.LogAsync($"Server {server.ServerId} has removed the phrase \"{element}\" from their word filter.",
                     DataStorage.JsonStorage.LogLvl.DEBUG);
             }
 

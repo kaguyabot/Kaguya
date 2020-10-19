@@ -21,15 +21,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [Summary("Allows a moderator to add a quote to this server's quote collection.")]
         [Remarks("<text>")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
-        public async Task Command([Remainder]string text)
+        public async Task Command([Remainder] string text)
         {
-            var server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var quotes = server.Quotes;
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            IEnumerable<Quote> quotes = server.Quotes;
             int quoteCount = quotes?.Count() ?? 0;
 
-            if(quoteCount > 0)
+            if (quoteCount > 0)
             {
-                if(server.Quotes.Any(x => x.Text.Equals(text)))
+                if (server.Quotes.Any(x => x.Text.Equals(text)))
                 {
                     var cEmbed = new KaguyaEmbedBuilder(EmbedColor.YELLOW)
                     {
@@ -37,17 +37,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                     };
 
                     var data = new ReactionCallbackData("", cEmbed.Build(), true, true, TimeSpan.FromSeconds(120));
-                    data.AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) => 
-                    {
-                        await InsertQuote(Context, server, text);
-                    });
+                    data.AddCallBack(GlobalProperties.CheckMarkEmoji(), async (c, r) => { await InsertQuote(Context, server, text); });
 
-                    data.AddCallBack(GlobalProperties.NoEntryEmoji(), async (c, r) =>
-                    {
-                        await SendBasicErrorEmbedAsync("Okay, no action will be taken.");
-                    });
+                    data.AddCallBack(GlobalProperties.NoEntryEmoji(),
+                        async (c, r) => { await SendBasicErrorEmbedAsync("Okay, no action will be taken."); });
 
                     await InlineReactionReplyAsync(data);
+
                     return;
                 }
             }
@@ -65,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 TimeStamp = DateTime.Now.ToOADate()
             };
 
-            var quoteId = await DatabaseQueries.SafeAddQuote(server, quote);            
+            int quoteId = await DatabaseQueries.SafeAddQuote(server, quote);
             var embed = new KaguyaEmbedBuilder
             {
                 Fields = new List<EmbedFieldBuilder>

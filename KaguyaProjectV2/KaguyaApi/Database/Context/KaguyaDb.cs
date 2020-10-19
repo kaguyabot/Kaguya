@@ -7,6 +7,6 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Context
     public class KaguyaDb : DataConnection
     {
         public KaguyaDb() : base("KaguyaContext") { }
-        public ITable<TopGgWebhook> TopGGUpvotes => GetTable<TopGgWebhook>();
+        public ITable<TopGgWebhook> TopGgUpvotes => GetTable<TopGgWebhook>();
     }
 }

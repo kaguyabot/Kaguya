@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
 
         public static Task Initialize()
         {
-            Timer timer = new Timer
+            var timer = new Timer
             {
                 Interval = 900000, // 15 minutes
                 Enabled = true,
@@ -35,40 +35,37 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
 
             timer.Elapsed += async (s, e) =>
             {
-                var allUnexpiredKeys = await DatabaseQueries.GetAllAsync<PremiumKey>(x => !x.HasExpired && x.UserId != 0);
-                var premiumServers = await DatabaseQueries.GetAllAsync<Server>(x => x.PremiumExpiration < DateTime.Now.ToOADate());
-                
-                foreach (var key in allUnexpiredKeys)
-                {
-                    if(_keysCache.Contains(key))
-                        continue;
-                    
-                    var serverToCheck = premiumServers.FirstOrDefault(x => x.ServerId == key.ServerId);
-                    
-                    if (serverToCheck == null || _serverNotificationCache.Contains(serverToCheck))
-                    {
-                        continue;
-                    }
-                    
-                    var kaguyaUser = await DatabaseQueries.GetOrCreateUserAsync(key.UserId);
+                List<PremiumKey> allUnexpiredKeys = await DatabaseQueries.GetAllAsync<PremiumKey>(x => !x.HasExpired && x.UserId != 0);
+                List<Server> premiumServers = await DatabaseQueries.GetAllAsync<Server>(x => x.PremiumExpiration < DateTime.Now.ToOADate());
 
-                    var keyRedeemSocketUser = _client.GetUser(key.UserId);
-                    var keyGuild = _client.GetGuild(key.ServerId);
-                    
-                    var descSb = new StringBuilder($"Your [Kaguya Premium]({ConfigProperties.KaguyaStoreURL}) benefits have expired " +
+                foreach (PremiumKey key in allUnexpiredKeys)
+                {
+                    if (_keysCache.Contains(key))
+                        continue;
+
+                    Server serverToCheck = premiumServers.FirstOrDefault(x => x.ServerId == key.ServerId);
+
+                    if (serverToCheck == null || _serverNotificationCache.Contains(serverToCheck))
+                        continue;
+
+                    User kaguyaUser = await DatabaseQueries.GetOrCreateUserAsync(key.UserId);
+
+                    SocketUser keyRedeemSocketUser = _client.GetUser(key.UserId);
+                    SocketGuild keyGuild = _client.GetGuild(key.ServerId);
+
+                    var descSb = new StringBuilder($"Your [Kaguya Premium]({ConfigProperties.KAGUYA_STORE_URL}) benefits have expired " +
                                                    $"in the server `{keyGuild.Name}`.");
+
                     if (kaguyaUser.IsPremium)
                     {
                         descSb.AppendLine("\n\nYour personal Kaguya Premium benefits will expire in " +
                                           $"`{DateTime.FromOADate(kaguyaUser.PremiumExpiration).Humanize(false)}`.");
                     }
                     else
-                    {
                         descSb.AppendLine("\n\nYour personal Kaguya Premium benefits have run out as well.");
-                    }
 
                     descSb.AppendLine($"\n___***[Click here to resubscribe for $4.99/month!](https://sellix.io/KaguyaStore)***___");
-                    
+
                     var embed = new KaguyaEmbedBuilder(EmbedColor.ORANGE)
                     {
                         Title = "Kaguya Premium Expiration Notification",
@@ -90,18 +87,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
                             $"Failed to DM user {keyRedeemSocketUser.UsernameAndDescriminator()} " +
                             $"about a key expiration for guild [{keyGuild.Name} | {keyGuild.Id}]", LogLvl.WARN);
                     }
-                    foreach (var key2 in allUnexpiredKeys.Where(x => x.ServerId == serverToCheck.ServerId))
+
+                    foreach (PremiumKey key2 in allUnexpiredKeys.Where(x => x.ServerId == serverToCheck.ServerId))
                     {
                         key2.HasExpired = true;
                         _keysCache.Add(key2);
                     }
-                    
+
                     await DatabaseQueries.UpdateAsync(_keysCache);
                 }
-                
+
                 _serverNotificationCache.Clear();
                 _keysCache.Clear();
             };
+
             return Task.CompletedTask;
         }
     }

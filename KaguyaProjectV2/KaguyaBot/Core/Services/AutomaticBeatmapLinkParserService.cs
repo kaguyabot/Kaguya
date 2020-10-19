@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using System;
+using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -11,6 +12,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using User = KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models.User;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -18,31 +21,32 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public static async Task LinkParserMethod(SocketMessage s, ShardedCommandContext context)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
-            var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
 
             var embed = new KaguyaEmbedBuilder();
 
             user.ActiveRateLimit++;
+
             if (user.IsBlacklisted)
                 return;
 
             string link = $"{s}";
-            string mapID = link.Split('/').Last(); //Gets the map's ID from the link.
-            if (mapID.Contains('?'))
-                mapID = mapID.Replace("?m=0", "");
+            string mapId = link.Split('/').Last(); //Gets the map's ID from the link.
+            if (mapId.Contains('?'))
+                mapId = mapId.Replace("?m=0", "");
 
-            var mapData = await client.GetBeatmapByIdAsync((long)mapID.AsUlong());
+            Beatmap mapData = await Client.GetBeatmapByIdAsync((long) mapId.AsUlong());
 
             string status = "";
-            var state = mapData.State;
+            BeatmapState state = mapData.State;
 
-            var approvedDate = mapData.ApprovedDate;
+            DateTimeOffset? approvedDate = mapData.ApprovedDate;
             status = state switch
             {
                 // ReSharper disable PossibleInvalidOperationException
                 BeatmapState.Graveyard | BeatmapState.WorkInProgress | BeatmapState.Pending =>
-                $"Last updated on {mapData.LastUpdate.Value.LocalDateTime.ToShortDateString()}",
+                    $"Last updated on {mapData.LastUpdate.Value.LocalDateTime.ToShortDateString()}",
                 BeatmapState.Ranked => $"Ranked on {approvedDate.Value.LocalDateTime.ToShortDateString()}",
                 BeatmapState.Approved => $"Approved on {approvedDate.Value.LocalDateTime.ToShortDateString()}",
                 BeatmapState.Qualified => $"Qualified on {approvedDate.Value.LocalDateTime.ToShortDateString()}",
@@ -52,15 +56,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             };
 
             string lengthValue = mapData.TotalLength.ToString(@"mm\:ss");
-            var pp95 = await mapData.GetPPAsync(95f);
-            var pp98 = await mapData.GetPPAsync(98f);
-            var pp99 = await mapData.GetPPAsync(99f);
-            var pp100 = await mapData.GetPPAsync(100f);
+            PerformanceData pp95 = await mapData.GetPPAsync(95f);
+            PerformanceData pp98 = await mapData.GetPPAsync(98f);
+            PerformanceData pp99 = await mapData.GetPPAsync(99f);
+            PerformanceData pp100 = await mapData.GetPPAsync(100f);
 
             embed.WithAuthor(author =>
             {
                 author.Name = $"{mapData.Title} by {mapData.Author}";
-                author.Url = $"https://osu.ppy.sh/b/{mapID}";
+                author.Url = $"https://osu.ppy.sh/b/{mapId}";
                 author.IconUrl = $"https://a.ppy.sh/{mapData.AuthorId}";
             });
 
@@ -77,6 +81,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 $"\n" +
                 $"\n**95% FC:** `{pp95.Pp:N0}pp` **98% FC:** `{pp98.Pp:N0}pp`" +
                 $"\n**99% FC:** `{pp99.Pp:N0}pp` **100% FC (SS):** `{pp100.Pp:N0}pp`");
+
             embed.WithFooter($"Status: {status} | 💙 Amount: {mapData.FavoriteCount:N0}");
 
             await context.Channel.SendEmbedAsync(embed);

@@ -32,23 +32,21 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<string> Get() => new string[]
         {
-            return new string[] { "value1", "value2" };
-        }
+            "value1",
+            "value2"
+        };
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        public string Get(int id) => "value";
 
         // POST api/<controller>
         [HttpPost("webhook")]
-        public async Task Post([FromBody]TopGgWebhook baseHook, [FromHeader(Name = "Authorization")]string auth)
+        public async Task Post([FromBody] TopGgWebhook baseHook, [FromHeader(Name = "Authorization")] string auth)
         {
-            if (auth != _cfg.Value.TopGGAuthorization)
+            if (auth != _cfg.Value.TopGgAuthorization)
                 return;
 
             var dbWebhook = new DatabaseUpvoteWebhook()
@@ -70,14 +68,10 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        public void Put(int id, [FromBody] string value) { }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        public void Delete(int id) { }
     }
 }
