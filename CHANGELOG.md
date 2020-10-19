@@ -2,6 +2,7 @@
 Developer Changes:
 - Added additional logging for OwnerGiveawayMessageUpdaterService.
 - Fixed issue where the OwnerGiveawayMessageUpdaterService would not remove a giveaway if it had been deleted before the time had expired.
+- Massive code cleanup and reformatting
 
 User Changes:
 - Fixed a bug where $log antiraids would not work but $log antiraid would. Correct usage is $log antiraids, as shown in $logs.
