@@ -1,18 +1,18 @@
-﻿using Discord;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 {
@@ -97,8 +97,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 }
             }
 
+            int pgCount = 1;
             foreach (PaginatedMessage.Page pg in pages)
+            {
                 pg.Description += "```";
+                pg.FooterOverride = new EmbedFooterBuilder
+                {
+                    Text = $"Page {pgCount}/{pages.Count - 1}" // pages.Count - 1 to exclude hidden owner page.
+                };
+
+                pgCount++;
+            }
 
             if (Context.User.Id != ConfigProperties.BotConfig.BotOwnerId)
                 pages.RemoveAt(pages.Count - 1);

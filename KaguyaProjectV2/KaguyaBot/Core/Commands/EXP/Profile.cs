@@ -20,6 +20,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command(ulong? id = null)
         {
+            Context.Channel.EnterTypingState();
+
             id ??= Context.User.Id;
 
             User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);

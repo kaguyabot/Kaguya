@@ -14,9 +14,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("ToggleOsuLinks")]
         [Alias("tol")]
         [Summary("Allows a server administrator to toggle the automatic osu! beatmap link parsing feature. " +
-            "The osu! beatmap link parser will automatically return data for the beatmap that was linked " +
-            "in chat if Kaguya detects it. Disabling this is recommended if you already have a more preferable " +
-            "bot that does the same thing, or if you simply don't care for the feature.")]
+                 "The osu! beatmap link parser will automatically return data for the beatmap that was linked " +
+                 "in chat if Kaguya detects it. Disabling this is recommended if you already have a more preferable " +
+                 "bot that does the same thing, or if you simply don't care for the feature.")]
         [Remarks("")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]

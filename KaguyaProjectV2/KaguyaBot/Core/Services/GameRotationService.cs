@@ -16,6 +16,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         private static byte _index;
         private static bool _enabled = true;
+        private static readonly DiscordShardedClient _client = ConfigProperties.Client;
+
+        private static readonly List<Tuple<string, ActivityType>> _games = new List<Tuple<string, ActivityType>>
+        {
+            new Tuple<string, ActivityType>($"Version {ConfigProperties.Version}", ActivityType.Streaming),
+            new Tuple<string, ActivityType>($"{_client.TotalUsers():N0} users", ActivityType.Watching),
+            new Tuple<string, ActivityType>($"{_client.Guilds.Count:N0} servers", ActivityType.Watching),
+            new Tuple<string, ActivityType>($"$help | @Kaguya help", ActivityType.Listening),
+            new Tuple<string, ActivityType>("$vote for bonuses", ActivityType.Watching),
+            new Tuple<string, ActivityType>("$premium", ActivityType.Watching)
+        };
 
         public static async Task Initialize()
         {
@@ -27,22 +38,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 if (!_enabled)
                     return;
 
-                DiscordShardedClient client = ConfigProperties.Client;
-                var games = new List<Tuple<string, ActivityType>>
-                {
-                    new Tuple<string, ActivityType>($"Version {ConfigProperties.Version}", ActivityType.Streaming),
-                    new Tuple<string, ActivityType>($"{client.TotalUsers():N0} users", ActivityType.Watching),
-                    new Tuple<string, ActivityType>($"{client.Guilds.Count:N0} servers", ActivityType.Watching),
-                    new Tuple<string, ActivityType>($"$help | @Kaguya help", ActivityType.Listening),
-                    new Tuple<string, ActivityType>("$vote for bonuses", ActivityType.Watching),
-                    new Tuple<string, ActivityType>("$premium", ActivityType.Watching)
-                };
-
-                if (_index >= games.Count)
+                if (_index >= _games.Count)
                     _index = 0;
 
-                Tuple<string, ActivityType> curGame = games[_index];
-                await client.SetGameAsync(curGame.Item1 + ".", null, curGame.Item2);
+                Tuple<string, ActivityType> curGame = _games[_index];
+                await Set(curGame);
                 await ConsoleLogger.LogAsync($"Switched game to: {curGame.Item2} {curGame.Item1}", LogLvl.INFO);
 
                 _index++;
@@ -60,6 +60,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             timer.Enabled = true;
             timer.AutoReset = false;
             timer.Elapsed += (s, e) => _enabled = true;
+        }
+
+        /// <summary>
+        /// Resumes the game rotation service.
+        /// </summary>
+        public static void Resume() => _enabled = true;
+
+        public static async Task Set(Tuple<string, ActivityType> game) => await _client.SetGameAsync(game.Item1 + ".", null, game.Item2);
+        public static async Task SetToDefault() => await Set(_games[0]);
+
+        public static async Task Set(string text, ActivityType type)
+        {
+            var toSet = new Tuple<string, ActivityType>(text, type);
+            await Set(toSet);
         }
     }
 }

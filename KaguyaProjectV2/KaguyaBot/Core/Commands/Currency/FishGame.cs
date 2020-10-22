@@ -22,13 +22,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Command("Fish")]
         [Alias("f")]
         [Summary("Allows you to play the fishing game! Requires 75 points to play (play cost scales up " +
-            "with your fishing level, 25% off for [Kaguya Premium subscribers](https://sellix.io/KaguyaStore)).\n\n" +
-            "Information:\n\n" +
-            "- You may only fish once every 15 seconds (5 seconds for " +
-            "[Kaguya Premium subscribers](https://sellix.io/KaguyaStore)).\n" +
-            "- Fish may be sold with the `sell` command!\n" +
-            "- View your fish collection with the `myfish` command!\n\n" +
-            "Happy fishing, and good luck catching the ultra rare **Legendary Big Kahuna**!")]
+                 "with your fishing level, 25% off for [Kaguya Premium subscribers](https://sellix.io/KaguyaStore)).\n\n" +
+                 "Information:\n\n" +
+                 "- You may only fish once every 15 seconds (5 seconds for " +
+                 "[Kaguya Premium subscribers](https://sellix.io/KaguyaStore)).\n" +
+                 "- Fish may be sold with the `sell` command!\n" +
+                 "- View your fish collection with the `myfish` command!\n\n" +
+                 "Happy fishing, and good luck catching the ultra rare **Legendary Big Kahuna**!")]
         [Remarks("")]
         public async Task Command()
         {

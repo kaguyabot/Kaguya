@@ -21,19 +21,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("ChannelBlacklist")]
         [Alias("cbl")]
         [Summary("Makes a channel blacklisted, disabling Kaguya completely in the channel. " +
-            "Kaguya will not respond to commands or " +
-            "post level-up announcements in this channel. Users with the `Administrator` server permission " +
-            "override this blacklist, and will not notice its effect. Level-up announcements will, however, " +
-            "still be disabled even if they are an `Administrator`.\n\n" +
-            "**Arguments:**\n\n" +
-            "The `-r` argument may be passed to unblacklist a channel (either the current channel or the specified one).\n" +
-            "The `-all` argument may be passed to completely disable Kaguya in the entire server.\n" +
-            "The `-clear` argument may be passed to lift all existing blacklists.\n" +
-            "The `-t` argument may be used to specify a time, and can be added to the other arguments as well! " +
-            "Seconds, minutes, hours, and even days may be passed in as an argument.\n\n" +
-            "To blacklist a specific channel, pass in its `ID`. If you don't know the ID, " +
-            "you can simply use this command without an argument to " +
-            "blacklist the channel this command was executed from.")]
+                 "Kaguya will not respond to commands or " +
+                 "post level-up announcements in this channel. Users with the `Administrator` server permission " +
+                 "override this blacklist, and will not notice its effect. Level-up announcements will, however, " +
+                 "still be disabled even if they are an `Administrator`.\n\n" +
+                 "**Arguments:**\n\n" +
+                 "The `-r` argument may be passed to unblacklist a channel (either the current channel or the specified one).\n" +
+                 "The `-all` argument may be passed to completely disable Kaguya in the entire server.\n" +
+                 "The `-clear` argument may be passed to lift all existing blacklists.\n" +
+                 "The `-t` argument may be used to specify a time, and can be added to the other arguments as well! " +
+                 "Seconds, minutes, hours, and even days may be passed in as an argument.\n\n" +
+                 "To blacklist a specific channel, pass in its `ID`. If you don't know the ID, " +
+                 "you can simply use this command without an argument to " +
+                 "blacklist the channel this command was executed from.")]
         [Remarks(
             "(<= blacklists current channel)\n<ID> (<= blacklists a specific channel)\n" +
             "-r (<= Un-blacklists the current channel)\n" +

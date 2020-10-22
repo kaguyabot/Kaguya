@@ -19,15 +19,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("WarnSettings")]
         [Alias("warnset", "ws")]
         [Summary("Allows a server Administrator to configure the server's warn-punishment scheme. " +
-            "Admins have the ability to configure up to `four` actions that get triggered " +
-            "when a user reaches a set amount of warnings. These four options are `mute`, " +
-            "`kick`, `shadowban`, and `ban`.\n\n" +
-            "Configure the action by typing the name of the action followed by the amount of " +
-            "warnings that should trigger the action, ranging from `1-99` warnings.\n\n" +
-            "If you want to `mute` users after `3` warnings, you would type the command " +
-            "followed by `mute 3`.\n\n" +
-            "__**To disable a trigger**__, set the number of warnings to `0`.\n" +
-            "__**To view your current settings**__, use the command without any arguments.")]
+                 "Admins have the ability to configure up to `four` actions that get triggered " +
+                 "when a user reaches a set amount of warnings. These four options are `mute`, " +
+                 "`kick`, `shadowban`, and `ban`.\n\n" +
+                 "Configure the action by typing the name of the action followed by the amount of " +
+                 "warnings that should trigger the action, ranging from `1-99` warnings.\n\n" +
+                 "If you want to `mute` users after `3` warnings, you would type the command " +
+                 "followed by `mute 3`.\n\n" +
+                 "__**To disable a trigger**__, set the number of warnings to `0`.\n" +
+                 "__**To view your current settings**__, use the command without any arguments.")]
         [Remarks("\n<action> <warnings>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.KickMembers)]

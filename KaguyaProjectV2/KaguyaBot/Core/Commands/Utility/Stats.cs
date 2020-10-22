@@ -27,6 +27,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Remarks("")]
         public async Task Command()
         {
+            Context.Channel.EnterTypingState();
+
             var curProcess = Process.GetCurrentProcess();
 
             DiscordShardedClient client = Client;

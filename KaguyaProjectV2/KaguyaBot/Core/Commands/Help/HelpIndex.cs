@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Command("Help")]
         [Alias("h")]
         [Summary("Returns the help command for a specific command if specified. If no command is specified, " +
-            "a list of commands, as well as their aliases, will be returned.")]
+                 "a list of commands, as well as their aliases, will be returned.")]
         [Remarks("\n<command>")]
         public async Task HelpCommand([Remainder] string cmd)
         {
@@ -119,7 +119,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 new EmbedFieldBuilder
                 {
                     //The value of this field is pretty hard to read, basically we add the command prefix + command name to the start of the string,
-                    //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute), we add the same thing to the start of the new line.
+                    //and then for any subsequent syntax (separated by a \n character in the Command's "Remarks" attribute),
+                    //we add the same thing to the start of the new line.
                     Name = "Syntax",
                     Value =
                         $"`{baseHelpAlias} {string.Join($"\n{server.CommandPrefix}{aliases.Split(",")[0]} ", cmdInfo.Remarks.Split("\n"))}`"
@@ -143,29 +144,30 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             return embed;
         }
 
-        private static string[] GetCommandPermissions(CommandInfo cmdInfo) => cmdInfo.Preconditions
-                                                                                     .Where(x => x is OwnerCommandAttribute ||
-                                                                                                 x is RequireUserPermissionAttribute ||
-                                                                                                 x is PremiumUserCommandAttribute ||
-                                                                                                 x is NsfwCommandAttribute)
-                                                                                     .Select(x =>
-                                                                                     {
-                                                                                         switch (x)
-                                                                                         {
-                                                                                             case OwnerCommandAttribute _:
-                                                                                                 return "Bot Owner";
-                                                                                             case PremiumUserCommandAttribute _:
-                                                                                                 return "Kaguya Premium (Key Redeemer)";
-                                                                                             case PremiumServerCommandAttribute _:
-                                                                                                 return "Kaguya Premium (Server Member)";
-                                                                                             case NsfwCommandAttribute _:
-                                                                                                 return "Invoke from NSFW-marked channel";
-                                                                                         }
+        private static string[] GetCommandPermissions(CommandInfo cmdInfo) => 
+            cmdInfo.Preconditions
+                 .Where(x => x is OwnerCommandAttribute ||
+                             x is RequireUserPermissionAttribute ||
+                             x is PremiumUserCommandAttribute ||
+                             x is NsfwCommandAttribute)
+                 .Select(x =>
+                 {
+                     switch (x)
+                     {
+                         case OwnerCommandAttribute _:
+                             return "Bot Owner";
+                         case PremiumUserCommandAttribute _:
+                             return "Kaguya Premium (Key Redeemer)";
+                         case PremiumServerCommandAttribute _:
+                             return "Kaguya Premium (Server Member)";
+                         case NsfwCommandAttribute _:
+                             return "Invoke from NSFW-marked channel";
+                     }
 
-                                                                                         var attr = (RequireUserPermissionAttribute) x;
+                     var attr = (RequireUserPermissionAttribute) x;
 
-                                                                                         return attr.GuildPermission?.ToString();
-                                                                                     })
-                                                                                     .ToArray();
+                     return attr.GuildPermission?.ToString();
+                 })
+                 .ToArray();
     }
 }

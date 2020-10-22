@@ -21,9 +21,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("Unwarn")]
         [Alias("uw")]
         [Summary("Removes a warning from a user. A list of the user's 4 most recent warnings (9 if server is premium) " +
-            "will be displayed in chat. The moderator executing this command may then choose which warnings to " +
-            "remove by clicking on the supplied reactions. A reason may be provided, and if the server is " +
-            "of premium status, it will be logged.")]
+                 "will be displayed in chat. The moderator executing this command may then choose which warnings to " +
+                 "remove by clicking on the supplied reactions. A reason may be provided, and if the server is " +
+                 "of premium status, it will be logged.")]
         [Remarks("<user> [reason]")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireUserPermission(GuildPermission.KickMembers)]

@@ -19,12 +19,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [Command("Volume")]
         [Alias("v", "vol")]
         [Summary("Allows you to adjust the volume of the current music player. Offsets " +
-            "may also be used, for example: `+70` or `-25` will adjust your volume " +
-            "by 70 points louder or 25 points quieter than it was previously. The " +
-            "`mute` keyword may also be used to mute the player, though this is the " +
-            "same as setting the volume to zero.\n\n" +
-            "The maximum total volume a player may have is `250`, and the lowest is `0`.\n\n" +
-            "**The default volume is 75.**")]
+                 "may also be used, for example: `+70` or `-25` will adjust your volume " +
+                 "by 70 points louder or 25 points quieter than it was previously. The " +
+                 "`mute` keyword may also be used to mute the player, though this is the " +
+                 "same as setting the volume to zero.\n\n" +
+                 "The maximum total volume a player may have is `250`, and the lowest is `0`.\n\n" +
+                 "**The default volume is 75.**")]
         [Remarks("<amount>\n70\n+50\n-35\nmute")]
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]

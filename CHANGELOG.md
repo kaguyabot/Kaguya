@@ -1,3 +1,9 @@
+### Version 2.16
+- (Owner Only) Added $resetgame, $setgame
+- (Owner Only) $advertisestream now takes in just a username, not a whole URL.
+- $help no longer shows 1/10 pages in the footer (the 10th page is hidden, now shows 1/9).
+
+
 ### Version 2.15.1
 Developer Changes:
 - Added additional logging for OwnerGiveawayMessageUpdaterService.

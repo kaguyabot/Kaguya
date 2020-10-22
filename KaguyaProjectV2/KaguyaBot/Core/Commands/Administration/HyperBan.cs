@@ -31,8 +31,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [AdminCommand]
         [Command("HyperBan")]
         [Summary("Permanently bans a user from this server and from **any other server " +
-            "that the command executor is an `Administrator` in.** Kaguya must be present in all mutual " +
-            "servers for this to work properly.")]
+                 "that the command executor is an `Administrator` in.** Kaguya must be present in all mutual " +
+                 "servers for this to work properly.")]
         [Remarks("<user>\n<ID>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]
