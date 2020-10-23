@@ -18,8 +18,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [Command("TwitchAudio")]
         [Alias("ta")]
         [Summary("Allows either a [Kaguya Supporter](https://sellix.io/KaguyaStoreproducts/kaguya-supporter-tag) " +
-            "or [Kaguya Premium](https://sellix.io/KaguyaStore) server " +
-            "to stream audio live from Twitch.")]
+                 "or [Kaguya Premium](https://sellix.io/KaguyaStore) server " +
+                 "to stream audio live from Twitch.")]
         [Remarks("<search>")]
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]

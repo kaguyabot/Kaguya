@@ -19,9 +19,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("Clear", RunMode = RunMode.Async)]
         [Alias("c", "purge")]
         [Summary("Clears the specified amount of messages from the current channel. " +
-            "If no value is specified, 10 messages will be cleared. A moderator " +
-            "may also specify a reason for clearing the messages. Premium servers " +
-            "will be able to have this reason be logged.")]
+                 "If no value is specified, 10 messages will be cleared. A moderator " +
+                 "may also specify a reason for clearing the messages. Premium servers " +
+                 "will be able to have this reason be logged.")]
         [Remarks("\n<n>\n<n> <reason>")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]

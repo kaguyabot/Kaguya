@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("CreateRole")]
         [Alias("cr")]
         [Summary("Creates a role, or a list of roles. New roles are separated by spaces. If a role " +
-            "has spaces in the name, surround it with `\"\"`.")]
+                 "has spaces in the name, surround it with `\"\"`.")]
         [Remarks("<role> {...}\n\"Some long role\" Moofins")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.ManageRoles)]

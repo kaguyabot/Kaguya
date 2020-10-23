@@ -24,8 +24,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [Command("Loop")]
         [Alias("repeat")]
         [Summary("Allows a user to repeat the song a certain number of times. Default is 1. " +
-            "The song will be appended to the end of the queue as many times " +
-            "as is specified, up to a maximum of 10.")]
+                 "The song will be appended to the end of the queue as many times " +
+                 "as is specified, up to a maximum of 10.")]
         [Remarks("<number of times to repeat song>\n3")]
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]

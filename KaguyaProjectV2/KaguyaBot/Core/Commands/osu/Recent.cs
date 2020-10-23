@@ -26,7 +26,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
         [Command("osuRecent")]
         [Alias("recent", "r")]
         [Summary("Displays the most recent osu! play for the user. If the user has spaces in their " +
-            "username, wrap the name with quotation marks.")]
+                 "username, wrap the name with quotation marks.")]
         [Remarks("[username, NOT ID] (Optional if configured with `osuset` already)\n" +
                  "SomeName\n\"Name with spaces 123\"")]
         public async Task OsuRecentCommand(string player = null)

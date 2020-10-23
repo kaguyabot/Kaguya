@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Command("DailyLoot")]
         [Alias("daily", "d", "timely")]
         [Summary("Claim your daily loot or give it to somebody else! Rewards increased " +
-            "if given to another user.")]
+                 "if given to another user.")]
         [Remarks("<user>")]
         public async Task Command([Remainder] SocketGuildUser guildUser = null)
         {

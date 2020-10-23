@@ -25,10 +25,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         [Command("SellFish")]
         [Alias("sf", "sell")]
         [Summary("Allows you to sell one of your fish or all of the fish you have that are of a specific type. " +
-            "When a fish is sold, it is taxed.\n\n" +
-            "- If a fish's taxed sell price is less than 100 points, it will be taxed at 35% of its value.\n" +
-            "- If a fish's taxed sell price is more than 100 points, it will be taxed at 5% of its value.\n\n" +
-            "Use the `all` keyword by itself to sell all of your fish at once.")]
+                 "When a fish is sold, it is taxed.\n\n" +
+                 "- If a fish's taxed sell price is less than 100 points, it will be taxed at 35% of its value.\n" +
+                 "- If a fish's taxed sell price is more than 100 points, it will be taxed at 5% of its value.\n\n" +
+                 "Use the `all` keyword by itself to sell all of your fish at once.")]
         [Remarks("<Fish ID>\nall\nall <Fish Type>\n464199220\nsmall salmon")]
         public async Task Command(params string[] args)
         {

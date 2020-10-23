@@ -19,7 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("FilterRemove")]
         [Alias("fr")]
         [Summary("Removes one phrase or a list of filtered phrases from your server's word filter. Phrases are separated by spaces. " +
-            "If a phrase is longer than one word, surround it with `\"\"`.")]
+                 "If a phrase is longer than one word, surround it with `\"\"`.")]
         [Remarks("<phrase> {...}\nMyPhrase \"My phrase with spaces\"")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         public async Task RemovePhrase(params string[] args)

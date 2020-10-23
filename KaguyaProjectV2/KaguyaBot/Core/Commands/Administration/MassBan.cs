@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("MassBan")]
         [Alias("mb")]
         [Summary("Allows a server moderator with the `Ban Members` permission to ban a user, or list of users, " +
-            "from the server. A default reason will be provided in the Audit Log.")]
+                 "from the server. A default reason will be provided in the Audit Log.")]
         [Remarks("<user> {...}")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]

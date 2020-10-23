@@ -23,12 +23,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Command("CreateReactionRole")]
         [Alias("crr")]
         [Summary("Allows a user to add a emote-role pair to a message in the form of a reaction. Users who click on " +
-            "the reaction will then be given the role paired to the emote. When a user removes " +
-            "their reaction, the role will be removed from them.\n\n" +
-            "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
-            "together on a new line.\n This emote may either be a custom Emote or standard Emoji.\n\n" +
-            "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
-            "Subsequent emote-role pairs can be added seamlessly.")]
+                 "the reaction will then be given the role paired to the emote. When a user removes " +
+                 "their reaction, the role will be removed from them.\n\n" +
+                 "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
+                 "together on a new line.\n This emote may either be a custom Emote or standard Emoji.\n\n" +
+                 "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
+                 "Subsequent emote-role pairs can be added seamlessly.")]
         [Remarks("<message ID> [channel] <emote> <role> {...}\n" +
                  "588369719132684296 :sunglasses: OG\n" +
                  "588369719132684296 :PepeJam: \"DJ Master\" :PepeLaugh: @Comedian\n" +
@@ -46,12 +46,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Command("CreateReactionRole")]
         [Alias("crr")]
         [Summary("Allows a user to add a emote-role pair to a message in the form of a reaction. Users who click on " +
-            "the reaction will then be given the role paired to the emote. When a user removes " +
-            "their reaction, the role will be removed from them.\n\n" +
-            "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
-            "together on a new line.\n This emote may either be a custom Emote or standard Emoji.\n\n" +
-            "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
-            "Subsequent emote-role pairs can be added seamlessly.")]
+                 "the reaction will then be given the role paired to the emote. When a user removes " +
+                 "their reaction, the role will be removed from them.\n\n" +
+                 "Multiple reaction roles can be created at once by placing a new `emote` and `role` " +
+                 "together on a new line.\n This emote may either be a custom Emote or standard Emoji.\n\n" +
+                 "If your role has spaces, don't forget to wrap it in double quotes like so: `\"My Role\"`\n\n" +
+                 "Subsequent emote-role pairs can be added seamlessly.")]
         [Remarks("<message ID> [channel] <emote> <role> {...}\n" +
                  "588369719132684296 :Banger: OG\n" +
                  "<msg ID> :PepeJam: \"DJ Master\" :PepeLaugh: @Comedian\n" +

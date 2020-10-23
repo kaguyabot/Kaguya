@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("MassKick")]
         [Alias("mk")]
         [Summary("Allows a server moderator with the `Kick Members` permission to kick a user, or list of users, " +
-            "out of the server. A default reason will be provided in the Audit Log.")]
+                 "out of the server. A default reason will be provided in the Audit Log.")]
         [Remarks("<user> {...}")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]

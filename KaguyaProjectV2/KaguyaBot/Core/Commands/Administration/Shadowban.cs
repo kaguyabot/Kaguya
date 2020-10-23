@@ -15,8 +15,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("Shadowban", RunMode = RunMode.Async)]
         [Alias("sb")]
         [Summary("Shadowbans a user, denying them of every possible channel permission, meaning " +
-            "they will no longer be able to view or interact with any voice channels. " +
-            "This command also strips the user of any roles they may have.")]
+                 "they will no longer be able to view or interact with any voice channels. " +
+                 "This command also strips the user of any roles they may have.")]
         [Remarks("<user>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.Administrator)]

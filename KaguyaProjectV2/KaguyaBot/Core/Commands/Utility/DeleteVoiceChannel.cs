@@ -13,9 +13,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Command("DeleteVoiceChannel")]
         [Alias("dvc")]
         [Summary("Deletes a standard voice channel. The name does not need to be an exact match of the voice " +
-            "channel's name. This command will delete the voice channel that matches closest to what you wrote. " +
-            "For example, if I have a voice channel named `Music-128KBPS`, I could write " +
-            "`dvc Music-128`.")]
+                 "channel's name. This command will delete the voice channel that matches closest to what you wrote. " +
+                 "For example, if I have a voice channel named `Music-128KBPS`, I could write " +
+                 "`dvc Music-128`.")]
         [Remarks("<name>")]
         [RequireUserPermission(GuildPermission.ManageChannels)]
         [RequireBotPermission(GuildPermission.ManageChannels)]

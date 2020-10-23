@@ -144,30 +144,29 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             return embed;
         }
 
-        private static string[] GetCommandPermissions(CommandInfo cmdInfo) => 
-            cmdInfo.Preconditions
-                 .Where(x => x is OwnerCommandAttribute ||
-                             x is RequireUserPermissionAttribute ||
-                             x is PremiumUserCommandAttribute ||
-                             x is NsfwCommandAttribute)
-                 .Select(x =>
-                 {
-                     switch (x)
-                     {
-                         case OwnerCommandAttribute _:
-                             return "Bot Owner";
-                         case PremiumUserCommandAttribute _:
-                             return "Kaguya Premium (Key Redeemer)";
-                         case PremiumServerCommandAttribute _:
-                             return "Kaguya Premium (Server Member)";
-                         case NsfwCommandAttribute _:
-                             return "Invoke from NSFW-marked channel";
-                     }
+        private static string[] GetCommandPermissions(CommandInfo cmdInfo) => cmdInfo.Preconditions
+                                                                                     .Where(x => x is OwnerCommandAttribute ||
+                                                                                                 x is RequireUserPermissionAttribute ||
+                                                                                                 x is PremiumUserCommandAttribute ||
+                                                                                                 x is NsfwCommandAttribute)
+                                                                                     .Select(x =>
+                                                                                     {
+                                                                                         switch (x)
+                                                                                         {
+                                                                                             case OwnerCommandAttribute _:
+                                                                                                 return "Bot Owner";
+                                                                                             case PremiumUserCommandAttribute _:
+                                                                                                 return "Kaguya Premium (Key Redeemer)";
+                                                                                             case PremiumServerCommandAttribute _:
+                                                                                                 return "Kaguya Premium (Server Member)";
+                                                                                             case NsfwCommandAttribute _:
+                                                                                                 return "Invoke from NSFW-marked channel";
+                                                                                         }
 
-                     var attr = (RequireUserPermissionAttribute) x;
+                                                                                         var attr = (RequireUserPermissionAttribute) x;
 
-                     return attr.GuildPermission?.ToString();
-                 })
-                 .ToArray();
+                                                                                         return attr.GuildPermission?.ToString();
+                                                                                     })
+                                                                                     .ToArray();
     }
 }

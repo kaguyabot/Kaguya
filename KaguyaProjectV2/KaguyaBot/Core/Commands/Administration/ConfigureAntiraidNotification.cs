@@ -21,20 +21,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("ConfigureAntiraidDM")]
         [Alias("ardm", "configureardm")]
         [Summary("This command allows a server administrator to configure the direct message sent to any user " +
-            "punished by the anti-raid service. The ideal use for this feature is to notify a user of how or why " +
-            "they were punished from the server.\n\n" +
-            "**Example:**\n" +
-            "- \"User, you were banned from our server by our anti-raid system. Rejoin here! <link>\"\n\n" +
-            "**Customization:**\n" +
-            "The arguments below may be supplied to customize your notification message further. Include these exactly " +
-            "as shown, if desired, to have said information be displayed in the DM.\n\n" +
-            "`{USERNAME}` = The user's name and tag. Example: Kaguya#2708\n" +
-            "`{USERMENTION}` = Mention the user. Example: <@538910393918160916>\n" +
-            "`{SERVER}` = The current name of the Discord server they were punished in.\n" +
-            "`{PUNISHMENT}` = The type of punishment, or action, the user received, in past-tense form. " +
-            "Example: Banned.\n\n" +
-            "*Set your content as `{DISABLED}` to disable the DM notification feature.*\n" +
-            "*Use without any arguments to display the current message.*")]
+                 "punished by the anti-raid service. The ideal use for this feature is to notify a user of how or why " +
+                 "they were punished from the server.\n\n" +
+                 "**Example:**\n" +
+                 "- \"User, you were banned from our server by our anti-raid system. Rejoin here! <link>\"\n\n" +
+                 "**Customization:**\n" +
+                 "The arguments below may be supplied to customize your notification message further. Include these exactly " +
+                 "as shown, if desired, to have said information be displayed in the DM.\n\n" +
+                 "`{USERNAME}` = The user's name and tag. Example: Kaguya#2708\n" +
+                 "`{USERMENTION}` = Mention the user. Example: <@538910393918160916>\n" +
+                 "`{SERVER}` = The current name of the Discord server they were punished in.\n" +
+                 "`{PUNISHMENT}` = The type of punishment, or action, the user received, in past-tense form. " +
+                 "Example: Banned.\n\n" +
+                 "*Set your content as `{DISABLED}` to disable the DM notification feature.*\n" +
+                 "*Use without any arguments to display the current message.*")]
         [Remarks(
             "\n<content>\n{USERMENTION}, you were {PUNISHMENT} from {SERVER} because of our anti-raid service! Rejoin " +
             "here: mydiscord.url or contact us for more help.")]

@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("RemoveAutoAssignedRole")]
         [Alias("raar", "aarr", "autoassignremove")]
         [Summary("Allows a server administrator to remove a role, or a list of roles, " +
-            "from the existing list of auto-assigned roles for this server.")]
+                 "from the existing list of auto-assigned roles for this server.")]
         [Remarks("<role> {...}")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Command(params SocketRole[] roles)

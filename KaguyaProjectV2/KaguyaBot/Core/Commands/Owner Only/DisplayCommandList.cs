@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Command("DisplayCommandList")]
         [Alias("dcl")]
         [Summary("Displays a list of all Kaguya commands with their respective categories, as " +
-            "well as the formatting for the list (so it may be pasted elsewhere).")]
+                 "well as the formatting for the list (so it may be pasted elsewhere).")]
         [Remarks("[exclude owner commands? (true/false)]")]
         public async Task Command(bool excludeOwnerCmds = true)
         {

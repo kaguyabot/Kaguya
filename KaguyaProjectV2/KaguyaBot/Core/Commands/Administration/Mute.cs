@@ -25,10 +25,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("Mute", RunMode = RunMode.Async)]
         [Alias("m")]
         [Summary("Mutes a user, **denying** them permission to chat in any channel, add reactions, connect to " +
-            "voice channels, speak in voice channels, and create instant invites. Note that the displayed \"time until unmute\" " +
-            "rounds slightly to the nearest time precision. A reason may be provided upon muting someone, but " +
-            "only if a duration is specified before it as well. Reasons will be logged for premium servers in the " +
-            "specified modlog channel.")]
+                 "voice channels, speak in voice channels, and create instant invites. Note that the displayed \"time until unmute\" " +
+                 "rounds slightly to the nearest time precision. A reason may be provided upon muting someone, but " +
+                 "only if a duration is specified before it as well. Reasons will be logged for premium servers in the " +
+                 "specified modlog channel.")]
         [Remarks("<user> [duration] [reason]")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]

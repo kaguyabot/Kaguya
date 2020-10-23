@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Command("FishCalc")]
         [Alias("fc")]
         [Summary("Displays how many points the user earned for their last `<amount>` fish as well as " +
-            "how much they paid to play.")]
+                 "how much they paid to play.")]
         [Remarks("<user id> [amount]")]
         public async Task Command(ulong userId, int amount = 100)
         {

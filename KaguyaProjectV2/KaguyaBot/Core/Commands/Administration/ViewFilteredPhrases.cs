@@ -18,7 +18,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Command("ViewFilteredPhrases")]
         [Alias("vfp", "fv", "filterview")]
         [Summary("Displays all currently filtered phrases. If the character count of all phrases total to more than " +
-            "1,750 characters, they will be sent as a text file.")]
+                 "1,750 characters, they will be sent as a text file.")]
         [Remarks("")]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         [RequireBotPermission(GuildPermission.ManageMessages)]

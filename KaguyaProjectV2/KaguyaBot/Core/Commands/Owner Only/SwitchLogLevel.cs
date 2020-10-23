@@ -16,7 +16,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
         [Command("swaploglevel")]
         [Alias("swaplog", "sll")]
         [Summary("Switches the current console log severity to the specified severity. " +
-            "Valid severities are `Trace, Debug, Info, Warn, Error`")]
+                 "Valid severities are `Trace, Debug, Info, Warn, Error`")]
         [Remarks("<severity>")]
         public async Task SwapLogLevel(string level)
         {

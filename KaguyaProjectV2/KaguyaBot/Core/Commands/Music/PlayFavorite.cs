@@ -17,8 +17,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [Command("PlayFavorite")]
         [Alias("playfav", "pf")]
         [Summary("Allows a user to play a song from their `favorites` playlist. To get this " +
-            "list, execute the `favls` command. You also need to have favorited at least one " +
-            "track before.")]
+                 "list, execute the `favls` command. You also need to have favorited at least one " +
+                 "track before.")]
         [Remarks("<trackNum>")]
         public async Task Command(int trackNum)
         {

@@ -29,9 +29,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         [Command("Nsfw", RunMode = RunMode.Async)]
         [Alias("n")]
         [Summary("Posts an NSFW image into chat. The `bomb` tag may be used to post 3 images at once. Normal users are limited to 12 NSFW images per day. " +
-            "[Kaguya Premium Subscribers](https://sellix.io/KaguyaStore) " +
-            "may specify one or multiple tags and have no limit on how many images they can post per day. " +
-            "A complete list of tags may be found [here (SFW link)](https://konachan.com/tag).")]
+                 "[Kaguya Premium Subscribers](https://sellix.io/KaguyaStore) " +
+                 "may specify one or multiple tags and have no limit on how many images they can post per day. " +
+                 "A complete list of tags may be found [here (SFW link)](https://konachan.com/tag).")]
         [Remarks("\nbomb\n[tag] {...} ($$$)\nbomb [tag] {...} ($$$)")]
         public async Task Command([Remainder] string tagString = null)
         {
@@ -89,10 +89,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                         else
                         {
                             for (int i = 0; i < NSFW_BOMB_COUNT; i++)
+                            {
                                 await SendHentaiAsync(user, new[]
                                 {
                                     "sex"
                                 });
+                            }
                         }
                     }
                     else
@@ -106,12 +108,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
             }
 
             if (tags == null)
+            {
                 await SendHentaiAsync(user, new[]
                 {
                     "sex",
                     "breasts",
                     "cum"
                 });
+            }
 
             if (!user.IsPremium)
                 await DatabaseQueries.UpdateAsync(user);

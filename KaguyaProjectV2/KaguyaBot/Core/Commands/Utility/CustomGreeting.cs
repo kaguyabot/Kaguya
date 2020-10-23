@@ -14,15 +14,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Command("SetCustomGreeting")]
         [Alias("greeting", "welcome", "scg")]
         [Summary("Allows a server administrator to set a custom greeting for a server. Custom " +
-            "greetings are limited to `1,750` characters. The channel this command is used in " +
-            "will determine where the greeting messages are sent, but this may be later " +
-            "overridden via the `log` command, as greetings are also technically a logtype. Special " +
-            "parameters may also be used in your greeting:\n\n" +
-            "`{USERNAME}` - The name of the user who just joined the server.\n" +
-            "`{USERMENTION}` - Mentions the user who just joined.\n" +
-            "`{SERVER}` - The name of this server.\n" +
-            "`{MEMBERCOUNT}` - The member count of this server, including the user who just joined. " +
-            "Formatted as such: `321st`, `4th`, etc.\n")]
+                 "greetings are limited to `1,750` characters. The channel this command is used in " +
+                 "will determine where the greeting messages are sent, but this may be later " +
+                 "overridden via the `log` command, as greetings are also technically a logtype. Special " +
+                 "parameters may also be used in your greeting:\n\n" +
+                 "`{USERNAME}` - The name of the user who just joined the server.\n" +
+                 "`{USERMENTION}` - Mentions the user who just joined.\n" +
+                 "`{SERVER}` - The name of this server.\n" +
+                 "`{MEMBERCOUNT}` - The member count of this server, including the user who just joined. " +
+                 "Formatted as such: `321st`, `4th`, etc.\n")]
         [Remarks("<msg>")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Command([Remainder] string message)

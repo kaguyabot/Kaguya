@@ -17,9 +17,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         [MusicCommand]
         [Command("Join")]
         [Summary("Joins Kaguya into the voice channel you are currently in. This step is optional, and may " +
-            "be skipped with the `play` command. You may also specify the name (or part of a name) of a voice " +
-            "channel that you want Kaguya to join instead of the voice channel you currently are in. If Kaguya " +
-            "is already in one voice channel, it will move to the specified channel.")]
+                 "be skipped with the `play` command. You may also specify the name (or part of a name) of a voice " +
+                 "channel that you want Kaguya to join instead of the voice channel you currently are in. If Kaguya " +
+                 "is already in one voice channel, it will move to the specified channel.")]
         [Remarks("[channel]")]
         [RequireUserPermission(GuildPermission.Connect)]
         [RequireBotPermission(GuildPermission.Connect)]
