@@ -39,7 +39,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 #if DEBUG
             string[] cl = await File.ReadAllLinesAsync("..\\changelog.md");
 #else
-            string[] cl = await File.ReadAllLinesAsync("..\\..\\..\\..\\..\\changelog.md");
+            string[] cl = await File.ReadAllLinesAsync("..\\..\\..\\..\\changelog.md");
 #endif
             KaguyaEmbedBuilder embed = await GenerateChangelogEmbed(cl, args);
 
