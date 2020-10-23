@@ -70,7 +70,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
                     if (cmd.Attributes.Contains(attr) || cmd.Preconditions.Contains(attr))
                     {
-                        if (!pages[i].Description.Contains($"{server.CommandPrefix}{cmd.Name.ToLower()} {aliases}"))
+                        if (!pages[i].Description.Contains($"{server.CommandPrefix}{cmd.Name.ToLower()}{aliases}"))
                         {
                             if (!string.IsNullOrWhiteSpace(aliases))
                                 aliases = aliases.Insert(0, " ");

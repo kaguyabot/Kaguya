@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                  "- `-v <version>` Will display the changelog for the exact version provided.\nExample: `v2.16`\n" +
                  "- `-ls` Will display all available changelog versions that can be searched through.\n\n" +
                  "**Note: These arguments may not be chained together.**")]
-        [Remarks("\n[-n <num>]\n[-v <version num>]")]
+        [Remarks("\n[-n <num>]\n[-v <version num>]\n[-ls]")]
         public async Task Command(params string[] args)
         {
             string[] cl = await File.ReadAllLinesAsync("..\\changelog.md");
