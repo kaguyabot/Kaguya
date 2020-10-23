@@ -4,7 +4,6 @@
 - $help no longer shows 1/10 pages in the footer (the 10th page is hidden, now shows 1/9).
 - Added $changelog (shows what's new in the most recent version. See more with the command's arguments!)
 - Fixed bug where sometimes a command would be displayed twice in the $help command list.
-- 
 
 ### Version 2.15.1
 Developer Changes:
