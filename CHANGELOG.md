@@ -2,14 +2,13 @@
 - (Owner Only) Added $resetgame, $setgame
 - (Owner Only) $advertisestream now takes in just a username, not a whole URL.
 - $help no longer shows 1/10 pages in the footer (the 10th page is hidden, now shows 1/9).
-
+- Added $changelog (shows what's new in the most recent version. See more with the command's arguments!)
 
 ### Version 2.15.1
 Developer Changes:
 - Added additional logging for OwnerGiveawayMessageUpdaterService.
 - Fixed issue where the OwnerGiveawayMessageUpdaterService would not remove a giveaway if it had been deleted before the time had expired.
 - Massive code cleanup and reformatting
-
 User Changes:
 - Fixed a bug where $log antiraids would not work but $log antiraid would. Correct usage is $log antiraids, as shown in $logs.
 - Fixed a bug with the $fish level-up notification service where either:
@@ -322,7 +321,6 @@ User Changes:
 - Fixed a bug where the NSFW image handler timer would not auto reset.
 
 ### Version 2.0.1
-
 - Fixed a bug where the $buybait command was displaying an incorrect maximum value for how much bait you could buy based on how many points you have.
 - "Total value" renamed to "taxed value" on $myfish.
 - Fixed a bug where, upon attempt to buy more bait than your baitbox can hold, the error message would not be thrown.

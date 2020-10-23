@@ -11,7 +11,6 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using MoreLinq.Extensions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
@@ -140,8 +139,5 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         private async Task<List<ReactionRole>> GetReactionRoleCache() => await DatabaseQueries.GetAllAsync<ReactionRole>();
         private void AddToCache(IEnumerable<ReactionRole> reactionRoles) => _reactionRoleCache.AddRange(reactionRoles);
-        private void AddToCache(ReactionRole reactionRole) => _reactionRoleCache.Add(reactionRole);
-        private void RemoveFromCache(IEnumerable<ReactionRole> reactionRoles) => reactionRoles.ForEach(x => _reactionRoleCache.Remove(x));
-        private void RemoveFromCache(ReactionRole reactionRole) => _reactionRoleCache.Remove(reactionRole);
     }
 }

@@ -32,7 +32,6 @@
     <PackageReference Include="JetBrains.Profiler.Api" Version="1.1.7" />
     <PackageReference Include="linq2db" Version="3.0.0-preview.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.1" />
-    <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="MySql.Data" Version="8.0.21" />
     <PackageReference Include="Nekos-Sharp" Version="3.3.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

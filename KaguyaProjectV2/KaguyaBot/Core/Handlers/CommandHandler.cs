@@ -278,7 +278,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             var embed = new KaguyaEmbedBuilder(EmbedColor.RED)
             {
                 Title = "Command Failed",
-                Description = $"Failed to execute command `{context.Message}`\n\nReason: `{result.ErrorReason}`\n\n" +
+                Description = $"Failed to execute command `{context.Message}`\n\n`Reason:` {result.ErrorReason}\n\n" +
                               $"[Kaguya Support](https://discord.gg/aumCJhr)\n" +
                               $"[Report a bug](https://github.com/stageosu/Kaguya/issues/new?assignees=&labels=Bug&template=bug-report.md&title=)",
                 Footer = new EmbedFooterBuilder

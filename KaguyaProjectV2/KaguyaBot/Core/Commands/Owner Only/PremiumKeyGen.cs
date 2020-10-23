@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using Discord.Net;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using MoreLinq;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only
 {
