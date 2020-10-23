@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
     {
         // The color we will use for all changelog embeds.
         private const EmbedColor EMBED_COLOR = EmbedColor.GREEN;
-        
+
         [ReferenceCommand]
         [Command("Changelog")]
         [Alias("cl")]
@@ -36,11 +36,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Remarks("\n[-n <num>]\n[-v <version num>]\n[-ls]")]
         public async Task Command(params string[] args)
         {
+#if DEBUG
             string[] cl = await File.ReadAllLinesAsync("..\\changelog.md");
-
+#else
+            string[] cl = await File.ReadAllLinesAsync("..\\..\\..\\..\\..\\changelog.md");
+#endif
             KaguyaEmbedBuilder embed = await GenerateChangelogEmbed(cl, args);
-            
-            if(embed != null)
+
+            if (embed != null)
                 await SendEmbedAsync(embed);
         }
 
@@ -61,7 +64,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         {
             if (args.IsNullOrEmpty())
                 return ChangelogArgs.DEFAULT;
-            
+
             var ex = new KaguyaSupportException("I could not identify a way to parse the arguments you provided. " +
                                                 "Please review this command's syntax (located in the `help changelog` comamnd)" +
                                                 " for more information.");
@@ -93,10 +96,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                     if (regi[i].IsMatch(argsStr))
                     {
                         index = i;
+
                         break;
                     }
                 }
-                
+
                 return index switch
                 {
                     0 => ChangelogArgs.RECENT,
@@ -126,12 +130,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
             {
                 clLines[0]
             };
-            
+
             var sb = new StringBuilder($"{Context.User.Mention}\n```\n");
 
             int versions = args[1].AsInteger();
             int versionsPassed = 0;
-            
+
             for (int i = 0; i < clLines.Length; i++)
             {
                 if (string.IsNullOrWhiteSpace(clLines[i]))
@@ -146,7 +150,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
                         break;
                     }
-                    
+
                     // We index + 1 here because the title rests on the following line,
                     // not the current blank line.
                     titles.Add(clLines[i + 1]);
@@ -175,7 +179,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 titleSb.Append(titles[0]);
             else
                 titleSb.Append($"{titles[0]} - {titles[^1]}");
-            
+
             titleSb.Replace("### ", "");
             titleSb.Replace("Version ", "V");
 
@@ -193,7 +197,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
         private async Task<KaguyaEmbedBuilder> VersionSpecificChangelogEmbed(string[] clLines, params string[] args)
         {
-            StringBuilder descSb = new StringBuilder($"{Context.User.Mention}\n```");
+            var descSb = new StringBuilder($"{Context.User.Mention}\n```");
             bool atVersion = false;
             string titleStr = string.Empty;
 
@@ -204,7 +208,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
                 if (!version.Contains("Version "))
                     version = "Version " + version;
-                
+
                 string lReplace = line.Replace("### ", "");
                 if (lReplace == version)
                 {
@@ -213,9 +217,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 }
 
                 if (atVersion)
-                {
                     descSb.AppendLine(line);
-                }
 
                 // We have already determined we are at our version, 
                 // but have now encountered a blank line. Therefore, 
@@ -235,7 +237,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
 
                 return null;
             }
-            
+
             return new KaguyaEmbedBuilder(EMBED_COLOR)
             {
                 Title = titleStr,
@@ -247,20 +249,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         {
             var versionSb = new StringBuilder($"{Context.User.Mention}\n```");
             var versions = new List<string>();
-            
+
             foreach (string line in clLines)
             {
-                if(line.Contains("### Version "))
-                {
+                if (line.Contains("### Version "))
                     versions.Add(line.Replace("### Version ", ""));
-                }
             }
 
             versionSb.AppendLine(versions.Humanize(","));
             versionSb.Append("```");
             versionSb = versionSb.Replace("### Version ", "");
             versionSb = versionSb.Replace(", , ", ", "); // For some reason, we have to do this...
-            
+
             return new KaguyaEmbedBuilder(EMBED_COLOR)
             {
                 Title = "Kaguya Changelog History",
