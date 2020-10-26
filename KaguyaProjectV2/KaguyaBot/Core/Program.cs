@@ -75,7 +75,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 #if DEBUG
                 TotalShards = 1
 #else
-                TotalShards = 4
+                TotalShards = 7
 #endif
             };
 

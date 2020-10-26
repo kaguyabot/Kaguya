@@ -188,7 +188,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             };
 
             string reason = "";
-
             // ReSharper disable once PossibleInvalidOperationException
             switch (result.Error.Value)
             {
