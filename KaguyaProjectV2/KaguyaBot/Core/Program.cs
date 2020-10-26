@@ -70,10 +70,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
             var config = new DiscordSocketConfig
             {
-                MessageCacheSize = 500,
+                MessageCacheSize = 200,
                 AlwaysDownloadUsers = true,
 #if DEBUG
-                TotalShards = 1
+                TotalShards = 2
 #else
                 TotalShards = 7
 #endif
