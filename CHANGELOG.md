@@ -1,3 +1,7 @@
+### Version 2.16.1
+- Updated total shards to 3 (was 4).
+- Now logging _client.ShardDisconnected exception types as well as the message.
+
 ### Version 2.16
 - (Owner Only) Added $resetgame, $setgame
 - (Owner Only) $advertisestream now takes in just a username, not a whole URL.

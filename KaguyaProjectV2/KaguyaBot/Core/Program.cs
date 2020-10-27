@@ -73,9 +73,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 MessageCacheSize = 200,
                 AlwaysDownloadUsers = true,
 #if DEBUG
-                TotalShards = 2
+                TotalShards = 1
 #else
-                TotalShards = 7
+                TotalShards = 3
 #endif
             };
 
