@@ -1,8 +1,5 @@
 pipeline {
  agent any
- environment {
-  dotnet = /usr/bin/dotnet
- }
  stages {
   stage('Checkout') {
    steps {
