@@ -16,11 +16,11 @@ pipeline {
     }
    }
   }
-@REM   stage('Write AppSettings File (API)'){
-@REM       steps{
-@REM           bat "copy /Y C:\\Users\\admin\\Desktop\\KaguyaCredentials\\appsettings.json \"${env.WORKSPACE}\\KaguyaProjectV2\\appsettings.json\""
-@REM       }
-@REM   }
+//   stage('Write AppSettings File (API)'){
+//       steps{
+//           bat "copy /Y C:\\Users\\admin\\Desktop\\KaguyaCredentials\\appsettings.json \"${env.WORKSPACE}\\KaguyaProjectV2\\appsettings.json\""
+//       }
+//   }
   stage('Clean') {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2"){
