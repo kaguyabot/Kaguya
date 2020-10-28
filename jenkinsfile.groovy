@@ -21,7 +21,7 @@ pipeline {
   stage('Clean') {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2"){
-        sh "dotnet clean"
+        sh "dotnet clean -c Release"
         }
       }
     }
@@ -43,7 +43,7 @@ pipeline {
   stage('Start Bot + API') {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2/bin/Release/netcoreapp3.1"){
-        sh "dotnet KaguyaProjectV2.dll %Token% %Bot Owner ID% %Log Level% %Default Prefix% %osu! API Key% %Top.gg API Key% %MySQL Username% %MySQL Password% %MySQL Server% %MySQL Schema% %Twitch Client ID% %Twitch Authorization Token% %Danbooru Username% %Danbooru API Key% %Top.gg Webhook Port%"
+        sh "dotnet KaguyaProjectV2.dll %Token% %BotOwnerID% %LogLevel% %DefaultPrefix% %osu!APIKey% %Top.ggAPIKey% %MySQLUsername% %MySQLPassword% %MySQLServer% %MySQLSchema% %TwitchClientID% %TwitchAuthorizationToken% %DanbooruUsername% %DanbooruAPIKey% %Top.ggWebhookPort%"
     }
    }
   }
