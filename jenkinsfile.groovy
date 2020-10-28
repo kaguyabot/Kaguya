@@ -25,6 +25,13 @@ pipeline {
         }
       }
     }
+  stage('Build') {
+   steps {
+    dir("${env.WORKSPACE}/KaguyaProjectV2"){
+        cp "dotnet build -c Release"
+    }
+   }
+  }
   stage('Copy External Dependencies'){
       steps{
           dir("${env.WORKSPACE}/KaguyaProjectV2/ExternalDependencies"){
@@ -32,13 +39,6 @@ pipeline {
               sh "cp /Y oppai.dll ${env.WORKSPACE}/KaguyaProjectV2/bin/Release/netcoreapp3.1/"
           }
       }
-  }
-  stage('Build') {
-   steps {
-    dir("${env.WORKSPACE}/KaguyaProjectV2"){
-        cp "dotnet build -c Release"
-    }
-   }
   }
   stage('Start Bot + API') {
    steps {
