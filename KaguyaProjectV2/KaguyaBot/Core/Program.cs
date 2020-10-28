@@ -41,12 +41,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             _config = await Config.GetOrCreateConfigAsync(args);
 
+            /*
+             * This portion requires that appsettings.json is properly configured.
+             * appsettings.json is database configuration information, which for task1
+             * is only necessary for posting Top.GG webhook notifications to the
+             * kaguya database. We don't need this during a debug session.
+             */
+#if !DEBUG
             Task task1 = CreateHostBuilder(args).Build().RunAsync();
+#endif
             Task task2 = new Program().MainAsync(args);
 
+#if !DEBUG
             Task.WaitAll(task1, task2);
+#else
+            Task.WaitAll(task2);
+#endif
         }
 
+#if !DEBUG
         public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaultBuilder(args)
                                                                            .ConfigureLogging(logging =>
                                                                            {
@@ -59,7 +72,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                                                                                webBuilder.UseUrls($"http://+:{_config.TopGgWebhookPort}");
                                                                                webBuilder.UseKestrel();
                                                                            });
-
+#endif
         public async Task MainAsync(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
@@ -134,7 +147,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 catch (HttpException e)
                 {
                     await ConsoleLogger.LogAsync($"Error when logging into Discord:\n" +
-                                                 $"-Have you configured your config file?\n" +
+                                                 $"-Have you passed in the correct application arguments?\n" +
                                                  $"-Is your token correct? Exception: {e.Message}", LogLvl.ERROR);
 
                     Console.ReadLine();

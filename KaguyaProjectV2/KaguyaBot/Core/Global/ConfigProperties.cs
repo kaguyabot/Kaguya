@@ -35,6 +35,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
             "https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=469101694";
 
         // Github contributors, please do not edit the Version number.
-        public static string Version { get; } = "2.16.1";
+        public static string Version { get; } = "2.16.2";
     }
 }

@@ -1,3 +1,7 @@
+### Version 2.16.2
+- Updated total shards to 5.
+- Changes needed for Windows -> Linux migration.
+
 ### Version 2.16.1
 - Updated total shards to 3 (was 4).
 - Now logging _client.ShardDisconnected exception types as well as the message.
