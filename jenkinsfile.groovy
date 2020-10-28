@@ -28,8 +28,8 @@ pipeline {
   stage('Copy External Dependencies'){
       steps{
           dir("${env.WORKSPACE}/KaguyaProjectV2/ExternalDependencies"){
-              sh "cp /Y Discord.Addons.Interactive.dll \"${env.WORKSPACE}\\KaguyaProjectV2\\bin\\Release\\netcoreapp3.1\""
-              sh "cp /Y oppai.dll \"${env.WORKSPACE}\\KaguyaProjectV2\\bin\\Release\\netcoreapp3.1\""
+              sh "cp /Y Discord.Addons.Interactive.dll ${env.WORKSPACE}/KaguyaProjectV2/bin/Release/netcoreapp3.1/"
+              sh "cp /Y oppai.dll ${env.WORKSPACE}/KaguyaProjectV2/bin/Release/netcoreapp3.1/"
           }
       }
   }
