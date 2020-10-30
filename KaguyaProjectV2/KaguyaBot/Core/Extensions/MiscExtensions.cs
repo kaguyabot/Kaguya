@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                 return result;
 
             if (throwException)
-                throw new NullReferenceException("Could not parse string to integer.");
+                throw new NullReferenceException($"Could not parse string '{numString}' to integer.");
 
             return 0;
         }
@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                 return result;
 
             if (throwExceptionIfNull)
-                throw new NullReferenceException("Could not parse string to ulong.");
+                throw new NullReferenceException($"Could not parse string '{numString}' to ulong.");
 
             return 0;
         }

@@ -69,7 +69,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             var model = new ConfigModel
             {
                 Token = args[0],
-                BotOwnerId = args[1].AsUlong(),
+                BotOwnerId = args[1].Trim().AsUlong(),
                 LogLevelNumber = args[2].AsInteger(),
                 DefaultPrefix = args[3],
                 OsuApiKey = args[4],
