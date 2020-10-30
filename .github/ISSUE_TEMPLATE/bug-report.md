@@ -23,7 +23,7 @@ assignees: ''
 **Screenshots** - *If applicable, add links to any screenshots that help explain the problem.*
 
 **Version** - *The version of Kaguya that caused this bug.*
-- For v2.0 open beta, this may look like `v2.0.A2020.x.y`.
-- For live, this may look like `v2.x`
+- `v2.x`
+- Example: `v2.15.1`, `v2.16`, etc.
 
 **Additional context** - *Is there anything else that should be noted about the bug?*
