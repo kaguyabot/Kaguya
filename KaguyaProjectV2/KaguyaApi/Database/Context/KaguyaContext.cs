@@ -15,8 +15,8 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Context
 
     public class KaguyaSettings : ILinqToDBSettings
     {
-        private readonly DatabaseConfig _dbConfig;
-        public KaguyaSettings(IOptions<DatabaseConfig> dbConfig) { _dbConfig = dbConfig.Value; }
+        private readonly DbConfig _dbConfig;
+        public KaguyaSettings(IOptions<DbConfig> dbConfig) { _dbConfig = dbConfig.Value; }
         public IEnumerable<IDataProviderSettings> DataProviders => Enumerable.Empty<IDataProviderSettings>();
         public string DefaultConfiguration => "KaguyaContext";
         public string DefaultDataProvider => "MySQL";
