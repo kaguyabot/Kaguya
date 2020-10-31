@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 #region This file will load all Config file data into memory for the bot to use. This file contains very important credentials.
@@ -18,11 +19,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         private const int CORRECT_ARG_COUNT = 15;
 
         /// <summary>
-        /// Retreives a populated <see cref="ConfigModel"/> and also re-populates any necessary data from the Resources folder.
+        /// Retreives a populated <see cref="BotConfig"/> and also re-populates any necessary data from the Resources folder.
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static async Task<ConfigModel> GetOrCreateConfigAsync(string[] args)
+        public static async Task<IBotConfig> GetOrCreateConfigAsync(string[] args)
         {
             string[] directories =
             {
@@ -47,7 +48,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                     byte[] data = await wc.DownloadDataTaskAsync("https://i.imgur.com/Ae2BBiC.png");
                     await File.WriteAllBytesAsync($@"{directories[0]}\ProfileSmall.png", data);
 
-                    await ConsoleLogger.LogAsync("Downloaded and saved ProfileSmall.png image.", LogLvl.INFO);
+                    await ConsoleLogger.LogAsync($@"Missing file ProfileSmall.png downladed and saved to {directories[0]}\ProfileSmall.png.", LogLvl.INFO);
                 }
 
                 // Exp level-up image
@@ -56,17 +57,25 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                     byte[] data = await wc.DownloadDataTaskAsync("https://i.imgur.com/fgNNX8H.png");
                     await File.WriteAllBytesAsync($@"{directories[0]}\XpLevelUpSmall.png", data);
 
-                    await ConsoleLogger.LogAsync("Downloaded and saved XpLevelUpSmall.png image.", LogLvl.INFO);
+                    await ConsoleLogger.LogAsync($@"Missing file XpLevelUpSmall.png downladed and saved to {directories[0]}\XpLevelUpSmall.png.", LogLvl.INFO);
                 }
+            }
+
+            IBotConfig model;
+            if (File.Exists(configFilePath) && args.Length != CORRECT_ARG_COUNT)
+            {
+                model = JsonConvert.DeserializeObject<IBotConfig>(configFilePath);
+
+                return model;
             }
 
             if (args.Length != CORRECT_ARG_COUNT)
             {
                 throw new Exception("The correct amount of arguments was not specified. " +
-                                    $"Expected {CORRECT_ARG_COUNT}, received {args.Length}");
+                                    $"Expected {CORRECT_ARG_COUNT}, received {args.Length}.");
             }
 
-            var model = new ConfigModel
+            model = new BotConfig
             {
                 Token = args[0],
                 BotOwnerId = args[1].Trim().AsUlong(),
@@ -85,20 +94,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 TopGgWebhookPort = args[14].AsInteger()
             };
 
-            if (!File.Exists(configFilePath) || !model.Equals(new ConfigModel()))
+            if (!File.Exists(configFilePath) || !model.Equals(new BotConfig()))
             {
                 //Creates JSON from model.
-                var modelToSave = JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath, model));
+                var modelToSave = JsonConvert.DeserializeObject<BotConfig>(await CreateConfigAsync(configFilePath, model));
                 await File.WriteAllTextAsync(configFilePath, JsonConvert.SerializeObject(modelToSave, Formatting.Indented));
 
                 await ConsoleLogger.LogAsync($"Wrote new config file.", LogLvl.INFO);
-            }
-            else if (args.Length != 14)
-            {
-                //Reads config file.
-                model = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(configFilePath));
-
-                return model ?? JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath));
             }
 
             return model;
@@ -117,10 +119,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             }
         }
 
-        private static async Task<string> CreateConfigAsync(string filepath, ConfigModel model = null)
+        private static async Task<string> CreateConfigAsync(string filepath, IBotConfig model = null)
         {
             if (model == null)
-                model = new ConfigModel();
+                model = new BotConfig();
 
             string json = JsonConvert.SerializeObject(model, Formatting.Indented);
             using (StreamWriter writer = File.CreateText(filepath))
@@ -144,7 +146,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
     }
 
 #region Model
-    public class ConfigModel
+    public sealed class BotConfig : IBotConfig
     {
         public string Token { get; set; }
         public ulong BotOwnerId { get; set; }
@@ -163,5 +165,4 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         public int TopGgWebhookPort { get; set; }
     }
 #endregion
-
 }

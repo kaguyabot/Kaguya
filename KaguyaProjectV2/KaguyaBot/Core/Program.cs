@@ -13,6 +13,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium; // DO NOT REMOVE
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;         // DO NOT REMOVE
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
@@ -35,11 +36,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private DiscordShardedClient _client;
         private LavaNode _lavaNode;
         private TwitchAPI _api;
-        private static ConfigModel _config;
+        private static IBotConfig _botConfig;
 
         private static async Task Main(string[] args)
         {
-            _config = await Config.GetOrCreateConfigAsync(args);
+            _botConfig = await Config.GetOrCreateConfigAsync(args);
 
             /*
              * This portion requires that appsettings.json is properly configured.
@@ -47,12 +48,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
              * is only necessary for posting Top.GG webhook notifications to the
              * kaguya database. We don't need this during a debug session.
              */
+            
+            Task task2 = new Program().MainAsync(args);
 #if !DEBUG
             Task task1 = CreateHostBuilder(args).Build().RunAsync();
-#endif
-            Task task2 = new Program().MainAsync(args);
-
-#if !DEBUG
             Task.WaitAll(task1, task2);
 #else
             Task.WaitAll(task2);
@@ -108,7 +107,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 try
                 {
-                    GlobalPropertySetup(_config);
+                    GlobalPropertySetup(_botConfig);
 
                     SetupTwitch();
 
@@ -120,7 +119,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     _client = services.GetRequiredService<DiscordShardedClient>();
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
 
-                    await _client.LoginAsync(TokenType.Bot, _config.Token);
+                    await _client.LoginAsync(TokenType.Bot, _botConfig.Token);
                     await _client.StartAsync();
 
                     await _client.SetGameAsync($"v{ConfigProperties.Version}: Booting up!");
@@ -137,7 +136,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                         ConfigProperties.LavaNode = _lavaNode;
                         OsuBase.Client = new OsuClient(new OsuSharpConfiguration
                         {
-                            ApiKey = _config.OsuApiKey
+                            ApiKey = _botConfig.OsuApiKey
                         });
                     }
 
@@ -164,12 +163,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             LogLvl.INFO, true,
             ConsoleColor.Cyan, ConsoleColor.Black, false, false);
 
-        private void GlobalPropertySetup(ConfigModel config)
+        private void GlobalPropertySetup(IBotConfig botConfig)
         {
             ConfigProperties.Client = _client;
-            ConfigProperties.BotConfig = config;
-            ConfigProperties.LogLevel = (LogLvl) config.LogLevelNumber;
-            ConfigProperties.TopGgApi = new AuthDiscordBotListApi(538910393918160916, config.TopGgApiKey);
+            ConfigProperties.BotConfig = botConfig;
+            ConfigProperties.LogLevel = (LogLvl) botConfig.LogLevelNumber;
+            ConfigProperties.TopGgApi = new AuthDiscordBotListApi(538910393918160916, botConfig.TopGgApiKey);
         }
 
         private async Task TestDatabaseConnection()

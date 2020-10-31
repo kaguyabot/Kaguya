@@ -1,3 +1,7 @@
+### Version 2.17
+- Kaguya will now read from a configuration file if program arguments are not being used on launch.
+- Refactored ConfigModel to IBotConfig
+
 ### Version 2.16.2
 - Updated total shards to 5.
 - Changes needed for Windows -> Linux migration.
