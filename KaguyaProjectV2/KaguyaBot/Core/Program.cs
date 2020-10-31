@@ -68,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                                                                            .ConfigureWebHostDefaults(webBuilder =>
                                                                            {
                                                                                webBuilder.UseStartup<Startup>();
-                                                                               webBuilder.UseUrls($"http://+:{_config.TopGgWebhookPort}");
+                                                                               webBuilder.UseUrls($"http://+:{_botConfig.TopGgWebhookPort}");
                                                                                webBuilder.UseKestrel();
                                                                            });
 #endif
