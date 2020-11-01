@@ -37,12 +37,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private LavaNode _lavaNode;
         private TwitchAPI _api;
         private static IBotConfig _botConfig;
-        private static KaguyaApiConfig _apiConfig;
 
         private static async Task Main(string[] args)
         {
             _botConfig = await Config.GetOrCreateConfigAsync(args);
-            _apiConfig = new KaguyaApiConfig(_botConfig, new KaguyaApiCredentials(_botConfig));
             
             /*
              * This portion requires that appsettings.json is properly configured.

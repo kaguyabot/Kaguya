@@ -3,36 +3,29 @@ using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 
 namespace KaguyaProjectV2.KaguyaApi
 {
-    public sealed class KaguyaApiConfig : DbConfig
+    public sealed class KaguyaApiConfig : IDbConfig
     {
         public KaguyaApiConfig(IBotConfig botConfig, KaguyaApiCredentials credentials)
         {
             string[] dbSplits = botConfig.MySqlServer.Split(':');
-            this.ServerIp = dbSplits[0];
-            this.Port = ushort.Parse(dbSplits[1]);
-            this.SchemaName = botConfig.MySqlDatabase;
-            this.Username = botConfig.MySqlUsername;
-            this.Password = botConfig.MySqlPassword;
-            this.Credentials = credentials;
+            ServerIp = dbSplits[0];
+            Port = ushort.Parse(dbSplits[1]);
+            SchemaName = botConfig.MySqlDatabase;
+            Username = botConfig.MySqlUsername;
+            Password = botConfig.MySqlPassword;
+            Credentials = credentials;
+            CharSet = "utf8mb4";
         }
 
-        public KaguyaApiConfig()
-        {
-            this.Credentials = new KaguyaApiCredentials();
-        }
-        
-        public override string ServerIp { get; }
-        public override ushort Port { get; }
-        public override string SchemaName { get; }
-        public override string Username { get; }
-        public override string Password { get; }
-        public new string CharSet => base.CharSet;
-        
+        public KaguyaApiConfig() { Credentials = new KaguyaApiCredentials(); }
+
+        public string ServerIp { get; }
+        public ushort Port { get; }
+        public string SchemaName { get; }
+        public string Username { get; }
+        public string Password { get; }
+        public string CharSet { get; }
         public KaguyaApiCredentials Credentials { get; }
-
-        public void CreateAppsettingsFile()
-        {
-            
-        }
+        public void CreateAppsettingsFile() { }
     }
 }

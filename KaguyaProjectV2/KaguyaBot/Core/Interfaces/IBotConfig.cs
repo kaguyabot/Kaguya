@@ -2,20 +2,20 @@
 {
     public interface IBotConfig
     {
-        public string Token { get; set; }
-        public ulong BotOwnerId { get; set; }
-        public int LogLevelNumber { get; set; }
-        public string DefaultPrefix { get; set; }
-        public string OsuApiKey { get; set; }
-        public string TopGgApiKey { get; set; }
-        public string MySqlUsername { get; set; }
-        public string MySqlPassword { get; set; }
-        public string MySqlServer { get; set; }
-        public string MySqlDatabase { get; set; }
-        public string TwitchClientId { get; set; }
-        public string TwitchAuthToken { get; set; }
-        public string DanbooruUsername { get; set; }
-        public string DanbooruApiKey { get; set; }
-        public int TopGgWebhookPort { get; set; }
+        public string Token { get; }
+        public ulong BotOwnerId { get; }
+        public int LogLevelNumber { get; }
+        public string DefaultPrefix { get; }
+        public string OsuApiKey { get; }
+        public string TopGgApiKey { get; }
+        public string MySqlUsername { get; }
+        public string MySqlPassword { get; }
+        public string MySqlServer { get; }
+        public string MySqlDatabase { get; }
+        public string TwitchClientId { get; }
+        public string TwitchAuthToken { get; }
+        public string DanbooruUsername { get; }
+        public string DanbooruApiKey { get; }
+        public int TopGgWebhookPort { get; }
     }
 }

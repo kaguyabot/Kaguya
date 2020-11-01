@@ -13,10 +13,10 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Context
         public bool IsGlobal => false;
     }
 
-    public class KaguyaSettings : ILinqToDBSettings
+    public class KaguyaDbSettings : ILinqToDBSettings
     {
         private readonly KaguyaApiConfig _apiConfig;
-        public KaguyaSettings(IOptions<KaguyaApiConfig> apiConfig) { _apiConfig = apiConfig.Value; }
+        public KaguyaDbSettings(IOptions<KaguyaApiConfig> apiConfig) { _apiConfig = apiConfig.Value; }
         public IEnumerable<IDataProviderSettings> DataProviders => Enumerable.Empty<IDataProviderSettings>();
         public string DefaultConfiguration => "KaguyaContext";
         public string DefaultDataProvider => "MySQL";
