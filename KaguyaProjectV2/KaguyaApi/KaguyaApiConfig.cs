@@ -5,17 +5,6 @@ namespace KaguyaProjectV2.KaguyaApi
 {
     public sealed class KaguyaApiConfig : DbConfig
     {
-        public override string ServerIp { get; }
-        public override ushort Port { get; }
-        public override string SchemaName { get; }
-        public override string Username { get; }
-        public override string Password { get; }
-        public new string CharSet => base.CharSet;
-        
-        public KaguyaApiCredentials Credentials { get; }
-        
-        // todo: public void CreateAppsettings.json() {}
-
         public KaguyaApiConfig(IBotConfig botConfig, KaguyaApiCredentials credentials)
         {
             string[] dbSplits = botConfig.MySqlServer.Split(':');
@@ -30,6 +19,20 @@ namespace KaguyaProjectV2.KaguyaApi
         public KaguyaApiConfig()
         {
             this.Credentials = new KaguyaApiCredentials();
+        }
+        
+        public override string ServerIp { get; }
+        public override ushort Port { get; }
+        public override string SchemaName { get; }
+        public override string Username { get; }
+        public override string Password { get; }
+        public new string CharSet => base.CharSet;
+        
+        public KaguyaApiCredentials Credentials { get; }
+
+        public void CreateAppsettingsFile()
+        {
+            
         }
     }
 }

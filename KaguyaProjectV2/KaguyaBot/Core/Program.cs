@@ -42,8 +42,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private static async Task Main(string[] args)
         {
             _botConfig = await Config.GetOrCreateConfigAsync(args);
-            
-            
+            _apiConfig = new KaguyaApiConfig(_botConfig, new KaguyaApiCredentials(_botConfig));
             
             /*
              * This portion requires that appsettings.json is properly configured.
@@ -52,9 +51,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
              * kaguya database. We don't need this during a debug session.
              */
             
+            Task task1 = CreateHostBuilder(args).Build().RunAsync();
             Task task2 = new Program().MainAsync(args);
 #if !DEBUG
-            Task task1 = CreateHostBuilder(args).Build().RunAsync();
             Task.WaitAll(task1, task2);
 #else
             Task.WaitAll(task2);
