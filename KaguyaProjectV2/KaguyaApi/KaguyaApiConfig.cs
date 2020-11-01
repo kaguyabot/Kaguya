@@ -1,4 +1,6 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using System;
+using Humanizer;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 
 namespace KaguyaProjectV2.KaguyaApi
 {
@@ -7,9 +9,13 @@ namespace KaguyaProjectV2.KaguyaApi
         public KaguyaApiConfig(IBotConfig botConfig, KaguyaApiCredentials credentials)
         {
             string[] dbSplits = botConfig.MySqlServer.Split(':');
+            Console.WriteLine(botConfig.MySqlServer);
+            Console.WriteLine(dbSplits.Humanize(""));
             ServerIp = dbSplits[0];
+            Console.WriteLine(ServerIp);
             Port = ushort.Parse(dbSplits[1]);
-            SchemaName = botConfig.MySqlDatabase;
+            Console.WriteLine(Port);
+            SchemaName = botConfig.MySqlSchema;
             Username = botConfig.MySqlUsername;
             Password = botConfig.MySqlPassword;
             Credentials = credentials;

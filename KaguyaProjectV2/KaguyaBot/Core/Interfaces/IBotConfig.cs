@@ -11,7 +11,7 @@
         public string MySqlUsername { get; }
         public string MySqlPassword { get; }
         public string MySqlServer { get; }
-        public string MySqlDatabase { get; }
+        public string MySqlSchema { get; }
         public string TwitchClientId { get; }
         public string TwitchAuthToken { get; }
         public string DanbooruUsername { get; }

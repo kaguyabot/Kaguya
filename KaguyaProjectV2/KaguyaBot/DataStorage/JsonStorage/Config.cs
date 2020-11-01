@@ -86,7 +86,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 MySqlUsername = args[6],
                 MySqlPassword = args[7],
                 MySqlServer = args[8],
-                MySqlDatabase = args[9],
+                MySqlSchema = args[9],
                 TwitchClientId = args[10],
                 TwitchAuthToken = args[11],
                 DanbooruUsername = args[12],
@@ -157,7 +157,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         public string MySqlUsername { get; set; }
         public string MySqlPassword { get; set; }
         public string MySqlServer { get; set; }
-        public string MySqlDatabase { get; set; }
+        public string MySqlSchema { get; set; }
         public string TwitchClientId { get; set; }
         public string TwitchAuthToken { get; set; }
         public string DanbooruUsername { get; set; }
