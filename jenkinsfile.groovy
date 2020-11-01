@@ -1,3 +1,7 @@
+ def buildNumber = env.BUILD_NUMBER as int
+ if (buildNumber > 1) milestone(buildNumber - 1)
+ milestone(buildNumber)
+
 pipeline {
  agent any
  stages {
@@ -13,11 +17,6 @@ pipeline {
     }
    }
   }
-//   stage('Write AppSettings File (API)'){
-//       steps{
-//           sh "cp /Y C:\\Users\\admin\\Desktop\\KaguyaCredentials\\appsettings.json \"${env.WORKSPACE}\\KaguyaProjectV2\\appsettings.json\""
-//       }
-//   }
   stage('Clean') {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2"){
