@@ -4,11 +4,14 @@ using Discord;
 using Discord.Net;
 using Discord.WebSocket;
 using DiscordBotsList.Api;
+using KaguyaProjectV2.KaguyaApi;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
@@ -18,22 +21,22 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using Microsoft.AspNetCore.Hosting; // DO NOT REMOVE
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting; // DO NOT REMOVE
+using Microsoft.Extensions.Logging; // DO NOT REMOVE
 using OsuSharp;
 using TwitchLib.Api;
 using Victoria;
-
-// DO NOT REMOVE
-// DO NOT REMOVE
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
     internal class Program
     {
+        private static IBotConfig _botConfig;
+        private TwitchAPI _api;
         private DiscordShardedClient _client;
         private LavaNode _lavaNode;
-        private TwitchAPI _api;
-        private static IBotConfig _botConfig;
 
         private static async Task Main(string[] args)
         {
@@ -209,7 +212,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Kaguya Premium expiration handler initialized", LogLvl.INFO);
             await RateLimitService.Initialize();
             await ConsoleLogger.LogAsync("Ratelimit service initialized", LogLvl.INFO);
-            
+
             await StatsUpdater.Initialize();
             await ConsoleLogger.LogAsync("Top.gg stats updater initialized", LogLvl.INFO);
             await KaguyaStatsLogger.Initialize();
