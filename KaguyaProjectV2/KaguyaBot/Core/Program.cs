@@ -4,14 +4,11 @@ using Discord;
 using Discord.Net;
 using Discord.WebSocket;
 using DiscordBotsList.Api;
-using KaguyaProjectV2.KaguyaApi;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium; // DO NOT REMOVE
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;         // DO NOT REMOVE
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
@@ -21,13 +18,13 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using OsuSharp;
 using TwitchLib.Api;
 using Victoria;
+
+// DO NOT REMOVE
+// DO NOT REMOVE
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
@@ -41,17 +38,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         private static async Task Main(string[] args)
         {
             _botConfig = await Config.GetOrCreateConfigAsync(args);
-            
+
             /*
              * This portion requires that appsettings.json is properly configured.
              * appsettings.json is database configuration information, which for task1
              * is only necessary for posting Top.GG webhook notifications to the
              * kaguya database. We don't need this during a debug session.
              */
-            
-            Task task1 = CreateHostBuilder(args).Build().RunAsync();
+
             Task task2 = new Program().MainAsync(args);
 #if !DEBUG
+            Task task1 = CreateHostBuilder(args).Build().RunAsync();
             Task.WaitAll(task1, task2);
 #else
             Task.WaitAll(task2);
@@ -145,8 +142,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 }
                 catch (HttpException e)
                 {
-                    await ConsoleLogger.LogAsync($"Error when logging into Discord:\n" +
-                                                 $"-Have you passed in the correct application arguments?\n" +
+                    await ConsoleLogger.LogAsync("Error when logging into Discord:\n" +
+                                                 "-Have you passed in the correct application arguments?\n" +
                                                  $"-Is your token correct? Exception: {e.Message}", LogLvl.ERROR);
 
                     Console.ReadLine();
@@ -180,8 +177,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             }
             catch (Exception e)
             {
-                await ConsoleLogger.LogAsync($"Failed to establish database connection. " +
-                                             $"Have you properly configured your config file? " +
+                await ConsoleLogger.LogAsync("Failed to establish database connection. " +
+                                             "Have you properly configured your config file? " +
                                              $"Exception: {e.Message}", LogLvl.ERROR);
             }
         }

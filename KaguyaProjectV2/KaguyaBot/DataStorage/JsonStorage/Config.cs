@@ -1,12 +1,12 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using Newtonsoft.Json;
 
 #region This file will load all Config file data into memory for the bot to use. This file contains very important credentials.
 #endregion
@@ -15,11 +15,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 {
     public class Config
     {
-        private static readonly string _resourcesPath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\";
         private const int CORRECT_ARG_COUNT = 15;
+        private static readonly string _resourcesPath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\";
 
         /// <summary>
-        /// Retreives a populated <see cref="BotConfig"/> and also re-populates any necessary data from the Resources folder.
+        ///     Retreives a populated <see cref="BotConfig" /> and also re-populates any necessary data from the Resources folder.
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
@@ -100,7 +100,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 var modelToSave = JsonConvert.DeserializeObject<BotConfig>(await CreateConfigAsync(configFilePath, model));
                 await File.WriteAllTextAsync(configFilePath, JsonConvert.SerializeObject(modelToSave, Formatting.Indented));
 
-                await ConsoleLogger.LogAsync($"Wrote new config file.", LogLvl.INFO);
+                await ConsoleLogger.LogAsync("Wrote new config file.", LogLvl.INFO);
             }
 
             return model;
@@ -133,8 +133,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
     }
 
     /// <summary>
-    /// LogLevels arranged in order of importance (least to greatest importance): Trace, Debug, Info, Warn, Error.
-    /// Info should be used for commands and other general information.
+    ///     LogLevels arranged in order of importance (least to greatest importance): Trace, Debug, Info, Warn, Error.
+    ///     Info should be used for commands and other general information.
     /// </summary>
     public enum LogLvl
     {
@@ -165,4 +165,5 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         public int TopGgWebhookPort { get; set; }
     }
 #endregion
+
 }

@@ -1,5 +1,4 @@
-﻿using KaguyaProjectV2.KaguyaApi.Database;
-using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 
 namespace KaguyaProjectV2.KaguyaApi
 {
@@ -18,14 +17,13 @@ namespace KaguyaProjectV2.KaguyaApi
         }
 
         public KaguyaApiConfig() { Credentials = new KaguyaApiCredentials(); }
-
+        public KaguyaApiCredentials Credentials { get; }
         public string ServerIp { get; }
         public ushort Port { get; }
         public string SchemaName { get; }
         public string Username { get; }
         public string Password { get; }
         public string CharSet { get; }
-        public KaguyaApiCredentials Credentials { get; }
         public void CreateAppsettingsFile() { }
     }
 }

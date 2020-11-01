@@ -15,12 +15,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
         private static readonly string _logFileName = $"KaguyaLog_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
 
         /// <summary>
-        /// Logs a message to the console and the log file.
+        ///     Logs a message to the console and the log file.
         /// </summary>
-        /// <param name="message">The <see cref="string"/> to display inside of the console.</param>
-        /// <param name="logLevel">The <see cref="LogLvl"/> that determines this log's severity.</param>
-        /// <param name="colorOverride">Whether to override the console colors.
-        /// These are normally automatically determined by the provided <see cref="logLevel"/></param>
+        /// <param name="message">The <see cref="string" /> to display inside of the console.</param>
+        /// <param name="logLevel">The <see cref="LogLvl" /> that determines this log's severity.</param>
+        /// <param name="colorOverride">
+        ///     Whether to override the console colors.
+        ///     These are normally automatically determined by the provided <see cref="logLevel" />
+        /// </param>
         /// <param name="foregroundColor">Assuming we override the colors, this will alter the color of the text shown in the console.</param>
         /// <param name="displaySeverity">Whether to display the date and time in the console.</param>
         /// <param name="showDate">Whether to display the date and time in the console.</param>
@@ -42,9 +44,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
         }
 
         /// <summary>
-        /// Logs a Discord command to the console. This log message is special in that the format is completely different from other log messages.
+        ///     Logs a Discord command to the console. This log message is special in that the format is completely different from other log messages.
         /// </summary>
-        /// <param name="context">The <see cref="ICommandContext"/> that we will use to gather command data from.</param>
+        /// <param name="context">The <see cref="ICommandContext" /> that we will use to gather command data from.</param>
         /// <param name="logLevel">The severity of this log message.</param>
         /// <returns></returns>
         public static async Task LogAsync(ICommandContext context, LogLvl logLevel = LogLvl.INFO)
@@ -61,8 +63,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
         }
 
         /// <summary>
-        /// Asynchronously logs a Discord <see cref="CommandService"/> log message to the console and log file.
-        /// This is generally used for capturing thrown command exceptions.
+        ///     Asynchronously logs a Discord <see cref="CommandService" /> log message to the console and log file.
+        ///     This is generally used for capturing thrown command exceptions.
         /// </summary>
         /// <param name="logMsg"></param>
         /// <param name="cmdException"></param>
@@ -176,7 +178,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
                 color = GetConsoleForegroundColor(logLevel);
             else
                 color = foregroundColor;
-            
+
             SetConsoleForegroundColor(color);
             Console.WriteLine(contents);
 
