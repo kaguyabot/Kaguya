@@ -3,7 +3,7 @@ pipeline {
  stages {
   stage('Checkout') {
    steps {
-     git branch: 'master', url: 'https://github.com/stageosu/Kaguya.git'
+     git branch: 'development', url: 'https://github.com/stageosu/Kaguya.git'
    }
   }
   stage('Restore Packages') {
