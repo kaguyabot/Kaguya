@@ -1,6 +1,8 @@
-### Version 2.17
+### Version 3.0
 - Kaguya will now read from a configuration file if program arguments are not being used on launch.
 - Refactored ConfigModel to IBotConfig
+- Kaguya now has a working pipeline on a Linux server.
+- Fixed a bug where some commands would trigger an endless "Kaguya is typing..." state.
 
 ### Version 2.16.2
 - Updated total shards to 5.

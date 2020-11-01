@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
             if (auth != _cfg.Value.TopGgAuthorization)
                 return;
 
-            var dbWebhook = new DatabaseUpvoteWebhook()
+            var dbWebhook = new DatabaseUpvoteWebhook
             {
                 BotId = baseHook.BotId.AsUlong(),
                 UserId = baseHook.UserId.AsUlong(),
