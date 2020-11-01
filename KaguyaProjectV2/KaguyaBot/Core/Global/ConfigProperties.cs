@@ -13,6 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
 {
     public static class ConfigProperties
     {
+        // todo: Remove public setters...this is dangerous.
         public static DiscordShardedClient Client { get; set; }
         public static LavaNode LavaNode { get; set; }
         public static AuthDiscordBotListApi TopGgApi { get; set; }
