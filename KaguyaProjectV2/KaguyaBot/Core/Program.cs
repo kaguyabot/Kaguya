@@ -154,7 +154,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 catch (Exception e)
                 {
                     await ConsoleLogger.LogAsync("Something really important broke!\n" +
-                                                 $"Exception: {e.Message}", LogLvl.ERROR);
+                                                 $"Exception: {e.Message}\n" +
+                                                 $"More information: {e}", LogLvl.ERROR);
                 }
             }
         }
