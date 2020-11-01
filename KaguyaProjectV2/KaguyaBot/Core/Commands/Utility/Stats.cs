@@ -27,8 +27,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         [Remarks("")]
         public async Task Command()
         {
-            IDisposable typingState = Context.Channel.EnterTypingState();
-            
             var curProcess = Process.GetCurrentProcess();
 
             DiscordShardedClient client = Client;
@@ -131,8 +129,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
 
             embed.SetColor(EmbedColor.GOLD);
             await ReplyAsync(embed: embed.Build());
-            
-            typingState.Dispose();
         }
     }
 }

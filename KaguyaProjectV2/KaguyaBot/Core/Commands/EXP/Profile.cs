@@ -20,8 +20,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command(ulong? id = null)
         {
-            IDisposable typingState = Context.Channel.EnterTypingState();
-
             id ??= Context.User.Id;
 
             User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
@@ -44,7 +42,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             await Context.Channel.SendFileAsync(image, $"Kaguya_Profile_" +
                                                        $"{Context.User.Username}_{DateTime.Now.Month}_" +
                                                        $"{DateTime.Now.Day}_{DateTime.Now.Year}.png");
-            typingState.Dispose();
         }
     }
 }
