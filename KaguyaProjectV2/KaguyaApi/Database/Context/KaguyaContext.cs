@@ -15,8 +15,8 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Context
 
     public class KaguyaSettings : ILinqToDBSettings
     {
-        private readonly DbConfig _dbConfig;
-        public KaguyaSettings(IOptions<DbConfig> dbConfig) { _dbConfig = dbConfig.Value; }
+        private readonly KaguyaApiConfig _apiConfig;
+        public KaguyaSettings(IOptions<KaguyaApiConfig> apiConfig) { _apiConfig = apiConfig.Value; }
         public IEnumerable<IDataProviderSettings> DataProviders => Enumerable.Empty<IDataProviderSettings>();
         public string DefaultConfiguration => "KaguyaContext";
         public string DefaultDataProvider => "MySQL";
@@ -29,8 +29,9 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Context
                 {
                     Name = "KaguyaContext",
                     ProviderName = "MySql.Data.MySqlClient",
-                    ConnectionString = $"Server={_dbConfig.ServerIp};Port={_dbConfig.Port};" +
-                                       $"Database={_dbConfig.SchemaName};Uid={_dbConfig.Username};Pwd={_dbConfig.Password};charset={_dbConfig.CharSet};"
+                    ConnectionString = $"Server={_apiConfig.ServerIp};Port={_apiConfig.Port};" +
+                                       $"Database={_apiConfig.SchemaName};Uid={_apiConfig.Username};" +
+                                       $"Pwd={_apiConfig.Password};charset={_apiConfig.CharSet};"
                 };
             }
         }

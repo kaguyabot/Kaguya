@@ -163,8 +163,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         }
 
         public async Task SetupKaguya() => await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========",
-            LogLvl.INFO, true,
-            ConsoleColor.Cyan, ConsoleColor.Black, false, false);
+            LogLvl.INFO, ConsoleColor.Cyan, false, false);
 
         private void GlobalPropertySetup(IBotConfig botConfig)
         {

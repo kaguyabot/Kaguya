@@ -1,8 +1,8 @@
 ﻿namespace KaguyaProjectV2.KaguyaApi
 {
-    public class KaguyaConfig
+    public class KaguyaApiCredentials
     {
         public string TopGgAuthorization { get; set; }
-        public KaguyaConfig() { }
+        public KaguyaApiCredentials() { }
     }
 }
