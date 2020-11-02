@@ -7,7 +7,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
 {
     public abstract class ImageBase
     {
-        private const string LINUX_FONT_PATH = @".fonts/framd.ttf";
+        private static readonly string _linuxFontPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}.fonts/framd.ttf";
         private static readonly string _fontPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Fonts)}/framd.ttf";
 #if DEBUG
         public const string PROFILE_TEMPLATE_PATH = @"C:\Users\stage\Desktop\Artwork\KaguyaArtworkAssets\Discord-Chat-Images\ProfileSmall.png";
@@ -34,9 +34,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
             {
                 fontPath = _fontPath;
             }
-            else if (File.Exists(LINUX_FONT_PATH))
+            else if (File.Exists(_linuxFontPath))
             {
-                fontPath = LINUX_FONT_PATH;
+                fontPath = _linuxFontPath;
             }
             else
             {
