@@ -10,6 +10,7 @@ using Humanizer;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Owner_Only;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -44,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices
 
                 foreach (OwnerGiveaway giveaway in _activeGiveaways)
                 {
-                    SocketChannel guildChannel = KaguyaBase.Client.GetChannel(giveaway.ChannelId);
+                    SocketChannel guildChannel = ConfigProperties.Client.GetChannel(giveaway.ChannelId);
                     if (guildChannel == null)
                     {
                         await ConsoleLogger.LogAsync("Failed to find channel for active reaction role " +
