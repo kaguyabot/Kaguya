@@ -12,7 +12,9 @@ pipeline {
   }
   stage('Launch Lavalink') {
     steps {
-      sh "java -jar Lavalink.jar"
+      dir("${env.WORKSPACE}/KaguyaProjectV2/LavalinkServer"){
+        sh "java -jar Lavalink.jar"
+      }
     }
   }
   stage('Restore Packages') {
@@ -26,9 +28,9 @@ pipeline {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2"){
         sh "dotnet clean -c Release"
-        }
       }
     }
+  }
   stage('Build') {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2"){
