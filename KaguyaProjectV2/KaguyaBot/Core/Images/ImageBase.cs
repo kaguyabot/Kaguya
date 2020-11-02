@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
             else
             {
                 throw new KaguyaSupportException("The font needed for profile " +
-                                                 "image generation could not be found.");
+                                                 $"image generation could not be found. Path: '{_fontPath}'");
             }
 
             return fontPath;
