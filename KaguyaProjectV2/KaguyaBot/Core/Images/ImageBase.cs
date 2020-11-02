@@ -19,6 +19,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
 
         public static Font Font(float fontSize)
         {
+            string fontPath = GetFontPath();
+
+            var fontCollection = new FontCollection();
+            FontFamily frankGothicFont = fontCollection.Install(fontPath);
+
+            return new Font(frankGothicFont, fontSize);
+        }
+
+        public static string GetFontPath()
+        {
             string fontPath;
             if (File.Exists(_fontPath))
             {
@@ -33,11 +43,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
                 throw new KaguyaSupportException("The font needed for profile " +
                                                  "image generation could not be found.");
             }
-            
-            var fontCollection = new FontCollection();
-            FontFamily frankGothicFont = fontCollection.Install(fontPath);
 
-            return new Font(frankGothicFont, fontSize);
+            return fontPath;
         }
 
         /// <summary>
