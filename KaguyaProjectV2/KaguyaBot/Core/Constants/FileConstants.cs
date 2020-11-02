@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Constants
 {
@@ -18,20 +19,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Constants
         {
             get
             {
-                var fSb = new StringBuilder();
-                DirectoryInfo parent = Directory.GetParent(_workingDirectory);
-                DirectoryInfo[] subDirs = parent.GetDirectories();
-                
-                // We start at the bottom, iterating through to the top.
-                for (int dIdx = subDirs.Length - 1; dIdx >= 0; dIdx--)
-                {
-                    string dir = subDirs[dIdx].FullName;
-
-                    if (dir.EndsWith("KaguyaProjectV2"))
-                        return dir;
-                }
-
-                return fSb.ToString();
+                var rg = new Regex(@".*KaguyaProjectV2");
+                if(!rg.IsMatch(_workingDirectory))
+                    throw new Exception("An invalid working directory exists. Does not contain " +
+                                        "required: 'KaguyaProjectV2' folder. Directory in question: " +
+                                        $"'{_workingDirectory}'");
+                return rg.Match(_workingDirectory).Value;
             }
         }
 
