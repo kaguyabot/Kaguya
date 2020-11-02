@@ -1,18 +1,18 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Constants
 {
     /// <summary>
-    /// A class containing cross-platform file pathing utilized by the project.
+    ///     A class containing cross-platform file pathing utilized by the project.
     /// </summary>
     public static class FileConstants
     {
-        private static string _workingDirectory = Environment.CurrentDirectory;
+        private static readonly string _workingDirectory = Environment.CurrentDirectory;
+
         /// <summary>
-        /// The root directory of this project. The "KaguyaProjectV2" directory.
+        ///     The root directory of this project. The "KaguyaProjectV2" directory.
         /// </summary>
         /// <returns></returns>
         private static string RootDir
@@ -20,10 +20,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Constants
             get
             {
                 var rg = new Regex(@".*KaguyaProjectV2");
-                if(!rg.IsMatch(_workingDirectory))
+                if (!rg.IsMatch(_workingDirectory))
+                {
                     throw new Exception("An invalid working directory exists. Does not contain " +
                                         "required: 'KaguyaProjectV2' folder. Directory in question: " +
                                         $"'{_workingDirectory}'");
+                }
+
                 return rg.Match(_workingDirectory).Value;
             }
         }
