@@ -13,7 +13,7 @@ pipeline {
   stage('Launch Lavalink') {
     steps {
       dir("${env.WORKSPACE}/KaguyaProjectV2/LavalinkServer"){
-        sh "java -jar Lavalink.jar"
+        sh "/usr/lib/jvm/java-13-openjdk-amd64/bin/java -jar Lavalink.jar"
       }
     }
   }
