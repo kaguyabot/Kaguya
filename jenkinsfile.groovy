@@ -10,13 +10,6 @@ pipeline {
      git branch: 'development', url: 'https://github.com/stageosu/Kaguya.git'
    }
   }
-  stage('Launch Lavalink') {
-    steps {
-      dir("${env.WORKSPACE}/KaguyaProjectV2/LavalinkServer"){
-        sh "/usr/lib/jvm/java-13-openjdk-amd64/bin/java -jar Lavalink.jar"
-      }
-    }
-  }
   stage('Restore Packages') {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2"){
