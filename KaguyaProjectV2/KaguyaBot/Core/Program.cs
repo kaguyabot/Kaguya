@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Net;
@@ -7,6 +9,7 @@ using DiscordBotsList.Api;
 using KaguyaProjectV2.KaguyaApi;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
+using KaguyaProjectV2.KaguyaBot.Core.Constants;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
@@ -21,13 +24,15 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.OwnerGiveawayServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using Microsoft.AspNetCore.Hosting; // DO NOT REMOVE
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting; // DO NOT REMOVE
-using Microsoft.Extensions.Logging; // DO NOT REMOVE
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using OsuSharp;
 using TwitchLib.Api;
 using Victoria;
+
+// DO NOT ORGANIZE IMPORTS IN DEBUG MODE! YOU WILL BREAK RELEASE MODE!
 
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
@@ -160,8 +165,40 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             }
         }
 
-        public async Task SetupKaguya() => await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========",
-            LogLvl.INFO, ConsoleColor.Cyan, false, false);
+        public async Task SetupKaguya()
+        {
+            await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========",
+                LogLvl.INFO, ConsoleColor.Cyan, false, false);
+
+            await CopyDependencies();
+        }
+
+        private async Task CopyDependencies()
+        {
+            await ConsoleLogger.LogAsync("Beginning copy of external dependencies...", LogLvl.INFO);
+            
+            Assembly asm = Assembly.GetExecutingAssembly();
+            
+            string rootDir = FileConstants.RootDir;
+            string execDir = Path.GetDirectoryName(asm.Location);
+            var dirInfo = new DirectoryInfo(Path.Combine(rootDir, "ExternalDependencies"));
+
+            foreach (FileInfo file in dirInfo.GetFiles())
+            {
+                string cmbPath = Path.Combine(execDir, file.Name);
+
+                if (File.Exists(cmbPath))
+                {
+                    // Can't copy a file if it already exists. So, delete it.
+                    File.Delete(cmbPath);
+                }
+                
+                File.Copy(file.FullName, cmbPath);
+                await ConsoleLogger.LogAsync($"Dependency {file.Name} copied to {cmbPath}", LogLvl.DEBUG);
+            }
+
+            await ConsoleLogger.LogAsync("Dependencies successfully copied.", LogLvl.INFO);
+        }
 
         private void GlobalPropertySetup(IBotConfig botConfig)
         {

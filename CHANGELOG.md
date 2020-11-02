@@ -3,6 +3,8 @@
 - Refactored ConfigModel to IBotConfig
 - Kaguya now has a working pipeline on a Linux server.
 - Fixed a bug where some commands would trigger an endless "Kaguya is typing..." state.
+- External dependencies are copied in the Main() method, no longer required by the pipeline.
+- osu dependency (Oppai.dll) updated to accurately reflect performance values of scores.
 
 ### Version 2.16.2
 - Updated total shards to 5.

@@ -31,14 +31,6 @@ pipeline {
     }
    }
   }
-  stage('Copy External Dependencies'){
-      steps{
-          dir("${env.WORKSPACE}/KaguyaProjectV2/ExternalDependencies"){
-              sh "cp -rf Discord.Addons.Interactive.dll ${env.WORKSPACE}/KaguyaProjectV2/bin/Release/netcoreapp3.1/"
-              sh "cp -rf oppai.dll ${env.WORKSPACE}/KaguyaProjectV2/bin/Release/netcoreapp3.1/"
-          }
-      }
-  }
   stage('Start Bot + API') {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2/bin/Release/netcoreapp3.1"){

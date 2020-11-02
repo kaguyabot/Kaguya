@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Constants
 {
@@ -15,16 +17,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Constants
         ///     The root directory of this project. The "KaguyaProjectV2" directory.
         /// </summary>
         /// <returns></returns>
-        private static string RootDir
+        public static string RootDir
         {
             get
             {
                 var rg = new Regex(@".*KaguyaProjectV2");
                 if (!rg.IsMatch(_workingDirectory))
                 {
-                    throw new Exception("An invalid working directory exists. Does not contain " +
+                    ConsoleLogger.LogAsync("An invalid working directory exists. Does not contain " +
                                         "required: 'KaguyaProjectV2' folder. Directory in question: " +
-                                        $"'{_workingDirectory}'");
+                                        $"'{_workingDirectory}'", LogLvl.WARN);
+
+                    return "";
                 }
 
                 return rg.Match(_workingDirectory).Value;
