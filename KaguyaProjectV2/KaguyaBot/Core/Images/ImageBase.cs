@@ -1,26 +1,19 @@
 ﻿using SixLabors.Fonts;
-using System;
 using System.IO;
+using KaguyaProjectV2.KaguyaBot.Core.Constants;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images
 {
     public abstract class ImageBase
     {
-        private static readonly string _linuxFontPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}.fonts/framd.ttf";
-        private static readonly string _fontPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Fonts)}/framd.ttf";
-#if DEBUG
-        public const string PROFILE_TEMPLATE_PATH = @"C:\Users\stage\Desktop\Artwork\KaguyaArtworkAssets\Discord-Chat-Images\ProfileSmall.png";
-        public const string XP_TEMPLATE_PATH = @"C:\Users\stage\Desktop\Artwork\KaguyaArtworkAssets\Discord-Chat-Images\XpLevelUpSmall.png";
-#else
-        public const string PROFILE_TEMPLATE_PATH = @"Resources\Images\ProfileSmall.png";
-        public const string XP_TEMPLATE_PATH = @"Resources\Images\XpLevelUpSmall.png";
-#endif
+        private static readonly string _fontPath = Path.Combine(FileConstants.FontsDir, "framd.ttf");
+        protected static readonly string ProfileTemplatePath = Path.Combine(FileConstants.ImagesDir, "ProfileSmall.png");
+        protected static readonly string XpTemplatePath = Path.Combine(FileConstants.ImagesDir, "XpLevelUpSmall.png");
 
         public static Font Font(float fontSize)
         {
             string fontPath = GetFontPath();
-
             var fontCollection = new FontCollection();
             FontFamily frankGothicFont = fontCollection.Install(fontPath);
 
@@ -33,10 +26,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
             if (File.Exists(_fontPath))
             {
                 fontPath = _fontPath;
-            }
-            else if (File.Exists(_linuxFontPath))
-            {
-                fontPath = _linuxFontPath;
             }
             else
             {
