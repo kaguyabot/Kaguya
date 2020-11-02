@@ -1,11 +1,14 @@
 ﻿using SixLabors.Fonts;
 using System;
+using System.IO;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images
 {
     public abstract class ImageBase
     {
-        public static string FontPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Fonts)}/framd.ttf";
+        private const string LINUX_FONT_PATH = @".fonts/framd.ttf";
+        private static readonly string _fontPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Fonts)}/framd.ttf";
 #if DEBUG
         public const string PROFILE_TEMPLATE_PATH = @"C:\Users\stage\Desktop\Artwork\KaguyaArtworkAssets\Discord-Chat-Images\ProfileSmall.png";
         public const string XP_TEMPLATE_PATH = @"C:\Users\stage\Desktop\Artwork\KaguyaArtworkAssets\Discord-Chat-Images\XpLevelUpSmall.png";
@@ -16,8 +19,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
 
         public static Font Font(float fontSize)
         {
+            string fontPath;
+            if (File.Exists(_fontPath))
+            {
+                fontPath = _fontPath;
+            }
+            else if (File.Exists(LINUX_FONT_PATH))
+            {
+                fontPath = LINUX_FONT_PATH;
+            }
+            else
+            {
+                throw new KaguyaSupportException("The font needed for profile " +
+                                                 "image generation could not be found.");
+            }
+            
             var fontCollection = new FontCollection();
-            FontFamily frankGothicFont = fontCollection.Install(FontPath);
+            FontFamily frankGothicFont = fontCollection.Install(fontPath);
 
             return new Font(frankGothicFont, fontSize);
         }
@@ -36,7 +54,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
                 : baseFontSize - (username.Length + charThreshold);
 
             var fontCollection = new FontCollection();
-            FontFamily frankGothicFont = fontCollection.Install(FontPath);
+            FontFamily frankGothicFont = fontCollection.Install(_fontPath);
 
             return new Font(frankGothicFont, fontSize);
         }
