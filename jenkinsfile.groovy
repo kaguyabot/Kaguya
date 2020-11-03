@@ -27,6 +27,9 @@ pipeline {
   stage('Build') {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2"){
+        sh "echo killing dotnet processes..."
+        sh "killall dotnet" // Needed so that the web server dies each shutdown and doesn't leave an open port.
+        sh "echo all dotnet processes have been killed."
         sh "dotnet build -c Release"
     }
    }
