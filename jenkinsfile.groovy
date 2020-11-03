@@ -27,8 +27,8 @@ pipeline {
   stage('Build') {
    steps {
     dir("${env.WORKSPACE}/KaguyaProjectV2"){
-        sh "echo killing any existing dotnet processes..."
-        sh "if pgrep dotnet; then pkill dotnet; fi" // Needed so that the web server dies each shutdown and doesn't leave an open port.
+        sh "echo killing any existing processes listening to port ${TopggWebhookPort}..."
+        sh "kill $(lsof -t -i:${TopggWebhookPort})" // Needed so that the web server dies each shutdown and doesn't leave an open port.
         sh "echo all dotnet processes have been killed."
         sh "dotnet build -c Release"
     }
