@@ -13,7 +13,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Join : KaguyaBase
     {
-        [DisabledCommand]
         [MusicCommand]
         [Command("Join")]
         [Summary("Joins Kaguya into the voice channel you are currently in. This step is optional, and may " +

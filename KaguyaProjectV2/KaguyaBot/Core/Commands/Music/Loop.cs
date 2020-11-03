@@ -19,7 +19,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Loop : KaguyaBase
     {
-        [DisabledCommand]
         [MusicCommand]
         [Command("Loop")]
         [Alias("repeat")]

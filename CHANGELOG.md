@@ -6,6 +6,7 @@
 - External dependencies are copied in the Main() method, no longer required by the pipeline.
 - osu dependency (Oppai.dll) updated to accurately reflect performance values of scores.
 - Better overall cross-platform support (filepathing, to be specific).
+- Music commands are re-enabled
 
 ### Version 2.16.2
 - Updated total shards to 5.

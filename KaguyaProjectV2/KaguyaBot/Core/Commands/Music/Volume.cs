@@ -14,7 +14,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Volume : KaguyaBase
     {
-        [DisabledCommand]
         [MusicCommand]
         [Command("Volume")]
         [Alias("v", "vol")]

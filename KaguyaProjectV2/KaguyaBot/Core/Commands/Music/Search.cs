@@ -27,7 +27,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Search : KaguyaBase
     {
-        [DisabledCommand]
         [MusicCommand]
         [Command("Search")]
         [Summary("Searches YouTube for the provided song and returns a list of up to 7 songs to choose from.")]
