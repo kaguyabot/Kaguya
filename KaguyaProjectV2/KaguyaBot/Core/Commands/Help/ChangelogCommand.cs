@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Constants;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -36,11 +37,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
         [Remarks("\n[-n <num>]\n[-v <version num>]\n[-ls]")]
         public async Task Command(params string[] args)
         {
-#if DEBUG
-            string[] cl = await File.ReadAllLinesAsync("..\\changelog.md");
-#else
-            string[] cl = await File.ReadAllLinesAsync("..\\..\\..\\..\\changelog.md");
-#endif
+            string[] cl = await File.ReadAllLinesAsync(Path.Combine(FileConstants.RootDir, @"..\", "changelog.md"));
             KaguyaEmbedBuilder embed = await GenerateChangelogEmbed(cl, args);
 
             if (embed != null)
