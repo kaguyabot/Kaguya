@@ -12,7 +12,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class TwitchAudio : KaguyaBase
     {
-        [DisabledCommand]
         [PremiumUserCommand]
         [MusicCommand]
         [Command("TwitchAudio")]

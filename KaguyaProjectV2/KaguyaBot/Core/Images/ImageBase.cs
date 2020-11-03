@@ -1,25 +1,39 @@
 ﻿using SixLabors.Fonts;
-using System;
+using System.IO;
+using KaguyaProjectV2.KaguyaBot.Core.Constants;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Images
 {
     public abstract class ImageBase
     {
-        public static string FontPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Fonts)}\framd.ttf";
-#if DEBUG
-        public const string PROFILE_TEMPLATE_PATH = @"C:\Users\stage\Desktop\Artwork\KaguyaArtworkAssets\Discord-Chat-Images\ProfileSmall.png";
-        public const string XP_TEMPLATE_PATH = @"C:\Users\stage\Desktop\Artwork\KaguyaArtworkAssets\Discord-Chat-Images\XpLevelUpSmall.png";
-#else
-        public const string PROFILE_TEMPLATE_PATH = @"Resources\Images\ProfileSmall.png";
-        public const string XP_TEMPLATE_PATH = @"Resources\Images\XpLevelUpSmall.png";
-#endif
+        private static readonly string _fontPath = Path.Combine(FileConstants.FontsDir, "framd.ttf");
+        protected static readonly string ProfileTemplatePath = Path.Combine(FileConstants.ImagesDir, "ProfileSmall.png");
+        protected static readonly string XpTemplatePath = Path.Combine(FileConstants.ImagesDir, "XpLevelUpSmall.png");
 
         public static Font Font(float fontSize)
         {
+            string fontPath = GetFontPath();
             var fontCollection = new FontCollection();
-            FontFamily frankGothicFont = fontCollection.Install(FontPath);
+            FontFamily frankGothicFont = fontCollection.Install(fontPath);
 
             return new Font(frankGothicFont, fontSize);
+        }
+
+        public static string GetFontPath()
+        {
+            string fontPath;
+            if (File.Exists(_fontPath))
+            {
+                fontPath = _fontPath;
+            }
+            else
+            {
+                throw new KaguyaSupportException("The font needed for profile " +
+                                                 $"image generation could not be found. Path: '{_fontPath}'");
+            }
+
+            return fontPath;
         }
 
         /// <summary>
@@ -36,7 +50,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images
                 : baseFontSize - (username.Length + charThreshold);
 
             var fontCollection = new FontCollection();
-            FontFamily frankGothicFont = fontCollection.Install(FontPath);
+            FontFamily frankGothicFont = fontCollection.Install(_fontPath);
 
             return new Font(frankGothicFont, fontSize);
         }

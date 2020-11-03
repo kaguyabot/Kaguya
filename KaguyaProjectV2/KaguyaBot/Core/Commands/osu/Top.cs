@@ -115,7 +115,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                                  $"{beatmap.BeatmapId} ▸ **[{beatmap.Title} " +
                                  $"[{beatmap.Difficulty}]](https://osu.ppy.sh/b/{beatmap.BeatmapId})** " +
                                  $"\n▸ **☆{beatmap.StarRating:N2}** ▸ **{playerBestObject.Accuracy:F}%** " +
-                                 $"for **{pp.Pp:F}pp** " +
+                                 $"for **{pp.Pp:N}pp** " +
                                  $"\n▸ [Combo: {playerBestObject.MaxCombo}x / Max: {beatmap.MaxCombo}]" +
                                  $"\n▸ Play made {(DateTime.Now - playerBestObject.Date.Value).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 3)} ago\n";
             }

@@ -115,7 +115,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
                 badgeStream = new MemoryStream(badgeImg);
             }
 
-            using Image image = Image.Load(XP_TEMPLATE_PATH);
+            using Image image = Image.Load(XpTemplatePath);
             using var canvas = new Image<Rgba32>(image.Width, image.Height);
             using Image profilePicture = Image.Load(pfpStream);
             using Image suppBadge = Image.Load(badgeStream);

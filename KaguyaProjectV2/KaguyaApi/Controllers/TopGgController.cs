@@ -19,11 +19,11 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
     [Route("api/[controller]")]
     public class TopGgController : ControllerBase
     {
-        private readonly IOptions<KaguyaConfig> _cfg;
+        private readonly IOptions<KaguyaApiCredentials> _cfg;
         private readonly KaguyaDb _db;
         private readonly UpvoteNotifier _uvNotifier;
 
-        public TopGgController(IOptions<KaguyaConfig> cfg, KaguyaDb db, UpvoteNotifier uvNotifier)
+        public TopGgController(IOptions<KaguyaApiCredentials> cfg, KaguyaDb db, UpvoteNotifier uvNotifier)
         {
             _cfg = cfg;
             _db = db;
@@ -49,7 +49,7 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
             if (auth != _cfg.Value.TopGgAuthorization)
                 return;
 
-            var dbWebhook = new DatabaseUpvoteWebhook()
+            var dbWebhook = new DatabaseUpvoteWebhook
             {
                 BotId = baseHook.BotId.AsUlong(),
                 UserId = baseHook.UserId.AsUlong(),

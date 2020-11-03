@@ -9,7 +9,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile.Models
 {
     public static class GlobalBarData
     {
-        public static string FontPath = ImageBase.FontPath;
+        public static string FontPath = ImageBase.GetFontPath();
 
         public static TemplateXpBar Bar(User user)
         {

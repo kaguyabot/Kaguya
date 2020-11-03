@@ -1,11 +1,12 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Extensions;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using Newtonsoft.Json;
 
 #region This file will load all Config file data into memory for the bot to use. This file contains very important credentials.
 #endregion
@@ -14,15 +15,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 {
     public class Config
     {
-        private static readonly string _resourcesPath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\";
         private const int CORRECT_ARG_COUNT = 15;
+        private static readonly string _resourcesPath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\";
 
         /// <summary>
-        /// Retreives a populated <see cref="ConfigModel"/> and also re-populates any necessary data from the Resources folder.
+        ///     Retreives a populated <see cref="BotConfig" /> and also re-populates any necessary data from the Resources folder.
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static async Task<ConfigModel> GetOrCreateConfigAsync(string[] args)
+        public static async Task<IBotConfig> GetOrCreateConfigAsync(string[] args)
         {
             string[] directories =
             {
@@ -47,7 +48,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                     byte[] data = await wc.DownloadDataTaskAsync("https://i.imgur.com/Ae2BBiC.png");
                     await File.WriteAllBytesAsync($@"{directories[0]}\ProfileSmall.png", data);
 
-                    await ConsoleLogger.LogAsync("Downloaded and saved ProfileSmall.png image.", LogLvl.INFO);
+                    await ConsoleLogger.LogAsync($@"Missing file ProfileSmall.png downladed and saved to {directories[0]}\ProfileSmall.png.", LogLvl.INFO);
                 }
 
                 // Exp level-up image
@@ -56,20 +57,28 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                     byte[] data = await wc.DownloadDataTaskAsync("https://i.imgur.com/fgNNX8H.png");
                     await File.WriteAllBytesAsync($@"{directories[0]}\XpLevelUpSmall.png", data);
 
-                    await ConsoleLogger.LogAsync("Downloaded and saved XpLevelUpSmall.png image.", LogLvl.INFO);
+                    await ConsoleLogger.LogAsync($@"Missing file XpLevelUpSmall.png downladed and saved to {directories[0]}\XpLevelUpSmall.png.", LogLvl.INFO);
                 }
+            }
+
+            IBotConfig model;
+            if (File.Exists(configFilePath) && args.Length != CORRECT_ARG_COUNT)
+            {
+                model = JsonConvert.DeserializeObject<IBotConfig>(configFilePath);
+
+                return model;
             }
 
             if (args.Length != CORRECT_ARG_COUNT)
             {
                 throw new Exception("The correct amount of arguments was not specified. " +
-                                    $"Expected {CORRECT_ARG_COUNT}, received {args.Length}");
+                                    $"Expected {CORRECT_ARG_COUNT}, received {args.Length}.");
             }
 
-            var model = new ConfigModel
+            model = new BotConfig
             {
                 Token = args[0],
-                BotOwnerId = args[1].AsUlong(),
+                BotOwnerId = args[1].Trim().AsUlong(),
                 LogLevelNumber = args[2].AsInteger(),
                 DefaultPrefix = args[3],
                 OsuApiKey = args[4],
@@ -77,7 +86,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 MySqlUsername = args[6],
                 MySqlPassword = args[7],
                 MySqlServer = args[8],
-                MySqlDatabase = args[9],
+                MySqlSchema = args[9],
                 TwitchClientId = args[10],
                 TwitchAuthToken = args[11],
                 DanbooruUsername = args[12],
@@ -85,20 +94,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 TopGgWebhookPort = args[14].AsInteger()
             };
 
-            if (!File.Exists(configFilePath) || !model.Equals(new ConfigModel()))
+            if (!File.Exists(configFilePath) || !model.Equals(new BotConfig()))
             {
                 //Creates JSON from model.
-                var modelToSave = JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath, model));
+                var modelToSave = JsonConvert.DeserializeObject<BotConfig>(await CreateConfigAsync(configFilePath, model));
                 await File.WriteAllTextAsync(configFilePath, JsonConvert.SerializeObject(modelToSave, Formatting.Indented));
 
-                await ConsoleLogger.LogAsync($"Wrote new config file.", LogLvl.INFO);
-            }
-            else if (args.Length != 14)
-            {
-                //Reads config file.
-                model = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(configFilePath));
-
-                return model ?? JsonConvert.DeserializeObject<ConfigModel>(await CreateConfigAsync(configFilePath));
+                await ConsoleLogger.LogAsync("Wrote new config file.", LogLvl.INFO);
             }
 
             return model;
@@ -117,10 +119,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             }
         }
 
-        private static async Task<string> CreateConfigAsync(string filepath, ConfigModel model = null)
+        private static async Task<string> CreateConfigAsync(string filepath, IBotConfig model = null)
         {
             if (model == null)
-                model = new ConfigModel();
+                model = new BotConfig();
 
             string json = JsonConvert.SerializeObject(model, Formatting.Indented);
             using (StreamWriter writer = File.CreateText(filepath))
@@ -131,8 +133,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
     }
 
     /// <summary>
-    /// LogLevels arranged in order of importance (least to greatest importance): Trace, Debug, Info, Warn, Error.
-    /// Info should be used for commands and other general information.
+    ///     LogLevels arranged in order of importance (least to greatest importance): Trace, Debug, Info, Warn, Error.
+    ///     Info should be used for commands and other general information.
     /// </summary>
     public enum LogLvl
     {
@@ -144,7 +146,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
     }
 
 #region Model
-    public class ConfigModel
+    public sealed class BotConfig : IBotConfig
     {
         public string Token { get; set; }
         public ulong BotOwnerId { get; set; }
@@ -155,7 +157,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
         public string MySqlUsername { get; set; }
         public string MySqlPassword { get; set; }
         public string MySqlServer { get; set; }
-        public string MySqlDatabase { get; set; }
+        public string MySqlSchema { get; set; }
         public string TwitchClientId { get; set; }
         public string TwitchAuthToken { get; set; }
         public string DanbooruUsername { get; set; }

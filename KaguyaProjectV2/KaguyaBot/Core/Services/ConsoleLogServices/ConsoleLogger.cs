@@ -15,21 +15,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
         private static readonly string _logFileName = $"KaguyaLog_{DateTime.Now.Month}-{DateTime.Now.Day}-{DateTime.Now.Year}.txt";
 
         /// <summary>
-        /// Logs a message to the console and the log file.
+        ///     Logs a message to the console and the log file.
         /// </summary>
-        /// <param name="message">The <see cref="string"/> to display inside of the console.</param>
-        /// <param name="logLevel">The <see cref="LogLvl"/> that determines this log's severity.</param>
-        /// <param name="colorOverride">Whether to override the console colors.
-        /// These are normally automatically determined by the provided <see cref="logLevel"/></param>
+        /// <param name="message">The <see cref="string" /> to display inside of the console.</param>
+        /// <param name="logLevel">The <see cref="LogLvl" /> that determines this log's severity.</param>
+        /// <param name="colorOverride">
+        ///     Whether to override the console colors.
+        ///     These are normally automatically determined by the provided <see cref="logLevel" />
+        /// </param>
         /// <param name="foregroundColor">Assuming we override the colors, this will alter the color of the text shown in the console.</param>
-        /// <param name="backgroundColor">Modifies the background color </param>
         /// <param name="displaySeverity">Whether to display the date and time in the console.</param>
         /// <param name="showDate">Whether to display the date and time in the console.</param>
         /// <returns></returns>
         public static async Task LogAsync(string message,
             LogLvl logLevel,
-            bool colorOverride = false,
-            ConsoleColor backgroundColor = ConsoleColor.Black,
             ConsoleColor foregroundColor = ConsoleColor.White,
             bool displaySeverity = true,
             bool showDate = true)
@@ -38,19 +37,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
             string dateString = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}";
             string contents = $"{(showDate ? $"{dateString} " : "")}{(displaySeverity ? $"{logP} " : "")}{message}";
 
-            if (colorOverride == false && foregroundColor != ConsoleColor.White || colorOverride == false && backgroundColor != ConsoleColor.Black)
-                throw new InvalidOperationException("Cannot change the console colors with the \"colorOverride\" parameter set to false.");
-
             // If the loglevel provided in the Config is only set to display more severe logs, return.
             if (ConfigProperties.LogLevel > logLevel) return;
 
-            await LogFinisher(logLevel, contents, colorOverride, backgroundColor, foregroundColor);
+            await LogFinisher(logLevel, contents, foregroundColor);
         }
 
         /// <summary>
-        /// Logs a Discord command to the console. This log message is special in that the format is completely different from other log messages.
+        ///     Logs a Discord command to the console. This log message is special in that the format is completely different from other log messages.
         /// </summary>
-        /// <param name="context">The <see cref="ICommandContext"/> that we will use to gather command data from.</param>
+        /// <param name="context">The <see cref="ICommandContext" /> that we will use to gather command data from.</param>
         /// <param name="logLevel">The severity of this log message.</param>
         /// <returns></returns>
         public static async Task LogAsync(ICommandContext context, LogLvl logLevel = LogLvl.INFO)
@@ -67,8 +63,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
         }
 
         /// <summary>
-        /// Asynchronously logs a Discord <see cref="CommandService"/> log message to the console and log file.
-        /// This is generally used for capturing thrown command exceptions.
+        ///     Asynchronously logs a Discord <see cref="CommandService" /> log message to the console and log file.
+        ///     This is generally used for capturing thrown command exceptions.
         /// </summary>
         /// <param name="logMsg"></param>
         /// <param name="cmdException"></param>
@@ -140,55 +136,50 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
             return false;
         }
 
-        private static void SetConsoleColor(LogLvl level)
+        private static ConsoleColor GetConsoleForegroundColor(LogLvl level)
         {
+            ConsoleColor color;
             switch (level)
             {
                 case LogLvl.TRACE:
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.BackgroundColor = ConsoleColor.Black;
+                    color = ConsoleColor.DarkGray;
 
                     break;
                 case LogLvl.DEBUG:
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.BackgroundColor = ConsoleColor.Black;
+                    color = ConsoleColor.Gray;
 
                     break;
                 case LogLvl.INFO:
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.BackgroundColor = ConsoleColor.Black;
+                    color = ConsoleColor.White;
 
                     break;
                 case LogLvl.WARN:
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.BackgroundColor = ConsoleColor.DarkYellow;
+                    color = ConsoleColor.Black;
 
                     break;
                 case LogLvl.ERROR:
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    color = ConsoleColor.Black;
 
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
+
+            return color;
         }
 
         private static async Task LogFinisher(LogLvl logLevel,
-            string contents,
-            bool colorOverride = false,
-            ConsoleColor backgroundColor = ConsoleColor.Black,
-            ConsoleColor foregroundColor = ConsoleColor.White)
+            string contents, ConsoleColor foregroundColor = ConsoleColor.White)
         {
+            ConsoleColor color;
             //Logs to console only if the log level is less or equally severe to what is specified in the config.
-            SetConsoleColor(logLevel);
 
-            if (colorOverride)
-            {
-                Console.BackgroundColor = backgroundColor;
-                Console.ForegroundColor = foregroundColor;
-            }
+            if (foregroundColor == ConsoleColor.White)
+                color = GetConsoleForegroundColor(logLevel);
+            else
+                color = foregroundColor;
 
+            SetConsoleForegroundColor(color);
             Console.WriteLine(contents);
 
             if (LogFileExists())
@@ -203,5 +194,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
                 }
             }
         }
+
+        private static void SetConsoleForegroundColor(ConsoleColor c) => Console.ForegroundColor = c;
     }
 }

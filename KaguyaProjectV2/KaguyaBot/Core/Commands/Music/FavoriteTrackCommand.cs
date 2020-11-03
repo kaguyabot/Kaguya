@@ -14,7 +14,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class FavoriteTrackCommand : KaguyaBase
     {
-        [DisabledCommand]
         [MusicCommand]
         [Command("FavoriteTrack")]
         [Alias("fav", "favorite")]

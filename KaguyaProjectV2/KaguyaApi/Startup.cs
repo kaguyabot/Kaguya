@@ -23,13 +23,10 @@ namespace KaguyaProjectV2.KaguyaApi
 
             services.AddControllers();
             services.AddOptions();
-            services.Configure<DatabaseConfig>(Configuration.GetSection("DbConfig"));
-            services.Configure<KaguyaConfig>(Configuration.GetSection("KaguyaConfig"));
-            services.AddSingleton<KaguyaSettings>();
+            services.AddSingleton<KaguyaDbSettings>();
             services.AddSingleton(voteNotifier);
-            services.AddScoped<KaguyaDb>();
 
-            var dbSettings = services.BuildServiceProvider().GetRequiredService<KaguyaSettings>();
+            var dbSettings = services.BuildServiceProvider().GetRequiredService<KaguyaDbSettings>();
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",

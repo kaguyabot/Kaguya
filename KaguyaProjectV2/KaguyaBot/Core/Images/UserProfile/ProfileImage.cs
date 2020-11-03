@@ -16,7 +16,7 @@ using Image = SixLabors.ImageSharp.Image;
 // ReSharper disable AccessToDisposedClosure
 namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
 {
-    public class ProfileImage
+    public class ProfileImage : ImageBase
     {
         /// <summary>
         /// Generates the profile image for the provided <see cref="User"/>. A <see cref="Server"/>
@@ -61,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile
                 badgeStream = new MemoryStream(badgeImg);
             }
 
-            using Image image = Image.Load(ImageBase.PROFILE_TEMPLATE_PATH);
+            using Image image = Image.Load(ProfileTemplatePath);
             using Image profilePicture = Image.Load(pfpStream);
             using Image suppBadge = Image.Load(badgeStream);
             using var gBar = new Image<Rgba32>(image.Width, image.Height);

@@ -14,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 {
     public abstract class KaguyaBase : InteractiveBase<ShardedCommandContext>
     {
-        public static readonly DiscordShardedClient Client = ConfigProperties.Client;
+        protected readonly DiscordShardedClient Client = ConfigProperties.Client;
 
         /// <summary>
         /// Builds and sends an <see cref="EmbedBuilder"/> to the current <see cref="ICommandContext"/>'s <see cref="ITextChannel"/>.

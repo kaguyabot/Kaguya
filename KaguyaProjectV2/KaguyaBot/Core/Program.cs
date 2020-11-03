@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Net;
@@ -7,12 +9,14 @@ using DiscordBotsList.Api;
 using KaguyaProjectV2.KaguyaApi;
 using KaguyaProjectV2.KaguyaBot.Core.Application;
 using KaguyaProjectV2.KaguyaBot.Core.Configurations;
+using KaguyaProjectV2.KaguyaBot.Core.Constants;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium; // DO NOT REMOVE
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;         // DO NOT REMOVE
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
@@ -28,25 +32,38 @@ using OsuSharp;
 using TwitchLib.Api;
 using Victoria;
 
+// DO NOT ORGANIZE IMPORTS IN DEBUG MODE! YOU WILL BREAK RELEASE MODE!
+
 namespace KaguyaProjectV2.KaguyaBot.Core
 {
     internal class Program
     {
+        private static IBotConfig _botConfig;
+        private TwitchAPI _api;
         private DiscordShardedClient _client;
         private LavaNode _lavaNode;
-        private TwitchAPI _api;
-        private static ConfigModel _config;
 
         private static async Task Main(string[] args)
         {
-            _config = await Config.GetOrCreateConfigAsync(args);
+            _botConfig = await Config.GetOrCreateConfigAsync(args);
 
-            Task task1 = CreateHostBuilder(args).Build().RunAsync();
+            /*
+             * This portion requires that appsettings.json is properly configured.
+             * appsettings.json is database configuration information, which for task1
+             * is only necessary for posting Top.GG webhook notifications to the
+             * kaguya database. We don't need this during a debug session.
+             */
+
             Task task2 = new Program().MainAsync(args);
-
+#if !DEBUG
+            Task task1 = CreateHostBuilder(args).Build().RunAsync();
             Task.WaitAll(task1, task2);
+#else
+            Task.WaitAll(task2);
+#endif
         }
 
+#if !DEBUG
         public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaultBuilder(args)
                                                                            .ConfigureLogging(logging =>
                                                                            {
@@ -56,10 +73,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                                                                            .ConfigureWebHostDefaults(webBuilder =>
                                                                            {
                                                                                webBuilder.UseStartup<Startup>();
-                                                                               webBuilder.UseUrls($"http://+:{_config.TopGgWebhookPort}");
+                                                                               webBuilder.UseUrls($"http://+:{_botConfig.TopGgWebhookPort}");
                                                                                webBuilder.UseKestrel();
                                                                            });
-
+#endif
         public async Task MainAsync(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
@@ -95,7 +112,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 try
                 {
-                    GlobalPropertySetup(_config);
+                    GlobalPropertySetup(_botConfig);
 
                     SetupTwitch();
 
@@ -107,7 +124,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     _client = services.GetRequiredService<DiscordShardedClient>();
                     await services.GetRequiredService<CommandHandler>().InitializeAsync();
 
-                    await _client.LoginAsync(TokenType.Bot, _config.Token);
+                    await _client.LoginAsync(TokenType.Bot, _botConfig.Token);
                     await _client.StartAsync();
 
                     await _client.SetGameAsync($"v{ConfigProperties.Version}: Booting up!");
@@ -124,7 +141,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                         ConfigProperties.LavaNode = _lavaNode;
                         OsuBase.Client = new OsuClient(new OsuSharpConfiguration
                         {
-                            ApiKey = _config.OsuApiKey
+                            ApiKey = _botConfig.OsuApiKey
                         });
                     }
 
@@ -133,8 +150,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 }
                 catch (HttpException e)
                 {
-                    await ConsoleLogger.LogAsync($"Error when logging into Discord:\n" +
-                                                 $"-Have you configured your config file?\n" +
+                    await ConsoleLogger.LogAsync("Error when logging into Discord:\n" +
+                                                 "-Have you passed in the correct application arguments?\n" +
                                                  $"-Is your token correct? Exception: {e.Message}", LogLvl.ERROR);
 
                     Console.ReadLine();
@@ -142,21 +159,53 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 catch (Exception e)
                 {
                     await ConsoleLogger.LogAsync("Something really important broke!\n" +
-                                                 $"Exception: {e.Message}", LogLvl.ERROR);
+                                                 $"Exception: {e.Message}\n" +
+                                                 $"More information: {e}", LogLvl.ERROR);
                 }
             }
         }
 
-        public async Task SetupKaguya() => await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========",
-            LogLvl.INFO, true,
-            ConsoleColor.Cyan, ConsoleColor.Black, false, false);
+        public async Task SetupKaguya()
+        {
+            await ConsoleLogger.LogAsync($"========== KaguyaBot Version {ConfigProperties.Version} ==========",
+                LogLvl.INFO, ConsoleColor.Cyan, false, false);
 
-        private void GlobalPropertySetup(ConfigModel config)
+            await CopyDependencies();
+        }
+
+        private async Task CopyDependencies()
+        {
+            await ConsoleLogger.LogAsync("Beginning copy of external dependencies...", LogLvl.INFO);
+            
+            Assembly asm = Assembly.GetExecutingAssembly();
+            
+            string rootDir = FileConstants.RootDir;
+            string execDir = Path.GetDirectoryName(asm.Location);
+            var dirInfo = new DirectoryInfo(Path.Combine(rootDir, "ExternalDependencies"));
+
+            foreach (FileInfo file in dirInfo.GetFiles())
+            {
+                string cmbPath = Path.Combine(execDir, file.Name);
+
+                if (File.Exists(cmbPath))
+                {
+                    // Can't copy a file if it already exists. So, delete it.
+                    File.Delete(cmbPath);
+                }
+                
+                File.Copy(file.FullName, cmbPath);
+                await ConsoleLogger.LogAsync($"Dependency {file.Name} copied to {cmbPath}", LogLvl.DEBUG);
+            }
+
+            await ConsoleLogger.LogAsync("Dependencies successfully copied.", LogLvl.INFO);
+        }
+
+        private void GlobalPropertySetup(IBotConfig botConfig)
         {
             ConfigProperties.Client = _client;
-            ConfigProperties.BotConfig = config;
-            ConfigProperties.LogLevel = (LogLvl) config.LogLevelNumber;
-            ConfigProperties.TopGgApi = new AuthDiscordBotListApi(538910393918160916, config.TopGgApiKey);
+            ConfigProperties.BotConfig = botConfig;
+            ConfigProperties.LogLevel = (LogLvl) botConfig.LogLevelNumber;
+            ConfigProperties.TopGgApi = new AuthDiscordBotListApi(538910393918160916, botConfig.TopGgApiKey);
         }
 
         private async Task TestDatabaseConnection()
@@ -169,8 +218,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             }
             catch (Exception e)
             {
-                await ConsoleLogger.LogAsync($"Failed to establish database connection. " +
-                                             $"Have you properly configured your config file? " +
+                await ConsoleLogger.LogAsync("Failed to establish database connection. " +
+                                             "Have you properly configured your config file? " +
                                              $"Exception: {e.Message}", LogLvl.ERROR);
             }
         }
@@ -201,7 +250,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Kaguya Premium expiration handler initialized", LogLvl.INFO);
             await RateLimitService.Initialize();
             await ConsoleLogger.LogAsync("Ratelimit service initialized", LogLvl.INFO);
-            
+
             await StatsUpdater.Initialize();
             await ConsoleLogger.LogAsync("Top.gg stats updater initialized", LogLvl.INFO);
             await KaguyaStatsLogger.Initialize();

@@ -1,11 +1,11 @@
-﻿using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Discord.Commands;
+using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
 {
@@ -20,8 +20,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
         [RequireContext(ContextType.Guild)]
         public async Task Command(ulong? id = null)
         {
-            Context.Channel.EnterTypingState();
-
             id ??= Context.User.Id;
 
             User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
@@ -38,12 +36,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             if (id != Context.User.Id)
                 user = await DatabaseQueries.GetOrCreateUserAsync(id.Value);
 
-            var p = new ProfileImage();
-            Stream image = await p.GenerateProfileImageStream(user, server, Context.Guild.GetUser(id.Value));
+            using (Context.Channel.EnterTypingState())
+            {
+                var p = new ProfileImage();
+                Stream image = await p.GenerateProfileImageStream(user, server, Context.Guild.GetUser(id.Value));
 
-            await Context.Channel.SendFileAsync(image, $"Kaguya_Profile_" +
-                                                       $"{Context.User.Username}_{DateTime.Now.Month}_" +
-                                                       $"{DateTime.Now.Day}_{DateTime.Now.Year}.png");
+                await Context.Channel.SendFileAsync(image, "Kaguya_Profile_" +
+                                                           $"{Context.User.Username}_{DateTime.Now.Month}_" +
+                                                           $"{DateTime.Now.Day}_{DateTime.Now.Year}.png");
+            }
         }
     }
 }

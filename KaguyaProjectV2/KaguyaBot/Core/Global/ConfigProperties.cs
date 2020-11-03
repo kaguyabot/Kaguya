@@ -3,6 +3,7 @@ using DiscordBotsList.Api;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using NekosSharp;
 using System.IO;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using TwitchLib.Api;
 using Victoria;
 
@@ -12,12 +13,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
 {
     public static class ConfigProperties
     {
+        // todo: Remove public setters...this is dangerous.
         public static DiscordShardedClient Client { get; set; }
         public static LavaNode LavaNode { get; set; }
         public static AuthDiscordBotListApi TopGgApi { get; set; }
         public static TwitchAPI TwitchApi { get; set; }
         public static NekoClient NekoClient = new NekoClient("Kaguya");
-        public static ConfigModel BotConfig { get; set; }
+        public static IBotConfig BotConfig { get; set; }
         public static LogLvl LogLevel { get; set; }
 
         /// <summary>
@@ -35,6 +37,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Global
             "https://discordapp.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=469101694";
 
         // Github contributors, please do not edit the Version number.
-        public static string Version { get; } = "2.16.1";
+        public static string Version { get; } = "3.0";
     }
 }

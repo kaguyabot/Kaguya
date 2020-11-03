@@ -12,7 +12,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 {
     public class Pause : KaguyaBase
     {
-        [DisabledCommand]
         [MusicCommand]
         [Command("Pause")]
         [Summary("Pauses the music player if it is playing.")]

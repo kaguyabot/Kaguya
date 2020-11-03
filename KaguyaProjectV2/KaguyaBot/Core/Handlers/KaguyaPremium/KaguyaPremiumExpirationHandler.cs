@@ -20,7 +20,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium
 {
     public static class KaguyaPremiumExpirationHandler
     {
-        private static readonly DiscordShardedClient _client = KaguyaBase.Client;
+        private static readonly DiscordShardedClient _client = ConfigProperties.Client;
         private static readonly List<Server> _serverNotificationCache = new List<Server>();
         private static readonly List<PremiumKey> _keysCache = new List<PremiumKey>();
 
