@@ -23,6 +23,8 @@ namespace KaguyaProjectV2.KaguyaApi
 
             services.AddControllers();
             services.AddOptions();
+            services.AddScoped<KaguyaDb>();
+            services.AddScoped<KaguyaApiConfig>();
             services.AddSingleton<KaguyaDbSettings>();
             services.AddSingleton(voteNotifier);
 
