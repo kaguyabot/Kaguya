@@ -1,3 +1,6 @@
+### Version 3.0.1
+- Patches unhandled exception in StatsUpdater.cs
+
 ### Version 3.0
 - Kaguya will now read from a configuration file if program arguments are not being used on launch.
 - Refactored ConfigModel to inherit from new IBotConfig
