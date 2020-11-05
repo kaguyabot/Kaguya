@@ -55,15 +55,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core
              */
 
             Task task2 = new Program().MainAsync(args);
-#if !DEBUG
             Task task1 = CreateHostBuilder(args).Build().RunAsync();
+            
             Task.WaitAll(task1, task2);
-#else
             Task.WaitAll(task2);
-#endif
         }
 
-#if !DEBUG
         public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaultBuilder(args)
                                                                            .ConfigureLogging(logging =>
                                                                            {
@@ -76,7 +73,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                                                                                webBuilder.UseUrls($"http://+:{_botConfig.TopGgWebhookPort}");
                                                                                webBuilder.UseKestrel();
                                                                            });
-#endif
         public async Task MainAsync(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>

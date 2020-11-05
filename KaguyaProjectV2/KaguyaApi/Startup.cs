@@ -50,8 +50,6 @@ namespace KaguyaProjectV2.KaguyaApi
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            //app.UseHttpsRedirection();
-
             app.UseCors(builder => builder
                                    .AllowAnyOrigin()
                                    .AllowAnyMethod()
