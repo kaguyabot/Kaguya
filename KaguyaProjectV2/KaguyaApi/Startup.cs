@@ -22,13 +22,14 @@ namespace KaguyaProjectV2.KaguyaApi
         public void ConfigureServices(IServiceCollection services)
         {
             var voteNotifier = new UpvoteNotifier();
-
+            IBotConfig botConfig = BotConfig.GetConfig();
+            
             services.AddControllers();
             services.AddOptions();
             services.AddScoped<KaguyaDb>();
             services.AddScoped<KaguyaApiConfig>();
-            services.AddSingleton(BotConfig.GetConfig());
-            services.AddSingleton<KaguyaDbSettings>();
+            services.AddSingleton(botConfig);
+            services.AddSingleton(new KaguyaDbSettings(new KaguyaApiConfig(botConfig)));
             services.AddSingleton(voteNotifier);
 
             var dbSettings = services.BuildServiceProvider().GetRequiredService<KaguyaDbSettings>();

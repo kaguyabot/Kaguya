@@ -5,7 +5,7 @@ namespace KaguyaProjectV2.KaguyaApi
 {
     public sealed class KaguyaApiConfig : IDbConfig
     {
-        public KaguyaApiConfig(IBotConfig botConfig, KaguyaApiCredentials credentials)
+        public KaguyaApiConfig(IBotConfig botConfig)
         {
             string[] dbSplits = botConfig.MySqlServer.Split(':');
             ServerIp = dbSplits[0];
@@ -13,12 +13,10 @@ namespace KaguyaProjectV2.KaguyaApi
             SchemaName = botConfig.MySqlSchema;
             Username = botConfig.MySqlUsername;
             Password = botConfig.MySqlPassword;
-            Credentials = credentials;
             CharSet = "utf8mb4";
         }
 
-        public KaguyaApiConfig() : this(ConfigProperties.BotConfig, new KaguyaApiCredentials()) { }
-        public KaguyaApiCredentials Credentials { get; }
+        public KaguyaApiConfig() : this(ConfigProperties.BotConfig) { }
         public string ServerIp { get; }
         public ushort Port { get; }
         public string SchemaName { get; }
