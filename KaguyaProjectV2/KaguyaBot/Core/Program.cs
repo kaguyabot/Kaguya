@@ -67,7 +67,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                                                                                webBuilder.UseStartup<Startup>();
                                                                                webBuilder.UseUrls($"http://+:{_botConfig.TopGgWebhookPort}");
                                                                                webBuilder.UseKestrel();
-                                                                           });
+                                                                           })
+                                                                           .ConfigureLogging(x => x.ClearProviders());
         public async Task MainAsync(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
