@@ -68,6 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Osu
             _ => ""
         };
 
-        public static double OsuAccuracy(int count50, int count100, int count300, int countMiss) => ((double) 100 * ((50 * count50) + (100 * count100) + (300 * count300))) / (300 * (countMiss + count50 + count100 + count300));
+        public static double OsuAccuracy(int count50, int count100, int count300, int countMiss) => 
+            ((double) 100 * ((50 * count50) + (100 * count100) + (300 * count300))) / (300 * (countMiss + count50 + count100 + count300));
     }
 }

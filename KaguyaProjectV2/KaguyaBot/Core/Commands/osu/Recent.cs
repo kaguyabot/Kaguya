@@ -20,90 +20,91 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
 {
     public class OsuRecent : KaguyaBase
     {
-        public KaguyaEmbedBuilder Embed = new KaguyaEmbedBuilder();
-
         [OsuCommand]
         [Command("osuRecent")]
         [Alias("recent", "r")]
-        [Summary("Displays the most recent osu! play for the user. If the user has spaces in their " +
-                 "username, wrap the name with quotation marks.")]
-        [Remarks("[username, NOT ID] (Optional if configured with `osuset` already)\n" +
-                 "SomeName\n\"Name with spaces 123\"")]
-        public async Task OsuRecentCommand(string player = null)
+        [Summary("Displays the most recent osu! Standard play for the user. The `[player]` parameter " +
+                 "is optional if the command executor has already set their name with the `osuset` command.")]
+        [Remarks("[player]")]
+        public async Task OsuRecentCommand([Remainder]string player = null)
         {
-            OsuClient client = OsuBase.Client;
-            var gameMode = GameMode.Standard;
+            var embed = new KaguyaEmbedBuilder();
+            var client = OsuBase.Client;
 
             User user = await DatabaseQueries.GetOrCreateUserAsync(Context.User.Id);
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
 
             OsuSharp.User osuPlayer = player == null
-                ? await client.GetUserByUserIdAsync(user.OsuId, gameMode)
-                : await client.GetUserByUsernameAsync(player, gameMode);
+                ? await client.GetUserByUserIdAsync(user.OsuId, GameMode.Standard)
+                : await client.GetUserByUsernameAsync(player, GameMode.Standard);
 
+            // Maybe the user provided an ID to search for.
+            if (osuPlayer == null && long.TryParse(player, out long id))
+            {
+                osuPlayer = await client.GetUserByUserIdAsync(id, GameMode.Standard);
+            }
+
+            // If it's still null, they don't exist.
             if (osuPlayer == null)
             {
-                Embed.WithTitle($"osu! Recent");
-                Embed.WithDescription($"**{Context.User.Mention} Failed to acquire username! " +
-                                      $"Please specify a player or set your osu! username with " +
-                                      $"`{server.CommandPrefix}osuset`!**");
+                embed.Description = $"{Context.User.Mention} Failed to acquire username! " +
+                                      "Please specify a player or set your osu! username with " +
+                                      $"`{server.CommandPrefix}osuset`!";
 
-                await ReplyAsync(embed: Embed.Build());
+                await ReplyAsync(embed: embed.Build());
 
                 return;
             }
 
-            IReadOnlyList<Score> osuRecents = player == null
-                ? await client.GetUserRecentsByUserIdAsync(user.OsuId, GameMode.Standard, 1)
-                : await client.GetUserRecentsByUsernameAsync(player, GameMode.Standard, 1);
+            Score osuRecent = player == null
+                ? (await client.GetUserRecentsByUserIdAsync(user.OsuId, GameMode.Standard, 1)).FirstOrDefault()
+                : (await client.GetUserRecentsByUsernameAsync(player, GameMode.Standard, 1)).FirstOrDefault();
 
-            if (!osuRecents.Any())
+            if (osuRecent == null)
             {
-                Embed.WithAuthor(author =>
+                embed.WithAuthor(author =>
                 {
                     author
-                        .WithName($"{osuPlayer.Username} hasn't got any recent plays")
-                        .WithIconUrl("https://a.ppy.sh/" + osuPlayer.UserId);
-                });
-            }
-            else
-            {
-                //Author
-                Embed.WithAuthor(author =>
-                {
-                    author
-                        .WithName($"Most Recent osu! {gameMode} Play for {osuPlayer.Username}")
+                        .WithName($"{osuPlayer.Username} doesn't have any recent plays.")
                         .WithIconUrl("https://a.ppy.sh/" + osuPlayer.UserId);
                 });
 
-                //Description
-                Beatmap beatmap = await osuRecents[0].GetBeatmapAsync();
-                PerformanceData pp = await beatmap.GetPPAsync((float) osuRecents[0].Accuracy);
-
-                Embed.Description += $"▸ **{OsuBase.OsuGrade(osuRecents[0].Rank)}{osuRecents[0].Mods}** ▸ " +
-                                     $"**[{beatmap.Title} [{beatmap.Difficulty}]]" +
-                                     $"(https://osu.ppy.sh/b/{osuRecents[0].BeatmapId})** by **{beatmap.Artist}**\n" +
-                                     $"▸ **☆{beatmap.StarRating:F}** ▸ **{osuRecents[0].Accuracy:N2}%**\n" +
-                                     $"▸ **Combo:** `{osuRecents[0].MaxCombo:N0}x / {beatmap.MaxCombo:N0}x`\n" +
-                                     $"▸ `[{osuRecents[0].Count300} / {osuRecents[0].Count100} / " +
-                                     $"{osuRecents[0].Count50} / {osuRecents[0].Miss}]` ▸ " +
-                                     $"`[{osuRecents[0].Geki}激 / {osuRecents[0].Katu}喝]`\n" +
-                                     $"▸ **Map Completion:** `{MapCompletionPercent(osuRecents[0], beatmap) * 100:N2}%`\n" +
-                                     $"▸ **Max Combo Percentage:** `{((double) osuRecents[0].MaxCombo / beatmap.MaxCombo) * 100:N2}%`\n";
-
-                Embed.Description += $"▸ **PP for FC**: `{pp.Pp:N0}pp`\n";
-
-                //Footer
-                TimeSpan difference = DateTime.UtcNow - osuRecents.Last().Date.Value;
-                difference = difference.Add(new TimeSpan(0, 4, 0, 0));
-                string humanizedDif = difference.Humanize(2, minUnit: TimeUnit.Second);
-
-                Embed.WithFooter(osuRecents.Count > 1
-                    ? $"{osuPlayer.Username} performed these plays {humanizedDif} ago."
-                    : $"{osuPlayer.Username} performed this play {humanizedDif} ago.");
+                await SendEmbedAsync(embed);
+                return;
             }
+            
+            //Author
+            embed.WithAuthor(author =>
+            {
+                author
+                    .WithName($"Most recent osu! standard play for {osuPlayer.Username}")
+                    .WithIconUrl("https://a.ppy.sh/" + osuPlayer.UserId);
+            });
 
-            await ReplyAsync(embed: Embed.Build());
+            //Description
+            Beatmap beatmap = await osuRecent.GetBeatmapAsync();
+            PerformanceData pp = await beatmap.GetPPAsync((float) osuRecent.Accuracy);
+
+            embed.Description += $"▸ **{OsuBase.OsuGrade(osuRecent.Rank)}{osuRecent.Mods}** ▸ " +
+                                 $"**[{beatmap.Title} [{beatmap.Difficulty}]]" +
+                                 $"(https://osu.ppy.sh/b/{osuRecent.BeatmapId})** by **{beatmap.Artist}**\n" +
+                                 $"▸ **☆{beatmap.StarRating:F}** ▸ **{osuRecent.Accuracy:N2}%**\n" +
+                                 $"▸ **Combo:** `{osuRecent.MaxCombo:N0}x / {beatmap.MaxCombo:N0}x`\n" +
+                                 $"▸ `[{osuRecent.Count300} / {osuRecent.Count100} / " +
+                                 $"{osuRecent.Count50} / {osuRecent.Miss}]` ▸ " +
+                                 $"`[{osuRecent.Geki}激 / {osuRecent.Katu}喝]`\n" +
+                                 $"▸ **Map Completion:** `{MapCompletionPercent(osuRecent, beatmap) * 100:N2}%`\n" +
+                                 $"▸ **Max Combo Percentage:** `{((double) osuRecent.MaxCombo / beatmap.MaxCombo) * 100:N2}%`\n";
+
+            embed.Description += $"▸ **PP for FC**: `{pp.Pp:N0}pp`\n";
+
+            //Footer
+            TimeSpan difference = DateTime.UtcNow - osuRecent.Date.Value.DateTime;
+            string humanizedDif = difference.Humanize(2, minUnit: TimeUnit.Second);
+
+            embed.WithFooter($"{osuPlayer.Username} performed this play {humanizedDif} ago.");
+
+            await ReplyAsync(embed: embed.Build());
         }
 
         private double MapCompletionPercent(Score score, Beatmap beatmap)
