@@ -211,7 +211,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 $"\n▸ **☆{beatmap.StarRating:N2}** ▸ **{playerBestObject.Accuracy:F}%** " +
                 $"for **{pp.Pp:F}pp** " +
                 $"\n▸ [Combo: {playerBestObject.MaxCombo}x / Max: {beatmap.MaxCombo}]" +
-                $"\n▸ Play made {(DateTime.Now - playerBestObject.Date.Value).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 3)} ago\n";
+                $"\n▸ Play made {(DateTime.UtcNow - playerBestObject.Date.Value.DateTime).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 3)} ago\n";
 
             Embed.WithDescription(topPlayString);
             await ReplyAsync(embed: Embed.Build());
