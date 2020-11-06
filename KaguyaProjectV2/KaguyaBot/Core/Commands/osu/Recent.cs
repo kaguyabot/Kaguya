@@ -96,7 +96,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             descSb.AppendLine($"**Links:** [Listing]({beatmapLink}) ▸ [Modding]({discussionLink}) ▸ [Download]({downloadLink})");
             descSb.AppendLine();
             // Row 1
-            descSb.AppendLine($"• {OsuBase.OsuGradeEmote(osuRecent.Rank)}{osuRecent.Mods} | {scoredPerformance.Stars:N2}★");
+            descSb.AppendLine($@"• {OsuBase.OsuGradeEmote(osuRecent.Rank)} {osuRecent.Mods.ToModeString(OsuBase.Client)
+                                                                                             .Replace("No Mode", "No Mod")
+                                                                                             .Replace("DTNC", "NC")} | {scoredPerformance.Stars:N2}★");
             // Row 2
             descSb.Append($"• **Combo:** {osuRecent.MaxCombo:N0}x / {beatmap.MaxCombo:N0}x ▸ ");
             descSb.AppendLine($"**Accuracy:** {osuRecent.Accuracy:N2}% ▸ **Score:** {osuRecent.TotalScore:N0}");

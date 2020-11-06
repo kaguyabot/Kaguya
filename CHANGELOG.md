@@ -1,5 +1,6 @@
 ### Version 3.0.3
 - $osurecent now displays the correct time for when the play was made.
+- $osutop now displays the correct time for when the play was made.
 - $osurecent has been rewritten with new information and a new format.
 
 ### Version 3.0.2

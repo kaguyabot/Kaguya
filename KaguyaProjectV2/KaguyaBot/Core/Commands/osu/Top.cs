@@ -96,7 +96,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 author.IconUrl = $"https://osu.ppy.sh/images/flags/{playerUserObject.Country}.png";
             });
 
-            Embed.WithTitle($"**Top {num} play for {playerUserObject.Username}:**");
+            Embed.WithTitle($"**Top {num} plays for {playerUserObject.Username}:**");
             Embed.WithUrl($"https://osu.ppy.sh/u/{playerUserObject.UserId}");
 
             int i = 0;
@@ -117,7 +117,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                                  $"\n▸ **☆{beatmap.StarRating:N2}** ▸ **{playerBestObject.Accuracy:F}%** " +
                                  $"for **{pp.Pp:N}pp** " +
                                  $"\n▸ [Combo: {playerBestObject.MaxCombo}x / Max: {beatmap.MaxCombo}]" +
-                                 $"\n▸ Play made {(DateTime.Now - playerBestObject.Date.Value).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 3)} ago\n";
+                                 $"\n▸ Play made {(DateTime.UtcNow - playerBestObject.Date.Value.DateTime).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year, precision: 3)} ago\n";
             }
 
             Embed.WithDescription(topPlayString);
