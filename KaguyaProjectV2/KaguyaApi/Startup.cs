@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaApi
             services.AddSingleton(botConfig);
             services.AddSingleton(new KaguyaDbSettings(new KaguyaApiConfig(botConfig)));
             services.AddSingleton(voteNotifier);
-
+            
             var dbSettings = services.BuildServiceProvider().GetRequiredService<KaguyaDbSettings>();
             services.AddCors(options =>
             {

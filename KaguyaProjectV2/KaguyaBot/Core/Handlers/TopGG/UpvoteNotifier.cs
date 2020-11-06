@@ -65,10 +65,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG
                                 $"{(vote.IsWeekend ? weekendStr : "")}"
                         };
 
-                        await dmCh.SendEmbedAsync(embed);
+                        try
+                        {
+                            await dmCh.SendEmbedAsync(embed);
+                            
+                        }
+                        catch (Exception e)
+                        {
+                            await ConsoleLogger.LogAsync(e, $"Failed to DM user {user.UserId} with their " +
+                                                            $"Top.GG authorized vote notification.", LogLvl.WARN);
+                        }
                     }
 
-                    await DatabaseQueries.UpdateAsync(user);
+                    try
+                    {
+                        await DatabaseQueries.UpdateAsync(user);
+                    }
+                    catch (Exception e)
+                    {
+                        await ConsoleLogger.LogAsync(e, "Failed to insert authorized Top.GG webhook into database " +
+                                                        $"for user {user.UserId}.");
+                    }
                 }
                 catch (Exception e)
                 {

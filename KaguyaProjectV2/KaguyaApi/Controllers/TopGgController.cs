@@ -49,8 +49,18 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
                 VoteId = Guid.NewGuid().ToString()
             };
 
-            await _db.InsertAsync(dbWebhook);
-            _uvNotifier.Enqueue(dbWebhook);
+            try
+            {
+                await _db.InsertAsync(dbWebhook);
+                _uvNotifier.Enqueue(dbWebhook);
+            }
+            catch (Exception e)
+            {
+                await ConsoleLogger.LogAsync(e, "An error occurred when trying to insert a Top.GG authorized " +
+                                                $"webhook for user {dbWebhook.UserId}.");
+                return;
+            }
+            
 
             await ConsoleLogger.LogAsync($"[Kaguya Api]: Authorized Top.GG Webhook received for user {dbWebhook.UserId}.", LogLvl.INFO);
         }
