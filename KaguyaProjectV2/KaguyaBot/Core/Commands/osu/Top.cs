@@ -108,7 +108,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                 PerformanceData pp = await beatmap.GetPPAsync(playerBestObject.Mods, (float) playerBestObject.Accuracy);
 
                 Debug.Assert(playerBestObject.Date != null, "playerBestObject.Date != null");
-                topPlayString += $"\n{i}: ▸ **{OsuBase.OsuGrade(playerBestObject.Rank)}" +
+                topPlayString += $"\n{i}: ▸ **{OsuBase.OsuGradeEmote(playerBestObject.Rank)}" +
                                  $@"{playerBestObject.Mods.ToModeString(OsuBase.Client)
                                                      .Replace("No Mode", "No Mod")
                                                      .Replace("DTNC", "NC")}** ▸ " +
@@ -205,7 +205,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
             PerformanceData pp = await beatmap.GetPPAsync(playerBestObject.Mods, (float) playerBestObject.Accuracy);
 
             string topPlayString =
-                $"#{num}: ▸ **{OsuBase.OsuGrade(playerBestObject.Rank)}{playerBestObject.Mods.ToModeString(OsuBase.Client).Replace("No Mode", "No Mod")}** ▸ " +
+                $"#{num}: ▸ **{OsuBase.OsuGradeEmote(playerBestObject.Rank)}{playerBestObject.Mods.ToModeString(OsuBase.Client).Replace("No Mode", "No Mod")}** ▸ " +
                 $"{beatmap.BeatmapId} ▸ **[{beatmap.Title} " +
                 $"[{beatmap.Difficulty}]](https://osu.ppy.sh/b/{beatmap.BeatmapId})** " +
                 $"\n▸ **☆{beatmap.StarRating:N2}** ▸ **{playerBestObject.Accuracy:F}%** " +
