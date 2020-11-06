@@ -5,6 +5,7 @@ using KaguyaProjectV2.KaguyaApi.Database.Context;
 using KaguyaProjectV2.KaguyaApi.Database.Models;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using LinqToDB;
@@ -19,34 +20,22 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
     [Route("api/[controller]")]
     public class TopGgController : ControllerBase
     {
-        private readonly IOptions<KaguyaApiCredentials> _cfg;
+        private readonly IBotConfig _cfg;
         private readonly KaguyaDb _db;
         private readonly UpvoteNotifier _uvNotifier;
 
-        public TopGgController(IOptions<KaguyaApiCredentials> cfg, KaguyaDb db, UpvoteNotifier uvNotifier)
+        public TopGgController(IBotConfig cfg, KaguyaDb db, UpvoteNotifier uvNotifier)
         {
             _cfg = cfg;
             _db = db;
             _uvNotifier = uvNotifier;
         }
 
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get() => new string[]
-        {
-            "value1",
-            "value2"
-        };
-
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id) => "value";
-
         // POST api/<controller>
         [HttpPost("webhook")]
         public async Task Post([FromBody] TopGgWebhook baseHook, [FromHeader(Name = "Authorization")] string auth)
         {
-            if (auth != _cfg.Value.TopGgAuthorization)
+            if (auth != _cfg.TopGgApiKey)
                 return;
 
             var dbWebhook = new DatabaseUpvoteWebhook
@@ -65,13 +54,5 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
 
             await ConsoleLogger.LogAsync($"[Kaguya Api]: Authorized Top.GG Webhook received for user {dbWebhook.UserId}.", LogLvl.INFO);
         }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value) { }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id) { }
     }
 }

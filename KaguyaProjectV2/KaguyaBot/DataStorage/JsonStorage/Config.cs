@@ -75,25 +75,24 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                                     $"Expected {CORRECT_ARG_COUNT}, received {args.Length}.");
             }
 
-            model = new BotConfig
-            {
-                Token = args[0],
-                BotOwnerId = args[1].Trim().AsUlong(),
-                LogLevelNumber = args[2].AsInteger(),
-                DefaultPrefix = args[3],
-                OsuApiKey = args[4],
-                TopGgApiKey = args[5],
-                MySqlUsername = args[6],
-                MySqlPassword = args[7],
-                MySqlServer = args[8],
-                MySqlSchema = args[9],
-                TwitchClientId = args[10],
-                TwitchAuthToken = args[11],
-                DanbooruUsername = args[12],
-                DanbooruApiKey = args[13],
-                TopGgWebhookPort = args[14].AsInteger()
-            };
-
+            model = BotConfig.GetConfig();
+            model.Token = args[0];
+            model.Token = args[0];
+            model.BotOwnerId = args[1].Trim().AsUlong();
+            model.LogLevelNumber = args[2].AsInteger();
+            model.DefaultPrefix = args[3];
+            model.OsuApiKey = args[4];
+            model.TopGgApiKey = args[5];
+            model.MySqlUsername = args[6];
+            model.MySqlPassword = args[7];
+            model.MySqlServer = args[8];
+            model.MySqlSchema = args[9];
+            model.TwitchClientId = args[10];
+            model.TwitchAuthToken = args[11];
+            model.DanbooruUsername = args[12];
+            model.DanbooruApiKey = args[13];
+            model.TopGgWebhookPort = args[14].AsInteger();
+            
             if (!File.Exists(configFilePath) || !model.Equals(new BotConfig()))
             {
                 //Creates JSON from model.
@@ -148,6 +147,16 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 #region Model
     public sealed class BotConfig : IBotConfig
     {
+        private static IBotConfig _instance;
+        public static IBotConfig GetConfig()
+        {
+            if (_instance == null)
+            {
+                _instance = new BotConfig();
+            }
+            return _instance;
+        }
+        
         public string Token { get; set; }
         public ulong BotOwnerId { get; set; }
         public int LogLevelNumber { get; set; } = 1;

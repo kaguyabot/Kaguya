@@ -1,6 +1,8 @@
 using KaguyaProjectV2.KaguyaApi.Database;
 using KaguyaProjectV2.KaguyaApi.Database.Context;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using LinqToDB.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +27,7 @@ namespace KaguyaProjectV2.KaguyaApi
             services.AddOptions();
             services.AddScoped<KaguyaDb>();
             services.AddScoped<KaguyaApiConfig>();
+            services.AddSingleton(BotConfig.GetConfig());
             services.AddSingleton<KaguyaDbSettings>();
             services.AddSingleton(voteNotifier);
 
