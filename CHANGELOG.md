@@ -1,3 +1,6 @@
+### Version 3.0.2
+- Fixes bug with Kaguya API where top.gg voters would not be given their rewards.
+
 ### Version 3.0.1
 - Patches unhandled exception in StatsUpdater.cs
 
