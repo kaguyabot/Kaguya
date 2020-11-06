@@ -6,7 +6,6 @@ using Discord.Commands;
 using Humanizer;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
