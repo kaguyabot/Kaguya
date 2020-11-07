@@ -69,14 +69,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 timer.Elapsed += async (sender, args) =>
                 {
                     ServerTimer existingObj = ServerTimers.CachedTimers.FirstOrDefault(x => x.ServerId == server.ServerId);
-
+                    
                     if (existingObj == null)
                         return;
 
                     if (existingObj.UserIds.Count >= ar.Users)
-                        await ActionUsers(existingObj.UserIds, server.ServerId, ar.Action);
-
-                    ServerTimers.CachedTimers.Remove(existingObj);
+                    {
+                        HashSet<ulong> cache = existingObj.UserIds;
+                        
+                        existingObj.Clear();
+                        ServerTimers.CachedTimers.Remove(existingObj);
+                        
+                        await ActionUsers(cache, server.ServerId, ar.Action);
+                    }
                 };
             };
         });
@@ -237,6 +242,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     {
         public ulong ServerId { get; set; }
         public HashSet<ulong> UserIds { get; set; }
+
+        public void Clear()
+        {
+            this.ServerId = 0;
+            this.UserIds.Clear();
+        }
     }
 
     public static class ServerTimers

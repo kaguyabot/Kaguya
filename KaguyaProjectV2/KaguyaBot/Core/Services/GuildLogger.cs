@@ -9,8 +9,10 @@ using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -173,11 +175,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             foreach (SocketGuildUser user in e.GuildUsers)
             {
                 actionedUsers +=
-                    $"Name: `{user}` | ID: `{user.Id}`\n";
+                    $"`{user} | {user.Id}`\n";
             }
 
             if (actionedUsers.Length > 1750)
-                actionedUsers = e.GuildUsers.Count.ToString("N0");
+                actionedUsers = "Too many users to write here! " + e.GuildUsers.Count.ToString("N0") + " users actioned.";
 
             var embed = new KaguyaEmbedBuilder
             {
@@ -187,7 +189,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 ThumbnailUrl = "https://i.imgur.com/QFY9CdE.png"
             };
 
-            await _client.GetGuild(e.SocketGuild.Id).GetTextChannel(server.LogAntiraids).SendEmbedAsync(embed);
+            try
+            {
+                await _client.GetGuild(e.SocketGuild.Id).GetTextChannel(server.LogAntiraids).SendEmbedAsync(embed);
+            }
+            catch (Exception exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to deliver anti-raid log message in guild {server.ServerId}!\nReason: {exception.Message}", LogLvl.WARN);
+            }
         }
 
         private static async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)

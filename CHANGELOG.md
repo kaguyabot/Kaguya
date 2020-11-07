@@ -1,3 +1,6 @@
+### Version 3.0.4
+- Fixed bug where antiraid could log messages multiple times if lots of users are being actioned.
+
 ### Version 3.0.3
 - $osurecent now displays the correct time for when the play was made.
 - $osutop now displays the correct time for when the play was made.
