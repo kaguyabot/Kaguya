@@ -86,7 +86,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             int fishId = r.Next(int.MaxValue);
             int fishExp;
 
-            while (await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId))
+            while (await DatabaseQueries.ItemExistsAsync<Fish>(x => x.FishId == fishId))
                 fishId = r.Next(int.MaxValue);
 
             var bonuses = new FishHandler.FishLevelBonuses(user.FishExp);

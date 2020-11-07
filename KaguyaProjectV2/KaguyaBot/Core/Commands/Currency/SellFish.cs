@@ -107,7 +107,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 }
             }
 
-            if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId) && fishId != 0)
+            if (!await DatabaseQueries.ItemExistsAsync<Fish>(x => x.FishId == fishId) && fishId != 0)
             {
                 await SendBasicErrorEmbedAsync($"The fish ID `{fishId}` does not exist. Use the " +
                                                $"`myfish` command to view your fish and IDs!");
@@ -115,7 +115,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 return;
             }
 
-            if (!await DatabaseQueries.ItemExists<Fish>(x => x.FishId == fishId && x.UserId == user.UserId) && fishId != 0)
+            if (!await DatabaseQueries.ItemExistsAsync<Fish>(x => x.FishId == fishId && x.UserId == user.UserId) && fishId != 0)
             {
                 await SendBasicErrorEmbedAsync($"This fish doesn't belong to you!");
 

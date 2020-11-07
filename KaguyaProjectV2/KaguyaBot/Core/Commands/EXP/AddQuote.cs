@@ -61,7 +61,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
                 TimeStamp = DateTime.Now.ToOADate()
             };
 
-            int quoteId = await DatabaseQueries.SafeAddQuote(server, quote);
+            int quoteId = await DatabaseQueries.SafeAddQuoteAsync(server, quote);
             var embed = new KaguyaEmbedBuilder
             {
                 Fields = new List<EmbedFieldBuilder>

@@ -1,23 +1,23 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using LinqToDB;
-using LinqToDB.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Context;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using LinqToDB;
+using LinqToDB.Data;
 using LinqToDB.Linq;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
 {
     public static class DatabaseQueries
     {
-        public static async Task<bool> TestConnection()
+        public static async Task<bool> TestConnectionAsync()
         {
             using (var db = new KaguyaDb())
             {
@@ -129,10 +129,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Sells a <see cref="Fish"/> to the "market", then adds the value of the fish to the
-        /// <see cref="User"/>'s points balance. This action will add the points to the user's account.
-        ///
-        /// This method is synchronous as of v2.5.2 due to errors relating to users not getting points when mass-selling fish.
+        ///     Sells a <see cref="Fish" /> to the "market", then adds the value of the fish to the
+        ///     <see cref="User" />'s points balance. This action will add the points to the user's account.
+        ///     This method is synchronous as of v2.5.2 due to errors relating to users not getting points when mass-selling fish.
         /// </summary>
         /// <param name="fish">The fish to sell.</param>
         /// <param name="userId">The ID of the user to add the value of the fish to.</param>
@@ -154,7 +153,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a List of Fish that belong to the user ID.
+        ///     Returns a List of Fish that belong to the user ID.
         /// </summary>
         /// <param name="fishType">The type of fish we are selling.</param>
         /// <param name="userId">The id of the user who we want to get all of the fish from.</param>
@@ -170,8 +169,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a List of Fish that belongs to the user ID that have not been sold. This only returns
-        /// actual fish, not the BAIT_STOLEN event.
+        ///     Returns a List of Fish that belongs to the user ID that have not been sold. This only returns
+        ///     actual fish, not the BAIT_STOLEN event.
         /// </summary>
         /// <param name="userId">The ID of the user who we want to get all of the unsold fish from.</param>
         /// <returns></returns>
@@ -186,8 +185,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Inserts the <see cref="IKaguyaUnique{T}"/> object into the database, assuming it doesn't already exist.
-        /// If it exists, this will replace it via the PrimaryKey.
+        ///     Inserts the <see cref="IKaguyaUnique{T}" /> object into the database, assuming it doesn't already exist.
+        ///     If it exists, this will replace it via the PrimaryKey.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
@@ -199,8 +198,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Inerts a new <see cref="IKaguyaQueryable{T}"/> object into the database. Do not use if wanting to
-        /// update.
+        ///     Inerts a new <see cref="IKaguyaQueryable{T}" /> object into the database. Do not use if wanting to
+        ///     update.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
@@ -221,12 +220,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Inserts the <see cref="T"/> <see cref="arg"/> into the database and returns the <see cref="T"/> <see cref="arg"/>
-        /// with it's updated auto-incremented identifier. Use this only if the database table has an auto-incremented ID.
+        ///     Inserts the <see cref="T" /> <see cref="arg" /> into the database and returns the <see cref="T" /> <see cref="arg" />
+        ///     with it's updated auto-incremented identifier. Use this only if the database table has an auto-incremented ID.
         /// </summary>
         /// <param name="arg"></param>
         /// <typeparam name="T"></typeparam>
-        /// <returns>The id of the <see cref="T"/>.</returns>
+        /// <returns>The id of the <see cref="T" />.</returns>
         public static async Task<int> InsertWithIdentityAsync<T>(T arg) where T : class,
             IKaguyaQueryable<T>, IKaguyaUnique<T>
         {
@@ -239,13 +238,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a <see cref="T"/> object that belongs to the user, but is not necessarily
-        /// mapped to the user object directly. <see cref="T"/> refers to the object in the database that
-        /// we want to retreive, for example, someone's fish or something else that belongs to them.
+        ///     Returns a <see cref="T" /> object that belongs to the user, but is not necessarily
+        ///     mapped to the user object directly. <see cref="T" /> refers to the object in the database that
+        ///     we want to retreive, for example, someone's fish or something else that belongs to them.
         /// </summary>
-        /// <typeparam name="T">The <see cref="T"/> object that we are looking for. Must inherit from
-        /// <see cref="IKaguyaQueryable{T}"/>, <see cref="IKaguyaUnique{T}"/> and <see cref="IUserSearchable{T}"/></typeparam>
-        /// <param name="userId">The user whom we are retreiving the <see cref="T"/> for.</param>
+        /// <typeparam name="T">
+        ///     The <see cref="T" /> object that we are looking for. Must inherit from
+        ///     <see cref="IKaguyaQueryable{T}" />, <see cref="IKaguyaUnique{T}" /> and <see cref="IUserSearchable{T}" />
+        /// </typeparam>
+        /// <param name="userId">The user whom we are retreiving the <see cref="T" /> for.</param>
         /// <returns></returns>
         public static async Task<T> GetFirstForUserAsync<T>(ulong userId) where T :
             class,
@@ -262,8 +263,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Finds all <see cref="T"/> objects that belong to the <see cref="userId"/>
-        /// with the corresponding <see cref="userId"/>.
+        ///     Finds all <see cref="T" /> objects that belong to the <see cref="userId" />
+        ///     with the corresponding <see cref="userId" />.
         /// </summary>
         /// <typeparam name="T">The type of object we want to find for the user.</typeparam>
         /// <param name="userId">The Id of the user.</param>
@@ -293,11 +294,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Finds the first (or default) <see cref="IKaguyaUnique{T}"/> object in the database that belongs to this <see cref="serverId"/>
+        ///     Finds the first (or default) <see cref="IKaguyaUnique{T}" /> object in the database that belongs to this <see cref="serverId" />
         /// </summary>
-        /// <typeparam name="T">The <see cref="IServerSearchable{T}"/> that belongs to this <see cref="serverId"/></typeparam>
+        /// <typeparam name="T">The <see cref="IServerSearchable{T}" /> that belongs to this <see cref="serverId" /></typeparam>
         /// <param name="serverId">The Id of the server.</param>
-        /// <returns>The first element of type <see cref="IKaguyaUnique{T}"/> that belongs to this <see cref="serverId"/></returns>
+        /// <returns>The first element of type <see cref="IKaguyaUnique{T}" /> that belongs to this <see cref="serverId" /></returns>
         public static async Task<T> GetFirstForServerAsync<T>(ulong serverId) where T :
             class,
             IKaguyaQueryable<T>,
@@ -313,9 +314,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a <see cref="List{T}"/> of objects that match the given <see cref="serverId"/>.
+        ///     Returns a <see cref="List{T}" /> of objects that match the given <see cref="serverId" />.
         /// </summary>
-        /// <typeparam name="T">The <see cref="IServerSearchable{T}"/> that we want to get for this <see cref="serverId"/>.</typeparam>
+        /// <typeparam name="T">The <see cref="IServerSearchable{T}" /> that we want to get for this <see cref="serverId" />.</typeparam>
         /// <param name="serverId">The Id of the server we are searching for.</param>
         /// <returns></returns>
         public static async Task<List<T>> GetAllForServerAsync<T>(ulong serverId) where T :
@@ -332,10 +333,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Deletes all of the <see cref="IServerSearchable{T}"/> objects from the database
-        /// where the serverId matches the provided <see cref="serverId"/>
+        ///     Deletes all of the <see cref="IServerSearchable{T}" /> objects from the database
+        ///     where the serverId matches the provided <see cref="serverId" />
         /// </summary>
-        /// <typeparam name="T">The <see cref="IServerSearchable{T}"/> to remove from the database.</typeparam>
+        /// <typeparam name="T">The <see cref="IServerSearchable{T}" /> to remove from the database.</typeparam>
         /// <param name="serverId">The id of the server to clear the objects from.</param>
         /// <returns></returns>
         public static async Task DeleteAllForServerAsync<T>(ulong serverId) where T :
@@ -350,7 +351,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Bulk copies (inserts) the <see cref="IEnumerable{T}"/> into the database.
+        ///     Bulk copies (inserts) the <see cref="IEnumerable{T}" /> into the database.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="args"></param>
@@ -365,7 +366,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Deletes the <see cref="T"/> object from the database.
+        ///     Deletes the <see cref="T" /> object from the database.
         /// </summary>
         /// <typeparam name="T">The type of object we are removing from the database.</typeparam>
         /// <param name="arg">The exact object that we are deleting from the database.</param>
@@ -393,10 +394,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Deletes all objects from the database that are specified in <see cref="args"/>
+        ///     Deletes all objects from the database that are specified in <see cref="args" />
         /// </summary>
         /// <typeparam name="T">The type of object we are removing from the database.</typeparam>
-        /// <param name="args">The <see cref="IEnumerable{T}"/> collection of objects to delete.</param>
+        /// <param name="args">The <see cref="IEnumerable{T}" /> collection of objects to delete.</param>
         /// <returns></returns>
         public static async Task DeleteAsync<T>(IEnumerable<T> args) where T : class, IKaguyaQueryable<T>
         {
@@ -408,7 +409,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns ALL objects of type <see cref="T"/> that exist in the database.
+        ///     Returns ALL objects of type <see cref="T" /> that exist in the database.
         /// </summary>
         /// <typeparam name="T">The type of object to retreive ALL items of.</typeparam>
         /// <returns></returns>
@@ -419,12 +420,14 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a <see cref="List{T}"/> that match the given predicate.
+        ///     Returns a <see cref="List{T}" /> that match the given predicate.
         /// </summary>
-        /// <typeparam name="T">The type of <see cref="List{T}"/> to return.</typeparam>
-        /// <param name="predicate">A condition that each returned object in the <see cref="List{T}"/> must match.</param>
-        /// <param name="limit">The amount of objects to return. If this value is below zero, the function will
-        /// return all objects that match the <see cref="Predicate{T}"/></param>
+        /// <typeparam name="T">The type of <see cref="List{T}" /> to return.</typeparam>
+        /// <param name="predicate">A condition that each returned object in the <see cref="List{T}" /> must match.</param>
+        /// <param name="limit">
+        ///     The amount of objects to return. If this value is below zero, the function will
+        ///     return all objects that match the <see cref="Predicate{T}" />
+        /// </param>
         /// <returns></returns>
         public static async Task<List<T>> GetAllAsync<T>(Expression<Func<T, bool>> predicate) where T :
             class, IKaguyaQueryable<T>
@@ -437,13 +440,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns all of the <see cref="T"/> objects from the database that match the given <see cref="Predicate{T}"/>,
-        /// limited by the <see cref="limit"/> parameter. The <see cref="selector"/> will determine what variable to order
-        /// the results by. If the <see cref="selector"/> is provided, the results will be ordered based on the
-        /// <see cref="orderByDescending"/> parameter.
+        ///     Returns all of the <see cref="T" /> objects from the database that match the given <see cref="Predicate{T}" />,
+        ///     limited by the <see cref="limit" /> parameter. The <see cref="selector" /> will determine what variable to order
+        ///     the results by. If the <see cref="selector" /> is provided, the results will be ordered based on the
+        ///     <see cref="orderByDescending" /> parameter.
         /// </summary>
         /// <typeparam name="T">The type of object to return results of.</typeparam>
-        /// <typeparam name="TKey">The <see cref="TKey"/> to order our results by, assuming we want them ordered.</typeparam>
+        /// <typeparam name="TKey">The <see cref="TKey" /> to order our results by, assuming we want them ordered.</typeparam>
         /// <param name="predicate"></param>
         /// <param name="limit"></param>
         /// <param name="selector"></param>
@@ -480,8 +483,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a <see cref="List{T}"/> where the <see cref="userId"/> and <see cref="serverId"/> matches
-        /// the provided values.
+        ///     Returns a <see cref="List{T}" /> where the <see cref="userId" /> and <see cref="serverId" /> matches
+        ///     the provided values.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="userId"></param>
@@ -499,7 +502,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns the FirstOrDefault <see cref="T"/> that matches the provided <see cref="userId"/> and <see cref="serverId"/>
+        ///     Returns the FirstOrDefault <see cref="T" /> that matches the provided <see cref="userId" /> and <see cref="serverId" />
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="userId"></param>
@@ -517,8 +520,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Updates the specified <see cref="IKaguyaUnique{T}"/> <see cref="arg"/> in the database. Item
-        /// must have a primary key in order for this query to execute. 
+        ///     Updates the specified <see cref="IKaguyaUnique{T}" /> <see cref="arg" /> in the database. Item
+        ///     must have a primary key in order for this query to execute.
         /// </summary>
         /// <typeparam name="T">The type of object we are updating</typeparam>
         /// <param name="arg">The object to update.</param>
@@ -530,7 +533,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Updates the specified <see cref="IEnumerable{T}"/> <see cref="args"/> in the database.
+        ///     Updates the specified <see cref="IEnumerable{T}" /> <see cref="args" /> in the database.
         /// </summary>
         /// <typeparam name="T">The type of object whom's collection we are updating.</typeparam>
         /// <param name="args">The collection to update.</param>
@@ -546,7 +549,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Executes the provided sql query and returns the number of affected rows.
+        ///     Executes the provided sql query and returns the number of affected rows.
         /// </summary>
         /// <param name="sql">The sql to execute asynchronously.</param>
         /// <returns>The number of affected rows</returns>
@@ -557,13 +560,15 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns the first or default value from the database of a type that matches this <see cref="Predicate{T}"/>.
+        ///     Returns the first or default value from the database of a type that matches this <see cref="Predicate{T}" />.
         /// </summary>
-        /// <typeparam name="T">The type of <see cref="IKaguyaQueryable{T}"/> object to return</typeparam>
-        /// <param name="predicate">An expression that the returned object must match.
-        /// <code>
+        /// <typeparam name="T">The type of <see cref="IKaguyaQueryable{T}" /> object to return</typeparam>
+        /// <param name="predicate">
+        ///     An expression that the returned object must match.
+        ///     <code>
         /// await GetFirstMatchAsync{User}(x => x.UserId == SomeId);
-        /// </code></param>
+        /// </code>
+        /// </param>
         /// <returns></returns>
         public static async Task<T> GetFirstMatchAsync<T>(Expression<Func<T, bool>> predicate) where T :
             class, IKaguyaQueryable<T>
@@ -576,13 +581,13 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a <see cref="bool"/> that determines whether the provided <see cref="arg"/> exists in the database.
-        /// If it does, this function will return true.
+        ///     Returns a <see cref="bool" /> that determines whether the provided <see cref="arg" /> exists in the database.
+        ///     If it does, this function will return true.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg">The object that we are checking to see exists in the database.</param>
         /// <returns></returns>
-        public static async Task<bool> ItemExists<T>(T arg) where T :
+        public static async Task<bool> ItemExistsAsync<T>(T arg) where T :
             class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
@@ -590,21 +595,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns a <see cref="bool"/> that determines whether this <see cref="T"/> object exists in the database
-        /// where the <see cref="predicate"/> is true.
-        /// If it does, this function will return true.
+        ///     Returns a <see cref="bool" /> that determines whether this <see cref="T" /> object exists in the database
+        ///     where the <see cref="predicate" /> is true.
+        ///     If it does, this function will return true.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static async Task<bool> ItemExists<T>(Expression<Func<T, bool>> predicate) where T :
+        public static async Task<bool> ItemExistsAsync<T>(Expression<Func<T, bool>> predicate) where T :
             class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
                 return await db.GetTable<T>().Where(predicate).AnyAsync();
         }
 
-        public static async Task<bool> ItemExists<T>(IEnumerable<T> args, Expression<Func<T, bool>> predicate) where T :
+        public static async Task<bool> ItemExistsAsync<T>(IEnumerable<T> args, Expression<Func<T, bool>> predicate) where T :
             class, IKaguyaQueryable<T>
         {
             using (var db = new KaguyaDb())
@@ -612,7 +617,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Inserts the object into the database. If it already exists, an exception will be thrown.
+        ///     Inserts the object into the database. If it already exists, an exception will be thrown.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg">The object to insert, assuming it doesn't already exist.</param>
@@ -633,7 +638,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns the number of objects that exist of type <see cref="T"/>
+        ///     Returns the number of objects that exist of type <see cref="T" />
         /// </summary>
         /// <typeparam name="T">The type of object to return the number of occurances of.</typeparam>
         /// <returns></returns>
@@ -644,7 +649,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns the number of objects that exist of type <see cref="T"/> matching the given <see cref="Predicate{T}"/>
+        ///     Returns the number of objects that exist of type <see cref="T" /> matching the given <see cref="Predicate{T}" />
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="predicate"></param>
@@ -657,7 +662,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns the most popular command of all time, with how many uses it has.
+        ///     Returns the most popular command of all time, with how many uses it has.
         /// </summary>
         /// <returns></returns>
         public static Dictionary<string, int> GetMostPopularCommandAsync()
@@ -686,7 +691,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
         }
 
         /// <summary>
-        /// Returns the total amount of points in circulation across all users.
+        ///     Returns the total amount of points in circulation across all users.
         /// </summary>
         /// <returns></returns>
         public static int GetTotalCurrency()
@@ -695,7 +700,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
                 return Enumerable.Sum(db.Users, user => user.Points);
         }
 
-        public static async Task<int> SafeAddQuote(Server server, Quote quote)
+        public static async Task<int> SafeAddQuoteAsync(Server server, Quote quote)
         {
             using (var db = new KaguyaDb())
             {
@@ -724,6 +729,19 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries
             }
 
             return -1;
+        }
+
+        /// <summary>
+        /// Returns the most recent set of statistics from the database.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<KaguyaStatistics> GetMostRecentStatsAsync()
+        {
+            using (var db = new KaguyaDb())
+            {
+                return await (from t in db.GetTable<KaguyaStatistics>().OrderByDescending(x => x.TimeStamp)
+                              select t).FirstOrDefaultAsync();
+            }
         }
     }
 }

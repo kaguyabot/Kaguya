@@ -1,5 +1,7 @@
-### Version 3.0.4
+### Version 3.1
 - Fixed bug where antiraid could log messages multiple times if lots of users are being actioned.
+- Drastically improved speed of KaguyaWebData api response.
+- Drastically improved speed of $stats.
 
 ### Version 3.0.3
 - $osurecent now displays the correct time for when the play was made.

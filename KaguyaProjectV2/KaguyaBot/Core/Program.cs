@@ -205,7 +205,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             try
             {
                 var _ = new Init();
-                if (await DatabaseQueries.TestConnection())
+                if (await DatabaseQueries.TestConnectionAsync())
                     await ConsoleLogger.LogAsync("Database connection successfully established.", LogLvl.INFO);
             }
             catch (Exception e)
@@ -231,6 +231,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             // We need to load the cache on program start.
             await MemoryCache.Initialize();
             await ConsoleLogger.LogAsync("Memory Cache timer initialized", LogLvl.INFO);
+            await KaguyaStatsFactory.Initialize();
+            await ConsoleLogger.LogAsync("Kaguya stats updater initialized", LogLvl.INFO);
 #if !DEBUG
             await AntiRaidService.Initialize();
             await ConsoleLogger.LogAsync("Antiraid service initialized", LogLvl.INFO);
@@ -242,11 +244,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Kaguya Premium expiration handler initialized", LogLvl.INFO);
             await RateLimitService.Initialize();
             await ConsoleLogger.LogAsync("Ratelimit service initialized", LogLvl.INFO);
-
             await StatsUpdater.Initialize();
             await ConsoleLogger.LogAsync("Top.gg stats updater initialized", LogLvl.INFO);
-            await KaguyaStatsLogger.Initialize();
-            await ConsoleLogger.LogAsync("Kaguya stats logger initialized", LogLvl.INFO);
             await AutoUnmuteHandler.Initialize();
             await ConsoleLogger.LogAsync("Unmute handler initialized", LogLvl.INFO);
             await RemindService.Initialize();

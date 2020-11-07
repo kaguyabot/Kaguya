@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaApi.Database.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Application;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,7 +14,7 @@ namespace KaguyaProjectV2.KaguyaApi.Controllers
         [HttpGet]
         public async Task<string> Get()
         {
-            var data = new KaguyaWebData();
+            KaguyaStatistics data = MemoryCache.MostRecentStats;
 
             return JsonConvert.SerializeObject(data, Formatting.Indented);
         }
