@@ -66,7 +66,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             int points = DatabaseQueries.GetTotalCurrency();
             int gambles = await DatabaseQueries.GetCountAsync<GambleHistory>();
             DateTime timestamp = DateTime.Now;
-            double ram = (double)GC.GetTotalMemory(false) / 100000;
+            double ram = (double)GC.GetTotalMemory(false) / 1000000;
             int latency = ConfigProperties.Client.Latency;
             string version = ConfigProperties.Version;
             long uptimeSeconds = (long) (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
