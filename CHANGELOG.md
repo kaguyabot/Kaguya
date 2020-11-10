@@ -1,3 +1,7 @@
+### Version 3.1.1
+- Fixed bug with antiraid where users would not be actioned or logged properly.
+- **Re-introduced bug** where sometimes there are duplicate anti-raid log messages.
+
 ### Version 3.1
 - Fixed bug where antiraid could log messages multiple times if lots of users are being actioned.
 - Drastically improved speed of KaguyaWebData api response.

@@ -233,9 +233,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Memory Cache timer initialized", LogLvl.INFO);
             await KaguyaStatsFactory.Initialize();
             await ConsoleLogger.LogAsync("Kaguya stats updater initialized", LogLvl.INFO);
-#if !DEBUG
             await AntiRaidService.Initialize();
             await ConsoleLogger.LogAsync("Antiraid service initialized", LogLvl.INFO);
+#if !DEBUG
             await OwnerGiveawayMessageUpdaterService.Initialize();
             await ConsoleLogger.LogAsync("Owner giveaway message updater initialized", LogLvl.INFO);
             await KaguyaPremiumRoleHandler.Initialize();
