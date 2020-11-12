@@ -1,5 +1,9 @@
 ### Version 3.2
 - $shadowban and $unshadowban have been rewritten to be more efficient.
+- Re-designed the formatting of log messages to take up much less space.
+- Fixed typo where antiraid DM's had incorrect grammar for the punishment.
+- Fixed bug where, in some circumstances, antiraid log messages would be duplicated.
+- Fixed a bug where users DM'd with an antiraid DM notification would not be called by their proper name.
 
 ### Version 3.1.1
 - Fixed bug with antiraid where users would not be actioned or logged properly.

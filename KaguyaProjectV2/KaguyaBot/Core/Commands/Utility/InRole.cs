@@ -23,11 +23,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
         {
             SocketGuild guild = Context.Guild;
             IReadOnlyCollection<SocketRole> roles = guild.Roles;
-            KaguyaEmbedBuilder embed;
 
             if (roles.All(x => x.Name.ToLower() != roleName.ToLower()))
             {
-                embed = new KaguyaEmbedBuilder
+                var embed = new KaguyaEmbedBuilder
                 {
                     Description = $"The role `{roleName.ToUpper()}` could not be found."
                 };

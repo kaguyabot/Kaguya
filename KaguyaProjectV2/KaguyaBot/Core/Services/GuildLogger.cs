@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
@@ -135,15 +137,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             if (server.LogUserJoins == 0)
                 return;
 
-            var embed = new KaguyaEmbedBuilder
-            {
-                Title = "User Joined",
-                Description =
-                    $"User: `[Name: {arg} | ID: {arg.Id}]`\nAccount Created: `{arg.CreatedAt}`\nStatus: `{Regex.Replace(arg.Status.ToString(), "([a-z])([A-Z])", "$1 $2")}`",
-                ThumbnailUrl = "https://i.imgur.com/3PsE0Ey.png"
-            };
-
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendEmbedAsync(embed);
+            string msg = $"✅ `[{GetFormattedTimestamp()}]` `ID: {arg.Id}` **{arg}** joined the server. Member Count: **{arg.Guild.MemberCount:N0}**";
+            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendMessageAsync(msg);
         }
 
         private static async Task _client_UserLeft(SocketGuildUser arg)
@@ -153,15 +148,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             if (server.LogUserLeaves == 0)
                 return;
 
-            var embed = new KaguyaEmbedBuilder
-            {
-                Title = "User Left",
-                Description =
-                    $"User: `[Name: {arg} | ID: {arg.Id}]`\nAccount Created: `{arg.CreatedAt}`\nStatus: `{Regex.Replace(arg.Status.ToString(), "([a-z])([A-Z])", "$1 $2")}`",
-                ThumbnailUrl = "https://i.imgur.com/1I0ayRE.png"
-            };
+            const string X_CROSS = "<:RedCross:776513248312295484>";
+            string msg = $"{X_CROSS} `[{GetFormattedTimestamp()}]` `ID: {arg.Id}` **{arg}** left the server or was kicked. Member Count: **{arg.Guild.MemberCount:N0}**";
 
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendEmbedAsync(embed);
+            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendMessageAsync(msg);
         }
 
         private static async Task OnAntiRaid(AntiRaidEventArgs e)
@@ -171,31 +161,48 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             if (server.LogAntiraids == 0)
                 return;
 
-            string actionedUsers = "";
+            string punishString = AntiRaidService.FormattedAntiraidPunishment(e.Punishment);
+
+            int lines = 0;
+            var actionedUsers = new StringBuilder();
             foreach (SocketGuildUser user in e.GuildUsers)
             {
-                actionedUsers +=
-                    $"`{user} | {user.Id}`\n";
+                actionedUsers.AppendLine($"🛡️ `[Anti-Raid]` `[{GetFormattedTimestamp()}]` `ID: {user.Id}` **{user}** was automatically {punishString}.");
+                lines++;
             }
 
-            if (actionedUsers.Length > 1750)
-                actionedUsers = "Too many users to write here! " + e.GuildUsers.Count.ToString("N0") + " users actioned.";
-
-            var embed = new KaguyaEmbedBuilder
+            if (lines > 15)
             {
-                Title = "Anti-Raid Triggered",
-                Description = $"Punishment: `{e.Punishment}`\n" +
-                              $"Users Actioned:\n\n{actionedUsers}",
-                ThumbnailUrl = "https://i.imgur.com/QFY9CdE.png"
-            };
-
-            try
-            {
-                await _client.GetGuild(e.SocketGuild.Id).GetTextChannel(server.LogAntiraids).SendEmbedAsync(embed);
+                var textLines = actionedUsers.ToString().Split('\n').ToArray();
+                int msgCount = lines + 14 / 15;
+                for (int i = 1 ; i < msgCount - 1; i++)
+                {
+                    var curMsg = new StringBuilder();
+                    for (int j = 0; j < textLines.Length / i; j++)
+                    {
+                        curMsg.Append(textLines[j]);
+                    }
+                    
+                    try
+                    {
+                        await _client.GetGuild(e.SocketGuild.Id).GetTextChannel(server.LogAntiraids).SendMessageAsync(curMsg.ToString());
+                    }
+                    catch (Exception exception)
+                    {
+                        await ConsoleLogger.LogAsync($"Failed to deliver anti-raid log message in guild {server.ServerId}!\nReason: {exception.Message}", LogLvl.WARN);
+                    }
+                }
             }
-            catch (Exception exception)
+            else
             {
-                await ConsoleLogger.LogAsync($"Failed to deliver anti-raid log message in guild {server.ServerId}!\nReason: {exception.Message}", LogLvl.WARN);
+                try
+                {
+                    await _client.GetGuild(e.SocketGuild.Id).GetTextChannel(server.LogAntiraids).SendMessageAsync(actionedUsers.ToString());
+                }
+                catch (Exception exception)
+                {
+                    await ConsoleLogger.LogAsync($"Failed to deliver anti-raid log message in guild {server.ServerId}!\nReason: {exception.Message}", LogLvl.WARN);
+                }
             }
         }
 
@@ -281,6 +288,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections)
                              .SendEmbedAsync(_embed);
             }
+        }
+
+        private static string GetFormattedTimestamp()
+        {
+            var d = DateTime.Now;
+            var sb = new StringBuilder();
+
+            sb.Append(d.Month.ToString("00") + "-");
+            sb.Append(d.Day.ToString("00") + "-");
+            sb.Append(d.Year.ToString("0000") + " ");
+            sb.Append(d.Hour.ToString("00") + ":");
+            sb.Append(d.Minute.ToString("00") + ":");
+            sb.Append(d.Second.ToString("00"));
+
+            return sb.ToString();
         }
     }
 }

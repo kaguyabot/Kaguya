@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Discord.Net;
 using Discord.WebSocket;
-using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
-using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -34,9 +32,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                 AntiRaidConfig ar = server.AntiRaid;
 
-                if (!ServerTimers.CachedTimers.Any(x => x.ServerId == server.ServerId))
+                if (!ActiveAntiraids.Raids.Any(x => x.ServerId == server.ServerId))
                 {
-                    var newSt = new ServerTimer
+                    var newRaidData = new RaidData
                     {
                         ServerId = server.ServerId,
                         UserIds = new HashSet<ulong>
@@ -45,18 +43,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         }
                     };
 
-                    ServerTimers.AddToCache(newSt);
+                    ActiveAntiraids.SafeAdd(newRaidData);
                 }
                 else
                 {
                     var newIds = new HashSet<ulong>();
-                    HashSet<ulong> existingIds = ServerTimers.CachedTimers.First(x => x.ServerId == server.ServerId).UserIds;
+                    HashSet<ulong> existingIds = ActiveAntiraids.Raids.First(x => x.ServerId == server.ServerId).UserIds;
 
+                    // Copies existing IDs from the known / active raid into a new HashSet<ulong>.
                     foreach (ulong id in existingIds)
                         newIds.Add(id);
 
+                    // Finally, add the current user's ID to the HashSet.
                     newIds.Add(u.Id);
-                    ServerTimers.ReplaceTimer(new ServerTimer
+                    
+                    // Replace the object in memory.
+                    ActiveAntiraids.ReplaceRaidData(new RaidData
                     {
                         ServerId = server.ServerId,
                         UserIds = newIds
@@ -68,20 +70,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 timer.AutoReset = false;
                 timer.Elapsed += async (sender, args) =>
                 {
-                    ServerTimer existingObj = ServerTimers.CachedTimers.FirstOrDefault(x => x.ServerId == server.ServerId);
-
+                    RaidData existingObj = ActiveAntiraids.Raids.FirstOrDefault(x => x.ServerId == server.ServerId);
                     if (existingObj == null)
                         return;
+                    
+                    // Filter by distinct to fix the duplicate users issue.
+                    existingObj.UserIds = existingObj.UserIds.Distinct().ToHashSet();
 
+                    // This must be above ActionUsers() as it takes a few seconds for users to be actioned 
+                    // resulting in duplicate log messages and ban attempts.
+                    ActiveAntiraids.RemoveAll(existingObj);
                     if (existingObj.UserIds.Count >= ar.Users)
+                    {
                         await ActionUsers(existingObj.UserIds, server.ServerId, ar.Action);
-
-                    ServerTimers.CachedTimers.Remove(existingObj);
+                    }
                 };
             };
         });
 
-        private static async Task ActionUsers(HashSet<ulong> userIds, ulong guildId, string action)
+        private static async Task ActionUsers(IEnumerable<ulong> userIds, ulong guildId, string action)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(guildId);
             SocketGuild guild = ConfigProperties.Client.GetGuild(guildId);
@@ -95,8 +102,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     guildUsers.Add(guildUser);
             }
 
-            AntiRaidEvent.Trigger(server, guildUsers, guild, action);
-
             if (guildUsers.Count == 0)
             {
                 await ConsoleLogger.LogAsync($"The antiraid service was triggered in guild: {guild.Id} " +
@@ -104,25 +109,32 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                 return;
             }
+            
+            AntiRaidEvent.Trigger(server, guildUsers, guild, action);
 
             // We need to message the actioned users, if applicable, before actioning.
-            string content = server.AntiraidPunishmentDirectMessage;
 
-            if (!string.IsNullOrWhiteSpace(content))
+            if (!string.IsNullOrWhiteSpace(server.AntiraidPunishmentDirectMessage))
             {
-                var embed = new KaguyaEmbedBuilder(EmbedColor.ORANGE)
-                {
-                    Title = "Kaguya Anti-Raid Notification",
-                    Description = content
-                };
-
-                var sb = new StringBuilder(content);
+                
                 foreach (SocketGuildUser guildUser in guildUsers)
                 {
+                    // content must be inside the foreach because of how we modify it below 
+                    // on a per-user basis.
+                    string content = server.AntiraidPunishmentDirectMessage;
+
+                    var embed = new KaguyaEmbedBuilder(EmbedColor.ORANGE)
+                    {
+                        Title = "Kaguya Anti-Raid Notification",
+                        Description = content
+                    };
+                
+                    var sb = new StringBuilder(content);
+                    
                     sb = sb.Replace("{USERNAME}", guildUser.UsernameAndDescriminator());
                     sb = sb.Replace("{USERMENTION}", guildUser.Mention);
                     sb = sb.Replace("{SERVER}", guild.Name);
-                    sb = sb.Replace("{PUNISHMENT}", action.ToLower());
+                    sb = sb.Replace("{PUNISHMENT}", FormattedAntiraidPunishment(action.ToLower()));
 
                     embed.Description = sb.ToString();
 
@@ -231,48 +243,72 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
             await ConsoleLogger.LogAsync($"Antiraid: Successfully actioned {guildUsers.Count:N0} users in guild {guild.Id}.", LogLvl.INFO);
         }
+
+        public static string FormattedAntiraidPunishment(string punishmentStr)
+        {
+            return punishmentStr switch
+            {
+                "kick" => "kicked",
+                "ban" => "banned",
+                "mute" => "muted",
+                "shadowban" => "shadowbanned",
+                _ => punishmentStr
+            };
+        }
     }
 
-    public class ServerTimer
+    public class RaidData
     {
         public ulong ServerId { get; set; }
         public HashSet<ulong> UserIds { get; set; }
     }
 
-    public static class ServerTimers
+    public static class ActiveAntiraids
     {
-        public static List<ServerTimer> CachedTimers { get; set; } = new List<ServerTimer>();
+        public static List<RaidData> Raids { get; set; } = new List<RaidData>();
 
         /// <summary>
-        /// Adds a timer to the cache.
+        /// Adds a <see cref="RaidData"/> to the cache, but if there is an existing
+        /// <see cref="RaidData"/> with the same ServerId, it will not be added.
         /// </summary>
-        /// <param name="stObj"></param>
-        public static void AddToCache(ServerTimer stObj) => CachedTimers.Add(stObj);
-
-        public static void ReplaceTimer(ServerTimer stObj)
+        /// <param name="data"></param>
+        public static void SafeAdd(RaidData data)
         {
-            ServerTimer existingObj = CachedTimers.FirstOrDefault(x => x.ServerId == stObj.ServerId);
+            if(!Raids.Any(x => x.ServerId == data.ServerId))
+                Raids.Add(data);
+        }
 
-            CachedTimers.Remove(existingObj);
-            CachedTimers.Add(stObj);
+        public static void ReplaceRaidData(RaidData data)
+        {
+            Raids.Remove(Raids.FirstOrDefault(x => x.ServerId == data.ServerId));
+            SafeAdd(data);
+        }
+
+        /// <summary>
+        /// Removes all matches where the <see cref="data"/>'s ServerId value is found in the cache.
+        /// </summary>
+        /// <param name="data"></param>
+        public static void RemoveAll(RaidData data)
+        {
+            Raids.RemoveAll(x => x.ServerId == data.ServerId);
         }
     }
 
     public static class AntiRaidEvent
     {
         public static event Func<AntiRaidEventArgs, Task> OnRaid;
-        public static void Trigger(Server server, List<SocketGuildUser> users, SocketGuild guild, string action) => AntiRaidEventTrigger(new AntiRaidEventArgs(server, users, guild, action));
+        public static void Trigger(Server server, IEnumerable<SocketGuildUser> users, SocketGuild guild, string action) => AntiRaidEventTrigger(new AntiRaidEventArgs(server, users, guild, action));
         private static void AntiRaidEventTrigger(AntiRaidEventArgs e) => OnRaid?.Invoke(e);
     }
 
     public class AntiRaidEventArgs : EventArgs
     {
         public Server Server { get; }
-        public List<SocketGuildUser> GuildUsers { get; }
+        public IEnumerable<SocketGuildUser> GuildUsers { get; }
         public SocketGuild SocketGuild { get; }
         public string Punishment { get; }
 
-        public AntiRaidEventArgs(Server server, List<SocketGuildUser> users, SocketGuild guild, string punishment)
+        public AntiRaidEventArgs(Server server, IEnumerable<SocketGuildUser> users, SocketGuild guild, string punishment)
         {
             Server = server;
             GuildUsers = users;

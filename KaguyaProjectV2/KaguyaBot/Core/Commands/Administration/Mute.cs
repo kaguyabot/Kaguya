@@ -261,11 +261,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task AutoMute(SocketGuildUser user)
         {
             SocketGuild guild = user.Guild;
-            SocketRole muteRole = guild.Roles.FirstOrDefault(x => x?.Name.ToLower() == "kaguya-mute");
+            IRole muteRole = guild.Roles.FirstOrDefault(x => x?.Name.ToLower() == "kaguya-mute");
 
             if (muteRole == null)
             {
-                await guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, Color.Default, false, false, null);
+                IRole newRole = await guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, Color.Default, false, false, null);
+                muteRole = newRole;
+                
                 await ConsoleLogger.LogAsync($"New mute role created in guild [Name: {guild.Name} | ID: {guild.Id}]",
                     LogLvl.DEBUG);
 

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Discord.Rest;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Helpers;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -104,29 +105,34 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         /// <returns></returns>
         public async Task AutoShadowbanUserAsync(SocketGuildUser user)
         {
-            // Not try-catched as the exception is handled elsewhere.
-
             SocketGuild guild = user.Guild;
             SocketRole role = guild.Roles.FirstOrDefault(x => x.Name == SB_ROLE);
             
             if (role == null)
             {
-                await guild.CreateRoleAsync(SB_ROLE, GuildPermissions.None, null, false, false, null);
-                role = guild.Roles.FirstOrDefault(x => x.Name == SB_ROLE);
+                try
+                {
+                    await guild.CreateRoleAsync(SB_ROLE, GuildPermissions.None, null, false, false, null);
+                    role = guild.Roles.FirstOrDefault(x => x.Name == SB_ROLE);
+                }
+                catch (Exception e)
+                {
+                    await ConsoleLogger.LogAsync(e, $"Failed to create shadowban role in guild {guild.Id}.");
+                }
+                
             }
             
             try
             {
+                IEnumerable<SocketRole> roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
+                await user.RemoveRolesAsync(roles);
+                
                 await user.AddRoleAsync(role);
             }
             catch (Exception e)
             {
-                throw new KaguyaSupportException("Failed to add `kaguya-mute` role to user!\n\n" +
-                                                 $"Error Log: ```{e}```");
+                await ConsoleLogger.LogAsync(e, $"Failed to automatically shadowban user {user.Id} in guild {guild.Id}.");
             }
-            
-            IEnumerable<SocketRole> roles = user.Roles.Where(x => !x.IsManaged && x.Name != "@everyone");
-            await user.RemoveRolesAsync(roles);
         }
     }
 }
