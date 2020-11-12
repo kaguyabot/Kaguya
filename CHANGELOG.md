@@ -1,3 +1,6 @@
+### Version 3.2
+- $shadowban and $unshadowban have been rewritten to be more efficient.
+
 ### Version 3.1.1
 - Fixed bug with antiraid where users would not be actioned or logged properly.
 - **Re-introduced bug** where sometimes there are duplicate anti-raid log messages.

@@ -1,14 +1,16 @@
-﻿using Discord;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using System.Threading.Tasks;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class SomeCommand : KaguyaBase
     {
+        private const string SB_ROLE = "kaguya-shadowban";
+
         [AdminCommand]
         [Command("UnShadowban")]
         [Alias("usb")]
@@ -20,19 +22,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task Command(SocketGuildUser user)
         {
-            await ReplyAsync($"{Context.User.Mention} Executing, please wait...");
-
-            SocketGuild guild = Context.Guild;
-            foreach (SocketGuildChannel channel in guild.Channels)
-                await channel.RemovePermissionOverwriteAsync(user);
-
-            var successEmbed = new KaguyaEmbedBuilder
+            IRole role = Context.Guild.Roles.FirstOrDefault(x => x.Name == SB_ROLE);
+            if (role == null)
             {
-                Description = $"Successfully removed all channel-specific permission overwrites for `{user}`. " +
-                              $"They now have the same permissions as a new member who has no special roles."
-            };
+                await SendBasicErrorEmbedAsync($"The role `{SB_ROLE}` does not exist, therefore there are no active shadowbans.");
 
-            await ReplyAsync(embed: successEmbed.Build());
+                return;
+            }
+
+            if (!user.Roles.Contains(role))
+            {
+                await SendBasicErrorEmbedAsync($"{user.Mention} is not shadowbanned.");
+
+                return;
+            }
+
+            await user.RemoveRoleAsync(role);
+            await ReplyAsync($"{Context.User.Mention} Successfully unshadowbanned `{user}`.");
         }
     }
 }
