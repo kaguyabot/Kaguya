@@ -164,7 +164,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 {
                     await context.Channel.DeleteMessageAsync(message);
                     await ConsoleLogger.LogAsync($"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {phrase}]", LogLvl.INFO);
-
+                    
+                    var fpArgs = new FilteredPhraseEventArgs(server, phrase, message);
+                    FilteredPhrase.Trigger(fpArgs);
+                    
                     return true;
                 }
             }

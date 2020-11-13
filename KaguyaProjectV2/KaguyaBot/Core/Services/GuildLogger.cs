@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
@@ -26,13 +25,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             _client.MessageUpdated += _client_MessageUpdated;
             _client.UserJoined += _client_UserJoined;
             _client.UserLeft += _client_UserLeft;
-            AntiRaidEvent.OnRaid += OnAntiRaid;
             _client.UserBanned += _client_UserBanned;
             _client.UserUnbanned += _client_UserUnbanned;
             _client.UserVoiceStateUpdated += _client_UserVoiceStateUpdated;
+            AntiRaidEvent.OnRaid += OnAntiRaid;
+            FilteredPhrase.OnDetection += LogFilteredPhrase;
             //LevelUps
         }
-
+        
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel) arg2).Guild.Id);
@@ -273,11 +273,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
             string msg = sb.ToString();
             
-            if (server.LogVoiceChannelConnections != 0)
-            {
-                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(msg);
-            }
+            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(msg);
         }
+
+        private static async Task LogFilteredPhrase(FilteredPhraseEventArgs fpArgs)
+        {
+            if (fpArgs.Server.LogFilteredPhrases == 0)
+                return;
+
+            var author = fpArgs.Author;
+            var sb = new StringBuilder($"🛂 `[{GetFormattedTimestamp()}]` `ID: {author.Id}` Filtered phrase detected by **{author}**. ");
+            sb.Append($"Phrase: **{fpArgs.Phrase}**");
+
+            if (fpArgs.Server.IsPremium)
+            {
+                sb.Append($"\nMessage Contents: **{fpArgs.Message.Content}**");
+            }
+
+            string msg = sb.ToString();
+            await _client.GetGuild(fpArgs.Server.ServerId).GetTextChannel(fpArgs.Server.LogFilteredPhrases).SendMessageAsync(msg);
+        }
+
         
         private static string GetFormattedTimestamp()
         {
