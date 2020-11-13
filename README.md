@@ -41,7 +41,7 @@ The Kaguya Discord Bot provides the pinnacle of what a general-purpose Discord b
 * Praise servers
 * NSFW Commands
 * Rewards for upvoting Kaguya on [Top.gg.](https://top.gg/bot/538910393918160916/vote)
-* **NEW** Reaction Roles
+* Reaction Roles
 
 ## [Kaguya Premium](https://sellix.io/KaguyaStore) (Monthly Subscription):
 The standard Kaguya Premium option unlocks many features for both individuals and their servers. Any server-wide premium benefits, marked as **(SW)** below, apply to all servers you own and have Kaguya in. If you want to redeem multiple Kaguya Premium keys, the time will stack for every server you redeem the key in, as well as the personal benefits will stack on your account. Please note that redeeming 3 separate 30 day keys will grant you and all of your servers 90 days of premium benefits, but will grant the individual servers 30 days of benefits each.
@@ -54,9 +54,9 @@ All perks below will last until your time as a premium subscriber runs out.
 * 25,000 points for every 30 days of premium time purchased.
 * 2x points and exp from $daily
 * 2x points and exp from $vote
-* 25% off $bait cost
+* Save 25% on the cost of $fish-ing
 * Special $profile badge
-* Significantly reduced $fish cooldown
+* $fish 3x as frequently
 * More lenient rate limit (able to use commands more frequently than other users).
 * Access to $doujin
 * Access to $react
@@ -67,7 +67,7 @@ All perks below will last until your time as a premium subscriber runs out.
 * Access to $soundcloud, $twitchaudio
 * Bonus luck on all gambling commands (including $fish)
 * Store up to 1,000 fish bait instead of 100
-* Deleted messages logged via "$log DeletedMessages " will now include archives of deleted images and attachments. **(SW)**
+* Deleted messages logged via "$log DeletedMessages" will now include archives of the message's content, deleted images, and attachments. **(SW)**
 * Unlimited role rewards **(SW)**
 * Access to the $logtype "ModLog" - logs many various administrative actions **(SW)**
 * View more of a user's warn history via $unwarn **(SW)**

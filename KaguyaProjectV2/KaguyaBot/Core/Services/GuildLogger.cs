@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -50,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 return;
 
             IMessage message = arg1.Value;
-
+            
             if (message is null || message.Author.IsBot)
                 return;
 
@@ -59,45 +55,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 ? "<Message contained no text>"
                 : $"{message.Content}";
 
-            if (message.Attachments.Count == 0)
+            var sb = new StringBuilder($"🗑️ `[{GetFormattedTimestamp()}]` `ID: {message.Author.Id}` ");
+            sb.Append($"Message deleted. Author: **{message.Author}**. Channel: **{((SocketTextChannel)message.Channel).Mention}**.");
+            
+            // Premium servers get more content in the log.
+            if(server.IsPremium)
             {
-                embed = new KaguyaEmbedBuilder
+                sb.Append($"\nContent: \"**{content}**\"");
+
+                if (message.Attachments.Count > 0)
                 {
-                    Title = "Message Deleted",
-                    Description = $"User: `[Name: {message.Author} | ID: {message.Author.Id}]`\n" +
-                                  $"Content: `{content}`\nChannel: `{message.Channel}`\nDate Created: `{message.CreatedAt}`\n",
-                    ThumbnailUrl = "https://i.imgur.com/hooIc7u.png"
-                };
-            }
-            else
-            {
-                if (server.IsPremium)
-                {
-                    embed = new KaguyaEmbedBuilder
+                    sb.Append($" Attachments: **{message.Attachments.Count}**.");
+                    foreach (IAttachment a in message.Attachments)
                     {
-                        Title = "Message Deleted",
-                        Description = $"User: `[Name: {message.Author} | ID: {message.Author.Id}]`\n" +
-                                      $"Content: `{content}`\nChannel: `{message.Channel}`\nDate Created: `{message.CreatedAt}`\n" +
-                                      $"Number of Attachments: `{message.Attachments.Count}`\nAttachment URL: {message.Attachments.FirstOrDefault()?.ProxyUrl}",
-                        ThumbnailUrl = "https://i.imgur.com/hooIc7u.png",
-                        ImageUrl = message.Attachments.FirstOrDefault()?.ProxyUrl
-                    };
-                }
-                else
-                {
-                    embed = new KaguyaEmbedBuilder
-                    {
-                        Title = "Message Deleted",
-                        Description = $"User: `[Name: {message.Author} | ID: {message.Author.Id}]`\n" +
-                                      $"Content: `{content}`\nChannel: `{message.Channel}`\nDate Created: `{message.CreatedAt}`\n" +
-                                      $"Number of Attachments: `{message.Attachments.Count}`",
-                        ThumbnailUrl = "https://i.imgur.com/hooIc7u.png"
-                    };
+                        sb.Append($" URL: **<{a.ProxyUrl}>**");
+                    }
                 }
             }
 
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogDeletedMessages)
-                         .SendEmbedAsync(embed);
+            string msg = sb.ToString();
+            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogDeletedMessages).SendMessageAsync(msg);
         }
 
         private static async Task _client_MessageUpdated(Cacheable<IMessage, ulong> arg1, SocketMessage arg2, ISocketMessageChannel arg3)
