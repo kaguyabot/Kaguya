@@ -27,10 +27,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             _client.UserJoined += _client_UserJoined;
             _client.UserLeft += _client_UserLeft;
             AntiRaidEvent.OnRaid += OnAntiRaid;
-            //UserKicked
             _client.UserBanned += _client_UserBanned;
             _client.UserUnbanned += _client_UserUnbanned;
-            //FilteredPhrase
             _client.UserVoiceStateUpdated += _client_UserVoiceStateUpdated;
             //LevelUps
         }
@@ -280,7 +278,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(msg);
             }
         }
-
+        
         private static string GetFormattedTimestamp()
         {
             var d = DateTime.Now;
