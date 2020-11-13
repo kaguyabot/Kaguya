@@ -240,14 +240,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             if (server.LogUnbans == 0)
                 return;
 
-            var embed = new KaguyaEmbedBuilder
-            {
-                Title = "User Un-Banned",
-                Description = $"User: `[Name: {arg1} | ID: {arg1.Id}`]\n",
-                ThumbnailUrl = "https://i.imgur.com/uYOa4VD.png"
-            };
+            string msg = $"♻ `[{GetFormattedTimestamp()}]` `ID: {arg1.Id}` **{arg1}** has been unbanned.";
 
-            await arg2.GetTextChannel(server.LogBans).SendEmbedAsync(embed);
+            try
+            {
+                await arg2.GetTextChannel(server.LogBans).SendMessageAsync(msg);
+            }
+            catch (Exception e)
+            {
+                await ConsoleLogger.LogAsync($"Failed to deliver user unban log message in guild {server.ServerId}!\nReason: {e.Message}", LogLvl.WARN);
+            }
         }
 
         private static async Task _client_UserVoiceStateUpdated(SocketUser arg1, SocketVoiceState arg2, SocketVoiceState arg3)
@@ -259,43 +261,40 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             else
                 server = await DatabaseQueries.GetOrCreateServerAsync(arg2.VoiceChannel.Guild.Id);
 
-            string oldVoice = string.Empty, newVoice = string.Empty, embedUrl = string.Empty;
-
-            if (server.LogVoiceChannelConnections != 0)
+            if (server.LogVoiceChannelConnections == 0)
             {
-                if (arg2.VoiceChannel is null)
-                {
-                    oldVoice = "No prior channel.";
-                    newVoice = $"New connection to {arg3.VoiceChannel.Name}";
-                    embedUrl = "https://i.imgur.com/WPtsNwD.png";
-                }
-
-                if (arg2.VoiceChannel != null && arg3.VoiceChannel != null)
-                {
-                    oldVoice = $"{arg2.VoiceChannel.Name}";
-                    newVoice = $"{arg3.VoiceChannel.Name}";
-                    embedUrl = "https://i.imgur.com/Z4JTUBq.png";
-                }
-
-                if (arg3.VoiceChannel is null)
-                {
-                    oldVoice = $"{arg2.VoiceChannel.Name}";
-                    newVoice = "No new channel, user has disconnected.";
-                    embedUrl = "https://i.imgur.com/pAifz2P.png";
-                }
-
-                _embed = new KaguyaEmbedBuilder
-                {
-                    Title = "User Voice State Updated",
-                    Description = $"User: `[Name: {arg1} | ID: {arg1.Id}]`\nOld Voice Channel: `{oldVoice}`\nNew Voice Channel: `{newVoice}`",
-                    ThumbnailUrl = embedUrl
-                };
+                return;
             }
 
+            string changeString = ""; // User has...
+            string emoji = string.Empty;
+
+            if (arg2.VoiceChannel is null)
+            {
+                emoji = "🎙️🟢"; // Green circle
+                changeString = $"joined **{arg3.VoiceChannel.Name}**";
+            }
+
+            if (arg2.VoiceChannel != null && arg3.VoiceChannel != null)
+            {
+                emoji = "🎙️🟡"; // Yellow circle.
+                changeString = $"moved from **{arg2.VoiceChannel.Name}** to **{arg3.VoiceChannel.Name}**";
+            }
+
+            if (arg3.VoiceChannel is null)
+            {
+                emoji = "🎙️🔴"; // Red circle.
+                changeString = $"disconnected from **{arg2.VoiceChannel.Name}**";
+            }
+
+            var sb = new StringBuilder($"{emoji} `[{GetFormattedTimestamp()}]` `ID: {arg1.Id}` **{arg1}** ");
+            sb.Append($"has {changeString}.");
+
+            string msg = sb.ToString();
+            
             if (server.LogVoiceChannelConnections != 0)
             {
-                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections)
-                             .SendEmbedAsync(_embed);
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(msg);
             }
         }
 
