@@ -220,15 +220,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             if (server.LogBans == 0)
                 return;
 
-            var embed = new KaguyaEmbedBuilder
-            {
-                Title = "User Banned",
-                Description = $"User: `[Name: {arg1} | ID: {arg1.Id}`]\n" +
-                              $"Reason: `{(await arg2.GetBanAsync(arg1.Id)).Reason}`",
-                ThumbnailUrl = "https://i.imgur.com/6Xk2HCG.png"
-            };
+            string msg = $"⛔ `[{GetFormattedTimestamp()}]` `ID: {arg1.Id}` **{arg1}** was banned from the server. " +
+                         $"Member Count: **{arg2.MemberCount - 1:N0}**";
 
-            await arg2.GetTextChannel(server.LogBans).SendEmbedAsync(embed);
+            try
+            {
+                await arg2.GetTextChannel(server.LogBans).SendMessageAsync(msg);
+            }
+            catch (Exception e)
+            {
+                await ConsoleLogger.LogAsync($"Failed to deliver user ban log message in guild {server.ServerId}!\nReason: {e.Message}", LogLvl.WARN);
+            }
         }
 
         private static async Task _client_UserUnbanned(SocketUser arg1, SocketGuild arg2)
