@@ -15,6 +15,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
+using LinqToDB.Common;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Services
 {
@@ -171,16 +172,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 lines++;
             }
 
-            if (lines > 15)
+            // If there are more than 10 users being actioned, send messages in bulk with 10 users per message.
+            if (lines > 10)
             {
-                var textLines = actionedUsers.ToString().Split('\n').ToArray();
-                int msgCount = lines + 14 / 15;
-                for (int i = 1 ; i < msgCount - 1; i++)
+                string[] textLines = actionedUsers.ToString().Split('\n').Where(x => !x.IsNullOrEmpty()).ToArray();
+                int msgCount = (lines + 9) / 10;
+                for (int i = 0; i < msgCount; i++)
                 {
                     var curMsg = new StringBuilder();
-                    for (int j = 0; j < textLines.Length / i; j++)
+                    for (int j = 0; j < 10; j++)
                     {
-                        curMsg.Append(textLines[j]);
+                        int index = j + (i * 10);
+
+                        if (index == textLines.Length)
+                            break;
+                        
+                        curMsg.Append(textLines[index]);
                     }
                     
                     try
