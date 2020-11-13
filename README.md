@@ -68,6 +68,7 @@ All perks below will last until your time as a premium subscriber runs out.
 * Bonus luck on all gambling commands (including $fish)
 * Store up to 1,000 fish bait instead of 100
 * Deleted messages logged via "$log DeletedMessages" will now include archives of the message's content, deleted images, and attachments. **(SW)**
+* Updated messages logged via "$log UpdatedMessages" will now include archives of the previous message's content, as well as the new message's content. **(SW)**
 * Unlimited role rewards **(SW)**
 * Access to the $logtype "ModLog" - logs many various administrative actions **(SW)**
 * View more of a user's warn history via $unwarn **(SW)**

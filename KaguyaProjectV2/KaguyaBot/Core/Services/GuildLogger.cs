@@ -79,33 +79,39 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         private static async Task _client_MessageUpdated(Cacheable<IMessage, ulong> arg1, SocketMessage arg2, ISocketMessageChannel arg3)
         {
-            if (arg3 is SocketGuildChannel channel)
+            if (!(arg3 is SocketGuildChannel channel))
             {
-                Server server = await DatabaseQueries.GetOrCreateServerAsync(channel.Guild.Id);
-
-                if (server.LogUpdatedMessages == 0)
-                    return;
-
-                IMessage oldMsg = arg1.Value;
-                string content = oldMsg.Content;
-
-                if (oldMsg.Author.IsBot) return;
-                if (string.IsNullOrEmpty(content)) content = "<No previous text>";
-
-                if (content == arg2.Content)
-                    return;
-
-                var embed = new KaguyaEmbedBuilder
-                {
-                    Title = "Message Updated",
-                    Description = $"User: `[Name: {oldMsg.Author} | ID: {oldMsg.Author.Id}]`\n" +
-                                  $"Old Message: `{content}`\nNew Message: `{arg2.Content}`\nChannel: `{oldMsg.Channel}`\n" +
-                                  $"Date Originally Created: `{oldMsg.CreatedAt}`\n",
-                    ThumbnailUrl = "https://i.imgur.com/uYkjSxM.png"
-                };
-
-                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUpdatedMessages).SendEmbedAsync(embed);
+                return;
             }
+            
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(channel.Guild.Id);
+
+            if (server.LogUpdatedMessages == 0)
+                return;
+
+            IMessage oldMsg = arg1.Value;
+            if (oldMsg.Author.IsBot) return;
+
+            string content = oldMsg.Content;
+            
+            if (content == arg2.Content)
+                return;
+            
+            if (string.IsNullOrEmpty(content)) 
+                content = "<No previous text>";
+
+            var sb = new StringBuilder($"📝 `[{GetFormattedTimestamp()}]` `ID: {oldMsg.Author.Id}` ");
+            sb.Append($"Message updated. Author: **{oldMsg.Author}**. Channel: **{((SocketTextChannel)oldMsg.Channel).Mention}**.");
+
+            if (server.IsPremium)
+            {
+                string arg2Content = arg2.Content.IsNullOrEmpty() ? "<No content>" : arg2.Content;
+                sb.AppendLine($"\nOld Content:\n\"**{content}**\"");
+                sb.Append($"New Content:\n\"**{arg2Content}**\"");
+            }
+
+            string msg = sb.ToString();
+            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUpdatedMessages).SendMessageAsync(msg);
         }
 
         private static async Task _client_UserJoined(SocketGuildUser arg)
