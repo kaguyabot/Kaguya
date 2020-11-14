@@ -25,6 +25,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
         public PremiumModActionHandler Action { get; set; }
         public string Reason { get; set; }
 
+        // Todo: Redesign to match 1-line design of other log types.
         public static async Task SendModerationLog(PremiumModerationLog log)
         {
             if (!log.Server.IsPremium)

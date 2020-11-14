@@ -23,19 +23,24 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             if (!CanGetExperience(user))
                 return;
 
+            // Don't give exp to any user who is blacklisted.
+            // Members in blacklisted servers also cannot earn exp.
             if (user.IsBlacklisted || server.IsBlacklisted)
                 return;
 
-            SocketTextChannel levelAnnouncementChannel;
+            SocketTextChannel levelAnnouncementChannel = null;
             if (server.LogLevelAnnouncements != 0)
+            {
                 levelAnnouncementChannel = await context.Guild.GetTextChannelAsync(server.LogLevelAnnouncements) as SocketTextChannel;
-            else
-                levelAnnouncementChannel = context.Channel as SocketTextChannel;
+            }
+
+            if (levelAnnouncementChannel == null)
+                levelAnnouncementChannel = (SocketTextChannel) context.Channel;
 
             double oldLevel = ReturnLevel(user);
 
             var r = new Random();
-            int exp = r.Next(5, 8);
+            int exp = r.Next(5, 8) * 20;
             int points = r.Next(1, 4);
 
             user.Experience += exp;
@@ -51,7 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 return;
 
             await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has leveled up! " +
-                                         $"[Level: {newLevel} | EXP: {user.Experience:N0}]", LogLvl.INFO);
+                                         $"[Level: {Math.Floor(newLevel):0} | EXP: {user.Experience:N0}]", LogLvl.INFO);
 
             // Don't send announcement if the channel is blacklisted, but only if it's not a level-announcements log channel.
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id && x.ChannelId != server.LogLevelAnnouncements))

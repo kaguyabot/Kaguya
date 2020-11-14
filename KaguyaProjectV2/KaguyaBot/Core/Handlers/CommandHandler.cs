@@ -68,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 return; // If filtered phrase (and user isn't admin), return.
 
             await ExperienceHandler.TryAddExp(user, server, context);
-            await ServerSpecificExpHandler.TryAddExp(user, server, context);
+            await ServerSpecificExperienceHandler.TryAddExp(user, server, context);
 
             // If the channel is blacklisted and the user isn't an Admin, return.
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&

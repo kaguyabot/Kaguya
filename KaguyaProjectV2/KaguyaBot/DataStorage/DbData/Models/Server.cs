@@ -96,7 +96,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 
         [Column(Name = "level_announcements_enabled")]
         [NotNull]
-        public bool LevelAnnouncementsEnabled { get; set; }
+        public bool LevelAnnouncementsEnabled { get; set; } = true;
 
         [Column(Name = "osu_link_parsing_enabled")]
         [NotNull]
@@ -127,7 +127,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// </summary>
         [Column(Name = "is_currently_purging_messages")]
         [NotNull]
-        public bool IsCurrentlyPurgingMessages { get; set; } = false;
+        public bool IsCurrentlyPurgingMessages { get; set; }
 
         [Column(Name = "next_quote_id")]
         [NotNull]

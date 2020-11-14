@@ -18,7 +18,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 // ReSharper disable RedundantAssignment
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
 {
-    public class ServerSpecificExpHandler
+    public class ServerSpecificExperienceHandler
     {
         public static async Task TryAddExp(User user, Server server, ICommandContext context)
         {

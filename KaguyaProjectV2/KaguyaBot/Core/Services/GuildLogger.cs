@@ -30,7 +30,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             _client.UserVoiceStateUpdated += _client_UserVoiceStateUpdated;
             AntiRaidEvent.OnRaid += OnAntiRaid;
             FilteredPhrase.OnDetection += LogFilteredPhrase;
-            //LevelUps
         }
         
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
@@ -48,7 +47,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             if (message is null || message.Author.IsBot)
                 return;
 
-            KaguyaEmbedBuilder embed;
             string content = string.IsNullOrEmpty(message.Content)
                 ? "<Message contained no text>"
                 : $"{message.Content}";
