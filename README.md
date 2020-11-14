@@ -69,9 +69,9 @@ All perks below will last until your time as a premium subscriber runs out.
 * Store up to 1,000 fish bait instead of 100
 * Deleted messages logged via "$log DeletedMessages" will now include archives of the message's content, deleted images, and attachments. **(SW)**
 * Updated messages logged via "$log UpdatedMessages" will now include archives of the previous message's content, as well as the new message's content. **(SW)**
-* "$log FilteredPhrases" will now include archives of the user's full message as well as the phrase they had their message removed for.
+* "$log FilteredPhrases" will now include archives of the user's full message as well as the phrase they had their message removed for. **(SW)**
+* Access to the following LogTypes: Mute, Unmute, Shadowban, Unshadowban, Warn, and Unwarn. Access this through the $logs command. **(SW)**
 * Unlimited role rewards **(SW)**
-* Access to the $logtype "ModLog" - logs many various administrative actions **(SW)**
 * View more of a user's warn history via $unwarn **(SW)**
 * Unlimited song duration (compared to 10 minutes) **(SW)**
 * Unlimited music queue size **(SW)**

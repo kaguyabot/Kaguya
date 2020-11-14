@@ -7,6 +7,8 @@
 - The ability for a deleted message's old contents to be archived is now a premium-only feature.
 - The ability for an updated message's old + new contents to be archived is now a premium-only feature.
 - When using logs from "$log filteredphrases", archival of the user's full message is now a premium-only feature.
+- Logtype "MogLog" no longer exists. Replaced by individual logtypes for mutes, unmutes, shadowban, unshadowban, warn, and unwarn.
+    - All of these logtypes are premium only.
 
 ### Version 3.1.1
 - Fixed bug with antiraid where users would not be actioned or logged properly.

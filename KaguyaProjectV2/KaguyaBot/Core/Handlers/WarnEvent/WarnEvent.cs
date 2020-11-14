@@ -1,14 +1,15 @@
 ﻿using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using System;
+using System.Threading.Tasks;
 
 // ReSharper disable VariableHidesOuterVariable
 namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
 {
     public static class WarnEvent
     {
-        public static event EventHandler<WarnHandlerEventArgs> OnWarn;
+        public static event Func<WarnHandlerEventArgs, Task> OnWarn;
         public static void Trigger(Server server, WarnedUser warnedUser) => WarnEventTrigger(new WarnHandlerEventArgs(server, warnedUser));
-        private static void WarnEventTrigger(WarnHandlerEventArgs e) => OnWarn?.Invoke(null, e);
+        private static void WarnEventTrigger(WarnHandlerEventArgs e) => OnWarn?.Invoke(e);
     }
 
     public class WarnHandlerEventArgs : EventArgs

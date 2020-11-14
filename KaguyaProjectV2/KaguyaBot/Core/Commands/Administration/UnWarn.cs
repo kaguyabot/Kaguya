@@ -100,18 +100,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                             await DatabaseQueries.DeleteAsync(warnings.ElementAt(j1));
                             await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
                                                              $"`Successfully removed warning #{j1 + 1}`");
-
-                            if (server.IsPremium && server.ModLog != 0)
-                            {
-                                await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
-                                {
-                                    Server = server,
-                                    Moderator = Context.User as SocketGuildUser,
-                                    ActionRecipient = user as SocketGuildUser,
-                                    Action = PremiumModActionHandler.UNWARN,
-                                    Reason = reason
-                                });
-                            }
                         }
                     ));
             }

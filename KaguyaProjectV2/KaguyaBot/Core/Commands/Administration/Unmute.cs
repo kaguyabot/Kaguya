@@ -28,8 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task UnmuteUser(IGuildUser user, [Remainder] string reason = null)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var mutedObject =
-                await DatabaseQueries.GetFirstMatchAsync<MutedUser>(x => x.UserId == user.Id && x.ServerId == server.ServerId);
+            var mutedObject = await DatabaseQueries.GetFirstMatchAsync<MutedUser>(x => x.UserId == user.Id && x.ServerId == server.ServerId);
 
             if (mutedObject != null)
                 await DatabaseQueries.DeleteAsync(mutedObject);
@@ -37,15 +36,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             if (server.IsPremium)
             {
                 await DatabaseQueries.UpdateAsync(server);
-
-                await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
-                {
-                    Server = server,
-                    Moderator = Context.Client.GetGuild(server.ServerId).GetUser(538910393918160916),
-                    ActionRecipient = (SocketGuildUser) user,
-                    Action = PremiumModActionHandler.UNMUTE,
-                    Reason = reason
-                });
             }
 
             try

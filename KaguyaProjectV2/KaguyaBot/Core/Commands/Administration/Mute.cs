@@ -91,18 +91,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                                                              $"be unmuted\n`{DateTime.FromOADate(time).Humanize(false)}`"
                                                            };
 
-                                                           if (server.IsPremium)
-                                                           {
-                                                               await SendModLog(server, new PremiumModerationLog
-                                                               {
-                                                                   Moderator = (SocketGuildUser) Context.User,
-                                                                   ActionRecipient = (SocketGuildUser) user,
-                                                                   Action = PremiumModActionHandler.MUTE,
-                                                                   Server = server,
-                                                                   Reason = reason
-                                                               });
-                                                           }
-
                                                            await DatabaseQueries.UpdateAsync(muteObject);
                                                            await c.Channel.SendEmbedAsync(replacementEmbed);
                                                        })
@@ -124,15 +112,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                                            };
 
                                                            await DatabaseQueries.UpdateAsync(extendedMuteObject);
-                                                           await SendModLog(server, new PremiumModerationLog
-                                                           {
-                                                               Moderator = (SocketGuildUser) Context.User,
-                                                               ActionRecipient = (SocketGuildUser) user,
-                                                               Action = PremiumModActionHandler.MUTE,
-                                                               Server = server,
-                                                               Reason = reason
-                                                           });
-
                                                            await ReplyAsync(embed: extensionEmbed.Build());
                                                        })
                                                        .WithCallback(new Emoji("⛔"), (c, r) =>
@@ -230,27 +209,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await ConsoleLogger.LogAsync($"User muted. Guild: [Name: {guild.Name} | ID: {guild.Id}] " +
                                          $"User: [Name: {user} | ID: {user.Id}]", LogLvl.DEBUG);
 
-            await SendModLog(server, new PremiumModerationLog
-            {
-                Moderator = (SocketGuildUser) Context.User,
-                ActionRecipient = (SocketGuildUser) user,
-                Action = PremiumModActionHandler.MUTE,
-                Server = server,
-                Reason = reason
-            });
-
             var embed = new KaguyaEmbedBuilder
             {
                 Description = $"Successfully muted user `{user}`. {muteString}"
             };
 
             await ReplyAsync(embed: embed.Build());
-        }
-
-        private async Task SendModLog(Server server, PremiumModerationLog modlogObj)
-        {
-            if (server.IsPremium)
-                await PremiumModerationLog.SendModerationLog(modlogObj);
         }
 
         /// <summary>

@@ -30,10 +30,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "praise_cooldown")]
         public int PraiseCooldown { get; set; } = 24;
 
-        [Column(Name = "mod_log")]
-        [Nullable]
-        public ulong ModLog { get; set; }
-
         [Column(Name = "deleted_messages_log")]
         [Nullable]
         public ulong LogDeletedMessages { get; set; }
@@ -81,7 +77,31 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "greetings_log")]
         [NotNull]
         public ulong LogGreetings { get; set; }
-
+        
+        [Column(Name = "warn_log")]
+        [NotNull]
+        public ulong LogWarns { get; set; }
+        
+        [Column(Name = "unwarn_log")]
+        [NotNull]
+        public ulong LogUnwarns { get; set; }
+        
+        [Column(Name = "shadowban_log")]
+        [NotNull]
+        public ulong LogShadowbans { get; set; }
+        
+        [Column(Name = "unshadowban_log")]
+        [NotNull]
+        public ulong LogUnshadowbans { get; set; }
+        
+        [Column(Name = "mute_log")]
+        [NotNull]
+        public ulong LogMutes { get; set; }
+        
+        [Column(Name = "unmute_log")]
+        [NotNull]
+        public ulong LogUnmutes { get; set; }
+        
         [Column(Name = "is_blacklisted")]
         [Nullable]
         public bool IsBlacklisted { get; set; }

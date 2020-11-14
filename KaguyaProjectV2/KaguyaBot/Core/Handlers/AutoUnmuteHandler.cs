@@ -35,19 +35,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     Server server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
                     SocketGuildUser user = ConfigProperties.Client.GetGuild(server.ServerId).GetUser(mutedUser.UserId);
 
-                    if (server.IsPremium)
-                    {
-                        await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
-                        {
-                            Server = server,
-                            Moderator = ConfigProperties.Client.GetGuild(server.ServerId)
-                                                        .GetUser(538910393918160916),
-                            ActionRecipient = user,
-                            Action = PremiumModActionHandler.UNMUTE,
-                            Reason = "User was automatically unmuted because their timed mute has expired."
-                        });
-                    }
-
                     try
                     {
                         SocketRole muteRole = guild.Roles.FirstOrDefault(x => x.Name == "kaguya-mute");

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -30,8 +31,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             _client.UserVoiceStateUpdated += _client_UserVoiceStateUpdated;
             AntiRaidEvent.OnRaid += OnAntiRaid;
             FilteredPhrase.OnDetection += LogFilteredPhrase;
+            WarnEvent.OnWarn += LogWarns;
         }
-        
+
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel) arg2).Guild.Id);
@@ -43,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 return;
 
             IMessage message = arg1.Value;
-            
+
             if (message is null || message.Author.IsBot)
                 return;
 
@@ -52,10 +54,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 : $"{message.Content}";
 
             var sb = new StringBuilder($"🗑️ `[{GetFormattedTimestamp()}]` `ID: {message.Author.Id}` ");
-            sb.Append($"Message deleted. Author: **{message.Author}**. Channel: **{((SocketTextChannel)message.Channel).Mention}**.");
-            
+            sb.Append($"Message deleted. Author: **{message.Author}**. Channel: **{((SocketTextChannel) message.Channel).Mention}**.");
+
             // Premium servers get more content in the log.
-            if(server.IsPremium)
+            if (server.IsPremium)
             {
                 sb.Append($"\nContent: \"**{content}**\"");
 
@@ -63,41 +65,50 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 {
                     sb.Append($" Attachments: **{message.Attachments.Count}**.");
                     foreach (IAttachment a in message.Attachments)
-                    {
                         sb.Append($" URL: **<{a.ProxyUrl}>**");
-                    }
                 }
             }
 
             string msg = sb.ToString();
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogDeletedMessages).SendMessageAsync(msg);
+
+            try
+            {
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogDeletedMessages).SendMessageAsync(msg);
+            }
+            catch (Exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to send message deleted log to channel {server.LogDeletedMessages} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogDeletedMessages = 0;
+                await DatabaseQueries.UpdateAsync(server);
+            }
         }
 
         private static async Task _client_MessageUpdated(Cacheable<IMessage, ulong> arg1, SocketMessage arg2, ISocketMessageChannel arg3)
         {
             if (!(arg3 is SocketGuildChannel channel))
-            {
                 return;
-            }
-            
+
             Server server = await DatabaseQueries.GetOrCreateServerAsync(channel.Guild.Id);
 
             if (server.LogUpdatedMessages == 0)
                 return;
 
             IMessage oldMsg = arg1.Value;
+
             if (oldMsg.Author.IsBot) return;
 
             string content = oldMsg.Content;
-            
             if (content == arg2.Content)
                 return;
-            
-            if (string.IsNullOrEmpty(content)) 
+
+            if (string.IsNullOrEmpty(content))
                 content = "<No previous text>";
 
             var sb = new StringBuilder($"📝 `[{GetFormattedTimestamp()}]` `ID: {oldMsg.Author.Id}` ");
-            sb.Append($"Message updated. Author: **{oldMsg.Author}**. Channel: **{((SocketTextChannel)oldMsg.Channel).Mention}**.");
+            sb.Append($"Message updated. Author: **{oldMsg.Author}**. Channel: **{((SocketTextChannel) oldMsg.Channel).Mention}**.");
 
             if (server.IsPremium)
             {
@@ -107,7 +118,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             }
 
             string msg = sb.ToString();
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUpdatedMessages).SendMessageAsync(msg);
+
+            try
+            {
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUpdatedMessages).SendMessageAsync(msg);
+            }
+            catch (Exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to send message updated log to channel {server.LogUpdatedMessages} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogUpdatedMessages = 0;
+                await DatabaseQueries.UpdateAsync(server);
+            }
         }
 
         private static async Task _client_UserJoined(SocketGuildUser arg)
@@ -118,7 +142,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 return;
 
             string msg = $"✅ `[{GetFormattedTimestamp()}]` `ID: {arg.Id}` **{arg}** joined the server. Member Count: **{arg.Guild.MemberCount:N0}**";
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendMessageAsync(msg);
+            try
+            {
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendMessageAsync(msg);
+            }
+            catch (Exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to send user join log to channel {server.LogUserJoins} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogUserJoins = 0;
+                await DatabaseQueries.UpdateAsync(server);
+            }
         }
 
         private static async Task _client_UserLeft(SocketGuildUser arg)
@@ -129,9 +165,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 return;
 
             const string X_CROSS = "<:RedCross:776513248312295484>";
-            string msg = $"{X_CROSS} `[{GetFormattedTimestamp()}]` `ID: {arg.Id}` **{arg}** left the server or was kicked. Member Count: **{arg.Guild.MemberCount:N0}**";
+            string msg = $"{X_CROSS} `[{GetFormattedTimestamp()}]` `ID: {arg.Id}` **{arg}** left the server or was kicked. " +
+                         $"Member Count: **{arg.Guild.MemberCount:N0}**";
 
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserJoins).SendMessageAsync(msg);
+            try
+            {
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUserLeaves).SendMessageAsync(msg);
+            }
+            catch (Exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to send user leave log to channel {server.LogUserLeaves} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogUserLeaves = 0;
+                await DatabaseQueries.UpdateAsync(server);
+            }
         }
 
         private static async Task OnAntiRaid(AntiRaidEventArgs e)
@@ -165,17 +214,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                         if (index == textLines.Length)
                             break;
-                        
+
                         curMsg.Append(textLines[index]);
                     }
-                    
+
                     try
                     {
                         await _client.GetGuild(e.SocketGuild.Id).GetTextChannel(server.LogAntiraids).SendMessageAsync(curMsg.ToString());
                     }
-                    catch (Exception exception)
+                    catch (Exception)
                     {
-                        await ConsoleLogger.LogAsync($"Failed to deliver anti-raid log message in guild {server.ServerId}!\nReason: {exception.Message}", LogLvl.WARN);
+                        await ConsoleLogger.LogAsync($"Failed to send antiraid log to channel {server.LogAntiraids} " +
+                                                     $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                                     "doesn't happen again!", LogLvl.WARN);
+
+                        server.LogAntiraids = 0;
+                        await DatabaseQueries.UpdateAsync(server);
                     }
                 }
             }
@@ -185,9 +239,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 {
                     await _client.GetGuild(e.SocketGuild.Id).GetTextChannel(server.LogAntiraids).SendMessageAsync(actionedUsers.ToString());
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
-                    await ConsoleLogger.LogAsync($"Failed to deliver anti-raid log message in guild {server.ServerId}!\nReason: {exception.Message}", LogLvl.WARN);
+                    await ConsoleLogger.LogAsync($"Failed to send antiraid log to channel {server.LogAntiraids} " +
+                                                 $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                                 "doesn't happen again!", LogLvl.WARN);
+
+                    server.LogAntiraids = 0;
+                    await DatabaseQueries.UpdateAsync(server);
                 }
             }
         }
@@ -206,9 +265,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             {
                 await arg2.GetTextChannel(server.LogBans).SendMessageAsync(msg);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                await ConsoleLogger.LogAsync($"Failed to deliver user ban log message in guild {server.ServerId}!\nReason: {e.Message}", LogLvl.WARN);
+                await ConsoleLogger.LogAsync($"Failed to send ban log to channel {server.LogBans} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogBans = 0;
+                await DatabaseQueries.UpdateAsync(server);
             }
         }
 
@@ -223,11 +287,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
             try
             {
-                await arg2.GetTextChannel(server.LogBans).SendMessageAsync(msg);
+                await arg2.GetTextChannel(server.LogUnbans).SendMessageAsync(msg);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                await ConsoleLogger.LogAsync($"Failed to deliver user unban log message in guild {server.ServerId}!\nReason: {e.Message}", LogLvl.WARN);
+                await ConsoleLogger.LogAsync($"Failed to send unban log to channel {server.LogUnbans} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogUnbans = 0;
+                await DatabaseQueries.UpdateAsync(server);
             }
         }
 
@@ -241,9 +310,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 server = await DatabaseQueries.GetOrCreateServerAsync(arg2.VoiceChannel.Guild.Id);
 
             if (server.LogVoiceChannelConnections == 0)
-            {
                 return;
-            }
 
             string changeString = ""; // User has...
             string emoji = string.Empty;
@@ -270,32 +337,85 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             sb.Append($"has {changeString}.");
 
             string msg = sb.ToString();
-            
-            await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(msg);
+
+            try
+            {
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogVoiceChannelConnections).SendMessageAsync(msg);
+            }
+            catch (Exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to send voice state log to channel {server.LogVoiceChannelConnections} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogVoiceChannelConnections = 0;
+                await DatabaseQueries.UpdateAsync(server);
+            }
         }
 
         private static async Task LogFilteredPhrase(FilteredPhraseEventArgs fpArgs)
         {
-            if (fpArgs.Server.LogFilteredPhrases == 0)
+            Server server = fpArgs.Server;
+            if (server.LogFilteredPhrases == 0)
                 return;
 
-            var author = fpArgs.Author;
+            IUser author = fpArgs.Author;
+            
             var sb = new StringBuilder($"🛂 `[{GetFormattedTimestamp()}]` `ID: {author.Id}` Filtered phrase detected by **{author}**. ");
             sb.Append($"Phrase: **{fpArgs.Phrase}**");
 
-            if (fpArgs.Server.IsPremium)
-            {
+            if (server.IsPremium)
                 sb.Append($"\nMessage Contents: **{fpArgs.Message.Content}**");
-            }
 
             string msg = sb.ToString();
-            await _client.GetGuild(fpArgs.Server.ServerId).GetTextChannel(fpArgs.Server.LogFilteredPhrases).SendMessageAsync(msg);
+
+            try
+            {
+                await _client.GetGuild(fpArgs.Server.ServerId).GetTextChannel(server.LogFilteredPhrases).SendMessageAsync(msg);
+            }
+            catch (Exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to send filtered phrase log to channel {server.LogFilteredPhrases} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogFilteredPhrases = 0;
+                await DatabaseQueries.UpdateAsync(server);
+            }
         }
 
-        
+        private static async Task LogWarns(WarnHandlerEventArgs wArgs)
+        {
+            Server server = wArgs.Server;
+            SocketGuild guild = _client.GetGuild(server.ServerId);
+            SocketUser user = guild.GetUser(wArgs.WarnedUser.UserId);
+
+            if (server.LogWarns == 0 || !server.IsPremium)
+                return;
+            
+            var sb = new StringBuilder($"🚔 `[{GetFormattedTimestamp()}]` `ID: {user.Id}` **{user}** was warned by ");
+            sb.Append($"**{wArgs.WarnedUser.ModeratorName}**. Reason: **{wArgs.WarnedUser.Reason}**");
+
+            string msg = sb.ToString();
+
+            try
+            {
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogWarns).SendMessageAsync(msg);
+            }
+            catch (Exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to send warn log to channel {server.LogWarns} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogWarns = 0;
+                await DatabaseQueries.UpdateAsync(server);
+            }
+        }
+
         private static string GetFormattedTimestamp()
         {
-            var d = DateTime.Now;
+            DateTime d = DateTime.Now;
             var sb = new StringBuilder();
 
             sb.Append(d.Month.ToString("00") + "-");

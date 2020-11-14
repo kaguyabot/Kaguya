@@ -50,15 +50,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 
                     switch (type.ToLower())
                     {
-                        case "modlog":
-                        {
-                            if (server.IsPremium)
-                                server.ModLog = channel.Id;
-                            else
-                                throw new KaguyaPremiumException();
-
-                            break;
-                        }
                         case "deletedmessages":
                             server.LogDeletedMessages = channel.Id;
 
@@ -109,9 +100,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                             break;
                         case "all":
                         {
-                            if (server.IsPremium)
-                                server.ModLog = channel.Id;
-
                             server.LogDeletedMessages = channel.Id;
                             server.LogUpdatedMessages = channel.Id;
                             server.LogFilteredPhrases = channel.Id;
@@ -125,7 +113,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                             server.LogAntiraids = channel.Id;
                             server.LogGreetings = channel.Id;
                         }
-
                             break;
                         default:
                             logTypes.Remove(type);
@@ -138,10 +125,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                     await ConsoleLogger.LogAsync($"Server has disabled log type: [ID: {guildId} | Type: {type.ToUpperInvariant()}]", LogLvl.DEBUG);
                     switch (type.ToLower())
                     {
-                        case "modlog":
-                            server.ModLog = 0;
-
-                            break;
                         case "deletedmessages":
                             server.LogDeletedMessages = 0;
 
@@ -192,9 +175,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                             break;
                         case "all":
                         {
-                            if (server.IsPremium)
-                                server.ModLog = 0;
-
                             server.LogDeletedMessages = 0;
                             server.LogUpdatedMessages = 0;
                             server.LogFilteredPhrases = 0;

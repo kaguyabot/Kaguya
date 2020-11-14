@@ -85,23 +85,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 await ReplyAndDeleteAsync("", false, embed.Build(), TimeSpan.FromSeconds(15));
             }
 
-            if (server.IsPremium && server.ModLog != 0)
-            {
-                string rsnTxt = "Reason provided: ";
-                rsnTxt = reason ?? "No reason provided.";
-
-                var log = new PremiumModerationLog
-                {
-                    Server = server,
-                    Moderator = Context.User as SocketGuildUser,
-                    ActionRecipient = Context.User as SocketGuildUser,
-                    Action = PremiumModActionHandler.MESSAGEPURGE,
-                    Reason = $"{amount} messages deleted. {rsnTxt}"
-                };
-
-                await PremiumModerationLog.SendModerationLog(log);
-            }
-
             server.IsCurrentlyPurgingMessages = false;
             await DatabaseQueries.UpdateAsync(server);
         }
