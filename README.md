@@ -37,7 +37,7 @@ Updating the repository:
 
 Before building, if you desire to debug or test music functionality, you need to run the `Lavalink.jar` located inside `~KaguyaProjectV2/LavalinkServer`. You may also need to have Port 2333 whitelisted in your firewall.
 
-In order for Kaguya to run, you must configure a MySQL Database, then import the .sqldump file in `KaguyaProjectV2/Resources` into your database.
+In order for Kaguya to run, you must configure a MySQL Database. Create one, then navigate to `KaguyaProjectV2/Resources/script.sql` and paste that into a SQL Command Prompt or editor, then execute it.
 
 Ensure you have a bot to test with. Create one [here](https://discord.com/developers/applications).
 
@@ -64,7 +64,7 @@ Finally, navigate to `KaguyaProjectV2/Resources` again and open `config.json`. Y
 }
 ```
 
-If you have everything properly configured, you should be good to go. If the bot runs without errors and still doesn't respond to commands, *ensure your database is exactly identical* to the structure in the provided .sqldump. Otherwise, feel free to write to me in my [support Discord](https://discord.gg/aumCJhr) and I will be happy to assist you.
+If you have everything properly configured, you should be good to go. If the bot runs without errors and still doesn't respond to commands, *ensure your database is exactly identical* to the structure in the provided .sql script. Otherwise, feel free to write to me in my [support Discord](https://discord.gg/aumCJhr) and I will be happy to assist you.
 
 ## License:
 - Kaguya's code is intentionally unlicensed, unlike many open-source projects. Anyone who wishes to use or modify the code in this repository must adhere to these terms:
