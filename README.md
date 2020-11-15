@@ -35,7 +35,7 @@ Updating the repository:
       ```
 ### Building
 
-Before building, if you desire to debug or test music functionality, you need to run the `Lavalink.jar` located inside `~KaguyaProjectV2/LavalinkServer`. You may also need to have Port 2333 whitelisted in your firewall.
+Before building, if you desire to debug or test music functionality, you need to run the `Lavalink.jar` located inside `KaguyaProjectV2/LavalinkServer`. You may also need to have Port 2333 whitelisted in your firewall.
 
 In order for Kaguya to run, you must configure a MySQL Database. Create one, then navigate to `KaguyaProjectV2/Resources/script.sql` and paste that into a SQL Command Prompt or editor, then execute it.
 
