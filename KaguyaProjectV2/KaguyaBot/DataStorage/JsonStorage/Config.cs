@@ -32,7 +32,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             };
 
             string configFilePath = Path.Combine(_resourcesPath, "config.json");
-
+            string profileSmallPath = Path.Combine(directories[0], "ProfileSmall.png");
+            string xpLevelSmallPath = Path.Combine(directories[1], "XpLevelUpSmall.png");
+            
             if (!Directory.Exists(_resourcesPath))
                 CreateIfNotExists(_resourcesPath);
 
@@ -43,21 +45,21 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             using (var wc = new WebClient())
             {
                 // $profile image
-                if (!File.Exists($@"{directories[0]}\ProfileSmall.png"))
+                if (!File.Exists(profileSmallPath))
                 {
                     byte[] data = await wc.DownloadDataTaskAsync("https://i.imgur.com/Ae2BBiC.png");
-                    await File.WriteAllBytesAsync($@"{directories[0]}\ProfileSmall.png", data);
+                    await File.WriteAllBytesAsync(profileSmallPath, data);
 
-                    await ConsoleLogger.LogAsync($@"Missing file ProfileSmall.png downladed and saved to {directories[0]}\ProfileSmall.png.", LogLvl.INFO);
+                    await ConsoleLogger.LogAsync($@"Missing file ProfileSmall.png downladed and saved to {profileSmallPath}.", LogLvl.INFO);
                 }
 
                 // Exp level-up image
-                if (!File.Exists($@"{directories[0]}\XpLevelUpSmall.png"))
+                if (!File.Exists())
                 {
                     byte[] data = await wc.DownloadDataTaskAsync("https://i.imgur.com/fgNNX8H.png");
-                    await File.WriteAllBytesAsync($@"{directories[0]}\XpLevelUpSmall.png", data);
+                    await File.WriteAllBytesAsync(xpLevelSmallPath, data);
 
-                    await ConsoleLogger.LogAsync($@"Missing file XpLevelUpSmall.png downladed and saved to {directories[0]}\XpLevelUpSmall.png.", LogLvl.INFO);
+                    await ConsoleLogger.LogAsync($@"Missing file XpLevelUpSmall.png downladed and saved to {xpLevelSmallPath}.", LogLvl.INFO);
                 }
             }
 
