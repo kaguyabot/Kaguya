@@ -6,7 +6,7 @@
     <NoWarn>1998</NoWarn>
     <ApplicationIcon>server-icon.ico</ApplicationIcon>
     <Win32Resource />
-    <LangVersion>8</LangVersion>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
