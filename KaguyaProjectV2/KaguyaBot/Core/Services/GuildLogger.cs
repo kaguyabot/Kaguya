@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -29,9 +30,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             _client.UserBanned += _client_UserBanned;
             _client.UserUnbanned += _client_UserUnbanned;
             _client.UserVoiceStateUpdated += _client_UserVoiceStateUpdated;
-            AntiRaidEvent.OnRaid += OnAntiRaid;
+            AntiRaidEvent.OnRaid += LogAntiRaid;
             FilteredPhrase.OnDetection += LogFilteredPhrase;
             WarnEvent.OnWarn += LogWarns;
+            UnWarn.OnUnwarn += LogUnwarn;
         }
 
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
@@ -183,7 +185,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             }
         }
 
-        private static async Task OnAntiRaid(AntiRaidEventArgs e)
+        private static async Task LogAntiRaid(AntiRaidEventArgs e)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(e.SocketGuild.Id);
 
@@ -387,8 +389,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         private static async Task LogWarns(WarnHandlerEventArgs wArgs)
         {
             Server server = wArgs.Server;
-            SocketGuild guild = _client.GetGuild(server.ServerId);
-            SocketUser user = guild.GetUser(wArgs.WarnedUser.UserId);
+            SocketUser user = _client.GetGuild(server.ServerId).GetUser(wArgs.WarnedUser.UserId);
 
             if (server.LogWarns == 0 || !server.IsPremium)
                 return;
@@ -413,6 +414,35 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             }
         }
 
+        //todo: shadowban, unshadowban, mute, unmute logtypes...
+
+        private static async Task LogUnwarn(UnwarnEventArgs uwArgs)
+        {
+            Server server = uwArgs.Server;
+
+            if (server.LogUnwarns == 0 || !server.IsPremium)
+                return;
+            
+            var sb = new StringBuilder($"🚔 `[{GetFormattedTimestamp()}]` `ID: {uwArgs.WarnedUser.Id}` **{uwArgs.WarnedUser}** was warned by ");
+            sb.Append($"**{uwArgs.ModeratorUser}**. Reason: **{uwArgs.Reason}**");
+
+            string msg = sb.ToString();
+
+            try
+            {
+                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUnwarns).SendMessageAsync(msg);
+            }
+            catch (Exception)
+            {
+                await ConsoleLogger.LogAsync($"Failed to send unwarn log to channel {server.LogUnwarns} " +
+                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
+                                             "doesn't happen again!", LogLvl.WARN);
+
+                server.LogUnwarns = 0;
+                await DatabaseQueries.UpdateAsync(server);
+            }
+        }
+        
         private static string GetFormattedTimestamp()
         {
             DateTime d = DateTime.Now;

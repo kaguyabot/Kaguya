@@ -1,4 +1,4 @@
-﻿using Discord;
+﻿﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands;
@@ -24,7 +24,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         public async Task Command()
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            string[] logTypes = LogQuery.AllLogTypes;
 
             string logSettingString = "";
 

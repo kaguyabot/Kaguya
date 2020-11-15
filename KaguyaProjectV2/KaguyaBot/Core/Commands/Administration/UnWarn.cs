@@ -1,4 +1,4 @@
-﻿using Discord;
+﻿﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -17,6 +17,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class UnWarn : KaguyaBase
     {
+        public static event Func<UnwarnEventArgs, Task> OnUnwarn;
+        private static void Trigger(UnwarnEventArgs uwArgs) => OnUnwarn?.Invoke(uwArgs);
+        
         [AdminCommand]
         [Command("Unwarn")]
         [Alias("uw")]
@@ -29,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task UnWarnUser(IGuildUser user, string reason = null)
+        public async Task UnWarnUser(IGuildUser user, string reason = default)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             List<WarnedUser> warnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.Id, server.ServerId);
@@ -97,6 +100,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 int j1 = j;
                 callbacks.Add((emojis[j], async (c, r) =>
                         {
+                            var uwArgs = new UnwarnEventArgs
+                            {
+                                Server = server,
+                                WarnedUser = user,
+                                ModeratorUser = (IGuildUser) Context.User,
+                                Reason = reason
+                            };
+                            
+                            Trigger(uwArgs);
+                            
                             await DatabaseQueries.DeleteAsync(warnings.ElementAt(j1));
                             await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
                                                              $"`Successfully removed warning #{j1 + 1}`");
@@ -107,5 +120,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             data.SetCallbacks(callbacks);
             await InlineReactionReplyAsync(data);
         }
+    }
+
+    public class UnwarnEventArgs
+    {
+        public Server Server { get; set; }
+        public IGuildUser WarnedUser { get; set; }
+        public IGuildUser ModeratorUser { get; set; }
+        public string Reason { get; set; }
     }
 }
