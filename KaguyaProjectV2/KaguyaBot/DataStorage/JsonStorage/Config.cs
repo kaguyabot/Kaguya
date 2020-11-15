@@ -61,18 +61,23 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 }
             }
 
-            IBotConfig model;
+            IBotConfig model = new BotConfig();
+            if (!File.Exists(configFilePath) && args.Length != CORRECT_ARG_COUNT)
+            {
+                string text = JsonConvert.SerializeObject(model);
+                await File.WriteAllTextAsync(configFilePath, text);
+                await ConsoleLogger.LogAsync($"Attention: A new configuration file has been created at " +
+                                             $"{configFilePath}. Please visit this location and configure the file " +
+                                             $"according to the instructions on github: https://github.com/stageosu/Kaguya/blob/master/README.md", LogLvl.WARN);
+
+                return model;
+            }
+            
             if (File.Exists(configFilePath) && args.Length != CORRECT_ARG_COUNT)
             {
                 model = JsonConvert.DeserializeObject<IBotConfig>(configFilePath);
 
                 return model;
-            }
-
-            if (args.Length != CORRECT_ARG_COUNT)
-            {
-                throw new Exception("The correct amount of arguments was not specified. " +
-                                    $"Expected {CORRECT_ARG_COUNT}, received {args.Length}.");
             }
 
             model = BotConfig.GetConfig();
@@ -93,15 +98,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             model.DanbooruApiKey = args[13];
             model.TopGgWebhookPort = args[14].AsInteger();
             
-            if (!File.Exists(configFilePath) || !model.Equals(new BotConfig()))
-            {
-                //Creates JSON from model.
-                var modelToSave = JsonConvert.DeserializeObject<BotConfig>(await CreateConfigAsync(configFilePath, model));
-                await File.WriteAllTextAsync(configFilePath, JsonConvert.SerializeObject(modelToSave, Formatting.Indented));
+            //Creates JSON from model.
+            var modelToSave = JsonConvert.DeserializeObject<BotConfig>(await CreateConfigAsync(configFilePath, model));
+            await File.WriteAllTextAsync(configFilePath, JsonConvert.SerializeObject(modelToSave, Formatting.Indented));
 
-                await ConsoleLogger.LogAsync("Wrote new config file.", LogLvl.INFO);
-            }
-
+            await ConsoleLogger.LogAsync($"Config file at {configFilePath} has been populated with arguments provided.", LogLvl.INFO);
             return model;
         }
 
@@ -120,13 +121,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
 
         private static async Task<string> CreateConfigAsync(string filepath, IBotConfig model = null)
         {
-            if (model == null)
-                model = new BotConfig();
+            model ??= new BotConfig();
 
             string json = JsonConvert.SerializeObject(model, Formatting.Indented);
-            using (StreamWriter writer = File.CreateText(filepath))
-                await writer.WriteAsync(json);
-
+            await File.WriteAllTextAsync(filepath, json);
             return json;
         }
     }
