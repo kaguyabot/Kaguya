@@ -75,9 +75,18 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             
             if (File.Exists(configFilePath) && args.Length != CORRECT_ARG_COUNT)
             {
-                model = JsonConvert.DeserializeObject<IBotConfig>(configFilePath);
+                try
+                {
+                    model = JsonConvert.DeserializeObject<IBotConfig>(configFilePath);
 
-                return model;
+                    return model;
+                }
+                catch (Exception)
+                {
+                    await ConsoleLogger.LogAsync($"Your config file is improperly configured at " +
+                                                 $"{configFilePath}. Please visit this location and configure the file " +
+                                                 $"according to the instructions on github: https://github.com/stageosu/Kaguya/blob/master/README.md", LogLvl.WARN);
+                }
             }
 
             model = BotConfig.GetConfig();
