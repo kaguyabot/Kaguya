@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             _client.UserBanned += _client_UserBanned;
             _client.UserUnbanned += _client_UserUnbanned;
             _client.UserVoiceStateUpdated += _client_UserVoiceStateUpdated;
-            AntiRaidEvent.OnRaid += LogAntiRaid;
+            KaguyaEvents.OnRaid += LogAntiRaid;
             FilteredPhrase.OnDetection += LogFilteredPhrase;
             WarnEvent.OnWarn += LogWarns;
             UnWarn.OnUnwarn += LogUnwarn;

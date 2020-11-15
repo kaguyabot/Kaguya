@@ -110,7 +110,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 return;
             }
             
-            AntiRaidEvent.Trigger(server, guildUsers, guild, action);
+            KaguyaEvents.TriggerAntiraid(new AntiRaidEventArgs(server, guildUsers, guild, action));
 
             // We need to message the actioned users, if applicable, before actioning.
 
