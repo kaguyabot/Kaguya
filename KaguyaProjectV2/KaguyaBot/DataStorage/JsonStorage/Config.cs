@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using Newtonsoft.Json;
+using TwitchLib.Api.ThirdParty.ModLookup;
 
 #region This file will load all Config file data into memory for the bot to use. This file contains very important credentials.
 #endregion
@@ -165,11 +166,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             }
             return _instance;
         }
-        
+
         public string Token { get; set; }
         public ulong BotOwnerId { get; set; }
-        public int LogLevelNumber { get; set; } = 1;
-        public string DefaultPrefix { get; set; } = "$";
+        public int LogLevelNumber { get; set; }
+        public string DefaultPrefix { get; set; }
         public string OsuApiKey { get; set; }
         public string TopGgApiKey { get; set; }
         public string MySqlUsername { get; set; }
