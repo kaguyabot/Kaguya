@@ -1,0 +1,17 @@
+{
+  "Token": "",
+  "BotOwnerId": 0,
+  "LogLevelNumber": 0,
+  "DefaultPrefix": "$",
+  "OsuApiKey": "",
+  "TopGgApiKey": "",
+  "MySqlUsername": "",
+  "MySqlPassword": "",
+  "MySqlServer": "",
+  "MySqlSchema": "",
+  "TwitchClientId": "",
+  "TwitchAuthToken": "",
+  "DanbooruUsername": "",
+  "DanbooruApiKey": "",
+  "TopGgWebhookPort": 6969
+}
