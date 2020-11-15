@@ -77,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             {
                 try
                 {
-                    model = JsonConvert.DeserializeObject<IBotConfig>(configFilePath);
+                    model = JsonConvert.DeserializeObject<BotConfig>(configFilePath);
 
                     return model;
                 }
