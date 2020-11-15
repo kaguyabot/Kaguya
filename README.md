@@ -37,11 +37,11 @@ Updating the repository:
 
 Before building, if you desire to debug or test music functionality, you need to run the `Lavalink.jar` located inside `KaguyaProjectV2/LavalinkServer`. You may also need to have Port 2333 whitelisted in your firewall.
 
-In order for Kaguya to run, you must configure a MySQL Database. Create one, then navigate to `KaguyaProjectV2/Resources/script.sql` and paste that into a SQL Command Prompt or editor, then execute it.
+In order for Kaguya to run, you must configure a MySQL Database. Create one, then navigate to `KaguyaProjectV2/Resources/script.sql` and paste that into a SQL command prompt or editor, then execute it.
 
 Ensure you have a bot to test with. Create one [here](https://discord.com/developers/applications).
 
-Finally, navigate to `KaguyaProjectV2/Resources` again and open `config.json`. You will find that all of its values are empty. Below is an example of how you should configure this file.
+Finally, navigate to `KaguyaProjectV2/Resources` again and open `config.json`. You will find that all of its values are empty or null. Below is an example of how you should configure this file. Everything must be wrapped in quotes except for the `BotOwnerId` and `LogLevelNumber` properties.
 
 *config.json*
 ```
@@ -50,7 +50,7 @@ Finally, navigate to `KaguyaProjectV2/Resources` again and open `config.json`. Y
   "BotOwnerId": 0, // Your Discord ID
   "LogLevelNumber": 0, // 0 = Trace, 1 = Debug, 2 = Info, 3 = Warning, 4 = Error.
   "DefaultPrefix": "$", // Default symbol bot looks for when executing command.
-  "OsuApiKey": "", // Required for osu commands. api.ppy.sh to get key. Otherwise, leave blank.
+  "OsuApiKey": "", // Required for osu commands. https://github.com/ppy/osu-api/wiki for more info. Otherwise, leave blank.
   "TopGgApiKey": "", // Leave this blank
   "MySqlUsername": "", // The username for your database, e.g. root.
   "MySqlPassword": "", // The password for your database.
@@ -66,21 +66,21 @@ Finally, navigate to `KaguyaProjectV2/Resources` again and open `config.json`. Y
 
 If you have everything properly configured, you should be good to go. If the bot runs without errors and still doesn't respond to commands, *ensure your database is exactly identical* to the structure in the provided .sql script. Otherwise, feel free to write to me in my [support Discord](https://discord.gg/aumCJhr) and I will be happy to assist you.
 
-## License:
-- Kaguya's code is intentionally unlicensed, unlike many open-source projects. Anyone who wishes to use or modify the code in this repository must adhere to these terms:
+## License
+- Kaguya's code is intentionally **unlicensed**, unlike many open-source projects. Anyone who wishes to use or modify the code in this repository must adhere to these terms:
     - You may not reproduce, redistribute, or rebrand, for profit or otherwise, any part of the project.
     - Any contributors willfully release any copyright permission they otherwise would gain from contributing to this project and are not inherently entitled to anything if they choose to contribute.
     - Users may, and are encouraged to, clone, debug, and modify the code to their liking, so long as the sole intent of these actions is to improve this primary repository through a pull request.
       If you're just curious and want to look around the code, this is fine too.
     - Wanton disregard for or violation of these terms are subject to DMCA takedown notices.
     - If you have any questions about these terms, please email me at hburnett777@gmail.com.
-- *TL;DR - Don't steal the code and use it to run or improve your own bot.*
+- *TL;DR - Don't run off with the code and use it to run or improve your own bot.*
 
 ## Special Thanks
 - [CakeAndBanana](https://github.com/CakeAndBanana) for v2.0 ORM implementations and core implementation of the new database, license for the Windows 2019 Datacenter software, and for many other code contributions and consultations during the early development phase.
 - [BitMasher](https://github.com/BitMasher) for guiding me on the development of the KaguyaApi portion of the project. This allows users to vote on top.gg and receive an instant notification with rewards by responding to a webhook. This wouldn't be possible without his help.
 
-## Main Featues:
+## Main Featues
 * Anti-Raid features to protect your server!
     - Protects your server from mass raids by allowing Administrators to configure whether to action a 
     certain amount of users who join within a specified time limit.
@@ -156,8 +156,8 @@ All perks below will last until your time as a premium subscriber runs out.
 
 ### Purchase Kaguya Premium at the [Kaguya Store](https://sellix.io/KaguyaStore) for only $4.99 a month!
 
-## Support:
+## Support
 Join the [Kaguya Support Server](https://discord.gg/aumCJhr) and ask our support staff if you need help!
 
 
-##### Original V2 changes can be viewed [here.](https://github.com/stageosu/Kaguya/blob/master/v2.md)
+##### [Original V2 changes](https://github.com/stageosu/Kaguya/blob/master/v2.md)
