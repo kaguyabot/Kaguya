@@ -54,7 +54,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 }
 
                 // Exp level-up image
-                if (!File.Exists())
+                if (!File.Exists(xpLevelSmallPath))
                 {
                     byte[] data = await wc.DownloadDataTaskAsync("https://i.imgur.com/fgNNX8H.png");
                     await File.WriteAllBytesAsync(xpLevelSmallPath, data);
