@@ -159,11 +159,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
 
                     break;
                 case LogLvl.WARN:
-                    color = ConsoleColor.Black;
+                    color = ConsoleColor.Yellow;
 
                     break;
                 case LogLvl.ERROR:
-                    color = ConsoleColor.Black;
+                    color = ConsoleColor.Red;
 
                     break;
                 default:
