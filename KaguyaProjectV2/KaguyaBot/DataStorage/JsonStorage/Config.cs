@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Constants;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
@@ -16,8 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
     public class Config
     {
         private const int CORRECT_ARG_COUNT = 15;
-        private static readonly string _resourcesPath = $"{ConfigProperties.KaguyaMainFolder}\\Resources\\";
-
+        private static readonly string _resourcesPath = Path.Combine(FileConstants.RootDir, "Resources");
         /// <summary>
         ///     Retreives a populated <see cref="BotConfig" /> and also re-populates any necessary data from the Resources folder.
         /// </summary>
@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
                 _resourcesPath + "Logs"
             };
 
-            string configFilePath = _resourcesPath + "config.json";
+            string configFilePath = Path.Combine(_resourcesPath, "config.json");
 
             if (!Directory.Exists(_resourcesPath))
                 CreateIfNotExists(_resourcesPath);
