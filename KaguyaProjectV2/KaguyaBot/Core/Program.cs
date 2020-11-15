@@ -73,6 +73,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 await ConsoleLogger.LogAsync($"Unhandled Exception: {(Exception) eventArgs.ExceptionObject}\n" +
                                              $"Inner Exception: {((Exception) eventArgs.ExceptionObject).InnerException}", LogLvl.ERROR);
             };
