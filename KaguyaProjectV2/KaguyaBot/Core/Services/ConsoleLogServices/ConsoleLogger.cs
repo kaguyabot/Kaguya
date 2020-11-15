@@ -19,10 +19,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
         /// </summary>
         /// <param name="message">The <see cref="string" /> to display inside of the console.</param>
         /// <param name="logLevel">The <see cref="LogLvl" /> that determines this log's severity.</param>
-        /// <param name="colorOverride">
-        ///     Whether to override the console colors.
-        ///     These are normally automatically determined by the provided <see cref="logLevel" />
-        /// </param>
         /// <param name="foregroundColor">Assuming we override the colors, this will alter the color of the text shown in the console.</param>
         /// <param name="displaySeverity">Whether to display the date and time in the console.</param>
         /// <param name="showDate">Whether to display the date and time in the console.</param>

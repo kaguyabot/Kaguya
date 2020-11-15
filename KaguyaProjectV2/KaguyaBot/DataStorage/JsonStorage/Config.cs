@@ -66,7 +66,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage
             IBotConfig model = new BotConfig();
             if (!File.Exists(configFilePath) && args.Length != CORRECT_ARG_COUNT)
             {
-                string text = JsonConvert.SerializeObject(model);
+                string text = JsonConvert.SerializeObject(model, Formatting.Indented);
                 await File.WriteAllTextAsync(configFilePath, text);
                 await ConsoleLogger.LogAsync($"Attention: A new configuration file has been created at " +
                                              $"{configFilePath}. Please visit this location and configure the file " +
