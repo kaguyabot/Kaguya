@@ -1,4 +1,6 @@
 ### Version 3.2
+- Updated framework to .NET 5.
+- Updated language version to C# 9.
 - $shadowban and $unshadowban have been rewritten to be more efficient.
 - Re-designed the formatting of log messages to take up much less space.
 - Fixed typo where antiraid DM's had incorrect grammar for the punishment.
