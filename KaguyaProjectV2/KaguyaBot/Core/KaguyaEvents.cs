@@ -54,25 +54,25 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         /// Fired whenever a user is shadowbanned via the 'shadowban' command.
         /// </summary>
         public static event Func<IModeratorEventArgs, Task> OnShadowban;
-        public static async Task TriggerShadowban(IModeratorEventArgs mArgs) => OnShadowban?.Invoke(mArgs);
+        public static void TriggerShadowban(IModeratorEventArgs mArgs) => OnShadowban?.Invoke(mArgs);
 
         /// <summary>
         /// Fired whenever a user is unshadowbanned via the 'unshadowban' command.
         /// </summary>
         public static event Func<IModeratorEventArgs, Task> OnUnshadowban;
-        public static async Task TriggerUnshadowban(IModeratorEventArgs mArgs) => OnUnshadowban?.Invoke(mArgs);
+        public static void TriggerUnshadowban(IModeratorEventArgs mArgs) => OnUnshadowban?.Invoke(mArgs);
 
         /// <summary>
         /// Fired whenever a user is muted via the 'mute' command.
         /// </summary>
         public static event Func<IModeratorEventArgs, Task> OnMute;
-        public static async Task TriggerMute(IModeratorEventArgs mArgs) => OnMute?.Invoke(mArgs);
+        public static void TriggerMute(IModeratorEventArgs mArgs) => OnMute?.Invoke(mArgs);
 
         /// <summary>
         /// Fired whenever a user is unmuted via the 'unmute' command.
         /// </summary>
         public static event Func<IModeratorEventArgs, Task> OnUnmute;
-        public static async Task TriggerUnmute(IModeratorEventArgs mArgs) => OnUnmute?.Invoke(mArgs);
+        public static void TriggerUnmute(IModeratorEventArgs mArgs) => OnUnmute?.Invoke(mArgs);
     }
 
     public class AntiRaidEventArgs
@@ -145,7 +145,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         protected ModeratorEventArgs(IModeratorEventArgs a) : this(a.Server, a.Guild, a.ActionedUser, a.ModeratorUser, a.Reason) { }
     }
 
-    public class ModeratorEventLogger : ModeratorEventArgs
+    public sealed class ModeratorEventLogger : ModeratorEventArgs
     {
         public string FormattedTimeStamp { get; }
         public InternalModerationAction Action { get; }

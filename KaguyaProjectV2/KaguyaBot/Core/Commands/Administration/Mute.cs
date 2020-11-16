@@ -22,6 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
     public class Mute : KaguyaBase
     {
         [AdminCommand]
+        // todo: I'm unsure why this is RunMode.Async. Find out whether this is necessary.
         [Command("Mute", RunMode = RunMode.Async)]
         [Alias("m")]
         [Summary("Mutes a user, **denying** them permission to chat in any channel, add reactions, connect to " +
@@ -34,7 +35,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.MuteMembers)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         [RequireBotPermission(GuildPermission.MuteMembers)]
-        public async Task MuteUser(IGuildUser user, string duration = null, [Remainder] string reason = null)
+        public async Task MuteUser(SocketGuildUser user, string duration = null, [Remainder] string reason = null)
         {
             SocketGuild guild = Context.Guild;
             Server server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
@@ -202,6 +203,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
             catch (Exception e)
             {
+                // todo: Throw new KaguyaSupportException and not just spew the log at the user.
                 await ReplyAsync($"{Context.User.Mention} Failed to mute user!!\n\n" +
                                  $"Error Log: ```{e}```");
             }
@@ -214,6 +216,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 Description = $"Successfully muted user `{user}`. {muteString}"
             };
 
+            KaguyaEvents.TriggerMute(new ModeratorEventArgs(server, guild, user, (SocketGuildUser) Context.User, reason));
             await ReplyAsync(embed: embed.Build());
         }
 

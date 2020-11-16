@@ -11,6 +11,8 @@ using Discord.Rest;
 using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Helpers;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
@@ -23,16 +25,19 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Alias("sb")]
         [Summary("Shadowbans a user, denying them of every possible channel permission, meaning " +
                  "they will no longer be able to view or interact with any voice channels.\n" +
+                 "You can provide a reason at the end of the command for logging purposes, if desired.\n\n" +
                  "__**This command also strips the user of any roles they may have.**__")]
-        [Remarks("<user>")]
+        [Remarks("<user> [reason]")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
         [RequireUserPermission(GuildPermission.DeafenMembers)]
         [RequireBotPermission(GuildPermission.ManageRoles)]
-        public async Task ShadowbanUser(SocketGuildUser user)
+        public async Task ShadowbanUser(SocketGuildUser user, [Remainder]string reason = null)
         {
             SocketGuild guild = Context.Guild;
             IRole role = guild.Roles.FirstOrDefault(x => x.Name == SB_ROLE);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
+            
             if (role == null)
             {
                 await ReplyAsync($"{Context.User.Mention} Could not find role `{SB_ROLE}`. Creating...");
@@ -40,6 +45,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 role = newRole;
                 await ReplyAsync($"{Context.User.Mention} Created role `{SB_ROLE}` with permissions: `none`.");
                 await ReplyAsync($"{Context.User.Mention} Scanning permission overwrites for channels...");
+            }
+
+            if (string.IsNullOrWhiteSpace(reason))
+            {
+                reason = "<No reason provided>";
             }
             
             try
@@ -74,6 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 }
             };
 
+            KaguyaEvents.TriggerShadowban(new ModeratorEventArgs(server, guild, user, (SocketGuildUser) Context.User, reason));
             await ReplyAsync(embed: successEmbed.Build());
         }
 

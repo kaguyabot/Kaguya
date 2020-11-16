@@ -4,10 +4,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
-using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -33,6 +31,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             KaguyaEvents.OnFilteredPhrase += LogFilteredPhrase;
             KaguyaEvents.OnWarn += LogWarns;
             KaguyaEvents.OnUnwarn += LogUnwarn;
+            KaguyaEvents.OnMute += LogMute;
+            KaguyaEvents.OnUnmute += LogUnmute;
+            KaguyaEvents.OnShadowban += LogShadowban;
+            KaguyaEvents.OnUnmute += LogUnshadowban;
         }
 
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
@@ -102,6 +104,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             if (oldMsg.Author.IsBot) return;
 
             string content = oldMsg.Content;
+
             if (content == arg2.Content)
                 return;
 
@@ -357,11 +360,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         private static async Task LogFilteredPhrase(FilteredPhraseEventArgs fpArgs)
         {
             Server server = fpArgs.Server;
+
             if (server.LogFilteredPhrases == 0)
                 return;
 
             IUser author = fpArgs.Author;
-            
+
             var sb = new StringBuilder($"🛂 `[{GetFormattedTimestamp()}]` `ID: {author.Id}` Filtered phrase detected by **{author}**. ");
             sb.Append($"Phrase: **{fpArgs.Phrase}**");
 
@@ -389,6 +393,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         {
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.WARN,
                 "🚔", GetFormattedTimestamp(), mArgs.Server.LogWarns);
+
             await logger.LogModerationAction();
         }
 
@@ -398,20 +403,23 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         {
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNMUTE,
                 "🛃☑", GetFormattedTimestamp(), mArgs.Server.LogUnwarns);
+
             await logger.LogModerationAction();
         }
 
         private static async Task LogShadowban(IModeratorEventArgs mArgs)
         {
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.SHADOWBAN, 
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.SHADOWBAN,
                 "👻⛔", GetFormattedTimestamp(), mArgs.Server.LogShadowbans);
+
             await logger.LogModerationAction();
         }
 
         private static async Task LogUnshadowban(IModeratorEventArgs mArgs)
         {
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.SHADOWBAN, 
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.SHADOWBAN,
                 "👻✅", GetFormattedTimestamp(), mArgs.Server.LogUnshadowbans);
+
             await logger.LogModerationAction();
         }
 
@@ -419,6 +427,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         {
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.MUTE,
                 "🔕", GetFormattedTimestamp(), mArgs.Server.LogMutes);
+
             await logger.LogModerationAction();
         }
 
@@ -426,6 +435,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         {
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNMUTE,
                 "🔔", GetFormattedTimestamp(), mArgs.Server.LogUnmutes);
+
             await logger.LogModerationAction();
         }
 

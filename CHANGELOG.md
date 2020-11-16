@@ -12,6 +12,7 @@
 - When using logs from "$log filteredphrases", archival of the user's full message is now a premium-only feature.
 - Logtype "MogLog" no longer exists. Replaced by individual logtypes for mutes, unmutes, shadowban, unshadowban, warn, and unwarn.
     - All of these logtypes are premium only.
+- $shadowban & $unshadowban now will accept a reason parameter at the end, if desired for logging purposes.
 
 ### Version 3.1.1
 - Fixed bug with antiraid where users would not be actioned or logged properly.
