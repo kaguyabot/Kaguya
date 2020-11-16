@@ -401,7 +401,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         private static async Task LogUnwarn(IModeratorEventArgs mArgs)
         {
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNMUTE,
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNWARN,
                 "🛃☑", GetFormattedTimestamp(), mArgs.Server.LogUnwarns);
 
             await logger.LogModerationAction();
@@ -417,7 +417,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         private static async Task LogUnshadowban(IModeratorEventArgs mArgs)
         {
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.SHADOWBAN,
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNSHADOWBAN,
                 "👻✅", GetFormattedTimestamp(), mArgs.Server.LogUnshadowbans);
 
             await logger.LogModerationAction();
