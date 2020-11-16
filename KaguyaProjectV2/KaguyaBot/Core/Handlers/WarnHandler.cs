@@ -13,19 +13,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public static class WarnHandler
     {
-        public static async Task OnWarn(WarnHandlerEventArgs args)
+        public static async Task OnWarn(WarnEventArgs args)
         {
             var currentSettings = await DatabaseQueries.GetFirstForServerAsync<WarnSetting>(args.Server.ServerId);
 
             if (currentSettings == null)
                 return;
 
-            List<WarnedUser> currentWarnings =
-                await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.WarnedUser.UserId, args.Server.ServerId);
+            List<WarnedUser> currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.WarnedUser.Id, args.Server.ServerId);
 
             int warnCount = currentWarnings.Count;
 
-            SocketGuildUser guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.ServerId).GetUser(args.WarnedUser.UserId);
+            SocketGuildUser guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.Id).GetUser(args.WarnedUser.Id);
 
             int? muteNum = currentSettings.Mute;
             int? kickNum = currentSettings.Kick;

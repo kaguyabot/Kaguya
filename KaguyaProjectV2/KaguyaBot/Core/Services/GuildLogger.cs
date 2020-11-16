@@ -384,16 +384,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             }
         }
 
-        private static async Task LogWarns(WarnHandlerEventArgs wArgs)
+        private static async Task LogWarns(WarnEventArgs wArgs)
         {
             Server server = wArgs.Server;
-            SocketUser user = _client.GetGuild(server.ServerId).GetUser(wArgs.WarnedUser.UserId);
+            SocketUser user = _client.GetGuild(server.ServerId).GetUser(wArgs.WarnedUser.Id);
 
             if (server.LogWarns == 0 || !server.IsPremium)
                 return;
             
             var sb = new StringBuilder($"🚔 `[{GetFormattedTimestamp()}]` `ID: {user.Id}` **{user}** was warned by ");
-            sb.Append($"**{wArgs.WarnedUser.ModeratorName}**. Reason: **{wArgs.WarnedUser.Reason}**");
+            sb.Append($"**{wArgs.ModeratorUser}**. Reason: **{wArgs.Reason}**");
 
             string msg = sb.ToString();
 
@@ -414,7 +414,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         //todo: shadowban, unshadowban, mute, unmute logtypes...
 
-        private static async Task LogUnwarn(UnwarnEventArgs uwArgs)
+        private static async Task LogUnwarn(WarnEventArgs uwArgs)
         {
             Server server = uwArgs.Server;
 

@@ -45,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
 
             await DatabaseQueries.InsertAsync(wu);
-            KaguyaEvents.TriggerWarning(new WarnHandlerEventArgs(server, wu));
+            KaguyaEvents.TriggerWarning(new WarnEventArgs(server, user, (SocketGuildUser) Context.User, reason));
 
             try
             {

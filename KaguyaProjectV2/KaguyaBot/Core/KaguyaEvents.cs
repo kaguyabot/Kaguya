@@ -30,20 +30,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         /// <summary>
         ///     Fired whenever a warning is issued in a guild via the 'warn' command.
         /// </summary>
-        public static event Func<WarnHandlerEventArgs, Task> OnWarn;
-        public static void TriggerWarning(WarnHandlerEventArgs e) => OnWarn?.Invoke(e);
+        public static event Func<WarnEventArgs, Task> OnWarn;
+        public static void TriggerWarning(WarnEventArgs e) => OnWarn?.Invoke(e);
 
         /// <summary>
         ///     Fired whenever a warning is removed from a guild via the 'unwarn' command.
         /// </summary>
-        public static event Func<UnwarnEventArgs, Task> OnUnwarn;
-        public static void TriggerUnwarn(UnwarnEventArgs uwArgs) => OnUnwarn?.Invoke(uwArgs);
+        public static event Func<WarnEventArgs, Task> OnUnwarn;
+        public static void TriggerUnwarn(WarnEventArgs uwArgs) => OnUnwarn?.Invoke(uwArgs);
 
         /// <summary>
         ///     Fired whenever a user successfully catches a fish via the 'fish' command.
         /// </summary>
         public static event Func<FishHandlerEventArgs, Task> OnFish;
         public static async Task TriggerFish(FishHandlerEventArgs e) => OnFish?.Invoke(e);
+
+        public static event Func<ShadowbanEventArgs, Task> OnShadowban;
+        public static async Task TriggerShadowban(ShadowbanEventArgs sbArgs) => OnShadowban?.Invoke(sbArgs);
+
+        public static event Func<ShadowbanEventArgs, Task> OnUnshadowban;
+        public static async Task TriggerUnshadowban(ShadowbanEventArgs sbArgs) => OnUnshadowban?.Invoke(sbArgs);
     }
 
     public class AntiRaidEventArgs : EventArgs
@@ -60,7 +66,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         }
     }
 
-    public class FilteredPhraseEventArgs : EventArgs
+    public class FilteredPhraseEventArgs
     {
         public readonly IUser Author;
         public readonly IMessage Message;
@@ -76,30 +82,27 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         }
     }
 
-    public class WarnHandlerEventArgs : EventArgs
+    public class WarnEventArgs
     {
-        public WarnHandlerEventArgs(Server server, WarnedUser warnedUser)
+        public Server Server { get; }
+        public SocketGuildUser WarnedUser { get; }
+        public SocketGuildUser ModeratorUser { get; }
+        public string Reason { get; }
+        
+        public WarnEventArgs(Server server, SocketGuildUser warnedUser, SocketGuildUser moderatorUser, string reason)
         {
             Server = server;
             WarnedUser = warnedUser;
+            ModeratorUser = moderatorUser;
+            Reason = reason;
         }
-
-        public Server Server { get; }
-        public WarnedUser WarnedUser { get; }
     }
 
-    public class UnwarnEventArgs
-    {
-        public Server Server { get; set; }
-        public IGuildUser WarnedUser { get; set; }
-        public IGuildUser ModeratorUser { get; set; }
-        public string Reason { get; set; }
-    }
-
-    public class FishHandlerEventArgs : EventArgs
+    public class FishHandlerEventArgs
     {
         public FishHandlerEventArgs(User user, Fish fish, ICommandContext context)
         {
+            // todo: Remove logging. Log this somewhere else, definitely not in the constructor!
 #pragma warning disable 4014
             ConsoleLogger.LogAsync($"User {user.UserId} has caught fish {fish} with value {fish.Value}.", LogLvl.DEBUG);
 #pragma warning restore 4014
@@ -112,5 +115,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         public User User { get; }
         public Fish Fish { get; }
         public ICommandContext Context { get; }
+    }
+
+    public class ShadowbanEventArgs
+    {
+        public Server Server { get; }
+        public SocketGuild Guild { get; }
+        public SocketGuildUser ActionedUser { get; }
+        public SocketGuildUser ModeratorUser { get; }
+        public ShadowbanEventArgs(Server server, SocketGuild guild, SocketGuildUser actionedUser, SocketGuildUser moderatorUser)
+        {
+            Server = server;
+            Guild = guild;
+            ActionedUser = actionedUser;
+            ModeratorUser = moderatorUser;
+        }
     }
 }

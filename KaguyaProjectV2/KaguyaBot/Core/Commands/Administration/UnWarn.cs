@@ -31,7 +31,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task UnWarnUser(IGuildUser user, string reason = default)
+        public async Task UnWarnUser(SocketGuildUser user, string reason = default)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             List<WarnedUser> warnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.Id, server.ServerId);
@@ -82,7 +82,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await ReactionReply(user, warnings, embed.Build(), warnCount, server, reason);
         }
 
-        private async Task ReactionReply(IGuildUser user,
+        private async Task ReactionReply(SocketGuildUser user,
             IReadOnlyCollection<WarnedUser> warnings,
             Embed embed,
             int warnCount,
@@ -98,22 +98,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 int j1 = j;
                 callbacks.Add((emojis[j], async (c, r) =>
-                        {
-                            var uwArgs = new UnwarnEventArgs
-                            {
-                                Server = server,
-                                WarnedUser = user,
-                                ModeratorUser = (IGuildUser) Context.User,
-                                Reason = reason
-                            };
-                            
-                            KaguyaEvents.TriggerUnwarn(uwArgs);
-                            
-                            await DatabaseQueries.DeleteAsync(warnings.ElementAt(j1));
-                            await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
-                                                             $"`Successfully removed warning #{j1 + 1}`");
-                        }
-                    ));
+                {
+                    var uwArgs = new WarnEventArgs(server, user, (SocketGuildUser) Context.User, reason);
+                    KaguyaEvents.TriggerUnwarn(uwArgs);
+                    
+                    await DatabaseQueries.DeleteAsync(warnings.ElementAt(j1));
+                    await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
+                                                     $"`Successfully removed warning #{j1 + 1}`");
+                }));
             }
 
             data.SetCallbacks(callbacks);
