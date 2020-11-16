@@ -15,21 +15,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
         /// <summary>
         ///     Performs all necessary actions that allow a server to have their logtypes enabled or disabled.
         /// </summary>
-        /// <param name="args">A period separated list of logtypes to enable/disable.</param>
+        /// <param name="logType">A period separated list of logtypes to enable/disable.</param>
         /// <param name="guildId"></param>
         /// <param name="channel">The channel where we will be sending the log messages to.</param>
         /// <param name="enabled">A boolean stating whether we should enable the logging or disable it.</param>
-        public static async Task<List<string>> LogSwitcher(string args, bool enabled, ulong guildId, SocketTextChannel channel = null)
+        public static async Task<List<string>> LogSwitcher(string logType, bool enabled, ulong guildId, SocketTextChannel channel = null)
         {
-            List<string> logTypes = ArrayInterpreter.ReturnParams(args).ToList();
+            // todo: This does not work.
+            List<string> logTypes = ArrayInterpreter.ReturnParams(logType).ToList();
             Server server = await DatabaseQueries.GetOrCreateServerAsync(guildId);
 
             foreach (string type in logTypes.ToList())
             {
                 if (enabled)
                 {
-                    await ConsoleLogger.LogAsync($"Server has set log type: [ID: {channel.Guild.Id} | Type: {type.ToUpperInvariant()}]",
-                        LogLvl.DEBUG);
+                    await ConsoleLogger.LogAsync($"Server has set log type: [ID: {channel.Guild.Id} | Type: {type.ToUpperInvariant()}]", LogLvl.DEBUG);
 
                     switch (type.ToLower())
                     {

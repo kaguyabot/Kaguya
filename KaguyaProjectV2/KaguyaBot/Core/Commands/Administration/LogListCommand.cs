@@ -1,4 +1,4 @@
-﻿﻿using Discord;
+﻿using Discord;
 using Discord.Commands;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands;
@@ -13,7 +13,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
-    public class LogTypes : KaguyaBase
+    public class LogListCommand : KaguyaBase
     {
         [AdminCommand]
         [Command("LogTypes")]
@@ -28,7 +28,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             string logSettingString = "";
 
             foreach (PropertyInfo prop in server.GetType().GetProperties()
-                                                .Where(x => x.PropertyType == typeof(ulong) && !x.Name.Contains("Id")))
+                                                .Where(x => x.PropertyType == typeof(ulong) && x.Name.Contains("Log")))
             {
                 if (!server.IsPremium && prop.Name.ToLower() == "modlog")
                     continue;
@@ -41,6 +41,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 SocketTextChannel channel = Client.GetGuild(Context.Guild.Id).GetTextChannel(matchChannel);
                 bool deletedChannel = channel == null && matchChannel != 0;
 
+                // wtf is this shit...
+                // todo: Add 'Kaguya Premium Only' tags to warn, unwarn, shadowban, unshadowban, mute, and unmute logs.
                 logSettingString +=
                     $"**{(prop.Name == "ModLog" ? "ModLog (Kaguya Premium Only)" : prop.Name.Replace("Log", ""))}** - {(channel == null && !deletedChannel ? "`Not assigned.`" : " ")} " +
                     $"{(deletedChannel ? $"*`Deleted Channel`*" : $"{(channel == null ? null : $"`#{channel.Name}`")}")}\n";

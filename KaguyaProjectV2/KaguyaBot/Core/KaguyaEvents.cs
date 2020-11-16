@@ -73,6 +73,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         /// </summary>
         public static event Func<IModeratorEventArgs, Task> OnUnmute;
         public static void TriggerUnmute(IModeratorEventArgs mArgs) => OnUnmute?.Invoke(mArgs);
+        
+        // todo: public static event Func<IKaguyaCommandArgs, Task> OnCommandExecuted; to send a notification 
+        // todo: whenever a command is executed. Ensure support for any future implementations of commands.
     }
 
     public class AntiRaidEventArgs
