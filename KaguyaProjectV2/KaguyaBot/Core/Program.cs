@@ -12,10 +12,8 @@ using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Constants;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
@@ -263,8 +261,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             var reactionHandler = new ReactionRoleHandler();
 
-            WarnEvent.OnWarn += WarnHandler.OnWarn;
-            FishEvent.OnFish += async args => await FishHandler.OnFish(args);
+            KaguyaEvents.OnWarn += WarnHandler.OnWarn;
+            KaguyaEvents.OnFish += async args => await FishHandler.OnFish(args);
 
             _client.UserJoined += GreetingService.Trigger;
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;

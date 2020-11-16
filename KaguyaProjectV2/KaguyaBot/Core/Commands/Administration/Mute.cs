@@ -179,7 +179,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                                  $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
                                                  $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     if (failCount >= 3)
                     {
@@ -261,7 +261,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                                      $"Guild: [Name: {guild.Name} | ID: {guild.Id}]\n" +
                                                      $"Channel: [Name: {channel.Name} | ID: {channel.Id}]", LogLvl.TRACE);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         // ignored
                     }

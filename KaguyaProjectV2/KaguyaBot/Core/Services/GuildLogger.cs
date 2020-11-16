@@ -6,7 +6,6 @@ using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -19,7 +18,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
     public class GuildLogger
     {
         private static readonly DiscordShardedClient _client = ConfigProperties.Client;
-        private static KaguyaEmbedBuilder _embed;
 
         public static void InitializeGuildLogListener()
         {
@@ -31,9 +29,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             _client.UserUnbanned += _client_UserUnbanned;
             _client.UserVoiceStateUpdated += _client_UserVoiceStateUpdated;
             KaguyaEvents.OnRaid += LogAntiRaid;
-            FilteredPhrase.OnDetection += LogFilteredPhrase;
-            WarnEvent.OnWarn += LogWarns;
-            UnWarn.OnUnwarn += LogUnwarn;
+            KaguyaEvents.OnFilteredPhrase += LogFilteredPhrase;
+            KaguyaEvents.OnWarn += LogWarns;
+            KaguyaEvents.OnUnwarn += LogUnwarn;
         }
 
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)

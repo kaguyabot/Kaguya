@@ -38,7 +38,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             {
                 trackMatch = userFavorites[trackIndex];
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await SendBasicErrorEmbedAsync($"The track number you provided doesn't match a track in " +
                                                $"your playlist.");

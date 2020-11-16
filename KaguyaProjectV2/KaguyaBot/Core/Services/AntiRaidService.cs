@@ -56,7 +56,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                     // Finally, add the current user's ID to the HashSet.
                     newIds.Add(u.Id);
-                    
+
                     // Replace the object in memory.
                     ActiveAntiraids.ReplaceRaidData(new RaidData
                     {
@@ -71,9 +71,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                 timer.Elapsed += async (sender, args) =>
                 {
                     RaidData existingObj = ActiveAntiraids.Raids.FirstOrDefault(x => x.ServerId == server.ServerId);
+
                     if (existingObj == null)
                         return;
-                    
+
                     // Filter by distinct to fix the duplicate users issue.
                     existingObj.UserIds = existingObj.UserIds.Distinct().ToHashSet();
 
@@ -81,9 +82,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                     // resulting in duplicate log messages and ban attempts.
                     ActiveAntiraids.RemoveAll(existingObj);
                     if (existingObj.UserIds.Count >= ar.Users)
-                    {
                         await ActionUsers(existingObj.UserIds, server.ServerId, ar.Action);
-                    }
                 };
             };
         });
@@ -109,14 +108,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
                 return;
             }
-            
-            KaguyaEvents.TriggerAntiraid(new AntiRaidEventArgs(server, guildUsers, guild, action));
+
+            KaguyaEvents.TriggerRaid(new AntiRaidEventArgs(guildUsers, guild, action));
 
             // We need to message the actioned users, if applicable, before actioning.
 
             if (!string.IsNullOrWhiteSpace(server.AntiraidPunishmentDirectMessage))
             {
-                
                 foreach (SocketGuildUser guildUser in guildUsers)
                 {
                     // content must be inside the foreach because of how we modify it below 
@@ -128,9 +126,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         Title = "Kaguya Anti-Raid Notification",
                         Description = content
                     };
-                
+
                     var sb = new StringBuilder(content);
-                    
+
                     sb = sb.Replace("{USERNAME}", guildUser.UsernameAndDescriminator());
                     sb = sb.Replace("{USERMENTION}", guildUser.Mention);
                     sb = sb.Replace("{SERVER}", guild.Name);
@@ -169,10 +167,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         }
                         catch (Exception)
                         {
-                            await ConsoleLogger.LogAsync($"Attempted to auto-mute user " +
+                            await ConsoleLogger.LogAsync("Attempted to auto-mute user " +
                                                          $"{user.ToString() ?? "NULL"} as " +
-                                                         $"part of the antiraid service, but " +
-                                                         $"an exception was thrown!!", LogLvl.ERROR);
+                                                         "part of the antiraid service, but " +
+                                                         "an exception was thrown!!", LogLvl.ERROR);
                         }
                     }
 
@@ -187,10 +185,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         }
                         catch (Exception)
                         {
-                            await ConsoleLogger.LogAsync($"Attempted to auto-kick user " +
+                            await ConsoleLogger.LogAsync("Attempted to auto-kick user " +
                                                          $"{user.ToString() ?? "NULL"} as " +
-                                                         $"part of the antiraid service, but " +
-                                                         $"an exception was thrown!!", LogLvl.ERROR);
+                                                         "part of the antiraid service, but " +
+                                                         "an exception was thrown!!", LogLvl.ERROR);
                         }
                     }
 
@@ -205,10 +203,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         }
                         catch (Exception)
                         {
-                            await ConsoleLogger.LogAsync($"Attempted to auto-shadowban user " +
+                            await ConsoleLogger.LogAsync("Attempted to auto-shadowban user " +
                                                          $"{user.ToString() ?? "NULL"} as " +
-                                                         $"part of the antiraid service, but " +
-                                                         $"an exception was thrown!!", LogLvl.ERROR);
+                                                         "part of the antiraid service, but " +
+                                                         "an exception was thrown!!", LogLvl.ERROR);
                         }
                     }
 
@@ -223,10 +221,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         }
                         catch (Exception)
                         {
-                            await ConsoleLogger.LogAsync($"Attempted to auto-ban user " +
+                            await ConsoleLogger.LogAsync("Attempted to auto-ban user " +
                                                          $"{user.ToString() ?? "NULL"} as " +
-                                                         $"part of the antiraid service, but " +
-                                                         $"an exception was thrown!!", LogLvl.ERROR);
+                                                         "part of the antiraid service, but " +
+                                                         "an exception was thrown!!", LogLvl.ERROR);
                         }
                     }
 
@@ -244,17 +242,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             await ConsoleLogger.LogAsync($"Antiraid: Successfully actioned {guildUsers.Count:N0} users in guild {guild.Id}.", LogLvl.INFO);
         }
 
-        public static string FormattedAntiraidPunishment(string punishmentStr)
+        public static string FormattedAntiraidPunishment(string punishmentStr) => punishmentStr switch
         {
-            return punishmentStr switch
-            {
-                "kick" => "kicked",
-                "ban" => "banned",
-                "mute" => "muted",
-                "shadowban" => "shadowbanned",
-                _ => punishmentStr
-            };
-        }
+            "kick" => "kicked",
+            "ban" => "banned",
+            "mute" => "muted",
+            "shadowban" => "shadowbanned",
+            _ => punishmentStr
+        };
     }
 
     public class RaidData
@@ -265,16 +260,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
     public static class ActiveAntiraids
     {
-        public static List<RaidData> Raids { get; set; } = new List<RaidData>();
+        public static List<RaidData> Raids { get; set; } = new();
 
         /// <summary>
-        /// Adds a <see cref="RaidData"/> to the cache, but if there is an existing
-        /// <see cref="RaidData"/> with the same ServerId, it will not be added.
+        ///     Adds a <see cref="RaidData" /> to the cache, but if there is an existing
+        ///     <see cref="RaidData" /> with the same ServerId, it will not be added.
         /// </summary>
         /// <param name="data"></param>
         public static void SafeAdd(RaidData data)
         {
-            if(!Raids.Any(x => x.ServerId == data.ServerId))
+            if (!Raids.Any(x => x.ServerId == data.ServerId))
                 Raids.Add(data);
         }
 
@@ -285,35 +280,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         }
 
         /// <summary>
-        /// Removes all matches where the <see cref="data"/>'s ServerId value is found in the cache.
+        ///     Removes all matches where the <see cref="data" />'s ServerId value is found in the cache.
         /// </summary>
         /// <param name="data"></param>
-        public static void RemoveAll(RaidData data)
-        {
-            Raids.RemoveAll(x => x.ServerId == data.ServerId);
-        }
-    }
-
-    public static class AntiRaidEvent
-    {
-        public static event Func<AntiRaidEventArgs, Task> OnRaid;
-        public static void Trigger(Server server, IEnumerable<SocketGuildUser> users, SocketGuild guild, string action) => AntiRaidEventTrigger(new AntiRaidEventArgs(server, users, guild, action));
-        private static void AntiRaidEventTrigger(AntiRaidEventArgs e) => OnRaid?.Invoke(e);
-    }
-
-    public class AntiRaidEventArgs : EventArgs
-    {
-        public Server Server { get; }
-        public IEnumerable<SocketGuildUser> GuildUsers { get; }
-        public SocketGuild SocketGuild { get; }
-        public string Punishment { get; }
-
-        public AntiRaidEventArgs(Server server, IEnumerable<SocketGuildUser> users, SocketGuild guild, string punishment)
-        {
-            Server = server;
-            GuildUsers = users;
-            SocketGuild = guild;
-            Punishment = punishment;
-        }
+        public static void RemoveAll(RaidData data) => Raids.RemoveAll(x => x.ServerId == data.ServerId);
     }
 }

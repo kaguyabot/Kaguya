@@ -24,10 +24,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Constants
                 var rg = new Regex(@".*KaguyaProjectV2");
                 if (!rg.IsMatch(_workingDirectory))
                 {
+#pragma warning disable 4014
                     ConsoleLogger.LogAsync("An invalid working directory exists. Does not contain " +
-                                        "required: 'KaguyaProjectV2' folder. Directory in question: " +
-                                        $"'{_workingDirectory}'", LogLvl.WARN);
-
+                                           "required: 'KaguyaProjectV2' folder. Directory in question: " +
+                                           $"'{_workingDirectory}'", LogLvl.WARN);
+#pragma warning restore 4014
                     return "";
                 }
 

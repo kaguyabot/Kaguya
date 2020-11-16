@@ -17,8 +17,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class UnWarn : KaguyaBase
     {
-        public static event Func<UnwarnEventArgs, Task> OnUnwarn;
-        private static void Trigger(UnwarnEventArgs uwArgs) => OnUnwarn?.Invoke(uwArgs);
+        
         
         [AdminCommand]
         [Command("Unwarn")]
@@ -108,7 +107,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                                 Reason = reason
                             };
                             
-                            Trigger(uwArgs);
+                            KaguyaEvents.TriggerUnwarn(uwArgs);
                             
                             await DatabaseQueries.DeleteAsync(warnings.ElementAt(j1));
                             await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
@@ -122,11 +121,5 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         }
     }
 
-    public class UnwarnEventArgs
-    {
-        public Server Server { get; set; }
-        public IGuildUser WarnedUser { get; set; }
-        public IGuildUser ModeratorUser { get; set; }
-        public string Reason { get; set; }
-    }
+   
 }

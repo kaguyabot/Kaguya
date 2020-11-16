@@ -1,9 +1,9 @@
-﻿using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
-using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
+﻿using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {

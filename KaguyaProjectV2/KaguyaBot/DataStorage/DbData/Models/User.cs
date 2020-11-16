@@ -1,12 +1,12 @@
 ﻿using KaguyaProjectV2.KaguyaBot.Core.Commands.EXP;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models

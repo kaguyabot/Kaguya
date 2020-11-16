@@ -9,7 +9,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
+namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public static class WarnHandler
     {
@@ -26,7 +26,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             int warnCount = currentWarnings.Count;
 
             SocketGuildUser guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.ServerId).GetUser(args.WarnedUser.UserId);
-            SocketSelfUser kaguya = ConfigProperties.Client.CurrentUser;
 
             int? muteNum = currentSettings.Mute;
             int? kickNum = currentSettings.Kick;

@@ -2,7 +2,6 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -46,7 +45,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
 
             await DatabaseQueries.InsertAsync(wu);
-            WarnEvent.Trigger(server, wu);
+            KaguyaEvents.TriggerWarning(new WarnHandlerEventArgs(server, wu));
 
             try
             {

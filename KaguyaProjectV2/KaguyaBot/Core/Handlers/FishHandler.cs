@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
@@ -10,7 +9,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
-namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent
+namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public static class FishHandler // Fish level-up handler.
     {

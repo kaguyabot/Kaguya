@@ -166,7 +166,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     await ConsoleLogger.LogAsync($"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {phrase}]", LogLvl.INFO);
                     
                     var fpArgs = new FilteredPhraseEventArgs(server, phrase, message);
-                    FilteredPhrase.Trigger(fpArgs);
+                    KaguyaEvents.TriggerFilteredPhrase(fpArgs);
                     
                     return true;
                 }

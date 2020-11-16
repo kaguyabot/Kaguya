@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 Enabled = true
             };
 
-            timer.Elapsed += async (sender, e) =>
+            timer.Elapsed += async (_, _) =>
             {
                 List<MutedUser> curMutedUsers = await DatabaseQueries.GetAllAsync<MutedUser>(x => x.ExpiresAt < DateTime.Now.ToOADate());
                 foreach (MutedUser mutedUser in curMutedUsers)

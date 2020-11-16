@@ -1,4 +1,7 @@
-﻿#nullable enable
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
@@ -6,17 +9,12 @@ using Discord.WebSocket;
 using Humanizer;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization.Json;
-using System.Threading.Tasks;
-using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using Victoria;
 using Victoria.Enums;
@@ -42,34 +40,34 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
         }
 
         /// <summary>
-        /// Searches the specified <see cref="SearchProvider"/> for the provided <see cref="query"/>.
-        /// This method also adds the song to the guild's player queue and will even join the user's voice
-        /// channel automatically.
+        ///     Searches the specified <see cref="SearchProvider" /> for the provided <see cref="query" />.
+        ///     This method also adds the song to the guild's player queue and will even join the user's voice
+        ///     channel automatically.
         /// </summary>
         /// <param name="context"></param>
         /// <param name="query">The song to search for, user input.</param>
         /// <param name="playFirst"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public async Task<ReactionCallbackData?> SearchAndPlayAsync(ShardedCommandContext context,
+        public async Task<ReactionCallbackData> SearchAndPlayAsync(ShardedCommandContext context,
             string query,
             bool playFirst = false,
             SearchProvider provider = SearchProvider.YOU_TUBE)
         {
-            var user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
-            var server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
+            User user = await DatabaseQueries.GetOrCreateUserAsync(context.User.Id);
+            Server server = await DatabaseQueries.GetOrCreateServerAsync(context.Guild.Id);
 
-            var node = ConfigProperties.LavaNode;
-            var curVc = (context.User as SocketGuildUser).VoiceChannel;
+            LavaNode node = ConfigProperties.LavaNode;
+            SocketVoiceChannel curVc = (context.User as SocketGuildUser).VoiceChannel;
 
             await ConsoleLogger.LogAsync($"Found node and voice channel for guild {context.Guild.Id}.", LogLvl.TRACE);
 
             if (curVc == null)
             {
                 await context.Channel.SendMessageAsync($"{context.User.Mention} You must be in a voice " +
-                                                       $"channel to use this command.");
+                                                       "channel to use this command.");
 
-                await ConsoleLogger.LogAsync($"User was not in voice channel, cancelling music search operation.", LogLvl.TRACE);
+                await ConsoleLogger.LogAsync("User was not in voice channel, cancelling music search operation.", LogLvl.TRACE);
 
                 return null;
             }
@@ -84,9 +82,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             if (provider == SearchProvider.TWITCH)
             {
                 const string PROVIDER_URL = "www.twitch.tv";
-                string errorString = $"Your search returned no results. Ensure you are only " +
-                                     $"typing the name of the streamer who you want to watch or a direct link to their stream.\n\n" +
-                                     $"Note: The streamer must be live for this feature to work.";
+                string errorString = "Your search returned no results. Ensure you are only " +
+                                     "typing the name of the streamer who you want to watch or a direct link to their stream.\n\n" +
+                                     "Note: The streamer must be live for this feature to work.";
 
                 if (!query.ToLower().Contains(PROVIDER_URL))
                 {
@@ -131,18 +129,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     ? ""
                     : "If you are " +
                       $"not a [Kaguya Premium Subscriber]({ConfigProperties.KAGUYA_STORE_URL}), " +
-                      $"you are only limited to playing songs less than `10 minutes` in duration.";
+                      "you are only limited to playing songs less than `10 minutes` in duration.";
 
                 await context.Channel.SendBasicErrorEmbedAsync($"Your requested search returned no results. {suppString}");
-                await ConsoleLogger.LogAsync($"Search request returned no usable " +
+                await ConsoleLogger.LogAsync("Search request returned no usable " +
                                              $"results in guild {Context.Guild.Id} for query {query}", LogLvl.TRACE);
             }
 
             var fields = new List<EmbedFieldBuilder>();
             var callbacks = new List<(IEmote, Func<SocketCommandContext, SocketReaction, Task>)>();
-            var emojiNums = GlobalProperties.EmojisOneThroughNine();
+            Emoji[] emojiNums = GlobalProperties.EmojisOneThroughNine();
 
-            var player = node.HasPlayer(context.Guild)
+            LavaPlayer player = node.HasPlayer(context.Guild)
                 ? node.GetPlayer(context.Guild)
                 : await node.JoinAsync(curVc);
 
@@ -151,8 +149,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 #region If the track is a livestream:
             if (tracks.Any(x => x.IsStream))
             {
-                var trackSel = tracks.First(x => x.IsStream); // Gathers the first stream from the collection.
-                var twitchName = (await ConfigProperties.TwitchApi.V5.Users.GetUserByNameAsync(trackSel.Author)).Matches[0].DisplayName;
+                LavaTrack trackSel = tracks.First(x => x.IsStream); // Gathers the first stream from the collection.
+                string twitchName = (await ConfigProperties.TwitchApi.V5.Users.GetUserByNameAsync(trackSel.Author)).Matches[0].DisplayName;
                 string playString = player.PlayerState == PlayerState.Playing
                     ? $"Queued stream into position {player.Queue.Count}."
                     : $"Now playing `{twitchName}`'s stream.";
@@ -167,7 +165,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     }
                     catch (Exception e)
                     {
-                        await ConsoleLogger.LogAsync($"An exception was thrown when trying to enqueue the livestream " +
+                        await ConsoleLogger.LogAsync("An exception was thrown when trying to enqueue the livestream " +
                                                      $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
                                                      $"Exception Message: {e.Message}\n" +
                                                      $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
@@ -183,7 +181,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     }
                     catch (Exception e)
                     {
-                        await ConsoleLogger.LogAsync($"An exception was thrown when trying to play track " +
+                        await ConsoleLogger.LogAsync("An exception was thrown when trying to play track " +
                                                      $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
                                                      $"Exception Message: {e.Message}\n" +
                                                      $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
@@ -213,10 +211,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 #region If we have chosen to only play the default track (via $play).
             if (playFirst && tracks.Any())
             {
-                var trackSel = tracks[0];
+                LavaTrack trackSel = tracks[0];
                 var field = new EmbedFieldBuilder
                 {
-                    Name = $"Track #1.",
+                    Name = "Track #1.",
                     Value = $"Title: `{trackSel.Title.Replace("`", "")}`\n" + // We get rid of backticks for formatting.
                             $"Duration: `{trackSel.Duration.Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Hour, precision: 3)}`\n" +
                             $"Uploader: `{trackSel.Author}`"
@@ -224,7 +222,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
 
                 string playString = player.PlayerState == PlayerState.Playing && !player.Track.IsStream
                     ? $"Queued track #1 into position {player.Queue.Count + 1}."
-                    : $"Now playing track #1.";
+                    : "Now playing track #1.";
 
                 if (player.PlayerState == PlayerState.Playing)
                 {
@@ -257,7 +255,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                     }
                     catch (Exception e)
                     {
-                        await ConsoleLogger.LogAsync($"An exception was thrown when trying to play track " +
+                        await ConsoleLogger.LogAsync("An exception was thrown when trying to play track " +
                                                      $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
                                                      $"Exception Message: {e.Message}\n" +
                                                      $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
@@ -291,7 +289,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
             for (int i = 0; i < (h < 7 ? h : 7); i++)
             {
                 int i1 = i;
-                var trackSel = tracks[i];
+                LavaTrack trackSel = tracks[i];
                 var field = new EmbedFieldBuilder
                 {
                     Name = $"Track {i1 + 1}.",
@@ -312,23 +310,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                                 if (player.Queue.Count() == 50 && !server.IsPremium)
                                 {
                                     await ConsoleLogger.LogAsync($"Queue was full in guild {context.Guild.Id}. Sending error message.", LogLvl.TRACE);
-                                    await SendBasicErrorEmbedAsync($"Your queue is full! `50 songs` is the maximum " +
+                                    await SendBasicErrorEmbedAsync("Your queue is full! `50 songs` is the maximum " +
                                                                    $"for non [Kaguya Premium]({ConfigProperties.KAGUYA_STORE_URL}) " +
-                                                                   $"servers.");
+                                                                   "servers.");
 
                                     return;
                                 }
-                                else
-                                {
-                                    player.Queue.Enqueue(trackSel);
-                                    await ConsoleLogger.LogAsync($"Enqueued track {trackSel} in guild {context.Guild.Id}", LogLvl.TRACE);
 
-                                    if (player.Track.IsStream)
-                                    {
-                                        await player.SkipAsync();
-                                        await ConsoleLogger.LogAsync($"Automatically skipped livestream to play" +
-                                                                     $" incoming track in guild {context.Guild.Id}", LogLvl.TRACE);
-                                    }
+                                player.Queue.Enqueue(trackSel);
+                                await ConsoleLogger.LogAsync($"Enqueued track {trackSel} in guild {context.Guild.Id}", LogLvl.TRACE);
+
+                                if (player.Track.IsStream)
+                                {
+                                    await player.SkipAsync();
+                                    await ConsoleLogger.LogAsync("Automatically skipped livestream to play" +
+                                                                 $" incoming track in guild {context.Guild.Id}", LogLvl.TRACE);
                                 }
                             }
                             else
@@ -341,7 +337,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                                 }
                                 catch (Exception e)
                                 {
-                                    await ConsoleLogger.LogAsync($"An exception was thrown when trying to play track " +
+                                    await ConsoleLogger.LogAsync("An exception was thrown when trying to play track " +
                                                                  $"{trackSel.Title} in guild {Context.Guild.Id}.\n" +
                                                                  $"Exception Message: {e.Message}\n" +
                                                                  $"Stack Trace: {e.StackTrace}", LogLvl.WARN);
@@ -382,7 +378,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Music
                 Title = "Kaguya Music Search Results",
                 Description = $" I found {tracks.Count} track{s} from {provider}, " +
                               $"{(tracks.Count > 5 ? "but here are the top 5" : "here they are")}. " +
-                              $"Please select a track to play.",
+                              "Please select a track to play.",
                 Fields = fields
             };
 
