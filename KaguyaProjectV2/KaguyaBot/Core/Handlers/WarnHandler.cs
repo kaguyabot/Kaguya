@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -13,18 +14,18 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public static class WarnHandler
     {
-        public static async Task OnWarn(WarnEventArgs args)
+        public static async Task OnWarn(IModeratorEventArgs warnArgs)
         {
-            var currentSettings = await DatabaseQueries.GetFirstForServerAsync<WarnSetting>(args.Server.ServerId);
+            var currentSettings = await DatabaseQueries.GetFirstForServerAsync<WarnSetting>(warnArgs.Server.ServerId);
 
             if (currentSettings == null)
                 return;
 
-            List<WarnedUser> currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.WarnedUser.Id, args.Server.ServerId);
+            List<WarnedUser> currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(warnArgs.ActionedUser.Id, warnArgs.Server.ServerId);
 
             int warnCount = currentWarnings.Count;
 
-            SocketGuildUser guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.Id).GetUser(args.WarnedUser.Id);
+            SocketGuildUser guildUser = ConfigProperties.Client.GetGuild(warnArgs.ActionedUser.Id).GetUser(warnArgs.ActionedUser.Id);
 
             int? muteNum = currentSettings.Mute;
             int? kickNum = currentSettings.Kick;
@@ -52,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                                  $"to take place. This failed due to an exception.\n" +
                                                  $"Exception Message: {e.Message}\n" +
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
-                                                 $"Guild: {args.Server.ServerId}", LogLvl.WARN);
+                                                 $"Guild: {warnArgs.Server.ServerId}", LogLvl.WARN);
                 }
 
                 return;
@@ -76,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                                  $"to take place. This failed due to an exception.\n" +
                                                  $"Exception Message: {e.Message}\n" +
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
-                                                 $"Guild: {args.Server.ServerId}", LogLvl.WARN);
+                                                 $"Guild: {warnArgs.Server.ServerId}", LogLvl.WARN);
                 }
 
                 return;
@@ -103,7 +104,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                                  $"to take place. This failed due to an exception.\n" +
                                                  $"Exception Message: {e.Message}\n" +
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
-                                                 $"Guild: {args.Server.ServerId}", LogLvl.WARN);
+                                                 $"Guild: {warnArgs.Server.ServerId}", LogLvl.WARN);
                 }
 
                 return;
@@ -127,7 +128,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                                                  $"to take place. This failed due to an exception.\n" +
                                                  $"Exception Message: {e.Message}\n" +
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
-                                                 $"Guild: {args.Server.ServerId}", LogLvl.WARN);
+                                                 $"Guild: {warnArgs.Server.ServerId}", LogLvl.WARN);
                 }
             }
         }

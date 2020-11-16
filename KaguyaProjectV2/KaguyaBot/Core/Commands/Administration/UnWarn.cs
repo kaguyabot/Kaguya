@@ -99,7 +99,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 int j1 = j;
                 callbacks.Add((emojis[j], async (c, r) =>
                 {
-                    var uwArgs = new WarnEventArgs(server, user, (SocketGuildUser) Context.User, reason);
+                    var uwArgs = new ModeratorEventArgs(server, Context.Guild, user, (SocketGuildUser) Context.User, reason);
                     KaguyaEvents.TriggerUnwarn(uwArgs);
                     
                     await DatabaseQueries.DeleteAsync(warnings.ElementAt(j1));

@@ -6,6 +6,7 @@ using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -384,63 +385,50 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             }
         }
 
-        private static async Task LogWarns(WarnEventArgs wArgs)
+        private static async Task LogWarns(IModeratorEventArgs mArgs)
         {
-            Server server = wArgs.Server;
-            SocketUser user = _client.GetGuild(server.ServerId).GetUser(wArgs.WarnedUser.Id);
-
-            if (server.LogWarns == 0 || !server.IsPremium)
-                return;
-            
-            var sb = new StringBuilder($"🚔 `[{GetFormattedTimestamp()}]` `ID: {user.Id}` **{user}** was warned by ");
-            sb.Append($"**{wArgs.ModeratorUser}**. Reason: **{wArgs.Reason}**");
-
-            string msg = sb.ToString();
-
-            try
-            {
-                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogWarns).SendMessageAsync(msg);
-            }
-            catch (Exception)
-            {
-                await ConsoleLogger.LogAsync($"Failed to send warn log to channel {server.LogWarns} " +
-                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
-                                             "doesn't happen again!", LogLvl.WARN);
-
-                server.LogWarns = 0;
-                await DatabaseQueries.UpdateAsync(server);
-            }
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.WARN,
+                "🚔", GetFormattedTimestamp(), mArgs.Server.LogWarns);
+            await logger.LogModerationAction();
         }
 
         //todo: shadowban, unshadowban, mute, unmute logtypes...
 
-        private static async Task LogUnwarn(WarnEventArgs uwArgs)
+        private static async Task LogUnwarn(IModeratorEventArgs mArgs)
         {
-            Server server = uwArgs.Server;
-
-            if (server.LogUnwarns == 0 || !server.IsPremium)
-                return;
-            
-            var sb = new StringBuilder($"🚔 `[{GetFormattedTimestamp()}]` `ID: {uwArgs.WarnedUser.Id}` **{uwArgs.WarnedUser}** was warned by ");
-            sb.Append($"**{uwArgs.ModeratorUser}**. Reason: **{uwArgs.Reason}**");
-
-            string msg = sb.ToString();
-
-            try
-            {
-                await _client.GetGuild(server.ServerId).GetTextChannel(server.LogUnwarns).SendMessageAsync(msg);
-            }
-            catch (Exception)
-            {
-                await ConsoleLogger.LogAsync($"Failed to send unwarn log to channel {server.LogUnwarns} " +
-                                             $"in guild {server.ServerId}. Resetting this log channel to 0 so it " +
-                                             "doesn't happen again!", LogLvl.WARN);
-
-                server.LogUnwarns = 0;
-                await DatabaseQueries.UpdateAsync(server);
-            }
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNMUTE,
+                "🛃☑", GetFormattedTimestamp(), mArgs.Server.LogUnwarns);
+            await logger.LogModerationAction();
         }
-        
+
+        private static async Task LogShadowban(IModeratorEventArgs mArgs)
+        {
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.SHADOWBAN, 
+                "👻⛔", GetFormattedTimestamp(), mArgs.Server.LogShadowbans);
+            await logger.LogModerationAction();
+        }
+
+        private static async Task LogUnshadowban(IModeratorEventArgs mArgs)
+        {
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.SHADOWBAN, 
+                "👻✅", GetFormattedTimestamp(), mArgs.Server.LogUnshadowbans);
+            await logger.LogModerationAction();
+        }
+
+        private static async Task LogMute(IModeratorEventArgs mArgs)
+        {
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.MUTE,
+                "🔕", GetFormattedTimestamp(), mArgs.Server.LogMutes);
+            await logger.LogModerationAction();
+        }
+
+        private static async Task LogUnmute(IModeratorEventArgs mArgs)
+        {
+            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNMUTE,
+                "🔔", GetFormattedTimestamp(), mArgs.Server.LogUnmutes);
+            await logger.LogModerationAction();
+        }
+
         private static string GetFormattedTimestamp()
         {
             DateTime d = DateTime.Now;
