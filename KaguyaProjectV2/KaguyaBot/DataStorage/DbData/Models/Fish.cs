@@ -13,34 +13,34 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [PrimaryKey]
         public long FishId { get; set; }
 
-        [Column(Name = "UserId")]
+        [Column(Name = "user_id")]
         [NotNull]
         public ulong UserId { get; set; }
 
-        [Column(Name = "ServerId")]
+        [Column(Name = "server_id")]
         [NotNull]
         public ulong ServerId { get; set; }
 
-        [Column(Name = "TimeCaught")]
+        [Column(Name = "time_caught")]
         [NotNull]
         public double TimeCaught { get; set; }
 
-        [Column(Name = "Fish")]
+        [Column(Name = "fish_type")]
         [NotNull]
         public FishType FishType { get; set; }
 
-        [Column(Name = "FishString")]
+        [Column(Name = "fish_string")]
         public string FishString { get; set; }
 
-        [Column(Name = "Value")]
+        [Column(Name = "value")]
         [NotNull]
         public int Value { get; set; }
 
-        [Column(Name = "Exp")]
+        [Column(Name = "exp")]
         [NotNull]
         public int Exp { get; set; }
 
-        [Column(Name = "Sold")]
+        [Column(Name = "sold")]
         [NotNull]
         public bool Sold { get; set; }
 
@@ -95,6 +95,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         }
     }
 
+    // todo: Convert to struct?
     public enum FishType
     {
         BIG_KAHUNA,          // 0.05% (1 in 2,000)
