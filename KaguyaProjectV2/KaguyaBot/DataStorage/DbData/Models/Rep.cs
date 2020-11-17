@@ -21,5 +21,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "reason")]
         [NotNull]
         public string Reason { get; set; }
+        
+        [Association(ThisKey = "user_id", OtherKey = "user_id", CanBeNull = false)]
+        public User User { get; set; }
     }
 }

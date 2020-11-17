@@ -88,9 +88,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [NotNull]
         public double LastFished { get; set; }
 
-        [Column(Name = "premium_expiration")]
-        public double PremiumExpiration { get; set; }
-
         /// <summary>
         /// If a user wants to receive level-up notifications in chat, what type should it be?
         /// </summary>
@@ -104,6 +101,9 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "exp_dmnotification_typenum")]
         [NotNull]
         public int ExpDmNotificationTypeNum { private get; set; } = 3;
+        
+        [Column(Name = "premium_expiration")]
+        public double PremiumExpiration { get; set; }
 
         public bool IsBlacklisted => Blacklist != null && (Blacklist.Expiration - DateTime.Now.ToOADate()) > 0;
         public ExpType ExpChatNotificationType => (ExpType) ExpChatNotificationTypeNum;

@@ -55,7 +55,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// <summary>
         /// FK_KaguyaUser_GambleHistory
         /// </summary>
-        [Association(ThisKey = "user_id", OtherKey = "id", CanBeNull = false)]
+        [Association(ThisKey = "user_id", OtherKey = "user_id", CanBeNull = false)]
         public User User { get; set; }
     }
 

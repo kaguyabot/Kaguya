@@ -25,5 +25,8 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "ban")]
         [NotNull]
         public int Ban { get; set; }
+        
+        [Association(ThisKey = "server_id", OtherKey = "server_id")]
+        public Server Server { get; set; }
     }
 }

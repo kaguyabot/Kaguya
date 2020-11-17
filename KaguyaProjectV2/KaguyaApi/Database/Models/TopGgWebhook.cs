@@ -76,5 +76,8 @@ namespace KaguyaProjectV2.KaguyaApi.Database.Models
         [Column(Name = "query_params")]
         [Nullable]
         public string QueryParams { get; set; }
+        
+        [Column(Name = "reminder_sent")]
+        public bool ReminderSent { get; set; }
     }
 }

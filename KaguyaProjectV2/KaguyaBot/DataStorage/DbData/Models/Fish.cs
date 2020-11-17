@@ -45,6 +45,12 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [NotNull]
         public bool Sold { get; set; }
 
+        [Association(ThisKey = "user_id", OtherKey = "user_id", CanBeNull = false)]
+        public User User { get; set; }
+        
+        [Association(ThisKey = "server_id", OtherKey = "server_id", CanBeNull = false)]
+        public Server Server { get; set; }
+        
         public const int BAIT_COST = 75;
         public const int PREMIUM_BAIT_COST = (int) (BAIT_COST * .75);
 

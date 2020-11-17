@@ -45,5 +45,11 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "id")]
         [NotNull]
         public int Id { get; set; }
+        
+        [Association(ThisKey = "server_id", OtherKey = "server_id", CanBeNull = false)]
+        public Server Server { get; set; }
+        
+        [Association(ThisKey = "user_id", OtherKey = "user_id", CanBeNull = false)]
+        public User User { get; set; }
     }
 }

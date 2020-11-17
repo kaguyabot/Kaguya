@@ -102,9 +102,35 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [NotNull]
         public ulong LogUnmutes { get; set; }
         
+        [Column(Name = "next_quote_id")]
+        [NotNull]
+        public int NextQuoteId { get; set; } = 1;
+        
+        [Column(Name = "premium_expiration")]
+        [NotNull]
+        public double PremiumExpiration { get; set; }
+        
+        /// <summary>
+        /// Upon anti-raid execution, if this value is set, Kaguya will send a DM to whoever was punished
+        /// by the anti-raid service with this property as the message's content.
+        /// </summary>
+        [Column(Name = "antiraid_punishment_dm")]
+        public string AntiraidPunishmentDirectMessage { get; set; }
+        
         [Column(Name = "is_blacklisted")]
         [Nullable]
         public bool IsBlacklisted { get; set; }
+        
+        /// <summary>
+        /// A boolean that determines whether the server is currently purging messages.
+        /// We log this so that we don't bombard log channels with messages whenever they are bulk
+        /// cleared. Instead, we use this boolean to determine whether to skip the 'Deleted Message'
+        /// log event. We log bulk-deletion of messages by checking the audit log instead. This
+        /// value is not in the database.
+        /// </summary>
+        [Column(Name = "is_currently_purging_messages")]
+        [NotNull]
+        public bool IsCurrentlyPurgingMessages { get; set; }
 
         [Column(Name = "custom_greeting")]
         [Nullable]
@@ -122,36 +148,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [NotNull]
         public bool OsuLinkParsingEnabled { get; set; } = true;
 
-        [Column(Name = "premium_expiration")]
-        [NotNull]
-        public double PremiumExpiration { get; set; }
-
-        /// <summary>
-        /// Upon anti-raid execution, if this value is set, Kaguya will send a DM to whoever was punished
-        /// by the anti-raid service with this property as the message's content.
-        /// </summary>
-        [Column(Name = "antiraid_punishment_dm")]
-        public string AntiraidPunishmentDirectMessage { get; set; }
-
         /// <summary>
         /// Whether or not the server currently has an active premium subscription.
         /// </summary>
         public bool IsPremium => PremiumExpiration > DateTime.Now.ToOADate();
-
-        /// <summary>
-        /// A boolean that determines whether the server is currently purging messages.
-        /// We log this so that we don't bombard log channels with messages whenever they are bulk
-        /// cleared. Instead, we use this boolean to determine whether to skip the 'Deleted Message'
-        /// log event. We log bulk-deletion of messages by checking the audit log instead. This
-        /// value is not in the database.
-        /// </summary>
-        [Column(Name = "is_currently_purging_messages")]
-        [NotNull]
-        public bool IsCurrentlyPurgingMessages { get; set; }
-
-        [Column(Name = "next_quote_id")]
-        [NotNull]
-        public int NextQuoteId { get; set; } = 1;
 
         /// <summary>
         /// FK_AntiRaid_KaguyaServer_BackReference

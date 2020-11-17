@@ -48,7 +48,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public int Gambles { get; set; }
         [JsonProperty(PropertyName = "time_stamp")]
         
-        [Column(Name = "time_stamp"), NotNull]
+        [Column(Name = "timestamp"), NotNull]
         public DateTime TimeStamp { get; set; }
         [JsonProperty(PropertyName = "text_channels")]
         

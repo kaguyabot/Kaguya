@@ -3,21 +3,22 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "userblacklists")]
+    [Table(Name = "user_blacklists")]
     public class UserBlacklist : IKaguyaQueryable<UserBlacklist>, IKaguyaUnique<UserBlacklist>, IUserSearchable<UserBlacklist>
     {
         [PrimaryKey]
+        [Column(Name = "user_id")]
         public ulong UserId { get; set; }
 
-        [Column(Name = "Expiration")]
+        [Column(Name = "expiration")]
         [NotNull]
         public double Expiration { get; set; }
 
-        [Column(Name = "Reason")]
+        [Column(Name = "reason")]
         [NotNull]
         public string Reason { get; set; }
 
-        [Association(ThisKey = "UserId", OtherKey = "UserId")]
+        [Association(ThisKey = "user_id", OtherKey = "user_id")]
         public User User { get; set; }
     }
 }

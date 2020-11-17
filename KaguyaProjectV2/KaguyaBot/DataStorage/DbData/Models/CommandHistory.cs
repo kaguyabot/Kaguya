@@ -24,10 +24,10 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "timestamp")]
         public DateTime Timestamp { get; set; }
 
-        /// <summary>
-        /// FK_KaguyaServer_AutoAssignedRoles
-        /// </summary>
-        [Association(ThisKey = "user_id", OtherKey = "id", CanBeNull = false)]
+        [Association(ThisKey = "user_id", OtherKey = "user_id", CanBeNull = false)]
         public User User { get; set; }
+        
+        [Association(ThisKey = "server_id", OtherKey = "server_id", CanBeNull = false)]
+        public Server Server { get; set; }
     }
 }

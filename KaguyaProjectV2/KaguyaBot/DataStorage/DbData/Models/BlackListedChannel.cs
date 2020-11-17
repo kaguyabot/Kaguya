@@ -19,10 +19,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [NotNull]
         public double Expiration { get; set; }
 
-        /// <summary>
-        /// FK_KaguyaServer_BlackListedChannels
-        /// </summary>
-        [Association(ThisKey = "server_id", OtherKey = "id", CanBeNull = false)]
+        [Association(ThisKey = "server_id", OtherKey = "server_id", CanBeNull = false)]
         public Server Server { get; set; }
     }
 }

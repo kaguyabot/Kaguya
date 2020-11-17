@@ -7,6 +7,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     public class TopGgWebhook : IKaguyaQueryable<TopGgWebhook>, IKaguyaUnique<TopGgWebhook>, IUserSearchable<TopGgWebhook>
     {
         // todo: Duplicate of KaguyaProjectV2.KaguyaApi.Database.Models.TopGgWebhook.cs ??
+        [PrimaryKey]
         [Column(Name = "vote_id")]
         public string VoteId { get; set; }
 

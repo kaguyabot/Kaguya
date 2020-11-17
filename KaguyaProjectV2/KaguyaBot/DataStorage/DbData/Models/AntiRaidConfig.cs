@@ -21,7 +21,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         [Column(Name = "action")]
         public string Action { get; set; }
 
-        [Association(ThisKey = "server_id", OtherKey = "id")]
+        [Association(ThisKey = "server_id", OtherKey = "server_id")]
         public Server Server { get; set; }
     }
 }

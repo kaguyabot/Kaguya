@@ -27,12 +27,6 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         public double LatestExp { get; set; }
 
         /// <summary>
-        /// FK_KaguyaServer_ServerExp
-        /// </summary>
-        [Association(ThisKey = "server_id", OtherKey = "id", CanBeNull = false)]
-        public Server Server { get; set; }
-
-        /// <summary>
         /// FK_KaguyaUser_ServerExp
         /// </summary>
         [Association(ThisKey = "user_id", OtherKey = "id", CanBeNull = false)]

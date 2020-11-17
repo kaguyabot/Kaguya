@@ -29,7 +29,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// <summary>
         /// FK_KaguyaServer_WarnedUsers
         /// </summary>
-        [Association(ThisKey = "server_id", OtherKey = "id", CanBeNull = false)]
+        [Association(ThisKey = "server_id", OtherKey = "server_id", CanBeNull = false)]
         public Server Server { get; set; }
     }
 }
