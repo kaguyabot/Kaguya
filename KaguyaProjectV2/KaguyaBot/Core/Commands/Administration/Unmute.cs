@@ -25,40 +25,37 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("<user>")]
         [RequireUserPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task UnmuteUser(IGuildUser user, [Remainder] string reason = null)
+        public async Task UnmuteUser(SocketGuildUser user, [Remainder] string reason = null)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
-            var mutedObject =
-                await DatabaseQueries.GetFirstMatchAsync<MutedUser>(x => x.UserId == user.Id && x.ServerId == server.ServerId);
+            var mutedObject = await DatabaseQueries.GetFirstMatchAsync<MutedUser>(x => x.UserId == user.Id && x.ServerId == server.ServerId);
 
+            reason ??= "<No reason provided>";
+            
             if (mutedObject != null)
                 await DatabaseQueries.DeleteAsync(mutedObject);
 
             if (server.IsPremium)
             {
                 await DatabaseQueries.UpdateAsync(server);
-
-                await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
-                {
-                    Server = server,
-                    Moderator = Context.Client.GetGuild(server.ServerId).GetUser(538910393918160916),
-                    ActionRecipient = (SocketGuildUser) user,
-                    Action = PremiumModActionHandler.UNMUTE,
-                    Reason = reason
-                });
             }
 
             try
             {
                 SocketRole muteRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "kaguya-mute");
-                await user.RemoveRoleAsync(muteRole);
 
-                var embed = new KaguyaEmbedBuilder
+                if (!user.Roles.Contains(muteRole))
                 {
-                    Description = $"Successfully unmuted `{user}`"
-                };
+                    await ReplyAsync($"{Context.User.Mention} **{user}** is not muted.");
 
-                await ReplyAsync(embed: embed.Build());
+                    return;
+                }
+                
+                await user.RemoveRoleAsync(muteRole);
+                await ReplyAsync($"{Context.User.Mention} Successfully unmuted **{user}**.");
+                
+
+                KaguyaEvents.TriggerUnmute(new ModeratorEventArgs(server, Context.Guild, user, (SocketGuildUser)Context.User, reason, null));
             }
             catch (NullReferenceException)
             {

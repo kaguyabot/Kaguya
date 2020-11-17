@@ -1,64 +1,38 @@
-﻿using Discord.WebSocket;
-using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
-using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
-using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using KaguyaProjectV2.KaguyaBot.Core.Exceptions;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
 {
     public static class LogQuery
     {
-        public static string[] AllLogTypes =
-        {
-            "ModLog",
-            "DeletedMessages",
-            "UpdatedMessages",
-            "FilteredPhrases",
-            "UserJoins",
-            "UserLeaves",
-            "Bans",
-            "Unbans",
-            "VoiceConnections",
-            "LevelAnnouncements",
-            "FishLevels",
-            "AntiRaid",
-            "Greetings",
-            "All"
-        };
-
         /// <summary>
-        /// Performs all necessary actions that allow a server to have their logtypes enabled or disabled.
+        ///     Performs all necessary actions that allow a server to have their logtypes enabled or disabled.
         /// </summary>
-        /// <param name="args">A period separated list of logtypes to enable/disable.</param>
+        /// <param name="logType">A period separated list of logtypes to enable/disable.</param>
+        /// <param name="guildId"></param>
         /// <param name="channel">The channel where we will be sending the log messages to.</param>
         /// <param name="enabled">A boolean stating whether we should enable the logging or disable it.</param>
-        public static async Task<List<string>> LogSwitcher(string args, bool enabled, ulong guildId, SocketTextChannel channel = null)
+        public static async Task<List<string>> LogSwitcher(string logType, bool enabled, ulong guildId, SocketTextChannel channel = null)
         {
-            List<string> logTypes = ArrayInterpreter.ReturnParams(args).ToList();
+            // todo: This does not work.
+            List<string> logTypes = ArrayInterpreter.ReturnParams(logType).ToList();
             Server server = await DatabaseQueries.GetOrCreateServerAsync(guildId);
 
             foreach (string type in logTypes.ToList())
             {
                 if (enabled)
                 {
-                    await ConsoleLogger.LogAsync($"Server has set log type: [ID: {channel.Guild.Id} | Type: {type.ToUpperInvariant()}]",
-                        LogLvl.DEBUG);
+                    await ConsoleLogger.LogAsync($"Server has set log type: [ID: {channel.Guild.Id} | Type: {type.ToUpperInvariant()}]", LogLvl.DEBUG);
 
                     switch (type.ToLower())
                     {
-                        case "modlog":
-                        {
-                            if (server.IsPremium)
-                                server.ModLog = channel.Id;
-                            else
-                                throw new KaguyaPremiumException();
-
-                            break;
-                        }
                         case "deletedmessages":
                             server.LogDeletedMessages = channel.Id;
 
@@ -107,11 +81,38 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                             server.LogGreetings = channel.Id;
 
                             break;
+                        case "warns":
+                            ThrowExIfNotPremium(server);
+                            server.LogWarns = channel.Id;
+
+                            break;
+                        case "unwarns":
+                            ThrowExIfNotPremium(server);
+                            server.LogUnwarns = channel.Id;
+
+                            break;
+                        case "shadowbans":
+                            ThrowExIfNotPremium(server);
+                            server.LogShadowbans = channel.Id;
+
+                            break;
+                        case "unshadowbans":
+                            ThrowExIfNotPremium(server);
+                            server.LogUnshadowbans = channel.Id;
+
+                            break;
+                        case "mutes":
+                            ThrowExIfNotPremium(server);
+                            server.LogMutes = channel.Id;
+
+                            break;
+                        case "unmutes":
+                            ThrowExIfNotPremium(server);
+                            server.LogUnmutes = channel.Id;
+
+                            break;
                         case "all":
                         {
-                            if (server.IsPremium)
-                                server.ModLog = channel.Id;
-
                             server.LogDeletedMessages = channel.Id;
                             server.LogUpdatedMessages = channel.Id;
                             server.LogFilteredPhrases = channel.Id;
@@ -124,6 +125,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                             server.LogFishLevels = channel.Id;
                             server.LogAntiraids = channel.Id;
                             server.LogGreetings = channel.Id;
+                            if (server.IsPremium)
+                            {
+                                server.LogWarns = channel.Id;
+                                server.LogUnwarns = channel.Id;
+                                server.LogShadowbans = channel.Id;
+                                server.LogUnshadowbans = channel.Id;
+                                server.LogMutes = channel.Id;
+                                server.LogUnmutes = channel.Id;
+                            }
                         }
 
                             break;
@@ -138,10 +148,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                     await ConsoleLogger.LogAsync($"Server has disabled log type: [ID: {guildId} | Type: {type.ToUpperInvariant()}]", LogLvl.DEBUG);
                     switch (type.ToLower())
                     {
-                        case "modlog":
-                            server.ModLog = 0;
-
-                            break;
                         case "deletedmessages":
                             server.LogDeletedMessages = 0;
 
@@ -190,11 +196,38 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                             server.LogGreetings = 0;
 
                             break;
+                        case "warns":
+                            ThrowExIfNotPremium(server);
+                            server.LogWarns = 0;
+
+                            break;
+                        case "unwarns":
+                            ThrowExIfNotPremium(server);
+                            server.LogUnwarns = 0;
+
+                            break;
+                        case "shadowbans":
+                            ThrowExIfNotPremium(server);
+                            server.LogShadowbans = 0;
+
+                            break;
+                        case "unshadowbans":
+                            ThrowExIfNotPremium(server);
+                            server.LogUnshadowbans = 0;
+
+                            break;
+                        case "mutes":
+                            ThrowExIfNotPremium(server);
+                            server.LogMutes = 0;
+
+                            break;
+                        case "unmutes":
+                            ThrowExIfNotPremium(server);
+                            server.LogUnmutes = 0;
+
+                            break;
                         case "all":
                         {
-                            if (server.IsPremium)
-                                server.ModLog = 0;
-
                             server.LogDeletedMessages = 0;
                             server.LogUpdatedMessages = 0;
                             server.LogFilteredPhrases = 0;
@@ -207,6 +240,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
                             server.LogFishLevels = 0;
                             server.LogAntiraids = 0;
                             server.LogGreetings = 0;
+                            if (server.IsPremium)
+                            {
+                                server.LogWarns = 0;
+                                server.LogUnwarns = 0;
+                                server.LogShadowbans = 0;
+                                server.LogUnshadowbans = 0;
+                                server.LogMutes = 0;
+                                server.LogUnmutes = 0;
+                            }
                         }
 
                             break;
@@ -221,6 +263,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration.LogCommands
             await DatabaseQueries.UpdateAsync(server);
 
             return logTypes;
+        }
+
+        /// <summary>
+        /// Throws a <see cref="KaguyaPremiumException"/> if the server is not premium.
+        /// </summary>
+        /// <param name="server"></param>
+        private static void ThrowExIfNotPremium(Server server)
+        {
+            if (!server.IsPremium)
+                throw new KaguyaPremiumException();
         }
     }
 }

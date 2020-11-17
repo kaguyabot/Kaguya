@@ -3,7 +3,6 @@ using Discord.Commands;
 using Humanizer;
 using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -12,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
+using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
 {
@@ -240,7 +240,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
             await DatabaseQueries.InsertAsync(fish);
             await DatabaseQueries.UpdateAsync(user);
 
-            await FishEvent.Trigger(user, fish, Context); // Triggers the fish EXP service.
+            await KaguyaEvents.TriggerFish(new FishHandlerEventArgs(user, fish, Context)); // Triggers the fish EXP service.
 
             if (fishType != FishType.BAIT_STOLEN)
             {

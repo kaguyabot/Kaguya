@@ -68,7 +68,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 return; // If filtered phrase (and user isn't admin), return.
 
             await ExperienceHandler.TryAddExp(user, server, context);
-            await ServerSpecificExpHandler.TryAddExp(user, server, context);
+            await ServerSpecificExperienceHandler.TryAddExp(user, server, context);
 
             // If the channel is blacklisted and the user isn't an Admin, return.
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&
@@ -164,7 +164,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 {
                     await context.Channel.DeleteMessageAsync(message);
                     await ConsoleLogger.LogAsync($"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {phrase}]", LogLvl.INFO);
-
+                    
+                    var fpArgs = new FilteredPhraseEventArgs(server, phrase, message);
+                    KaguyaEvents.TriggerFilteredPhrase(fpArgs);
+                    
                     return true;
                 }
             }

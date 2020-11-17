@@ -12,10 +12,8 @@ using KaguyaProjectV2.KaguyaBot.Core.Configurations;
 using KaguyaProjectV2.KaguyaBot.Core.Constants;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.FishEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.KaguyaPremium;
 using KaguyaProjectV2.KaguyaBot.Core.Handlers.TopGG;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Osu;
 using KaguyaProjectV2.KaguyaBot.Core.Services;
@@ -73,6 +71,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArgs) =>
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 await ConsoleLogger.LogAsync($"Unhandled Exception: {(Exception) eventArgs.ExceptionObject}\n" +
                                              $"Inner Exception: {((Exception) eventArgs.ExceptionObject).InnerException}", LogLvl.ERROR);
             };
@@ -235,6 +234,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Kaguya stats updater initialized", LogLvl.INFO);
             await AntiRaidService.Initialize();
             await ConsoleLogger.LogAsync("Antiraid service initialized", LogLvl.INFO);
+            await AutoUnmuteHandler.Initialize();
+            await ConsoleLogger.LogAsync("Unmute handler initialized", LogLvl.INFO);
 #if !DEBUG
             await OwnerGiveawayMessageUpdaterService.Initialize();
             await ConsoleLogger.LogAsync("Owner giveaway message updater initialized", LogLvl.INFO);
@@ -246,8 +247,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Ratelimit service initialized", LogLvl.INFO);
             await StatsUpdater.Initialize();
             await ConsoleLogger.LogAsync("Top.gg stats updater initialized", LogLvl.INFO);
-            await AutoUnmuteHandler.Initialize();
-            await ConsoleLogger.LogAsync("Unmute handler initialized", LogLvl.INFO);
+            
             await RemindService.Initialize();
             await ConsoleLogger.LogAsync("Remind service initialized", LogLvl.INFO);
             await UpvoteExpirationNotifier.Initialize();
@@ -262,8 +262,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         {
             var reactionHandler = new ReactionRoleHandler();
 
-            WarnEvent.OnWarn += WarnHandler.OnWarn;
-            FishEvent.OnFish += async args => await FishHandler.OnFish(args);
+            KaguyaEvents.OnWarn += WarnHandler.OnWarn;
+            KaguyaEvents.OnFish += async args => await FishHandler.OnFish(args);
 
             _client.UserJoined += GreetingService.Trigger;
             _client.UserJoined += AutoAssignedRoleHandler.Trigger;

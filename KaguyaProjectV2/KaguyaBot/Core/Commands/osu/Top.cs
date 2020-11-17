@@ -30,7 +30,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.osu
                  "by itself returns 5 top plays for the current user. " +
                  "The amount of requested plays must be between 1 and 7.")]
         [Remarks("\n<player>\n<index> <player>\nSomePlayer\n6 SomePlayer")]
-        public async Task TopOsuPlaysNoNum([Remainder] string player) => TopOsuPlays(5, player);
+        public async Task TopOsuPlaysNoNum([Remainder] string player) => await TopOsuPlays(5, player);
 
         [OsuCommand]
         [Command("osuTop")]

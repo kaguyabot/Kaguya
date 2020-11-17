@@ -131,14 +131,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
         {
             { } n when n < 7 => DiceOutcome.LOWER,
             { } n when n == 7 => DiceOutcome.SEVEN,
-            { } n when n > 7 => DiceOutcome.HIGHER
+            { } n when n > 7 => DiceOutcome.HIGHER,
+            _ => throw new KaguyaSupportException("An unexpected error occurred.")
         };
 
         private int GetWinningPayout(int points, DiceOutcome outcome) => outcome switch
         {
             DiceOutcome.HIGHER => points * 2,
             DiceOutcome.LOWER => points * 2,
-            DiceOutcome.SEVEN => points * 4
+            DiceOutcome.SEVEN => points * 4,
+            _ => throw new KaguyaSupportException("An unexpected error occurred.")
         };
 
         private string DiceDescription(int rollOne,
@@ -157,7 +159,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                 {
                     DiceOutcome.HIGHER => "higher than 7",
                     DiceOutcome.LOWER => "lower than 7",
-                    DiceOutcome.SEVEN => "exactly 7!"
+                    DiceOutcome.SEVEN => "exactly 7!",
+                    _ => throw new KaguyaSupportException("An unexpected error occurred.")
                 };
 
                 return $"{diceEmoji} Roll One: `{rollOne}`\n" +
@@ -166,21 +169,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Currency
                        $"Points Won: `{payout:N0}`\n\n" +
                        $"Congratulations, your roll was {outcomeString}!";
             }
-            else
+            
+            string lossString = prediction switch
             {
-                string lossString = prediction switch
-                {
-                    DicePrediction.HIGHER => "not higher than 7.",
-                    DicePrediction.LOWER => "not lower than 7.",
-                    DicePrediction.SEVEN => "not exactly 7."
-                };
+                DicePrediction.HIGHER => "not higher than 7.",
+                DicePrediction.LOWER => "not lower than 7.",
+                DicePrediction.SEVEN => "not exactly 7.",
+                _ => throw new KaguyaSupportException("An unexpected error occurred.")
+            };
 
-                return $"{diceEmoji} Roll One: `{rollOne}`\n" +
-                       $"{diceEmoji} Roll Two: `{rollTwo}`\n" +
-                       $"Combined Score: `{rollOne + rollTwo}`\n\n" +
-                       $"Sorry, your predicted outcome was {lossString}\n" +
-                       $"Better luck next time!";
-            }
+            return $"{diceEmoji} Roll One: `{rollOne}`\n" +
+                   $"{diceEmoji} Roll Two: `{rollTwo}`\n" +
+                   $"Combined Score: `{rollOne + rollTwo}`\n\n" +
+                   $"Sorry, your predicted outcome was {lossString}\n" +
+                   $"Better luck next time!";
         }
     }
 

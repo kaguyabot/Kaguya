@@ -1,31 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Commands.Administration;
 using KaguyaProjectV2.KaguyaBot.Core.Global;
+using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 
-namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
+namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public static class WarnHandler
     {
-        public static async void OnWarn(object warn, WarnHandlerEventArgs args)
+        public static async Task OnWarn(IModeratorEventArgs warnArgs)
         {
-            var currentSettings = await DatabaseQueries.GetFirstForServerAsync<WarnSetting>(args.Server.ServerId);
+            var currentSettings = await DatabaseQueries.GetFirstForServerAsync<WarnSetting>(warnArgs.Server.ServerId);
 
             if (currentSettings == null)
                 return;
 
-            List<WarnedUser> currentWarnings =
-                await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(args.WarnedUser.UserId, args.Server.ServerId);
+            List<WarnedUser> currentWarnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(warnArgs.ActionedUser.Id, warnArgs.Server.ServerId);
 
             int warnCount = currentWarnings.Count;
 
-            SocketGuildUser guildUser = ConfigProperties.Client.GetGuild(args.WarnedUser.ServerId).GetUser(args.WarnedUser.UserId);
-            SocketSelfUser kaguya = ConfigProperties.Client.CurrentUser;
+            SocketGuildUser guildUser = ConfigProperties.Client.GetGuild(warnArgs.ActionedUser.Id).GetUser(warnArgs.ActionedUser.Id);
 
             int? muteNum = currentSettings.Mute;
             int? kickNum = currentSettings.Kick;
@@ -35,14 +35,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             if (warnCount == banNum)
             {
                 var ban = new Ban();
-                var modLog = new PremiumModerationLog
-                {
-                    Server = args.Server,
-                    Moderator = kaguya,
-                    ActionRecipient = guildUser,
-                    Action = PremiumModActionHandler.AUTOBAN,
-                    Reason = $"Automatic ban due to the user reaching {warnCount} warnings."
-                };
 
                 try
                 {
@@ -50,7 +42,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                           $"reaching the specified warning threshold for bans " +
                                                           $"({warnCount} warnings).");
 
-                    await PremiumModerationLog.SendModerationLog(modLog);
                     await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                                  $"automatically banned in guild " +
                                                  $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLvl.DEBUG);
@@ -62,7 +53,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                  $"to take place. This failed due to an exception.\n" +
                                                  $"Exception Message: {e.Message}\n" +
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
-                                                 $"Guild: {args.Server.ServerId}", LogLvl.WARN);
+                                                 $"Guild: {warnArgs.Server.ServerId}", LogLvl.WARN);
                 }
 
                 return;
@@ -71,19 +62,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             if (warnCount == shadowbanNum)
             {
                 var shadowban = new Shadowban();
-                var modLog = new PremiumModerationLog
-                {
-                    Server = args.Server,
-                    Moderator = kaguya,
-                    ActionRecipient = guildUser,
-                    Action = PremiumModActionHandler.AUTOSHADOWBAN,
-                    Reason = $"Automatic shadowban due to the user reaching {warnCount} warnings."
-                };
 
                 try
                 {
                     await shadowban.AutoShadowbanUserAsync(guildUser);
-                    await PremiumModerationLog.SendModerationLog(modLog);
                     await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                                  $"automatically shadowbanned in guild " +
                                                  $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLvl.DEBUG);
@@ -95,7 +77,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                  $"to take place. This failed due to an exception.\n" +
                                                  $"Exception Message: {e.Message}\n" +
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
-                                                 $"Guild: {args.Server.ServerId}", LogLvl.WARN);
+                                                 $"Guild: {warnArgs.Server.ServerId}", LogLvl.WARN);
                 }
 
                 return;
@@ -104,14 +86,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             if (warnCount == kickNum)
             {
                 var kick = new Kick();
-                var modLog = new PremiumModerationLog
-                {
-                    Server = args.Server,
-                    Moderator = kaguya,
-                    ActionRecipient = guildUser,
-                    Action = PremiumModActionHandler.AUTOKICK,
-                    Reason = $"Automatic kick due to the user reaching {warnCount} warnings."
-                };
 
                 try
                 {
@@ -119,7 +93,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                             $"reaching the specified warning threshold for kicks " +
                                                             $"({warnCount} warnings).");
 
-                    await PremiumModerationLog.SendModerationLog(modLog);
                     await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                                  $"automatically kicked in guild " +
                                                  $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLvl.DEBUG);
@@ -131,7 +104,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                  $"to take place. This failed due to an exception.\n" +
                                                  $"Exception Message: {e.Message}\n" +
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
-                                                 $"Guild: {args.Server.ServerId}", LogLvl.WARN);
+                                                 $"Guild: {warnArgs.Server.ServerId}", LogLvl.WARN);
                 }
 
                 return;
@@ -140,19 +113,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
             if (warnCount == muteNum)
             {
                 var mute = new Mute();
-                var modLog = new PremiumModerationLog
-                {
-                    Server = args.Server,
-                    Moderator = kaguya,
-                    ActionRecipient = guildUser,
-                    Action = PremiumModActionHandler.AUTOMUTE,
-                    Reason = $"Automatic mute due to the user reaching {warnCount} warnings."
-                };
-
+                
                 try
                 {
                     await mute.AutoMute(guildUser);
-                    await PremiumModerationLog.SendModerationLog(modLog);
                     await ConsoleLogger.LogAsync($"User [{guildUser} | {guildUser.Id}] has been " +
                                                  $"automatically muted in guild " +
                                                  $"[{guildUser.Guild} | {guildUser.Guild.Id}]", LogLvl.DEBUG);
@@ -164,7 +128,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent
                                                  $"to take place. This failed due to an exception.\n" +
                                                  $"Exception Message: {e.Message}\n" +
                                                  $"Inner Exception Message: {e.InnerException?.Message}\n" +
-                                                 $"Guild: {args.Server.ServerId}", LogLvl.WARN);
+                                                 $"Guild: {warnArgs.Server.ServerId}", LogLvl.WARN);
                 }
             }
         }

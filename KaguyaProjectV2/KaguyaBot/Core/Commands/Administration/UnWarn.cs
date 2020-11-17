@@ -1,4 +1,4 @@
-﻿using Discord;
+﻿﻿using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -17,6 +17,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
 {
     public class UnWarn : KaguyaBase
     {
+        
+        
         [AdminCommand]
         [Command("Unwarn")]
         [Alias("uw")]
@@ -29,13 +31,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task UnWarnUser(IGuildUser user, string reason = null)
+        public async Task UnWarnUser(SocketGuildUser user, [Remainder]string reason = null)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             List<WarnedUser> warnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.Id, server.ServerId);
             int warnCount = warnings.Count;
             var fields = new List<EmbedFieldBuilder>();
 
+            reason ??= "<No reason provided>";
+            
             if (warnCount > 4 && !server.IsPremium)
                 warnCount = 4;
 
@@ -80,7 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await ReactionReply(user, warnings, embed.Build(), warnCount, server, reason);
         }
 
-        private async Task ReactionReply(IGuildUser user,
+        private async Task ReactionReply(SocketGuildUser user,
             IReadOnlyCollection<WarnedUser> warnings,
             Embed embed,
             int warnCount,
@@ -96,28 +100,20 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             {
                 int j1 = j;
                 callbacks.Add((emojis[j], async (c, r) =>
-                        {
-                            await DatabaseQueries.DeleteAsync(warnings.ElementAt(j1));
-                            await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
-                                                             $"`Successfully removed warning #{j1 + 1}`");
-
-                            if (server.IsPremium && server.ModLog != 0)
-                            {
-                                await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
-                                {
-                                    Server = server,
-                                    Moderator = Context.User as SocketGuildUser,
-                                    ActionRecipient = user as SocketGuildUser,
-                                    Action = PremiumModActionHandler.UNWARN,
-                                    Reason = reason
-                                });
-                            }
-                        }
-                    ));
+                {
+                    var uwArgs = new ModeratorEventArgs(server, Context.Guild, user, (SocketGuildUser) Context.User, reason, null);
+                    KaguyaEvents.TriggerUnwarn(uwArgs);
+                    
+                    await DatabaseQueries.DeleteAsync(warnings.ElementAt(j1));
+                    await c.Channel.SendMessageAsync($"{r.User.Value.Mention} " +
+                                                     $"`Successfully removed warning #{j1 + 1}`");
+                }));
             }
 
             data.SetCallbacks(callbacks);
             await InlineReactionReplyAsync(data);
         }
     }
+
+   
 }

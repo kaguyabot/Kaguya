@@ -235,7 +235,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Utility
                     throw new KaguyaSupportException($"An unknown error occurred.\n\n" +
                                                      $"Exception Message: {e.Message}\nInner Exception: {e.InnerException}");
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new KaguyaSupportException("An error occurred when inserting the reaction role " +
                                                      "into the database.\n\n" +

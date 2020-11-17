@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                     await user.KickAsync($"Masskick operation from user " +
                                          $"@{Context.User.Username}#{Context.User.Discriminator}");
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     errorSb.AppendLine($"Failed to kick user `{user}`");
                 }

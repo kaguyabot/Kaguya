@@ -2,8 +2,6 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers;
-using KaguyaProjectV2.KaguyaBot.Core.Handlers.WarnEvent;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
@@ -47,8 +45,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             };
 
             await DatabaseQueries.InsertAsync(wu);
-            WarnEvent.Trigger(server, wu);
-
+            KaguyaEvents.TriggerWarning(new ModeratorEventArgs(server, Context.Guild, user, (SocketGuildUser) Context.User, reason, null));
+            
             try
             {
                 await user.SendMessageAsync(embed: (await WarnEmbed(wu, Context)).Build());
@@ -61,20 +59,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             }
 
             await ReplyAsync(embed: (await Reply(wu, user)).Build());
-
-            if (server.IsPremium && server.ModLog != 0)
-            {
-                var premLog = new PremiumModerationLog
-                {
-                    Server = server,
-                    Moderator = (SocketGuildUser) Context.User,
-                    ActionRecipient = user,
-                    Reason = reason,
-                    Action = PremiumModActionHandler.WARN
-                };
-
-                await PremiumModerationLog.SendModerationLog(premLog);
-            }
 
             await DatabaseQueries.UpdateAsync(server);
         }

@@ -32,7 +32,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 await user.KickAsync(reason);
                 embed.Description = $"Successfully kicked `{user}` with reason `{reason}`";
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 embed.Description = $"Failed to kick `{user}`.";
             }

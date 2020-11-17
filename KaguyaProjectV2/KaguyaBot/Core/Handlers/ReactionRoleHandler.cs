@@ -22,11 +22,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public ReactionRoleHandler()
         {
+#pragma warning disable 4014
             ConsoleLogger.LogAsync("Populating reaction role cache...", LogLvl.DEBUG);
             // We have this as synchronus during initial setup.
             _reactionRoleCache ??= GetReactionRoleCache().Result;
             ConsoleLogger.LogAsync("Reaction role cache populated.", LogLvl.DEBUG);
-
+#pragma warning restore 4014
             CreateReactionRole.UpdatedCache += AddToCache;
 
             if (!_cacheTimerEnabled)

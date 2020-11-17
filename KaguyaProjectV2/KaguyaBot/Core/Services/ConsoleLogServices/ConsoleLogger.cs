@@ -19,10 +19,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
         /// </summary>
         /// <param name="message">The <see cref="string" /> to display inside of the console.</param>
         /// <param name="logLevel">The <see cref="LogLvl" /> that determines this log's severity.</param>
-        /// <param name="colorOverride">
-        ///     Whether to override the console colors.
-        ///     These are normally automatically determined by the provided <see cref="logLevel" />
-        /// </param>
         /// <param name="foregroundColor">Assuming we override the colors, this will alter the color of the text shown in the console.</param>
         /// <param name="displaySeverity">Whether to display the date and time in the console.</param>
         /// <param name="showDate">Whether to display the date and time in the console.</param>
@@ -40,7 +36,12 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
             // If the loglevel provided in the Config is only set to display more severe logs, return.
             if (ConfigProperties.LogLevel > logLevel) return;
 
-            await LogFinisher(logLevel, contents, foregroundColor);
+            // If the color wasn't overridden by the caller...
+            if (foregroundColor == ConsoleColor.White)
+            {
+                foregroundColor = GetConsoleForegroundColor(logLevel);
+            }
+            await LogFinisher(contents, foregroundColor);
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
                               $"Guild: [Name: {context.Guild} | ID: {context.Guild.Id} | Shard: {shardId}]\n" +
                               $"Channel: [Name: {context.Channel.Name} | ID: {context.Channel.Id}]\n";
 
-            await LogFinisher(logLevel, contents);
+            await LogFinisher(contents);
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
                               $"Inner Exception Message: {cmdException.InnerException?.Message ?? "NULL"}\n" +
                               $"Stack Trace: {logMsg.Exception.StackTrace ?? "NULL"}";
 
-            await LogFinisher(LogLvl.ERROR, contents);
+            await LogFinisher(contents);
         }
 
         public static async Task LogAsync(Exception e, LogLvl logLvl = LogLvl.ERROR)
@@ -92,7 +93,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
                               $"{e.Message}.\nInner Exception Message: {e.InnerException?.Message ?? "NULL"}\n" +
                               $"Stack Trace: {e.StackTrace ?? "NULL"}";
 
-            await LogFinisher(logLvl, contents);
+            await LogFinisher(contents);
         }
 
         public static async Task LogAsync(Exception e, string additionalInfo, LogLvl logLvl = LogLvl.ERROR)
@@ -107,7 +108,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
                               $"{e.Message}.\nInner Exception Message: {e.InnerException?.Message ?? "NULL"}\n" +
                               $"Stack Trace: {e.StackTrace ?? "NULL"}\nAdditional Information: {additionalInfo}";
 
-            await LogFinisher(logLvl, contents);
+            await LogFinisher(contents);
         }
 
         private static string LogPrefix(LogLvl logLevel) => logLevel switch
@@ -154,11 +155,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
 
                     break;
                 case LogLvl.WARN:
-                    color = ConsoleColor.Black;
+                    color = ConsoleColor.Yellow;
 
                     break;
                 case LogLvl.ERROR:
-                    color = ConsoleColor.Black;
+                    color = ConsoleColor.Red;
 
                     break;
                 default:
@@ -168,18 +169,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices
             return color;
         }
 
-        private static async Task LogFinisher(LogLvl logLevel,
-            string contents, ConsoleColor foregroundColor = ConsoleColor.White)
+        private static async Task LogFinisher(string contents, ConsoleColor foregroundColor = ConsoleColor.White)
         {
-            ConsoleColor color;
             //Logs to console only if the log level is less or equally severe to what is specified in the config.
-
-            if (foregroundColor == ConsoleColor.White)
-                color = GetConsoleForegroundColor(logLevel);
-            else
-                color = foregroundColor;
-
-            SetConsoleForegroundColor(color);
+            SetConsoleForegroundColor(foregroundColor);
             Console.WriteLine(contents);
 
             if (LogFileExists())

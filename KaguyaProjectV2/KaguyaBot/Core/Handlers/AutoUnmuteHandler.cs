@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 Enabled = true
             };
 
-            timer.Elapsed += async (sender, e) =>
+            timer.Elapsed += async (_, _) =>
             {
                 List<MutedUser> curMutedUsers = await DatabaseQueries.GetAllAsync<MutedUser>(x => x.ExpiresAt < DateTime.Now.ToOADate());
                 foreach (MutedUser mutedUser in curMutedUsers)
@@ -33,25 +33,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                         goto RemoveFromDB;
 
                     Server server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
-                    SocketGuildUser user = ConfigProperties.Client.GetGuild(server.ServerId).GetUser(mutedUser.UserId);
-
-                    if (server.IsPremium)
-                    {
-                        await PremiumModerationLog.SendModerationLog(new PremiumModerationLog
-                        {
-                            Server = server,
-                            Moderator = ConfigProperties.Client.GetGuild(server.ServerId)
-                                                        .GetUser(538910393918160916),
-                            ActionRecipient = user,
-                            Action = PremiumModActionHandler.UNMUTE,
-                            Reason = "User was automatically unmuted because their timed mute has expired."
-                        });
-                    }
+                    SocketGuildUser user = guild.GetUser(mutedUser.UserId);
+                    SocketGuildUser selfUser = guild.GetUser(ConfigProperties.Client.CurrentUser.Id);
 
                     try
                     {
                         SocketRole muteRole = guild.Roles.FirstOrDefault(x => x.Name == "kaguya-mute");
                         await user.RemoveRoleAsync(muteRole);
+                        
+                        KaguyaEvents.TriggerUnmute(new ModeratorEventArgs(server, guild, user, selfUser, 
+                            "Automatic unmute (timed mute has expired)", null));
                     }
                     catch (Exception)
                     {

@@ -53,7 +53,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Help
                 ChangelogArgs.DEFAULT => await RecentChangelogEmbed(clLines, null),
                 ChangelogArgs.RECENT => await RecentChangelogEmbed(clLines, args),
                 ChangelogArgs.VERSION_MATCH => await VersionSpecificChangelogEmbed(clLines, args),
-                ChangelogArgs.LIST_VERSIONS => await ListVersionsEmbed(clLines)
+                ChangelogArgs.LIST_VERSIONS => await ListVersionsEmbed(clLines),
+                _ => throw new KaguyaSupportException("An unexpected error occurred.")
             };
         }
 
