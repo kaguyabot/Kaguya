@@ -80,12 +80,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             {
                 MessageCacheSize = 200,
                 AlwaysDownloadUsers = true,
+                LogLevel = LogSeverity.Info,
 #if DEBUG
                 TotalShards = 1
 #else
-                TotalShards = 5
+                TotalShards = 5,
 #endif
             };
+            
+            _client = new DiscordShardedClient(config);
+
+            _client.Log += Log;
 
             var lavaConfig = new LavaConfig
             {
@@ -95,7 +100,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                 SelfDeaf = true
             };
 
-            _client = new DiscordShardedClient(config);
             _lavaNode = new LavaNode(_client, lavaConfig);
 
             await SetupKaguya();
@@ -278,6 +282,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             _lavaNode.OnTrackEnded += MusicService.OnTrackEnd;
         }
 
+        private Task Log(LogMessage msg)
+        {
+            Console.WriteLine(msg.ToString());
+
+            return Task.CompletedTask;
+        }
+        
         private bool AllShardsLoggedIn(DiscordShardedClient client, DiscordSocketConfig config) => client.Shards.Count == config.TotalShards;
     }
 }
