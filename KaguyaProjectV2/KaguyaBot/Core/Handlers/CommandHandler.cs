@@ -28,26 +28,26 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public class CommandHandler
     {
-        private static CommandService _commands;
+        public static CommandService Commands;
         private readonly DiscordShardedClient _client;
         private readonly IServiceProvider _services;
 
         public CommandHandler(IServiceProvider services)
         {
-            _commands = services.GetRequiredService<CommandService>();
+            Commands = services.GetRequiredService<CommandService>();
             _client = services.GetRequiredService<DiscordShardedClient>();
             _services = services;
 
             _client.MessageReceived += HandleCommandAsync;
-            _commands.CommandExecuted += CommandExecutedAsync;
-            _commands.Log += HandleCommandLog;
+            Commands.CommandExecuted += CommandExecutedAsync;
+            Commands.Log += HandleCommandLog;
         }
 
         public async Task InitializeAsync()
         {
-            _commands.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTr());
-            _commands.AddTypeReader(typeof(Emote), new EmoteTr());
-            await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
+            Commands.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTr());
+            Commands.AddTypeReader(typeof(Emote), new EmoteTr());
+            await Commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
         }
 
         public async Task HandleCommandAsync(SocketMessage msg)
@@ -105,7 +105,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 return;
 
             Console.WriteLine($"Executing command...: " + sw.ElapsedMilliseconds);
-            await _commands.ExecuteAsync(context, argPos, _services);
+            await Commands.ExecuteAsync(context, argPos, _services);
         }
 
         private static async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
