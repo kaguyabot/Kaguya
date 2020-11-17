@@ -4,7 +4,7 @@ using System;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "premiumkeys")]
+    [Table(Name = "premium_keys")]
     public class PremiumKey : IKey, IKaguyaQueryable<PremiumKey>,
         IKaguyaUnique<PremiumKey>,
         IServerSearchable<PremiumKey>,
