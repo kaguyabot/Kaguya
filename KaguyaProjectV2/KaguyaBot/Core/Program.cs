@@ -123,7 +123,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
                     await _client.StartAsync();
 
                     await _client.SetGameAsync($"v{ConfigProperties.Version}: Booting up!");
-                    _client.ShardReady += async c => { await _lavaNode.ConnectAsync(); };
+                    _client.ShardReady += async c =>
+                    {
+                        if (!_lavaNode.IsConnected)
+                        {
+                            await _lavaNode.ConnectAsync();
+                        }
+                    };
 
                     await InitializeTimers(AllShardsLoggedIn(_client, config));
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -27,30 +28,31 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 {
     public class CommandHandler
     {
-        public static CommandService Commands;
+        private static CommandService _commands;
         private readonly DiscordShardedClient _client;
         private readonly IServiceProvider _services;
 
         public CommandHandler(IServiceProvider services)
         {
-            Commands = services.GetRequiredService<CommandService>();
+            _commands = services.GetRequiredService<CommandService>();
             _client = services.GetRequiredService<DiscordShardedClient>();
             _services = services;
 
             _client.MessageReceived += HandleCommandAsync;
-            Commands.CommandExecuted += CommandExecutedAsync;
-            Commands.Log += HandleCommandLog;
+            _commands.CommandExecuted += CommandExecutedAsync;
+            _commands.Log += HandleCommandLog;
         }
 
         public async Task InitializeAsync()
         {
-            Commands.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTr());
-            Commands.AddTypeReader(typeof(Emote), new EmoteTr());
-            await Commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
+            _commands.AddTypeReader(typeof(List<SocketGuildUser>), new ListSocketGuildUserTr());
+            _commands.AddTypeReader(typeof(Emote), new EmoteTr());
+            await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
         }
 
         public async Task HandleCommandAsync(SocketMessage msg)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             if (!(msg is SocketUserMessage message) || message.Author.IsBot) return;
             if (message.Channel.GetType() != typeof(SocketTextChannel))
                 return;
@@ -58,28 +60,43 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
             User user = await DatabaseQueries.GetOrCreateUserAsync(message.Author.Id);
 
+            Console.WriteLine($"Command execution server and user pulled from DB: " + sw.ElapsedMilliseconds);
+            
             // Never blacklist the bot owner.
             if (user.IsBlacklisted && user.UserId != ConfigProperties.BotConfig.BotOwnerId) return;
             if (server.IsBlacklisted) return;
 
             var context = new ShardedCommandContext(_client, message);
 
+            Console.WriteLine($"Command execution command context created: " + sw.ElapsedMilliseconds);
+            
             if (await IsFilteredPhrase(context, server, message))
                 return; // If filtered phrase (and user isn't admin), return.
 
+            Console.WriteLine($"Command execution filtered phrase parsing: " + sw.ElapsedMilliseconds);
+            
             await ExperienceHandler.TryAddExp(user, server, context);
             await ServerSpecificExperienceHandler.TryAddExp(user, server, context);
 
+            Console.WriteLine($"Command execution global and server experience handlers passed: " + sw.ElapsedMilliseconds);
+            
             // If the channel is blacklisted and the user isn't an Admin, return.
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&
                 !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
                 return;
 
+            Console.WriteLine($"Command execution channel is not blacklisted: " + sw.ElapsedMilliseconds);
+            
             // Parsing of osu! beatmaps.
-            if (Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/beatmapsets/[0-9]*#\b(?:osu|taiko|mania|fruits)\b/[0-9]*") ||
-                Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/b/[0-9]*"))
-                await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, context);
+            if (server.OsuLinkParsingEnabled)
+            {
+                if (Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/beatmapsets/[0-9]*#\b(?:osu|taiko|mania|fruits)\b/[0-9]*") ||
+                    Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/b/[0-9]*"))
+                    await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, context);
+            }
 
+            Console.WriteLine($"Command execution osu beatmap parsing: " + sw.ElapsedMilliseconds);
+            
             int argPos = 0;
 
             if (!(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
@@ -87,7 +104,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 message.Author.IsBot)
                 return;
 
-            await Commands.ExecuteAsync(context, argPos, _services);
+            Console.WriteLine($"Executing command...: " + sw.ElapsedMilliseconds);
+            await _commands.ExecuteAsync(context, argPos, _services);
         }
 
         private static async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
