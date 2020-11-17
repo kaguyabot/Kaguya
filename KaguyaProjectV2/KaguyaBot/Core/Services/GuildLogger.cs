@@ -219,7 +219,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
                         if (index == textLines.Length)
                             break;
 
-                        curMsg.Append(textLines[index]);
+                        curMsg.AppendLine(textLines[index]);
                     }
 
                     try
