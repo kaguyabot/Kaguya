@@ -52,7 +52,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public async Task HandleCommandAsync(SocketMessage msg)
         {
-            Stopwatch sw = Stopwatch.StartNew();
             if (!(msg is SocketUserMessage message) || message.Author.IsBot) return;
             if (message.Channel.GetType() != typeof(SocketTextChannel))
                 return;
@@ -153,13 +152,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
         public async Task<bool> IsFilteredPhrase(ICommandContext context, Server server, IMessage message)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             GuildPermissions userPerms = (await context.Guild.GetUserAsync(context.User.Id)).GuildPermissions;
 
+            Console.WriteLine($"{sw.ElapsedMilliseconds}ms Checking for filtered phrase, user {context.User} in guild {context.Guild}...");
+            
             if (userPerms.Administrator)
                 return false;
 
             List<FilteredPhrase> fp = server.FilteredPhrases.ToList();
-
+            Console.WriteLine($"{sw.ElapsedMilliseconds}ms Gathered all filtered phrases for guild {context.Guild}...");
+            
             if (fp.Count == 0) return false;
 
             List<string> phrases = fp.Select(element => element.Phrase).ToList();
@@ -176,7 +179,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     return true;
                 }
             }
-
+            
+            Console.WriteLine($"{sw.ElapsedMilliseconds}ms Iterated through all phrases for guild {context.Guild} (none found)...");
             return false;
         }
 
