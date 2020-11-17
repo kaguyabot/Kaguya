@@ -106,7 +106,7 @@ If you have everything properly configured, you should be good to go. If the bot
         - HyperBans: Permanently bans a user from this server and from **any other server that the command executor is an Administrator in.** *Kaguya must be present in all mutual servers for this to work properly.* (Use this command with caution)
         - Shadow bans
     - and more!
-* Super fun and addicting fishing game, as well as other games! (First person to catch a **Legendary Big Kahuna** and DM a screenshot to `mmatt#0001` will get 1 month of Discord Nitro! **Not Claimed Yet** [Offer Valid 9/8/2020 - 1/1/2021] )
+* Super fun and addicting fishing game, as well as other games!
 * Fun economy system (With global and server specific levels.)
 * Easy to remember command names and aliases.
 * Extensive customization. (Don't like a command? Just toggle it off!)
