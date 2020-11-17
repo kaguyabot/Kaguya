@@ -40,7 +40,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
             double oldLevel = ReturnLevel(user);
 
             var r = new Random();
-            int exp = r.Next(5, 8) * 20;
+            int exp = r.Next(5, 8);
             int points = r.Next(1, 4);
 
             user.Experience += exp;
