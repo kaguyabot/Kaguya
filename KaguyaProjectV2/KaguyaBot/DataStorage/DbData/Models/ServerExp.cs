@@ -3,39 +3,39 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "serverexp")]
+    [Table(Name = "server_exp")]
     public class ServerExp : IKaguyaQueryable<ServerExp>,
         IKaguyaUnique<ServerExp>,
         IServerSearchable<ServerExp>,
         IUserSearchable<ServerExp>
     {
         [PrimaryKey]
-        [Column(Name = "ServerId")]
+        [Column(Name = "server_id")]
         [NotNull]
         public ulong ServerId { get; set; }
 
-        [Column(Name = "UserId")]
+        [Column(Name = "user_id")]
         [NotNull]
         public ulong UserId { get; set; }
 
-        [Column(Name = "Exp")]
+        [Column(Name = "exp")]
         [NotNull]
         public int Exp { get; set; }
 
-        [Column(Name = "LatestExp")]
+        [Column(Name = "latest_exp")]
         [NotNull]
         public double LatestExp { get; set; }
 
         /// <summary>
         /// FK_KaguyaServer_ServerExp
         /// </summary>
-        [Association(ThisKey = "ServerId", OtherKey = "Id", CanBeNull = false)]
+        [Association(ThisKey = "server_id", OtherKey = "id", CanBeNull = false)]
         public Server Server { get; set; }
 
         /// <summary>
         /// FK_KaguyaUser_ServerExp
         /// </summary>
-        [Association(ThisKey = "UserId", OtherKey = "Id", CanBeNull = false)]
+        [Association(ThisKey = "user_id", OtherKey = "id", CanBeNull = false)]
         public User User { get; set; }
     }
 }
