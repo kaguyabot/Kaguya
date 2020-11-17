@@ -252,8 +252,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Remind service initialized", LogLvl.INFO);
             await UpvoteExpirationNotifier.Initialize();
             await ConsoleLogger.LogAsync("Upvote expiration notification timer initialized", LogLvl.INFO);
-            await GameRotationService.Initialize();
-            await ConsoleLogger.LogAsync("Game rotation timer initialized", LogLvl.INFO);
+            // Disabled due to bug #149.
+            // await GameRotationService.Initialize();
+            // await ConsoleLogger.LogAsync("Game rotation timer initialized", LogLvl.INFO);
 #endif
             await ConsoleLogger.LogAsync("All timers initialized.", LogLvl.INFO);
         }

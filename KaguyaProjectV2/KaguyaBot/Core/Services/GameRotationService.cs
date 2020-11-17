@@ -33,7 +33,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             var timer = new Timer(600000); // 10 Minutes
             timer.Enabled = true;
             timer.AutoReset = true;
-            timer.Elapsed += async (sender, e) =>
+            timer.Elapsed += async (_, _) =>
             {
                 if (!_enabled)
                     return;
@@ -68,6 +68,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
         public static void Resume() => _enabled = true;
 
         public static async Task Set(Tuple<string, ActivityType> game) => await _client.SetGameAsync(game.Item1 + ".", null, game.Item2);
+        public static async Task Set(Tuple<string, ActivityType> game, string streamUrl) => 
+            await _client.SetGameAsync(game.Item1 + ".", streamUrl, game.Item2);
         public static async Task SetToDefault() => await Set(_games[0]);
 
         public static async Task Set(string text, ActivityType type)
