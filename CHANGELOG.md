@@ -5,7 +5,7 @@
 - Logtype "MogLog" no longer exists. Replaced by individual logtypes for mutes, unmutes, shadowban, unshadowban, warn, and unwarn.
     - All of these logtypes are premium only.
 - $shadowban and $unshadowban have been rewritten to be more efficient.
-- Re-designed the formatting of log messages to take up much less space.
+- Re-designed the formatting of log messages to take up much less space. *Please let me know if you like / dislike it!!*
 - Fixed typo where antiraid DM's had incorrect grammar for the punishment.
 - Fixed bug where, in some circumstances, antiraid log messages would be duplicated.
 - Fixed a bug where users DM'd with an antiraid DM notification would not be called by their proper name.
@@ -14,7 +14,7 @@
 - When using logs from "$log filteredphrases", archival of the user's full message is now a premium-only feature.
 - $shadowban & $unshadowban now will accept a reason parameter at the end, if desired for logging purposes.
 - If a user is muted despite the user already having an existing mute (*with a duration*), that duration will be overwritten with whatever new duration was provided.
-- Unmute, shadowban, unshadowban, and unwarn now all accept a 'reason' as a parameter. This can be saved for logging purposes.
+- Unmute, shadowban, unshadowban, and unwarn now all accept a 'reason' as a parameter. This can be saved for logging purposes (again, premium only).
 
 ### Version 3.1.1
 - Fixed bug with antiraid where users would not be actioned or logged properly.
