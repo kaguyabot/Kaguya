@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "blacklistedchannels")]
+    [Table(Name = "blacklisted_channels")]
     public class BlackListedChannel : IKaguyaQueryable<BlackListedChannel>, IServerSearchable<BlackListedChannel>,
         IKaguyaUnique<BlackListedChannel>
     {
