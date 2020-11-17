@@ -8,6 +8,7 @@ using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Queries;
 using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,21 +68,21 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 if (!server.LevelAnnouncementsEnabled)
                     return;
 
-                var xp = new XpImage();
-                if (user.ExpChatNotificationType == ExpType.GLOBAL || user.ExpChatNotificationType == ExpType.BOTH)
-                {
-                    if (levelAnnouncementChannel != null)
-                    {
-                        Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
-                        await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
-                    }
-                }
-
-                if (user.ExpDmNotificationType == ExpType.GLOBAL || user.ExpDmNotificationType == ExpType.BOTH)
-                {
-                    Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
-                    await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
-                }
+                // var xp = new XpImage();
+                // if (user.ExpChatNotificationType == ExpType.GLOBAL || user.ExpChatNotificationType == ExpType.BOTH)
+                // {
+                //     if (levelAnnouncementChannel != null)
+                //     {
+                //         Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
+                //         await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                //     }
+                // }
+                //
+                // if (user.ExpDmNotificationType == ExpType.GLOBAL || user.ExpDmNotificationType == ExpType.BOTH)
+                // {
+                //     Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
+                //     await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                // }
             });
         }
 

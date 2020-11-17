@@ -59,8 +59,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             Server server = await DatabaseQueries.GetOrCreateServerAsync(((SocketGuildChannel) message.Channel).Guild.Id);
             User user = await DatabaseQueries.GetOrCreateUserAsync(message.Author.Id);
-
-            Console.WriteLine($"Command execution server and user pulled from DB: " + sw.ElapsedMilliseconds);
             
             // Never blacklist the bot owner.
             if (user.IsBlacklisted && user.UserId != ConfigProperties.BotConfig.BotOwnerId) return;
@@ -68,25 +66,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
 
             var context = new ShardedCommandContext(_client, message);
 
-            Console.WriteLine($"Command execution command context created: " + sw.ElapsedMilliseconds);
-            
             if (await IsFilteredPhrase(context, server, message))
                 return; // If filtered phrase (and user isn't admin), return.
 
-            Console.WriteLine($"Command execution filtered phrase parsing: " + sw.ElapsedMilliseconds);
-            
             await ExperienceHandler.TryAddExp(user, server, context);
             await ServerSpecificExperienceHandler.TryAddExp(user, server, context);
 
-            Console.WriteLine($"Command execution global and server experience handlers passed: " + sw.ElapsedMilliseconds);
-            
             // If the channel is blacklisted and the user isn't an Admin, return.
             if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id) &&
                 !context.Guild.GetUser(context.User.Id).GuildPermissions.Administrator)
                 return;
 
-            Console.WriteLine($"Command execution channel is not blacklisted: " + sw.ElapsedMilliseconds);
-            
             // Parsing of osu! beatmaps.
             if (server.OsuLinkParsingEnabled)
             {
@@ -94,8 +84,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                     Regex.IsMatch(msg.Content, @"http[Ss|\s]://osu.ppy.sh/b/[0-9]*"))
                     await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, context);
             }
-
-            Console.WriteLine($"Command execution osu beatmap parsing: " + sw.ElapsedMilliseconds);
             
             int argPos = 0;
 
@@ -104,7 +92,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                 message.Author.IsBot)
                 return;
 
-            Console.WriteLine($"Executing command...: " + sw.ElapsedMilliseconds);
             await Commands.ExecuteAsync(context, argPos, _services);
         }
 
