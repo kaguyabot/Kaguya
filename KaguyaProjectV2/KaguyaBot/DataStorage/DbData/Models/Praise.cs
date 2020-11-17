@@ -8,27 +8,27 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         IServerSearchable<Praise>,
         IUserSearchable<Praise>
     {
-        [Column(Name = "UserId")]
+        [Column(Name = "user_id")]
         [NotNull]
         public ulong UserId { get; set; }
 
-        [Column(Name = "ServerId")]
+        [Column(Name = "server_id")]
         [NotNull]
         public ulong ServerId { get; set; }
 
-        [Column(Name = "GivenBy")]
+        [Column(Name = "given_by")]
         [NotNull]
         public ulong GivenBy { get; set; }
 
-        [Column(Name = "TimeGiven")]
+        [Column(Name = "time_given")]
         [NotNull]
         public double TimeGiven { get; set; }
 
-        [Column(Name = "Reason")]
+        [Column(Name = "reason")]
         [NotNull]
         public string Reason { get; set; }
 
-        [Association(ThisKey = "ServerId", OtherKey = "ServerId")]
+        [Association(ThisKey = "server_id", OtherKey = "id")]
         public Server Server { get; set; }
     }
 }
