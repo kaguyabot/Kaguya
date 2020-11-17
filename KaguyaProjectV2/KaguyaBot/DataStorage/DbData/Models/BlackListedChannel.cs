@@ -7,22 +7,22 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     public class BlackListedChannel : IKaguyaQueryable<BlackListedChannel>, IServerSearchable<BlackListedChannel>,
         IKaguyaUnique<BlackListedChannel>
     {
-        [Column(Name = "ServerId")]
+        [Column(Name = "server_id")]
         [NotNull]
         public ulong ServerId { get; set; }
 
-        [Column(Name = "ChannelId")]
+        [Column(Name = "channel_id")]
         [NotNull]
         public ulong ChannelId { get; set; }
 
-        [Column(Name = "Expiration")]
+        [Column(Name = "expiration")]
         [NotNull]
         public double Expiration { get; set; }
 
         /// <summary>
         /// FK_KaguyaServer_BlackListedChannels
         /// </summary>
-        [Association(ThisKey = "ServerId", OtherKey = "Id", CanBeNull = false)]
+        [Association(ThisKey = "server_id", OtherKey = "id", CanBeNull = false)]
         public Server Server { get; set; }
     }
 }
