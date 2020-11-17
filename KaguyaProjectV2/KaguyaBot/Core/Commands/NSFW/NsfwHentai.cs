@@ -22,7 +22,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
         private static readonly string _userName = ConfigProperties.BotConfig.DanbooruUsername;
         private static readonly string _apiKey = ConfigProperties.BotConfig.DanbooruApiKey;
         private static readonly BooruAuth _auth = new BooruAuth(_userName, _apiKey);
-        private static readonly Konachan _konachan = new Konachan(_auth);
+        private static readonly Konachan _konachan = new Konachan();
 
         [RequireVoteCommand]
         [NsfwCommand]
@@ -130,8 +130,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.NSFW
                 tagsList.Add("sex");
 
             var wc = new WebClient();
-            SearchResult img = await _konachan.GetRandomImage(tagsList.ToArray());
-            using (var stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.fileUrl)))
+            SearchResult img = await _konachan.GetRandomPostAsync(tagsList.ToArray());
+            using (var stream = new MemoryStream(await wc.DownloadDataTaskAsync(img.FileUrl)))
             {
                 if (img.Equals(null))
                 {
