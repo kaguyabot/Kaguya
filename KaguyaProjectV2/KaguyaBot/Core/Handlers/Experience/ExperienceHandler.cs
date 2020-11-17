@@ -20,11 +20,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
     {
         public static async Task TryAddExp(User user, Server server, ICommandContext context)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             await Task.Run(async () =>
             {
                 // If the user can receive exp, give them between 5 and 8.
                 if (!CanGetExperience(user))
                     return;
+
+                Console.WriteLine($"{sw.ElapsedMilliseconds} User {context.User} confirmed to be able to earn global exp.");
 
                 // Don't give exp to any user who is blacklisted.
                 // Members in blacklisted servers also cannot earn exp.
@@ -41,6 +44,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                     levelAnnouncementChannel = (SocketTextChannel) context.Channel;
 
                 double oldLevel = ReturnLevel(user);
+                
+                Console.WriteLine($"{sw.ElapsedMilliseconds} User {context.User} old level identified.");
 
                 var r = new Random();
                 int exp = r.Next(5, 8);
@@ -50,39 +55,52 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                 user.Points += points;
                 user.LastGivenExp = DateTime.Now.ToOADate();
                 await DatabaseQueries.UpdateAsync(user);
+                
+                Console.WriteLine($"{sw.ElapsedMilliseconds} User {context.User} updated in the database.");
 
                 double newLevel = ReturnLevel(user);
                 await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has received {exp} exp and {points} points. " +
                                              $"[New Total: {user.Experience:N0} Exp]", LogLvl.DEBUG);
 
+                Console.WriteLine($"{sw.ElapsedMilliseconds} User {context.User} new level identified.");
+                
                 if (!HasLeveledUp(oldLevel, newLevel))
                     return;
 
                 await ConsoleLogger.LogAsync($"[Global Exp]: User {user.UserId} has leveled up! " +
                                              $"[Level: {Math.Floor(newLevel):0} | EXP: {user.Experience:N0}]", LogLvl.INFO);
 
+                Console.WriteLine($"{sw.ElapsedMilliseconds} User {context.User} has leveled up.");
+
+                
                 // Don't send announcement if the channel is blacklisted, but only if it's not a level-announcements log channel.
                 if (server.BlackListedChannels.Any(x => x.ChannelId == context.Channel.Id && x.ChannelId != server.LogLevelAnnouncements))
                     return;
+                
+                Console.WriteLine($"{sw.ElapsedMilliseconds} User {context.User} iterated through blacklisted channels.");
 
                 if (!server.LevelAnnouncementsEnabled)
                     return;
 
-                // var xp = new XpImage();
-                // if (user.ExpChatNotificationType == ExpType.GLOBAL || user.ExpChatNotificationType == ExpType.BOTH)
-                // {
-                //     if (levelAnnouncementChannel != null)
-                //     {
-                //         Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
-                //         await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
-                //     }
-                // }
-                //
-                // if (user.ExpDmNotificationType == ExpType.GLOBAL || user.ExpDmNotificationType == ExpType.BOTH)
-                // {
-                //     Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
-                //     await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
-                // }
+                var xp = new XpImage();
+                Console.WriteLine($"{sw.ElapsedMilliseconds} User {context.User} xp image created.");
+
+                if (user.ExpChatNotificationType == ExpType.GLOBAL || user.ExpChatNotificationType == ExpType.BOTH)
+                {
+                    if (levelAnnouncementChannel != null)
+                    {
+                        Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
+                        await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                    }
+                }
+                
+                if (user.ExpDmNotificationType == ExpType.GLOBAL || user.ExpDmNotificationType == ExpType.BOTH)
+                {
+                    Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
+                    await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                }
+                
+                Console.WriteLine($"{sw.ElapsedMilliseconds} User {context.User} sent level up notification.");
             });
         }
 
