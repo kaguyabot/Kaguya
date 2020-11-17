@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "kaguyaserver")]
+    [Table(Name = "kaguya_server")]
     public class Server : IKaguyaQueryable<Server>, IKaguyaUnique<Server>, IServerSearchable<Server>
     {
         [PrimaryKey]
