@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "mutedusers")]
+    [Table(Name = "muted_users")]
     public class MutedUser : IKaguyaQueryable<MutedUser>,
         IServerSearchable<MutedUser>,
         IUserSearchable<MutedUser>,
