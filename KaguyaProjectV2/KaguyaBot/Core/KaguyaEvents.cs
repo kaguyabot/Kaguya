@@ -6,7 +6,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Humanizer;
-using KaguyaProjectV2.KaguyaBot.Core.Global;
+using Humanizer.Localisation;
 using KaguyaProjectV2.KaguyaBot.Core.Interfaces;
 using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -42,13 +42,13 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         ///     Fired whenever a warning is issued in a guild via the 'warn' command.
         /// </summary>
         public static event Func<IModeratorEventArgs, Task> OnWarn;
-        public static void TriggerWarning(IModeratorEventArgs mArgs) => OnWarn?.Invoke(mArgs);
+        public static void TriggerWarning(IModeratorEventArgs wArgs) => OnWarn?.Invoke(wArgs);
 
         /// <summary>
         ///     Fired whenever a warning is removed from a guild via the 'unwarn' command.
         /// </summary>
         public static event Func<IModeratorEventArgs, Task> OnUnwarn;
-        public static void TriggerUnwarn(IModeratorEventArgs mArgs) => OnUnwarn?.Invoke(mArgs);
+        public static void TriggerUnwarn(IModeratorEventArgs wArgs) => OnUnwarn?.Invoke(wArgs);
 
         /// <summary>
         /// Fired whenever a user is shadowbanned via the 'shadowban' command.
@@ -134,20 +134,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         public SocketGuildUser ActionedUser { get; init; }
         public SocketGuildUser ModeratorUser { get; init; }
         public string Reason { get; init; }
+        public TimeSpan? Duration { get; }
 
         public ModeratorEventArgs(Server server, SocketGuild guild, SocketGuildUser actionedUser, 
-            SocketGuildUser moderatorUser, string reason)
+            SocketGuildUser moderatorUser, string reason, TimeSpan? duration)
         {
             Server = server;
             Guild = guild;
             ActionedUser = actionedUser;
             ModeratorUser = moderatorUser;
             Reason = reason;
+            Duration = duration;
         }
 
-        protected ModeratorEventArgs(IModeratorEventArgs a) : this(a.Server, a.Guild, a.ActionedUser, a.ModeratorUser, a.Reason) { }
+        protected ModeratorEventArgs(IModeratorEventArgs a) : this(a.Server, a.Guild, a.ActionedUser, a.ModeratorUser, a.Reason, a.Duration) { }
     }
-
+    
     public sealed class ModeratorEventLogger : ModeratorEventArgs
     {
         public string FormattedTimeStamp { get; }
@@ -193,8 +195,14 @@ namespace KaguyaProjectV2.KaguyaBot.Core
         public string GetGuildLogString()
         {
             var sb = new StringBuilder($"{Emoji} `[{FormattedTimeStamp}]` `ID: {ActionedUser.Id}` ");
-            sb.Append($"**{ActionedUser}** was {PastTenseAction} by {ModeratorUser}. Reason: {Reason}");
+            sb.AppendLine($"**{ActionedUser}** was {PastTenseAction} by {ModeratorUser}.");
 
+            if (Duration.HasValue)
+            {
+                sb.AppendLine($"Duration: **{Duration.Value.Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day)}**");
+            }
+
+            sb.Append($"Reason: **{Reason}**");
             return sb.ToString();
         }
 

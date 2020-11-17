@@ -2,6 +2,8 @@
 - Updated framework to .NET 5.
 - Updated language version to C# 9.0
 - Updated README.md to include instructions for developing Kaguya yourself.
+- Logtype "MogLog" no longer exists. Replaced by individual logtypes for mutes, unmutes, shadowban, unshadowban, warn, and unwarn.
+    - All of these logtypes are premium only.
 - $shadowban and $unshadowban have been rewritten to be more efficient.
 - Re-designed the formatting of log messages to take up much less space.
 - Fixed typo where antiraid DM's had incorrect grammar for the punishment.
@@ -10,9 +12,9 @@
 - The ability for a deleted message's old contents to be archived is now a premium-only feature.
 - The ability for an updated message's old + new contents to be archived is now a premium-only feature.
 - When using logs from "$log filteredphrases", archival of the user's full message is now a premium-only feature.
-- Logtype "MogLog" no longer exists. Replaced by individual logtypes for mutes, unmutes, shadowban, unshadowban, warn, and unwarn.
-    - All of these logtypes are premium only.
 - $shadowban & $unshadowban now will accept a reason parameter at the end, if desired for logging purposes.
+- If a user is muted despite the user already having an existing mute (*with a duration*), that duration will be overwritten with whatever new duration was provided.
+- Unmute, shadowban, unshadowban, and unwarn now all accept a 'reason' as a parameter. This can be saved for logging purposes.
 
 ### Version 3.1.1
 - Fixed bug with antiraid where users would not be actioned or logged properly.

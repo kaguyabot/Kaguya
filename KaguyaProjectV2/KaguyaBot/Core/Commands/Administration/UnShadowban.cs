@@ -46,7 +46,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             await user.RemoveRoleAsync(role);
             await ReplyAsync($"{Context.User.Mention} Successfully unshadowbanned `{user}`.");
             
-            KaguyaEvents.TriggerUnshadowban(new ModeratorEventArgs(server, Context.Guild, user, (SocketGuildUser)Context.User, reason));
+            KaguyaEvents.TriggerUnshadowban(new ModeratorEventArgs(server, Context.Guild, user, (SocketGuildUser)Context.User, reason, null));
         }
     }
 }

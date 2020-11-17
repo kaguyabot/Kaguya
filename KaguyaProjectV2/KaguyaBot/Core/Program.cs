@@ -234,6 +234,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Kaguya stats updater initialized", LogLvl.INFO);
             await AntiRaidService.Initialize();
             await ConsoleLogger.LogAsync("Antiraid service initialized", LogLvl.INFO);
+            await AutoUnmuteHandler.Initialize();
+            await ConsoleLogger.LogAsync("Unmute handler initialized", LogLvl.INFO);
 #if !DEBUG
             await OwnerGiveawayMessageUpdaterService.Initialize();
             await ConsoleLogger.LogAsync("Owner giveaway message updater initialized", LogLvl.INFO);
@@ -245,8 +247,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core
             await ConsoleLogger.LogAsync("Ratelimit service initialized", LogLvl.INFO);
             await StatsUpdater.Initialize();
             await ConsoleLogger.LogAsync("Top.gg stats updater initialized", LogLvl.INFO);
-            await AutoUnmuteHandler.Initialize();
-            await ConsoleLogger.LogAsync("Unmute handler initialized", LogLvl.INFO);
+            
             await RemindService.Initialize();
             await ConsoleLogger.LogAsync("Remind service initialized", LogLvl.INFO);
             await UpvoteExpirationNotifier.Initialize();

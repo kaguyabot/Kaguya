@@ -31,13 +31,15 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task UnWarnUser(SocketGuildUser user, string reason = default)
+        public async Task UnWarnUser(SocketGuildUser user, [Remainder]string reason = null)
         {
             Server server = await DatabaseQueries.GetOrCreateServerAsync(Context.Guild.Id);
             List<WarnedUser> warnings = await DatabaseQueries.GetAllForServerAndUserAsync<WarnedUser>(user.Id, server.ServerId);
             int warnCount = warnings.Count;
             var fields = new List<EmbedFieldBuilder>();
 
+            reason ??= "<No reason provided>";
+            
             if (warnCount > 4 && !server.IsPremium)
                 warnCount = 4;
 
@@ -99,7 +101,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 int j1 = j;
                 callbacks.Add((emojis[j], async (c, r) =>
                 {
-                    var uwArgs = new ModeratorEventArgs(server, Context.Guild, user, (SocketGuildUser) Context.User, reason);
+                    var uwArgs = new ModeratorEventArgs(server, Context.Guild, user, (SocketGuildUser) Context.User, reason, null);
                     KaguyaEvents.TriggerUnwarn(uwArgs);
                     
                     await DatabaseQueries.DeleteAsync(warnings.ElementAt(j1));

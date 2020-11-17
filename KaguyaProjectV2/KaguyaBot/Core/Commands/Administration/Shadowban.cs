@@ -84,7 +84,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
                 }
             };
 
-            KaguyaEvents.TriggerShadowban(new ModeratorEventArgs(server, guild, user, (SocketGuildUser) Context.User, reason));
+            KaguyaEvents.TriggerShadowban(new ModeratorEventArgs(server, guild, user, (SocketGuildUser) Context.User, reason, null));
             await ReplyAsync(embed: successEmbed.Build());
         }
 

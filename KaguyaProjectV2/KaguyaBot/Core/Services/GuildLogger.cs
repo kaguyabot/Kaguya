@@ -34,7 +34,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             KaguyaEvents.OnMute += LogMute;
             KaguyaEvents.OnUnmute += LogUnmute;
             KaguyaEvents.OnShadowban += LogShadowban;
-            KaguyaEvents.OnUnmute += LogUnshadowban;
+            KaguyaEvents.OnUnshadowban += LogUnshadowban;
         }
 
         private static async Task _client_MessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
@@ -391,40 +391,48 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         private static async Task LogWarns(IModeratorEventArgs mArgs)
         {
+            if (!mArgs.Server.IsPremium) return;
+
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.WARN,
                 "🚔", GetFormattedTimestamp(), mArgs.Server.LogWarns);
 
             await logger.LogModerationAction();
         }
 
-        //todo: shadowban, unshadowban, mute, unmute logtypes...
-
         private static async Task LogUnwarn(IModeratorEventArgs mArgs)
         {
+            if (!mArgs.Server.IsPremium) return;
+
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNWARN,
-                "🛃☑", GetFormattedTimestamp(), mArgs.Server.LogUnwarns);
+                "🛃 ☑", GetFormattedTimestamp(), mArgs.Server.LogUnwarns);
 
             await logger.LogModerationAction();
         }
 
         private static async Task LogShadowban(IModeratorEventArgs mArgs)
         {
+            if (!mArgs.Server.IsPremium) return;
+
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.SHADOWBAN,
-                "👻⛔", GetFormattedTimestamp(), mArgs.Server.LogShadowbans);
+                "👻 ⛔", GetFormattedTimestamp(), mArgs.Server.LogShadowbans);
 
             await logger.LogModerationAction();
         }
 
         private static async Task LogUnshadowban(IModeratorEventArgs mArgs)
         {
+            if (!mArgs.Server.IsPremium) return;
+
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNSHADOWBAN,
-                "👻✅", GetFormattedTimestamp(), mArgs.Server.LogUnshadowbans);
+                "👻 ✅", GetFormattedTimestamp(), mArgs.Server.LogUnshadowbans);
 
             await logger.LogModerationAction();
         }
 
         private static async Task LogMute(IModeratorEventArgs mArgs)
         {
+            if (!mArgs.Server.IsPremium) return;
+
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.MUTE,
                 "🔕", GetFormattedTimestamp(), mArgs.Server.LogMutes);
 
@@ -433,6 +441,8 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
 
         private static async Task LogUnmute(IModeratorEventArgs mArgs)
         {
+            if (!mArgs.Server.IsPremium) return;
+
             var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNMUTE,
                 "🔔", GetFormattedTimestamp(), mArgs.Server.LogUnmutes);
 

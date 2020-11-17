@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using System;
+using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Interfaces
@@ -10,5 +11,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Interfaces
         SocketGuildUser ActionedUser { get; }
         SocketGuildUser ModeratorUser { get; }
         string Reason { get; }
+        TimeSpan? Duration { get; }
     }
 }

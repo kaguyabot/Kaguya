@@ -30,10 +30,10 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
             foreach (PropertyInfo prop in server.GetType().GetProperties()
                                                 .Where(x => x.PropertyType == typeof(ulong) && x.Name.Contains("Log")))
             {
-                if (!server.IsPremium && prop.Name.ToLower() == "modlog")
-                    continue;
-
-                if (prop.Name.ToLower().Contains("twitch"))
+                string n = prop.Name.ToLower();
+                string[] premLogs = { "warn", "unwarn", "mute", "unmute", "shadowban", "unshadowban" };
+                
+                if (!server.IsPremium && premLogs.Any(x => n.Contains(x)))
                     continue;
 
                 ulong matchChannel = (ulong) prop.GetValue(server);

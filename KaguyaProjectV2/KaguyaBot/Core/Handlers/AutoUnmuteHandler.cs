@@ -33,12 +33,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
                         goto RemoveFromDB;
 
                     Server server = await DatabaseQueries.GetOrCreateServerAsync(guild.Id);
-                    SocketGuildUser user = ConfigProperties.Client.GetGuild(server.ServerId).GetUser(mutedUser.UserId);
+                    SocketGuildUser user = guild.GetUser(mutedUser.UserId);
+                    SocketGuildUser selfUser = guild.GetUser(ConfigProperties.Client.CurrentUser.Id);
 
                     try
                     {
                         SocketRole muteRole = guild.Roles.FirstOrDefault(x => x.Name == "kaguya-mute");
                         await user.RemoveRoleAsync(muteRole);
+                        
+                        KaguyaEvents.TriggerUnmute(new ModeratorEventArgs(server, guild, user, selfUser, 
+                            "Automatic unmute (timed mute has expired)", null));
                     }
                     catch (Exception)
                     {
