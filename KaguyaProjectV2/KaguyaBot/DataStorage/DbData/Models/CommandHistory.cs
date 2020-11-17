@@ -9,25 +9,25 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         IUserSearchable<CommandHistory>,
         IServerSearchable<CommandHistory>
     {
-        [Column(Name = "UserId")]
+        [Column(Name = "user_id")]
         [NotNull]
         public ulong UserId { get; set; }
 
-        [Column(Name = "ServerId")]
+        [Column(Name = "server_id")]
         [NotNull]
         public ulong ServerId { get; set; }
 
-        [Column(Name = "Command")]
+        [Column(Name = "command")]
         [NotNull]
         public string Command { get; set; }
 
-        [Column(Name = "Timestamp")]
+        [Column(Name = "timestamp")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// FK_KaguyaServer_AutoAssignedRoles
         /// </summary>
-        [Association(ThisKey = "UserId", OtherKey = "Id", CanBeNull = false)]
+        [Association(ThisKey = "user_id", OtherKey = "id", CanBeNull = false)]
         public User User { get; set; }
     }
 }
