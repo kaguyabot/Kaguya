@@ -12,37 +12,38 @@ using KaguyaProjectV2.KaguyaBot.Core.Handlers;
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
     //todo: Add properties for collections such as IEnumerable<FavoriteTrack>
-    [Table(Name = "kaguyauser")]
+    [Table(Name = "kaguya_user")]
     public class User : IKaguyaQueryable<User>, IKaguyaUnique<User>, IUserSearchable<User>
     {
         [PrimaryKey]
+        [Column(Name = "user_id")]
         public ulong UserId { get; set; }
 
-        [Column(Name = "Experience")]
+        [Column(Name = "experience")]
         [NotNull]
         public int Experience { get; set; }
 
-        [Column(Name = "FishExp")]
+        [Column(Name = "fish_exp")]
         [NotNull]
         public int FishExp { get; set; }
 
-        [Column(Name = "Points")]
+        [Column(Name = "points")]
         [NotNull]
         public int Points { get; set; }
 
-        [Column(Name = "OsuId")]
+        [Column(Name = "osu_id")]
         [NotNull]
         public int OsuId { get; set; }
 
-        [Column(Name = "OsuBeatmapsLinked")]
+        [Column(Name = "osu_beatmaps_linked")]
         [NotNull]
         public int OsuBeatmapsLinked { get; set; }
 
-        [Column(Name = "CommandUses")]
+        [Column(Name = "commands_used")]
         [NotNull]
         public int TotalCommandUses { get; set; }
 
-        [Column(Name = "TotalDaysSupported")]
+        [Column(Name = "total_days_premium")]
         [NotNull]
         public int TotalDaysPremium { get; set; }
 
@@ -51,84 +52,56 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         /// The ratelimit service will check for whether the user
         /// has too many commands allowed by the ratelimit (x cmds in y seconds).
         /// </summary>
-        [Column(Name = "ActiveRateLimit")]
+        [Column(Name = "active_ratelimit")]
         [NotNull]
         public int ActiveRateLimit { get; set; }
 
-        [Column(Name = "RateLimitWarnings")]
+        [Column(Name = "ratelimit_warnings")]
         [NotNull]
         public int RateLimitWarnings { get; set; }
 
-        [Column(Name = "GamblingWins")]
-        [NotNull]
-        public int TotalGamblingWins { get; set; }
-
-        [Column(Name = "GamblingLosses")]
-        [NotNull]
-        public int TotalGamblingLosses { get; set; }
-
-        [Column(Name = "CurrencyAwarded")]
-        [NotNull]
-        public int TotalCurrencyAwarded { get; set; }
-
-        [Column(Name = "CurrencyLost")]
-        [NotNull]
-        public int TotalCurrencyLost { get; set; }
-
-        [Column(Name = "RollWins")]
-        [NotNull]
-        public int TotalRollWins { get; set; }
-
-        [Column(Name = "QuickdrawWins")]
-        [NotNull]
-        public int TotalQuickdrawWins { get; set; }
-
-        [Column(Name = "QuickdrawLosses")]
-        [NotNull]
-        public int TotalQuickdrawLosses { get; set; }
-
-        [Column(Name = "TotalUpvotes")]
+        [Column(Name = "total_upvotes")]
         [NotNull]
         public int TotalUpvotes { get; set; }
 
-        [Column(Name = "LastGivenExp")]
+        [Column(Name = "last_given_exp")]
         [NotNull]
         public double LastGivenExp { get; set; }
 
-        [Column(Name = "LastDailyBonus")]
+        [Column(Name = "last_daily_bonus")]
         [NotNull]
         public double LastDailyBonus { get; set; }
 
-        [Column(Name = "LastWeeklyBonus")]
+        [Column(Name = "last_weekly_bonus")]
         [NotNull]
         public double LastWeeklyBonus { get; set; }
 
-        [Column(Name = "LastGivenRep")]
+        [Column(Name = "last_given_rep")]
         [NotNull]
         public double LastGivenRep { get; set; }
 
-        [Column(Name = "LastRatelimited")]
+        [Column(Name = "last_ratelimited")]
         [NotNull]
         public double LastRatelimited { get; set; }
 
-        [Column(Name = "LastFished")]
+        [Column(Name = "last_fished")]
         [NotNull]
         public double LastFished { get; set; }
 
-        [Column(Name = "PremiumExpiration")]
+        [Column(Name = "premium_expiration")]
         public double PremiumExpiration { get; set; }
 
         /// <summary>
         /// If a user wants to receive level-up notifications in chat, what type should it be?
         /// </summary>
-        [Column(Name = "ExpChatNotificationType")]
+        [Column(Name = "exp_chatnotification_typenum")]
         [NotNull]
         public int ExpChatNotificationTypeNum { private get; set; } = 2;
 
         /// <summary>
         /// If a user wants to receive level-up notifications in their DMs, what type should it be?
         /// </summary>
-        [Column(Name = "ExpDMNotificationType")]
+        [Column(Name = "exp_dmnotification_typenum")]
         [NotNull]
         public int ExpDmNotificationTypeNum { private get; set; } = 3;
 
