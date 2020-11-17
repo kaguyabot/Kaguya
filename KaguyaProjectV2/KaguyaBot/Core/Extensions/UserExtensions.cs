@@ -110,7 +110,6 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Extensions
                         UserId = user.UserId,
                         Exp = 0,
                         LatestExp = 0,
-                        Server = server,
                         User = user
                     };
 
