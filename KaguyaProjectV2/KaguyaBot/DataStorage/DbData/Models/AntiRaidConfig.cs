@@ -9,18 +9,19 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
         IServerSearchable<AntiRaidConfig>
     {
         [PrimaryKey]
+        [Column(Name = "server_id")]
         public ulong ServerId { get; set; }
 
-        [Column(Name = "Users")]
+        [Column(Name = "users")]
         public int Users { get; set; }
 
-        [Column(Name = "Seconds")]
+        [Column(Name = "seconds")]
         public int Seconds { get; set; }
 
-        [Column(Name = "Action")]
+        [Column(Name = "action")]
         public string Action { get; set; }
 
-        [Association(ThisKey = "ServerId", OtherKey = "Id")]
+        [Association(ThisKey = "server_id", OtherKey = "id")]
         public Server Server { get; set; }
     }
 }
