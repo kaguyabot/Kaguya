@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "stats")]
+    [Table(Name = "kaguya_statistics")]
     public class KaguyaStatistics : IKaguyaQueryable<KaguyaStatistics>
     {
         [JsonProperty(PropertyName = "kaguya_users")]
