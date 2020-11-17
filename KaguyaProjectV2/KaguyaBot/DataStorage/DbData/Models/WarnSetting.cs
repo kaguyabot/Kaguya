@@ -3,25 +3,26 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "warnsettings")]
+    [Table(Name = "warn_settings")]
     public class WarnSetting : IKaguyaQueryable<WarnSetting>, IKaguyaUnique<WarnSetting>, IServerSearchable<WarnSetting>
     {
         [PrimaryKey]
+        [Column(Name = "server_id")]
         public ulong ServerId { get; set; }
 
-        [Column(Name = "Mute")]
+        [Column(Name = "mute")]
         [NotNull]
         public int Mute { get; set; }
 
-        [Column(Name = "Kick")]
+        [Column(Name = "kick")]
         [NotNull]
         public int Kick { get; set; }
 
-        [Column(Name = "Shadowban")]
+        [Column(Name = "shadowban")]
         [NotNull]
         public int Shadowban { get; set; }
 
-        [Column(Name = "Ban")]
+        [Column(Name = "ban")]
         [NotNull]
         public int Ban { get; set; }
     }
