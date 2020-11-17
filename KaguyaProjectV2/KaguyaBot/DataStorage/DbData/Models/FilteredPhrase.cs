@@ -3,20 +3,21 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "filteredphrases")]
+    [Table(Name = "filtered_phrases")]
     public class FilteredPhrase : IKaguyaQueryable<FilteredPhrase>, IKaguyaUnique<FilteredPhrase>, IServerSearchable<FilteredPhrase>
     {
-        [Column(Name = "Phrase")]
+        [Column(Name = "phrase")]
         [NotNull]
         public string Phrase { get; set; }
 
         /// <summary>
         ///     FK_KaguyaServer_FilteredPhrases
         /// </summary>
-        [Association(ThisKey = "ServerId", OtherKey = "Id", CanBeNull = false)]
+        [Association(ThisKey = "server_id", OtherKey = "id", CanBeNull = false)]
         public Server Server { get; set; }
 
-        [Column(Name = "ServerId")]
+        // todo: Redundant if there is an association with server.
+        [Column(Name = "server_id")]
         [NotNull]
         public ulong ServerId { get; set; }
 
