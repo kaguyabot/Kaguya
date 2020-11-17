@@ -4,7 +4,7 @@ using System;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "commandhistory")]
+    [Table(Name = "command_history")]
     public class CommandHistory : IKaguyaQueryable<CommandHistory>,
         IUserSearchable<CommandHistory>,
         IServerSearchable<CommandHistory>
