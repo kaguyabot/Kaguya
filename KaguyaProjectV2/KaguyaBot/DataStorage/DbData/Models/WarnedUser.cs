@@ -3,33 +3,33 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "warnedusers")]
+    [Table(Name = "warned_users")]
     public class WarnedUser : IKaguyaQueryable<WarnedUser>, IUserSearchable<WarnedUser>, IServerSearchable<WarnedUser>
     {
-        [Column(Name = "ServerId")]
+        [Column(Name = "server_id")]
         [NotNull]
         public ulong ServerId { get; set; }
 
-        [Column(Name = "UserId")]
+        [Column(Name = "user_id")]
         [NotNull]
         public ulong UserId { get; set; }
 
-        [Column(Name = "ModeratorName")]
+        [Column(Name = "moderator_name")]
         [NotNull]
         public string ModeratorName { get; set; }
 
-        [Column(Name = "Reason")]
+        [Column(Name = "reason")]
         [NotNull]
         public string Reason { get; set; }
 
-        [Column(Name = "Date")]
+        [Column(Name = "date")]
         [NotNull]
         public double Date { get; set; }
 
         /// <summary>
         /// FK_KaguyaServer_WarnedUsers
         /// </summary>
-        [Association(ThisKey = "ServerId", OtherKey = "Id", CanBeNull = false)]
+        [Association(ThisKey = "server_id", OtherKey = "id", CanBeNull = false)]
         public Server Server { get; set; }
     }
 }
