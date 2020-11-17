@@ -11,6 +11,7 @@ namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
     public class Fish : IKaguyaQueryable<Fish>, IKaguyaUnique<Fish>, IServerSearchable<Fish>, IUserSearchable<Fish>
     {
         [PrimaryKey]
+        [Column(Name = "fish_id")]
         public long FishId { get; set; }
 
         [Column(Name = "user_id")]
