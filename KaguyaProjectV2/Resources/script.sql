@@ -2,7 +2,7 @@ create table if not exists eightball
 (
     response varchar(500) not null,
     primary key (response)
-    );
+);
 
 create table if not exists favorite_tracks
 (
@@ -20,7 +20,6 @@ create table if not exists kaguya_server
     command_count bigint unsigned null,
     total_admin_actions int null,
     praise_cooldown int default 24 not null,
-    mod_log bigint unsigned null,
     deleted_messages_log bigint unsigned null,
     updated_messages_log bigint unsigned null,
     filtered_phrases_log bigint unsigned null,
@@ -33,17 +32,23 @@ create table if not exists kaguya_server
     fish_levels_log bigint unsigned not null,
     anti_raids_log bigint unsigned null,
     greetings_log bigint default 0 not null,
-    is_blacklisted bit not null,
-    is_currently_purging_messages bit not null,
-    custom_greeting text null,
-    custom_greeting_enabled tinyint default 0 not null,
+    warn_log bigint not null,
+    unwarn_log bigint not null,
+    shadowban_log bigint not null,
+    unshadowban_log bigint not null,
+    mute_log bigint not null,
+    unmute_log bigint null,
     level_announcements_enabled tinyint default 1 not null,
     osu_link_parsing_enabled tinyint default 1 null,
     next_quote_id int default 1 not null,
     premium_expiration double default 0 not null,
     antiraid_punishment_dm text null,
+    is_blacklisted bit not null,
+    is_currently_purging_messages bit not null,
+    custom_greeting text null,
+    custom_greeting_enabled tinyint default 0 not null,
     primary key (server_id)
-    )
+)
     charset=utf8;
 
 create table if not exists antiraid
@@ -54,20 +59,20 @@ create table if not exists antiraid
     action varchar(10) not null,
     primary key (server_id),
     constraint FK_AntiRaid_KaguyaServer_BackReference
-    foreign key (server_id) references kaguya_server (server_id)
-    );
+        foreign key (server_id) references kaguya_server (server_id)
+);
 
 create table if not exists auto_assigned_roles
 (
     server_id bigint unsigned not null,
     role_id bigint unsigned not null,
     constraint fk_AutoAssignedRoles_KaguyaServer1
-    foreign key (server_id) references kaguya_server (server_id)
-    )
+        foreign key (server_id) references kaguya_server (server_id)
+)
     charset=utf8;
 
 create index fk_AutoAssignedRoles_KaguyaServer1_idx
-	on auto_assigned_roles (server_id);
+    on auto_assigned_roles (server_id);
 
 create table if not exists blacklisted_channels
 (
@@ -75,24 +80,24 @@ create table if not exists blacklisted_channels
     channel_id bigint unsigned not null,
     expiration double not null,
     constraint fk_BlackListedChannels_KaguyaServer1
-    foreign key (server_id) references kaguya_server (server_id)
-    )
+        foreign key (server_id) references kaguya_server (server_id)
+)
     charset=utf8;
 
 create index fk_BlackListedChannels_KaguyaServer1_idx
-	on blacklisted_channels (server_id);
+    on blacklisted_channels (server_id);
 
 create table if not exists filtered_phrases
 (
     server_id bigint unsigned not null,
     phrase text not null,
     constraint fk_FilteredPhrases_KaguyaServer1
-    foreign key (server_id) references kaguya_server (server_id)
-    )
+        foreign key (server_id) references kaguya_server (server_id)
+)
     charset=utf8;
 
 create index fk_FilteredPhrases_KaguyaServer1_idx
-	on filtered_phrases (server_id);
+    on filtered_phrases (server_id);
 
 create table if not exists kaguya_statistics
 (
@@ -137,7 +142,7 @@ create table if not exists kaguya_user
     exp_dmnotification_typenum int default 2 not null,
     premium_expiration double default 0 not null,
     primary key (user_id)
-    )
+)
     comment 'ExpTypePreference: 0 = Global, 1 = Server, 2 = Both, 3 = None' charset=utf8;
 
 create table if not exists command_history
@@ -147,17 +152,17 @@ create table if not exists command_history
     command text not null,
     timestamp datetime not null,
     constraint FK_CommandHistory_KaguyaServer_BackReference
-    foreign key (server_id) references kaguya_server (server_id),
+        foreign key (server_id) references kaguya_server (server_id),
     constraint FK_CommandHistory_KaguyaUser_BackReference
-    foreign key (user_id) references kaguya_user (user_id)
-    )
+        foreign key (user_id) references kaguya_user (user_id)
+)
     charset=utf8;
 
 create index FK_CommandHistory_KaguyaServer_BackReference_idx
-	on command_history (server_id);
+    on command_history (server_id);
 
 create index fk_CommandHistory_KaguyaUser1_idx
-	on command_history (user_id);
+    on command_history (user_id);
 
 create table if not exists fish
 (
@@ -172,13 +177,13 @@ create table if not exists fish
     sold tinyint not null,
     primary key (fish_id),
     constraint FK_Fish_KaguyaServer_BackReference
-    foreign key (server_id) references kaguya_server (server_id),
+        foreign key (server_id) references kaguya_server (server_id),
     constraint FK_Fish_KaguyaUser_BackReference
-    foreign key (user_id) references kaguya_user (user_id)
-    );
+        foreign key (user_id) references kaguya_user (user_id)
+);
 
 create index FK_Fish_KaguyaServer_BackReference_idx
-	on fish (server_id);
+    on fish (server_id);
 
 create table if not exists gamble_history
 (
@@ -191,12 +196,12 @@ create table if not exists gamble_history
     time double not null,
     winner tinyint not null,
     constraint FK_GambleHistory_KaguyaUser_BackReference
-    foreign key (user_id) references kaguya_user (user_id)
-    )
+        foreign key (user_id) references kaguya_user (user_id)
+)
     charset=utf8;
 
 create index fk_GambleHistory_KaguyaUser1_idx
-	on gamble_history (user_id);
+    on gamble_history (user_id);
 
 create table if not exists muted_users
 (
@@ -205,22 +210,22 @@ create table if not exists muted_users
     expires_at double not null,
     primary key (server_id),
     constraint fk_MutedUsers_KaguyaServer1
-    foreign key (server_id) references kaguya_server (server_id),
+        foreign key (server_id) references kaguya_server (server_id),
     constraint fk_MutedUsers_KaguyaUser1
-    foreign key (user_id) references kaguya_user (user_id)
-    )
+        foreign key (user_id) references kaguya_user (user_id)
+)
     charset=utf8;
 
 create index fk_MutedUsers_KaguyaServer1_idx
-	on muted_users (server_id);
+    on muted_users (server_id);
 
 create index fk_MutedUsers_KaguyaUser1_idx
-	on muted_users (user_id);
+    on muted_users (user_id);
 
 create table if not exists owner_giveaway
 (
     id int auto_increment
-    primary key,
+        primary key,
     message_id bigint not null,
     channel_id bigint not null,
     exp int not null,
@@ -243,15 +248,15 @@ create table if not exists praise
     time_given double not null,
     reason text not null,
     constraint FK_Praise_KaguyaServer_BackReference
-    foreign key (server_id) references kaguya_server (server_id)
-    )
+        foreign key (server_id) references kaguya_server (server_id)
+)
     comment 'Server specific rep.';
 
 create index FK_Praise_KaguyaUser_BackReference_idx
-	on praise (user_id);
+    on praise (user_id);
 
 create index FK_Praise_KaguyaUser_BackReference_idx1
-	on praise (server_id);
+    on praise (server_id);
 
 create table if not exists premium_keys
 (
@@ -262,7 +267,7 @@ create table if not exists premium_keys
     server_id bigint unsigned null,
     has_expired tinyint null,
     primary key (`key`)
-    );
+);
 
 create table if not exists quotes
 (
@@ -272,16 +277,16 @@ create table if not exists quotes
     timestamp double not null,
     id int not null,
     constraint FK_Quotes_KaguyaServer_BackReference
-    foreign key (server_id) references kaguya_server (server_id),
+        foreign key (server_id) references kaguya_server (server_id),
     constraint FK_Quotes_KaguyaUser_BackReference
-    foreign key (user_id) references kaguya_user (user_id)
-    );
+        foreign key (user_id) references kaguya_user (user_id)
+);
 
 create index FK_Quotes_KaguyaServer_BackReference_idx
-	on quotes (server_id);
+    on quotes (server_id);
 
 create index FK_Quotes_KaguyaUser_BackReference_idx
-	on quotes (user_id);
+    on quotes (user_id);
 
 create table if not exists reaction_roles
 (
@@ -298,11 +303,11 @@ create table if not exists reminders
     text text not null,
     has_triggered tinyint not null,
     constraint FK_KaguyaUser_Reminder_BackReference
-    foreign key (user_id) references kaguya_user (user_id)
-    );
+        foreign key (user_id) references kaguya_user (user_id)
+);
 
 create index FK_KaguyaUser_Reminder_BackReference_idx
-	on reminders (user_id);
+    on reminders (user_id);
 
 create table if not exists rep
 (
@@ -311,11 +316,11 @@ create table if not exists rep
     time_given double not null,
     reason text not null,
     constraint FK_Rep_KaguyaUser_BackReference
-    foreign key (user_id) references kaguya_user (user_id)
-    );
+        foreign key (user_id) references kaguya_user (user_id)
+);
 
 create index FK_Rep_KaguyaUser_BackReference_idx
-	on rep (user_id);
+    on rep (user_id);
 
 create table if not exists server_exp
 (
@@ -325,12 +330,12 @@ create table if not exists server_exp
     latest_exp double not null,
     primary key (server_id, user_id),
     constraint FK_ServerExp_KaguyaUser_BackReference
-    foreign key (user_id) references kaguya_user (user_id)
-    )
+        foreign key (user_id) references kaguya_user (user_id)
+)
     charset=utf8;
 
 create index FK_ServerExp_KaguyaUser_BackReference_idx
-	on server_exp (user_id);
+    on server_exp (user_id);
 
 create table if not exists server_role_rewards
 (
@@ -338,11 +343,11 @@ create table if not exists server_role_rewards
     role_id bigint unsigned not null,
     level int not null,
     constraint FK_ServerRoleRewards_KaguyaServer_BackReference
-    foreign key (server_id) references kaguya_server (server_id)
-    );
+        foreign key (server_id) references kaguya_server (server_id)
+);
 
 create index FK_ServerRoleRewards_KaguyaServer_BackReference_idx
-	on server_role_rewards (server_id);
+    on server_role_rewards (server_id);
 
 create table if not exists upvotes
 (
@@ -355,7 +360,7 @@ create table if not exists upvotes
     query_params text null,
     reminder_sent tinyint default 0 not null,
     primary key (vote_id)
-    );
+);
 
 create table if not exists user_blacklists
 (
@@ -364,8 +369,8 @@ create table if not exists user_blacklists
     reason text not null,
     primary key (user_id),
     constraint FK_UserBlacklists_KaguyaUser_BackReference
-    foreign key (user_id) references kaguya_user (user_id)
-    );
+        foreign key (user_id) references kaguya_user (user_id)
+);
 
 create table if not exists warn_settings
 (
@@ -376,12 +381,12 @@ create table if not exists warn_settings
     ban int default 0 not null,
     primary key (server_id),
     constraint FK_WarnSettings_KaguyaServer_BackReference
-    foreign key (server_id) references kaguya_server (server_id)
-    )
+        foreign key (server_id) references kaguya_server (server_id)
+)
     charset=utf8;
 
 create index fk_WarnActions_KaguyaServer1_idx
-	on warn_settings (server_id);
+    on warn_settings (server_id);
 
 create table if not exists warned_users
 (
@@ -391,9 +396,9 @@ create table if not exists warned_users
     reason text not null,
     date double not null,
     constraint FK_WarnedUsers_KaguyaServer_BackReference
-    foreign key (server_id) references kaguya_server (server_id)
-    )
+        foreign key (server_id) references kaguya_server (server_id)
+)
     charset=utf8;
 
 create index FK_WarnedUsers_KaguyaServer_BackReference_idx
-	on warned_users (server_id);
+    on warned_users (server_id);
