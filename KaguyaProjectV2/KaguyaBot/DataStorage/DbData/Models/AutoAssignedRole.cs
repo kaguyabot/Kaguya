@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models
 {
-    [Table(Name = "autoassignedroles")]
+    [Table(Name = "auto_assigned_roles")]
     public class AutoAssignedRole : IKaguyaQueryable<AutoAssignedRole>, IServerSearchable<AutoAssignedRole>
     {
         [Column(Name = "server_id")]
