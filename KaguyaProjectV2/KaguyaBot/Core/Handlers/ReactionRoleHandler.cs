@@ -53,6 +53,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             SocketReaction reaction,
             bool added)
         {
+            if (_reactionRoleCache.Count == 0)
+                return;
+            
             if (!(channel is SocketGuildChannel guildChannel))
                 return; // The reaction was sent via DM, return.
 
@@ -134,7 +137,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers
             }
             catch (Exception e)
             {
-                await ConsoleLogger.LogAsync(e);
+                //await ConsoleLogger.LogAsync(e);
             }
         }
 

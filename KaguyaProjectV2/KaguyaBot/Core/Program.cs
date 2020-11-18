@@ -289,7 +289,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core
 
         private Task Log(LogMessage msg)
         {
-            Console.WriteLine(msg.ToString());
+            string m = msg.ToString();
+            if(!(m.Contains("Serializer Error") || m.Contains("Unknown Dispatch")))
+                Console.WriteLine(m);
 
             return Task.CompletedTask;
         }
