@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
     public class Profile : KaguyaBase
     {
         [ExpCommand]
-        [Command("Profile")]
+        [Command("Profile", RunMode = RunMode.Async)]
         [Alias("p")]
         [Summary("Displays your Kaguya Profile, showing off how much EXP you have earned, as well " +
                  "as some other stats!")]
