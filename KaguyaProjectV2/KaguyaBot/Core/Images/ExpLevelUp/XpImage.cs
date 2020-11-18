@@ -144,7 +144,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
             catch (ImageProcessingException e)
             {
                 await ConsoleLogger.LogAsync($"An ImageProcessingException occurred when trying to draw text " +
-                                             $"{xp.NameText} for user {user.UserId}.\nException Message: {e.Message}", LogLvl.WARN);
+                                             $"{xp.NameText.Text} for user {user.UserId}.\nException Message: {e.Message}", LogLvl.WARN);
 
                 return null;
             }

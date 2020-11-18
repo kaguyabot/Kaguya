@@ -1,3 +1,7 @@
+### Version 3.2.1
+- Solved issue with $profile deadlocking the client, thus causing long wait times / crashes of shards.
+- Removed unnecessary typing state with $stats
+
 ### Version 3.2
 - Updated framework to .NET 5.
 - Updated language version to C# 9.0

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Discord.Commands;
+using JetBrains.Profiler.Api;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
 using KaguyaProjectV2.KaguyaBot.Core.Images.UserProfile;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
@@ -36,11 +37,11 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             if (id != Context.User.Id)
                 user = await DatabaseQueries.GetOrCreateUserAsync(id.Value);
 
+            var p = new ProfileImage();
+            Stream image = await p.GenerateProfileImageStream(user, server, Context.Guild.GetUser(id.Value));
+
             using (Context.Channel.EnterTypingState())
             {
-                var p = new ProfileImage();
-                Stream image = await p.GenerateProfileImageStream(user, server, Context.Guild.GetUser(id.Value));
-
                 await Context.Channel.SendFileAsync(image, "Kaguya_Profile_" +
                                                            $"{Context.User.Username}_{DateTime.Now.Month}_" +
                                                            $"{DateTime.Now.Day}_{DateTime.Now.Year}.png");

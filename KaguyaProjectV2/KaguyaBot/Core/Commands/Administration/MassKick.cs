@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Humanizer;
 using KaguyaProjectV2.KaguyaBot.Core.Attributes;
+using KaguyaProjectV2.KaguyaBot.Core.Extensions.DiscordExtensions;
+using KaguyaProjectV2.KaguyaBot.Core.Helpers;
 using KaguyaProjectV2.KaguyaBot.Core.KaguyaEmbed;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
@@ -20,30 +24,46 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.Administration
         [Remarks("<user> {...}")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
-        public async Task Command(params SocketGuildUser[] args)
+        public async Task Command(params string[] args)
         {
-            var kickSb = new StringBuilder();
-            var errorSb = new StringBuilder();
-            foreach (SocketGuildUser user in args)
+            var users = new List<SocketGuildUser>();
+            var invalidUsers = new List<string>();
+            
+            foreach (string a in args)
             {
-                try
+                SocketGuildUser user = DiscordHelpers.ParseGuildUser(a, Context.Guild);
+                
+                if (user != null)
                 {
-                    kickSb.AppendLine($"Kicked user `{user}`.");
-                    await user.KickAsync($"Masskick operation from user " +
-                                         $"@{Context.User.Username}#{Context.User.Discriminator}");
+                    users.Add(user);
                 }
-                catch (Exception)
+                else
                 {
-                    errorSb.AppendLine($"Failed to kick user `{user}`");
+                    invalidUsers.Add(a);
                 }
             }
 
+            // Embolden all users, format them in a comma separated list.
+            string kickString = users.Humanize(x => x.ToString().ToDiscordBold(), "");
+            var errorSb = new StringBuilder("Failed to kick users:\n");
+            
+            if(invalidUsers.Any())
+                errorSb.AppendLine(invalidUsers.Humanize(x => x.ToDiscordBold(), ""));
+
+            List<Task> awaiters = new List<Task>();
+            foreach (SocketGuildUser user in users)
+            {
+                awaiters.Add(user.KickAsync());
+            }
+
+            await Task.WhenAll(awaiters);
+            
             var finalSb = new StringBuilder();
-            if (!String.IsNullOrWhiteSpace(kickSb.ToString()))
-                finalSb.AppendLine(kickSb.ToString());
+            if (!String.IsNullOrWhiteSpace(kickString))
+                finalSb.AppendLine(kickString);
 
             if (!String.IsNullOrWhiteSpace(errorSb.ToString()))
-                finalSb.AppendLine($"\n\n{errorSb}");
+                finalSb.AppendLine("\n\n" + errorSb);
 
             var embed = new KaguyaEmbedBuilder
             {

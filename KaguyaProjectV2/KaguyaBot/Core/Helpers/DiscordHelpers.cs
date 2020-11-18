@@ -2,8 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Discord;
-using Discord.Commands;
-using KaguyaProjectV2.KaguyaBot.Core.TypeReaders;
+using Discord.WebSocket;
 
 namespace KaguyaProjectV2.KaguyaBot.Core.Helpers
 {
@@ -25,6 +24,50 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Helpers
                 null, args, null, null);
 
             return (T) instance;
+        }
+
+        public static bool TryParseUser(string text, out ulong id)
+        {
+            if (MentionUtils.TryParseUser(text, out ulong parsedId))
+            {
+                id = parsedId;
+                return true;
+            }
+
+            id = 0;
+            return false;
+        }
+
+        /// <summary>
+        /// Parses a <see cref="string"/> to a <see cref="SocketGuildUser"/>. If no user can be parsed,
+        /// this method returns a null <see cref="SocketGuildUser"/>.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="guild"></param>
+        /// <returns></returns>
+        public static SocketGuildUser ParseGuildUser(string text, SocketGuild guild)
+        {
+            SocketGuildUser user = null;
+            if (MentionUtils.TryParseUser(text, out ulong id))
+            {
+                user = guild.Users.FirstOrDefault(x => x.Id == id);
+            }
+            else
+            {
+                SocketGuildUser parsedRes = guild.Users.FirstOrDefault(x => x.Username.Equals(text, StringComparison.OrdinalIgnoreCase));
+                if (parsedRes != null)
+                    user = parsedRes;
+                else
+                {
+                    
+                    SocketGuildUser nickParse = guild.Users.FirstOrDefault(x => !String.IsNullOrWhiteSpace(x.Nickname) &&
+                                                                                x.Nickname.Equals(text, StringComparison.OrdinalIgnoreCase));
+                    if (nickParse != null)
+                        user = nickParse;
+                }
+            }
+            
+            return user;
         }
     }
 }
