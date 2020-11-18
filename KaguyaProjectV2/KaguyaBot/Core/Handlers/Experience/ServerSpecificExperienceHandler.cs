@@ -90,19 +90,22 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                     return;
 
                 var xp = new XpImage();
-                if (user.ExpChatNotificationType == ExpType.SERVER || user.ExpChatNotificationType == ExpType.BOTH)
-                {
-                    Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User, server);
-                    if (levelAnnouncementChannel != null)
-                        await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
-                    else
-                        await context.Channel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
-                }
+                Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User, server);
 
-                if (user.ExpDmNotificationType == ExpType.SERVER || user.ExpDmNotificationType == ExpType.BOTH)
+                if (xpStream != null)
                 {
-                    Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User, server);
-                    await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                    if (user.ExpChatNotificationType == ExpType.SERVER || user.ExpChatNotificationType == ExpType.BOTH)
+                    {
+                        if (levelAnnouncementChannel != null)
+                            await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                        else
+                            await context.Channel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                    }
+
+                    if (user.ExpDmNotificationType == ExpType.SERVER || user.ExpDmNotificationType == ExpType.BOTH)
+                    {
+                        await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                    }
                 }
 
                 // Server level-up reward stuffs.

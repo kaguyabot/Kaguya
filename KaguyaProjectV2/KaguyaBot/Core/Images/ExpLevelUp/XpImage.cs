@@ -1,15 +1,17 @@
-﻿using Discord;
+﻿using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
 using KaguyaProjectV2.KaguyaBot.Core.Extensions;
 using KaguyaProjectV2.KaguyaBot.Core.Images.Models;
+using KaguyaProjectV2.KaguyaBot.Core.Services.ConsoleLogServices;
 using KaguyaProjectV2.KaguyaBot.DataStorage.DbData.Models;
+using KaguyaProjectV2.KaguyaBot.DataStorage.JsonStorage;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
 using Image = SixLabors.ImageSharp.Image;
 
 // ReSharper disable AccessToDisposedClosure
@@ -135,7 +137,17 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Images.ExpLevelUp
             // Unlike ProfileImage.cs, however, I decided to go with a deliberate blank canvas to draw ontop of.
             canvas.Mutate(x => x.DrawImage(profilePicture, new Point((int) xp.ProfilePicture.Loc.X, (int) xp.ProfilePicture.Loc.Y), 1));
             canvas.Mutate(x => x.DrawImage(image, 1));
-            canvas.Mutate(x => x.DrawKaguyaXpPanelText(xp));
+            try
+            {
+                canvas.Mutate(x => x.DrawKaguyaXpPanelText(xp));
+            }
+            catch (ImageProcessingException e)
+            {
+                await ConsoleLogger.LogAsync($"An ImageProcessingException occurred when trying to draw text " +
+                                             $"{xp.NameText} for user {user.UserId}.\nException Message: {e.Message}", LogLvl.WARN);
+
+                return null;
+            }
 
             if (user.IsPremium)
                 canvas.Mutate(x => x.DrawImage(suppBadge, new Point((int) xp.SupporterBadge.Loc.X, (int) xp.SupporterBadge.Loc.Y), 1));

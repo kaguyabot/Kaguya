@@ -75,14 +75,16 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Handlers.Experience
                     if (levelAnnouncementChannel != null)
                     {
                         Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
-                        await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                        if(xpStream != null)
+                            await levelAnnouncementChannel.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
                     }
                 }
                 
                 if (user.ExpDmNotificationType == ExpType.GLOBAL || user.ExpDmNotificationType == ExpType.BOTH)
                 {
                     Stream xpStream = await xp.GenerateXpImageStream(user, (SocketGuildUser) context.User);
-                    await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
+                    if(xpStream != null)
+                        await context.User.SendFileAsync(xpStream, $"Kaguya_Xp_LevelUp.png", "");
                 }
             });
         }
