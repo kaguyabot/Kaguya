@@ -26,7 +26,7 @@
   <ItemGroup>
     <PackageReference Include="BooruSharp" Version="3.0.0" />
     <PackageReference Include="Centvrio.Emoji" Version="1.1.6" />
-    <PackageReference Include="Discord.Net" Version="2.3.0-dev-20201117.8" />
+    <PackageReference Include="Discord.Net" Version="2.3.0-dev-20201118.6" />
     <PackageReference Include="DiscordBotsList.Api" Version="1.4.0" />
     <PackageReference Include="Humanizer" Version="2.8.26" />
     <PackageReference Include="JetBrains.Profiler.Api" Version="1.1.7" />
