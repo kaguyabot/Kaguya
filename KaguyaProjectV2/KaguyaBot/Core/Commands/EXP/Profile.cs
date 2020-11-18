@@ -13,7 +13,7 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
     public class Profile : KaguyaBase
     {
         [ExpCommand]
-        [Command("Profile", RunMode = RunMode.Async)]
+        [Command("Profile")]
         [Alias("p")]
         [Summary("Displays your Kaguya Profile, showing off how much EXP you have earned, as well " +
                  "as some other stats!")]
@@ -40,12 +40,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Commands.EXP
             var p = new ProfileImage();
             Stream image = await p.GenerateProfileImageStream(user, server, Context.Guild.GetUser(id.Value));
 
-            using (Context.Channel.EnterTypingState())
-            {
-                await Context.Channel.SendFileAsync(image, "Kaguya_Profile_" +
-                                                           $"{Context.User.Username}_{DateTime.Now.Month}_" +
-                                                           $"{DateTime.Now.Day}_{DateTime.Now.Year}.png");
-            }
+            await Context.Channel.SendFileAsync(image, "Kaguya_Profile_" +
+                                                       $"{Context.User.Username}_{DateTime.Now.Month}_" +
+                                                       $"{DateTime.Now.Day}_{DateTime.Now.Year}.png");
         }
     }
 }
