@@ -99,6 +99,9 @@ namespace KaguyaProjectV2.KaguyaBot.Core.Services
             if (server.LogUpdatedMessages == 0)
                 return;
 
+            if (!arg1.HasValue)
+                return;
+            
             IMessage oldMsg = arg1.Value;
 
             if (oldMsg.Author.IsBot) return;
