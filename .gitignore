@@ -1,24 +1,32 @@
-# KaguyaBot
-/Properties
-/Kaguya/obj/Debug
-/KaguyaProjectV2/.vs/*/
-/KaguyaProjectV2/bin
-/KaguyaProjectV2/obj
-/KaguyaProjectV2/Resources/Logs
-/KaguyaProjectV2/Resources/config.json
-/Kaguya/KaguyaWebBlazor/*
-/KaguyaProjectV2/appsettings.json
-/KaguyaProjectV2/Properties/launchSettings.json
-/KaguyaProjectV2/LavalinkServer/logs/
+# User specific
+**/.idea/**/workspace.xml
+**/.idea/**/tasks.xml
+**/.idea/shelf/*
+**/.idea/dictionaries
+**/.idea/httpRequests/
 
-# Other
-**/bin
-**/obj
-**/out
-**/.vs
-**/.vscode
-**/.idea
-*.run
+# Sensitive or high-churn files
+**/.idea/**/dataSources/
+**/.idea/**/dataSources.ids
+**/.idea/**/dataSources.xml
+**/.idea/**/dataSources.local.xml
+**/.idea/**/sqlDataSources.xml
+**/.idea/**/dynamic.xml
+
+# Rider
+# Rider auto-generates .iml files, and contentModel.xml
+**/.idea/**/*.iml
+**/.idea/**/contentModel.xml
+**/.idea/**/modules.xml
+
 *.suo
-KaguyaProjectV2/KaguyaProjectV2.csproj.user
-**/LavalinkServer/logs
+*.user
+.vs/
+[Bb]in/
+[Oo]bj/
+_UpgradeReport_Files/
+[Pp]ackages/
+
+Thumbs.db
+Desktop.ini
+.DS_Store
