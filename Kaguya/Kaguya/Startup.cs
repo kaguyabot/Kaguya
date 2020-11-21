@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
 using Kaguya.Database.Context;
 using Kaguya.Discord;
 using Microsoft.AspNetCore.Builder;
@@ -14,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Victoria;
 
 namespace Kaguya
 {
@@ -30,6 +34,15 @@ namespace Kaguya
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
+            services.AddSingleton(provider =>
+            {
+                var cs = new CommandService();
+                cs.AddModulesAsync(Assembly.GetExecutingAssembly(), provider);
+
+                return cs;
+            });
+            
             services.AddHostedService<DiscordWorker>();
 
             services.AddDbContextPool<KaguyaDbContext>(builder =>
@@ -37,6 +50,7 @@ namespace Kaguya
                 builder.UseMySql(Configuration.GetConnectionString("database"),
                     ServerVersion.AutoDetect(Configuration.GetConnectionString("database")));
             });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

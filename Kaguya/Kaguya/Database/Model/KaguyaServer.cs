@@ -25,8 +25,6 @@ namespace Kaguya.Database.Model
 
 		public DateTime? PremiumExpiration { get; set; }
 
-		public bool IsBlacklisted { get; set; } = false;
-
 		/// <summary>
 		/// A boolean that determines whether the server is currently purging messages.
 		/// We log this so that we don't bombard log channels with messages whenever they are bulk

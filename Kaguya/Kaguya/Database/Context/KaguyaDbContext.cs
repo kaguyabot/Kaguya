@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -15,7 +17,8 @@ namespace Kaguya.Database.Context
 	{
 		public DbSet<KaguyaServer> Servers { get; set; }
 		public DbSet<KaguyaUser> Users { get; set; }
-
+		public DbSet<BlacklistedEntity> BlacklistedEntities { get; set; }
+		public DbSet<WordFilter> WordFilters { get; set; }
 
 		public KaguyaDbContext(DbContextOptions<KaguyaDbContext> options)
 			: base(options)

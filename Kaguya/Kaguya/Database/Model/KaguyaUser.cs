@@ -60,9 +60,6 @@ namespace Kaguya.Database.Model
 
 		public DateTime? PremiumExpiration { get; set; }
 
-		// [NotMapped]
-		// public bool IsBlacklisted => Blacklist != null && (Blacklist.Expiration <= DateTime.Now);
-
 		// public FishHandler.FishLevelBonuses FishLevelBonuses => new FishHandler.FishLevelBonuses(FishExp);
 		// public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
 		[NotMapped]
