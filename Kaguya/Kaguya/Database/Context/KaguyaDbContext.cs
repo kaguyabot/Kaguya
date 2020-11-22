@@ -35,6 +35,7 @@ namespace Kaguya.Database.Context
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			OnModelCreatingPartial(modelBuilder);
+			modelBuilder.Entity<WordFilter>().HasKey(w => new {w.ServerId, w.Word});
 		}
 
 		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

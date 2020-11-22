@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,12 @@ namespace Kaguya
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+	        foreach (DictionaryEntry environmentVariable in System.Environment.GetEnvironmentVariables())
+	        {
+		        Console.WriteLine($"{environmentVariable.Key}={environmentVariable.Value}");
+	        }
+
+	        CreateHostBuilder(args).Build().Run();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>

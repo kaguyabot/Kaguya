@@ -4,8 +4,11 @@ namespace Kaguya.Discord.options
 {
     public class DiscordConfigurations
     {
-        // login details
-        [MinLength(1)]
+	    public static string Position { get; } = "DiscordSettings";
+
+	    // login details
+
+	    [MinLength(1)]
         public string BotToken { get; set; }
 
         public int? MessageCacheSize { get; set; }

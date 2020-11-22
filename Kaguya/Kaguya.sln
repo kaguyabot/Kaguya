@@ -7,6 +7,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{9381FFB4-B3CC-4A0B-84CB-7C8FD63EBED4}"
 ProjectSection(SolutionItems) = preProject
 	..\nuget.config = ..\nuget.config
+	..\Dockerfile = ..\Dockerfile
+	..\docker-compose.yml = ..\docker-compose.yml
+	..\Migrations.Dockerfile = ..\Migrations.Dockerfile
 EndProjectSection
 EndProject
 Global
