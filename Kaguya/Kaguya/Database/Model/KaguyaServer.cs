@@ -21,8 +21,6 @@ namespace Kaguya.Database.Model
 
 		public int NextQuoteId { get; set; } = 1;
 
-		public bool DoYouLikeColumns { get; set; } = true;
-
 		public DateTime? PremiumExpiration { get; set; }
 
 		/// <summary>
