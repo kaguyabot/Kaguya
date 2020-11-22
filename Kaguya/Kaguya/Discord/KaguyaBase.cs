@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.Rest;
-using Kaguya.Discord.Embeds;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord
@@ -70,6 +69,16 @@ namespace Kaguya.Discord
             };
 
             return await SendEmbedAsync(embed);
+        }
+
+        /// <summary>
+        /// Sends a standard chat message.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        protected async Task<RestUserMessage> SendAsync(string message)
+        {
+	        return await Context.Channel.SendMessageAsync(message);
         }
     }
 }
