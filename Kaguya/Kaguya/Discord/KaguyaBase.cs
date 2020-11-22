@@ -72,13 +72,22 @@ namespace Kaguya.Discord
         }
 
         /// <summary>
-        /// Sends a standard chat message.
+        /// Sends a standard chat message. If the message could not be sent, this method will return null.
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
         protected async Task<RestUserMessage> SendAsync(string message)
         {
-	        return await Context.Channel.SendMessageAsync(message);
+            try
+            {
+                return await Context.Channel.SendMessageAsync(message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Could not send message to channel [{Context.Channel} | {Context.Channel.Id}] " +
+                                 $"in guild [{Context.Guild} | {Context.Guild.Id}]");
+                return null;
+            }
         }
     }
 }
