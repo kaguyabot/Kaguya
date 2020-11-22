@@ -26,18 +26,18 @@ namespace Kaguya.Discord
 		private readonly ILogger<DiscordWorker> _logger;
 		private readonly CommandService _commandService;
 		private readonly KaguyaDbContext _dbContext;
-		private readonly ServiceProvider _serviceProvider;
+		private readonly IServiceProvider _serviceProvider;
 		private DiscordShardedClient _client;
 
 		public DiscordWorker(IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
 			ILogger<DiscordWorker> logger,
-			CommandService commandService, KaguyaDbContext dbContext, ServiceProvider serviceProvider)
+			CommandService commandService, DbContextOptions<KaguyaDbContext> dbContextOptions, IServiceProvider serviceProvider)
 		{
 			_adminConfigs = adminConfigs;
 			_discordConfigs = discordConfigs;
 			_logger = logger;
 			_commandService = commandService;
-			_dbContext = dbContext;
+			_dbContext = new KaguyaDbContext(dbContextOptions);
 			_serviceProvider = serviceProvider;
 			// TODO: add emote type handler 
 			// TODO: add socket guild user list type handler
@@ -224,8 +224,8 @@ namespace Kaguya.Discord
 
 		public static bool FilterMatch(string message, string pattern)
 		{
-			var (start, end) = (start: pattern.StartsWith("*"), end: pattern.EndsWith("*"));
-			var wordlet = Regex.Escape(pattern.Substring((start ? 1 : 0),
+			var (start, end) = (pattern.StartsWith("*"), pattern.EndsWith("*"));
+			var wordlet = Regex.Escape(pattern.Substring(start ? 1 : 0,
 				end
 					? pattern.Length - (start ? 2 : 1)
 					: pattern.Length - (start ? 1 : 0)));

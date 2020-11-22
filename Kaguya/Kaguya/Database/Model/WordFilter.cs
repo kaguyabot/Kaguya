@@ -20,5 +20,6 @@ namespace Kaguya.Database.Model
 		public string Word { get; set; }
 
 		public FilterReactionEnum FilterReaction { get; set; }
+		
 	}
 }

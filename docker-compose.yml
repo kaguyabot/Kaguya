@@ -1,0 +1,31 @@
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: CHANGEME
+      MYSQL_DATABASE: kaguyadb
+  kaguyamigrate:
+    restart: on-failure
+    build:
+      dockerfile: Migrations.Dockerfile
+      context: .
+    environment:
+      Kaguya_ConnectionStrings__Database: server=mysql;user=root;password=CHANGEME;database=kaguyadb
+    volumes:
+      - type: bind
+        source: ./developer-settings.json
+        target: /Kaguya/appsettings.json
+    links:
+      - mysql
+  kaguya:
+    restart: always
+    build:
+      context: .
+    environment:
+      Kaguya_ConnectionStrings__Database: server=mysql;user=root;password=CHANGEME;database=kaguyadb 
+    volumes:
+      - type: bind
+        source: ./developer-settings.json
+        target: /KaguyaApp/appsettings.json
+    links:
+      - mysql

@@ -7,6 +7,8 @@ using Discord;
 using Discord.Commands;
 using Kaguya.Database.Context;
 using Kaguya.Discord;
+using Kaguya.Discord.options;
+using Kaguya.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -21,49 +23,51 @@ using Victoria;
 
 namespace Kaguya
 {
-    public class Startup
-    {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+	public class Startup
+	{
+		public Startup(IConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
 
-        public IConfiguration Configuration { get; }
+		public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-            
-            services.AddSingleton(provider =>
-            {
-                var cs = new CommandService();
-                cs.AddModulesAsync(Assembly.GetExecutingAssembly(), provider);
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.Configure<AdminConfigurations>(Configuration.GetSection(AdminConfigurations.Position));
+			services.Configure<DiscordConfigurations>(Configuration.GetSection(DiscordConfigurations.Position));
 
-                return cs;
-            });
-            
-            services.AddHostedService<DiscordWorker>();
+			services.AddDbContextPool<KaguyaDbContext>(builder =>
+			{
+				builder
+					.UseMySql(Configuration.GetConnectionString("Database"),
+					          ServerVersion.AutoDetect(Configuration.GetConnectionString("Database")));
+			});
 
-            services.AddDbContextPool<KaguyaDbContext>(builder =>
-            {
-                builder.UseMySql(Configuration.GetConnectionString("database"),
-                    ServerVersion.AutoDetect(Configuration.GetConnectionString("database")));
-            });
-            
-        }
+			services.AddControllers();
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+			services.AddSingleton(provider =>
+			{
+				var cs = new CommandService();
+				cs.AddModulesAsync(Assembly.GetExecutingAssembly(), provider);
 
-            app.UseRouting();
+				return cs;
+			});
+			services.AddHostedService<DiscordWorker>();
+		}
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-        }
-    }
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
+
+			app.UseRouting();
+
+			app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+		}
+	}
 }
