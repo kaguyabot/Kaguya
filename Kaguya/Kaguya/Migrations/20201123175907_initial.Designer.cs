@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    [Migration("20201122164552_202011221043_initial")]
-    partial class _202011221043_initial
+    [Migration("20201123175907_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,9 +77,6 @@ namespace Kaguya.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("CustomGreetingIsEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("DoYouLikeColumns")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsCurrentlyPurgingMessages")

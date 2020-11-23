@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Kaguya.Migrations
 {
-    public partial class _202011221043_initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,7 +34,6 @@ namespace Kaguya.Migrations
                     TotalAdminActions = table.Column<int>(type: "int", nullable: false),
                     PraiseCooldown = table.Column<int>(type: "int", nullable: false),
                     NextQuoteId = table.Column<int>(type: "int", nullable: false),
-                    DoYouLikeColumns = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     PremiumExpiration = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     IsCurrentlyPurgingMessages = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CustomGreeting = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
