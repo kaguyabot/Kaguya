@@ -201,7 +201,9 @@ namespace Kaguya.Discord
 				return;
 			}
 
-			await _commandService.ExecuteAsync(commandCtx, argPos, _serviceProvider);
+			using (var commandScope = _serviceProvider.CreateScope()) {
+				await _commandService.ExecuteAsync(commandCtx, argPos, commandScope.ServiceProvider);
+			}
 		}
 
 		private async Task<bool> CheckFilteredPhrase(ICommandContext commandCtx, KaguyaServer server, IMessage message)

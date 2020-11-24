@@ -14,11 +14,6 @@ namespace Kaguya
     {
         public static void Main(string[] args)
         {
-	        foreach (DictionaryEntry environmentVariable in System.Environment.GetEnvironmentVariables())
-	        {
-		        Console.WriteLine($"{environmentVariable.Key}={environmentVariable.Value}");
-	        }
-
 	        CreateHostBuilder(args).Build().Run();
         }
 
