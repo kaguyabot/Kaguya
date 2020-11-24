@@ -77,9 +77,6 @@ namespace Kaguya.Migrations
                     b.Property<bool>("CustomGreetingIsEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<bool>("DoYouLikeColumns")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<bool>("IsCurrentlyPurgingMessages")
                         .HasColumnType("tinyint(1)");
 

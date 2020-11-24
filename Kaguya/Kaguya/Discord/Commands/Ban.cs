@@ -15,28 +15,29 @@ namespace Kaguya.Discord.Commands
     [Alias("b")]
     [RequireUserPermission(GuildPermission.BanMembers)]
     [RequireBotPermission(GuildPermission.BanMembers)]
-    public class Ban : KaguyaBase
+    public class Ban : KaguyaBase<Ban>
     {
         private readonly ILogger<Ban> _logger;
+        private readonly KaguyaServerRepository _ksRepo;
 
-        public Ban(ILogger<Ban> logger) : base(logger)
+        public Ban(ILogger<Ban> logger, KaguyaServerRepository ksRepo) : base(logger)
         {
-            _logger = logger;
+	        _logger = logger;
+	        _ksRepo = ksRepo;
         }
         
-        [Command("")]
+        [Command]
         [Summary("Permanently bans a user from the server.")]
         [Remarks("<user> [reason]")]
-        public async Task CommandBan(KaguyaServerRepository repo, SocketGuildUser user, 
-            [Remainder]string reason = "<No reason provided.>")
+        public async Task CommandBan(SocketGuildUser user, [Remainder]string reason = "<No reason provided.>")
         {
 	        KaguyaServer server = null;
             try
             {
-                server = await repo.GetOrCreateAsync(Context.Guild.Id);
+                server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
                 server.TotalAdminActions++;
 
-                await repo.UpdateAsync(server);
+                await _ksRepo.UpdateAsync(server);
                 await user.BanAsync(reason: reason);
                 
                 await SendAsync($"{Context.User.Mention} Banned **{user}**.");
@@ -54,15 +55,14 @@ namespace Kaguya.Discord.Commands
         [Command("-u")]
         [Summary("Unbans the user from the server.")]
         [Remarks("<user> [reason]")]
-        public async Task CommandUnban(KaguyaServerRepository repo, SocketGuildUser user, 
-                                       [Remainder]string reason = "<No reason provided.>")
+        public async Task CommandUnban(SocketGuildUser user, [Remainder]string reason = "<No reason provided.>")
         {
 	        try
 	        {
-		        var server = await repo.GetOrCreateAsync(Context.Guild.Id);
+		        var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
 		        server.TotalAdminActions++;
 
-		        await repo.UpdateAsync(server);
+		        await _ksRepo.UpdateAsync(server);
 		        await Context.Guild.RemoveBanAsync(user);
 
 		        await SendAsync($"{Context.User.Mention} Unbanned user **{user}**.");
@@ -79,9 +79,7 @@ namespace Kaguya.Discord.Commands
         [Command("-t")]
         [Summary("Temporarily bans the user from the server for the time specified.")]
         [Remarks("<user> <duration> [reason]")]
-        
-        public async Task CommandTempban(KaguyaServerRepository ksRepo, TemporaryBanRepository tbRepo, SocketGuildUser user, 
-                                         string timeString, [Remainder]string reason = "<No reason provided.>")
+        public async Task CommandTempban(SocketGuildUser user, string timeString, [Remainder]string reason = "<No reason provided.>")
         {
 	        var timeParser = new TimeParser(timeString);
 	        var parsedTime = timeParser.ParseTime();
@@ -97,10 +95,10 @@ namespace Kaguya.Discord.Commands
 	        {
 		        // TODO: Create temporary ban object, insert into tbRepo.
 
-		        var server = await ksRepo.GetOrCreateAsync(Context.Guild.Id);
+		        var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
 		        server.TotalAdminActions++;
 
-		        await ksRepo.UpdateAsync(server);
+		        await _ksRepo.UpdateAsync(server);
 		        
 		        // TODO: Ensure service watches for new temporary bans and unbans when the time expires.
 

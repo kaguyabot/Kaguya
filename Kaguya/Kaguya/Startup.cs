@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Kaguya.Database.Context;
+using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.options;
 using Kaguya.Options;
@@ -45,13 +46,15 @@ namespace Kaguya
 					          ServerVersion.AutoDetect(Configuration.GetConnectionString("Database")));
 			});
 
+			// TODO: Add user repositories, etc.
+			// All database repositories are added as scoped here.
+			services.AddTransient<KaguyaServerRepository>();
+			
 			services.AddControllers();
 
 			services.AddSingleton(provider =>
 			{
 				var cs = new CommandService();
-				cs.AddModulesAsync(Assembly.GetExecutingAssembly(), provider);
-
 				return cs;
 			});
 			services.AddHostedService<DiscordWorker>();

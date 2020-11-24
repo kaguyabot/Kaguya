@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +11,7 @@ using Discord.Rest;
 using Discord.WebSocket;
 using Kaguya.Database.Context;
 using Kaguya.Database.Model;
+using Kaguya.Database.Repositories;
 using Kaguya.Discord.options;
 using Kaguya.Options;
 using Microsoft.Extensions.Hosting;
@@ -30,8 +33,8 @@ namespace Kaguya.Discord
 		private DiscordShardedClient _client;
 
 		public DiscordWorker(IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
-			ILogger<DiscordWorker> logger,
-			CommandService commandService, DbContextOptions<KaguyaDbContext> dbContextOptions, IServiceProvider serviceProvider)
+			ILogger<DiscordWorker> logger, CommandService commandService, DbContextOptions<KaguyaDbContext> dbContextOptions, 
+			IServiceProvider serviceProvider)
 		{
 			_adminConfigs = adminConfigs;
 			_discordConfigs = discordConfigs;
@@ -45,6 +48,8 @@ namespace Kaguya.Discord
 
 		public async Task StartAsync(CancellationToken cancellationToken)
 		{
+			await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider);
+			
 			var restClient = new DiscordRestClient();
 			await restClient.LoginAsync(TokenType.Bot, _discordConfigs.Value.BotToken);
 			var shards = await restClient.GetRecommendedShardCountAsync();
@@ -128,6 +133,8 @@ namespace Kaguya.Discord
 				{
 					ServerId = guildChannel.Guild.Id
 				})).Entity;
+				
+				await _dbContext.SaveChangesAsync();
 			}
 
 			var user = await _dbContext.Users.AsQueryable().FirstOrDefaultAsync(u => u.UserId == message.Author.Id);
@@ -137,12 +144,14 @@ namespace Kaguya.Discord
 				{
 					UserId = message.Author.Id
 				})).Entity;
+
+				await _dbContext.SaveChangesAsync();
 			}
 
 			if (user.UserId != _adminConfigs.Value.OwnerId)
 			{
 				if (await _dbContext.BlacklistedEntities.AsQueryable().AnyAsync(b =>
-					new[]
+					new []
 					{
 						user.UserId, server.ServerId
 					}.Contains(b.EntityId)))
@@ -158,6 +167,7 @@ namespace Kaguya.Discord
 				return; // If filtered phrase (and user isn't admin), return.
 			}
 
+			// TODO: Implement experience handlers.
 			// await ExperienceHandler.TryAddExp(user, server, commandCtx);
 			// await ServerSpecificExperienceHandler.TryAddExp(user, server, commandCtx);
 
@@ -242,10 +252,75 @@ namespace Kaguya.Discord
 			return Regex.IsMatch(message, $"(?:^|[ ]){wordlet}(?:$|[ ])", RegexOptions.IgnoreCase);
 		}
 
-		private async Task CommandExecutedAsync(Optional<CommandInfo> arg1, ICommandContext arg2, IResult arg3)
+		private async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext ctx, IResult result)
 		{
-			// TODO: implement
-			await Task.CompletedTask;
+			using (var scope = _serviceProvider.CreateScope())
+			{
+				var provider = scope.ServiceProvider;
+				
+				var ksRepo = provider.GetRequiredService<KaguyaServerRepository>();
+				// var userRepo = provider.GetService<KaguyaUserRepository>();
+				// var chRepo = provider.GetService<CommandHistoryRepository>();
+
+				if (!command.IsSpecified)
+				{
+					return;
+				}
+
+				var server = await ksRepo.GetOrCreateAsync(ctx.Guild.Id);
+				int guildShard = _client.GetShardIdFor(ctx.Guild);
+
+				if (result.IsSuccess)
+				{
+					//KaguyaUser user = await userRepo.GetOrCreateAsync(ctx.User.Id);
+
+					//user.ActiveRateLimit++;
+					server.TotalCommandCount++;
+
+					// TODO: Insert new "commandhistory" object to database.
+
+					var logCtxSb = new StringBuilder();
+
+					logCtxSb.AppendLine($"Command Executed [Name: {command.Value.Name} | Message: {ctx.Message}]");
+					logCtxSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
+					logCtxSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
+					logCtxSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id}]");
+					logCtxSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
+
+					_logger.LogInformation(logCtxSb.ToString());
+
+					await _dbContext.SaveChangesAsync();
+				}
+				else
+				{
+					var logErrorSb = new StringBuilder();
+				
+					logErrorSb.AppendLine($"Command Failed [Message: {ctx.Message}]");
+					logErrorSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
+					logErrorSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
+					logErrorSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id}]");
+					logErrorSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
+				
+					_logger.LogDebug(logErrorSb.ToString());
+				
+					// We don't want to spam users with "Unknown command" if they are invoking a 
+					// command from another bot with the same prefix.
+					if (result.Error != CommandError.UnknownCommand)
+					{
+						try
+						{ 
+							await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} There was an error executing the command {command.Value.Name}.\n" +
+							                                   $"Please use `{server.CommandPrefix}help {command.Value.Name}` for " +
+							                                   $"instructions on how to use this command.");
+						}
+						catch (Exception e)
+						{
+							// TODO: Implement auto-eject.
+							// We auto-eject from guilds that don't give us permission to respond to command errors.
+						}
+					}
+				}
+			}
 		}
 
 		#endregion

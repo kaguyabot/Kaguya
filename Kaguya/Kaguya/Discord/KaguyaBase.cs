@@ -7,11 +7,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord
 {
-    public class KaguyaBase : ModuleBase<ShardedCommandContext>
+    public class KaguyaBase<T> : ModuleBase<ShardedCommandContext>
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<T> _logger;
 
-        public KaguyaBase(ILogger logger)
+        protected KaguyaBase(ILogger<T> logger)
         {
             _logger = logger;
         }
