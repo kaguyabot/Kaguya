@@ -48,7 +48,10 @@ namespace Kaguya.Discord
 
 		public async Task StartAsync(CancellationToken cancellationToken)
 		{
-			await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider);
+			using (var scope = _serviceProvider.CreateScope())
+			{
+				await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), scope.ServiceProvider);
+			}
 			
 			var restClient = new DiscordRestClient();
 			await restClient.LoginAsync(TokenType.Bot, _discordConfigs.Value.BotToken);
