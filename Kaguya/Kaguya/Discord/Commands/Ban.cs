@@ -37,16 +37,16 @@ namespace Kaguya.Discord.Commands
                 server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
                 server.TotalAdminActions++;
 
-                await _ksRepo.UpdateAsync(server);
                 await user.BanAsync(reason: reason);
                 
                 await SendAsync($"{Context.User.Mention} Banned **{user}**.");
+                await _ksRepo.UpdateAsync(server);
                 
                 // TODO: Trigger ban event.
             }
             catch (Exception e)
             {
-                await SendAsync($"{Context.User.Mention} Failed to ban user {user}. Error: {e.Message}");
+                await SendAsync($"{Context.User.Mention} Failed to ban user {user}. Do I have enough permissions?\nError: {e.Message}");
                 _logger.LogDebug(e, "Exception encountered with ban in guild " +
                                     $"{(server == null ? "NULL" : server.ServerId)}.");
             }
@@ -54,25 +54,27 @@ namespace Kaguya.Discord.Commands
 
         [Command("-u")]
         [Summary("Unbans the user from the server.")]
-        [Remarks("<user> [reason]")]
-        public async Task CommandUnban(SocketGuildUser user, [Remainder]string reason = "<No reason provided.>")
+        [Remarks("<user id> [reason]")]
+        public async Task CommandUnban(ulong id, [Remainder]string reason = "<No reason provided.>")
         {
 	        try
 	        {
 		        var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
 		        server.TotalAdminActions++;
-
+		        
+		        // Try to get the name of the user for display, if they exist.
+		        
 		        await _ksRepo.UpdateAsync(server);
-		        await Context.Guild.RemoveBanAsync(user);
+		        await Context.Guild.RemoveBanAsync(id);
 
-		        await SendAsync($"{Context.User.Mention} Unbanned user **{user}**.");
+		        await SendAsync($"{Context.User.Mention} Unbanned user **{id}**.");
 
 		        // TODO: Trigger unban event.
 	        }
 	        catch (Exception e)
 	        {
-		        await SendAsync($"{Context.User.Mention} Failed to unban user {user}. Error: {e.Message}");
-		        _logger.LogDebug(e, "Exception encountered with ban in guild IMPLEMENT.");
+		        await SendAsync($"{Context.User.Mention} Failed to unban user {id}. Error: {e.Message}");
+		        _logger.LogDebug(e, $"Exception encountered with ban in guild {Context.Guild}.");
 	        }
         }
 

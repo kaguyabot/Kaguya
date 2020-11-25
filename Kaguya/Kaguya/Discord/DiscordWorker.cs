@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Net;
 using Discord.Rest;
 using Discord.WebSocket;
 using Kaguya.Database.Context;
@@ -102,7 +103,7 @@ namespace Kaguya.Discord
 			{
 				if (logMessage.Exception is CommandException cmdEx)
 				{
-					_logger.Log(LogLevel.Error, cmdEx, "Command exception encountered :(");
+					_logger.Log(LogLevel.Error, cmdEx, $"Exception encountered when executing command. Message: {logMessage.Message}");
 				}
 
 				return Task.CompletedTask;
@@ -289,7 +290,6 @@ namespace Kaguya.Discord
 					logCtxSb.AppendLine($"Command Executed [Name: {command.Value.Name} | Message: {ctx.Message}]");
 					logCtxSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
 					logCtxSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
-					logCtxSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id}]");
 					logCtxSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
 
 					_logger.LogInformation(logCtxSb.ToString());
@@ -303,7 +303,6 @@ namespace Kaguya.Discord
 					logErrorSb.AppendLine($"Command Failed [Message: {ctx.Message}]");
 					logErrorSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
 					logErrorSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
-					logErrorSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id}]");
 					logErrorSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
 				
 					_logger.LogDebug(logErrorSb.ToString());
@@ -313,15 +312,19 @@ namespace Kaguya.Discord
 					if (result.Error != CommandError.UnknownCommand)
 					{
 						try
-						{ 
-							await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} There was an error executing the command {command.Value.Name}.\n" +
-							                                   $"Please use `{server.CommandPrefix}help {command.Value.Name}` for " +
+						{
+							await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} There was an error executing the command {command.Value.Module.Name}.\n" +
+							                                   $"Please use `{server.CommandPrefix}help {command.Value.Module.Name}` for " +
 							                                   $"instructions on how to use this command.");
 						}
-						catch (Exception e)
+						catch (HttpException e)
 						{
 							// TODO: Implement auto-eject.
 							// We auto-eject from guilds that don't give us permission to respond to command errors.
+						}
+						catch (Exception)
+						{
+							_logger.LogError($"Failed to send message in guild {ctx.Guild.Id} due to an exception.");
 						}
 					}
 				}

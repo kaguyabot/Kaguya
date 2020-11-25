@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using Kaguya.Database.Context;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
@@ -57,6 +58,7 @@ namespace Kaguya
 				var cs = new CommandService();
 				return cs;
 			});
+
 			services.AddHostedService<DiscordWorker>();
 		}
 
