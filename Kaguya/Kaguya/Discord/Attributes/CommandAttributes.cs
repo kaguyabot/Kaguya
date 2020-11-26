@@ -12,13 +12,14 @@ namespace Kaguya.Discord.Attributes
 		Music,
 		Nsfw,
 		Osu,
-		Utility
+		Utility,
+		Configuration
 	}
 
 	[AttributeUsage(AttributeTargets.Class)]
 	internal class ModuleAttribute : Attribute
 	{
-		public CommandModule Module { get; private set; }
+		public CommandModule Module { get; }
 		public ModuleAttribute(CommandModule module) => Module = module;
 	}
 }

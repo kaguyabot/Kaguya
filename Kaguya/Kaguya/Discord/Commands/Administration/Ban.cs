@@ -11,7 +11,7 @@ using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Parsers;
 using Microsoft.Extensions.Logging;
 
-namespace Kaguya.Discord.Commands
+namespace Kaguya.Discord.Commands.Administration
 {
 	[Module(CommandModule.Administration)]
     [Group("ban")]
@@ -41,7 +41,6 @@ namespace Kaguya.Discord.Commands
             try
             {
 	            await BanAsync(user, reason);
-
 	            await SendAsync($"{Context.User.Mention} Banned **{user}**.");
                 
                 // TODO: Trigger ban event.

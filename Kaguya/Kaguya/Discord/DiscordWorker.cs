@@ -272,6 +272,18 @@ namespace Kaguya.Discord
 					server.TotalCommandCount++;
 
 					// TODO: Insert new "commandhistory" object to database.
+					var ch = new CommandHistory
+					         {
+						         UserId = ctx.User.Id,
+						         ServerId = ctx.Guild.Id,
+						         CommandName = command.Value.GetFullCommandName(),
+						         Message = ctx.Message.Content,
+						         ExecutedSuccessfully = true,
+						         ExecutionTime = DateTime.Now
+					         };
+
+					_dbContext.CommandHistories.Add(ch);
+					await _dbContext.SaveChangesAsync();					         
 
 					var logCtxSb = new StringBuilder();
 
@@ -281,8 +293,6 @@ namespace Kaguya.Discord
 					logCtxSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
 
 					_logger.LogInformation(logCtxSb.ToString());
-
-					await _dbContext.SaveChangesAsync();
 				}
 				else
 				{

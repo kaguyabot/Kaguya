@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using Discord;
+using Discord.Commands;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord
@@ -18,6 +21,20 @@ namespace Kaguya.Discord
                 LogSeverity.Debug => LogLevel.Debug,
                 _ => throw new ArgumentOutOfRangeException(nameof(severity), severity, null)
             };
+        }
+
+        /// <summary>
+        /// Returns the full name of the command. This is the group name + any additional commands in the group.
+        /// Example: [Group("ban")] [Command("-u")] for a command returns "ban -u".
+        /// </summary>
+        /// <param name="cmdInfo"></param>
+        /// <returns></returns>
+        public static string GetFullCommandName(this CommandInfo cmdInfo)
+        {
+	        return new StringBuilder(cmdInfo.Module.Group)
+	               .Append(" ")
+	               .Append(cmdInfo.Module.Commands.FirstOrDefault(x => x.Name == cmdInfo.Name))
+	               .ToString();
         }
     }
 }
