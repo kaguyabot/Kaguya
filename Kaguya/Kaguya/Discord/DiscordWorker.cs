@@ -8,18 +8,17 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.Net;
-using Discord.Rest;
 using Discord.WebSocket;
 using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.options;
 using Kaguya.Options;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Kaguya.Discord
 {
@@ -31,12 +30,13 @@ namespace Kaguya.Discord
 		private readonly CommandService _commandService;
 		private readonly KaguyaDbContext _dbContext;
 		private readonly IServiceProvider _serviceProvider;
-		private DiscordShardedClient _client;
+		private readonly DiscordShardedClient _client;
 
-		public DiscordWorker(IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
+		public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
 			ILogger<DiscordWorker> logger, CommandService commandService, DbContextOptions<KaguyaDbContext> dbContextOptions, 
 			IServiceProvider serviceProvider)
 		{
+			_client = client;
 			_adminConfigs = adminConfigs;
 			_discordConfigs = discordConfigs;
 			_logger = logger;
@@ -54,18 +54,6 @@ namespace Kaguya.Discord
 				await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), scope.ServiceProvider);
 			}
 			
-			var restClient = new DiscordRestClient();
-			await restClient.LoginAsync(TokenType.Bot, _discordConfigs.Value.BotToken);
-			var shards = await restClient.GetRecommendedShardCountAsync();
-
-			_client = new DiscordShardedClient(new DiscordSocketConfig
-			{
-				AlwaysDownloadUsers = _discordConfigs.Value.AlwaysDownloadUsers ?? true,
-				MessageCacheSize = _discordConfigs.Value.MessageCacheSize ?? 50,
-				TotalShards = shards,
-				LogLevel = LogSeverity.Debug
-			});
-
 			_client.Log += logMessage =>
 			{
 				_logger.Log(logMessage.Severity.ToLogLevel(), logMessage.Exception, logMessage.Message);
