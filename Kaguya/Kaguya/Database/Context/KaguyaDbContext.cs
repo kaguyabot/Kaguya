@@ -12,9 +12,9 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Context
 {
-
 	public partial class KaguyaDbContext : DbContext
 	{
+		public DbSet<AdminAction> AdminActions { get; set; }
 		public DbSet<KaguyaServer> Servers { get; set; }
 		public DbSet<KaguyaUser> Users { get; set; }
 		public DbSet<BlacklistedEntity> BlacklistedEntities { get; set; }
@@ -35,7 +35,7 @@ namespace Kaguya.Database.Context
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			OnModelCreatingPartial(modelBuilder);
-			modelBuilder.Entity<WordFilter>().HasKey(w => new {w.ServerId, w.Word});
+			modelBuilder.Entity<WordFilter>().HasKey(w => new { w.ServerId, w.Word });
 		}
 
 		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

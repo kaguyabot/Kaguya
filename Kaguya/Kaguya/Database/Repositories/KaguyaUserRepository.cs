@@ -52,7 +52,13 @@ namespace Kaguya.Database.Repositories
 
 			return updated;
 		}
-		
+
+		public async Task InsertAsync(KaguyaUser value)
+		{ 
+			_dbContext.Users.Add(value);
+			await _dbContext.SaveChangesAsync();
+		}
+
 		public async Task<KaguyaUser> GetOrCreateAsync(ulong id)
 		{
 			var user = await GetAsync(id);

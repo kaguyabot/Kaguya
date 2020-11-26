@@ -8,6 +8,7 @@ using Discord.Commands;
 using Discord.Rest;
 using Discord.WebSocket;
 using Kaguya.Database.Context;
+using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.options;
@@ -52,6 +53,8 @@ namespace Kaguya
 			// TODO: Add user repositories, etc.
 			// All database repositories are added as scoped here.
 			services.AddScoped<KaguyaServerRepository>();
+			services.AddScoped<KaguyaUserRepository>();
+			services.AddScoped<AdminActionRepository>();
 			
 			services.AddControllers();
 

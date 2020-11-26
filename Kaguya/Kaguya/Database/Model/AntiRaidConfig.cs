@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Kaguya.Database.Model
 {
 	public class AntiRaidConfig
 	{
 		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public ulong ServerId { get; set; }
 
 		public int Users { get; set; }

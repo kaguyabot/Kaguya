@@ -8,6 +8,7 @@ namespace Kaguya.Database.Model
 	public class KaguyaServer
 	{
 		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public ulong ServerId { get; set; }
 
 		[NotNull]
