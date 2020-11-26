@@ -6,13 +6,14 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Attributes;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Parsers;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands
 {
-	// TODO: Categorize as AdministrationCommand with attribute [AdminCommand]
+	[Module(CommandModule.Administration)]
     [Group("ban")]
     [Alias("b")]
     [RequireUserPermission(GuildPermission.BanMembers)]
@@ -20,15 +21,13 @@ namespace Kaguya.Discord.Commands
     public class Ban : KaguyaBase<Ban>
     {
         private readonly ILogger<Ban> _logger;
-        private readonly DiscordShardedClient _client;
         private readonly KaguyaServerRepository _ksRepo;
         private readonly AdminActionRepository _aaRepo;
 
-        public Ban(ILogger<Ban> logger, DiscordShardedClient client, KaguyaServerRepository ksRepo,
+        public Ban(ILogger<Ban> logger, KaguyaServerRepository ksRepo,
                    AdminActionRepository aaRepo) : base(logger)
         {
 	        _logger = logger;
-	        _client = client;
 	        _ksRepo = ksRepo;
 	        _aaRepo = aaRepo;
         }

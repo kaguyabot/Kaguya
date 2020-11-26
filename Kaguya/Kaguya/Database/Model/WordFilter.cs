@@ -20,5 +20,7 @@ namespace Kaguya.Database.Model
 		public string Word { get; set; }
 
 		public FilterReactionEnum FilterReaction { get; set; }
+		// TODO: Needs testing for formatting. Is this how this should be implemented?
+		public string FilterReactionString => FilterReaction.ToString();
 	}
 }

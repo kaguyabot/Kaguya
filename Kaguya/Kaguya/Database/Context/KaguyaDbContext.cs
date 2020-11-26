@@ -15,9 +15,10 @@ namespace Kaguya.Database.Context
 	public partial class KaguyaDbContext : DbContext
 	{
 		public DbSet<AdminAction> AdminActions { get; set; }
+		public DbSet<BlacklistedEntity> BlacklistedEntities { get; set; }
+		public DbSet<CommandHistory> CommandHistories { get; set; }
 		public DbSet<KaguyaServer> Servers { get; set; }
 		public DbSet<KaguyaUser> Users { get; set; }
-		public DbSet<BlacklistedEntity> BlacklistedEntities { get; set; }
 		public DbSet<WordFilter> WordFilters { get; set; }
 
 		public KaguyaDbContext(DbContextOptions<KaguyaDbContext> options)
