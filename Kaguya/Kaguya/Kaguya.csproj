@@ -5,10 +5,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Discord.Net" Version="2.3.0-dev-20201119.4" />
-        <PackageReference Include="Discord.Net.Commands" Version="2.3.0-dev-20201119.4" />
-        <PackageReference Include="Discord.Net.Core" Version="2.3.0-dev-20201119.4" />
-        <PackageReference Include="Discord.Net.WebSocket" Version="2.3.0-dev-20201119.4" />
+        <PackageReference Include="Discord.Net" Version="2.3.0-dev-20201122.3" />
+        <PackageReference Include="Discord.Net.Commands" Version="2.3.0-dev-20201122.3" />
+        <PackageReference Include="Discord.Net.Core" Version="2.3.0-dev-20201122.3" />
+        <PackageReference Include="Discord.Net.WebSocket" Version="2.3.0-dev-20201122.3" />
+        <PackageReference Include="Humanizer" Version="2.8.26" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" NoWarn="NU1605" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
@@ -25,7 +26,6 @@
 
     <ItemGroup>
       <Folder Include="Discord\Commands" />
-      <Folder Include="Migrations" />
     </ItemGroup>
 
 </Project>

@@ -7,11 +7,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord
 {
-    public class KaguyaBase : ModuleBase<ShardedCommandContext>
+    public class KaguyaBase<T> : ModuleBase<ShardedCommandContext>
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<T> _logger;
 
-        public KaguyaBase(ILogger logger)
+        protected KaguyaBase(ILogger<T> logger)
         {
             _logger = logger;
         }
@@ -72,13 +72,22 @@ namespace Kaguya.Discord
         }
 
         /// <summary>
-        /// Sends a standard chat message.
+        /// Sends a standard chat message. If the message could not be sent, this method will return null.
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
         protected async Task<RestUserMessage> SendAsync(string message)
         {
-	        return await Context.Channel.SendMessageAsync(message);
+            try
+            {
+                return await Context.Channel.SendMessageAsync(message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Could not send message to channel [{Context.Channel} | {Context.Channel.Id}] " +
+                                 $"in guild [{Context.Guild} | {Context.Guild.Id}]");
+                return null;
+            }
         }
     }
 }

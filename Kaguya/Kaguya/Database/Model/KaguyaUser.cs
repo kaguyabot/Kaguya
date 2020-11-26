@@ -14,6 +14,7 @@ namespace Kaguya.Database.Model
 	public class KaguyaUser
 	{
 		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public ulong UserId { get; set; }
 
 		public int Experience { get; set; } = 0;

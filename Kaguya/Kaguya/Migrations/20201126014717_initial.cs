@@ -4,16 +4,32 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Kaguya.Migrations
 {
-    public partial class _202011221043_initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AdminActions",
+                columns: table => new
+                {
+                    Id = table.Column<uint>(type: "int unsigned", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ServerId = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    ModeratorId = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    ActionedUserId = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    Action = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    Expiration = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdminActions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BlacklistedEntities",
                 columns: table => new
                 {
-                    EntityId = table.Column<ulong>(type: "bigint unsigned", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    EntityId = table.Column<ulong>(type: "bigint unsigned", nullable: false),
                     EntityType = table.Column<int>(type: "int", nullable: false),
                     ExpirationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     Reason = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true)
@@ -27,14 +43,12 @@ namespace Kaguya.Migrations
                 name: "Servers",
                 columns: table => new
                 {
-                    ServerId = table.Column<ulong>(type: "bigint unsigned", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ServerId = table.Column<ulong>(type: "bigint unsigned", nullable: false),
                     CommandPrefix = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
                     TotalCommandCount = table.Column<int>(type: "int", nullable: false),
                     TotalAdminActions = table.Column<int>(type: "int", nullable: false),
                     PraiseCooldown = table.Column<int>(type: "int", nullable: false),
                     NextQuoteId = table.Column<int>(type: "int", nullable: false),
-                    DoYouLikeColumns = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     PremiumExpiration = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     IsCurrentlyPurgingMessages = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CustomGreeting = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
@@ -51,8 +65,7 @@ namespace Kaguya.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<ulong>(type: "bigint unsigned", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<ulong>(type: "bigint unsigned", nullable: false),
                     Experience = table.Column<int>(type: "int", nullable: false),
                     FishExp = table.Column<int>(type: "int", nullable: false),
                     Points = table.Column<int>(type: "int", nullable: false),
@@ -114,6 +127,9 @@ namespace Kaguya.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AdminActions");
+
             migrationBuilder.DropTable(
                 name: "AntiRaidConfig");
 

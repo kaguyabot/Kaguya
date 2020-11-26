@@ -6,7 +6,7 @@ using Xunit;
 
 namespace KaguyaTests
 {
-    public class WordFiltersCaseSensitive
+    public class TestWordFilterCaseSensitive
     {
         [Theory]
         [InlineData("the quick brown fox jumped over the lazy dog", "the")]

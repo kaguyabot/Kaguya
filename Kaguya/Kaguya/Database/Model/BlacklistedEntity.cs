@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Kaguya.Database.Model
@@ -14,6 +15,7 @@ namespace Kaguya.Database.Model
 	public class BlacklistedEntity
 	{
 		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public ulong EntityId { get; set; }
 		public BlacklistedEntityType EntityType { get; set; }
 		// null = forever muwahahaha

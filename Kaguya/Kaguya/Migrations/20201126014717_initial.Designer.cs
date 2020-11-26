@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    [Migration("20201122164552_202011221043_initial")]
-    partial class _202011221043_initial
+    [Migration("20201126014717_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,6 +18,32 @@ namespace Kaguya.Migrations
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.0");
+
+            modelBuilder.Entity("Kaguya.Database.Model.AdminAction", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int unsigned");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<ulong>("ActionedUserId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<ulong>("ModeratorId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<ulong>("ServerId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdminActions");
+                });
 
             modelBuilder.Entity("Kaguya.Database.Model.AntiRaidConfig", b =>
                 {
@@ -47,7 +73,6 @@ namespace Kaguya.Migrations
             modelBuilder.Entity("Kaguya.Database.Model.BlacklistedEntity", b =>
                 {
                     b.Property<ulong>("EntityId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
                     b.Property<int>("EntityType")
@@ -67,7 +92,6 @@ namespace Kaguya.Migrations
             modelBuilder.Entity("Kaguya.Database.Model.KaguyaServer", b =>
                 {
                     b.Property<ulong>("ServerId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
                     b.Property<string>("CommandPrefix")
@@ -77,9 +101,6 @@ namespace Kaguya.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("CustomGreetingIsEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("DoYouLikeColumns")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsCurrentlyPurgingMessages")
@@ -114,7 +135,6 @@ namespace Kaguya.Migrations
             modelBuilder.Entity("Kaguya.Database.Model.KaguyaUser", b =>
                 {
                     b.Property<ulong>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
                     b.Property<int>("ActiveRateLimit")
