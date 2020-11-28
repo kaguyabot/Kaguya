@@ -86,6 +86,17 @@ namespace Kaguya.Discord.Commands.Administration
 		        var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
 		        server.TotalAdminActions++;
 		        
+		        var adminAction = new AdminAction
+		                          {
+			                          ServerId = Context.Guild.Id,
+			                          ModeratorId = Context.User.Id,
+			                          ActionedUserId = id,
+			                          Action = AdminAction.UNBAN_ACTION,
+			                          Expiration = null
+		                          };
+
+		        await _aaRepo.InsertAsync(adminAction);
+		        
 		        // Try to get the name of the user for display, if they exist.
 		        var actionedUser = await Context.Guild.GetBanAsync(id);
 		        

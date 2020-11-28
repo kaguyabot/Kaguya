@@ -87,6 +87,38 @@ namespace Kaguya.Migrations
                     b.ToTable("BlacklistedEntities");
                 });
 
+            modelBuilder.Entity("Kaguya.Database.Model.CommandHistory", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int unsigned");
+
+                    b.Property<string>("CommandName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("ExecutedSuccessfully")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("ExecutionTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<ulong>("ServerId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<ulong>("UserId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CommandHistories");
+                });
+
             modelBuilder.Entity("Kaguya.Database.Model.KaguyaServer", b =>
                 {
                     b.Property<ulong>("ServerId")

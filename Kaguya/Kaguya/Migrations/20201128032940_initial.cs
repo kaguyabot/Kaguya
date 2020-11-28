@@ -40,6 +40,25 @@ namespace Kaguya.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CommandHistories",
+                columns: table => new
+                {
+                    Id = table.Column<uint>(type: "int unsigned", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    ServerId = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    CommandName = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    Message = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    ExecutedSuccessfully = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ErrorMessage = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    ExecutionTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommandHistories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Servers",
                 columns: table => new
                 {
@@ -135,6 +154,9 @@ namespace Kaguya.Migrations
 
             migrationBuilder.DropTable(
                 name: "BlacklistedEntities");
+
+            migrationBuilder.DropTable(
+                name: "CommandHistories");
 
             migrationBuilder.DropTable(
                 name: "Users");

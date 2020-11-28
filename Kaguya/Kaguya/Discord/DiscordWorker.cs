@@ -264,26 +264,26 @@ namespace Kaguya.Discord
 				var server = await ksRepo.GetOrCreateAsync(ctx.Guild.Id);
 				int guildShard = _client.GetShardIdFor(ctx.Guild);
 
+				CommandHistory ch = null;
+				if (command.GetValueOrDefault() != null)
+				{
+					ch = new CommandHistory 
+					     {
+						     UserId = ctx.User.Id, 
+						     ServerId = ctx.Guild.Id, 
+						     CommandName = command.Value.GetFullCommandName(), 
+						     Message = ctx.Message.Content, 
+						     ExecutedSuccessfully = true, 
+						     ExecutionTime = DateTime.Now
+					     };
+				}
+					
 				if (result.IsSuccess)
 				{
 					//KaguyaUser user = await userRepo.GetOrCreateAsync(ctx.User.Id);
 
 					//user.ActiveRateLimit++;
 					server.TotalCommandCount++;
-
-					// TODO: Insert new "commandhistory" object to database.
-					var ch = new CommandHistory
-					         {
-						         UserId = ctx.User.Id,
-						         ServerId = ctx.Guild.Id,
-						         CommandName = command.Value.GetFullCommandName(),
-						         Message = ctx.Message.Content,
-						         ExecutedSuccessfully = true,
-						         ExecutionTime = DateTime.Now
-					         };
-
-					_dbContext.CommandHistories.Add(ch);
-					await _dbContext.SaveChangesAsync();					         
 
 					var logCtxSb = new StringBuilder();
 
@@ -309,6 +309,11 @@ namespace Kaguya.Discord
 					// command from another bot with the same prefix.
 					if (result.Error != CommandError.UnknownCommand)
 					{
+						if (ch != null)
+						{
+							ch.ExecutedSuccessfully = false;
+						}
+						
 						try
 						{
 							await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} There was an error executing the command {command.Value.Module.Name}.\n" +
@@ -326,6 +331,13 @@ namespace Kaguya.Discord
 						}
 					}
 				}
+
+				if (ch != null)
+				{
+					_dbContext.CommandHistories.Add(ch);
+				}
+				
+				await _dbContext.SaveChangesAsync();
 			}
 		}
 

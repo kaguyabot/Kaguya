@@ -29,12 +29,6 @@ namespace Kaguya.Discord
         /// </summary>
         /// <param name="cmdInfo"></param>
         /// <returns></returns>
-        public static string GetFullCommandName(this CommandInfo cmdInfo)
-        {
-	        return new StringBuilder(cmdInfo.Module.Group)
-	               .Append(" ")
-	               .Append(cmdInfo.Module.Commands.FirstOrDefault(x => x.Name == cmdInfo.Name))
-	               .ToString();
-        }
+        public static string GetFullCommandName(this CommandInfo cmdInfo) => cmdInfo.Aliases[0];
     }
 }

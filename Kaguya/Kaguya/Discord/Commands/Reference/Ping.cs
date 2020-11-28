@@ -25,7 +25,7 @@ namespace Kaguya.Discord.Commands.Reference
 		public async Task CommandPing()
 		{
 			string latency = (_client.Latency.ToString("N0") + "ms").AsBold();
-			await SendAsync($"{Context.User.Mention} Latency: {latency}");
+			await SendAsync($"{Context.User.Mention} 🏓 Pong! Latency: {latency}");
 		}
 	}
 }

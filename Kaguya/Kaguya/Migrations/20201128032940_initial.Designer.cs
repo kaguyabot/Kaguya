@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    [Migration("20201126014717_initial")]
+    [Migration("20201128032940_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,38 @@ namespace Kaguya.Migrations
                     b.HasKey("EntityId");
 
                     b.ToTable("BlacklistedEntities");
+                });
+
+            modelBuilder.Entity("Kaguya.Database.Model.CommandHistory", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int unsigned");
+
+                    b.Property<string>("CommandName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("ExecutedSuccessfully")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("ExecutionTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<ulong>("ServerId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<ulong>("UserId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CommandHistories");
                 });
 
             modelBuilder.Entity("Kaguya.Database.Model.KaguyaServer", b =>
