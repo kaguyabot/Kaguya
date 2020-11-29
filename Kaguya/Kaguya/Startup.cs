@@ -7,6 +7,7 @@ using Discord;
 using Discord.Commands;
 using Discord.Rest;
 using Discord.WebSocket;
+using Interactivity;
 using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
@@ -30,6 +31,8 @@ namespace Kaguya
 {
 	public class Startup
 	{
+		private DiscordShardedClient _client;
+		
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -49,7 +52,7 @@ namespace Kaguya
 					.UseMySql(Configuration.GetConnectionString("Database"),
 					          ServerVersion.AutoDetect(Configuration.GetConnectionString("Database")));
 			});
-
+			
 			// TODO: Add user repositories, etc.
 			// All database repositories are added as scoped here.
 			services.AddScoped<KaguyaServerRepository>();
@@ -72,15 +75,18 @@ namespace Kaguya
 				restClient.LoginAsync(TokenType.Bot, discordConfigs.Value.BotToken).GetAwaiter().GetResult();
 				var shards = restClient.GetRecommendedShardCountAsync().GetAwaiter().GetResult();
 				
-				return new DiscordShardedClient(new DiscordSocketConfig
+				_client = new DiscordShardedClient(new DiscordSocketConfig
 							                    {
 							                        AlwaysDownloadUsers = discordConfigs.Value.AlwaysDownloadUsers ?? true,
 							                        MessageCacheSize = discordConfigs.Value.MessageCacheSize ?? 50,
 							                        TotalShards = shards,
 							                        LogLevel = LogSeverity.Debug
 							                    });
+
+				return _client;
 			});
 
+			services.AddSingleton(new InteractivityService(_client, TimeSpan.FromMinutes(5)));
 			services.AddHostedService<DiscordWorker>();
 		}
 
