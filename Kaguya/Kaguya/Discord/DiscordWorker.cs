@@ -33,15 +33,15 @@ namespace Kaguya.Discord
 		private readonly DiscordShardedClient _client;
 
 		public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
-			ILogger<DiscordWorker> logger, CommandService commandService, DbContextOptions<KaguyaDbContext> dbContextOptions, 
+			ILogger<DiscordWorker> logger, KaguyaDbContext dbContext, CommandService commandService, DbContextOptions<KaguyaDbContext> dbContextOptions, 
 			IServiceProvider serviceProvider)
 		{
 			_client = client;
 			_adminConfigs = adminConfigs;
 			_discordConfigs = discordConfigs;
 			_logger = logger;
+			_dbContext = dbContext;
 			_commandService = commandService;
-			_dbContext = new KaguyaDbContext(dbContextOptions);
 			_serviceProvider = serviceProvider;
 			// TODO: add emote type handler 
 			// TODO: add socket guild user list type handler
@@ -49,10 +49,7 @@ namespace Kaguya.Discord
 
 		public async Task StartAsync(CancellationToken cancellationToken)
 		{
-			using (var scope = _serviceProvider.CreateScope())
-			{
-				await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), scope.ServiceProvider);
-			}
+			await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider);
 			
 			_client.Log += logMessage =>
 			{
@@ -193,9 +190,7 @@ namespace Kaguya.Discord
 				return;
 			}
 
-			using (var commandScope = _serviceProvider.CreateScope()) {
-				await _commandService.ExecuteAsync(commandCtx, argPos, commandScope.ServiceProvider);
-			}
+			await _commandService.ExecuteAsync(commandCtx, argPos, _serviceProvider);
 		}
 
 		private async Task<bool> CheckFilteredPhrase(ICommandContext commandCtx, KaguyaServer server, IMessage message)
@@ -248,97 +243,92 @@ namespace Kaguya.Discord
 
 		private async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext ctx, IResult result)
 		{
-			using (var scope = _serviceProvider.CreateScope())
+			var ksRepo = _serviceProvider.GetRequiredService<KaguyaServerRepository>();
+			// var userRepo = provider.GetService<KaguyaUserRepository>();
+			// var chRepo = provider.GetService<CommandHistoryRepository>();
+
+			if (!command.IsSpecified)
 			{
-				var provider = scope.ServiceProvider;
+				return;
+			}
+
+			var server = await ksRepo.GetOrCreateAsync(ctx.Guild.Id);
+			int guildShard = _client.GetShardIdFor(ctx.Guild);
+
+			CommandHistory ch = null;
+			if (command.GetValueOrDefault() != null)
+			{
+				ch = new CommandHistory 
+				     {
+					     UserId = ctx.User.Id, 
+					     ServerId = ctx.Guild.Id, 
+					     CommandName = command.Value.GetFullCommandName(), 
+					     Message = ctx.Message.Content, 
+					     ExecutedSuccessfully = true, 
+					     ExecutionTime = DateTime.Now
+				     };
+			}
 				
-				var ksRepo = provider.GetRequiredService<KaguyaServerRepository>();
-				// var userRepo = provider.GetService<KaguyaUserRepository>();
-				// var chRepo = provider.GetService<CommandHistoryRepository>();
+			if (result.IsSuccess)
+			{
+				//KaguyaUser user = await userRepo.GetOrCreateAsync(ctx.User.Id);
 
-				if (!command.IsSpecified)
+				//user.ActiveRateLimit++;
+				server.TotalCommandCount++;
+
+				var logCtxSb = new StringBuilder();
+
+				logCtxSb.AppendLine($"Command Executed [Name: {command.Value.Name} | Message: {ctx.Message}]");
+				logCtxSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
+				logCtxSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
+				logCtxSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
+
+				_logger.LogInformation(logCtxSb.ToString());
+			}
+			else
+			{
+				var logErrorSb = new StringBuilder();
+			
+				logErrorSb.AppendLine($"Command Failed [Message: {ctx.Message}]");
+				logErrorSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
+				logErrorSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
+				logErrorSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
+			
+				_logger.LogDebug(logErrorSb.ToString());
+			
+				// We don't want to spam users with "Unknown command" if they are invoking a 
+				// command from another bot with the same prefix.
+				if (result.Error != CommandError.UnknownCommand)
 				{
-					return;
-				}
-
-				var server = await ksRepo.GetOrCreateAsync(ctx.Guild.Id);
-				int guildShard = _client.GetShardIdFor(ctx.Guild);
-
-				CommandHistory ch = null;
-				if (command.GetValueOrDefault() != null)
-				{
-					ch = new CommandHistory 
-					     {
-						     UserId = ctx.User.Id, 
-						     ServerId = ctx.Guild.Id, 
-						     CommandName = command.Value.GetFullCommandName(), 
-						     Message = ctx.Message.Content, 
-						     ExecutedSuccessfully = true, 
-						     ExecutionTime = DateTime.Now
-					     };
-				}
-					
-				if (result.IsSuccess)
-				{
-					//KaguyaUser user = await userRepo.GetOrCreateAsync(ctx.User.Id);
-
-					//user.ActiveRateLimit++;
-					server.TotalCommandCount++;
-
-					var logCtxSb = new StringBuilder();
-
-					logCtxSb.AppendLine($"Command Executed [Name: {command.Value.Name} | Message: {ctx.Message}]");
-					logCtxSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
-					logCtxSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
-					logCtxSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
-
-					_logger.LogInformation(logCtxSb.ToString());
-				}
-				else
-				{
-					var logErrorSb = new StringBuilder();
-				
-					logErrorSb.AppendLine($"Command Failed [Message: {ctx.Message}]");
-					logErrorSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
-					logErrorSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
-					logErrorSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
-				
-					_logger.LogDebug(logErrorSb.ToString());
-				
-					// We don't want to spam users with "Unknown command" if they are invoking a 
-					// command from another bot with the same prefix.
-					if (result.Error != CommandError.UnknownCommand)
+					if (ch != null)
 					{
-						if (ch != null)
-						{
-							ch.ExecutedSuccessfully = false;
-						}
-						
-						try
-						{
-							await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} There was an error executing the command {command.Value.Module.Name}.\n" +
-							                                   $"Please use `{server.CommandPrefix}help {command.Value.Module.Name}` for " +
-							                                   $"instructions on how to use this command.");
-						}
-						catch (HttpException e)
-						{
-							// TODO: Implement auto-eject.
-							// We auto-eject from guilds that don't give us permission to respond to command errors.
-						}
-						catch (Exception)
-						{
-							_logger.LogError($"Failed to send message in guild {ctx.Guild.Id} due to an exception.");
-						}
+						ch.ExecutedSuccessfully = false;
+					}
+					
+					try
+					{
+						await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} There was an error executing the command {command.Value.Module.Name}.\n" +
+						                                   $"Please use `{server.CommandPrefix}help {command.Value.Module.Name}` for " +
+						                                   $"instructions on how to use this command.");
+					}
+					catch (HttpException e)
+					{
+						// TODO: Implement auto-eject.
+						// We auto-eject from guilds that don't give us permission to respond to command errors.
+					}
+					catch (Exception)
+					{
+						_logger.LogError($"Failed to send message in guild {ctx.Guild.Id} due to an exception.");
 					}
 				}
-
-				if (ch != null)
-				{
-					_dbContext.CommandHistories.Add(ch);
-				}
-				
-				await _dbContext.SaveChangesAsync();
 			}
+
+			if (ch != null)
+			{
+				_dbContext.CommandHistories.Add(ch);
+			}
+			
+			await _dbContext.SaveChangesAsync();
 		}
 
 		#endregion

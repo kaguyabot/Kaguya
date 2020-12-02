@@ -53,11 +53,11 @@ namespace Kaguya
 			
 			// TODO: Add user repositories, etc.
 			// All database repositories are added as scoped here.
-			services.AddScoped<KaguyaServerRepository>();
-			services.AddScoped<KaguyaUserRepository>();
-			services.AddScoped<AdminActionRepository>();
-			services.AddScoped<WordFilterRepository>();
-			services.AddScoped<CommandHistoryRepository>();
+			services.AddTransient<KaguyaServerRepository>();
+			services.AddTransient<KaguyaUserRepository>();
+			services.AddTransient<AdminActionRepository>();
+			services.AddTransient<WordFilterRepository>();
+			services.AddTransient<CommandHistoryRepository>();
 			
 			services.AddControllers();
 
