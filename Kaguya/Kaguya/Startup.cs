@@ -48,8 +48,8 @@ namespace Kaguya
 			{
 				builder
 					.UseMySql(Configuration.GetConnectionString("Database"),
-					          ServerVersion.AutoDetect(Configuration.GetConnectionString("Database")));
-			});
+						ServerVersion.AutoDetect(Configuration.GetConnectionString("Database")));
+			}, ServiceLifetime.Transient);
 			
 			// TODO: Add user repositories, etc.
 			// All database repositories are added as scoped here.
