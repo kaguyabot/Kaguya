@@ -31,8 +31,6 @@ namespace Kaguya
 {
 	public class Startup
 	{
-		private DiscordShardedClient _client;
-		
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -58,6 +56,8 @@ namespace Kaguya
 			services.AddScoped<KaguyaServerRepository>();
 			services.AddScoped<KaguyaUserRepository>();
 			services.AddScoped<AdminActionRepository>();
+			services.AddScoped<WordFilterRepository>();
+			services.AddScoped<CommandHistoryRepository>();
 			
 			services.AddControllers();
 
@@ -73,9 +73,9 @@ namespace Kaguya
 
 				var restClient = new DiscordRestClient();
 				restClient.LoginAsync(TokenType.Bot, discordConfigs.Value.BotToken).GetAwaiter().GetResult();
-				var shards = restClient.GetRecommendedShardCountAsync().GetAwaiter().GetResult();
+				int shards = restClient.GetRecommendedShardCountAsync().GetAwaiter().GetResult();
 				
-				_client = new DiscordShardedClient(new DiscordSocketConfig
+				var _client = new DiscordShardedClient(new DiscordSocketConfig
 							                    {
 							                        AlwaysDownloadUsers = discordConfigs.Value.AlwaysDownloadUsers ?? true,
 							                        MessageCacheSize = discordConfigs.Value.MessageCacheSize ?? 50,
@@ -86,7 +86,12 @@ namespace Kaguya
 				return _client;
 			});
 
-			services.AddSingleton(new InteractivityService(_client, TimeSpan.FromMinutes(5)));
+			services.AddSingleton(provider =>
+			{
+				var client = provider.GetRequiredService<DiscordShardedClient>();
+				return new InteractivityService(client, TimeSpan.FromMinutes(5));
+			});
+			
 			services.AddHostedService<DiscordWorker>();
 		}
 

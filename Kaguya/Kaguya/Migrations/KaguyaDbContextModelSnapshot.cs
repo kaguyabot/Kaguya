@@ -119,6 +119,22 @@ namespace Kaguya.Migrations
                     b.ToTable("CommandHistories");
                 });
 
+            modelBuilder.Entity("Kaguya.Database.Model.FilteredWord", b =>
+                {
+                    b.Property<ulong>("ServerId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<string>("Word")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<int>("FilterReaction")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServerId", "Word");
+
+                    b.ToTable("FilteredWords");
+                });
+
             modelBuilder.Entity("Kaguya.Database.Model.KaguyaServer", b =>
                 {
                     b.Property<ulong>("ServerId")
@@ -221,22 +237,6 @@ namespace Kaguya.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Kaguya.Database.Model.WordFilter", b =>
-                {
-                    b.Property<ulong>("ServerId")
-                        .HasColumnType("bigint unsigned");
-
-                    b.Property<string>("Word")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<int>("FilterReaction")
-                        .HasColumnType("int");
-
-                    b.HasKey("ServerId", "Word");
-
-                    b.ToTable("WordFilters");
                 });
 
             modelBuilder.Entity("Kaguya.Database.Model.AntiRaidConfig", b =>

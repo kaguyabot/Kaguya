@@ -59,7 +59,7 @@ namespace Kaguya.Discord.Commands.Reference
                             .WithDefaultEmotes()
                             .WithFooter(PaginatorFooter.PageNumber | PaginatorFooter.Users)
                             .Build();
-            
+
             await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(2));
         }
 

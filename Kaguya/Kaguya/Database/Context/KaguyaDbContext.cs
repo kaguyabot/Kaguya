@@ -19,7 +19,7 @@ namespace Kaguya.Database.Context
 		public DbSet<CommandHistory> CommandHistories { get; set; }
 		public DbSet<KaguyaServer> Servers { get; set; }
 		public DbSet<KaguyaUser> Users { get; set; }
-		public DbSet<WordFilter> WordFilters { get; set; }
+		public DbSet<FilteredWord> FilteredWords { get; set; }
 
 		public KaguyaDbContext(DbContextOptions<KaguyaDbContext> options)
 			: base(options)
@@ -36,7 +36,7 @@ namespace Kaguya.Database.Context
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			OnModelCreatingPartial(modelBuilder);
-			modelBuilder.Entity<WordFilter>().HasKey(w => new { w.ServerId, w.Word });
+			modelBuilder.Entity<FilteredWord>().HasKey(w => new { w.ServerId, w.Word });
 		}
 
 		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

@@ -205,7 +205,7 @@ namespace Kaguya.Discord
 			if (userPerms.Administrator)
 				return false;
 
-			var filters = await _dbContext.WordFilters.AsQueryable().Where(w => w.ServerId == server.ServerId)
+			var filters = await _dbContext.FilteredWords.AsQueryable().Where(w => w.ServerId == server.ServerId)
 				.ToListAsync();
 
 			if (filters.Count == 0) return false;

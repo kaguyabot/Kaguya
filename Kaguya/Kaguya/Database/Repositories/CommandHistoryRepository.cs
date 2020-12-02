@@ -28,24 +28,22 @@ namespace Kaguya.Database.Repositories
 			                                                 x.CommandName.Equals(command, StringComparison.OrdinalIgnoreCase));
 		}
 
-		// TODO: Async naming?
-		public Task UpdateAsync(CommandHistory value)
+		public async Task UpdateAsync(CommandHistory value)
 		{
 			_dbContext.CommandHistories.Update(value);
-			return Task.CompletedTask;
+			await _dbContext.SaveChangesAsync();
 		}
 
-		public Task DeleteAsync(CommandHistory value)
+		public async Task DeleteAsync(CommandHistory value)
 		{
 			_dbContext.CommandHistories.Remove(value);
-			return Task.CompletedTask;
+			await _dbContext.SaveChangesAsync();
 		}
 
-		public Task InsertAsync(CommandHistory value)
+		public async Task InsertAsync(CommandHistory value)
 		{
 			_dbContext.CommandHistories.Add(value);
-
-			return Task.CompletedTask;
+			await _dbContext.SaveChangesAsync();
 		}
 	}
 }
