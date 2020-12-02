@@ -44,7 +44,7 @@ namespace Kaguya
 			services.Configure<AdminConfigurations>(Configuration.GetSection(AdminConfigurations.Position));
 			services.Configure<DiscordConfigurations>(Configuration.GetSection(DiscordConfigurations.Position));
 			
-			services.AddDbContextPool<KaguyaDbContext>(builder =>
+			services.AddDbContext<KaguyaDbContext>(builder =>
 			{
 				builder
 					.UseMySql(Configuration.GetConnectionString("Database"),

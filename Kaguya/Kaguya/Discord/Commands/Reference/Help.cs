@@ -28,7 +28,7 @@ namespace Kaguya.Discord.Commands.Reference
             _interactivityService = interactivityService;
         }
 
-        [Command]
+        [Command(RunMode = RunMode.Async)]
         [Summary("Displays all of the command modules")]
         public async Task CommandHelp()
         {

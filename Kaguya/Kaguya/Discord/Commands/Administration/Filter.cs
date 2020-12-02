@@ -26,7 +26,7 @@ namespace Kaguya.Discord.Commands.Administration
             _fwRepo = fwRepo;
         }
 
-        [Command]
+        [Command(RunMode = RunMode.Async)]
         [Summary("Displays the currently filtered words.")]
         public async Task CommandViewFilter()
         {
@@ -34,7 +34,7 @@ namespace Kaguya.Discord.Commands.Administration
         }
 
         [Priority(1)]
-        [Command("-a")]
+        [Command("-a", RunMode = RunMode.Async)]
         [Summary("Adds a word to the filter. Append a `*` character at the end to have the word " +
                  "be marked as a wildcard. Wildcards are detected if any portion of a user's message " +
                  "contains the filtered keyword. A non-wildcard filtered word will only be filtered if " +
@@ -63,7 +63,7 @@ namespace Kaguya.Discord.Commands.Administration
         }
         
         [Priority(0)]
-        [Command("-a")]
+        [Command("-a", RunMode = RunMode.Async)]
         public async Task CommandAddToFilter([Remainder]string word)
         {
             var fw = new FilteredWord
@@ -89,7 +89,7 @@ namespace Kaguya.Discord.Commands.Administration
             await SendBasicSuccessEmbedAsync("Successfully added the word to the filter.");
         }
 
-        [Command("-r")]
+        [Command("-r", RunMode = RunMode.Async)]
         [Summary("Removes a word or phrase from the word filter. If the word is a wildcard, you " +
                  "must specify so with the `*` indicator at the end of the word. Use this command " +
                  "with no arguments (filter) to view what's inside of the word filter.\n\n" +
@@ -107,7 +107,7 @@ namespace Kaguya.Discord.Commands.Administration
             await SendBasicSuccessEmbedAsync("Successfully deleted the word from the filter.");
         }
 
-        [Command("-c")]
+        [Command("-c", RunMode = RunMode.Async)]
         [Summary("Clears the entire list of filtered phrases for the current server.")]
         public async Task CommandClearFilter()
         {
