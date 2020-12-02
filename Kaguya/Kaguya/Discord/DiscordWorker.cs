@@ -33,8 +33,7 @@ namespace Kaguya.Discord
 		private readonly DiscordShardedClient _client;
 
 		public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
-			ILogger<DiscordWorker> logger, KaguyaDbContext dbContext, CommandService commandService, DbContextOptions<KaguyaDbContext> dbContextOptions, 
-			IServiceProvider serviceProvider)
+			ILogger<DiscordWorker> logger, KaguyaDbContext dbContext, CommandService commandService, IServiceProvider serviceProvider)
 		{
 			_client = client;
 			_adminConfigs = adminConfigs;
