@@ -49,7 +49,7 @@ namespace Kaguya
 				builder
 					.UseMySql(Configuration.GetConnectionString("Database"),
 						ServerVersion.AutoDetect(Configuration.GetConnectionString("Database")));
-			}, ServiceLifetime.Transient);
+			}, ServiceLifetime.Transient, ServiceLifetime.Transient);
 			
 			// TODO: Add user repositories, etc.
 			// All database repositories are added as scoped here.
