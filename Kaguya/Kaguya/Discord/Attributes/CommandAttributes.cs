@@ -13,7 +13,8 @@ namespace Kaguya.Discord.Attributes
 		Nsfw,
 		Osu,
 		Utility,
-		Configuration
+		Configuration,
+		OwnerOnly
 	}
 
 	public enum ModuleRestriction

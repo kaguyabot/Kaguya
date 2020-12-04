@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Net;
 using Discord.WebSocket;
+using Humanizer;
+using Humanizer.Localisation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes;
@@ -37,17 +41,26 @@ namespace Kaguya.Discord.Commands.Administration
         [Remarks("<user> [reason]")]
         public async Task CommandBan(SocketGuildUser user, [Remainder]string reason = "<No reason provided.>")
         {
-	        KaguyaServer server = null;
+	        KaguyaServer server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
             try
             {
-	            await BanAsync(user, reason);
-	            await SendAsync($"{Context.User.Mention} Banned **{user}**.");
-                
-                // TODO: Trigger ban event.
+	            var adminAction = new AdminAction
+	            {
+		            ServerId = Context.Guild.Id,
+		            ModeratorId = Context.User.Id,
+		            ActionedUserId = user.Id,
+		            Action = AdminAction.BAN_ACTION,
+		            Expiration = null
+	            };
+	            
+	            // Bans the user *and* updates the server admin actions in DB.
+	            await BanAsync(user, adminAction, reason);
+	            await SendBasicSuccessEmbedAsync($"Banned **{user}**.");
+	            // TODO: Trigger ban event.
             }
             catch (Exception e)
             {
-	            var errorString = new StringBuilder()
+	            string errorString = new StringBuilder()
 	                                 .AppendLine($"{Context.User.Mention} Failed to ban user {user.ToString().AsBold()}.")
 	                                 .AppendLine("Do I have enough permissions?".AsItalics())
 	                                 .AppendLine("This error can also occur if the user you are trying to ban has more permissions than me.".AsItalics())
@@ -55,26 +68,23 @@ namespace Kaguya.Discord.Commands.Administration
 	                                 .Append($"Error: {e.Message.AsBold()}")
 	                                 .ToString();
 	            
-	            var embed = new KaguyaEmbedBuilder(Color.Red)
-                {
-                    Description = errorString
-                };
-	            
-                await SendEmbedAsync(embed);
+                await SendBasicErrorEmbedAsync(errorString);
                 
                 _logger.LogDebug(e, "Exception encountered with ban in guild " + server.ServerId);
             }
         }
 
-        private async Task BanAsync(SocketGuildUser user, string reason)
+        private async Task BanAsync(SocketGuildUser user, AdminAction action, string reason)
         {
 	        var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
 	        server.TotalAdminActions++;
 
+	        await _aaRepo.InsertAsync(action);
 	        await _ksRepo.UpdateAsync(server);
 
 	        await user.BanAsync(reason: reason);
         }
+        
 
         [Command("-u")]
         [Summary("Unbans the user from the server.")]
@@ -83,6 +93,8 @@ namespace Kaguya.Discord.Commands.Administration
         {
 	        try
 	        {
+		        await Context.Guild.RemoveBanAsync(id);
+		        
 		        var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
 		        server.TotalAdminActions++;
 		        
@@ -101,15 +113,23 @@ namespace Kaguya.Discord.Commands.Administration
 		        var actionedUser = await Context.Guild.GetBanAsync(id);
 		        
 		        await _ksRepo.UpdateAsync(server);
-		        await Context.Guild.RemoveBanAsync(id);
-
-		        await SendAsync($"{Context.User.Mention} Unbanned user {actionedUser?.User.ToString().AsBold() ?? id.ToString().AsBold()}.");
+		        await SendBasicSuccessEmbedAsync($"Unbanned user with ID {actionedUser?.User.ToString().AsBold() ?? id.ToString().AsBold()}.");
 			
 		        // TODO: Trigger unban event.
 	        }
 	        catch (Exception e)
 	        {
-		        await SendAsync($"{Context.User.Mention} Failed to unban user with id {id.ToString().AsBold()}. Error: {e.Message.AsBold()}");
+		        if (e is HttpException httpEx)
+		        {
+			        // The user could not be found in the guild's ban list.
+			        if (httpEx.HttpCode == HttpStatusCode.NotFound)
+			        {
+				        await SendBasicErrorEmbedAsync("This user is not banned.");
+				        return;
+			        }
+		        }
+		        
+		        await SendBasicErrorEmbedAsync($"Failed to unban user with id {id.ToString().AsBold()}. Error: {e.Message.AsBold()}");
 		        _logger.LogDebug(e, $"Exception encountered with ban in guild {Context.Guild}.");
 	        }
         }
@@ -123,36 +143,33 @@ namespace Kaguya.Discord.Commands.Administration
 	        var parsedTime = timeParser.ParseTime();
 	        if (parsedTime == TimeSpan.Zero)
 	        {
-		        await SendAsync($"{Context.User.Mention} failed to temp-ban user **{user}**.\n" +
+		        await SendBasicErrorEmbedAsync($"Failed to temp-ban user **{user}**.\n" +
 		                        $"`{timeString}` could not be parsed into a duration.");
 		        return;
 	        }
 		        
 	        try
 	        {
-		        // TODO: Create temporary ban object, insert into tbRepo.
-
-		        await BanAsync(user, reason);
-
 		        var adminAction = new AdminAction
-					              {
-					                  ServerId = Context.Guild.Id,
-					                  ModeratorId = Context.User.Id,
-					                  ActionedUserId = user.Id,
-					                  Action = AdminAction.TEMP_BAN_ACTION,
-					                  Expiration = DateTime.Now + parsedTime
-					              };
+		        {
+			        ServerId = Context.Guild.Id,
+			        ModeratorId = Context.User.Id,
+			        ActionedUserId = user.Id,
+			        Action = AdminAction.TEMP_BAN_ACTION,
+			        Expiration = DateTime.Now + parsedTime
+		        };
+		        
+		        await BanAsync(user, adminAction, reason);
 
-		        await _aaRepo.InsertAsync(adminAction);
+		        string humanizedDuration = parsedTime.Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Year);
+		        await SendBasicSuccessEmbedAsync($"Successfully tempbanned user {user.ToString().AsBold()} for {humanizedDuration.AsBold()}.");
 
-		        // TODO: Respond to user.
-		        // TODO: Fix weird indentation in code style settings.
 		        // TODO: Ensure service watches for new temporary bans and unbans when the time expires.
 	        }
 	        catch (Exception e)
 	        {
-		        _logger.LogDebug(e, $"Failed to ban user {user.Id} in guild {Context.Guild.Id}.");
-		        await SendAsync($"{Context.User.Mention} Failed to ban user **{user}**. Reason: {e.Message}.");
+		        _logger.LogDebug(e, $"Failed to tempban user {user.Id} in guild {Context.Guild.Id}.");
+		        await SendBasicErrorEmbedAsync($"Failed to tempban user **{user}**. Reason: {e.Message.AsBold()}");
 	        }
         }
     }

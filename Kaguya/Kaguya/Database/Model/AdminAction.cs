@@ -20,10 +20,10 @@ namespace Kaguya.Database.Model
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public uint Id { get; set; }
-		public ulong ServerId { get; set; }
-		public ulong ModeratorId { get; set; }
-		public ulong ActionedUserId { get; set; }
-		public string Action { get; set; }
-		public DateTime? Expiration { get; set; }
+		public ulong ServerId { get; init; }
+		public ulong ModeratorId { get; init; }
+		public ulong ActionedUserId { get; init; }
+		public string Action { get; init; }
+		public DateTime? Expiration { get; init; }
 	}
 }
