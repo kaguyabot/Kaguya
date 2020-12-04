@@ -198,7 +198,7 @@ namespace Kaguya.Discord
 				return;
 			}
 
-			await _commandService.ExecuteAsync(commandCtx, argPos, _serviceProvider);
+			await _commandService.ExecuteAsync(commandCtx, argPos, scope.ServiceProvider);
 		}
 
 		private async Task<bool> CheckFilteredPhrase(ICommandContext ctx, KaguyaServer server, IMessage message)
