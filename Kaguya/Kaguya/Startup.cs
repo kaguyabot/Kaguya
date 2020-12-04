@@ -44,20 +44,20 @@ namespace Kaguya
 			services.Configure<AdminConfigurations>(Configuration.GetSection(AdminConfigurations.Position));
 			services.Configure<DiscordConfigurations>(Configuration.GetSection(DiscordConfigurations.Position));
 			
-			services.AddDbContext<KaguyaDbContext>(builder =>
+			services.AddDbContextPool<KaguyaDbContext>(builder =>
 			{
 				builder
 					.UseMySql(Configuration.GetConnectionString("Database"),
 						ServerVersion.AutoDetect(Configuration.GetConnectionString("Database")));
-			}, ServiceLifetime.Transient, ServiceLifetime.Transient);
+			});
 			
 			// TODO: Add user repositories, etc.
 			// All database repositories are added as scoped here.
-			services.AddTransient<KaguyaServerRepository>();
-			services.AddTransient<KaguyaUserRepository>();
-			services.AddTransient<AdminActionRepository>();
-			services.AddTransient<WordFilterRepository>();
-			services.AddTransient<CommandHistoryRepository>();
+			services.AddScoped<KaguyaServerRepository>();
+			services.AddScoped<KaguyaUserRepository>();
+			services.AddScoped<AdminActionRepository>();
+			services.AddScoped<WordFilterRepository>();
+			services.AddScoped<CommandHistoryRepository>();
 			
 			services.AddControllers();
 

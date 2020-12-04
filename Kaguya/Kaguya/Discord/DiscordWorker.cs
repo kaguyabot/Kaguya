@@ -28,27 +28,29 @@ namespace Kaguya.Discord
 		private readonly IOptions<DiscordConfigurations> _discordConfigs;
 		private readonly ILogger<DiscordWorker> _logger;
 		private readonly CommandService _commandService;
-		private readonly KaguyaDbContext _dbContext;
 		private readonly IServiceProvider _serviceProvider;
 		private readonly DiscordShardedClient _client;
 
 		public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
-			ILogger<DiscordWorker> logger, KaguyaDbContext dbContext, CommandService commandService, IServiceProvider serviceProvider)
+			ILogger<DiscordWorker> logger, CommandService commandService, IServiceProvider serviceProvider)
 		{
 			_client = client;
 			_adminConfigs = adminConfigs;
 			_discordConfigs = discordConfigs;
 			_logger = logger;
-			_dbContext = dbContext;
 			_commandService = commandService;
 			_serviceProvider = serviceProvider;
+			
 			// TODO: add emote type handler 
 			// TODO: add socket guild user list type handler
 		}
 
 		public async Task StartAsync(CancellationToken cancellationToken)
 		{
-			await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider);
+			using (var moduleScope = _serviceProvider.CreateScope())
+			{
+				await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), moduleScope.ServiceProvider);
+			}
 			
 			_client.Log += logMessage =>
 			{
@@ -113,45 +115,50 @@ namespace Kaguya.Discord
 				return;
 			}
 
-			var server = await _dbContext.Servers.AsQueryable()
+			var scope = _serviceProvider.CreateScope();
+			var dbContext = scope.ServiceProvider.GetRequiredService<KaguyaDbContext>();
+			
+			var server = await dbContext.Servers.AsQueryable()
 				.FirstOrDefaultAsync(s => s.ServerId == guildChannel.Guild.Id);
 			if (server == null)
 			{
-				server = (await _dbContext.Servers.AddAsync(new KaguyaServer
+				server = (await dbContext.Servers.AddAsync(new KaguyaServer
 				{
 					ServerId = guildChannel.Guild.Id
 				})).Entity;
 				
-				await _dbContext.SaveChangesAsync();
+				await dbContext.SaveChangesAsync();
 			}
 
-			var user = await _dbContext.Users.AsQueryable().FirstOrDefaultAsync(u => u.UserId == message.Author.Id);
+			var user = await dbContext.Users.AsQueryable().FirstOrDefaultAsync(u => u.UserId == message.Author.Id);
 			if (user == null)
 			{
-				user = (await _dbContext.Users.AddAsync(new KaguyaUser
+				user = (await dbContext.Users.AddAsync(new KaguyaUser
 				{
 					UserId = message.Author.Id
 				})).Entity;
 
-				await _dbContext.SaveChangesAsync();
+				await dbContext.SaveChangesAsync();
 			}
 
 			if (user.UserId != _adminConfigs.Value.OwnerId)
 			{
-				if (await _dbContext.BlacklistedEntities.AsQueryable().AnyAsync(b =>
+				if (await dbContext.BlacklistedEntities.AsQueryable().AnyAsync(b =>
 					new []
 					{
 						user.UserId, server.ServerId
 					}.Contains(b.EntityId)))
 				{
+					scope.Dispose();
 					return;
 				}
 			}
 
-			var commandCtx = new ShardedCommandContext(_client, message);
+			var commandCtx = new ScopedCommandContext(scope, _client, message);
 
 			if (await CheckFilteredPhrase(commandCtx, server, message))
 			{
+				scope.Dispose();
 				return; // If filtered phrase (and user isn't admin), return.
 			}
 
@@ -161,9 +168,10 @@ namespace Kaguya.Discord
 
 			// If the channel is blacklisted and the user isn't an Admin, return.
 			if (!commandCtx.Guild.GetUser(commandCtx.User.Id).GuildPermissions.Administrator &&
-			    await _dbContext.BlacklistedEntities.AsQueryable().AnyAsync(x =>
+			    await dbContext.BlacklistedEntities.AsQueryable().AnyAsync(x =>
 				    x.EntityId == commandCtx.Channel.Id && x.EntityType == BlacklistedEntityType.Channel))
 			{
+				scope.Dispose();
 				return;
 			}
 
@@ -186,27 +194,31 @@ namespace Kaguya.Discord
 			    !(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
 			      message.HasMentionPrefix(_client.CurrentUser, ref argPos)))
 			{
+				scope.Dispose();
 				return;
 			}
 
 			await _commandService.ExecuteAsync(commandCtx, argPos, _serviceProvider);
 		}
 
-		private async Task<bool> CheckFilteredPhrase(ICommandContext commandCtx, KaguyaServer server, IMessage message)
+		private async Task<bool> CheckFilteredPhrase(ICommandContext ctx, KaguyaServer server, IMessage message)
 		{
-			var userPerms = (await commandCtx.Guild.GetUserAsync(commandCtx.User.Id)).GuildPermissions;
+			var userPerms = (await ctx.Guild.GetUserAsync(ctx.User.Id)).GuildPermissions;
 
 			if (userPerms.Administrator)
 				return false;
-
-			var filters = await _dbContext.FilteredWords.AsQueryable().Where(w => w.ServerId == server.ServerId)
+			
+			var serviceProvider = (ctx as ScopedCommandContext)?.Scope.ServiceProvider ?? _serviceProvider;
+			var dbContext = serviceProvider.GetRequiredService<KaguyaDbContext>();
+			
+			var filters = await dbContext.FilteredWords.AsQueryable().Where(w => w.ServerId == server.ServerId)
 				.ToListAsync();
 
 			if (filters.Count == 0) return false;
 
 			foreach (var filter in filters.Where(filter => FilterMatch(message.Content, filter.Word)))
 			{
-				await commandCtx.Channel.DeleteMessageAsync(message);
+				await ctx.Channel.DeleteMessageAsync(message);
 				_logger.Log(LogLevel.Information,
 					$"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
 
@@ -242,7 +254,8 @@ namespace Kaguya.Discord
 
 		private async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext ctx, IResult result)
 		{
-			var ksRepo = _serviceProvider.GetRequiredService<KaguyaServerRepository>();
+			var serviceProvider = (ctx as ScopedCommandContext)?.Scope.ServiceProvider ?? _serviceProvider;
+			var ksRepo = serviceProvider.GetRequiredService<KaguyaServerRepository>();
 			// var userRepo = provider.GetService<KaguyaUserRepository>();
 			// var chRepo = provider.GetService<CommandHistoryRepository>();
 
@@ -310,7 +323,7 @@ namespace Kaguya.Discord
 						                                   $"Please use `{server.CommandPrefix}help {command.Value.Module.Name}` for " +
 						                                   $"instructions on how to use this command.");
 					}
-					catch (HttpException e)
+					catch (HttpException)
 					{
 						// TODO: Implement auto-eject.
 						// We auto-eject from guilds that don't give us permission to respond to command errors.
@@ -322,12 +335,19 @@ namespace Kaguya.Discord
 				}
 			}
 
+			var dbContext = serviceProvider.GetRequiredService<KaguyaDbContext>();
+			
 			if (ch != null)
 			{
-				_dbContext.CommandHistories.Add(ch);
+				dbContext.CommandHistories.Add(ch);
 			}
 			
-			await _dbContext.SaveChangesAsync();
+			await dbContext.SaveChangesAsync();
+
+			if (ctx is ScopedCommandContext scopedCommandContext)
+			{
+				scopedCommandContext.Scope.Dispose();
+			}
 		}
 
 		#endregion

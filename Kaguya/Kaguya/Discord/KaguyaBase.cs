@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord
 {
-    public class KaguyaBase<T> : ModuleBase<ShardedCommandContext>
+    public class KaguyaBase<T> : ModuleBase<ScopedCommandContext>
     {
         private readonly ILogger<T> _logger;
 
