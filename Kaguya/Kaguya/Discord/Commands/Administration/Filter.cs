@@ -1,7 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Interactivity;
+using Interactivity.Pagination;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes;
@@ -17,20 +21,63 @@ namespace Kaguya.Discord.Commands.Administration
     [RequireBotPermission(GuildPermission.ManageMessages)]
     public class Filter : KaguyaBase<Filter>
     {
-        private readonly ILogger<Filter> _logger;
         private readonly WordFilterRepository _fwRepo;
+        private readonly InteractivityService _interactivityService;
+        private readonly ILogger<Filter> _logger;
 
-        protected Filter(ILogger<Filter> logger, WordFilterRepository fwRepo) : base(logger)
+        protected Filter(ILogger<Filter> logger, WordFilterRepository fwRepo, InteractivityService interactivityService) : base(logger)
         {
             _logger = logger;
             _fwRepo = fwRepo;
+            _interactivityService = interactivityService;
         }
 
         [Command(RunMode = RunMode.Async)]
         [Summary("Displays the currently filtered words.")]
         public async Task CommandViewFilter()
         {
-            // TODO: Convert to pagination
+            FilteredWord[] filter = await _fwRepo.GetAllForServerAsync(Context.Guild.Id, true);
+
+            if (filter.Length == 0)
+            {
+                await SendBasicErrorEmbedAsync("The word filter is empty.");
+
+                return;
+            }
+
+            int numPages = (int) Math.Floor((double) (filter.Length + 24) / 25);
+            var pages = new PageBuilder[numPages];
+
+            int index = 0;
+            for (int i = 0; i < numPages; i++)
+            {
+                PageBuilder page = new PageBuilder()
+                                   .WithTitle("Word Filter")
+                                   .WithColor(Color.Magenta);
+
+                var descSb = new StringBuilder();
+
+                for (int j = 0; j < 25; j++)
+                {
+                    if (index == filter.Length)
+                        break;
+
+                    descSb.AppendLine(filter.ElementAt(index).Word);
+                    index++;
+                }
+
+                page.Description = descSb.ToString();
+
+                pages[i] = page;
+            }
+
+            Paginator paginator = new StaticPaginatorBuilder()
+                                  .WithPages(pages)
+                                  .WithUsers(Context.User)
+                                  .WithFooter(PaginatorFooter.PageNumber)
+                                  .Build();
+
+            await _interactivityService.SendPaginatorAsync(paginator, Context.Channel);
         }
 
         [Priority(1)]
@@ -56,15 +103,15 @@ namespace Kaguya.Discord.Commands.Administration
             {
                 ServerId = Context.Guild.Id,
                 Word = word,
-                FilterReaction = (FilterReactionEnum)reactionNum
+                FilterReaction = (FilterReactionEnum) reactionNum
             };
 
             await CommandAddToFilter(fw);
         }
-        
+
         [Priority(0)]
         [Command("-a", RunMode = RunMode.Async)]
-        public async Task CommandAddToFilter([Remainder]string word)
+        public async Task CommandAddToFilter([Remainder] string word)
         {
             var fw = new FilteredWord
             {
@@ -75,7 +122,7 @@ namespace Kaguya.Discord.Commands.Administration
 
             await CommandAddToFilter(fw);
         }
-        
+
         private async Task CommandAddToFilter(FilteredWord fw)
         {
             if (!await _fwRepo.InsertIfNotExistsAsync(fw))
@@ -96,7 +143,7 @@ namespace Kaguya.Discord.Commands.Administration
                  "")]
         public async Task CommandRemoveFromFilter([Remainder] string word)
         {
-            var fw = await _fwRepo.GetAsync(Context.Guild.Id, word);
+            FilteredWord fw = await _fwRepo.GetAsync(Context.Guild.Id, word);
             if (!await _fwRepo.DeleteIfExistsAsync(fw))
             {
                 await SendBasicErrorEmbedAsync("The word you specified doesn't exist in the word filter.");
@@ -111,14 +158,14 @@ namespace Kaguya.Discord.Commands.Administration
         [Summary("Clears the entire list of filtered phrases for the current server.")]
         public async Task CommandClearFilter()
         {
-            var curFilters = await _fwRepo.GetAllForServerAsync(Context.Guild.Id, true);
+            FilteredWord[] curFilters = await _fwRepo.GetAllForServerAsync(Context.Guild.Id, true);
             if (!curFilters.Any())
             {
                 await SendBasicErrorEmbedAsync("There are currently no filtered words.");
 
                 return;
             }
-            
+
             await _fwRepo.DeleteAllForServerAsync(Context.Guild.Id);
             await SendBasicSuccessEmbedAsync($"Successfully cleared the word filter for {Context.Guild.Name}.");
         }

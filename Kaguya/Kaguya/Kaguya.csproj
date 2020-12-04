@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Discord.InteractivityAddon" Version="2.2.0-rc4" />
+        <PackageReference Include="Discord.InteractivityAddon" Version="2.2.0-rc5" />
         <PackageReference Include="Discord.Net" Version="2.3.0-dev-20201201.2" />
         <PackageReference Include="Discord.Net.Commands" Version="2.3.0-dev-20201201.2" />
         <PackageReference Include="Discord.Net.Core" Version="2.3.0-dev-20201201.2" />
