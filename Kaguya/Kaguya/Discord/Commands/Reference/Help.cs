@@ -10,9 +10,7 @@ using Interactivity;
 using Interactivity.Pagination;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Options;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Color = System.Drawing.Color;
@@ -79,7 +77,7 @@ namespace Kaguya.Discord.Commands.Reference
             {
                 CommandModule curModule = modules[i];
                 string curModuleName = curModule.Humanize(LetterCasing.Title);
-                string links = "[Kaguya Website](http://kaguyabot.xyz/) | [Kaguya Support](https://discord.gg/gaumCJhr) | [Kaguya Premium](https://sellix.io/KaguyaStore)";
+                string links = $"[Kaguya Website]({Global.KaguyaWebsiteUrl}) | [Kaguya Support]({Global.KaguyaSupportDiscordUrl}) | [Kaguya Premium]({Global.KaguyaStoreUrl})";
                 
                 PageBuilder curPageBuilder = new PageBuilder()
                                              .WithTitle("Commands: " + curModuleName)
@@ -128,11 +126,12 @@ namespace Kaguya.Discord.Commands.Reference
                 }
 
                 // Closes code block assigned at start and adds helpful data.
-                curPageBuilder.Description += $"```\nUse `{server.CommandPrefix}help <command name>` for command documentation."; 
+                curPageBuilder.Description += $"```\nUse `{server.CommandPrefix}help <command name>` for command documentation.\n" +
+                                              $"Example: `{server.CommandPrefix}help ban`\n\n";
 
-                
-                
-                pages[i] = curPageBuilder;
+
+
+                                              pages[i] = curPageBuilder;
             }
 
             Paginator paginator = new StaticPaginatorBuilder()
@@ -173,6 +172,20 @@ namespace Kaguya.Discord.Commands.Reference
                                       .OrderBy(x => x)
                                       .Humanize(x => $"`{prefix}{x}`\n");
 
+            // Formats all required precondition attributes. 
+            string requiredPermissions = match.Module.Preconditions
+                                              .Where(x => x.GetType() == typeof(RequireUserPermissionAttribute))
+                                              .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission)
+                                              .Humanize(text => $"`{text.Humanize(LetterCasing.Title)}`");
+
+            string module = match.Module.Attributes
+                                 .Where(x => x.GetType() == typeof(ModuleAttribute))
+                                 .Humanize(x => $"`{((ModuleAttribute) x).Module.Humanize(LetterCasing.Title)}`");
+
+            string restrictions = match.Module.Preconditions
+                                       .Where(x => x.GetType() == typeof(RestrictionAttribute))
+                                       .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
+
             if (string.IsNullOrWhiteSpace(match.Remarks))
             {
                 remarks = $"`{prefix}{match.Aliases[0]}`";
@@ -190,6 +203,12 @@ namespace Kaguya.Discord.Commands.Reference
                 {
                     new EmbedFieldBuilder
                     {
+                        IsInline = true,
+                        Name = "Module",
+                        Value = module
+                    },
+                    new EmbedFieldBuilder
+                    {
                         IsInline = false,
                         Name = "Description",
                         Value = description
@@ -202,6 +221,26 @@ namespace Kaguya.Discord.Commands.Reference
                     }
                 }
             };
+
+            if (!string.IsNullOrWhiteSpace(requiredPermissions))
+            {
+                embed.Fields.Insert(0, new EmbedFieldBuilder
+                {
+                    IsInline = false,
+                    Name = "Required Permissions",
+                    Value = requiredPermissions
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(restrictions))
+            {
+                embed.Fields.Insert(1, new EmbedFieldBuilder
+                {
+                    IsInline = true,
+                    Name = "Restrictions",
+                    Value = restrictions
+                });
+            }
 
             // Aliases
             var otherAliases = match.Aliases.Where(x => !x.Equals(match.Aliases[0])).ToArray();
@@ -224,7 +263,7 @@ namespace Kaguya.Discord.Commands.Reference
                     Value = subCommands
                 });
             }
-
+            
             
             await SendEmbedAsync(embed);
         }

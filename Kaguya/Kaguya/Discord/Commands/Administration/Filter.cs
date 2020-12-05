@@ -93,7 +93,7 @@ namespace Kaguya.Discord.Commands.Administration
                  "Example 2: `filter -a penguins` will detect `I hate penguins` but not `I hate penguins2`.\n\n" +
                  "Specify an optional `punishment num` to customize the punishment for the filtered word. If " +
                  "unspecified, the default punishment is a message deletion.\n\n" +
-                 "__Punishment nums:__\n" +
+                 "__Punishment types:__\n" +
                  "`Delete` - Delete the message\n" +
                  "`Mute` - Mute user (indefinitely)\n" + // TODO: Maybe allow servers to customize this duration.
                  "`Kick` - Kick the user\n" +

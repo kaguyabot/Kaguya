@@ -6,7 +6,7 @@ namespace Kaguya.Database.Interfaces
     {
         public Task<TValue> GetAsync(TKey key);
         public Task DeleteAsync(TKey key);
-        public Task<TValue> UpdateAsync(TKey key, TValue value);
+        public Task UpdateAsync(TValue value);
         public Task InsertAsync(TValue value);
     }
 }

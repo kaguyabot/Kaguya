@@ -1,20 +1,27 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
+using Kaguya.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Kaguya.Database.Repositories
 {
 	public class KaguyaUserRepository : IKaguyaUserRepository
 	{
 		private readonly KaguyaDbContext _dbContext;
+		private readonly IOptions<AdminConfigurations> _adminConfigurations;
 		private readonly ILogger<KaguyaUserRepository> _logger;
 
-		public KaguyaUserRepository(KaguyaDbContext dbContext, ILogger<KaguyaUserRepository> logger)
+		public KaguyaUserRepository(ILogger<KaguyaUserRepository> logger, KaguyaDbContext dbContext, 
+			IOptions<AdminConfigurations> adminConfigurations)
 		{
 			_dbContext = dbContext;
+			_adminConfigurations = adminConfigurations;
 			_logger = logger;
 		}
 		
@@ -38,19 +45,16 @@ namespace Kaguya.Database.Repositories
 			_logger.LogDebug($"User deleted: {key}");
 		}
 		
-		public async Task<KaguyaUser> UpdateAsync(ulong id, KaguyaUser value)
+		public async Task UpdateAsync(KaguyaUser value)
 		{
-			var current = await GetAsync(id);
+			var current = await GetAsync(value.UserId);
 
 			if (current is null)
 			{
-				return null;
+				return;
 			}
 	        
-			var updated = _dbContext.Users.Update(value).Entity;
 			await _dbContext.SaveChangesAsync();
-
-			return updated;
 		}
 
 		public async Task InsertAsync(KaguyaUser value)
@@ -76,6 +80,22 @@ namespace Kaguya.Database.Repositories
             
 			_logger.LogDebug($"User created: {id}");
 			return user;
+		}
+
+		public async Task<IEnumerable<KaguyaUser>> GetActiveRatelimitedUsersAsync(bool ignoreOwner = true)
+		{
+			var users = await _dbContext.Users.AsQueryable().Where(x => x.ActiveRateLimit > 0).ToListAsync();
+			if (ignoreOwner)
+			{
+				KaguyaUser owner = users.FirstOrDefault(x => x.UserId == _adminConfigurations.Value.OwnerId);
+
+				if (owner != null)
+				{
+					users.Remove(owner);
+				}
+			}
+
+			return users;
 		}
 	}
 }

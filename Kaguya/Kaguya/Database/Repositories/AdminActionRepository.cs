@@ -41,19 +41,16 @@ namespace Kaguya.Database.Repositories
 			                 $"Actioned User Id: {match.ActionedUserId} Action: {match.Action}.");
 		}
 
-		public async Task<AdminAction> UpdateAsync(ulong key, AdminAction value)
+		public async Task UpdateAsync(AdminAction value)
 		{
-			var current = await GetAsync(key);
+			var current = await GetAsync(value.Id);
 
 			if (current is null)
 			{
-				return null;
+				return;
 			}
 	        
-			var updated = _dbContext.AdminActions.Update(value).Entity;
 			await _dbContext.SaveChangesAsync();
-
-			return updated;
 		}
 
 		public async Task InsertAsync(AdminAction value)
