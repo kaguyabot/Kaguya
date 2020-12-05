@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Humanizer;
 using Interactivity;
 using Interactivity.Pagination;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes;
+using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Color = System.Drawing.Color;
 
 namespace Kaguya.Discord.Commands.Reference
 {
@@ -38,8 +40,20 @@ namespace Kaguya.Discord.Commands.Reference
             _adminConfigurations = adminConfigurations;
         }
 
+        [Priority(1)]
         [Command(RunMode = RunMode.Async)]
-        [Summary("Displays all of the command modules")]
+        [Summary("If used without any parameters, this command displays all command modules with all of their commands. " +
+                 "The command executor may scroll between pages using the provided reactions.\n" +
+                 "If used with the name of a command (or command alias), the documentation for that command will be displayed.\n\n" +
+                 "Commands are displayed as: `<name> [alias 1] [alias 2] ... [premium?]`\n" +
+                 "Display Definitions:\n" +
+                 "`filter [f]` -> Command `filter` with alias `f`.\n" +
+                 "`weekly {$}` -> Command `weekly` with no aliases and marked as premium.\n\n" +
+                 "Usage Examples:\n" +
+                 "`help` -> Displays all commands.\n" +
+                 "`help filter` -> Displays documentation for filter.\n" +
+                 "`help f` -> Also displays documentation for filter, as `f` is an alias of `filter`.")]
+        [Remarks("[command or alias name]")]
         public async Task CommandHelp()
         {
             var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
@@ -129,6 +143,90 @@ namespace Kaguya.Discord.Commands.Reference
                             .Build();
 
             await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(2));
+        }
+
+        [Priority(0)]
+        [Command(RunMode = RunMode.Async)]
+        public async Task CommandHelp([Remainder] string commandName)
+        {
+            var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
+            string prefix = server.CommandPrefix;
+            
+            var commands = _commandService.Commands;
+
+            CommandInfo match = commands.FirstOrDefault(c => c.Aliases.Any(name => name.Equals(commandName, StringComparison.OrdinalIgnoreCase)));
+            
+            if (match == null)
+            {
+                await SendBasicErrorEmbedAsync($"No match found for **{commandName}**.");
+                return;
+            }
+
+            // Title = capitalize the first letter of the alias only. Ex: $ping -> Ping
+            string title = $"Help: {char.ToUpper(match.Aliases[0][0])}{match.Aliases[0].Substring(1)}";
+            string description = match.Summary;
+            string remarks = string.Empty;
+            string subCommands = match.Module.Commands
+                                      .Where(c => !c.Aliases[0].Equals(match.Aliases[0]))
+                                      .Select(x => x.Aliases[0])
+                                      .Distinct()
+                                      .OrderBy(x => x)
+                                      .Humanize(x => $"`{prefix}{x}`\n");
+
+            if (string.IsNullOrWhiteSpace(match.Remarks))
+            {
+                remarks = $"`{prefix}{match.Aliases[0]}`";
+            }
+            else
+            {
+                // Puts all remarks on a new line surrounded in backticks.
+                remarks = match.Remarks.Split("\n").Humanize(remark => $"`{prefix}{match.Aliases[0]} {remark}`\n");
+            }
+            
+            var embed = new KaguyaEmbedBuilder(global::Discord.Color.Magenta)
+            {
+                Title = title,
+                Fields = new List<EmbedFieldBuilder>
+                {
+                    new EmbedFieldBuilder
+                    {
+                        IsInline = false,
+                        Name = "Description",
+                        Value = description
+                    },
+                    new EmbedFieldBuilder
+                    {
+                        IsInline = false,
+                        Name = "Usage",
+                        Value = remarks
+                    }
+                }
+            };
+
+            // Aliases
+            var otherAliases = match.Aliases.Where(x => !x.Equals(match.Aliases[0])).ToArray();
+            if (otherAliases.Length > 0)
+            {
+                embed.AddField(new EmbedFieldBuilder
+                {
+                    IsInline = false,
+                    Name = "Aliases",
+                    Value = otherAliases.Humanize(x => $"`{prefix}{x}`\n")
+                });
+            }
+            
+            if (subCommands.Length > 1)
+            {
+                embed.AddField(new EmbedFieldBuilder
+                {
+                    IsInline = false,
+                    Name = "Sub Commands",
+                    Value = subCommands
+                });
+            }
+
+            
+            await SendEmbedAsync(embed);
         }
 
         /// <summary>

@@ -62,7 +62,9 @@ namespace Kaguya.Discord.Commands.Administration
                     if (index == filter.Length)
                         break;
 
-                    descSb.AppendLine(filter.ElementAt(index).Word);
+                    var match = filter.ElementAt(index);
+                    
+                    descSb.AppendLine(match.Word + $" | Punishment: {match.FilterReactionString}");
                     index++;
                 }
 
@@ -85,7 +87,7 @@ namespace Kaguya.Discord.Commands.Administration
         [Summary("Adds a word to the filter. Append a `*` character at the end to have the word " +
                  "be marked as a wildcard. Wildcards are detected if any portion of a user's message " +
                  "contains the filtered keyword. A non-wildcard filtered word will only be filtered if " +
-                 "any word in the user's message is the word in the filter.\n\n" +
+                 "any word in the user's message matches a word in the filter exactly.\n\n" +
                  "Example: `filter -a tacos*` will detect `tacos`, `tacosopweijfgwoeifj`, `tacos+burritos`.\n" +
                  "Example 2: `filter -a penguins` will detect `I hate penguins` but not `I hate penguins2`.\n\n" +
                  "Specify an optional `punishment num` to customize the punishment for the filtered word. If " +
@@ -141,6 +143,7 @@ namespace Kaguya.Discord.Commands.Administration
                  "must specify so with the `*` indicator at the end of the word. Use this command " +
                  "with no arguments (filter) to view what's inside of the word filter.\n\n" +
                  "")]
+        [Remarks("<word>")]
         public async Task CommandRemoveFromFilter([Remainder] string word)
         {
             FilteredWord fw = await _fwRepo.GetAsync(Context.Guild.Id, word);
