@@ -9,6 +9,7 @@ using Interactivity.Pagination;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes;
+using Kaguya.Discord.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Administration
@@ -93,24 +94,37 @@ namespace Kaguya.Discord.Commands.Administration
                  "Specify an optional `punishment num` to customize the punishment for the filtered word. If " +
                  "unspecified, the default punishment is a message deletion.\n\n" +
                  "__Punishment nums:__\n" +
-                 "`0` - Delete the message\n" +
-                 "`1` - Mute user (indefinitely)\n" + // TODO: Maybe allow servers to customize this duration.
-                 "`2` - Kick the user\n" +
-                 "`3` - Ban the user permanently\n" +
-                 "`4` - Shadowban the user indefinitely")]
-        [Remarks("[punishment num] <word>")]
-        public async Task CommandAddToFilter(int reactionNum, [Remainder] string word)
+                 "`Delete` - Delete the message\n" +
+                 "`Mute` - Mute user (indefinitely)\n" + // TODO: Maybe allow servers to customize this duration.
+                 "`Kick` - Kick the user\n" +
+                 "`Ban` - Ban the user permanently\n" +
+                 "`Shadowban` - Shadowban the user indefinitely")]
+        [Remarks("[punishment] <word>")]
+        public async Task CommandAddToFilter(string punishment, [Remainder] string word)
         {
+            if (!Enum.TryParse(punishment, true, out FilterReactionEnum reaction))
+            {
+                await CommandAddToFilter(new FilteredWord
+                {
+                    ServerId = Context.Guild.Id,
+                    Word = punishment + " " + word,
+                    FilterReaction = FilterReactionEnum.Delete
+                });
+                
+                return;
+            }
+
             var fw = new FilteredWord
             {
                 ServerId = Context.Guild.Id,
                 Word = word,
-                FilterReaction = (FilterReactionEnum) reactionNum
+                FilterReaction = reaction
             };
 
             await CommandAddToFilter(fw);
         }
 
+        // This is left here to account for one-word filtered words. Ref: line 103 takes in 2+ args.
         [Priority(0)]
         [Command("-a", RunMode = RunMode.Async)]
         public async Task CommandAddToFilter([Remainder] string word)
