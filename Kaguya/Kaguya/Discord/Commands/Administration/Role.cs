@@ -324,11 +324,11 @@ namespace Kaguya.Discord.Commands.Administration
             {
                 color = Color.DarkMagenta;
             }
-            else if (success && !failure)
+            else if (success)
             {
                 color = Color.Green;
             }
-            else if (!success && failure)
+            else if (failure)
             {
                 color = Color.Red;
             }
@@ -354,7 +354,7 @@ namespace Kaguya.Discord.Commands.Administration
             Confirmation request = new ConfirmationBuilder()
                                    .WithContent(new PageBuilder().WithDescription("Are you sure that you wish to " + 
                                                                            "delete all roles in this server?".AsBoldItalics() + "\n" + 
-                                                                           "This cannot be undone!")
+                                                                           "This cannot be undone!".AsBoldUnderlined())
                                                                  .WithColor(System.Drawing.Color.Yellow))
                                    .Build();
 
