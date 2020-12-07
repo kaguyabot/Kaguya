@@ -21,6 +21,7 @@ namespace Kaguya.Database.Model
 		public int PraiseCooldown { get; set; } = 24;
 
 		public int NextQuoteId { get; set; } = 1;
+		public ulong MuteRoleId { get; set; }
 
 		public DateTime? PremiumExpiration { get; set; }
 

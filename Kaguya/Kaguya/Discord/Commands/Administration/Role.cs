@@ -8,8 +8,10 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using Humanizer;
 using Interactivity;
 using Interactivity.Confirmation;
+using Kaguya.Database.Repositories;
 using Kaguya.Discord.DiscordExtensions;
 
 namespace Kaguya.Discord.Commands.Administration
@@ -23,11 +25,14 @@ namespace Kaguya.Discord.Commands.Administration
     {
         private readonly ILogger<Role> _logger;
         private readonly InteractivityService _interactivityService;
+        private readonly KaguyaServerRepository _kaguyaServerRepository;
 
-        public Role(ILogger<Role> logger, InteractivityService interactivityService) : base(logger)
+        public Role(ILogger<Role> logger, InteractivityService interactivityService, 
+            KaguyaServerRepository kaguyaServerRepository) : base(logger)
         {
             _logger = logger;
             _interactivityService = interactivityService;
+            _kaguyaServerRepository = kaguyaServerRepository;
         }
 
         [Command("-add")]
@@ -319,7 +324,7 @@ namespace Kaguya.Discord.Commands.Administration
                             .AppendLine(errorBuilder.ToString());
             }
 
-            Color color;
+            Color color = default;
             if (success && failure)
             {
                 color = Color.DarkMagenta;
@@ -331,10 +336,6 @@ namespace Kaguya.Discord.Commands.Administration
             else if (failure)
             {
                 color = Color.Red;
-            }
-            else
-            {
-                color = default;
             }
 
             var embed = new KaguyaEmbedBuilder(color)
@@ -400,6 +401,84 @@ namespace Kaguya.Discord.Commands.Administration
             {
                 await SendBasicEmbed("No action will be taken.", Color.DarkBlue);
             }
+        }
+
+        // [Restriction(ModuleRestriction.PremiumOnly)]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [Command("-deleteunused")]
+        [Summary("Deletes all unused roles from the server. These are roles that are not assigned to any users.")]
+        public async Task DeleteUnusedRolesCommand()
+        {
+            var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
+
+            List<SocketRole> success = new List<SocketRole>();
+            List<(SocketRole, string)> fail = new List<(SocketRole, string)>();
+
+            var unusedRoles = Context.Guild.Roles
+                                     .Where(x => !x.Members.Any() && x.Id != server.MuteRoleId && !x.IsManaged)
+                                     .ToArray();
+
+            if (!unusedRoles.Any())
+            {
+                await SendBasicErrorEmbedAsync("There are no unused roles.");
+
+                return;
+            }
+            
+            foreach (SocketRole role in unusedRoles)
+            {
+                try
+                {
+                    await role.DeleteAsync();
+                    success.Add(role);
+                }
+                catch (Exception e)
+                {
+                    fail.Add((role, e.Message));
+                }
+            }
+
+            var finalBuilder = new StringBuilder();
+
+            if (success.Any())
+            {
+                var successBuilder = new StringBuilder("Deleted the following roles: \n\n");
+                successBuilder.Append(success.Humanize(x => x.Name.AsBold()));
+
+                finalBuilder.AppendLine(successBuilder.ToString() + "\n");
+            }
+
+            if (fail.Any())
+            {
+                var failBuilder = new StringBuilder("Failed to delete the following roles: \n\n");
+                foreach (SocketRole role in success)
+                {
+                    failBuilder.AppendLine("- " + role.ToString().Humanize(x => $"{x}".AsItalics()));
+                }
+
+                finalBuilder.AppendLine(failBuilder.ToString());
+            }
+
+            Color color = default;
+
+            if (success.Any() && fail.Any())
+            {
+                color = Color.DarkMagenta;
+            }
+            else if (success.Any() && !fail.Any())
+            {
+                color = Color.Green;
+            }
+            else if (!success.Any() && fail.Any())
+            {
+                color = Color.Red;
+            }
+
+            var embed = new KaguyaEmbedBuilder(color)
+                        .WithDescription(finalBuilder.ToString())
+                        .Build();
+
+            await SendEmbedAsync(embed);
         }
     }
 }
