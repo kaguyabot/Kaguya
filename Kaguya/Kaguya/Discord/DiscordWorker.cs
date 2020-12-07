@@ -10,11 +10,14 @@ using Discord;
 using Discord.Commands;
 using Discord.Net;
 using Discord.WebSocket;
+using Humanizer;
 using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.options;
 using Kaguya.Options;
+using Kaguya.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -347,7 +350,19 @@ namespace Kaguya.Discord
 
                 return;
             }
-
+            
+            /*  Checks and processes user for ratelimits.
+                Technically with how this is implemented, if the user encounters our
+                ratelimit, the command will still execute, *then* they will be blacklisted.
+                Never ratelimit the bot owner.
+            */
+            // TODO: Remove
+            bool REMOVEME = true;
+            if (commandCtx.User.Id != _adminConfigs.Value.OwnerId || REMOVEME)
+            {
+                RatelimitService.Enqueue(user);
+            }
+            
             await _commandService.ExecuteAsync(commandCtx, argPos, scope.ServiceProvider);
         }
 
@@ -474,14 +489,48 @@ namespace Kaguya.Discord
 
                         try
                         {
-                            await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} There was an error executing the command {command.Value.Module.Name}.\n" +
-                                                               $"Please use `{server.CommandPrefix}help {command.Value.Module.Name}` for " +
-                                                               "instructions on how to use this command.");
+                            string cmdString = $"{server.CommandPrefix}help {command.Value.GetFullCommandName()}".AsBold();
+                            Embed embed = new KaguyaEmbedBuilder(Color.Red)
+                                          .WithDescription($"{ctx.User.Mention} There was an error executing the command {cmdString}.\n" +
+                                                           $"Error Reason: {result.ErrorReason.AsBold()}\n" +
+                                                           $"Please use {cmdString} for this command's documentation.")
+                                          .Build();
+
+                            await ctx.Channel.SendMessageAsync(embed: embed);
                         }
-                        catch (HttpException)
+                        catch (HttpException httpException)
                         {
-                            // TODO: Implement auto-eject.
                             // We auto-eject from guilds that don't give us permission to respond to command errors.
+                            // Code 50013 is missing permissions: https://discord.com/developers/docs/topics/opcodes-and-status-codes
+                            if (httpException.DiscordCode.HasValue && httpException.DiscordCode.Value == 50013)
+                            {
+                                var owner = await ctx.Guild.GetOwnerAsync();
+                                var embed = new KaguyaEmbedBuilder(Color.Red)
+                                            .WithTitle("Kaguya Auto-Ejection: Missing Permissions")
+                                            .WithDescription("Urgent Notice:\n\n".AsBold() + 
+                                                             "I was unable to send a command response into the text channel " +
+                                                             $"#{ctx.Channel.Name.AsBold()}! I have auto-ejected myself from this server " +
+                                                             $"to prevent further errors. If you wish to reinvite me, you may do " +
+                                                             $"so [here]({Global.InviteUrl}).")
+                                            .Build();
+
+                                bool ownerNotified = false;
+                                
+                                try
+                                {
+                                    await owner.SendMessageAsync(embed: embed);
+                                    ownerNotified = true;
+                                }
+                                catch (Exception)
+                                {
+                                    //
+                                }
+                                
+                                await ctx.Guild.LeaveAsync();
+                                
+                                _logger.LogInformation($"Auto-ejected from guild {ctx.Guild.Id}. Bot was unable to send command response into text channel " +
+                                                       $"[Name: {ctx.Channel.Name} | ID: {ctx.Channel.Id}]. Owner notified? {ownerNotified}");
+                            }
                         }
                         catch (Exception)
                         {
@@ -493,7 +542,9 @@ namespace Kaguya.Discord
                 var dbContext = serviceProvider.GetRequiredService<KaguyaDbContext>();
 
                 if (ch != null)
+                {
                     dbContext.CommandHistories.Add(ch);
+                }
 
                 await dbContext.SaveChangesAsync();
             }
@@ -504,6 +555,5 @@ namespace Kaguya.Discord
             }
         }
 #endregion
-
     }
 }

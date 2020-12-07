@@ -84,6 +84,17 @@ namespace Kaguya.Discord
             return await SendEmbedAsync(embed);
         }
 
+        protected async Task<RestUserMessage> SendBasicEmbed(string description, Color color, bool mentionUser = true)
+        {
+            if (mentionUser)
+                description = $"{Context.User.Mention} {description}";
+            
+            return await Context.Channel.SendMessageAsync(embed: new KaguyaEmbedBuilder(color)
+            {
+                Description = description
+            }.Build());
+        }
+
         /// <summary>
         /// Sends a standard chat message. If the message could not be sent, this method will return null.
         /// </summary>

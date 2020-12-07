@@ -14,6 +14,7 @@ using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.options;
 using Kaguya.Options;
+using Kaguya.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -58,7 +59,7 @@ namespace Kaguya
 			services.AddScoped<AdminActionRepository>();
 			services.AddScoped<WordFilterRepository>();
 			services.AddScoped<CommandHistoryRepository>();
-			
+
 			services.AddControllers();
 
 			services.AddSingleton(_ =>

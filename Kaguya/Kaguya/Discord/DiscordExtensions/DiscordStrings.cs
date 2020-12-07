@@ -20,9 +20,9 @@ namespace Kaguya.Discord.DiscordExtensions
 		public static string AsUrl(this string description, string url) => Format.Url(description, url);
 
 		public static string AsStrikethrough(this string s) => Format.Strikethrough(s);
-		public static string AsBoldItalics(this string s) => string.Join("***", s, "***");
-		public static string AsCodeBlockSingleLine(this string s) => string.Join('`', s, '`');
-		public static string AsCodeBlockMultiline(this string s) => string.Join("```", s, "```");
+		public static string AsBoldItalics(this string s) => "***" + s + "***";
+		public static string AsCodeBlockSingleLine(this string s) => "`" + s + "`";
+		public static string AsCodeBlockMultiline(this string s) => "```" + s + "```";
 		
 		/// <summary>
 		/// Removes all markdown from the string.

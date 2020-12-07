@@ -30,12 +30,14 @@ namespace Kaguya.Database.Model
 		public int TotalDaysPremium { get; set; } = 0;
 
 		/// <summary>
-		/// Whenever a user uses a command, increase this by one.
+		/// Whenever a user uses a command, decrease this value by one.
 		/// The ratelimit service will check for whether the user
 		/// has too many commands allowed by the ratelimit (x cmds in y seconds).
+		///
+		/// This check is made if there are zero active ratelimits remaining and
+		/// gets set back to 6 on a timer.
 		/// </summary>
-		// TODO: revisit this
-		public int ActiveRateLimit { get; set; } = 0;
+		public int ActiveRateLimit { get; set; } = 6;
 
 		public int RateLimitWarnings { get; set; } = 0;
 
@@ -128,5 +130,7 @@ namespace Kaguya.Database.Model
 			
 			this.FishExp += amount;
 		}
+
+		public override string ToString() => UserId.ToString();
 	}
 }

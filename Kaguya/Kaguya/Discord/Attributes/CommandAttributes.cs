@@ -65,7 +65,7 @@ namespace Kaguya.Discord.Attributes
 				
 				return user.IsPremium 
 					? PreconditionResult.FromSuccess() 
-					: PreconditionResult.FromError($"You must purchase a [Kaguya Premium]({Global.KaguyaStoreUrl}) subscription to use this command.");
+					: PreconditionResult.FromError($"You must purchase a [Kaguya Premium]({Global.StoreUrl}) subscription to use this command.");
 			}
 			
 			return PreconditionResult.FromSuccess();

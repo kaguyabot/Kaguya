@@ -97,5 +97,11 @@ namespace Kaguya.Database.Repositories
 
 			return users;
 		}
+
+		public async Task UpdateRange(IEnumerable<KaguyaUser> users)
+		{
+			_dbContext.Users.UpdateRange(users);
+			await _dbContext.SaveChangesAsync();
+		}
 	}
 }

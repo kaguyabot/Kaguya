@@ -38,7 +38,6 @@ namespace Kaguya.Discord.Commands.Reference
             _adminConfigurations = adminConfigurations;
         }
 
-        [Priority(1)]
         [Command(RunMode = RunMode.Async)]
         [Summary("If used without any parameters, this command displays all command modules with all of their commands. " +
                  "The command executor may scroll between pages using the provided reactions.\n" +
@@ -77,7 +76,7 @@ namespace Kaguya.Discord.Commands.Reference
             {
                 CommandModule curModule = modules[i];
                 string curModuleName = curModule.Humanize(LetterCasing.Title);
-                string links = $"[Kaguya Website]({Global.KaguyaWebsiteUrl}) | [Kaguya Support]({Global.KaguyaSupportDiscordUrl}) | [Kaguya Premium]({Global.KaguyaStoreUrl})";
+                string links = $"[Kaguya Website]({Global.WebsiteUrl}) | [Kaguya Support]({Global.SupportDiscordUrl}) | [Kaguya Premium]({Global.StoreUrl})";
                 
                 PageBuilder curPageBuilder = new PageBuilder()
                                              .WithTitle("Commands: " + curModuleName)
@@ -144,27 +143,31 @@ namespace Kaguya.Discord.Commands.Reference
             await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(2));
         }
 
-        [Priority(0)]
         [Command(RunMode = RunMode.Async)]
         public async Task CommandHelp([Remainder] string commandName)
         {
             var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
             string prefix = server.CommandPrefix;
             
-            var commands = _commandService.Commands;
+            var commands = _commandService.Commands.ToArray();
 
             CommandInfo match = commands.FirstOrDefault(c => c.Aliases.Any(name => name.Equals(commandName, StringComparison.OrdinalIgnoreCase)));
             
             if (match == null)
             {
-                await SendBasicErrorEmbedAsync($"No match found for **{commandName}**.");
-                return;
+                match = commands.FirstOrDefault(c => c.Module.Name.Equals(commandName, StringComparison.OrdinalIgnoreCase));
+                
+                if(match == null)
+                {
+                    await SendBasicErrorEmbedAsync($"No match found for **{commandName}**.");
+                    return;
+                }
             }
 
             // Title = capitalize the first letter of the alias only. Ex: $ping -> Ping
             string title = $"Help: {char.ToUpper(match.Aliases[0][0])}{match.Aliases[0].Substring(1)}";
             string description = match.Summary;
-            string remarks = string.Empty;
+            string remarks;
             string subCommands = match.Module.Commands
                                       .Where(c => !c.Aliases[0].Equals(match.Aliases[0]))
                                       .Select(x => x.Aliases[0])
@@ -173,10 +176,27 @@ namespace Kaguya.Discord.Commands.Reference
                                       .Humanize(x => $"`{prefix}{x}`\n");
 
             // Formats all required precondition attributes. 
-            string requiredPermissions = match.Module.Preconditions
-                                              .Where(x => x.GetType() == typeof(RequireUserPermissionAttribute))
-                                              .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission)
-                                              .Humanize(text => $"`{text.Humanize(LetterCasing.Title)}`");
+            var requiredPermissionsList = match.Module.Preconditions
+                                                    .Where(x => x.GetType() == typeof(RequireUserPermissionAttribute))
+                                                    .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission).ToList();
+
+            // If the command has more specific preconditions...
+            if (!match.Preconditions.Equals(match.Module.Preconditions))
+            {
+                requiredPermissionsList.AddRange(match.Preconditions
+                                                 .Where(x => x.GetType() == typeof(RequireUserPermissionAttribute))
+                                                 .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission).ToList());
+            }
+
+            string requiredPermissions = requiredPermissionsList.Humanize(x =>
+            {
+                if (x != null)
+                {
+                    return $"`{x.Value.Humanize(LetterCasing.Title)}`";
+                }
+
+                return default;
+            });
 
             string module = match.Module.Attributes
                                  .Where(x => x.GetType() == typeof(ModuleAttribute))
@@ -186,6 +206,14 @@ namespace Kaguya.Discord.Commands.Reference
                                        .Where(x => x.GetType() == typeof(RestrictionAttribute))
                                        .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
 
+
+            if (string.IsNullOrWhiteSpace(restrictions))
+            {
+                restrictions = match.Preconditions
+                                    .Where(x => x.GetType() == typeof(RestrictionAttribute))
+                                    .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
+            }
+            
             if (string.IsNullOrWhiteSpace(match.Remarks))
             {
                 remarks = $"`{prefix}{match.Aliases[0]}`";
