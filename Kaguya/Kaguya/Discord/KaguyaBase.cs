@@ -15,25 +15,27 @@ namespace Kaguya.Discord
         {
             _logger = logger;
         }
-        
+
         /// <summary>
         /// Builds and sends an <see cref="EmbedBuilder"/> to the current <see cref="ICommandContext"/>'s <see cref="ITextChannel"/>.
         /// If the message could not be sent, this method will return null.
         /// </summary>
         /// <param name="embed"></param>
         /// <returns></returns>
-        protected async Task<RestUserMessage> SendEmbedAsync(EmbedBuilder embed)
+        protected async Task<RestUserMessage> SendEmbedAsync(EmbedBuilder embed) => await SendEmbedAsync(embed.Build());
+
+        protected async Task<RestUserMessage> SendEmbedAsync(Embed embed)
         {
             try
             {
-                RestUserMessage msg = await Context.Channel.SendMessageAsync(embed: embed.Build());
+                RestUserMessage msg = await Context.Channel.SendMessageAsync(embed: embed);
                 return msg;
             }
             catch (Exception)
             {
                 _logger.LogWarning("An exception occurred when trying to send an embedded message " +
-                        $"in guild {Context.Guild} | {Context.Guild.Id}.\n" +
-                        $"Attempting to DM user...");
+                                   $"in guild {Context.Guild} | {Context.Guild.Id}.\n" +
+                                   $"Attempting to DM user...");
             }
 
             return null;

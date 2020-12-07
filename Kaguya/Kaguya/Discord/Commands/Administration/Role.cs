@@ -177,7 +177,8 @@ namespace Kaguya.Discord.Commands.Administration
         [Summary("Creates a role with the desired name and an optional color. If the " +
                  "name has spaces, be sure to wrap it in \"quotation marks\".\n" +
                  "If specifying a color, ensure that is one word only. Example colors:\n" +
-                 "Lightblue, red, orange, darkpurple, darkmagenta, gold, yellow, lightred, pink, etc.")]
+                 "Lightblue, red, orange, purple, magenta, gold, yellow, lightred, lightgreen, pink, etc.\n" +
+                 "If your color could not be found, the default Discord role color will be used.")]
         [Remarks("<role name> [color]")]
         public async Task CreateRoleCommand(string roleName)
         {
@@ -212,6 +213,48 @@ namespace Kaguya.Discord.Commands.Administration
             await SendBasicSuccessEmbedAsync("Created role " + roleName.AsBold() + " with color " + color.Name.AsBold());
         }
 
+        [Command("-createlist")]
+        [Alias("-cl")]
+        [Summary("Creates a list of roles with the names provided.\n" +
+                 "If a role name has spaces, wrap it in \"quotation marks\".")]
+        [Remarks("<role> [role] [...]")]
+        public async Task CreateRolesCommand(params string[] names)
+        {
+            var createdBuilder = new StringBuilder();
+            var errorBuilder = new StringBuilder();
+            
+            foreach (var name in names)
+            {
+                try
+                {
+                    await Context.Guild.CreateRoleAsync(name, null, null, false, null);
+                    createdBuilder.AppendLine($"- {name.AsBold()}");
+                }
+                catch (Exception)
+                {
+                    errorBuilder.AppendLine($"- {name.AsBold()}");
+                }
+            }
+            
+            if (!string.IsNullOrWhiteSpace(createdBuilder.ToString()))
+            {
+                var embed = new KaguyaEmbedBuilder(Color.Green)
+                            .WithDescription($"{Context.User.Mention} Roles created:\n\n" + createdBuilder)
+                            .Build();
+
+                await SendEmbedAsync(embed);
+            }
+
+            if (!string.IsNullOrWhiteSpace(errorBuilder.ToString()))
+            {
+                var embed = new KaguyaEmbedBuilder(Color.Green)
+                            .WithDescription($"{Context.User.Mention} Failed to create roles:\n\n" + createdBuilder)
+                            .Build();
+                
+                await SendEmbedAsync(embed);
+            }
+        }
+
         [Command("-delete")]
         [Alias("-d")]
         [Summary("Deletes the role from the server. If a role name has spaces, " +
@@ -238,7 +281,7 @@ namespace Kaguya.Discord.Commands.Administration
         [Alias("-deletel", "-dl")]
         [Summary("Deletes a list of roles from the server. If a role name has spaces, " +
                  "wrap it in \"quotation marks\".")]
-        [Remarks("<role> [role 2] [...]")]
+        [Remarks("<role> [role] [...]")]
         public async Task DeleteRoleCommand(params SocketRole[] roles)
         {
             var successBuilder = new StringBuilder();
@@ -266,13 +309,13 @@ namespace Kaguya.Discord.Commands.Administration
 
             if (success)
             {
-                finalBuilder.AppendLine("Roles deleted:")
+                finalBuilder.AppendLine($"{Context.User.Mention} Roles deleted:")
                             .AppendLine(successBuilder.ToString());
             }
 
             if (failure)
             {
-                finalBuilder.AppendLine("Failed to delete roles:")
+                finalBuilder.AppendLine($"{Context.User.Mention} Failed to delete roles:")
                             .AppendLine(errorBuilder.ToString());
             }
 
