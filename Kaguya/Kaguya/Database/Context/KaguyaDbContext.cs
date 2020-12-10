@@ -17,9 +17,10 @@ namespace Kaguya.Database.Context
 		public DbSet<AdminAction> AdminActions { get; set; }
 		public DbSet<BlacklistedEntity> BlacklistedEntities { get; set; }
 		public DbSet<CommandHistory> CommandHistories { get; set; }
+		public DbSet<FilteredWord> FilteredWords { get; set; }
+		public DbSet<LogConfiguration> LogConfigurations { get; set; }
 		public DbSet<KaguyaServer> Servers { get; set; }
 		public DbSet<KaguyaUser> Users { get; set; }
-		public DbSet<FilteredWord> FilteredWords { get; set; }
 
 		public KaguyaDbContext(DbContextOptions<KaguyaDbContext> options)
 			: base(options)

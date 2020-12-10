@@ -52,13 +52,14 @@ namespace Kaguya
 						ServerVersion.AutoDetect(Configuration.GetConnectionString("Database")));
 			});
 			
-			// TODO: Add user repositories, etc.
 			// All database repositories are added as scoped here.
+			
+			services.AddScoped<AdminActionRepository>();
+			services.AddScoped<CommandHistoryRepository>();
 			services.AddScoped<KaguyaServerRepository>();
 			services.AddScoped<KaguyaUserRepository>();
-			services.AddScoped<AdminActionRepository>();
+			services.AddScoped<LogConfigurationRepository>();
 			services.AddScoped<WordFilterRepository>();
-			services.AddScoped<CommandHistoryRepository>();
 
 			services.AddControllers();
 

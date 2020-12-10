@@ -19,7 +19,7 @@ namespace Kaguya.Database.Model
 		
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public uint Id { get; set; }
+		public uint Id { get; private set; }
 		public ulong ServerId { get; init; }
 		public ulong ModeratorId { get; init; }
 		public ulong ActionedUserId { get; init; }
