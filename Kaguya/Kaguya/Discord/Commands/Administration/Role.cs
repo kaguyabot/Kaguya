@@ -156,6 +156,59 @@ namespace Kaguya.Discord.Commands.Administration
                 await SendBasicEmbed(didNotContainsBuilder.ToString(), Color.DarkMagenta);
             }
         }
+
+        [Command("-assign")]
+        [Alias("-a")]
+        [Summary("Mass-assigns a role to a single user or a list of users. If any users are not found, this command " +
+                 "will not apply the role to any users and will need to be re-run. If a user has a space in their name, use \"quotation marks\" " +
+                 "or mention them.")]
+        [Remarks("<role> <user> {...}")]
+        public async Task AssignRoleCommand(SocketRole role, params SocketGuildUser[] users)
+        {
+            string successBase = $"Successfully assigned role {role.ToString().AsBold()} to:\n\n";
+            const string errorBase = "Errors:\n\n";
+            
+            var successBuilder = new StringBuilder(successBase);
+            var errorBuilder = new StringBuilder(errorBase);
+            var finalBuilder = new StringBuilder();
+
+            List<string> successUsers = new List<string>();
+
+            foreach (SocketGuildUser user in users)
+            {
+                try
+                {
+                    await user.AddRoleAsync(role);
+                    successUsers.Add(user.Mention);
+                }
+                catch (Exception e)
+                {
+                    errorBuilder.AppendLine($"Role assignment for {user.ToString().AsBold()} failed: {e.Message.AsBold()}");
+                }
+            }
+
+            if (successUsers.Count > 0)
+            {
+                successBuilder.AppendLine(successUsers.Humanize());
+            }
+
+            if (successBuilder.ToString() != successBase)
+            {
+                finalBuilder.AppendLine(successBuilder.ToString());
+            }
+
+            if (errorBuilder.ToString() != errorBase)
+            {
+                finalBuilder.Append("\n\n" + errorBuilder.ToString());
+            }
+
+            var embed = new KaguyaEmbedBuilder(Color.Green)
+            {
+                Description = finalBuilder.ToString()
+            };
+
+            await SendEmbedAsync(embed);
+        }
         
         [Command("-clear")]
         [Summary("Removes all roles from the user.")]
@@ -262,29 +315,7 @@ namespace Kaguya.Discord.Commands.Administration
 
         [Command("-delete")]
         [Alias("-d")]
-        [Summary("Deletes the role from the server. If a role name has spaces, " +
-                 "wrap it in \"quotation marks\".")]
-        [Remarks("<role>")]
-        public async Task DeleteRoleCommand(SocketRole role)
-        {
-            try
-            {
-                await role.DeleteAsync();
-            }
-            catch (Exception e)
-            {
-                await SendBasicErrorEmbedAsync($"Failed to delete role {role.Name.AsBold()} from the server.\n" +
-                                               $"Error: {e.Message.AsBold()}");
-
-                return;
-            }
-
-            await SendBasicSuccessEmbedAsync($"Deleted role {role.Name.AsBold()} from the server.");
-        }
-        
-        [Command("-deletelist")]
-        [Alias("-deletel", "-dl")]
-        [Summary("Deletes a list of roles from the server. If a role name has spaces, " +
+        [Summary("Deletes a role or list of roles from the server. If a role name has spaces, " +
                  "wrap it in \"quotation marks\".")]
         [Remarks("<role> [role] [...]")]
         public async Task DeleteRoleCommand(params SocketRole[] roles)

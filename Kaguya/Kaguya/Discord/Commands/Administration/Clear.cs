@@ -52,9 +52,11 @@ namespace Kaguya.Discord.Commands.Administration
                 return;
             }
 
+            await ((ITextChannel) Context.Channel).DeleteMessagesAsync(messages);
+            
             _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null, TimeSpan.FromSeconds(3), null, false,
                 new KaguyaEmbedBuilder(Color.Magenta)
-                    .WithDescription($"Deleted {messages.Count().ToString().AsBold()} messages.")
+                    .WithDescription($"Deleted {amount.ToString().AsBold()} messages.")
                     .Build());
         }
     }
