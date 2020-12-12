@@ -153,7 +153,7 @@ namespace Kaguya.Discord.Commands.Administration
 
             if (didNotContainsBuilder.ToString() != noContainsStart)
             {
-                await SendBasicEmbed(didNotContainsBuilder.ToString(), Color.DarkMagenta);
+                await SendBasicEmbedAsync(didNotContainsBuilder.ToString(), Color.DarkMagenta);
             }
         }
 
@@ -430,7 +430,7 @@ namespace Kaguya.Discord.Commands.Administration
             }
             else
             {
-                await SendBasicEmbed("No action will be taken.", Color.DarkBlue);
+                await SendBasicEmbedAsync("No action will be taken.", Color.DarkBlue);
             }
         }
 

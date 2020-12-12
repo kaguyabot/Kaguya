@@ -3,11 +3,11 @@ using System.Timers;
 
 namespace Kaguya.Services
 {
-    public abstract class TimedKaguyaService
+    public abstract class IntervaledService
     {
         protected readonly Timer Timer;
         
-        protected TimedKaguyaService(long milliseconds)
+        protected IntervaledService(long milliseconds)
         {
             Timer = new Timer(milliseconds)
             {

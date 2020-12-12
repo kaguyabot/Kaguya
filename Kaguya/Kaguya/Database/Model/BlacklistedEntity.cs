@@ -21,5 +21,8 @@ namespace Kaguya.Database.Model
 		// null = forever muwahahaha
 		public DateTime? ExpirationTime { get; set; }
 		public string Reason { get; set; }
+
+		[NotMapped]
+		public bool HasExpired => ExpirationTime.HasValue && ExpirationTime.Value < DateTime.Now;
 	}
 }

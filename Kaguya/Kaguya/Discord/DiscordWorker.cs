@@ -358,18 +358,6 @@ namespace Kaguya.Discord
                 return;
             }
             
-            /*  Checks and processes user for ratelimits.
-                Technically with how this is implemented, if the user encounters our
-                ratelimit, the command will still execute, *then* they will be blacklisted.
-                Never ratelimit the bot owner.
-            */
-            // TODO: Remove
-            bool REMOVEME = true;
-            if (commandCtx.User.Id != _adminConfigs.Value.OwnerId || REMOVEME)
-            {
-                RatelimitService.Enqueue(user);
-            }
-            
             await _commandService.ExecuteAsync(commandCtx, argPos, scope.ServiceProvider);
         }
 

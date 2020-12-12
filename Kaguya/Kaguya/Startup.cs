@@ -55,6 +55,7 @@ namespace Kaguya
 			// All database repositories are added as scoped here.
 			
 			services.AddScoped<AdminActionRepository>();
+			services.AddScoped<BlacklistedEntityRepository>();
 			services.AddScoped<CommandHistoryRepository>();
 			services.AddScoped<KaguyaServerRepository>();
 			services.AddScoped<KaguyaUserRepository>();

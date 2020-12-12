@@ -54,7 +54,7 @@ namespace Kaguya.Discord
             if (mentionUser)
                 description = $"{Context.User.Mention} {description}";
             
-            return await SendBasicEmbed(description, true);
+            return await SendBasicEmbedAsync(description, true);
         }
         
         /// <summary>
@@ -68,10 +68,10 @@ namespace Kaguya.Discord
             if (mentionUser)
                 description = $"{Context.User.Mention} {description}";
             
-            return await SendBasicEmbed(description, false);
+            return await SendBasicEmbedAsync(description, false);
         }
 
-        private async Task<RestUserMessage> SendBasicEmbed(string description, bool error)
+        private async Task<RestUserMessage> SendBasicEmbedAsync(string description, bool error)
         {
             Color embedColor = Color.Green;
             
@@ -86,7 +86,7 @@ namespace Kaguya.Discord
             return await SendEmbedAsync(embed);
         }
 
-        protected async Task<RestUserMessage> SendBasicEmbed(string description, Color color, bool mentionUser = true)
+        protected async Task<RestUserMessage> SendBasicEmbedAsync(string description, Color color, bool mentionUser = true)
         {
             if (mentionUser)
                 description = $"{Context.User.Mention} {description}";
