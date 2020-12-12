@@ -23,6 +23,8 @@ namespace Kaguya.Database.Model
     }
     public class LogConfiguration
     {
+        public static IList<PropertyInfo> LogProperties { get; private set; }
+        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public ulong ServerId { get; init; }
@@ -41,10 +43,19 @@ namespace Kaguya.Database.Model
         public static IList<PropertyInfo> GetLogProperties()
         {
             IList<PropertyInfo> properties = typeof(LogConfiguration).GetProperties()
-                                                                     .Where(x => !x.Name.Equals("ServerId", StringComparison.OrdinalIgnoreCase))
+                                                                     .Where(x => !x.Name.Equals("ServerId", StringComparison.OrdinalIgnoreCase) &&
+                                                                                 x.PropertyType == typeof(ulong))
                                                                      .ToList();
 
             return properties;
+        }
+
+        /// <summary>
+        /// Populates this class's <see cref="LogProperties"/> value.
+        /// </summary>
+        public static void LoadProperties()
+        {
+            LogProperties = GetLogProperties();
         }
     }
 }

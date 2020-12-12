@@ -67,7 +67,7 @@ namespace Kaguya.Services
 
                     if (user.ActiveRateLimit == 0)
                     {
-                        await InvokeRatelimit(user);
+                        await InvokeRatelimitAsync(user);
                     }
                     
                     _usersToReset.Add(user);
@@ -106,7 +106,7 @@ namespace Kaguya.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        private async Task InvokeRatelimit(KaguyaUser user)
+        private async Task InvokeRatelimitAsync(KaguyaUser user)
         {
         }
 

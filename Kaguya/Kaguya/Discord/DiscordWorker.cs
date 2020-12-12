@@ -65,11 +65,13 @@ namespace Kaguya.Discord
 
             InitCommands();
 
+            InitOther();
+
             await _client.LoginAsync(TokenType.Bot, _discordConfigs.Value.BotToken);
 
             await _client.StartAsync();
         }
-
+        
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await _client.StopAsync();
@@ -249,6 +251,11 @@ namespace Kaguya.Discord
             };
 
             _client.MessageReceived += HandleCommandAsync;
+        }
+
+        private static void InitOther()
+        {
+            LogConfiguration.LoadProperties();
         }
 
         private async Task HandleCommandAsync(SocketMessage msg)
