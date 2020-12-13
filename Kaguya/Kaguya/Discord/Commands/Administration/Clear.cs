@@ -30,9 +30,9 @@ namespace Kaguya.Discord.Commands.Administration
 
         [Command]
         [Summary("Deletes the most recent number of messages specified in the current channel, up to 100. " +
-                 "Cannot delete messages that are older than two weeks.")]
-        [Remarks("<amount>")] // Delete if no remarks needed.
-        public async Task ClearRecentCommand(int amount)
+                 "Cannot delete messages that are older than two weeks. Specify a user to only clear that user's messages.")]
+        [Remarks("<amount> [user]")]
+        public async Task ClearRecentCommand(int amount, SocketGuildUser user = null)
         {
             if (amount < 1 || amount > 100)
             {
@@ -45,6 +45,11 @@ namespace Kaguya.Discord.Commands.Administration
                 .Where(x => x.Timestamp >= DateTime.Now.AddDays(-14))
                 .ToList();
 
+            if (user != null)
+            {
+                messages = messages.Where(x => x.Author.Id == user.Id);
+            }
+
             if (!messages.Any())
             {
                 await SendBasicErrorEmbedAsync("No valid messages found.");
@@ -53,10 +58,18 @@ namespace Kaguya.Discord.Commands.Administration
             }
 
             await ((ITextChannel) Context.Channel).DeleteMessagesAsync(messages);
+
+            string userString = "";
+            if (user != null)
+            {
+                userString = $" from {user.Mention}";
+            }
+            
+            string delString = $"Deleted {amount.ToString().AsBold()} messages{userString}.";
             
             _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null, TimeSpan.FromSeconds(3), null, false,
                 new KaguyaEmbedBuilder(Color.Magenta)
-                    .WithDescription($"Deleted {amount.ToString().AsBold()} messages.")
+                    .WithDescription(delString)
                     .Build());
         }
     }

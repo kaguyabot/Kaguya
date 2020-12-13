@@ -28,17 +28,13 @@ namespace Kaguya.Discord.Commands.OwnerOnly
         [Command("-add")]
         [Summary("Blacklists the entity based on ID for an optional duration.\n" +
                  "Valid entity types are `channel`, `user`, and `server`.")]
-        [Remarks("<entity id> <entity type> [duration] [reason]")] // Delete if no remarks needed.
+        [Remarks("<entity id> <entity type> [duration] [reason]")]
         public async Task BlacklistEntityCommand(ulong id, string type, string duration = null, [Remainder]string reason = null)
         {
             BlacklistedEntity entity = await _blacklistedEntityRepository.GetAsync(id);
             if (entity != null)
             {
-                await SendBasicErrorEmbedAsync("This entity is already blacklisted.\n\n" +
-                                               $"ID: {entity.EntityId.ToString().AsBold()}\n" +
-                                               $"Type: {entity.EntityType.Humanize(LetterCasing.Title).AsBold()}\n" +
-                                               $"Reason: {entity.Reason ?? "<No reason>".AsBold()}\n" +
-                                               $"Expiration: {entity.ExpirationTime?.Humanize(false).AsBold() ?? "Permanent".AsBold()}");
+                await SendBasicErrorEmbedAsync("This entity is already blacklisted.\n\n" + EntityStatus(entity));
             }
             else
             {
@@ -75,6 +71,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 
         [Command("-undo")]
         [Alias("-remove", "-u")]
+        [Remarks("<entity id>")]
         public async Task UnblacklistCommand(ulong id)
         {
             var match = await _blacklistedEntityRepository.GetAsync(id);
@@ -89,6 +86,31 @@ namespace Kaguya.Discord.Commands.OwnerOnly
             await _blacklistedEntityRepository.UpdateAsync(match);
             
             await SendBasicSuccessEmbedAsync($"Unblacklisted entity with ID {id.ToString().AsBold()}");
+        }
+
+        [Command("-status")]
+        [Summary("View the status of a blacklisted entity")]
+        [Remarks("<entity id>")]
+        public async Task ViewBlacklistCommand(ulong id)
+        {
+            var entity = await _blacklistedEntityRepository.GetAsync(id);
+
+            if (entity != null)
+            {
+                await SendBasicSuccessEmbedAsync(EntityStatus(entity));
+            }
+            else
+            {
+                await SendBasicErrorEmbedAsync("The given entity is not blacklisted.");
+            }
+        }
+
+        private string EntityStatus(BlacklistedEntity entity)
+        {
+            return $"ID: {entity.EntityId.ToString().AsBold()}\n" +
+                   $"Type: {entity.EntityType.Humanize(LetterCasing.Title).AsBold()}\n" +
+                   $"Reason: {entity.Reason ?? "<No reason>".AsBold()}\n" +
+                   $"Expiration: {entity.ExpirationTime?.Humanize(false).AsBold() ?? "Permanent".AsBold()}";
         }
     }
 }
