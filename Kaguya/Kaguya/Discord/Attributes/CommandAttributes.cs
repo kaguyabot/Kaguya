@@ -12,7 +12,6 @@ namespace Kaguya.Discord.Attributes
 	{
 		Administration,
 		Games,
-		Exp,
 		Emotion,
 		Reference,
 		Music,

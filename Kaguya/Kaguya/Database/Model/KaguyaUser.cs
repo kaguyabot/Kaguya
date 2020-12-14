@@ -17,7 +17,7 @@ namespace Kaguya.Database.Model
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public ulong UserId { get; set; }
 
-		public int Experience { get; private set; } = 0;
+		public int GlobalExp { get; private set; } = 0;
 
 		public int FishExp { get; set; } = 0;
 
@@ -105,14 +105,14 @@ namespace Kaguya.Database.Model
 		/// <param name="amount"></param>
 		public void AdjustExperienceGlobal(int amount)
 		{
-			if (this.Experience + amount < 0)
+			if (this.GlobalExp + amount < 0)
 			{
-				this.Experience = 0;
+				this.GlobalExp = 0;
 
 				return;
 			}
 			
-			this.Experience += amount;
+			this.GlobalExp += amount;
 		}
 
 		/// <summary>
