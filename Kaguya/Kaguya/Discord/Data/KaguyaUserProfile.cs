@@ -29,17 +29,17 @@ namespace Kaguya.Discord.Data
         public int ExpToNextGlobalLevel => CalculateExpFromLevel(GlobalExpLevel + 1) - _user.GlobalExp;
         public double PercentToNextLevel => CalculatePercentToNextLevel();
 
-        private double CalculateLevel(int exp)
+        private static double CalculateLevel(int exp)
         {
-            if (exp < 64)
-                return 0;
-            
+	        if (exp < 64)
+		        return 0;
+	        
             return Math.Sqrt((exp / 8) - 8);
         }
 
-        private int CalculateExpFromLevel(double level)
+        private static int CalculateExpFromLevel(double level)
         {
-            return (int) (8 * Math.Pow(level, 2)) + 64;
+			return (int) (8 * Math.Pow(level, 2));
         }
 
         private double CalculatePercentToNextLevel()
