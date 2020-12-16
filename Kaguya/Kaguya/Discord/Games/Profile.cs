@@ -12,7 +12,7 @@ using Kaguya.Discord.DiscordExtensions;
 namespace Kaguya.Discord.Games
 {
     [Module(CommandModule.Games)]
-    [Group("Profile")]
+    [Group("profile")]
     [Alias("p")]
     public class Profile : KaguyaBase<Profile>
     {
