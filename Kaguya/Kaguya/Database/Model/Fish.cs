@@ -12,9 +12,9 @@ namespace Kaguya.Database.Model
         /// <summary>
         /// A auto-incrementing ID for this unique fish.
         /// </summary>
-        [Key, Column(Order = 0)]
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long FishId { get; init; }
+        public long FishId { get; }
         /// <summary>
         /// The ID of the user who caught this fish.
         /// </summary>
@@ -38,6 +38,7 @@ namespace Kaguya.Database.Model
         /// How much fish exp the user earned.
         /// </summary>
         public int ExpValue { get; set; }
+        
         /// <summary>
         /// How many points the user received for catching this fish.
         /// </summary>

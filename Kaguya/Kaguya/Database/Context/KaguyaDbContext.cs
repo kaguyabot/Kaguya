@@ -1,12 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Kaguya.Database.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Kaguya;
-using Kaguya.Database.Model;
 
 #nullable disable
 
@@ -18,6 +11,7 @@ namespace Kaguya.Database.Context
 		public DbSet<BlacklistedEntity> BlacklistedEntities { get; set; }
 		public DbSet<CommandHistory> CommandHistories { get; set; }
 		public DbSet<FilteredWord> FilteredWords { get; set; }
+		public DbSet<Fish> Fish { get; set; }
 		public DbSet<LogConfiguration> LogConfigurations { get; set; }
 		public DbSet<KaguyaServer> Servers { get; set; }
 		public DbSet<KaguyaUser> Users { get; set; }

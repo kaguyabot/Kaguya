@@ -96,6 +96,13 @@ namespace Kaguya.Services
 		   {FishType.BaitStolen, FishRarity.Trash}
 		};
 
+		private static KeyValuePair<FishType, FishRarity>[] LegendaryFish => FishMap.Where(x => x.Value == FishRarity.Legendary).ToArray(); 
+		private static KeyValuePair<FishType, FishRarity>[] UltraRareFish => FishMap.Where(x => x.Value == FishRarity.UltraRare).ToArray(); 
+		private static KeyValuePair<FishType, FishRarity>[] RareFish => FishMap.Where(x => x.Value == FishRarity.Rare).ToArray(); 
+		private static KeyValuePair<FishType, FishRarity>[] UncommonFish => FishMap.Where(x => x.Value == FishRarity.Uncommon).ToArray(); 
+		private static KeyValuePair<FishType, FishRarity>[] CommonFish => FishMap.Where(x => x.Value == FishRarity.Common).ToArray(); 
+		private static KeyValuePair<FishType, FishRarity>[] TrashFish => FishMap.Where(x => x.Value == FishRarity.Trash).ToArray(); 
+
 		public static FishRarity SelectRandomRarity()
 		{
 			// 110 / 200 chance to lose all points gambled.
@@ -107,7 +114,12 @@ namespace Kaguya.Services
 			var rangeUncommon = (0.55, 0.85); // 60 / 200 chance
 			var rangeCommon = (0.30, 0.55); // 50 / 200 chance
 			var rangeTrash = (0.0, 0.30); // 60 / 200 chance
-			double roll = _random.NextDouble();
+			
+			double roll;
+			lock (_random)
+			{
+				roll = _random.NextDouble();
+			}
 
 			if (IsBetween(roll, rangeTrash))
 			{
@@ -144,9 +156,23 @@ namespace Kaguya.Services
 
 		public static FishType SelectFish(FishRarity rarity)
 		{
-			var allFish = FishMap.Where(x => x.Value == rarity).ToArray();
+			var allFish = rarity switch
+			{
+				FishRarity.Trash => TrashFish,
+				FishRarity.Common => CommonFish,
+				FishRarity.Uncommon => UncommonFish,
+				FishRarity.Rare => RareFish,
+				FishRarity.UltraRare => UltraRareFish,
+				FishRarity.Legendary => LegendaryFish
+			};
+			
 			int max = allFish.Length;
-			int random = _random.Next(max);
+			int random;
+
+			lock (_random)
+			{
+				random = _random.Next(max);
+			}
 
 			return allFish[random].Key;
 		}
@@ -169,7 +195,7 @@ namespace Kaguya.Services
 
 		private static bool IsBetween(double num, (double min, double max) range)
 		{
-			return range.min < num && num < range.max;
+			return range.min <= num && num <= range.max;
 		}
 	}
 }
