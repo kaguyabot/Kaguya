@@ -6,7 +6,6 @@ using Kaguya.Services;
 
 namespace Kaguya.Database.Model
 {
-    // TODO: Create interface and add to context.
     public class Fish
     {
         /// <summary>
@@ -18,17 +17,14 @@ namespace Kaguya.Database.Model
         /// <summary>
         /// The ID of the user who caught this fish.
         /// </summary>
-        [Key, Column(Order = 1)]
         public ulong UserId { get; init; }
         /// <summary>
         /// The ID of the server in which this fish was caught in.
         /// </summary>
-        [Key, Column(Order = 2)]
         public ulong ServerId { get; init; }
         /// <summary>
         /// The ID of the text channel in which this fish was caught in.
         /// </summary>
-        [Key, Column(Order = 3)]
         public ulong ChannelId { get; init; }
         /// <summary>
         /// When this fish was caught.

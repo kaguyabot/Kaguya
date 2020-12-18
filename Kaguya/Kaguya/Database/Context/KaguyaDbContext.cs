@@ -32,6 +32,19 @@ namespace Kaguya.Database.Context
 		{
 			OnModelCreatingPartial(modelBuilder);
 			modelBuilder.Entity<FilteredWord>().HasKey(w => new { w.ServerId, w.Word });
+			modelBuilder.Entity<Fish>().HasKey(f => new
+			{
+				f.FishId
+			});
+			modelBuilder.Entity<Fish>().HasIndex(f => new
+			{
+				f.UserId,
+				f.ServerId,
+				f.ChannelId,
+				f.TimeCaught,
+				f.FishType,
+				f.Rarity
+			});
 		}
 
 		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
