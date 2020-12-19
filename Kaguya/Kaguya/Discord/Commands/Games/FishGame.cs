@@ -36,7 +36,7 @@ namespace Kaguya.Discord.Commands.Games
         {
             var user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
             int pointsUsed = user.IsPremium ? PREMIUM_POINTS : POINTS;
-            // TODO: Check for 15s cooldown, reduce top 5s for premium users.
+            TimeSpan cooldown = user.IsPremium ? TimeSpan.FromSeconds(5) : TimeSpan.FromSeconds(15);
             // TODO: Get user fish level bonuses and apply them here.
             if (user.Points < pointsUsed)
             {
@@ -69,6 +69,7 @@ namespace Kaguya.Discord.Commands.Games
             int netPoints = fish.PointValue - pointsUsed;
             user.AdjustPoints(netPoints);
             user.AdjustFishExperience(fish.ExpValue);
+            user.LastFished = DateTime.Now;
             await _kaguyaUserRepository.UpdateAsync(user);
 
             string prefix = rarity switch
