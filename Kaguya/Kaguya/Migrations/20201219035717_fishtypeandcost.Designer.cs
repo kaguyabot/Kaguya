@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201219035717_fishtypeandcost")]
+    partial class fishtypeandcost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,23 +158,20 @@ namespace Kaguya.Migrations
                     b.Property<int>("FishType")
                         .HasColumnType("int");
 
+                    b.Property<string>("FishTypeString")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<int>("PointValue")
                         .HasColumnType("int");
 
                     b.Property<int>("Rarity")
                         .HasColumnType("int");
 
-                    b.Property<string>("RarityString")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<DateTime>("TimeCaught")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("TypeString")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<ulong>("UserId")
                         .HasColumnType("bigint unsigned");

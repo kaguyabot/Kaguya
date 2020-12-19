@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Data;
 using Kaguya.Discord.DiscordExtensions;
 
 namespace Kaguya.Discord.Games
@@ -30,16 +29,15 @@ namespace Kaguya.Discord.Games
         public async Task ProfileCommand()
         {
             var user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
-            var profile = new KaguyaUserProfile(user, _kaguyaUserRepository);
 
-            var percent = profile.PercentToNextLevel;
+            var percent = user.PercentToNextLevel;
             
             // TODO: Implement server exp.
             string title = $"Kaguya Profile for {Context.User}";
             var profileBuilder = new StringBuilder()
-                                 .AppendLine($"Global Exp: {user.GlobalExp.ToString("N0").AsBold()} | Level: {profile.GlobalExpLevel.ToString("N0").AsBold()} " +
-                                             $"| ({(percent * 100):N2}% to {profile.GlobalExpLevel + 1})")
-                                 .AppendLine($"Fish Exp: {user.FishExp.ToString("N0").AsBold()} | Fish Level: {profile.FishLevel.ToString("N0").AsBold()} " +
+                                 .AppendLine($"Global Exp: {user.GlobalExp.ToString("N0").AsBold()} | Level: {user.GlobalExpLevel.ToString("N0").AsBold()} " +
+                                             $"| ({(percent * 100):N2}% to {user.GlobalExpLevel + 1})")
+                                 .AppendLine($"Fish Exp: {user.FishExp.ToString("N0").AsBold()} | Fish Level: {user.FishLevel.ToString("N0").AsBold()} " +
                                              $"| Fish Caught: IMPLEMENT")
                                  .AppendLine($"Points: {user.Points.ToString("N0").AsBold()}");
 

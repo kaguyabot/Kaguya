@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
 using Humanizer;
+using Humanizer.Localisation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.DiscordExtensions;
@@ -21,13 +22,15 @@ namespace Kaguya.Discord.Commands.Games
     {
         private readonly ILogger<FishGame> _logger;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
+        private readonly FishRepository _fishRepository;
         private const int POINTS = 75;
         private const int PREMIUM_POINTS = 50;
         
-        public FishGame(ILogger<FishGame> logger, KaguyaUserRepository kaguyaUserRepository) : base(logger)
+        public FishGame(ILogger<FishGame> logger, KaguyaUserRepository kaguyaUserRepository, FishRepository fishRepository) : base(logger)
         {
             _logger = logger;
             _kaguyaUserRepository = kaguyaUserRepository;
+            _fishRepository = fishRepository;
         }
 
         [Command]
@@ -37,6 +40,7 @@ namespace Kaguya.Discord.Commands.Games
             var user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
             int pointsUsed = user.IsPremium ? PREMIUM_POINTS : POINTS;
             TimeSpan cooldown = user.IsPremium ? TimeSpan.FromSeconds(5) : TimeSpan.FromSeconds(15);
+            
             // TODO: Get user fish level bonuses and apply them here.
             if (user.Points < pointsUsed)
             {
@@ -44,6 +48,15 @@ namespace Kaguya.Discord.Commands.Games
                                           $"Points: {user.Points.ToString().AsBold()} ({pointsUsed - user.Points} needed)");
 
                 return;
+            }
+
+            if (user.LastFished > DateTime.Now - cooldown)
+            {
+	            await SendBasicErrorEmbedAsync($"Please wait " + (user.LastFished.Value - DateTime.Now.Subtract(cooldown))
+	                                                             .Humanize(1, minUnit:  TimeUnit.Millisecond, maxUnit: TimeUnit.Second)
+	                                                             .AsBold() + " before fishing again.");
+
+	            return;
             }
 
             FishRarity rarity = FishService.SelectRandomRarity();
@@ -60,11 +73,14 @@ namespace Kaguya.Discord.Commands.Games
                 ExpValue = fishValue.exp,
                 PointValue = fishValue.points,
                 CostOfPlay = pointsUsed,
+                BaseCost = FishService.GetFishValue(rarity).fishPoints,
                 FishType = randomFish,
-                Rarity = rarity
+                Rarity = rarity,
+                RarityString = rarity.Humanize(LetterCasing.Title),
+                TypeString = randomFish.Humanize(LetterCasing.Title)
             };
-            
-            // TODO: Insert fish into database.
+
+            await _fishRepository.InsertAsync(fish);
 
             int netPoints = fish.PointValue - pointsUsed;
             user.AdjustPoints(netPoints);
@@ -79,11 +95,12 @@ namespace Kaguya.Discord.Commands.Games
                 FishRarity.Uncommon => "Nice! You caught a",
                 FishRarity.Rare => "Holy smokes! You caught a",
                 FishRarity.UltraRare => "Hot diggity dog!! You just caught a",
-                FishRarity.Legendary => "WOW!! You hit the jackpot and caught the"
+                FishRarity.Legendary => "WOW!! You hit the jackpot and caught the",
+                _ => "You caught a"
             };
 
             // Grammar
-            string start = fish.FishTypeString[0].ToString().ToLower();
+            string start = fish.TypeString[0].ToString().ToLower();
             bool fishStartsWithVowel = start == "a" || start == "e" || start == "i" || start == "o" || start == "u";
             
             if (prefix.EndsWith("a", StringComparison.OrdinalIgnoreCase) && fishStartsWithVowel)
@@ -97,14 +114,18 @@ namespace Kaguya.Discord.Commands.Games
             }
             
             // End grammar
-            StringBuilder descBuilder = new StringBuilder($"🎣 | {Context.User.Mention} {prefix} {fish.FishTypeString.AsBold()}!\n\n")
+            StringBuilder descBuilder = new StringBuilder($"🎣 | {Context.User.Mention} {prefix} {fish.TypeString.AsBold()}!\n\n")
                                         .AppendLine($"Fish ID: {fish.FishId.ToString().AsBold()}")
                                         .AppendLine($"Rarity: {rarity.Humanize(LetterCasing.Title).AsBold()}")
                                         .AppendLine($"Market value: {fish.PointValue.ToString("N0").AsBold()} points")
                                         .AppendLine($"Experience gained: " + $"+{fish.ExpValue:N0}".AsBold() + " fishing exp")
                                         .AppendLine("Points remaining: " + $"{user.Points:N0}".AsBold());
 
-            string footer = $"Fish Exp: {user.FishExp:N0} | Fish Caught: IMPLEMENT | Points from Fishing: IMPLEMENT";
+            var allFish = await _fishRepository.GetAllForUserAsync(user.UserId);
+            int allCaught = allFish.Count;
+            int allPoints = allFish.Sum(x => x.PointValue);
+            
+            string footer = $"Fish Level: {user.FishExp:N0} | Fish Caught: {allCaught:N0} | Points from Fishing: {allPoints:N0}";
             
             Color color = rarity switch
             {

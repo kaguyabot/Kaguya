@@ -46,7 +46,7 @@ namespace Kaguya.Database.Model
         /// <summary>
         /// The cost of this fish before taking user fishing experience modifications into account.
         /// </summary>
-        public int BaseCost => FishService.GetFishValue(Rarity).fishPoints;
+        public int BaseCost { get; set; }
 
         /// <summary>
         /// The type of fish caught (name).
@@ -57,8 +57,12 @@ namespace Kaguya.Database.Model
         /// </summary>
         public FishRarity Rarity { get; set; }
         /// <summary>
+        /// The written version of the <see cref="FishRarity"/>, formatted in "Title Case".
+        /// </summary>
+        public string RarityString { get; set; }
+        /// <summary>
         /// The written version of the <see cref="FishType"/>, formatted in "Title Case".
         /// </summary>
-        public string FishTypeString => FishType.Humanize(LetterCasing.Title);
+        public string TypeString { get; set; }
     }
 }

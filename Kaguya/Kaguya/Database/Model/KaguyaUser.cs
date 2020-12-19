@@ -68,21 +68,30 @@ namespace Kaguya.Database.Model
 
 		// public FishHandler.FishLevelBonuses FishLevelBonuses => new FishHandler.FishLevelBonuses(FishExp);
 		// public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
-		[NotMapped]
 		public bool IsPremium => PremiumExpiration.HasValue && PremiumExpiration.Value > DateTime.Now;
 
-		[NotMapped]
 		public bool CanGiveRep => !LastGivenRep.HasValue || LastGivenRep.Value < DateTime.Now.AddHours(-24);
 
-		[NotMapped]
 		public bool CanGetDailyPoints => !LastDailyBonus.HasValue || LastDailyBonus.Value < DateTime.Now.AddHours(-24);
 
-		[NotMapped]
 		public bool CanGetWeeklyPoints => !LastWeeklyBonus.HasValue || LastWeeklyBonus.Value < DateTime.Now.AddDays(-7);
+
+		public int GlobalExpLevel => ToFloor(ExactGlobalExpLevel);
+
+		/// <summary>
+		/// The user's level as returned by the experience formula.
+		/// </summary>
+		public double ExactGlobalExpLevel => CalculateLevel(this.GlobalExp);
+
+		public int FishLevel => ToFloor(ExactFishLevel);
+
+		public double ExactFishLevel => CalculateLevel(this.FishExp);
+
+		public int ExpToNextGlobalLevel => CalculateExpFromLevel(GlobalExpLevel + 1) - this.GlobalExp;
+		public double PercentToNextLevel => CalculatePercentToNextLevel();
 
 		// public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
 
-		// TODO: Do we have to specify [NotMapped] for these?
 		/// <summary>
 		/// Adjusts the user's points by the <see cref="amount"/> given.
 		/// </summary>
@@ -132,5 +141,30 @@ namespace Kaguya.Database.Model
 		}
 
 		public override string ToString() => UserId.ToString();
+		
+		private static int ToFloor(double d) => (int)Math.Floor(d);
+		
+		private static double CalculateLevel(int exp)
+		{
+			if (exp < 64)
+				return 0;
+	        
+			return Math.Sqrt((exp / 8) - 8);
+		}
+
+		private static int CalculateExpFromLevel(double level)
+		{
+			return (int) (8 * Math.Pow(level, 2));
+		}
+
+		private double CalculatePercentToNextLevel()
+		{
+			int baseExp = CalculateExpFromLevel(GlobalExpLevel);
+			int nextExp = CalculateExpFromLevel(GlobalExpLevel + 1);
+			int difference = nextExp - baseExp;
+			int remaining = nextExp - this.GlobalExp;
+
+			return (difference - remaining) / (double)difference;
+		}
 	}
 }
