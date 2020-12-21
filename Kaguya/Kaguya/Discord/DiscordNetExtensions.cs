@@ -30,5 +30,13 @@ namespace Kaguya.Discord
         /// <param name="cmdInfo"></param>
         /// <returns></returns>
         public static string GetFullCommandName(this CommandInfo cmdInfo) => cmdInfo.Aliases[0];
+
+        /// <summary>
+        /// Compares two <see cref="IUser"/> objects for equality, based only on user id.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public static bool IsEqual(this IUser user, IUser other) => user.Id == other.Id;
     }
 }

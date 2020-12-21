@@ -13,6 +13,7 @@ namespace Kaguya.Database.Context
 		public DbSet<FilteredWord> FilteredWords { get; set; }
 		public DbSet<Fish> Fish { get; set; }
 		public DbSet<LogConfiguration> LogConfigurations { get; set; }
+		public DbSet<Rep> Rep { get; set; }
 		public DbSet<KaguyaServer> Servers { get; set; }
 		public DbSet<KaguyaUser> Users { get; set; }
 

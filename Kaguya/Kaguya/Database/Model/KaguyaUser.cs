@@ -26,6 +26,7 @@ namespace Kaguya.Database.Model
 		public int? OsuId { get; set; }
 
 		public int TotalCommandUses { get; set; } = 0;
+		public int Rep { get; set; } = 0;
 
 		public int TotalDaysPremium { get; set; } = 0;
 

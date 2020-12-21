@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201221085419_UserRep")]
+    partial class UserRep
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,29 +343,6 @@ namespace Kaguya.Migrations
                     b.HasKey("ServerId");
 
                     b.ToTable("LogConfigurations");
-                });
-
-            modelBuilder.Entity("Kaguya.Database.Model.Rep", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<ulong>("GivenBy")
-                        .HasColumnType("bigint unsigned");
-
-                    b.Property<string>("Reason")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("TimeGiven")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<ulong>("UserId")
-                        .HasColumnType("bigint unsigned");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Rep");
                 });
 
             modelBuilder.Entity("Kaguya.Database.Model.AntiRaidConfig", b =>

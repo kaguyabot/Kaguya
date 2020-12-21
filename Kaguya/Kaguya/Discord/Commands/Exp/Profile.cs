@@ -1,14 +1,13 @@
-﻿using System;
-using System.Text;
-using Discord.Commands;
-using Kaguya.Discord.Attributes;
-using Microsoft.Extensions.Logging;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Attributes;
 using Kaguya.Discord.DiscordExtensions;
+using Microsoft.Extensions.Logging;
 
-namespace Kaguya.Discord.Games
+namespace Kaguya.Discord.Commands.Exp
 {
     [Module(CommandModule.Games)]
     [Group("profile")]
