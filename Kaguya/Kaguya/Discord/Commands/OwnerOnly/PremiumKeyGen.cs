@@ -46,7 +46,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
                     Key = PremiumKey.GenerateKey(),
                     KeyCreatorId = Context.User.Id,
                     LengthInSeconds = (int)parsedTime.TotalSeconds,
-                    Expiration = DateTime.Now.Add(parsedTime),
+                    Expiration = null,
                     UserId = 0,
                     ServerId = 0
                 });
