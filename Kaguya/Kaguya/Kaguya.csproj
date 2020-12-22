@@ -5,13 +5,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Discord.InteractivityAddon" Version="2.2.0-rc5" />
-        <PackageReference Include="Discord.Net" Version="2.3.0-dev-20201201.2" />
-        <PackageReference Include="Discord.Net.Commands" Version="2.3.0-dev-20201201.2" />
-        <PackageReference Include="Discord.Net.Core" Version="2.3.0-dev-20201201.2" />
-        <PackageReference Include="Discord.Net.Rest" Version="2.3.0-dev-20201201.2" />
-        <PackageReference Include="Discord.Net.Webhook" Version="2.3.0-dev-20201201.2" />
-        <PackageReference Include="Discord.Net.WebSocket" Version="2.3.0-dev-20201201.2" />
+        <PackageReference Include="Discord.InteractivityAddon" Version="2.2.0-rc8" />
+        <PackageReference Include="Discord.Net" Version="2.3.0-dev-20201220.5" />
+        <PackageReference Include="Discord.Net.Commands" Version="2.3.0-dev-20201220.5" />
+        <PackageReference Include="Discord.Net.Core" Version="2.3.0-dev-20201220.5" />
+        <PackageReference Include="Discord.Net.Rest" Version="2.3.0-dev-20201220.5" />
+        <PackageReference Include="Discord.Net.Webhook" Version="2.3.0-dev-20201220.5" />
+        <PackageReference Include="Discord.Net.WebSocket" Version="2.3.0-dev-20201220.5" />
         <PackageReference Include="Humanizer" Version="2.8.26" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" NoWarn="NU1605" />

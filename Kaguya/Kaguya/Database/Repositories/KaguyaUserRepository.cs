@@ -27,7 +27,7 @@ namespace Kaguya.Database.Repositories
 		
 		public async Task<KaguyaUser> GetAsync(ulong key)
 		{
-			return await _dbContext.Users.AsQueryable().FirstOrDefaultAsync(x => x.UserId == key);
+			return await _dbContext.Users.AsQueryable().Where(x => x.UserId == key).FirstOrDefaultAsync();
 		}
 		
 		public async Task DeleteAsync(ulong key)

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
@@ -23,9 +24,10 @@ namespace Kaguya.Database.Repositories
 		{
 			return await _dbContext.CommandHistories
 			                       .AsQueryable()
-			                       .FirstOrDefaultAsync(x => x.UserId == userId && 
-			                                                 x.ServerId == serverId && 
-			                                                 x.CommandName.Equals(command, StringComparison.OrdinalIgnoreCase));
+			                       .Where(x => x.UserId == userId && 
+			                                   x.ServerId == serverId && 
+			                                   x.CommandName.Equals(command, StringComparison.OrdinalIgnoreCase))
+			                       .FirstOrDefaultAsync();
 		}
 
 		public async Task UpdateAsync(CommandHistory value)

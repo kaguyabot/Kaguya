@@ -36,7 +36,7 @@ namespace Kaguya.Discord.Commands.Exp
             if (user.IsEqual(Context.User))
             {
                 await SendBasicErrorEmbedAsync("You cannot give rep to yourself.");
-
+            
                 return;
             }
             
@@ -59,7 +59,6 @@ namespace Kaguya.Discord.Commands.Exp
                     Reason = reason
                 };
                 
-                nextUser.Rep++;
                 curUser.LastGivenRep = DateTime.Now;
 
                 await _kaguyaUserRepository.UpdateAsync(curUser);
@@ -74,7 +73,7 @@ namespace Kaguya.Discord.Commands.Exp
         public async Task RepCommand()
         {
             var curUser = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
-            int repNum = curUser.Rep;
+            int repNum = await _repRepository.GetCountRepForUserAsync(curUser.UserId);
 
             var recentMatch = await _repRepository.GetMostRecentForUserAsync(curUser.UserId);
             bool showFooter = recentMatch != null;

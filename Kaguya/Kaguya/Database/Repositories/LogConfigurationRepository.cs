@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
@@ -20,7 +21,7 @@ namespace Kaguya.Database.Repositories
         
         public async Task<LogConfiguration> GetAsync(ulong key)
         {
-            return await _dbContext.LogConfigurations.AsQueryable().FirstOrDefaultAsync(x => x.ServerId == key);
+            return await _dbContext.LogConfigurations.AsQueryable().Where(x => x.ServerId == key).FirstOrDefaultAsync();
         }
         
         

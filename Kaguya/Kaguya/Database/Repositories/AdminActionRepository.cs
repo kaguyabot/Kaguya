@@ -22,7 +22,7 @@ namespace Kaguya.Database.Repositories
 		
 		public async Task<AdminAction> GetAsync(ulong key)
 		{
-			return await _dbContext.AdminActions.AsQueryable().FirstOrDefaultAsync(x => x.ServerId == key);
+			return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == key).FirstOrDefaultAsync();
 		}
 
 		public async Task DeleteAsync(ulong key)

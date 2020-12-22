@@ -23,7 +23,7 @@ namespace Kaguya.Database.Repositories
         
         public async Task<Fish> GetAsync(long key)
         {
-            return await _dbContext.Fish.AsQueryable().FirstOrDefaultAsync(x => x.FishId == key);
+            return await _dbContext.Fish.AsQueryable().Where(x => x.FishId == key).FirstOrDefaultAsync();
         }
 
         public async Task DeleteAsync(long key)
@@ -50,35 +50,22 @@ namespace Kaguya.Database.Repositories
 
         public async Task<IList<Fish>> GetAllForUserAsync(ulong userId)
         {
-            var collection = _dbContext.Fish.AsQueryable().Where(x => x.UserId == userId);
-
-            return await collection.ToListAsync();
+            return await _dbContext.Fish.AsQueryable().Where(x => x.UserId == userId).ToListAsync();
         }
 
         public async Task<IList<Fish>> GetAllForServerAsync(ulong serverId)
         {
-            var collection = _dbContext.Fish.AsQueryable().Where(x => x.ServerId == serverId);
-
-            return await collection.ToListAsync();
+             return await _dbContext.Fish.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
         }
 
-        public async Task<IList<Fish>> GetAllOfTypeAsync(FishType fish)
+        public async Task<IList<Fish>> GetAllOfTypeForUserAsync(ulong userId, FishType fish)
         {
-            var collection = _dbContext.Fish.AsQueryable().Where(x => x.FishType == fish);
-
-            return await collection.ToListAsync();
+            return await _dbContext.Fish.AsQueryable().Where(x => x.UserId == userId && x.FishType == fish).ToListAsync();
         }
 
-        public async Task<IList<Fish>> GetAllOfRarityAsync(FishRarity rarity)
+        public async Task<IList<Fish>> GetAllOfRarityForUserAsync(ulong userId, FishRarity rarity)
         {
-            var collection = _dbContext.Fish.AsQueryable().Where(x => x.Rarity == rarity);
-
-            return await collection.ToListAsync();
-        }
-
-        public async Task<IList<Fish>> GetAllAsync()
-        {
-            return await _dbContext.Fish.AsQueryable().ToListAsync();
+            return await _dbContext.Fish.AsQueryable().Where(x => x.UserId == userId && x.Rarity == rarity).ToListAsync();
         }
 
         public async Task<int> GetCountAsync()

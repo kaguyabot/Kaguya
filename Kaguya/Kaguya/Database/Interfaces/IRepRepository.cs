@@ -8,5 +8,6 @@ namespace Kaguya.Database.Interfaces
     {
         public Task<IList<Rep>> GetAllForUserAsync(ulong userId);
         public Task<Rep> GetMostRecentForUserAsync(ulong userId);
+        public Task<int> GetCountRepForUserAsync(ulong userid);
     }
 }

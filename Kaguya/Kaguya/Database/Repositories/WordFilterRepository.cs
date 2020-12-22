@@ -25,8 +25,8 @@ namespace Kaguya.Database.Repositories
 
         public async Task<FilteredWord> GetAsync(ulong key, string word)
         {
-            return await _dbContext.FilteredWords.AsQueryable().FirstOrDefaultAsync(x => 
-                x.ServerId == key && x.Word.Equals(word, StringComparison.OrdinalIgnoreCase));
+            return await _dbContext.FilteredWords.AsQueryable().Where(x => 
+                x.ServerId == key && x.Word.Equals(word, StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(FilteredWord value)

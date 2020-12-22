@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
@@ -39,7 +40,7 @@ namespace Kaguya.Database.Repositories
 
         public async Task<KaguyaServer> GetAsync(ulong key)
         {
-            return await _dbContext.Servers.AsQueryable().FirstOrDefaultAsync(x => x.ServerId == key);
+            return await _dbContext.Servers.AsQueryable().Where(x => x.ServerId == key).FirstOrDefaultAsync();
         }
 
         public async Task DeleteAsync(ulong key)
@@ -80,7 +81,10 @@ namespace Kaguya.Database.Repositories
 
         public async Task UpdateAsync(KaguyaServer value)
         {
-	        var current = await _dbContext.Servers.AsQueryable().FirstOrDefaultAsync(x => x.ServerId == value.ServerId);
+	        var current = await _dbContext.Servers
+                                          .AsQueryable()
+                                          .Where(x => x.ServerId == value.ServerId)
+                                          .FirstOrDefaultAsync();
 
 	        if (current.Equals(value))
 		        return;

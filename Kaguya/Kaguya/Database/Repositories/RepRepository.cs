@@ -22,7 +22,7 @@ namespace Kaguya.Database.Repositories
         
         public async Task<Rep> GetAsync(long key)
         {
-            return await _dbContext.Rep.AsQueryable().FirstOrDefaultAsync(x => x.Id == key);
+            return await _dbContext.Rep.AsQueryable().Where(x => x.Id == key).FirstOrDefaultAsync();
         }
 
         public async Task DeleteAsync(long key)
@@ -49,14 +49,20 @@ namespace Kaguya.Database.Repositories
 
         public async Task<IList<Rep>> GetAllForUserAsync(ulong userId)
         {
-            var matches = _dbContext.Rep.AsQueryable().Where(x => x.UserId == userId);
-
-            return await matches.ToListAsync();
+            return await _dbContext.Rep.AsQueryable().Where(x => x.UserId == userId).ToListAsync();
         }
 
         public async Task<Rep> GetMostRecentForUserAsync(ulong userId)
         {
-            return await _dbContext.Rep.AsQueryable().OrderByDescending(x => x.TimeGiven).FirstOrDefaultAsync();
+            return await _dbContext.Rep.AsQueryable()
+                                        .OrderByDescending(x => x.TimeGiven)
+                                        .Where(x => x.UserId == userId)
+                                        .FirstOrDefaultAsync();
+        }
+
+        public async Task<int> GetCountRepForUserAsync(ulong userid)
+        {
+            return await _dbContext.Rep.AsQueryable().CountAsync(x => x.UserId == userid);
         }
     }
 }

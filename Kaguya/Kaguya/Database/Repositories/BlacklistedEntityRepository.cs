@@ -21,7 +21,7 @@ namespace Kaguya.Database.Repositories
         
         public async Task<BlacklistedEntity> GetAsync(ulong key)
         {
-            return await _dbContext.BlacklistedEntities.AsQueryable().FirstOrDefaultAsync(x => x.EntityId == key);
+            return await _dbContext.BlacklistedEntities.AsQueryable().Where(x => x.EntityId == key).FirstOrDefaultAsync();
         }
 
         public async Task DeleteAsync(ulong key)
