@@ -13,7 +13,7 @@ namespace Kaguya.Database.Model
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long FishId { get; }
+        public long FishId { get; init; }
         /// <summary>
         /// The ID of the user who caught this fish.
         /// </summary>

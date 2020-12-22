@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Rest;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord
@@ -38,5 +40,8 @@ namespace Kaguya.Discord
         /// <param name="other"></param>
         /// <returns></returns>
         public static bool IsEqual(this IUser user, IUser other) => user.Id == other.Id;
+
+        public static async Task<IUserMessage> SendEmbedAsync(this IUser user, EmbedBuilder embedBuilder) => await user.SendMessageAsync(embed: embedBuilder.Build());
+        public static async Task<IUserMessage> SendEmbedAsync(this IUser user, Embed embed) => await user.SendMessageAsync(embed: embed);
     }
 }
