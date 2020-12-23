@@ -18,7 +18,8 @@ namespace Kaguya.Database.Model
         public DateTime? Expiration { get; set; }
         public ulong UserId { get; set; }
         public ulong ServerId { get; set; }
-        public string HumanizedDuration => new TimeSpan(0, 0, this.LengthInSeconds).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day);
+        public string HumanizedLength => TimeSpan.FromSeconds(this.LengthInSeconds).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day);
+        public bool IsRedeemed => Expiration.HasValue;
 
         public static string GenerateKey()
         {

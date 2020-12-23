@@ -21,13 +21,14 @@ namespace Kaguya.Database.Model
 
 		public int FishExp { get; set; } = 0;
 
-		public int Points { get; set; } = 0;
+		public int Points { get; private set; } = 0;
 
 		public int? OsuId { get; set; }
 
 		public int TotalCommandUses { get; set; } = 0;
 
 		public int TotalDaysPremium { get; set; } = 0;
+		public int TotalPremiumRedemptions { get; set; } = 0;
 
 		/// <summary>
 		/// Whenever a user uses a command, decrease this value by one.

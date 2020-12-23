@@ -61,7 +61,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
             var builder = new StringBuilder();
             foreach (PremiumKey key in collection)
             {
-                builder.AppendLine($"Duration: {key.HumanizedDuration.AsBold()} | Key: {key.Key.AsBold()}");
+                builder.AppendLine($"Duration: {key.HumanizedLength.AsBold()} | Key: {key.Key.AsBold()}");
             }
             
             if (amount < 20)

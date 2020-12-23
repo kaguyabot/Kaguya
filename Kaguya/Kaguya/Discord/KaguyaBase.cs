@@ -24,23 +24,6 @@ namespace Kaguya.Discord
         /// <returns></returns>
         protected async Task<RestUserMessage> SendEmbedAsync(EmbedBuilder embed) => await SendEmbedAsync(embed.Build());
 
-        protected async Task<RestUserMessage> SendEmbedAsync(Embed embed)
-        {
-            try
-            {
-                RestUserMessage msg = await Context.Channel.SendMessageAsync(embed: embed);
-                return msg;
-            }
-            catch (Exception)
-            {
-                _logger.LogWarning("An exception occurred when trying to send an embedded message " +
-                                   $"in guild {Context.Guild} | {Context.Guild.Id}.\n" +
-                                   $"Attempting to DM user...");
-            }
-
-            return null;
-        }
-
         /// <summary>
         /// Sends a basic <see cref="KaguyaEmbedBuilder"/> in chat with a red color.
         /// If the message could not be sent, this method will return null.
@@ -51,10 +34,7 @@ namespace Kaguya.Discord
         /// <returns></returns>
         protected async Task<RestUserMessage> SendBasicErrorEmbedAsync(string description, bool mentionUser = true)
         {
-            if (mentionUser)
-                description = $"{Context.User.Mention} {description}";
-            
-            return await SendBasicEmbedAsync(description, true);
+            return await SendBasicEmbedAsync(description, Color.Red);
         }
         
         /// <summary>
@@ -65,36 +45,38 @@ namespace Kaguya.Discord
         /// <returns></returns>
         protected async Task<RestUserMessage> SendBasicSuccessEmbedAsync(string description, bool mentionUser = true)
         {
-            if (mentionUser)
-                description = $"{Context.User.Mention} {description}";
-            
-            return await SendBasicEmbedAsync(description, false);
+            return await SendBasicEmbedAsync(description, false, mentionUser);
         }
 
-        private async Task<RestUserMessage> SendBasicEmbedAsync(string description, bool error)
+        private async Task<RestUserMessage> SendBasicEmbedAsync(string description, bool error, bool mentionUser)
         {
-            Color embedColor = Color.Green;
-            
-            if (error) 
-                embedColor = Color.Red;
-            
-            var embed = new KaguyaEmbedBuilder(embedColor)
-            {
-                Description = description
-            };
+            Color embedColor = error ? Color.Red : Color.Green;
 
-            return await SendEmbedAsync(embed);
+            return await SendBasicEmbedAsync(description, embedColor, mentionUser);
         }
 
         protected async Task<RestUserMessage> SendBasicEmbedAsync(string description, Color color, bool mentionUser = true)
         {
-            if (mentionUser)
-                description = $"{Context.User.Mention} {description}";
-            
-            return await Context.Channel.SendMessageAsync(embed: new KaguyaEmbedBuilder(color)
-            {
-                Description = description
-            }.Build());
+            return await Context.Channel.SendMessageAsync(embed: GetBasicEmbed(description, color, mentionUser));
+        }
+
+        protected Embed GetBasicErrorEmbed(string description, bool mentionUser = true)
+        {
+            return new KaguyaEmbedBuilder(Color.Red)
+                   .WithDescription(mentionUser ? $"{Context.User.Mention} {description}" : description)
+                   .Build();
+        }
+
+        protected Embed GetBasicSuccessEmbed(string description, bool mentionUser)
+        {
+            return GetBasicEmbed(description, Color.Green, mentionUser);
+        }
+        
+        protected Embed GetBasicEmbed(string description, Color color, bool mentionUser = true)
+        {
+            return new KaguyaEmbedBuilder(color)
+                   .WithDescription(mentionUser ? Context.User.Mention + " " + description : description)
+                   .Build();
         }
 
         /// <summary>
@@ -114,6 +96,23 @@ namespace Kaguya.Discord
                                  $"in guild [{Context.Guild} | {Context.Guild.Id}]");
                 return null;
             }
+        }
+        
+        protected async Task<RestUserMessage> SendEmbedAsync(Embed embed)
+        {
+            try
+            {
+                RestUserMessage msg = await Context.Channel.SendMessageAsync(embed: embed);
+                return msg;
+            }
+            catch (Exception)
+            {
+                _logger.LogWarning("An exception occurred when trying to send an embedded message " +
+                                   $"in guild {Context.Guild} | {Context.Guild.Id}.\n" +
+                                   $"Attempting to DM user...");
+            }
+
+            return null;
         }
     }
 }
