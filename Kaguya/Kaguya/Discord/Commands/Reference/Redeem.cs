@@ -88,7 +88,8 @@ namespace Kaguya.Discord.Commands.Reference
                         
             var response = new KaguyaEmbedBuilder(Color.Gold)
                            .WithTitle("Kaguya Premium: Redemption Successful")
-                           .WithDescription($"{Context.User.Mention} You have successfully redeemed a {Global.StoreNameWithLink} key for {match.HumanizedLength.AsBold()}. " +
+                           .WithDescription($"{Context.User.Mention} You have successfully redeemed a {Global.StoreNameWithLink} key " +
+                                            $"with a duration of {match.HumanizedLength.AsBold()}.\n" +
                                             $"You have been awarded {additionalPoints.ToString("N0").AsBold()} points.")
                            .WithFooter(new EmbedFooterBuilder
                            {
