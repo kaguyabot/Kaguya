@@ -6,16 +6,16 @@ namespace Kaguya.Database.Model
 {
 	public class AdminAction
 	{
-		public const string KICK_ACTION = "Kick";
-		public const string BAN_ACTION = "Ban";
-		public const string TEMP_BAN_ACTION = "Temporary Ban";
-		public const string UNBAN_ACTION = "Unban";
-		public const string SHADOWBAN_ACTION = "Shadowban";
-		public const string UNSHADOWBAN_ACTION = "Unshadowban";
-		public const string WARN_ACTION = "Warn";
-		public const string UNWARN_ACTION = "Unwarn";
-		public const string MUTE_ACTION = "Mute";
-		public const string UNMUTE_ACTION = "Unmute";
+		public const string KickAction = "Kick";
+		public const string BanAction = "Ban";
+		public const string TempBanAction = "Temporary Ban";
+		public const string UnbanAction = "Unban";
+		public const string ShadowbanAction = "Shadowban";
+		public const string UnshadowbanAction = "Unshadowban";
+		public const string WarnAction = "Warn";
+		public const string UnwarnAction = "Unwarn";
+		public const string MuteAction = "Mute";
+		public const string UnmuteAction = "Unmute";
 		
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,6 +24,7 @@ namespace Kaguya.Database.Model
 		public ulong ModeratorId { get; init; }
 		public ulong ActionedUserId { get; init; }
 		public string Action { get; init; }
+		public string Reason { get; set; }
 		public DateTime? Expiration { get; init; }
 	}
 }

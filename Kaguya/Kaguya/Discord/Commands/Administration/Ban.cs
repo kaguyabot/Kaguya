@@ -25,23 +25,23 @@ namespace Kaguya.Discord.Commands.Administration
     public class Ban : KaguyaBase<Ban>
     {
         private readonly ILogger<Ban> _logger;
-        private readonly KaguyaServerRepository _ksRepo;
-        private readonly AdminActionRepository _aaRepo;
+        private readonly KaguyaServerRepository _kaguyaServerRepository;
+        private readonly AdminActionRepository _adminActionRepository;
 
-        public Ban(ILogger<Ban> logger, KaguyaServerRepository ksRepo,
-                   AdminActionRepository aaRepo) : base(logger)
+        public Ban(ILogger<Ban> logger, KaguyaServerRepository kaguyaServerRepository,
+                   AdminActionRepository adminActionRepository) : base(logger)
         {
 	        _logger = logger;
-	        _ksRepo = ksRepo;
-	        _aaRepo = aaRepo;
+	        _kaguyaServerRepository = kaguyaServerRepository;
+	        _adminActionRepository = adminActionRepository;
         }
         
         [Command]
         [Summary("Permanently bans a user from the server.")]
         [Remarks("<user> [reason]")]
-        public async Task CommandBan(SocketGuildUser user, [Remainder]string reason = "<No reason provided.>")
+        public async Task BanCommand(SocketGuildUser user, [Remainder]string reason = "<No reason provided>")
         {
-	        KaguyaServer server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
+	        KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
             try
             {
 	            var adminAction = new AdminAction
@@ -49,7 +49,8 @@ namespace Kaguya.Discord.Commands.Administration
 		            ServerId = Context.Guild.Id,
 		            ModeratorId = Context.User.Id,
 		            ActionedUserId = user.Id,
-		            Action = AdminAction.BAN_ACTION,
+		            Action = AdminAction.BanAction,
+		            Reason = reason,
 		            Expiration = null
 	            };
 	            
@@ -76,11 +77,11 @@ namespace Kaguya.Discord.Commands.Administration
 
         private async Task BanAsync(SocketGuildUser user, AdminAction action, string reason)
         {
-	        var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
+	        KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
 	        server.TotalAdminActions++;
 
-	        await _aaRepo.InsertAsync(action);
-	        await _ksRepo.UpdateAsync(server);
+	        await _adminActionRepository.InsertAsync(action);
+	        await _kaguyaServerRepository.UpdateAsync(server);
 
 	        await user.BanAsync(reason: reason);
         }
@@ -89,13 +90,13 @@ namespace Kaguya.Discord.Commands.Administration
         [Command("-u")]
         [Summary("Unbans the user from the server.")]
         [Remarks("<user id> [reason]")]
-        public async Task CommandUnban(ulong id, [Remainder]string reason = "<No reason provided.>")
+        public async Task CommandUnban(ulong id, [Remainder]string reason = "<No reason provided>")
         {
 	        try
 	        {
 		        await Context.Guild.RemoveBanAsync(id);
 		        
-		        var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
+		        var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
 		        server.TotalAdminActions++;
 		        
 		        var adminAction = new AdminAction
@@ -103,16 +104,17 @@ namespace Kaguya.Discord.Commands.Administration
 			                          ServerId = Context.Guild.Id,
 			                          ModeratorId = Context.User.Id,
 			                          ActionedUserId = id,
-			                          Action = AdminAction.UNBAN_ACTION,
+			                          Action = AdminAction.UnbanAction,
+			                          Reason = reason,
 			                          Expiration = null
 		                          };
 
-		        await _aaRepo.InsertAsync(adminAction);
+		        await _adminActionRepository.InsertAsync(adminAction);
 		        
 		        // Try to get the name of the user for display, if they exist.
 		        var actionedUser = await Context.Guild.GetBanAsync(id);
 		        
-		        await _ksRepo.UpdateAsync(server);
+		        await _kaguyaServerRepository.UpdateAsync(server);
 		        await SendBasicSuccessEmbedAsync($"Unbanned user with ID {actionedUser?.User.ToString().AsBold() ?? id.ToString().AsBold()}.");
 			
 		        // TODO: Trigger unban event.
@@ -137,7 +139,7 @@ namespace Kaguya.Discord.Commands.Administration
         [Command("-t")]
         [Summary("Temporarily bans the user from the server for the time specified.")]
         [Remarks("<user> <duration> [reason]")]
-        public async Task CommandTempban(SocketGuildUser user, string timeString, [Remainder]string reason = "<No reason provided.>")
+        public async Task CommandTempban(SocketGuildUser user, string timeString, [Remainder]string reason = "<No reason provided>")
         {
 	        var timeParser = new TimeParser(timeString);
 	        var parsedTime = timeParser.ParseTime();
@@ -155,7 +157,8 @@ namespace Kaguya.Discord.Commands.Administration
 			        ServerId = Context.Guild.Id,
 			        ModeratorId = Context.User.Id,
 			        ActionedUserId = user.Id,
-			        Action = AdminAction.TEMP_BAN_ACTION,
+			        Action = AdminAction.TempBanAction,
+			        Reason = reason,
 			        Expiration = DateTime.Now + parsedTime
 		        };
 		        
