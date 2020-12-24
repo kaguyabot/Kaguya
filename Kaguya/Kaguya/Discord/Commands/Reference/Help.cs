@@ -10,6 +10,7 @@ using Interactivity;
 using Interactivity.Pagination;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes;
+using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -151,23 +152,33 @@ namespace Kaguya.Discord.Commands.Reference
             
             var commands = _commandService.Commands.ToArray();
 
+            // This should never be needed, but just in case.
+            if (!commands.Any())
+            {
+                await SendBasicErrorEmbedAsync("No commands are loaded. Please contact the developer.".AsBold());
+
+                return;
+            }
+            
             CommandInfo match = commands.FirstOrDefault(c => c.Aliases.Any(name => name.Equals(commandName, StringComparison.OrdinalIgnoreCase)));
             
             if (match == null)
             {
-                match = commands.FirstOrDefault(c => c.Module.Name.Equals(commandName, StringComparison.OrdinalIgnoreCase));
+                match = commands.FirstOrDefault(c => c.Module.Aliases.Any(name => name.Equals(commandName, StringComparison.OrdinalIgnoreCase)));
                 
-                if(match == null)
+                if (match == null)
                 {
                     await SendBasicErrorEmbedAsync($"No match found for **{commandName}**.");
                     return;
                 }
             }
+            
+            string aliasString = char.ToUpper(match.Aliases[0][0]) + match.Aliases[0].Substring(1);
 
             // Title = capitalize the first letter of the alias only. Ex: $ping -> Ping
-            string title = $"Help: {char.ToUpper(match.Aliases[0][0])}{match.Aliases[0].Substring(1)}";
-            string description = match.Summary;
-            string remarks;
+            string title = $"Help: " + aliasString;
+            string description = match.Summary ?? match.Module.Summary;
+            string remarks = match.Remarks ?? match.Module.Remarks;
             string subCommands = match.Module.Commands
                                       .Where(c => !c.Aliases[0].Equals(match.Aliases[0]))
                                       .Select(x => x.Aliases[0])
@@ -175,7 +186,34 @@ namespace Kaguya.Discord.Commands.Reference
                                       .OrderBy(x => x)
                                       .Humanize(x => $"`{prefix}{x}`\n");
 
-            // Formats all required precondition attributes. 
+            // If metadata is inherited from the module itself...
+            if (match.Attributes.Any(x => x.GetType() == typeof(InheritMetadataAttribute)))
+            {
+                CommandMetadata toAdd = match.Attributes
+                                             .Where(x => x.GetType() == typeof(InheritMetadataAttribute))
+                                             .Select(x => ((InheritMetadataAttribute) x).Metadata).FirstOrDefault();
+
+                if ((toAdd & CommandMetadata.Summary) != 0 && (toAdd & CommandMetadata.Remarks) != 0)
+                {
+                    description = match.Module.Summary;
+                    remarks = match.Module.Remarks;
+                }
+                else if ((toAdd & CommandMetadata.Remarks) != 0)
+                {
+                    remarks = match.Module.Remarks;
+                }
+                else if ((toAdd & CommandMetadata.Summary) != 0)
+                {
+                    remarks = match.Module.Summary;
+                }
+            }
+            
+            // If, after all that, the command info is still null...
+            description ??= "No description loaded.";
+            remarks ??= "No remarks loaded.";
+            subCommands ??= "`No sub-commands`";
+            
+            // Formats all required precondition attributes.
             var requiredPermissionsList = match.Module.Preconditions
                                                     .Where(x => x.GetType() == typeof(RequireUserPermissionAttribute))
                                                     .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission).ToList();
@@ -214,14 +252,14 @@ namespace Kaguya.Discord.Commands.Reference
                                     .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
             }
             
-            if (string.IsNullOrWhiteSpace(match.Remarks))
+            if (string.IsNullOrWhiteSpace(remarks))
             {
                 remarks = $"`{prefix}{match.Aliases[0]}`";
             }
             else
             {
                 // Puts all remarks on a new line surrounded in backticks.
-                remarks = match.Remarks.Split("\n").Humanize(remark => $"`{prefix}{match.Aliases[0]} {remark}`\n");
+                remarks = remarks.Split("\n").Humanize(remark => $"`{prefix}{match.Aliases[0]} {remark}`\n");
             }
             
             var embed = new KaguyaEmbedBuilder(global::Discord.Color.Magenta)

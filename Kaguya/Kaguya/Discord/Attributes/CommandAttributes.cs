@@ -13,7 +13,7 @@ namespace Kaguya.Discord.Attributes
 		Administration,
 		Games,
 		Exp,
-		Emotion,
+		Fun,
 		Reference,
 		Music,
 		Nsfw,
@@ -30,11 +30,25 @@ namespace Kaguya.Discord.Attributes
 		OwnerOnly = 2
 	}
 
+	[Flags]
+	public enum CommandMetadata
+	{
+		Summary = 1,
+		Remarks = 2
+	}
+
+	[AttributeUsage(AttributeTargets.Method)]
+	internal class InheritMetadataAttribute : Attribute
+	{
+		public CommandMetadata Metadata { get; }
+		public InheritMetadataAttribute(CommandMetadata metadata) { Metadata = metadata; }
+	}
+
 	[AttributeUsage(AttributeTargets.Class)]
 	internal class ModuleAttribute : Attribute
 	{
 		public CommandModule Module { get; }
-		public ModuleAttribute(CommandModule module) => Module = module;
+		public ModuleAttribute(CommandModule module) { Module = module; }
 	}
 
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
@@ -69,6 +83,6 @@ namespace Kaguya.Discord.Attributes
 			}
 			
 			return PreconditionResult.FromSuccess();
-		} 
+		}
 	}
 }
