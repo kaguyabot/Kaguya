@@ -26,6 +26,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using NekosSharp;
 using Victoria;
 
 namespace Kaguya
@@ -67,6 +68,8 @@ namespace Kaguya
 
 			services.AddControllers();
 
+			services.AddSingleton(new NekoClient("kaguya-v4"));
+			
 			services.AddSingleton(_ =>
 			{
 				var cs = new CommandService();

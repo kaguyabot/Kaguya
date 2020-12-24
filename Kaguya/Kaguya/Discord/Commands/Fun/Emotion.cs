@@ -29,12 +29,12 @@ namespace Kaguya.Discord.Commands.Fun
     public class Emotion : KaguyaBase<Emotion>
     {
         private readonly ILogger<Emotion> _logger;
-        private NekoClient _nkClient;
+        private NekoClient _nekoClient;
 
-        public Emotion(ILogger<Emotion> logger) : base(logger)
+        public Emotion(ILogger<Emotion> logger, NekoClient nekoClient) : base(logger)
         {
             _logger = logger;
-            _nkClient = new NekoClient("Kaguya-v4");
+            _nekoClient = nekoClient;
         }
 
         [InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
@@ -103,7 +103,7 @@ namespace Kaguya.Discord.Commands.Fun
         
         private async Task<Request> GetRequest(EmotionType emotion)
         {
-            ActionEndpoints_v3 action = _nkClient.Action_v3;
+            ActionEndpoints_v3 action = _nekoClient.Action_v3;
 
             return emotion switch
             {
