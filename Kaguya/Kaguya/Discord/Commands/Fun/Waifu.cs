@@ -8,28 +8,27 @@ using NekosSharp;
 namespace Kaguya.Discord.Commands.Fun
 {
     [Module(CommandModule.Fun)]
-    [Group("avatar")]
-    [Alias("avi", "av")]
-    public class Avatar : KaguyaBase<Avatar>
+    [Group("waifu")]
+    public class Waifu : KaguyaBase<Waifu>
     {
-        private readonly ILogger<Avatar> _logger;
+        private readonly ILogger<Waifu> _logger;
         private readonly NekoClient _nekoClient;
-        public Avatar(ILogger<Avatar> logger, NekoClient nekoClient) : base(logger)
+        
+        public Waifu(ILogger<Waifu> logger, NekoClient nekoClient) : base(logger)
         {
             _logger = logger;
             _nekoClient = nekoClient;
         }
 
         [Command]
-        [Summary("Generates an avatar perfect for you!")]
-        public async Task AvatarCommand()
+        [Summary("Displays an image of your new waifu!")]
+        public async Task WaifuCommand()
         {
-            var avatar = await _nekoClient.Image_v3.Avatar();
+            var image = await _nekoClient.Image_v3.Waifu();
             var embed = new KaguyaEmbedBuilder(Color.Green)
-                        .WithDescription($"{Context.User.Mention} here is a new avatar!")
-                        .WithImageUrl(avatar.ImageUrl)
+                        .WithDescription($"{Context.User.Mention} here is your new waifu!")
+                        .WithImageUrl(image.ImageUrl)
                         .Build();
-            
 
             await SendEmbedAsync(embed);
         }
