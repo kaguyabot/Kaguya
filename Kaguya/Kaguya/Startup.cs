@@ -62,6 +62,7 @@ namespace Kaguya
 			services.AddScoped<KaguyaServerRepository>();
 			services.AddScoped<KaguyaUserRepository>();
 			services.AddScoped<PremiumKeyRepository>();
+			services.AddScoped<ReminderRepository>();
 			services.AddScoped<RepRepository>();
 			services.AddScoped<LogConfigurationRepository>();
 			services.AddScoped<WordFilterRepository>();

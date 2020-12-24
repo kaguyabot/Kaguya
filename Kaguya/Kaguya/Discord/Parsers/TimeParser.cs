@@ -9,12 +9,12 @@ namespace Kaguya.Discord.Parsers
 	public class TimeParser
 	{
 		private readonly string _input;
-		public readonly TimeSpan Time;
+		private readonly TimeSpan _time;
 
 		public TimeParser(string input)
 		{
 			_input = input;
-			Time = ParseTime();
+			_time = ParseTime();
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace Kaguya.Discord.Parsers
 
 		public string FormattedTimestring()
 		{
-			return Time.Humanize(4, maxUnit: TimeUnit.Day, minUnit: TimeUnit.Second);
+			return _time.Humanize(3, maxUnit: TimeUnit.Day, minUnit: TimeUnit.Second);
 		}
 	}
 }

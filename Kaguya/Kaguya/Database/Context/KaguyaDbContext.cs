@@ -14,6 +14,7 @@ namespace Kaguya.Database.Context
 		public DbSet<Fish> Fish { get; set; }
 		public DbSet<PremiumKey> PremiumKeys { get; set; }
 		public DbSet<LogConfiguration> LogConfigurations { get; set; }
+		public DbSet<Reminder> Reminders { get; set; }
 		public DbSet<Rep> Rep { get; set; }
 		public DbSet<KaguyaServer> Servers { get; set; }
 		public DbSet<KaguyaUser> Users { get; set; }
@@ -113,6 +114,18 @@ namespace Kaguya.Database.Context
 			modelBuilder.Entity<Rep>().HasIndex(r => new
 			{
 				r.TimeGiven
+			});
+			
+			// Index: Reminders
+			modelBuilder.Entity<Reminder>().HasIndex(r => new
+			{
+				r.UserId
+			});
+			
+			modelBuilder.Entity<Reminder>().HasIndex(r => new
+			{
+				r.Expiration,
+				r.HasTriggered
 			});
 		}
 
