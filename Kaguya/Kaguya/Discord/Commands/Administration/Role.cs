@@ -476,40 +476,57 @@ namespace Kaguya.Discord.Commands.Administration
                 var successBuilder = new StringBuilder("Deleted the following roles: \n\n");
                 successBuilder.Append(success.Humanize(x => x.Name.AsBold()));
 
-                finalBuilder.AppendLine(successBuilder.ToString() + "\n");
+                finalBuilder.AppendLine(successBuilder + "\n");
             }
 
             if (fail.Any())
             {
                 var failBuilder = new StringBuilder("Failed to delete the following roles: \n\n");
-                foreach (SocketRole role in success)
+                foreach ((SocketRole role, string reason) in fail)
                 {
-                    failBuilder.AppendLine("- " + role.ToString().Humanize(x => $"{x}".AsItalics()));
+                    string reasonCopy = reason;
+                    reasonCopy = reasonCopy.Replace("The server responded with ", "");
+                    
+                    string roleHumanized = role.Name.AsBold();
+                    string error = "\nReason: " + reasonCopy.Humanize(LetterCasing.Sentence).AsItalics();
+                    
+                    failBuilder.AppendLine("- " + roleHumanized + error);
                 }
-
+            
                 finalBuilder.AppendLine(failBuilder.ToString());
             }
 
             Color color = default;
 
-            if (success.Any() && fail.Any())
+            bool successOnly = success.Any() && !fail.Any();
+            bool failureOnly = !success.Any() && fail.Any();
+            bool mixed = success.Any() && fail.Any();
+            
+            if (mixed)
             {
                 color = Color.DarkMagenta;
             }
-            else if (success.Any() && !fail.Any())
+            else if (successOnly)
             {
                 color = Color.Green;
             }
-            else if (!success.Any() && fail.Any())
+            else if (failureOnly)
             {
                 color = Color.Red;
             }
 
-            var embed = new KaguyaEmbedBuilder(color)
-                        .WithDescription(finalBuilder.ToString())
-                        .Build();
+            var embedBuilder = new KaguyaEmbedBuilder(color)
+                .WithDescription(finalBuilder.ToString());
 
-            await SendEmbedAsync(embed);
+            if (failureOnly)
+            {
+                embedBuilder.Footer = new EmbedFooterBuilder
+                {
+                    Text = "Errors often come from lack of permissions. Ensure the \"Kaguya\" role is at the top of the role hierarchy."
+                };
+            }
+
+            await SendEmbedAsync(embedBuilder);
         }
     }
 }
