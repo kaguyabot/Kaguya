@@ -3,6 +3,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Humanizer;
 using Humanizer.Localisation;
+using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Migrations;
 
 namespace Kaguya.Discord.Parsers
 {
@@ -66,9 +68,14 @@ namespace Kaguya.Discord.Parsers
 			return new TimeSpan(day, hour, min, sec);
 		}
 
-		public string FormattedTimestring()
-		{
-			return _time.Humanize(3, maxUnit: TimeUnit.Day, minUnit: TimeUnit.Second);
-		}
+		public string FormattedTimestring() { return _time.Humanize(3, maxUnit: TimeUnit.Day, minUnit: TimeUnit.Second); }
+	}
+
+	public class TimeParseException : Exception
+	{
+		public TimeParseException(string userInputTime) : base($"{userInputTime} is an invalid time.\n" +
+		                                                       $"Times are formatted in `xdxhxmxs` where `x` is a number " +
+		                                                       $"and `dhms` represent `days`, `hours`, `minutes`, and `seconds` respectively.\n" +
+		                                                       $"Example: `2h30m` = 2 hours and 30 minutes. 5d5s = 5 days and 5 seconds.") { }
 	}
 }

@@ -63,5 +63,10 @@ namespace Kaguya.Database.Repositories
 		{
 			return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
 		}
+
+		public async Task<int> GetCountForServerAsync(ulong serverId)
+		{
+			return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == serverId).CountAsync();
+		}
 	}
 }
