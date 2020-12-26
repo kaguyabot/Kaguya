@@ -39,7 +39,7 @@ namespace Kaguya.Discord.Commands.Administration
         [Command]
         [Summary("Permanently bans a user from the server.")]
         [Remarks("<user> [reason]")]
-        public async Task BanCommand(SocketGuildUser user, [Remainder]string reason = "<No reason provided>")
+        public async Task BanCommand(SocketGuildUser user, [Remainder]string reason = null)
         {
 	        KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
             try
@@ -90,7 +90,7 @@ namespace Kaguya.Discord.Commands.Administration
         [Command("-u")]
         [Summary("Unbans the user from the server.")]
         [Remarks("<user id> [reason]")]
-        public async Task CommandUnban(ulong id, [Remainder]string reason = "<No reason provided>")
+        public async Task CommandUnban(ulong id, [Remainder]string reason = null)
         {
 	        try
 	        {
@@ -139,7 +139,7 @@ namespace Kaguya.Discord.Commands.Administration
         [Command("-t")]
         [Summary("Temporarily bans the user from the server for the time specified.")]
         [Remarks("<user> <duration> [reason]")]
-        public async Task CommandTempban(SocketGuildUser user, string timeString, [Remainder]string reason = "<No reason provided>")
+        public async Task CommandTempban(SocketGuildUser user, string timeString, [Remainder]string reason = null)
         {
 	        var timeParser = new TimeParser(timeString);
 	        var parsedTime = timeParser.ParseTime();

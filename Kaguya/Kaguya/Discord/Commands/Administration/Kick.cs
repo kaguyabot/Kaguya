@@ -33,7 +33,7 @@ namespace Kaguya.Discord.Commands.Administration
         [Command]
         [Summary("Kicks a user from the server.")]
         [Remarks("<user> [reason]")]
-        public async Task KickCommand(SocketGuildUser user, [Remainder]string reason = "<No reason provided>")
+        public async Task KickCommand(SocketGuildUser user, [Remainder]string reason = null)
         {
 	        KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
             try
