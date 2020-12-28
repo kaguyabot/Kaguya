@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Humanizer;
 using Humanizer.Localisation;
+using Interactivity;
+using Interactivity.Confirmation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes;
@@ -17,61 +21,105 @@ namespace Kaguya.Discord.Commands.Administration
     [Module(CommandModule.Administration)]
     [Group("mute")]
     [Alias("m")]
+    [RequireUserPermission(GuildPermission.ManageChannels)]
     [RequireUserPermission(GuildPermission.ManageRoles)]
-    [RequireUserPermission(GuildPermission.BanMembers)]
-    [RequireUserPermission(GuildPermission.KickMembers)]
     [RequireUserPermission(GuildPermission.MuteMembers)]
-    [RequireUserPermission(GuildPermission.DeafenMembers)]
+    [RequireBotPermission(GuildPermission.ManageChannels)]
     [RequireBotPermission(GuildPermission.ManageRoles)]
-    [RequireBotPermission(GuildPermission.BanMembers)]
-    [RequireBotPermission(GuildPermission.KickMembers)]
     [RequireBotPermission(GuildPermission.MuteMembers)]
-    [RequireBotPermission(GuildPermission.DeafenMembers)]
+    [RequireUserPermission(GuildPermission.ManageChannels)]
     public class Mute : KaguyaBase<Mute>
     {
         private readonly ILogger<Mute> _logger;
         private readonly AdminActionRepository _adminActionRepository;
         private readonly KaguyaServerRepository _kaguyaServerRepository;
+        private readonly InteractivityService _interactivityService;
 
-        public Mute(ILogger<Mute> logger, AdminActionRepository adminActionRepository, KaguyaServerRepository kaguyaServerRepository) : base(logger)
+        public Mute(ILogger<Mute> logger, AdminActionRepository adminActionRepository, KaguyaServerRepository kaguyaServerRepository, 
+            InteractivityService interactivityService) : base(logger)
         {
             _logger = logger;
             _adminActionRepository = adminActionRepository;
             _kaguyaServerRepository = kaguyaServerRepository;
+            _interactivityService = interactivityService;
         }
 
-        // If the user executes $mute <user> foo -- a 1-word reason.
-        [Command]
-        public async Task MuteCommand(SocketGuildUser user, string reason) => await MuteCommand(user, null, reason);
-        
-        [Priority(2)]
-        [Command]
-        [Summary("Mutes a user for an optional duration with an optional reason.")]
-        [Remarks("<user> [duration] [reason]")]
-        public async Task MuteCommand(SocketGuildUser user, string duration = null, [Remainder]string reason = "<No reason provided>")
+        [Command(RunMode = RunMode.Async)]
+        [Summary("Mutes a user with an optional reason.")]
+        [Remarks("<user> [reason]")]
+        public async Task MuteCommand(SocketGuildUser user, [Remainder]string reason = null)
         {
             KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
-            DateTime? muteExpiration = null;
-            if (duration != null)
+            await MuteUser(user, null, reason, server);
+        }
+        
+        [Command("-t", RunMode = RunMode.Async)]
+        [Summary("Mutes a user with an optional reason.")]
+        [Remarks("<user> <duration> [reason]")]
+        // ReSharper disable once MethodOverloadWithOptionalParameter
+        public async Task MuteCommand(SocketGuildUser user, string duration, [Remainder]string reason = null)
+        {
+            KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
+
+            var timeParser = new TimeParser(duration);
+            var parsedDuration = timeParser.ParseTime();
+
+            if (parsedDuration == TimeSpan.Zero)
             {
-                var timeParser = new TimeParser(duration);
-                var parsedDuration = timeParser.ParseTime();
-
-                if (parsedDuration > TimeSpan.Zero)
-                {
-                    muteExpiration = DateTime.Now.Add(parsedDuration);
-                }
-
-                if (muteExpiration == null && duration != null)
-                {
-                    reason = duration;
-                }
+                throw new TimeParseException(duration);
             }
+            
+            DateTime? muteExpiration = DateTime.Now.Add(parsedDuration);
 
-            // TODO: Test once ratelimit is over.
             await MuteUser(user, muteExpiration, reason, server);
         }
 
+        [Command("-u")]
+        [Summary("Unmutes the user.")]
+        [Remarks("<user>")]
+        public async Task UnmuteUserCommand(SocketGuildUser user)
+        {
+            KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
+            IRole muteRole = await GetMuteRoleAsync(server);
+            bool isMuted = await UserIsCurrentlyMutedAsync(user, muteRole);
+
+            if (!isMuted)
+            {
+                await SendBasicErrorEmbedAsync("This user is not muted.");
+
+                return;
+            }
+
+            IList<AdminAction> allUserMutes = await GetUnexpiredMutesAsync(user.Id, server.ServerId);
+            if (allUserMutes.Any(x => x.Action != AdminAction.MuteAction)) // TESTING TODO: REMOVE
+            {
+                throw new Exception("There was an action in the collection that was not a mute.");
+            }
+
+            await _adminActionRepository.ForceExpireRangeAsync(allUserMutes);
+            
+            // Remove mute role from user, if applicable.
+            if (user.Roles.Any(x => x.Id == muteRole.Id))
+            {
+                try
+                {
+                    await user.RemoveRoleAsync(muteRole);
+                }
+                catch (Exception e)
+                {
+                    await SendBasicErrorEmbedAsync($"An error occurred when trying to remove {user.Mention}'s mute role:\n" +
+                                                   $"Error message: {e.Message.AsBold()}");
+
+                    return;
+                }
+            }
+
+            await SendBasicSuccessEmbedAsync($"Unmuted user {user.Mention}.");
+        }
+        
+        // TODO: Create a "mute -sync" command to sync channel permissions for the mute role.
+        // TODO: Create a "mute -status" command for admins to view who has what mutes.
+        // TODO: Create a "mute -erase" command for admins to "erase history" of users who were muted in their server.
         private async Task MuteUser(SocketGuildUser user, DateTime? expiration, string reason, KaguyaServer server)
         {
             var adminAction = new AdminAction
@@ -84,13 +132,43 @@ namespace Kaguya.Discord.Commands.Administration
                 Expiration = expiration
             };
 
-            await _adminActionRepository.InsertAsync(adminAction);
-
             bool muteRoleExists = DetermineIfMuteRoleExists(server);
             bool updateServer = false;
             
             IRole muteRole = await GetMuteRoleAsync(server);
-            await user.AddRoleAsync(muteRole);
+
+            // We want to confirm with the user whether they want to overwrite the existing mute or leave the existing one.
+            if (await UserIsCurrentlyMutedAsync(user, muteRole))
+            {
+                await SendConfirmationMessageAsync(user, expiration);
+            }
+            
+            await _adminActionRepository.InsertAsync(adminAction); // Very earliest we can insert to DB.
+            
+            List<EmbedFieldBuilder> permissionFields = new();
+            
+            try
+            {
+                permissionFields = await SetMutePermissionsAsync(muteRole);
+            }
+            catch (Exception e)
+            {
+                await SendBasicErrorEmbedAsync("Warning: Failed to complete permission overwrite execution process. This error occurs from a " +
+                                               $"lack of permissions.\n\nError: {e.Message.AsBold()}\n\n" +
+                                               $"The mute operation will still continue. " + "Use the ".AsBold() + "mute -sync".AsCodeBlockSingleLine().AsBold() + " " + 
+                                               "command after updating my permissions to continue.".AsBold());
+            }
+            
+            try
+            {
+                await user.AddRoleAsync(muteRole);
+            }
+            catch (Exception e)
+            {
+                await SendBasicErrorEmbedAsync($"Failed to add role {muteRole.ToString().AsBold()} to user {user.ToString().AsBold()}.\nReason: {e.ToString().AsBold()}");
+
+                return;
+            }
 
             if (!muteRoleExists)
             {
@@ -103,8 +181,72 @@ namespace Kaguya.Discord.Commands.Administration
                 await _kaguyaServerRepository.UpdateAsync(server);
             }
 
-            Embed embed = GetFinalEmbed(user, expiration);
+            Embed embed = GetFinalEmbed(user, expiration, reason, permissionFields);
             await SendEmbedAsync(embed);
+        }
+
+        private async Task SendConfirmationMessageAsync(SocketGuildUser user, DateTime? expiration)
+        {
+            IList<AdminAction> currentUserMutes = await GetUnexpiredMutesAsync(user.Id, Context.Guild.Id);
+
+            if (!currentUserMutes.Any())
+                return;
+            
+            bool permanentMute = currentUserMutes.Any(x => !x.Expiration.HasValue);
+
+            if (!permanentMute)
+            {
+                currentUserMutes = currentUserMutes.OrderByDescending(x => x.Expiration ?? DateTime.MinValue).ToList();
+            }
+
+            AdminAction longestMute = permanentMute ? currentUserMutes.First(x => !x.Expiration.HasValue) : currentUserMutes[0];
+
+            if (longestMute == null)
+            {
+                return;
+            }
+            
+            string oldMuteDurationStr = (permanentMute ? "never".AsBold() : longestMute.Expiration.Humanize(false)).Humanize(LetterCasing.Sentence).AsBold();
+            string newMuteDurationStr = (!expiration.HasValue 
+                ? "permanent" 
+                : (expiration.Value - DateTime.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day) + " from now").AsBold();
+
+            string reasonStr = (longestMute.Reason ?? "<No reason provided>").AsItalics();
+            
+            SocketGuildUser oldMod = Context.Guild.GetUser(longestMute.ModeratorId);
+
+            Confirmation request = new ConfirmationBuilder()
+                                   .WithContent(
+                                       new PageBuilder()
+                                           .WithDescription($"This user is already muted. Would you like to overwrite their current mute? Details of " +
+                                                            $"the current mute are described below:\n" +
+                                                            $"- Expiration: [current: {oldMuteDurationStr} | new: {newMuteDurationStr}]\n" +
+                                                            $"- Reason: {reasonStr}\n" +
+                                                            $"- Moderator: " +
+                                                            (oldMod?.Mention ?? "Not found".AsItalics()) + "\n\n" +
+                                                            "Response will expire in 60 seconds, defaulting to ✅.".AsItalics() + "\n" +
+                                                            "Note: Overwriting does not erase mute history.".AsItalics() + "\n\n" +
+                                                            $"✅ = Replace old duration with new. (default)\n" +
+                                                            $"❌ = Don't replace old. User will be unmuted at latest possible time.")
+                                           .WithColor(Color.Magenta))
+                                   .Build();
+
+            var result = await _interactivityService.SendConfirmationAsync(request, Context.Channel, TimeSpan.FromSeconds(60));
+
+            // If the user wants to overwrite...
+            if (result.Value)
+            {
+                // We force expire as we want to keep the mute reason history.
+                // Forcing expiration ensures it won't be actioned on by any background services.
+                await _adminActionRepository.ForceExpireRangeAsync(currentUserMutes);
+                await SendBasicSuccessEmbedAsync("Okay, I'll replace the old mute duration with the one you just provided.");
+            }
+            else
+            {
+                await SendBasicSuccessEmbedAsync("Okay, I'll insert this and log it, but if the user currently has mutes that expire later " +
+                                                 "than what you provided, they will be unmuted at that time.\n" +
+                                                 "Use the `mute -status` command to view this information.");
+            }
         }
 
         private bool DetermineIfMuteRoleExists(KaguyaServer server)
@@ -115,30 +257,132 @@ namespace Kaguya.Discord.Commands.Administration
 
         private async Task<IRole> GetMuteRoleAsync(KaguyaServer server)
         {
-            var match = Context.Guild.GetRole(server.MuteRoleId);
-
-            if (match == null)
-            {
-                return await CreateMuteRoleAsync();
-            }
-
+            IRole match = Context.Guild.GetRole(server.MuteRoleId) ?? await CreateMuteRoleAsync();
             return match;
         }
         
         private async Task<IRole> CreateMuteRoleAsync()
         {
-            return await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, Color.Default, false, false, null);
+            _logger.LogDebug($"Mute role created in guild {Context.Guild.Id}. Guild roles: {Context.Guild.Roles.Humanize()}");
+            return await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, Color.Default, false, false);
         }
 
-        private Embed GetFinalEmbed(SocketGuildUser target, DateTime? expiration)
+        private async Task<List<EmbedFieldBuilder>> SetMutePermissionsAsync(IRole role)
+        {
+            List<EmbedFieldBuilder> fieldBuilders = new();
+            List<SocketTextChannel> textChannelsToUpdate = new();
+            List<SocketCategoryChannel> categoriesToUpdate = new();
+            List<SocketVoiceChannel> voiceChannelsToUpdate = new();
+            
+            foreach (SocketTextChannel textChannel in Context.Guild.TextChannels)
+            {
+                if (!textChannel.GetPermissionOverwrite(role).HasValue)
+                {
+                    textChannelsToUpdate.Add(textChannel);
+                }
+            }
+            
+            foreach (SocketCategoryChannel category in Context.Guild.CategoryChannels)
+            {
+                if (!category.GetPermissionOverwrite(role).HasValue)
+                {
+                    categoriesToUpdate.Add(category);
+                }
+            }
+            
+            foreach (SocketVoiceChannel vc in Context.Guild.VoiceChannels)
+            {
+                if (!vc.GetPermissionOverwrite(role).HasValue)
+                {
+                    voiceChannelsToUpdate.Add(vc);
+                }
+            }
+
+            if (textChannelsToUpdate.Any())
+            {
+                fieldBuilders.Add(new EmbedFieldBuilder
+                {
+                    Name = "Channel Permissions",
+                    Value = $"Denied all permissions for role {role.ToString().AsBold()} in {textChannelsToUpdate.Count.ToString("N0").AsBold()} text channels."
+                });
+            }
+            
+            if (categoriesToUpdate.Any())
+            {
+                fieldBuilders.Add(new EmbedFieldBuilder
+                {
+                    Name = "Category Permissions",
+                    Value = $"Denied all permissions for role {role.ToString().AsBold()} in {categoriesToUpdate.Count.ToString("N0").AsBold()} categories."
+                });
+            }
+            
+            if (voiceChannelsToUpdate.Any())
+            {
+                fieldBuilders.Add(new EmbedFieldBuilder
+                {
+                    Name = "Voice Channel Permissions",
+                    Value = $"Denied all permissions for role {role.ToString().AsBold()} in {voiceChannelsToUpdate.Count.ToString("N0").AsBold()} voice channels."
+                });
+            }
+
+            List<IGuildChannel> finalCollection = new();
+            
+            finalCollection.AddRange(textChannelsToUpdate);
+            finalCollection.AddRange(voiceChannelsToUpdate);
+            finalCollection.AddRange(categoriesToUpdate);
+
+            if (finalCollection.Any())
+            {
+                await ReplyAsync($"{Context.User.Mention} Processing channel permissions. Please wait...");
+                await Task.Run(async () =>
+                {
+                    foreach (IGuildChannel channel in finalCollection)
+                    {
+                        await channel.AddPermissionOverwriteAsync(role, GetMuteOverwritePermissions());
+                    }
+                });
+            }
+
+            return fieldBuilders;
+        }
+
+        private static OverwritePermissions GetMuteOverwritePermissions()
+        {
+            return new OverwritePermissions(PermValue.Deny, addReactions: PermValue.Deny, sendMessages: PermValue.Deny, muteMembers: PermValue.Deny,
+                useVoiceActivation: PermValue.Deny, attachFiles: PermValue.Deny, embedLinks: PermValue.Deny, connect: PermValue.Deny, speak: PermValue.Deny,
+                useExternalEmojis: PermValue.Deny, viewChannel: PermValue.Inherit);
+        }
+
+        private async Task<bool> UserIsCurrentlyMutedAsync(SocketGuildUser user, IRole muteRole)
+        {
+            if (user.Roles.Any(x => x.Id == muteRole.Id))
+            {
+                return true;
+            }
+            // unexpired = null expiration or expiration that has not already expired.
+            IList<AdminAction> unexpiredUserMutes = await GetUnexpiredMutesAsync(user.Id, Context.Guild.Id);
+
+            return unexpiredUserMutes.Any();
+        }
+
+        private async Task<IList<AdminAction>> GetUnexpiredMutesAsync(ulong userId, ulong serverId)
+        {
+            return await _adminActionRepository.GetAllUnexpiredForUserInServerAsync(userId, serverId, AdminAction.MuteAction);
+        }
+        
+        private Embed GetFinalEmbed(SocketGuildUser target, DateTime? expiration, string reason, List<EmbedFieldBuilder> fields)
         {
             string durationStr = expiration.HasValue 
                 ? $" for {(expiration.Value - DateTime.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day).AsBold()}" 
                 : string.Empty;
 
+            string reasonStr = reason == null ? "<No reason provided>".AsBold() : reason.AsBold();
+
             return new KaguyaEmbedBuilder(Color.Purple)
-                   .WithDescription($"{Context.User.Mention} successfully muted user {target.Mention}{durationStr}.")
+                   .WithDescription($"{Context.User.Mention} Muted user {target.Mention}{durationStr}." +
+                                    $"\nReason: {reasonStr}")
                    .WithFooter("To unmute this user, use the mute -u command.")
+                   .WithFields(fields)
                    .Build();
         }
     }

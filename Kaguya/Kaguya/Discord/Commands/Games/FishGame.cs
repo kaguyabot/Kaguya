@@ -134,7 +134,8 @@ namespace Kaguya.Discord.Commands.Games
                 FishRarity.Uncommon => Color.Green,
                 FishRarity.Rare => Color.Blue,
                 FishRarity.UltraRare => Color.Purple,
-                FishRarity.Legendary => Color.Orange
+                FishRarity.Legendary => Color.Orange,
+                _ => Color.Green
             };
 
             Embed embed = new KaguyaEmbedBuilder(color)

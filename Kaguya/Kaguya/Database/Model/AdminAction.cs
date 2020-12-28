@@ -25,6 +25,8 @@ namespace Kaguya.Database.Model
 		public ulong ActionedUserId { get; init; }
 		public string Action { get; init; }
 		public string Reason { get; set; }
-		public DateTime? Expiration { get; init; }
+		public DateTime? Expiration { get; set; }
+		// Used if admins "erase history" for some data in their server to keep it from coming up in other commands.
+		public bool IsHidden { get; set; }
 	}
 }

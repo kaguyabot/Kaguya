@@ -163,7 +163,8 @@ namespace Kaguya.Services
 				FishRarity.Uncommon => UncommonFish,
 				FishRarity.Rare => RareFish,
 				FishRarity.UltraRare => UltraRareFish,
-				FishRarity.Legendary => LegendaryFish
+				FishRarity.Legendary => LegendaryFish,
+				_ => CommonFish
 			};
 			
 			int max = allFish.Length;

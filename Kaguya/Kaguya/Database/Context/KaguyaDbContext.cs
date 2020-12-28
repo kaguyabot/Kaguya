@@ -70,6 +70,13 @@ namespace Kaguya.Database.Context
 			{
 				a.ServerId
 			});
+			
+			modelBuilder.Entity<AdminAction>().HasIndex(a => new
+			{
+				a.ActionedUserId,
+				a.ServerId,
+				a.Expiration
+			});
 
 			// Index: CommandHistory
 			modelBuilder.Entity<CommandHistory>().HasIndex(ch => new

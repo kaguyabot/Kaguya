@@ -96,7 +96,7 @@ namespace Kaguya.Discord.Commands.Configuration
             await ModifyLogConfigAsync(logType, null);
         }
 
-        private async Task ModifyLogConfigAsync(string logType, SocketTextChannel? textChannel)
+        private async Task ModifyLogConfigAsync(string logType, SocketTextChannel textChannel)
         {
             IList<PropertyInfo> properties = _logProperties;
             LogConfiguration logConfig = await _logConfigurationRepository.GetOrCreateAsync(Context.Guild.Id);

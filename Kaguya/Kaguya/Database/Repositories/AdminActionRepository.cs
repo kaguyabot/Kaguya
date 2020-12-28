@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
@@ -19,11 +20,8 @@ namespace Kaguya.Database.Repositories
 			_dbContext = dbContext;
 			_logger = logger;
 		}
-		
-		public async Task<AdminAction> GetAsync(ulong key)
-		{
-			return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == key).FirstOrDefaultAsync();
-		}
+
+		public async Task<AdminAction> GetAsync(ulong key) { return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == key).FirstOrDefaultAsync(); }
 
 		public async Task DeleteAsync(ulong key)
 		{
@@ -36,7 +34,7 @@ namespace Kaguya.Database.Repositories
 
 			_dbContext.AdminActions.Remove(match);
 			await _dbContext.SaveChangesAsync();
-            
+
 			_logger.LogDebug($"Admin action deleted: Id: {match.Id} ServerId: {match.ServerId} Moderator Id: {match.ModeratorId} " +
 			                 $"Actioned User Id: {match.ActionedUserId} Action: {match.Action}.");
 		}
@@ -49,7 +47,7 @@ namespace Kaguya.Database.Repositories
 			{
 				return;
 			}
-	        
+
 			await _dbContext.SaveChangesAsync();
 		}
 
@@ -59,14 +57,68 @@ namespace Kaguya.Database.Repositories
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId)
+		public async Task UpdateRangeAsync(IEnumerable<AdminAction> collection)
 		{
-			return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
+			_dbContext.AdminActions.UpdateRange(collection);
+			await _dbContext.SaveChangesAsync();
+		}
+		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId) 
+		{ 
+			return await _dbContext.AdminActions.AsQueryable()
+			                       .Where(x => x.ServerId == serverId && !x.IsHidden)
+			                       .ToListAsync();
 		}
 
-		public async Task<int> GetCountForServerAsync(ulong serverId)
+		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId)
 		{
-			return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == serverId).CountAsync();
+			return await _dbContext.AdminActions.AsQueryable()
+			                       .Where(x => x.ActionedUserId == userId &&
+			                                   x.ServerId == serverId && 
+			                                   !x.IsHidden &&
+			                                   (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now))
+			                       .ToListAsync();
 		}
+		
+		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, string action)
+		{
+			return await _dbContext.AdminActions.AsQueryable()
+			                       .Where(x => x.ActionedUserId == userId && 
+			                                   x.ServerId == serverId && 
+			                                   x.Action.Equals(action, StringComparison.OrdinalIgnoreCase) &&
+			                                   !x.IsHidden &&
+			                                   (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now))
+			                       .ToListAsync();
+		}
+
+		/// <summary>
+		/// Sets the value's expiration to the current time.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public async Task ForceExpireAsync(AdminAction value)
+		{
+			value.Expiration = DateTime.Now;
+			await UpdateAsync(value);
+		}
+
+		/// <summary>
+		/// Sets the expiration value for all elements in the collection to the current time.
+		/// </summary>
+		/// <param name="collection"></param>
+		/// <returns></returns>
+		public async Task ForceExpireRangeAsync(IEnumerable<AdminAction> collection)
+		{
+			AdminAction[] copy = collection.ToArray();
+			for (int i = 0; i < copy.Length; i++)
+			{
+				var item = copy[i];
+				item.Expiration = DateTime.Now;
+				copy[i] = item;
+			}
+
+			await UpdateRangeAsync(copy);
+		}
+		
+		public async Task<int> GetCountForServerAsync(ulong serverId) { return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == serverId).CountAsync(); }
 	}
 }
