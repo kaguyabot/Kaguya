@@ -91,11 +91,6 @@ namespace Kaguya.Discord.Commands.Administration
             }
 
             IList<AdminAction> allUserMutes = await GetUnexpiredMutesAsync(user.Id, server.ServerId);
-            if (allUserMutes.Any(x => x.Action != AdminAction.MuteAction)) // TESTING TODO: REMOVE
-            {
-                throw new Exception("There was an action in the collection that was not a mute.");
-            }
-
             await _adminActionRepository.ForceExpireRangeAsync(allUserMutes);
             
             // Remove mute role from user, if applicable.
