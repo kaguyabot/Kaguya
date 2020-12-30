@@ -9,9 +9,10 @@ pipeline {
         }
         stage('Stop Old') {
             steps {
-                // todo: Try-catch
-                sh "docker stop kaguya"
-                sh "docker rm kaguya"
+                catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    sh "docker stop kaguya"
+                    sh "docker rm kaguya"
+                } 
             }
         }
         stage('Deploy') {
