@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Kaguya.Database.Repositories;
@@ -51,6 +52,21 @@ namespace Kaguya.Discord.Attributes
 		public ModuleAttribute(CommandModule module) { Module = module; }
 	}
 
+	[AttributeUsage(AttributeTargets.Method)]
+	internal class ExamplesAttribute : Attribute
+	{
+		public string Examples { get; }
+
+		/// <param name="examples">
+		/// A collection of examples, separated by \n (new line) characters.
+		/// This string may not be empty or only comprised of white-space characters.
+		/// </param>
+		public ExamplesAttribute(string examples)
+		{
+			Examples = string.IsNullOrWhiteSpace(examples) ? throw new ArgumentNullException(nameof(examples)) : examples;
+		}
+	}
+	
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 	internal class RestrictionAttribute : PreconditionAttribute
 	{
