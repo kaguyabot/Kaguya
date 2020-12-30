@@ -6,7 +6,7 @@ pipeline {
                 sh "docker build -t kaguya:${BUILD_NUMBER} ."
                 sh "docker tag kaguya:${BUILD_NUMBER} kaguya:latest"
 
-                sh "docker build -t kaguya-migrate:${BUILD_NUMBER} Migrations.Dockerfile"
+                sh "docker build -t kaguya-migrate:${BUILD_NUMBER} - < Migrations.Dockerfile"
                 sh "docker tag kaguya-migrate:${BUILD_NUMBER} kaguya-migrate:latest"
             }
         }
