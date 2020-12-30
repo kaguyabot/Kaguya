@@ -24,10 +24,11 @@ namespace Kaguya.Discord.Commands.Administration
     [RequireUserPermission(GuildPermission.ManageChannels)]
     [RequireUserPermission(GuildPermission.ManageRoles)]
     [RequireUserPermission(GuildPermission.MuteMembers)]
+    [RequireUserPermission(GuildPermission.DeafenMembers)]
     [RequireBotPermission(GuildPermission.ManageChannels)]
     [RequireBotPermission(GuildPermission.ManageRoles)]
     [RequireBotPermission(GuildPermission.MuteMembers)]
-    [RequireUserPermission(GuildPermission.ManageChannels)]
+    [RequireBotPermission(GuildPermission.DeafenMembers)]
     public class Mute : KaguyaBase<Mute>
     {
         private readonly ILogger<Mute> _logger;
@@ -45,17 +46,20 @@ namespace Kaguya.Discord.Commands.Administration
         }
 
         [Command(RunMode = RunMode.Async)]
-        [Summary("Mutes a user with an optional reason.")]
+        [Summary("Mutes a user permanently with an optional reason.")]
         [Remarks("<user> [reason]")]
+        [Examples("@User#0000 Being really spammy in chat.")]
         public async Task MuteCommand(SocketGuildUser user, [Remainder]string reason = null)
         {
             KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
-            await MuteUser(user, null, reason, server);
+            await MuteUserAsync(user, null, reason, server);
         }
         
         [Command("-t", RunMode = RunMode.Async)]
-        [Summary("Mutes a user with an optional reason.")]
+        [Summary("Mutes a user for a specified duration, with an optional reason.")]
         [Remarks("<user> <duration> [reason]")]
+        [Examples("@User#0000 1d16h35m25s\n" +
+                  "@User#0000 30m Being really spammy in chat.")]
         // ReSharper disable once MethodOverloadWithOptionalParameter
         public async Task MuteCommand(SocketGuildUser user, string duration, [Remainder]string reason = null)
         {
@@ -71,7 +75,7 @@ namespace Kaguya.Discord.Commands.Administration
             
             DateTime? muteExpiration = DateTime.Now.Add(parsedDuration);
 
-            await MuteUser(user, muteExpiration, reason, server);
+            await MuteUserAsync(user, muteExpiration, reason, server);
         }
 
         [Command("-u")]
@@ -111,11 +115,34 @@ namespace Kaguya.Discord.Commands.Administration
 
             await SendBasicSuccessEmbedAsync($"Unmuted user {user.Mention}.");
         }
+
+        [Command("-sync")]
+        [Summary("Syncs all text, voice, and category channel permissions for this server's mute role. " +
+                 "This should be used after adding new public channels so that muted users won't be able to type in them.")]
+        public async Task MuteSyncCommand()
+        {
+            var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
+            var muteRole = await GetMuteRoleAsync(server);
+            var embedFields = await SetMutePermissionsAsync(muteRole);
+
+            if (!embedFields.Any())
+            {
+                await SendBasicErrorEmbedAsync("All mute permissions are already synced!");
+
+                return;
+            }
+
+            var embed = GetBasicSuccessEmbedBuilder($"Synced permissions for the mute role {muteRole.Mention}.", true)
+                        .WithFields(embedFields)
+                        .Build();
+
+            await SendEmbedAsync(embed);
+        }
         
         // TODO: Create a "mute -sync" command to sync channel permissions for the mute role.
         // TODO: Create a "mute -status" command for admins to view who has what mutes.
         // TODO: Create a "mute -erase" command for admins to "erase history" of users who were muted in their server.
-        private async Task MuteUser(SocketGuildUser user, DateTime? expiration, string reason, KaguyaServer server)
+        private async Task MuteUserAsync(SocketGuildUser user, DateTime? expiration, string reason, KaguyaServer server)
         {
             var adminAction = new AdminAction
             {
@@ -295,28 +322,31 @@ namespace Kaguya.Discord.Commands.Administration
 
             if (textChannelsToUpdate.Any())
             {
+                string s = textChannelsToUpdate.Count == 1 ? default : "s";
                 fieldBuilders.Add(new EmbedFieldBuilder
                 {
                     Name = "Channel Permissions",
-                    Value = $"Denied all permissions for role {role.ToString().AsBold()} in {textChannelsToUpdate.Count.ToString("N0").AsBold()} text channels."
+                    Value = $"Denied all permissions for role {role.ToString().AsBold()} in {textChannelsToUpdate.Count.ToString("N0").AsBold()} text channel{s}."
                 });
             }
             
             if (categoriesToUpdate.Any())
             {
+                string s = textChannelsToUpdate.Count == 1 ? default : "s";
                 fieldBuilders.Add(new EmbedFieldBuilder
                 {
                     Name = "Category Permissions",
-                    Value = $"Denied all permissions for role {role.ToString().AsBold()} in {categoriesToUpdate.Count.ToString("N0").AsBold()} categories."
+                    Value = $"Denied all permissions for role {role.ToString().AsBold()} in {categoriesToUpdate.Count.ToString("N0").AsBold()} categorie{s}."
                 });
             }
             
             if (voiceChannelsToUpdate.Any())
             {
+                string s = textChannelsToUpdate.Count == 1 ? default : "s";
                 fieldBuilders.Add(new EmbedFieldBuilder
                 {
                     Name = "Voice Channel Permissions",
-                    Value = $"Denied all permissions for role {role.ToString().AsBold()} in {voiceChannelsToUpdate.Count.ToString("N0").AsBold()} voice channels."
+                    Value = $"Denied all permissions for role {role.ToString().AsBold()} in {voiceChannelsToUpdate.Count.ToString("N0").AsBold()} voice channel{s}."
                 });
             }
 
