@@ -41,7 +41,7 @@ namespace Kaguya.Discord.Commands.Reference
             PremiumKey match = await _premiumKeyRepository.GetAsync(key);
             if (match == null)
             {
-                var responseEmbed = GetBasicErrorEmbed("This premium key is invalid.");
+                var responseEmbed = GetBasicErrorEmbedBuilder("This premium key is invalid.").Build();
                 _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null, TimeSpan.FromSeconds(5), null, false, responseEmbed);
 
                 return;
@@ -49,7 +49,7 @@ namespace Kaguya.Discord.Commands.Reference
 
             if (match.IsRedeemed)
             {
-                Embed responseEmbed = GetBasicErrorEmbed("This key has already been redeemed.");
+                var responseEmbed = GetBasicErrorEmbedBuilder("This key has already been redeemed.").Build();
                 _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null, TimeSpan.FromSeconds(5), null, false, responseEmbed);
                 return;
             }
