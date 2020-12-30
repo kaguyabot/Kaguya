@@ -8,9 +8,11 @@ pipeline {
             }
         }
         stage('Stop Old') {
-            // todo: Try-catch
-            sh "docker stop kaguya"
-            sh "docker rm kaguya"
+            steps {
+                // todo: Try-catch
+                sh "docker stop kaguya"
+                sh "docker rm kaguya"
+            }
         }
         stage('Deploy') {
             steps {
