@@ -24,14 +24,14 @@ pipeline {
         }
         stage('Pre-Deployment') {
             steps {
-                sh "docker run --name=kaguya-migrate --network=host -v /path/to/settings.json:/Kaguya/appsettings.json kaguya-migrate:latest"
+                sh "docker run --name=kaguya-migrate --network=host -v /etc/kaguya/appsettings.json:/Kaguya/appsettings.json kaguya-migrate:latest"
             }
         }
         stage('Deploy') {
             steps {
                 sh "docker build -t kaguya:${BUILD_NUMBER} ."
                 sh "docker tag kaguya:${BUILD_NUMBER} kaguya:latest"
-                sh "docker run --name=kaguya --network=host --restart=always -e ASPNETCORE_URLS=\"http://0.0.0.0:6969\" -v /path/to/settings.json:/KaguyaApp/appsettings.json -d kaguya:latest"
+                sh "docker run --name=kaguya --network=host --restart=always -e \"ASPNETCORE_URLS=http://0.0.0.0:6969\" -v /etc/kaguya/appsettings.json:/KaguyaApp/appsettings.json -d kaguya:latest"
             }
         }
     }
