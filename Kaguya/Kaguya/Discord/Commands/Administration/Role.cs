@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using Discord.Commands;
 using Kaguya.Discord.Attributes;
@@ -527,6 +528,29 @@ namespace Kaguya.Discord.Commands.Administration
             }
 
             await SendEmbedAsync(embedBuilder);
+        }
+
+        [Command("-rename")]
+        [Summary("Renames the provided role to the name specified. If the **first** role name has spaces, wrap it " +
+                 "with quotation marks. If the **new name** has spaces, do not wrap it with quotation marks.\n\n")]
+        [Remarks("<role> <new name>")]
+        [Examples("penguins \"birds that can't fly\"\n" +
+                  "\"birds that can't fly\" ice chicken")]
+        public async Task RenameRoleCommand(SocketRole role, [Remainder]string newName)
+        {
+            try
+            {
+                await role.ModifyAsync(x => x.Name = newName);
+            }
+            catch (Exception e)
+            {
+                await SendBasicErrorEmbedAsync($"Failed to rename role {role.Mention}.\n" +
+                                               $"Error: {e.Message.AsBold()}");
+
+                return;
+            }
+
+            await SendBasicSuccessEmbedAsync($"Renamed the role successfully. New: {role.Mention}");
         }
     }
 }
