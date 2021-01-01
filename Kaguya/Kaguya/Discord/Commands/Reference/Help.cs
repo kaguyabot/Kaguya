@@ -189,21 +189,23 @@ namespace Kaguya.Discord.Commands.Reference
                                       .Humanize(x => $"`{prefix}{x}`\n");
 
             // If this match has specific usage examples...
-            if (match.Attributes.Any(x => x.GetType() == typeof(ExamplesAttribute)))
+            if (match.Attributes.Any(x => x.GetType() == typeof(ExampleAttribute)))
             {
-                string exampleString = match.Attributes
-                                         .Where(x => x.GetType() == typeof(ExamplesAttribute))
-                                         .Select(x => ((ExamplesAttribute) x).Examples)
-                                         .FirstOrDefault();
-                
-                // Null / whitespace check is performed in the ExamplesAttribute class constructor, so we can assert not-null via "!"
-                string[] exampleSplits = exampleString!.Split('\n');
+                IEnumerable<string> exampleAttributeStrings = match.Attributes
+                                                             .Where(x => x.GetType() == typeof(ExampleAttribute))
+                                                             .Select(x => ((ExampleAttribute) x).Examples);
 
+                // Null / whitespace check is performed in the ExamplesAttribute class constructor, so we can assert not-null via "!"
                 var exampleBuilder = new StringBuilder();
 
-                foreach (string split in exampleSplits)
+                foreach (string line in exampleAttributeStrings)
                 {
-                    exampleBuilder.AppendLine($"`{prefix}{match.Aliases[0]} {split}`");
+                    // This is needed in the event the example is an empty string.
+                    // This is used to showcase the command can be used by itself.
+                    
+                    // Formatting
+                    string lineCpy = string.IsNullOrWhiteSpace(line) ? string.Empty : " " + line;
+                    exampleBuilder.AppendLine($"`{prefix}{match.Aliases[0]}{lineCpy}`");
                 }
 
                 examples = exampleBuilder.ToString();
