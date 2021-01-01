@@ -157,7 +157,7 @@ namespace Kaguya.Discord.Commands.Administration
 			        ServerId = Context.Guild.Id,
 			        ModeratorId = Context.User.Id,
 			        ActionedUserId = user.Id,
-			        Action = AdminAction.TempBanAction,
+			        Action = AdminAction.BanAction,
 			        Reason = reason,
 			        Expiration = DateTime.Now + parsedTime
 		        };

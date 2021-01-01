@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -177,8 +178,9 @@ namespace Kaguya.Discord.Commands.Reference
 
             // Title = capitalize the first letter of the alias only. Ex: $ping -> Ping
             string title = $"Help: " + aliasString;
-            string description = match.Summary ?? match.Module.Summary;
-            string remarks = match.Remarks ?? match.Module.Remarks;
+            string description = match.Summary; // ?? match.Module.Summary
+            string examples = null;
+            string remarks = match.Remarks; // ?? match.Module.Remarks;
             string subCommands = match.Module.Commands
                                       .Where(c => !c.Aliases[0].Equals(match.Aliases[0]))
                                       .Select(x => x.Aliases[0])
@@ -186,6 +188,29 @@ namespace Kaguya.Discord.Commands.Reference
                                       .OrderBy(x => x)
                                       .Humanize(x => $"`{prefix}{x}`\n");
 
+            // If this match has specific usage examples...
+            if (match.Attributes.Any(x => x.GetType() == typeof(ExampleAttribute)))
+            {
+                IEnumerable<string> exampleAttributeStrings = match.Attributes
+                                                             .Where(x => x.GetType() == typeof(ExampleAttribute))
+                                                             .Select(x => ((ExampleAttribute) x).Examples);
+
+                // Null / whitespace check is performed in the ExamplesAttribute class constructor, so we can assert not-null via "!"
+                var exampleBuilder = new StringBuilder();
+
+                foreach (string line in exampleAttributeStrings)
+                {
+                    // This is needed in the event the example is an empty string.
+                    // This is used to showcase the command can be used by itself.
+                    
+                    // Formatting
+                    string lineCpy = string.IsNullOrWhiteSpace(line) ? string.Empty : " " + line;
+                    exampleBuilder.AppendLine($"`{prefix}{match.Aliases[0]}{lineCpy}`");
+                }
+
+                examples = exampleBuilder.ToString();
+            }
+            
             // If metadata is inherited from the module itself...
             if (match.Attributes.Any(x => x.GetType() == typeof(InheritMetadataAttribute)))
             {
@@ -204,14 +229,12 @@ namespace Kaguya.Discord.Commands.Reference
                 }
                 else if ((toAdd & CommandMetadata.Summary) != 0)
                 {
-                    remarks = match.Module.Summary;
+                    description = match.Module.Summary;
                 }
             }
             
-            // If, after all that, the command info is still null...
-            description ??= "No description loaded.";
-            remarks ??= "No remarks loaded.";
-            subCommands ??= "`No sub-commands`";
+            // If, after all that, the command description is still null...
+            description ??= "No description loaded.".AsItalics();
             
             // Formats all required precondition attributes.
             var requiredPermissionsList = match.Module.Preconditions
@@ -226,15 +249,10 @@ namespace Kaguya.Discord.Commands.Reference
                                                  .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission).ToList());
             }
 
-            string requiredPermissions = requiredPermissionsList.Humanize(x =>
-            {
-                if (x != null)
-                {
-                    return $"`{x.Value.Humanize(LetterCasing.Title)}`";
-                }
-
-                return default;
-            });
+            string requiredPermissions = requiredPermissionsList.Humanize(x => 
+                x != null 
+                ? $"`{x.Value.Humanize(LetterCasing.Title)}`" 
+                : default);
 
             string module = match.Module.Attributes
                                  .Where(x => x.GetType() == typeof(ModuleAttribute))
@@ -308,6 +326,19 @@ namespace Kaguya.Discord.Commands.Reference
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(examples))
+            {
+                EmbedFieldBuilder usageField = embed.Fields.FirstOrDefault(x => x.Name == "Usage");
+                int usageIndex = embed.Fields.IndexOf(usageField);
+                int examplesIndex = usageIndex + 1;
+                
+                embed.Fields.Insert(examplesIndex, new EmbedFieldBuilder
+                {
+                    Name = "Examples",
+                    Value = examples
+                });
+            }
+            
             // Aliases
             var otherAliases = match.Aliases.Where(x => !x.Equals(match.Aliases[0])).ToArray();
             if (otherAliases.Length > 0)
@@ -326,10 +357,9 @@ namespace Kaguya.Discord.Commands.Reference
                 {
                     IsInline = false,
                     Name = "Sub Commands",
-                    Value = subCommands
+                    Value = ChopSubcommandLines(subCommands)
                 });
             }
-            
             
             await SendEmbedAsync(embed);
         }
@@ -347,6 +377,48 @@ namespace Kaguya.Discord.Commands.Reference
             return commands.Where(x => x.Attributes.Contains(new ModuleAttribute(module)))
                            .Select(x => x)
                            .OrderByDescending(x => x.Aliases[0]);
+        }
+
+        /// <summary>
+        /// Formats the "sub commands" text to have proper new lines instead of code blocks running across multiple lines.
+        /// </summary>
+        /// <param name="subCommandString"></param>
+        /// <returns></returns>
+        private string ChopSubcommandLines(string subCommandString)
+        {
+            const int MAX_LENGTH = 65;
+
+            if (subCommandString.Length <= MAX_LENGTH)
+            {
+                return subCommandString;
+            }
+            
+            string finalString = "";
+            int charCount = 0;
+            int nextLength = 0;
+            string[] commaSplits = subCommandString.Split(", ");
+            for (int i = 0; i < commaSplits.Length; i++)
+            {
+                if (i > 0 && i < commaSplits.Length - 1)
+                {
+                    nextLength = commaSplits[i + 1].Length;
+                }
+                
+                var subCommand = commaSplits[i];
+                charCount += subCommand.Length;
+                finalString += commaSplits[i] + ", ";
+
+                if (charCount + nextLength >= MAX_LENGTH)
+                {
+                    finalString += "\n";
+                    charCount = 0;
+                    nextLength = 0;
+                }
+            }
+
+            finalString = finalString[..^2]; // Trims remaining ", " from the end.
+
+            return finalString;
         }
     }
 }

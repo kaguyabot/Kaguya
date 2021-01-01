@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Discord.Commands;
-using Kaguya.Discord.Attributes;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Humanizer;
 using Interactivity;
 using Interactivity.Confirmation;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Attributes;
 using Kaguya.Discord.DiscordExtensions;
+using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Administration
 {
@@ -166,10 +166,10 @@ namespace Kaguya.Discord.Commands.Administration
         public async Task AssignRoleCommand(SocketRole role, params SocketGuildUser[] users)
         {
             string successBase = $"Successfully assigned role {role.ToString().AsBold()} to:\n\n";
-            const string errorBase = "Errors:\n\n";
+            const string ERROR_BASE = "Errors:\n\n";
             
             var successBuilder = new StringBuilder(successBase);
-            var errorBuilder = new StringBuilder(errorBase);
+            var errorBuilder = new StringBuilder(ERROR_BASE);
             var finalBuilder = new StringBuilder();
 
             List<string> successUsers = new List<string>();
@@ -197,9 +197,9 @@ namespace Kaguya.Discord.Commands.Administration
                 finalBuilder.AppendLine(successBuilder.ToString());
             }
 
-            if (errorBuilder.ToString() != errorBase)
+            if (errorBuilder.ToString() != ERROR_BASE)
             {
-                finalBuilder.Append("\n\n" + errorBuilder.ToString());
+                finalBuilder.Append("\n\n" + errorBuilder);
             }
 
             var embed = new KaguyaEmbedBuilder(Color.Green)
@@ -527,6 +527,29 @@ namespace Kaguya.Discord.Commands.Administration
             }
 
             await SendEmbedAsync(embedBuilder);
+        }
+
+        [Command("-rename")]
+        [Summary("Renames the provided role to the name specified. If the **first** role name has spaces, wrap it " +
+                 "with quotation marks. If the **new name** has spaces, do not wrap it with quotation marks.\n\n")]
+        [Remarks("<role> <new name>")]
+        [Example("penguins birds that can't fly")]
+        [Example("\"birds that can't fly\" ice chicken")]
+        public async Task RenameRoleCommand(SocketRole role, [Remainder]string newName)
+        {
+            try
+            {
+                await role.ModifyAsync(x => x.Name = newName);
+            }
+            catch (Exception e)
+            {
+                await SendBasicErrorEmbedAsync($"Failed to rename role {role.Mention}.\n" +
+                                               $"Error: {e.Message.AsBold()}");
+
+                return;
+            }
+
+            await SendBasicSuccessEmbedAsync($"Renamed the role successfully. New: {role.Mention}");
         }
     }
 }
