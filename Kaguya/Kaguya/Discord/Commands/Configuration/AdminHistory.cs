@@ -28,7 +28,7 @@ namespace Kaguya.Discord.Commands.Configuration
         private readonly KaguyaServerRepository _kaguyaServerRepository;
         private readonly InteractivityService _interactivityService;
 
-        public AdminHistory(ILogger<AdminHistory> logger, AdminActionRepository adminActionRepository, 
+        public AdminHistory(ILogger<AdminHistory> logger, AdminActionRepository adminActionRepository,
             KaguyaServerRepository kaguyaServerRepository, InteractivityService interactivityService) : base(logger)
         {
             _logger = logger;
@@ -51,9 +51,10 @@ namespace Kaguya.Discord.Commands.Configuration
                  "`--sh` - Show hidden entries\n\n" +
                  "")]
         [Remarks("[-f <filter type> [...]] [--se] [--sh]")]
-        [Examples("\n-f kick ban shadowban\n" +
-                  "-f mute --sh --se\n" +
-                  "-f warn --sh")]
+        [Example("")]
+        [Example("-f kick ban shadowban")]
+        [Example("-f mute --sh --se")]
+        [Example("-f warn --sh")]
         public async Task AdminHistoryCommand(params string[] args)
         {
             bool showExpired = ShowExpired(args);

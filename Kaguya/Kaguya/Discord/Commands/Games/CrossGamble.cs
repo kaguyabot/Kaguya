@@ -50,7 +50,8 @@ namespace Kaguya.Discord.Commands.Games
                  "For example: If the `<max amount>` is 10000, the highest roll is 7500, and the lowest roll is 1000, whoever " +
                  "rolled 7500 wins 6500 of the loser's points.")]
         [Remarks("<max amount>")]
-        [Examples("30000\n1000000")]
+        [Example("30000")]
+        [Example("1000000")]
         public async Task CrossGamblingCommand(int maxAmount)
         {
             const int DELAY_SECONDS = 30;

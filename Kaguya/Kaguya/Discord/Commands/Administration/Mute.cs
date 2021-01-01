@@ -46,9 +46,11 @@ namespace Kaguya.Discord.Commands.Administration
         }
 
         [Command(RunMode = RunMode.Async)]
-        [Summary("Mutes a user permanently with an optional reason.")]
+        [Summary("Mutes a user indefinitely with an optional reason. The mute persists until the " +
+                 "user is unmuted via the `mute -u` command. If the mute role is manually removed from the user " +
+                 "by a moderator, the mute will not be automatically reapplied.")]
         [Remarks("<user> [reason]")]
-        [Examples("@User#0000 Being really spammy in chat.")]
+        [Example("@User#0000 Being really spammy in chat.")]
         public async Task MuteCommand(SocketGuildUser user, [Remainder]string reason = null)
         {
             KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
@@ -58,8 +60,8 @@ namespace Kaguya.Discord.Commands.Administration
         [Command("-t", RunMode = RunMode.Async)]
         [Summary("Mutes a user for a specified duration, with an optional reason.")]
         [Remarks("<user> <duration> [reason]")]
-        [Examples("@User#0000 1d16h35m25s\n" +
-                  "@User#0000 30m Being really spammy in chat.")]
+        [Example("@User#0000 30m Being really spammy in chat.")]
+        [Example("@User#0000 1d16h35m25s")]
         // ReSharper disable once MethodOverloadWithOptionalParameter
         public async Task MuteCommand(SocketGuildUser user, string duration, [Remainder]string reason = null)
         {
