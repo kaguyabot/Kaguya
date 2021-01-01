@@ -15,13 +15,13 @@ namespace Kaguya.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.0");
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("Kaguya.Database.Model.AdminAction", b =>
                 {
-                    b.Property<uint>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("int");
 
                     b.Property<string>("Action")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
