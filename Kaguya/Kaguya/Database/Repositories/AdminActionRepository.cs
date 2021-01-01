@@ -65,46 +65,42 @@ namespace Kaguya.Database.Repositories
 			_dbContext.AdminActions.UpdateRange(collection);
 			await _dbContext.SaveChangesAsync();
 		}
-		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId, bool showHidden = false) 
-		{ 
-			var collection = await _dbContext.AdminActions.AsQueryable()
-			                       .Where(x => x.ServerId == serverId)
-			                       .ToListAsync();
+		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId, bool showHidden = false)
+		{
+			var collection = _dbContext.AdminActions.AsQueryable()
+			                                 .Where(x => x.ServerId == serverId);
 			
-			return showHidden ? collection : collection.Where(x => !x.IsHidden).ToList();
+			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
 		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId, string action, bool showHidden = false)
 		{
-			var collection = await _dbContext.AdminActions.AsQueryable()
-			                       .Where(x => x.ServerId == serverId &&
-			                                   x.Action == action)
-			                       .ToListAsync();
+			var collection = _dbContext.AdminActions.AsQueryable()
+			                                 .Where(x => x.ServerId == serverId &&
+			                                             x.Action == action);
 			
-			return showHidden ? collection : collection.Where(x => !x.IsHidden).ToList();
+			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
 		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, bool showHidden = false)
 		{
-			var collection = await _dbContext.AdminActions.AsQueryable()
-				                       .Where(x => x.ActionedUserId == userId &&
-				                                   x.ServerId == serverId && 
-				                                   (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now))
-				                       .ToListAsync();
+			var collection = _dbContext.AdminActions.AsQueryable()
+			                                 .Where(x => x.ActionedUserId == userId &&
+			                                             x.ServerId == serverId &&
+			                                             (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now));
 
-			return showHidden ? collection : collection.Where(x => !x.IsHidden).ToList();
+			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 		
 		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, string action, bool showHidden = false)
 		{
-			var collection = await _dbContext.AdminActions.AsQueryable()
-			                       .Where(x => x.ActionedUserId == userId && 
-			                                   x.ServerId == serverId && 
-			                                   x.Action.Equals(action, StringComparison.OrdinalIgnoreCase) &&
-			                                   (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now))
-			                       .ToListAsync();
+			var collection = _dbContext.AdminActions.AsQueryable()
+			                                 .Where(x => x.ActionedUserId == userId &&
+			                                             x.ServerId == serverId &&
+			                                             x.Action.Equals(action, StringComparison.OrdinalIgnoreCase) &&
+			                                             (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now));
 
-			return showHidden ? collection : collection.Where(x => !x.IsHidden).ToList();
+			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
 		/// <summary>
