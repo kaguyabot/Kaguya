@@ -52,8 +52,8 @@ namespace Kaguya.Discord.Attributes
 		public ModuleAttribute(CommandModule module) { Module = module; }
 	}
 
-	[AttributeUsage(AttributeTargets.Method)]
-	internal class ExamplesAttribute : Attribute
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+	internal class ExampleAttribute : Attribute
 	{
 		public string Examples { get; }
 
@@ -61,9 +61,11 @@ namespace Kaguya.Discord.Attributes
 		/// A collection of examples, separated by \n (new line) characters.
 		/// This string may not be empty or only comprised of white-space characters.
 		/// </param>
-		public ExamplesAttribute(string examples)
+		public ExampleAttribute(string examples)
 		{
-			Examples = string.IsNullOrWhiteSpace(examples) ? throw new ArgumentNullException(nameof(examples)) : examples;
+			// We allow empty strings deliberately to showcase that the command can be used by itself 
+			// without any additional input from the user. This is only typically used with complex commands.
+			Examples = examples ?? throw new ArgumentNullException(nameof(examples));
 		}
 	}
 	
