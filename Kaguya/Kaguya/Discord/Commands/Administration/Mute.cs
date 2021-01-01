@@ -138,10 +138,7 @@ namespace Kaguya.Discord.Commands.Administration
 
             await SendEmbedAsync(embed);
         }
-        
-        // TODO: Create a "mute -sync" command to sync channel permissions for the mute role.
-        // TODO: Create a "mute -status" command for admins to view who has what mutes.
-        // TODO: Create a "mute -erase" command for admins to "erase history" of users who were muted in their server.
+
         private async Task MuteUserAsync(SocketGuildUser user, DateTime? expiration, string reason, KaguyaServer server)
         {
             var adminAction = new AdminAction
