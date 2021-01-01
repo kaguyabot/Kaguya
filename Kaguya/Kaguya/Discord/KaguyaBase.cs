@@ -86,5 +86,23 @@ namespace Kaguya.Discord
 
             return null;
         }
+
+        /// <summary>
+        /// Modifies the provided <see cref="RestUserMessage"/> such that it displays an "expired" embed.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        protected async Task<RestUserMessage> SetToInactiveEmbedAsync(RestUserMessage msg)
+        {
+            await msg.ModifyAsync(x =>
+            {
+                x.Content = null;
+                x.Embed = new KaguyaEmbedBuilder(Color.Orange)
+                          .WithTitle("Expired! ⏳")
+                          .Build();
+            });
+
+            return msg;
+        }
     }
 }
