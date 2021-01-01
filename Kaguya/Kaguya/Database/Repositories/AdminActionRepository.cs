@@ -21,11 +21,14 @@ namespace Kaguya.Database.Repositories
 			_logger = logger;
 		}
 
-		public async Task<AdminAction> GetAsync(ulong key) { return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == key).FirstOrDefaultAsync(); }
-
-		public async Task DeleteAsync(ulong key)
+		public async Task<AdminAction> GetAsync(int key)
 		{
-			var match = await GetAsync(key);
+			return await _dbContext.AdminActions.AsQueryable().Where(x => x.Id == key).FirstOrDefaultAsync();
+		}
+
+		public async Task DeleteAsync(int key)
+		{
+			AdminAction match = await GetAsync(key);
 
 			if (match is null)
 			{
@@ -62,32 +65,57 @@ namespace Kaguya.Database.Repositories
 			_dbContext.AdminActions.UpdateRange(collection);
 			await _dbContext.SaveChangesAsync();
 		}
-		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId) 
+		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId, bool showHidden = false) 
 		{ 
-			return await _dbContext.AdminActions.AsQueryable()
-			                       .Where(x => x.ServerId == serverId && !x.IsHidden)
+			var collection = await _dbContext.AdminActions.AsQueryable()
+			                       .Where(x => x.ServerId == serverId)
 			                       .ToListAsync();
+			
+			return showHidden ? collection : collection.Where(x => !x.IsHidden).ToList();
 		}
 
-		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId)
+		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId, string action, bool showHidden = false)
 		{
-			return await _dbContext.AdminActions.AsQueryable()
-			                       .Where(x => x.ActionedUserId == userId &&
-			                                   x.ServerId == serverId && 
-			                                   !x.IsHidden &&
-			                                   (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now))
+			var collection = await _dbContext.AdminActions.AsQueryable()
+			                       .Where(x => x.ServerId == serverId &&
+			                                   x.Action == action)
 			                       .ToListAsync();
+			
+			return showHidden ? collection : collection.Where(x => !x.IsHidden).ToList();
+		}
+
+		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, bool showHidden = false)
+		{
+			var collection = await _dbContext.AdminActions.AsQueryable()
+				                       .Where(x => x.ActionedUserId == userId &&
+				                                   x.ServerId == serverId && 
+				                                   (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now))
+				                       .ToListAsync();
+
+			return showHidden ? collection : collection.Where(x => !x.IsHidden).ToList();
 		}
 		
-		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, string action)
+		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, string action, bool showHidden = false)
 		{
-			return await _dbContext.AdminActions.AsQueryable()
+			var collection = await _dbContext.AdminActions.AsQueryable()
 			                       .Where(x => x.ActionedUserId == userId && 
 			                                   x.ServerId == serverId && 
 			                                   x.Action.Equals(action, StringComparison.OrdinalIgnoreCase) &&
-			                                   !x.IsHidden &&
 			                                   (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now))
 			                       .ToListAsync();
+
+			return showHidden ? collection : collection.Where(x => !x.IsHidden).ToList();
+		}
+
+		/// <summary>
+		/// Sets the `IsHidden` property of the <see cref="AdminAction"/> to true and updates it in the database.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public async Task HideAsync(AdminAction value)
+		{
+			value.IsHidden = true;
+			await UpdateAsync(value);
 		}
 
 		/// <summary>
