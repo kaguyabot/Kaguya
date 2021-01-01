@@ -199,7 +199,14 @@ namespace Kaguya.Discord.Commands.Reference
                 // Null / whitespace check is performed in the ExamplesAttribute class constructor, so we can assert not-null via "!"
                 string[] exampleSplits = exampleString!.Split('\n');
 
-                examples = exampleSplits.Humanize(x => $"`{prefix}{match.Aliases[0]} {x}`", "\n");
+                var exampleBuilder = new StringBuilder();
+
+                foreach (string split in exampleSplits)
+                {
+                    exampleBuilder.AppendLine($"`{prefix}{match.Aliases[0]} {split}`");
+                }
+
+                examples = exampleBuilder.ToString();
             }
             
             // If metadata is inherited from the module itself...
