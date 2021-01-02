@@ -22,6 +22,7 @@ namespace Kaguya.Database.Model
 
 		public int NextQuoteId { get; set; } = 1;
 		public ulong MuteRoleId { get; set; }
+		public DateTime DateFirstTracked { get; set; }
 
 		public DateTime? PremiumExpiration { get; set; }
 

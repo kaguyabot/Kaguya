@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using OsuSharp;
 
 namespace Kaguya.Database.Model
 {
@@ -23,7 +24,8 @@ namespace Kaguya.Database.Model
 
 		public int Points { get; private set; } = 0;
 
-		public int? OsuId { get; set; }
+		public long? OsuId { get; set; }
+		public GameMode? OsuGameMode { get; set; }
 
 		public int TotalCommandUses { get; set; } = 0;
 
@@ -43,6 +45,7 @@ namespace Kaguya.Database.Model
 		public int RateLimitWarnings { get; set; } = 0;
 
 		public int TotalUpvotes { get; set; } = 0;
+		public DateTime DateFirstTracked { get; set; }
 
 		public DateTime? LastGivenExp { get; set; }
 

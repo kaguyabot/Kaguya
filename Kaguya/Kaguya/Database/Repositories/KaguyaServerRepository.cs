@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
@@ -22,14 +23,15 @@ namespace Kaguya.Database.Repositories
         public async Task<KaguyaServer> GetOrCreateAsync(ulong id)
         {
             var server = await GetAsync(id);
-            if (server is not null)
+            if (server != null)
             {
                 return server;
             }
 
             server = _dbContext.Servers.Add(new KaguyaServer
             {
-                ServerId = id
+                ServerId = id,
+                DateFirstTracked = DateTime.Now
             }).Entity;
 
             await _dbContext.SaveChangesAsync();

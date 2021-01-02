@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
@@ -73,7 +74,8 @@ namespace Kaguya.Database.Repositories
 
 			user = _dbContext.Users.Add(new KaguyaUser
 			                                {
-				                                UserId = id
+				                                UserId = id,
+				                                DateFirstTracked = DateTime.Now
 			                                }).Entity;
 
 			await _dbContext.SaveChangesAsync();
