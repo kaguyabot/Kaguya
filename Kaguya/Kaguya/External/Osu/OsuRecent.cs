@@ -14,14 +14,12 @@ namespace Kaguya.External.Osu
     public class OsuRecent : OsuBase
     {
         private readonly OsuData _osuData;
-        private readonly ICommandContext _ctx;
 
         private const char POINT_RIGHT = '▸';
 
-        public OsuRecent(OsuData osuData, ICommandContext ctx) : base(osuData.Client)
+        public OsuRecent(OsuData osuData) : base(osuData.Client)
         {
             _osuData = osuData;
-            _ctx = ctx;
         }
 
         public async Task<Embed> GetMostRecentForUserAsync()

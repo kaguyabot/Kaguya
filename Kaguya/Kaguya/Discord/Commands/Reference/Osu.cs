@@ -114,7 +114,7 @@ namespace Kaguya.Discord.Commands.Reference
                 return;
             }
 
-            var recent = new OsuRecent(data, Context);
+            var recent = new OsuRecent(data);
             await SendEmbedAsync(await recent.GetMostRecentForUserAsync());
         }
     }
