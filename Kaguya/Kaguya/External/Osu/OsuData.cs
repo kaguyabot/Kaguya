@@ -14,7 +14,7 @@ namespace Kaguya.External.Osu
             Client = osuClient;
             
             OsuUsername = osuUsername;
-            GameMode = GetGamemode(gameModeString);
+            GameMode = GetGameMode(gameModeString);
         }
 
         public OsuData(string osuUsername, GameMode gameMode, OsuClient osuClient) : base(osuClient)
@@ -56,7 +56,7 @@ namespace Kaguya.External.Osu
         /// </summary>
         /// <param name="gmString"></param>
         /// <returns></returns>
-        public GameMode GetGamemode(string gmString)
+        public GameMode GetGameMode(string gmString)
         {
             return gmString.ToLower() switch
             {
