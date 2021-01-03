@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Humanizer;
 using Kaguya.Discord.DiscordExtensions;
 using OsuSharp;
 
@@ -14,7 +16,45 @@ namespace Kaguya.External.Osu
             _osuClient = osuClient;
         }
         
-        // todo: Method for mod string
+        protected string GetModString(Mode input)
+        {
+            var newMods = new List<string>();
+            Array enumCollection = Enum.GetValues(input.GetType());
+            
+            foreach (Enum value in enumCollection)
+            {
+                if (input.HasFlag(value))
+                {
+                    Mode val = value is Mode mod ? mod : Mode.None;
+
+                    if (val == Mode.None && enumCollection.Length == 1)
+                    {
+                        return "No Mod";
+                    }
+
+                    if (val == Mode.None && enumCollection.Length > 1)
+                    {
+                        continue;
+                    }
+                    
+                    newMods.Add(val.ToModeString(_osuClient));
+                }
+            }
+
+            // Double checking, no-mod may have been skipped.
+            if (newMods.Count == 0)
+            {
+                return "No Mod";
+            }
+
+            string final = string.Empty;
+            foreach (string modString in newMods)
+            {
+                final += $"{modString}, ";
+            }
+
+            return final[..^2];
+        }
 
         protected string GetEmoteForRank(string rank)
         {
@@ -31,6 +71,15 @@ namespace Kaguya.External.Osu
                 "F" => "<:rankingF:794934802117427241>",
                 _ => "<:rankingF:794934802117427241>"
             };
+        }
+
+        /// <summary>
+        /// Gets the correct <see cref="TimeSpan"/> for when this osu! play was submitted.
+        /// </summary>
+        /// <returns></returns>
+        protected TimeSpan GetScoreTimespan(Score score)
+        {
+            return score.Date.HasValue ? DateTime.UtcNow - score.Date.Value.DateTime : TimeSpan.Zero;
         }
     }
 

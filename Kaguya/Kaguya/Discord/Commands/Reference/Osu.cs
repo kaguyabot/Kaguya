@@ -41,11 +41,10 @@ namespace Kaguya.Discord.Commands.Reference
         [Example("ctb really good ctb player")]
         public async Task OsuSetCommand(string gameModeString, [Remainder] string username)
         {
-            GameMode gameMode = GetGamemode(gameModeString);
-
-            var data = new OsuData(username, gameMode, _osuClient);
-
-            var osuUser = await data.GetOsuUserAsync();
+            var data = new OsuData(username, gameModeString, _osuClient);
+            GameMode gameMode = data.GameMode;
+            
+            User osuUser = await data.GetOsuUserAsync();
             if (osuUser == null)
             {
                 await SendBasicErrorEmbedAsync(new OsuUserNotFoundException(username).Message);
@@ -63,11 +62,11 @@ namespace Kaguya.Discord.Commands.Reference
         }
 
         [Priority(2)]
-        [Command("-recent")]
+        [Command("-recent", RunMode = RunMode.Async)]
         [Alias("-r")]
         [Summary("Displays the most recent play for a given username. The `gamemode` parameter is only " +
                  "optional if your username has been set via the `osu -set` command.\n\n" + GAME_MODE_STRING)]
-        [Remarks("[gamemode] [username]\n<gamemode> [username]\n")]
+        [Remarks("\n<gamemode> [username]")]
         // ReSharper disable once MethodOverloadWithOptionalParameter
         public async Task OsuRecentCommand(string gameMode = null, [Remainder] string username = null)
         {
@@ -75,37 +74,48 @@ namespace Kaguya.Discord.Commands.Reference
             KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
 
             OsuData data;
+            
             if (gameMode == null && username == null)
             {
                 if (!kaguyaUser.OsuId.HasValue || !kaguyaUser.OsuGameMode.HasValue)
                 {
-                    await SendBasicErrorEmbedAsync($"To use this command without parameters, you need to set " +
-                                                   $"your osu! username and game mode through the " +
+                    await SendBasicErrorEmbedAsync($"To use this command without parameters, you need to set your osu! username and game mode through the " +
                                                    $"{server.CommandPrefix}osu -set <game mode> <username>".AsCodeBlockSingleLine() + " command.");
 
                     return;
                 }
-                else if (gameMode != null && username == null)
-                {
-                    // todo: data = new OsuData(username)
-                }
+
+                data = new OsuData(kaguyaUser.OsuId.Value, kaguyaUser.OsuGameMode.Value, _osuClient);
             }
-            GameMode mode = GetGamemode(gameMode);
-            
-        }
-
-        private GameMode GetGamemode(string gmString)
-        {
-            return gmString switch
+            else if (gameMode != null && username == null)
             {
-                "std" => GameMode.Standard,
-                "mania" => GameMode.Mania,
-                "taiko" => GameMode.Taiko,
-                "ctb" => GameMode.Catch,
-                _ => throw new OsuException("Invalid gamemode provided.\n**Valid Game Modes:** `std`, `mania`, `taiko`, `ctb`")
-            };
-        }
+                if (!kaguyaUser.OsuId.HasValue)
+                {
+                    await SendBasicErrorEmbedAsync("You specified a gamemode but not a username. To specify a gamemode without a username, " +
+                                                   "you need to set your osu! username and game mode through the " +
+                                                   $"{server.CommandPrefix}osu -set <game mode> <username>".AsCodeBlockSingleLine() +
+                                                   " command.");
 
-        
+                    return;
+                }
+                
+                data = new OsuData(kaguyaUser.OsuId.Value, gameMode, _osuClient);
+            }
+            else
+            {
+                data = new OsuData(username, gameMode, _osuClient);
+            }
+            
+            User osuUser = await data.GetOsuUserAsync();
+            if (osuUser == null)
+            {
+                await SendBasicErrorEmbedAsync($"I couldn't find anyone with the username {data.OsuUsername.AsBold()}.");
+
+                return;
+            }
+
+            var recent = new OsuRecent(data, Context);
+            await SendEmbedAsync(await recent.GetMostRecentForUserAsync());
+        }
     }
 }
