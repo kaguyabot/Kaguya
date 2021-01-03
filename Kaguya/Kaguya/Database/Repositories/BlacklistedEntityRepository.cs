@@ -45,5 +45,10 @@ namespace Kaguya.Database.Repositories
             _dbContext.BlacklistedEntities.Add(value);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<bool> IsBlacklisted(ulong key)
+        {
+            return await _dbContext.BlacklistedEntities.AsQueryable().AnyAsync(x => x.EntityId == key);
+        }
     }
 }

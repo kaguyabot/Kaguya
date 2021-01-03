@@ -4,5 +4,6 @@
 	{
 		public static string Position { get; } = "AdminSettings";
 		public ulong OwnerId { get; set; }
+		public string OsuApiKey { get; set; }
 	}
 }

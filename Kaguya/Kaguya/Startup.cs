@@ -27,6 +27,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using NekosSharp;
+using OsuSharp;
 using Victoria;
 
 namespace Kaguya
@@ -70,6 +71,17 @@ namespace Kaguya
 			services.AddControllers();
 
 			services.AddSingleton(new NekoClient("kaguya-v4"));
+			
+			// Osu setup (OsuSharp)
+			services.AddSingleton(provider =>
+			{
+				var adminConfigs = provider.GetRequiredService<IOptions<AdminConfigurations>>();
+				
+				return new OsuClient(new OsuSharpConfiguration
+				{
+					ApiKey = adminConfigs.Value.OsuApiKey
+				});
+			});
 			
 			services.AddSingleton(_ =>
 			{

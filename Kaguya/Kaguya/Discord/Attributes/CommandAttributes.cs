@@ -18,7 +18,6 @@ namespace Kaguya.Discord.Attributes
 		Reference,
 		Music,
 		Nsfw,
-		Osu,
 		Utility,
 		Configuration,
 		OwnerOnly

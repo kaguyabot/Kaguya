@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210102153938_UserServer_TimeCreated")]
+    partial class UserServer_TimeCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -295,11 +297,8 @@ namespace Kaguya.Migrations
                     b.Property<DateTime?>("LastWeeklyBonus")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("OsuGameMode")
+                    b.Property<int?>("OsuId")
                         .HasColumnType("int");
-
-                    b.Property<long?>("OsuId")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("Points")
                         .HasColumnType("int");
