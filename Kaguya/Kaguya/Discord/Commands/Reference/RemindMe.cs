@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Discord;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.Parsers;
 
 namespace Kaguya.Discord.Commands.Reference

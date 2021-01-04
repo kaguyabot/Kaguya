@@ -12,7 +12,7 @@ using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
-using Kaguya.Discord.options;
+using Kaguya.Discord.Options;
 using Kaguya.Options;
 using Kaguya.Services;
 using Kaguya.Workers;
@@ -100,7 +100,7 @@ namespace Kaguya
 				restClient.LoginAsync(TokenType.Bot, discordConfigs.Value.BotToken).GetAwaiter().GetResult();
 				int shards = restClient.GetRecommendedShardCountAsync().GetAwaiter().GetResult();
 				
-				var _client = new DiscordShardedClient(new DiscordSocketConfig
+				var client = new DiscordShardedClient(new DiscordSocketConfig
 							                    {
 							                        AlwaysDownloadUsers = discordConfigs.Value.AlwaysDownloadUsers ?? true,
 							                        MessageCacheSize = discordConfigs.Value.MessageCacheSize ?? 50,
@@ -108,7 +108,7 @@ namespace Kaguya
 							                        LogLevel = LogSeverity.Debug
 							                    });
 
-				return _client;
+				return client;
 			});
 
 			services.AddSingleton(provider =>
@@ -116,10 +116,19 @@ namespace Kaguya
 				var client = provider.GetRequiredService<DiscordShardedClient>();
 				return new InteractivityService(client, TimeSpan.FromMinutes(5));
 			});
-
+			
 			services.AddHostedService<TimerWorker>();
 			
 			services.AddHostedService<DiscordWorker>();
+
+			services.AddSingleton(provider =>
+			{
+				var logger = provider.GetRequiredService<ILogger<KaguyaEvents>>();
+				var client = provider.GetRequiredService<DiscordShardedClient>();
+
+				var events = new KaguyaEvents(logger, client);
+				return events;
+			});
 			
 			// Must be after discord.
 			services.AddHostedService<StatusRotationService>();
