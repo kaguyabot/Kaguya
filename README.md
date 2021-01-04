@@ -49,7 +49,7 @@ mysql> SHOW DATABASES;
 4 rows in set (0.00 sec)
 ```
 
-Navigate to your installation folder and find the `appsettings.development.json` file.
+Navigate to your installation folder and find the `appsettings.Development.json` file.
 You can do these steps through the command line or through a text editor.
 
 Navigate to the project directory.
