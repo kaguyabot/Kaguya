@@ -83,7 +83,7 @@ namespace Kaguya.Discord.Commands.Reference
                 
                 PageBuilder curPageBuilder = new PageBuilder()
                                              .WithTitle("Commands: " + curModuleName)
-                                             .WithColor(Color.MediumPurple)
+                                             .WithColor(KaguyaColors.Magenta)
                                              .WithDescription($"{links}\n\n```ini\n"); // Start description ini here. Closes later.
                 
                 IEnumerable<ModuleInfo> curModuleCommands = GetCommandsForModuleAlphabetized(curModule);
@@ -281,7 +281,7 @@ namespace Kaguya.Discord.Commands.Reference
                 remarks = remarks.Split("\n").Humanize(remark => $"`{prefix}{match.Aliases[0]} {remark}`\n");
             }
             
-            var embed = new KaguyaEmbedBuilder(global::Discord.Color.Magenta)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
             {
                 Title = title,
                 Fields = new List<EmbedFieldBuilder>

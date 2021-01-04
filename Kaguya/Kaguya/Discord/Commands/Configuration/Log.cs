@@ -69,7 +69,7 @@ namespace Kaguya.Discord.Commands.Configuration
                 await _logConfigurationRepository.UpdateAsync(logConfig);
             }
 
-            var embed = new KaguyaEmbedBuilder(Color.Green)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
             {
                 Title = $"Log Configuration for {Context.Guild.Name}",
                 Description = sb.ToString()

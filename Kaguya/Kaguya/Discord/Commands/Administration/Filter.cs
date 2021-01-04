@@ -55,7 +55,7 @@ namespace Kaguya.Discord.Commands.Administration
             {
                 PageBuilder page = new PageBuilder()
                                    .WithTitle("Word Filter")
-                                   .WithColor(Color.Magenta);
+                                   .WithColor(KaguyaColors.Magenta);
 
                 var descSb = new StringBuilder();
 

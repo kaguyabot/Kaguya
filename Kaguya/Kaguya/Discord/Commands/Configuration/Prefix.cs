@@ -88,7 +88,7 @@ namespace Kaguya.Discord.Commands.Configuration
                 return;
             }
             
-            await SendBasicEmbedAsync("The current prefix for this server is " + commandPrefix.AsCodeBlockSingleLine(), Color.Blue);
+            await SendBasicEmbedAsync("The current prefix for this server is " + commandPrefix.AsCodeBlockSingleLine(), KaguyaColors.Blue);
         }
     }
 }

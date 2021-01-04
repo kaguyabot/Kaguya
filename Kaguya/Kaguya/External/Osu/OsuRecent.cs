@@ -30,7 +30,7 @@ namespace Kaguya.External.Osu
 
             if (userRecentPlays.Count == 0)
             {
-                return new KaguyaEmbedBuilder(Color.Red)
+                return new KaguyaEmbedBuilder(KaguyaColors.Red)
                        .WithDescription("The user has no recent plays.")
                        .Build();
             }
@@ -179,7 +179,7 @@ namespace Kaguya.External.Osu
 
             string playerProfilePicture = "https://a.ppy.sh/" + osuUser.UserId;
             
-            return new KaguyaEmbedBuilder(Color.Teal)
+            return new KaguyaEmbedBuilder(KaguyaColors.Teal)
                    .WithAuthor(osuUser.Username, playerProfilePicture, osuUser.ProfileUri.AbsoluteUri)
                    .WithThumbnailUrl(recentMapInfo.ThumbnailUri.AbsoluteUri)
                    .WithTitle(title)

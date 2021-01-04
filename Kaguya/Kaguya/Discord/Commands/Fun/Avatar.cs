@@ -26,7 +26,7 @@ namespace Kaguya.Discord.Commands.Fun
         public async Task AvatarCommand()
         {
             var avatar = await _nekoClient.Image_v3.Avatar();
-            var embed = new KaguyaEmbedBuilder(Color.Green)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
                         .WithDescription($"{Context.User.Mention} here is a new avatar!")
                         .WithImageUrl(avatar.ImageUrl)
                         .Build();

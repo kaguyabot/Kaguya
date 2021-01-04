@@ -60,7 +60,7 @@ namespace Kaguya.Discord.Commands.Reference
 
             await _kaguyaUserRepository.UpdateAsync(kaguyaUser);
             
-            await SendBasicEmbedAsync("Successfully set your osu! username: " + osuUser.Username.AsBold(), Color.Blue);
+            await SendBasicEmbedAsync("Successfully set your osu! username: " + osuUser.Username.AsBold(), KaguyaColors.Blue);
         }
 
         [Priority(2)]

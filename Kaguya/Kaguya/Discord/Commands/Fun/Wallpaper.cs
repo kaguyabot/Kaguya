@@ -26,7 +26,7 @@ namespace Kaguya.Discord.Commands.Fun
         public async Task WallpaperCommand()
         {
             Request randomWallpaper = await _nekoClient.Image_v3.Wallpaper();
-            var embed = new KaguyaEmbedBuilder(Color.Blue)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Blue)
                         .WithTitle("Wallpaper")
                         .WithDescription($"{Context.User.Mention}")
                         .WithImageUrl(randomWallpaper.ImageUrl);

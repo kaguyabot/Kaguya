@@ -67,7 +67,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
             
             if (amount < 20)
             {
-                var dmEmbed = new KaguyaEmbedBuilder(Color.Magenta)
+                var dmEmbed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
                               .WithTitle("Kaguya Premium Keys")
                               .WithDescription(builder.ToString())
                               .WithCurrentTimestamp()
