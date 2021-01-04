@@ -318,10 +318,10 @@ If making an entirely new database table, do the following **in order**:
   ```
 - Index your queries after you have built your repository. Anything inside of a LINQ expression is indexable. This is done by modifying the `OnModelCreating()` method in this class. [Indexing instructions](https://github.com/kaguyabot/Kaguya/blob/v4-open-beta/Kaguya/Kaguya/Database/Context/KaguyaDbContext.cs#L42) are listed inside of this method.
 - Finally, add your new repository as a scoped service in [Startup.cs](https://github.com/kaguyabot/Kaguya/blob/v4-open-beta/Kaguya/Kaguya/Startup.cs#L58)
-```cs
-{...}
+  ```cs
+  {...}
 
-services.AddScoped<FooRepository>();
+  services.AddScoped<FooRepository>();
 
-{...}
-```
+  {...}
+  ```
