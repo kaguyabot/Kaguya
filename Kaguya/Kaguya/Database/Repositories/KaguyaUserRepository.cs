@@ -105,5 +105,10 @@ namespace Kaguya.Database.Repositories
 			_dbContext.Users.UpdateRange(users);
 			await _dbContext.SaveChangesAsync();
 		}
+
+		public async Task<int> GetCountOfUsersAsync()
+		{
+			return await _dbContext.Users.AsQueryable().CountAsync();
+		}
 	}
 }

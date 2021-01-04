@@ -15,6 +15,7 @@ using Kaguya.Discord;
 using Kaguya.Discord.options;
 using Kaguya.Options;
 using Kaguya.Services;
+using Kaguya.Workers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -68,6 +69,8 @@ namespace Kaguya
 			services.AddScoped<LogConfigurationRepository>();
 			services.AddScoped<WordFilterRepository>();
 
+			services.AddSingleton<ITimerService, TimerService>();
+
 			services.AddControllers();
 
 			services.AddSingleton(new NekoClient("kaguya-v4"));
@@ -113,8 +116,13 @@ namespace Kaguya
 				var client = provider.GetRequiredService<DiscordShardedClient>();
 				return new InteractivityService(client, TimeSpan.FromMinutes(5));
 			});
+
+			services.AddHostedService<TimerWorker>();
 			
 			services.AddHostedService<DiscordWorker>();
+			
+			// Must be after discord.
+			services.AddHostedService<StatusRotationService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
