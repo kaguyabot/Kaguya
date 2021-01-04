@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.DiscordExtensions
@@ -22,6 +24,8 @@ namespace Kaguya.Discord.DiscordExtensions
             };
         }
 
+        // CommandInfo extensions
+        
         /// <summary>
         /// Returns the full name of the command. This is the group name + any additional commands in the group.
         /// Example: [Group("ban")] [Command("-u")] for a command returns "ban -u".
@@ -30,6 +34,8 @@ namespace Kaguya.Discord.DiscordExtensions
         /// <returns></returns>
         public static string GetFullCommandName(this CommandInfo cmdInfo) => cmdInfo.Aliases[0];
 
+        // User extensions
+        
         /// <summary>
         /// Compares two <see cref="IUser"/> objects for equality, based only on user id.
         /// </summary>

@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Discord;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Exceptions;
 using Kaguya.External.Osu;
 using OsuSharp;
 

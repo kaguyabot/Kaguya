@@ -6,6 +6,7 @@ using Discord;
 using Discord.Commands;
 using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Exceptions;
 using OsuSharp;
 using OsuSharp.Oppai;
 

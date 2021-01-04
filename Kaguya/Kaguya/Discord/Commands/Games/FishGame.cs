@@ -10,6 +10,7 @@ using Humanizer;
 using Humanizer.Localisation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Services;
 

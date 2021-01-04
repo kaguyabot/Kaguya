@@ -13,6 +13,7 @@ using Discord.WebSocket;
 using Humanizer;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
 
 namespace Kaguya.Discord.Commands.Configuration

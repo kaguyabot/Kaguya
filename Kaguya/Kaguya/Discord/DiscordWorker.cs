@@ -15,7 +15,7 @@ using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.DiscordExtensions;
-using Kaguya.Discord.options;
+using Kaguya.Discord.Options;
 using Kaguya.Options;
 using Kaguya.Services;
 using Microsoft.EntityFrameworkCore;
@@ -34,9 +34,10 @@ namespace Kaguya.Discord
         private readonly IOptions<DiscordConfigurations> _discordConfigs;
         private readonly ILogger<DiscordWorker> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly KaguyaEvents _kaguyaEvents;
 
         public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
-            ILogger<DiscordWorker> logger, CommandService commandService, IServiceProvider serviceProvider)
+            ILogger<DiscordWorker> logger, CommandService commandService, IServiceProvider serviceProvider, KaguyaEvents kaguyaEvents)
         {
             _client = client;
             _adminConfigs = adminConfigs;
@@ -44,6 +45,7 @@ namespace Kaguya.Discord
             _logger = logger;
             _commandService = commandService;
             _serviceProvider = serviceProvider;
+            _kaguyaEvents = kaguyaEvents;
 
             // TODO: add emote type handler 
             // TODO: add socket guild user list type handler
@@ -253,9 +255,10 @@ namespace Kaguya.Discord
             _client.MessageReceived += HandleCommandAsync;
         }
 
-        private static void InitOther()
+        private void InitOther()
         {
             LogConfiguration.LoadProperties();
+            _kaguyaEvents.Init();
         }
 
         private async Task HandleCommandAsync(SocketMessage msg)

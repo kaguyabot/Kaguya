@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Kaguya.Discord.options
+namespace Kaguya.Discord.Options
 {
     public class DiscordConfigurations
     {
