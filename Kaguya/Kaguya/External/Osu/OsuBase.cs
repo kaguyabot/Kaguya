@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Humanizer;
-using Kaguya.Discord.DiscordExtensions;
 using OsuSharp;
 
 namespace Kaguya.External.Osu
@@ -81,15 +80,5 @@ namespace Kaguya.External.Osu
         {
             return score.Date.HasValue ? DateTime.UtcNow - score.Date.Value.DateTime : TimeSpan.Zero;
         }
-    }
-
-    public class OsuException : Exception
-    {
-        public OsuException(string msg) : base(msg) { }
-    }
-
-    public class OsuUserNotFoundException : Exception
-    {
-        public OsuUserNotFoundException(string username) : base($"No osu! username or ID match was found for {username.AsBold()}.") { }
     }
 }

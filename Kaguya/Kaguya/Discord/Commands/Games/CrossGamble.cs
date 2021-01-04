@@ -15,6 +15,7 @@ using Interactivity.Confirmation;
 using Interactivity.Selection;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Memory;
 

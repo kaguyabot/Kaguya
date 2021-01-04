@@ -11,7 +11,6 @@ using Timer = System.Timers.Timer;
 
 namespace Kaguya.Workers
 {
-
 	public class TimerWorker : BackgroundService
 	{
 		private readonly ITimerInternal _timerService;

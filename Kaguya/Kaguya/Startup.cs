@@ -12,7 +12,7 @@ using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
-using Kaguya.Discord.options;
+using Kaguya.Discord.Options;
 using Kaguya.Options;
 using Kaguya.Services;
 using Kaguya.Workers;

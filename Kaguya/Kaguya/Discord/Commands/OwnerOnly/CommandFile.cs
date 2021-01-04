@@ -8,6 +8,7 @@ using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Humanizer;
+using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
 
 namespace Kaguya.Discord.Commands.OwnerOnly
