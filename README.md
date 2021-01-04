@@ -263,7 +263,7 @@ Other custom attributes:
 - `[ModuleRestriction()]` is used to define restrictions for certain classes of users. This generally should not be included in any code you submit, but instead let us know in your PR that you intend for this command to be restricted to either bot owners or premium users only.
 - `[CommandMetadata()]` is used if you intend to write command documentation at the class level, instead of at the command level. This is useful if you write many commands that do similar things. View [Emotion.cs](https://github.com/kaguyabot/Kaguya/blob/v4-open-beta/Kaguya/Kaguya/Discord/Commands/Fun/Emotion.cs) for an example.
 
-### Example commands
+### Command Examples
 For examples on production-ready commands, please browse through the [Commands folder](https://github.com/kaguyabot/Kaguya/tree/v4-open-beta/Kaguya/Kaguya/Discord/Commands).
 
 ### Database changes
