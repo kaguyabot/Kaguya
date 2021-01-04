@@ -184,8 +184,31 @@ An understanding of [CommandAttributes.cs](https://github.com/kaguyabot/Kaguya/b
   - Your command should be created in the appropriate directory that matches your `CommandModule`. For example, if you are writing an Administration command, your attribute should be `[Module(CommandModule.Administration)]`, your namespace should be `Kaguya.Discord.Commands.Administration`, and your working directory should be `Kaguya/Discord/Commands/Administration`.
 
 - `[Group()]` is used to specify the base name of the command you are writing. Every command must have a base group (otherwise known as the "Module" in the Discord.NET documentation, NOT to be confused with `CommandModule`).
+  - Group names are always lowercase.
   - Use a short and memorable name for your group.
-- `[Alias()]` **(optional)** is simply an even shorter "shortcut" for the group name.
+- `[Command]`
+  - Always inherits (and extends) the `[Group]` name.
+  - Used as the name for the subcommand.
+  - If the subcommand name is the same as the group name, leave the command attribute as: `[Command]`.
+  - If the command is instead a *sub command*, it should be written as such: `[Command("-subcommandname")]` - don't forget to include the `-` character in-front.
+  - Command names are always lowercase.
+  - Example:
+    ```cs
+    [Group("example")]
+    public class MyCommand : {...}
+    {
+      [Command] // Invoke: $example
+      public async Task ExampleCommand()
+      {}
+
+      [Command("-sub")] // Invoke: $example -sub
+      public async Task ExampleSubCommand()
+      {}
+    }
+    ```
+  - Finally, if the command you are running has a long processing time (3+ seconds) or has intentional delays, you should specify this through `[Command(RunMode = RunMode.Async)]`, otherwise the thread will be halted. View 
+- `[Alias()]` **(optional)** is simply an even shorter "shortcut" for the group name. This can also be assigned underneath the `[Command]` attribute to give an alias to a subcommand.
+  - Do not give aliases to sub-commands that directly inherit the `[Group]` name.
 - For `[RequireUserPermission()]` and `[RequireBotPermission()]` **(both optional)**, [read here]([RequireBotPermission(GuildPermission.BanMembers)]).
   - If your command does not require specific Discord user or bot permissions (executable by any regular user), delete these attributes from your command.
 
@@ -239,3 +262,55 @@ Other custom attributes:
 
 ### Example commands
 For examples on production-ready commands, please browse through the [Commands folder](https://github.com/kaguyabot/Kaguya/tree/v4-open-beta/Kaguya/Kaguya/Discord/Commands).
+
+### Database changes
+If making any changes to the database (`Kaguya.Database.Context` or `Kaguya.Database.Context.Models` namespaces):
+
+- Run:
+  ```
+  $ dotnet ef migrations add your_brief_description
+  $ dotnet ef database update
+  ```
+- Ensure the changes you have made work correctly.
+- Tell us explicitly in your PR.
+- In general, you should never delete an item out of any model, unless it is completely unused by the rest of the program.
+
+If making an entirely new database table, do the following **in order**:
+- Create a model under `Kaguya.Database.Context.Models`.
+
+- Reference an existing similar model for design structure.
+- Create an interface under `Kaguya.Database.Context.Interfaces` that inherits from `IRepository`. Include additional methods if needed for accessing the database in a specific way.
+  ```cs
+  using System.Collections.Generic;
+  using System.Threading.Tasks;
+  using Kaguya.Database.Model;
+
+  namespace Kaguya.Database.Interfaces
+  {                            // long is the type of ID this example object has.
+    public interface IFooRepository : IRepository<long, Foo>
+    {
+        // Example - this could be anything from the DB for this object.
+        // The interface can also be completely empty.
+        public Task<IList<Foo>> GetLargestFooAsync();
+    }
+  }
+  ```
+- Create a repository under `Kaguya.Database.Repositories`. View [the other repositories](https://github.com/kaguyabot/Kaguya/tree/v4-open-beta/Kaguya/Kaguya/Database/Repositories) for examples.
+  ```cs
+  namespace Kaguya.Database.Interfaces
+  {
+    public class FooRepository : IFooRepository
+    {
+      // Implement missing methods.
+    }
+  }
+  ```
+- Insert your new type into the `DbSet<T>` inside of [KaguyaDbContext.cs](https://github.com/kaguyabot/Kaguya/blob/v4-open-beta/Kaguya/Kaguya/Database/Context/KaguyaDbContext.cs). We organize the properties in alphabetical order by type.
+  ```cs
+  {...}
+
+  public DbSet<Foo> Foos { get; set; }
+  
+  {...}
+  ```
+- Index your queries after you have built your repository. Anything inside of a LINQ expression is indexable. This is done by modifying the `OnModelCreating()` method in this class. [Indexing instructions](https://github.com/kaguyabot/Kaguya/blob/v4-open-beta/Kaguya/Kaguya/Database/Context/KaguyaDbContext.cs#L42) are listed inside of this method.
