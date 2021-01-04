@@ -16,7 +16,7 @@ namespace Kaguya.Workers
 	{
 		private readonly ITimerInternal _timerService;
 		private readonly ILogger<TimerWorker> _logger;
-		private const double TimerResolution = 1000;
+		private const double TIMER_RESOLUTION = 1000;
 		private Timer _timer;
 
 		private readonly object _locker = new();
@@ -31,7 +31,7 @@ namespace Kaguya.Workers
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
 			await Task.CompletedTask;
-			_timer = new Timer(TimerResolution);
+			_timer = new Timer(TIMER_RESOLUTION);
 			_timer.AutoReset = false;
 			_timer.Elapsed += HandleTimer;
 			_timer.Start();

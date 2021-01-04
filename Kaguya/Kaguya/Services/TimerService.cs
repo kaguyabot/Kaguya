@@ -12,8 +12,8 @@ namespace Kaguya.Services
 
 	public interface ITimerService
 	{
-		Task<bool> TriggerAt(DateTime when, ITimerReceiver receiver, object payload);
-		Task<bool> TriggerAt(DateTime when, ITimerReceiver receiver);
+		Task<bool> TriggerAtAsync(DateTime when, ITimerReceiver receiver, object payload);
+		Task<bool> TriggerAtAsync(DateTime when, ITimerReceiver receiver);
 	}
 
 	public interface ITimerInternal
@@ -38,7 +38,7 @@ namespace Kaguya.Services
 			return TimerChannel;
 		}
 
-		public async Task<bool> TriggerAt(DateTime when, ITimerReceiver receiver, object payload)
+		public async Task<bool> TriggerAtAsync(DateTime when, ITimerReceiver receiver, object payload)
 		{
 			try
 			{
@@ -52,9 +52,9 @@ namespace Kaguya.Services
 			}
 		}
 
-		public async Task<bool> TriggerAt(DateTime when, ITimerReceiver receiver)
+		public async Task<bool> TriggerAtAsync(DateTime when, ITimerReceiver receiver)
 		{
-			return await TriggerAt(when, receiver, new { });
+			return await TriggerAtAsync(when, receiver, new { });
 		}
 	}
 }
