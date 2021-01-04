@@ -54,7 +54,7 @@ You can do these steps through the command line or through a text editor.
 
 Navigate to the project directory.
 ```
-$ cd (installation_directory)/Kaguya/Kaguya/Kaguya
+$ cd (clone_directory)/Kaguya/Kaguya/Kaguya
 $ ls
 
 (output)
@@ -80,7 +80,9 @@ $ vi -v appsettings.Development.json
 or
 $ code appsettings.Development.json
 ```
-Your file should now look something like this (note that the "AdminSettings" section will change overtime, this is just an example):
+Your file should now look something like this (note that the "AdminSettings" section will change overtime, this is just an example). 
+  - Replace `"OwnerId": 0` with your Discord user ID.
+  - `"OsuApiKey"` can be left blank, but is required if you wish to execute any osu! related commands.
 
 ```json
 {
@@ -93,8 +95,8 @@ Your file should now look something like this (note that the "AdminSettings" sec
   },
   "AllowedHosts": "*",
   "AdminSettings": {
-    "OwnerId": YOUR_ID, // Optional
-    "OsuApiKey": "" // Optional
+    "OwnerId": 0,
+    "OsuApiKey": ""
   },
   "DiscordSettings": {
     "BotToken": "YOUR_TOKEN",
@@ -226,6 +228,7 @@ For the sake of this program, the `[Summary()]` and `[Remarks()]` attributes are
       ```
       (user input: $help foo)
       
+      (output)
       {...}
 
       Usage:
