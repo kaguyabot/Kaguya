@@ -208,7 +208,7 @@ An understanding of [CommandAttributes.cs](https://github.com/kaguyabot/Kaguya/b
       {}
     }
     ```
-  - Finally, if the command you are running has a long processing time (3+ seconds) or has intentional delays, you should specify this through `[Command(RunMode = RunMode.Async)]`, otherwise the thread will be halted. View 
+  - Finally, if the command you are running has a long processing time (3+ seconds) or has intentional delays, you should specify this through `[Command(RunMode = RunMode.Async)]`, otherwise the thread will be halted. View [CrossGamble.cs](https://github.com/kaguyabot/Kaguya/blob/feature/readme/Kaguya/Kaguya/Discord/Commands/Games/CrossGamble.cs) for a great example of when to use `RunMode.Async`.
 - `[Alias()]` **(optional)** is simply an even shorter "shortcut" for the group name. This can also be assigned underneath the `[Command]` attribute to give an alias to a subcommand.
   - Do not give aliases to sub-commands that directly inherit the `[Group]` name.
 - For `[RequireUserPermission()]` and `[RequireBotPermission()]` **(both optional)**, [read here]([RequireBotPermission(GuildPermission.BanMembers)]).
