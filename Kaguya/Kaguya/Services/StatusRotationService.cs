@@ -12,17 +12,18 @@ namespace Kaguya.Services
 {
     public class StatusRotationService : BackgroundService, ITimerReceiver
     {
+        private readonly DiscordShardedClient _client;
         private readonly ILogger<StatusRotationService> _logger;
         private readonly ITimerService _timerService;
-        private readonly DiscordShardedClient _client;
         private readonly IServiceProvider _serviceProvider;
 
-        private static readonly Action<ILogger, string, Exception> StatusSwapLog =
+        private static readonly Action<ILogger, string, Exception> _statusSwapLog =
 	        LoggerMessage.Define<string>(LogLevel.Debug, new EventId(), "Changed status to {Status}");
 
         private int _rotationIndex;
         
-        public StatusRotationService(ILogger<StatusRotationService> logger, ITimerService timerService, DiscordShardedClient client, IServiceProvider serviceProvider)
+        public StatusRotationService(ILogger<StatusRotationService> logger, ITimerService timerService, DiscordShardedClient client, 
+            IServiceProvider serviceProvider)
         {
             _logger = logger;
             _timerService = timerService;
@@ -34,8 +35,11 @@ namespace Kaguya.Services
         {
             try
             {
-                var statusInfo = await GetStatusAsync();
-                await _client.SetGameAsync(statusInfo.statusText, null, statusInfo.activityType);
+                if (Global.ShardsReady == _client.Shards.Count)
+                {
+                    var statusInfo = await GetStatusAsync();
+                    await _client.SetGameAsync(statusInfo.statusText, null, statusInfo.activityType);
+                }
             }
             catch (Exception e)
             {
@@ -43,7 +47,7 @@ namespace Kaguya.Services
                 _logger.LogError(e, "Exception encountered within the status rotation service.");
             }
 
-            // Puts ourself back in-queue...
+            // Puts ourself back in the queue...
             await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(15), this);
         }
 
@@ -57,7 +61,7 @@ namespace Kaguya.Services
                     
                     text = Global.Version;
                     
-                    StatusSwapLog(_logger, text, default!);
+                    _statusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Playing);
                 case 1:
                     using (IServiceScope scope = _serviceProvider.CreateScope())
@@ -67,7 +71,7 @@ namespace Kaguya.Services
 
                         text = $"{await kaguyaUserRepository.GetCountOfUsersAsync():N0} users";
                         
-                        StatusSwapLog(_logger, text, default!);
+                        _statusSwapLog(_logger, text, default!);
                         return (text, ActivityType.Watching);
                     }
                 case 2:
@@ -75,28 +79,28 @@ namespace Kaguya.Services
 
                     text = $"{_client.Guilds.Count:N0} servers";
                     
-                    StatusSwapLog(_logger, text, default!);
+                    _statusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Watching);
                 case 3:
                     _rotationIndex++;
 
                     text = "$help | @Kaguya help";
                     
-                    StatusSwapLog(_logger, text, default!);
+                    _statusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Listening);
                 case 4:
                     _rotationIndex++;
 
                     text = "$vote for bonuses!";
                     
-                    StatusSwapLog(_logger, text, default!);
+                    _statusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Watching);
                 case 5:
                     _rotationIndex++;
 
                     text = "$premium for rewards!";
                     
-                    StatusSwapLog(_logger, text, default!);
+                    _statusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Watching);
             }
         }
