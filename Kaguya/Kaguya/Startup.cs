@@ -15,6 +15,7 @@ using Kaguya.Discord;
 using Kaguya.Discord.Options;
 using Kaguya.Options;
 using Kaguya.Services;
+using Kaguya.Services.Recurring;
 using Kaguya.Workers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
