@@ -17,6 +17,9 @@ namespace Kaguya.Services
         private readonly DiscordShardedClient _client;
         private readonly IServiceProvider _serviceProvider;
 
+        private static readonly Action<ILogger, string, Exception> StatusSwapLog =
+	        LoggerMessage.Define<string>(LogLevel.Debug, new EventId(), "Changed status to {Status}");
+
         private int _rotationIndex;
         
         public StatusRotationService(ILogger<StatusRotationService> logger, ITimerService timerService, DiscordShardedClient client, IServiceProvider serviceProvider)
@@ -54,7 +57,7 @@ namespace Kaguya.Services
                     
                     text = Global.Version;
                     
-                    LogStatusSwap(text);
+                    StatusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Playing);
                 case 1:
                     using (IServiceScope scope = _serviceProvider.CreateScope())
@@ -64,7 +67,7 @@ namespace Kaguya.Services
 
                         text = $"{await kaguyaUserRepository.GetCountOfUsersAsync():N0} users";
                         
-                        LogStatusSwap(text);
+                        StatusSwapLog(_logger, text, default!);
                         return (text, ActivityType.Watching);
                     }
                 case 2:
@@ -72,38 +75,32 @@ namespace Kaguya.Services
 
                     text = $"{_client.Guilds.Count:N0} servers";
                     
-                    LogStatusSwap(text);
+                    StatusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Watching);
                 case 3:
                     _rotationIndex++;
 
                     text = "$help | @Kaguya help";
                     
-                    LogStatusSwap(text);
+                    StatusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Listening);
                 case 4:
                     _rotationIndex++;
 
                     text = "$vote for bonuses!";
                     
-                    LogStatusSwap(text);
+                    StatusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Watching);
                 case 5:
                     _rotationIndex++;
 
                     text = "$premium for rewards!";
                     
-                    LogStatusSwap(text);
+                    StatusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Watching);
             }
         }
 
-        private void LogStatusSwap(string status)
-        {
-            _logger.LogInformation($"Changed status to {status}.");
-        }
-        
-        
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await _timerService.TriggerAtAsync(DateTime.Now, this);
