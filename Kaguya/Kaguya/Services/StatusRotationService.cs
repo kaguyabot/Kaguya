@@ -35,7 +35,7 @@ namespace Kaguya.Services
         {
             try
             {
-                if (Global.ShardsReady == _client.Shards.Count)
+                if (Global.ShardsReady.Count == _client.Shards.Count)
                 {
                     var statusInfo = await GetStatusAsync();
                     await _client.SetGameAsync(statusInfo.statusText, null, statusInfo.activityType);
@@ -107,7 +107,8 @@ namespace Kaguya.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _timerService.TriggerAtAsync(DateTime.Now, this);
+            // It takes about 2 minutes for all shards to log in.
+            await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(2), this);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Humanizer;
 using Humanizer.Localisation;
@@ -16,10 +17,11 @@ namespace Kaguya
         public const string SupportDiscordUrl = "https://discord.gg/aumCJhr";
         public const string InviteUrl = "https://discord.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=536341759";
         public static readonly string Version = "v4.0-beta-" + Process.GetCurrentProcess().StartTime.ToShortDateString().Replace('/', '.');
+
         /// <summary>
         /// The number of shards currently logged into Discord.
         /// </summary>
-        public static int ShardsReady { get; private set; }
+        public static List<int> ShardsReady { get; private set; } = new List<int>();
         
         /// <summary>
         /// Gets the current uptime for the program in a user-friendly readable format.
@@ -33,6 +35,12 @@ namespace Kaguya
         /// <summary>
         /// Increases the number of logged in shards by 1.
         /// </summary>
-        public static void IncrementReadyShards() => ShardsReady++;
+        public static void AddReadyShard(int shardId)
+        {
+            if (!ShardsReady.Contains(shardId))
+            {
+                ShardsReady.Add(shardId);
+            }
+        }
     }
 }

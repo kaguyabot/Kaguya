@@ -24,7 +24,7 @@ namespace Kaguya
 
         private Task ClientOnShardReady(DiscordSocketClient arg)
         {
-            Global.IncrementReadyShards();
+            Global.AddReadyShard(arg.ShardId);
 
             return Task.CompletedTask;
         }
