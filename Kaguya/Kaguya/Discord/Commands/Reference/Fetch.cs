@@ -2,10 +2,8 @@
 using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Rest;
 using Kaguya.Discord.Attributes.Enums;
-using Kaguya.Discord.DiscordExtensions;
 
 namespace Kaguya.Discord.Commands.Reference
 {

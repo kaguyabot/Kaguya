@@ -1,17 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.Rest;
 using Discord.WebSocket;
 using Interactivity;
 using Kaguya.Database.Context;
-using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord;
 using Kaguya.Discord.Options;
 using Kaguya.Options;
 using Kaguya.Services;
@@ -19,18 +13,14 @@ using Kaguya.Services.Recurring;
 using Kaguya.Workers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
 using NekosSharp;
 using OsuSharp;
-using Victoria;
 
 namespace Kaguya
 {

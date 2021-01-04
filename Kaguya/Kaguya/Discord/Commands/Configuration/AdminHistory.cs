@@ -14,7 +14,6 @@ using Kaguya.Discord.Attributes;
 using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
 using Microsoft.Extensions.Logging;
-using Color = System.Drawing.Color;
 
 namespace Kaguya.Discord.Commands.Configuration
 {

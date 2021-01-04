@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using Discord.Commands;
 using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
@@ -11,8 +9,6 @@ using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
 using Interactivity;
-using Interactivity.Confirmation;
-using Interactivity.Selection;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes.Enums;

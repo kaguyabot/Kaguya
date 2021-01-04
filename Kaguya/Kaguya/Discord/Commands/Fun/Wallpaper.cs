@@ -2,7 +2,6 @@
 using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Discord;
 using Kaguya.Discord.Attributes.Enums;
 using NekosSharp;
 

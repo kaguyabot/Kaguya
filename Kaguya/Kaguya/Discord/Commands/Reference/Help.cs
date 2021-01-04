@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +15,6 @@ using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Color = System.Drawing.Color;
 
 namespace Kaguya.Discord.Commands.Reference
 {

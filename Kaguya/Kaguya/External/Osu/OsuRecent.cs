@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
 using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Exceptions;

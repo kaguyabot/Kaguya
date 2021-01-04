@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Exceptions;
 
 namespace Kaguya.Discord
