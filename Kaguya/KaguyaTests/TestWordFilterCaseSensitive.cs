@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using Discord.WebSocket;
 using Kaguya.Discord;
+using Kaguya.Workers;
 using Xunit;
 
 namespace KaguyaTests

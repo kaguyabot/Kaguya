@@ -10,21 +10,20 @@ using Discord;
 using Discord.Commands;
 using Discord.Net;
 using Discord.WebSocket;
-using Humanizer;
 using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Options;
 using Kaguya.Options;
-using Kaguya.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Kaguya.Discord
+namespace Kaguya.Workers
 {
     public class DiscordWorker : IHostedService
     {

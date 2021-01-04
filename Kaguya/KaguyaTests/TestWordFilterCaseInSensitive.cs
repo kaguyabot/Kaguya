@@ -1,4 +1,5 @@
 ﻿using Kaguya.Discord;
+using Kaguya.Workers;
 using Xunit;
 
 namespace KaguyaTests
