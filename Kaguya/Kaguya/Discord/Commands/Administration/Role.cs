@@ -234,9 +234,10 @@ namespace Kaguya.Discord.Commands.Administration
         [Command("-create")]
         [Alias("-c")]
         [Summary("Creates a role with the desired name and an optional color. If the " +
-                 "name has spaces, be sure to wrap it in \"quotation marks\".\n" +
-                 "If specifying a color, ensure that is one word only. Example colors:\n" +
-                 "Lightblue, red, orange, purple, magenta, gold, yellow, lightred, lightgreen, pink, etc.\n" +
+                 "name has spaces, be sure to wrap it in \"quotation marks\".\n\n" +
+                 "If specifying a color, ensure that is one word only.\n\n" +
+                 "**Example colors:**\n" +
+                 "`Lightblue`, `red`, `orange`, `purple`, `magenta`, `gold`, `yellow`, `lightred`, `lightgreen`, `pink`, etc.\n\n" +
                  "If your color could not be found, the default Discord role color will be used.")]
         [Remarks("<role name> [color]")]
         public async Task CreateRoleCommand(string roleName)
