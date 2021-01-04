@@ -127,8 +127,6 @@ namespace Kaguya
 				var client = provider.GetRequiredService<DiscordShardedClient>();
 
 				var events = new KaguyaEvents(logger, client);
-				events.Init();
-
 				return events;
 			});
 			

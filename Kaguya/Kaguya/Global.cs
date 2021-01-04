@@ -21,7 +21,7 @@ namespace Kaguya
         /// <summary>
         /// The number of shards currently logged into Discord.
         /// </summary>
-        public static List<int> ShardsReady { get; private set; } = new List<int>();
+        public static List<int> ShardsReady { get; } = new List<int>();
         
         /// <summary>
         /// Gets the current uptime for the program in a user-friendly readable format.

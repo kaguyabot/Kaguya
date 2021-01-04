@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using Humanizer;
 using Kaguya.Database.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +22,7 @@ namespace Kaguya.Services
 	        LoggerMessage.Define<string>(LogLevel.Debug, new EventId(), "Changed status to {Status}");
 
         private int _rotationIndex;
+        private bool _triggeredOnce;
         
         public StatusRotationService(ILogger<StatusRotationService> logger, ITimerService timerService, DiscordShardedClient client, 
             IServiceProvider serviceProvider)
@@ -35,10 +37,19 @@ namespace Kaguya.Services
         {
             try
             {
+                _logger.LogDebug("Status rotation timer triggered.");
+
                 if (Global.ShardsReady.Count == _client.Shards.Count)
                 {
                     var statusInfo = await GetStatusAsync();
                     await _client.SetGameAsync(statusInfo.statusText, null, statusInfo.activityType);
+
+                    if (!_triggeredOnce)
+                    {
+                        _triggeredOnce = true;
+                    }
+                    
+                    _logger.LogDebug($"Set status to {statusInfo.activityType} {statusInfo.statusText}");
                 }
             }
             catch (Exception e)
@@ -48,7 +59,14 @@ namespace Kaguya.Services
             }
 
             // Puts ourself back in the queue...
-            await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(15), this);
+            if (_triggeredOnce)
+            {
+                await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(15), this);
+            }
+            else
+            {
+                await _timerService.TriggerAtAsync(DateTime.Now.AddSeconds(10), this);   
+            }
         }
 
         private async Task<(string statusText, ActivityType activityType)> GetStatusAsync()
@@ -108,7 +126,7 @@ namespace Kaguya.Services
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // It takes about 2 minutes for all shards to log in.
-            await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(2), this);
+            await _timerService.TriggerAtAsync(DateTime.Now, this);
         }
     }
 }
