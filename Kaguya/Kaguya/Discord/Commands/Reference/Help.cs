@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +15,6 @@ using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Color = System.Drawing.Color;
 
 namespace Kaguya.Discord.Commands.Reference
 {
@@ -83,7 +81,7 @@ namespace Kaguya.Discord.Commands.Reference
                 
                 PageBuilder curPageBuilder = new PageBuilder()
                                              .WithTitle("Commands: " + curModuleName)
-                                             .WithColor(Color.MediumPurple)
+                                             .WithColor(KaguyaColors.Magenta)
                                              .WithDescription($"{links}\n\n```ini\n"); // Start description ini here. Closes later.
                 
                 IEnumerable<ModuleInfo> curModuleCommands = GetCommandsForModuleAlphabetized(curModule);
@@ -281,7 +279,7 @@ namespace Kaguya.Discord.Commands.Reference
                 remarks = remarks.Split("\n").Humanize(remark => $"`{prefix}{match.Aliases[0]} {remark}`\n");
             }
             
-            var embed = new KaguyaEmbedBuilder(global::Discord.Color.Magenta)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
             {
                 Title = title,
                 Fields = new List<EmbedFieldBuilder>

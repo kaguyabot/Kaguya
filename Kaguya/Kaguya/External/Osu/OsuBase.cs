@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Humanizer;
 using OsuSharp;
 
 namespace Kaguya.External.Osu

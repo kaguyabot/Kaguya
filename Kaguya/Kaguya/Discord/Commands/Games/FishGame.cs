@@ -130,13 +130,13 @@ namespace Kaguya.Discord.Commands.Games
             
             Color color = rarity switch
             {
-                FishRarity.Trash => Color.DarkGrey,
-                FishRarity.Common => Color.LighterGrey,
-                FishRarity.Uncommon => Color.Green,
-                FishRarity.Rare => Color.Blue,
-                FishRarity.UltraRare => Color.Purple,
-                FishRarity.Legendary => Color.Orange,
-                _ => Color.Green
+                FishRarity.Trash => KaguyaColors.DarkGrey,
+                FishRarity.Common => KaguyaColors.LighterGrey,
+                FishRarity.Uncommon => KaguyaColors.Green,
+                FishRarity.Rare => KaguyaColors.Blue,
+                FishRarity.UltraRare => KaguyaColors.Purple,
+                FishRarity.Legendary => KaguyaColors.Orange,
+                _ => KaguyaColors.Green
             };
 
             Embed embed = new KaguyaEmbedBuilder(color)

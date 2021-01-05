@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using Discord.Commands;
 using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
@@ -11,8 +9,6 @@ using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
 using Interactivity;
-using Interactivity.Confirmation;
-using Interactivity.Selection;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes.Enums;
@@ -83,7 +79,7 @@ namespace Kaguya.Discord.Commands.Games
                 new Emoji("⛔")
             };
             
-            var embed = new KaguyaEmbedBuilder(Color.Gold)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Gold)
             {
                 Title = "Cross-Gambling",
                 Description = $"A cross-gambling game has just begun! (2-25 players)\n" +
@@ -200,7 +196,7 @@ namespace Kaguya.Discord.Commands.Games
             if (difference == 0)
             {
                 await SafeSetInactiveEmbedAsync(toModify);
-                await SendBasicEmbedAsync("Wow! There was a tie, what an anomaly!", Color.Magenta, false);
+                await SendBasicEmbedAsync("Wow! There was a tie, what an anomaly!", KaguyaColors.Magenta, false);
                 
                 return;
             }
@@ -218,7 +214,7 @@ namespace Kaguya.Discord.Commands.Games
             
             await UpdateWinnerLoserPointsAsync(winnerUser, difference, loserUser);
 
-            var finalEmbed = new KaguyaEmbedBuilder(Color.Green)
+            var finalEmbed = new KaguyaEmbedBuilder(KaguyaColors.Green)
                              .WithTitle("Cross Gambling: Result")
                              .WithDescription($"Maximum roll: {maxAmount.ToString("N0").AsBold()}\n\n" +
                                               $"{highRoll.Key.Mention} rolled {highRoll.Value.ToString("N0").AsBold()}.\n" +

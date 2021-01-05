@@ -10,21 +10,20 @@ using Discord;
 using Discord.Commands;
 using Discord.Net;
 using Discord.WebSocket;
-using Humanizer;
 using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Options;
 using Kaguya.Options;
-using Kaguya.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Kaguya.Discord
+namespace Kaguya.Workers
 {
     public class DiscordWorker : IHostedService
     {
@@ -488,7 +487,7 @@ namespace Kaguya.Discord
                         try
                         {
                             string cmdString = $"{server.CommandPrefix}help {command.Value.GetFullCommandName()}".AsBold();
-                            Embed embed = new KaguyaEmbedBuilder(Color.Red)
+                            Embed embed = new KaguyaEmbedBuilder(KaguyaColors.Red)
                                           .WithDescription($"{ctx.User.Mention} There was an error executing the command {cmdString}.\n" +
                                                            $"Error Reason: {result.ErrorReason.AsBold()}\n" +
                                                            $"Please use {cmdString} for this command's documentation.")
@@ -503,7 +502,7 @@ namespace Kaguya.Discord
                             if (httpException.DiscordCode.HasValue && httpException.DiscordCode.Value == 50013)
                             {
                                 var owner = await ctx.Guild.GetOwnerAsync();
-                                var embed = new KaguyaEmbedBuilder(Color.Red)
+                                var embed = new KaguyaEmbedBuilder(KaguyaColors.Red)
                                             .WithTitle("Kaguya Auto-Ejection: Missing Permissions")
                                             .WithDescription("Urgent Notice:\n\n".AsBold() + 
                                                              "I was unable to send a command response into the text channel " +

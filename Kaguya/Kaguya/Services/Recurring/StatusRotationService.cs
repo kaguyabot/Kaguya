@@ -3,13 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using Humanizer;
 using Kaguya.Database.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Kaguya.Services
+namespace Kaguya.Services.Recurring
 {
     public class StatusRotationService : BackgroundService, ITimerReceiver
     {

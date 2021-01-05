@@ -47,7 +47,7 @@ namespace Kaguya.Discord.Commands.Reference
 
             await _reminderRepository.InsertAsync(reminder);
 
-            var embed = new KaguyaEmbedBuilder(Color.Green)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
             {
                 Title = "Reminder Set",
                 Fields = new List<EmbedFieldBuilder>

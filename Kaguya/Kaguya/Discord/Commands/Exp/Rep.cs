@@ -79,7 +79,7 @@ namespace Kaguya.Discord.Commands.Exp
             var recentMatch = await _repRepository.GetMostRecentForUserAsync(curUser.UserId);
             bool showFooter = recentMatch != null;
             
-            var embed = new KaguyaEmbedBuilder(Color.Green)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
             {
                 Description = $"{Context.User.Mention} you have " + repNum.ToString().AsBold() + " rep."
             };
