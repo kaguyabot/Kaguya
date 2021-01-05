@@ -134,14 +134,13 @@ $ dotnet run
 If you wish to contribute to the codebase, please note the following:
 - Create a fork of the code.
 - All commands must adhere to the guidelines below.
-- All changes must be made to the `v4-open-beta` branch. This is the latest stable release.
-- Submit your changes to us through a pull request. In your PR, please give a brief overview of what you changed. Ensure your commits have concise description messages.
+- Submit your changes to us through a pull request into the `v4-open-beta` branch. In your PR, please give a brief overview of what you changed. Ensure your commits have concise description messages.
 
 ### Creating Commands
 To create a Kaguya command, a very specific structure is used. This is so that the `$help` command can properly generate documentation for all commands at runtime.
 A command can be as simple or as complex as necessary, this guide will include both examples.
 
-**Jetbrains Rider C# file template** (all Kaguya Commands are built out from this template):
+**C# file template** (all Kaguya Commands are built out from this code):
 ```cs
 using Discord.Commands;
 using Kaguya.Discord.Attributes;
