@@ -487,7 +487,7 @@ namespace Kaguya.Workers
                         try
                         {
                             string cmdString = $"{server.CommandPrefix}help {command.Value.GetFullCommandName()}".AsBold();
-                            Embed embed = new KaguyaEmbedBuilder(Color.Red)
+                            Embed embed = new KaguyaEmbedBuilder(KaguyaColors.Red)
                                           .WithDescription($"{ctx.User.Mention} There was an error executing the command {cmdString}.\n" +
                                                            $"Error Reason: {result.ErrorReason.AsBold()}\n" +
                                                            $"Please use {cmdString} for this command's documentation.")
@@ -502,7 +502,7 @@ namespace Kaguya.Workers
                             if (httpException.DiscordCode.HasValue && httpException.DiscordCode.Value == 50013)
                             {
                                 var owner = await ctx.Guild.GetOwnerAsync();
-                                var embed = new KaguyaEmbedBuilder(Color.Red)
+                                var embed = new KaguyaEmbedBuilder(KaguyaColors.Red)
                                             .WithTitle("Kaguya Auto-Ejection: Missing Permissions")
                                             .WithDescription("Urgent Notice:\n\n".AsBold() + 
                                                              "I was unable to send a command response into the text channel " +

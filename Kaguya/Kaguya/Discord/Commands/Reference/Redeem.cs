@@ -87,7 +87,7 @@ namespace Kaguya.Discord.Commands.Reference
             TimeSpan userPremiumRemaining = user.PremiumExpiration.Value - DateTime.Now;
             TimeSpan serverPremiumRemaining = server.PremiumExpiration.Value - DateTime.Now;
                         
-            var response = new KaguyaEmbedBuilder(Color.Gold)
+            var response = new KaguyaEmbedBuilder(KaguyaColors.Gold)
                            .WithTitle("Kaguya Premium: Redemption Successful")
                            .WithDescription($"{Context.User.Mention} You have successfully redeemed a {Global.StoreNameWithLink} key " +
                                             $"with a duration of {match.HumanizedLength.AsBold()}.\n" +

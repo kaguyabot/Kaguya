@@ -138,7 +138,7 @@ namespace Kaguya.Discord.Commands.Fun
         
         private async Task<Embed> GetEmotionEmbed(EmotionType emotion, string user = null)
         {
-            return new KaguyaEmbedBuilder(Color.Blue)
+            return new KaguyaEmbedBuilder(KaguyaColors.Blue)
                    .WithAuthor(Context.User.Username, Context.User.GetAvatarUrl())
                    .WithDescription($"{Context.User.Mention} just " + GetEmotionPastTense(emotion) + " " + (user ?? "the air").AsBold() + "!")
                    .WithImageUrl((await GetRequest(emotion)).ImageUrl)

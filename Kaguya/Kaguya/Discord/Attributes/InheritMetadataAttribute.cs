@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Kaguya.Discord.Attributes.Enums;
 
 namespace Kaguya.Discord.Attributes

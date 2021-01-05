@@ -14,7 +14,6 @@ using Kaguya.Discord.Attributes;
 using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
 using Microsoft.Extensions.Logging;
-using Color = System.Drawing.Color;
 
 namespace Kaguya.Discord.Commands.Configuration
 {
@@ -129,7 +128,7 @@ namespace Kaguya.Discord.Commands.Configuration
                 
                 var page = new PageBuilder()
                     .WithTitle($"Administration History: {Context.Guild.Name}")
-                    .WithColor(Color.Yellow);
+                    .WithColor(KaguyaColors.LightYellow);
 
                 page.Description = GetPageDescription(curCollection, durationFilters, server);
                 pages[i] = page;

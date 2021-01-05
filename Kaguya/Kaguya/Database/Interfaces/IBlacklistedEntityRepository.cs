@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Kaguya.Database.Model;
+﻿using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {

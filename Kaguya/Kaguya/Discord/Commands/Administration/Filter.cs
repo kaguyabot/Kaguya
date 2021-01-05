@@ -10,7 +10,6 @@ using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes;
 using Kaguya.Discord.Attributes.Enums;
-using Kaguya.Discord.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Administration
@@ -55,7 +54,7 @@ namespace Kaguya.Discord.Commands.Administration
             {
                 PageBuilder page = new PageBuilder()
                                    .WithTitle("Word Filter")
-                                   .WithColor(Color.Magenta);
+                                   .WithColor(KaguyaColors.Magenta);
 
                 var descSb = new StringBuilder();
 

@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Attributes;
@@ -41,7 +40,7 @@ namespace Kaguya.Discord.Commands.Exp
                                              $"| Fish Caught: IMPLEMENT")
                                  .AppendLine($"Points: {user.Points.ToString("N0").AsBold()}");
 
-            var embed = new KaguyaEmbedBuilder(Color.Teal)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Teal)
                         .WithTitle(title)
                         .WithDescription(profileBuilder.ToString())
                         .Build();

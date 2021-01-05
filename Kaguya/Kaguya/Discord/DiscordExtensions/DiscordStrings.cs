@@ -1,5 +1,4 @@
-﻿using System;
-using Discord;
+﻿using Discord;
 
 namespace Kaguya.Discord.DiscordExtensions
 {

@@ -154,7 +154,7 @@ namespace Kaguya.Discord.Commands.Administration
 
             if (didNotContainsBuilder.ToString() != noContainsStart)
             {
-                await SendBasicEmbedAsync(didNotContainsBuilder.ToString(), Color.DarkMagenta);
+                await SendBasicEmbedAsync(didNotContainsBuilder.ToString(), KaguyaColors.DarkMagenta);
             }
         }
 
@@ -203,7 +203,7 @@ namespace Kaguya.Discord.Commands.Administration
                 finalBuilder.Append("\n\n" + errorBuilder);
             }
 
-            var embed = new KaguyaEmbedBuilder(Color.Green)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
             {
                 Description = finalBuilder.ToString()
             };
@@ -233,13 +233,13 @@ namespace Kaguya.Discord.Commands.Administration
 
         [Command("-create")]
         [Alias("-c")]
-        [Summary("Creates a role with the desired name and an optional color. If the " +
+        [Summary("Creates a role with the desired name and an optional hexadecimal color. If the " +
                  "name has spaces, be sure to wrap it in \"quotation marks\".\n\n" +
-                 "If specifying a color, ensure that is one word only.\n\n" +
-                 "**Example colors:**\n" +
-                 "`Lightblue`, `red`, `orange`, `purple`, `magenta`, `gold`, `yellow`, `lightred`, `lightgreen`, `pink`, etc.\n\n" +
+                 "If specifying a color, ensure that there are no spaces and no symbols besides the hex code itself.\n\n" +
                  "If your color could not be found, the default Discord role color will be used.")]
-        [Remarks("<role name> [color]")]
+        [Remarks("<role name> [hex color code]")]
+        [Example("\"birds who can't fly\"")]
+        [Example("\"birds who can't fly\" ABE3DE")]
         public async Task CreateRoleCommand(string roleName)
         {
             try
@@ -251,26 +251,30 @@ namespace Kaguya.Discord.Commands.Administration
                 await SendBasicErrorEmbedAsync("Failed to create role " + roleName.AsBold() + $"\nError: {e.Message.AsBold()}");
             }
             
-            await SendBasicSuccessEmbedAsync("Created role " + roleName.AsBold());
+            await SendBasicEmbedAsync("Created role " + roleName.AsBold(), KaguyaColors.Default);
         }
         
         [Command("-create")]
         [Alias("-c")]
-        public async Task CreateRoleCommand(string roleName, string colorname)
+        public async Task CreateRoleCommand(string roleName, string hex)
         {
-            var color = System.Drawing.Color.FromName(colorname);
-            var discordColor = new Color(color.R, color.G, color.B);
+            if (!hex.StartsWith("0x"))
+            {
+                hex = $"0x{hex.ToUpper()}";
+            }
+            
+            Color color = new Color(Convert.ToUInt32(hex, 16));
             
             try
             {
-                await Context.Guild.CreateRoleAsync(roleName, null, discordColor, false, null);
+                await Context.Guild.CreateRoleAsync(roleName, null, color, false, null);
             }
             catch (Exception e)
             {
                 await SendBasicErrorEmbedAsync("Failed to create role " + roleName.AsBold() + $"\nError: {e.Message.AsBold()}");
             }
             
-            await SendBasicSuccessEmbedAsync("Created role " + roleName.AsBold() + " with color " + color.Name.AsBold());
+            await SendBasicEmbedAsync($"Created role {roleName.AsBold()} with color {hex.AsBold()}", color);
         }
 
         [Command("-createlist")]
@@ -298,7 +302,7 @@ namespace Kaguya.Discord.Commands.Administration
             
             if (!string.IsNullOrWhiteSpace(createdBuilder.ToString()))
             {
-                var embed = new KaguyaEmbedBuilder(Color.Green)
+                var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
                             .WithDescription($"{Context.User.Mention} Roles created:\n\n" + createdBuilder)
                             .Build();
 
@@ -307,7 +311,7 @@ namespace Kaguya.Discord.Commands.Administration
 
             if (!string.IsNullOrWhiteSpace(errorBuilder.ToString()))
             {
-                var embed = new KaguyaEmbedBuilder(Color.Green)
+                var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
                             .WithDescription($"{Context.User.Mention} Failed to create roles:\n\n" + createdBuilder)
                             .Build();
                 
@@ -360,15 +364,15 @@ namespace Kaguya.Discord.Commands.Administration
             Color color = default;
             if (success && failure)
             {
-                color = Color.DarkMagenta;
+                color = KaguyaColors.DarkMagenta;
             }
             else if (success)
             {
-                color = Color.Green;
+                color = KaguyaColors.Green;
             }
             else if (failure)
             {
-                color = Color.Red;
+                color = KaguyaColors.Red;
             }
 
             var embed = new KaguyaEmbedBuilder(color)
@@ -389,7 +393,7 @@ namespace Kaguya.Discord.Commands.Administration
                                    .WithContent(new PageBuilder().WithDescription("Are you sure that you wish to " + 
                                                                            "delete all roles in this server?".AsBoldItalics() + "\n" + 
                                                                            "This cannot be undone!".AsBoldUnderlined())
-                                                                 .WithColor(System.Drawing.Color.Yellow))
+                                                                 .WithColor(KaguyaColors.LightYellow))
                                    .Build();
 
             var result = await _interactivityService.SendConfirmationAsync(request, Context.Channel);
@@ -432,7 +436,7 @@ namespace Kaguya.Discord.Commands.Administration
             }
             else
             {
-                await SendBasicEmbedAsync("No action will be taken.", Color.DarkBlue);
+                await SendBasicEmbedAsync("No action will be taken.", KaguyaColors.DarkBlue);
             }
         }
 
@@ -506,15 +510,15 @@ namespace Kaguya.Discord.Commands.Administration
             
             if (mixed)
             {
-                color = Color.DarkMagenta;
+                color = KaguyaColors.DarkMagenta;
             }
             else if (successOnly)
             {
-                color = Color.Green;
+                color = KaguyaColors.Green;
             }
             else if (failureOnly)
             {
-                color = Color.Red;
+                color = KaguyaColors.Red;
             }
 
             var embedBuilder = new KaguyaEmbedBuilder(color)
