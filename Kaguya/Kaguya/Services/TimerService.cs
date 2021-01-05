@@ -25,7 +25,7 @@ namespace Kaguya.Services
 	{
 		private readonly ILogger<TimerService> _logger;
 
-		private static readonly Channel<(DateTime when, ITimerReceiver receiver, object payload)> TimerChannel =
+		private static readonly Channel<(DateTime when, ITimerReceiver receiver, object payload)> _timerChannel =
 			Channel.CreateUnbounded<(DateTime when, ITimerReceiver receiver, object payload)>();
 
 		public TimerService(ILogger<TimerService> logger)
@@ -35,14 +35,14 @@ namespace Kaguya.Services
 
 		public Channel<(DateTime when, ITimerReceiver receiver, object payload)> GetChannel()
 		{
-			return TimerChannel;
+			return _timerChannel;
 		}
 
 		public async Task<bool> TriggerAtAsync(DateTime when, ITimerReceiver receiver, object payload)
 		{
 			try
 			{
-				await TimerChannel.Writer.WriteAsync((when, receiver, payload));
+				await _timerChannel.Writer.WriteAsync((when, receiver, payload));
 				return true;
 			}
 			catch (Exception e)
