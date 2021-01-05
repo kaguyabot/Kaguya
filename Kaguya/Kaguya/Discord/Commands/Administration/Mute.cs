@@ -251,7 +251,7 @@ namespace Kaguya.Discord.Commands.Administration
                                                             "Note: Overwriting does not erase mute history.".AsItalics() + "\n\n" +
                                                             $"✅ = Replace old duration with new. (default)\n" +
                                                             $"❌ = Don't replace old. User will be unmuted at latest possible time.")
-                                           .WithColor(Color.Magenta))
+                                           .WithColor(KaguyaColors.Magenta))
                                    .Build();
 
             var result = await _interactivityService.SendConfirmationAsync(request, Context.Channel, TimeSpan.FromSeconds(60));
@@ -287,7 +287,7 @@ namespace Kaguya.Discord.Commands.Administration
         private async Task<IRole> CreateMuteRoleAsync()
         {
             _logger.LogDebug($"Mute role created in guild {Context.Guild.Id}. Guild roles: {Context.Guild.Roles.Humanize()}");
-            return await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, Color.Default, false, false);
+            return await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, KaguyaColors.Default, false, false);
         }
 
         private async Task<List<EmbedFieldBuilder>> SetMutePermissionsAsync(IRole role)
@@ -404,7 +404,7 @@ namespace Kaguya.Discord.Commands.Administration
 
             string reasonStr = reason == null ? "<No reason provided>".AsBold() : reason.AsBold();
 
-            return new KaguyaEmbedBuilder(Color.Purple)
+            return new KaguyaEmbedBuilder(KaguyaColors.Purple)
                    .WithDescription($"{Context.User.Mention} Muted user {target.Mention}{durationStr}." +
                                     $"\nReason: {reasonStr}")
                    .WithFooter("To unmute this user, use the mute -u command.")

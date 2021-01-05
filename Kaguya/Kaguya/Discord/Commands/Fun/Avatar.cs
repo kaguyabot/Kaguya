@@ -2,7 +2,6 @@ using Discord.Commands;
 using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Discord;
 using Kaguya.Discord.Attributes.Enums;
 using NekosSharp;
 
@@ -26,7 +25,7 @@ namespace Kaguya.Discord.Commands.Fun
         public async Task AvatarCommand()
         {
             var avatar = await _nekoClient.Image_v3.Avatar();
-            var embed = new KaguyaEmbedBuilder(Color.Green)
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
                         .WithDescription($"{Context.User.Mention} here is a new avatar!")
                         .WithImageUrl(avatar.ImageUrl)
                         .Build();

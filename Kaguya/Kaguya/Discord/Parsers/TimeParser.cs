@@ -3,8 +3,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Humanizer;
 using Humanizer.Localisation;
-using Kaguya.Discord.DiscordExtensions;
-using Kaguya.Migrations;
 
 namespace Kaguya.Discord.Parsers
 {
