@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Discord.Commands;
-using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
@@ -11,9 +10,10 @@ using Discord.WebSocket;
 using Interactivity;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Memory;
+using Kaguya.Internal.Attributes;
+using Kaguya.Internal.Enums;
 
 namespace Kaguya.Discord.Commands.Games
 {

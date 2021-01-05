@@ -4,12 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Discord.Commands;
-using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Humanizer;
-using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Attributes;
+using Kaguya.Internal.Enums;
 
 namespace Kaguya.Discord.Commands.OwnerOnly
 {

@@ -1,4 +1,4 @@
-﻿namespace Kaguya.Discord.Attributes.Enums
+﻿namespace Kaguya.Internal.Enums
 {
     public enum CommandModule
     {

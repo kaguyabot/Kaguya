@@ -10,9 +10,9 @@ using Interactivity;
 using Interactivity.Pagination;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Attributes;
-using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Attributes;
+using Kaguya.Internal.Enums;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Configuration

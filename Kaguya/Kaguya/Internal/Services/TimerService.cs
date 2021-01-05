@@ -3,7 +3,7 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace Kaguya.Services
+namespace Kaguya.Internal.Services
 {
 	public interface ITimerReceiver
 	{

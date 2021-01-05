@@ -1,7 +1,7 @@
 ﻿using System;
 using Kaguya.Discord.DiscordExtensions;
 
-namespace Kaguya.Exceptions
+namespace Kaguya.Internal.Exceptions
 {
     public class OsuUserNotFoundException : Exception
     {

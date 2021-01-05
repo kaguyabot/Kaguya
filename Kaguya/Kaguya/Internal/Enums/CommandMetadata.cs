@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kaguya.Discord.Attributes.Enums
+namespace Kaguya.Internal.Enums
 {
     [Flags]
     public enum CommandMetadata

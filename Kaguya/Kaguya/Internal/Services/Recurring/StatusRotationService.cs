@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Kaguya.Services.Recurring
+namespace Kaguya.Internal.Services.Recurring
 {
     public class StatusRotationService : BackgroundService, ITimerReceiver
     {

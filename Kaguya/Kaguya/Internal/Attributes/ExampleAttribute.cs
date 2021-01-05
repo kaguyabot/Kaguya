@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kaguya.Discord.Attributes
+namespace Kaguya.Internal.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     internal class ExampleAttribute : Attribute

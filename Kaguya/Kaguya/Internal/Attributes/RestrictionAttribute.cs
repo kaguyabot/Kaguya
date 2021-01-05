@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Discord.Commands;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Attributes.Enums;
+using Kaguya.Internal.Enums;
 using Kaguya.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Kaguya.Discord.Attributes
+namespace Kaguya.Internal.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     internal class RestrictionAttribute : PreconditionAttribute

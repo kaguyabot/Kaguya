@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 
-namespace Kaguya
+namespace Kaguya.Internal.Events
 {
     public class KaguyaEvents
     {

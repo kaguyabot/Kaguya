@@ -1,7 +1,7 @@
 using System;
-using Kaguya.Discord.Attributes.Enums;
+using Kaguya.Internal.Enums;
 
-namespace Kaguya.Discord.Attributes
+namespace Kaguya.Internal.Attributes
 {
 	[AttributeUsage(AttributeTargets.Method)]
 	internal class InheritMetadataAttribute : Attribute

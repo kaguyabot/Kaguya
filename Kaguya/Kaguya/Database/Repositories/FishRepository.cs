@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
-using Kaguya.Services;
+using Kaguya.Internal.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
