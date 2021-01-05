@@ -16,7 +16,7 @@ namespace Kaguya
         public const string StoreNameWithLink = "[Kaguya Premium](" + StoreUrl + ")";
         public const string SupportDiscordUrl = "https://discord.gg/aumCJhr";
         public const string InviteUrl = "https://discord.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=536341759";
-        public static readonly string Version = "v4.0-beta-" + Process.GetCurrentProcess().StartTime.ToShortDateString().Replace('/', '.');
+        public static readonly string Version = "v4.0-beta-" + GetStartDate();
 
         /// <summary>
         /// The number of shards currently logged into Discord.
@@ -31,6 +31,8 @@ namespace Kaguya
         {
             return (DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day);
         }
+
+        public static string GetStartDate() { return Process.GetCurrentProcess().StartTime.ToLocalTime().ToShortDateString().Replace('/', '.'); }
 
         /// <summary>
         /// Increases the number of logged in shards by 1.
