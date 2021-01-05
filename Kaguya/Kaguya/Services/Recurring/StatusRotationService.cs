@@ -124,7 +124,6 @@ namespace Kaguya.Services.Recurring
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // It takes about 2 minutes for all shards to log in.
             await _timerService.TriggerAtAsync(DateTime.Now, this);
         }
     }
