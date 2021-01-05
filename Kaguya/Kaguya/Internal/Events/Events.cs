@@ -20,6 +20,7 @@ namespace Kaguya.Internal.Events
             _logger.LogDebug("Kaguya Events initialized.");
             
             _client.ShardReady += ClientOnShardReady;
+            
         }
 
         private Task ClientOnShardReady(DiscordSocketClient arg)
