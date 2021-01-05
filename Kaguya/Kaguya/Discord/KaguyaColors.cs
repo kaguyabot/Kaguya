@@ -33,15 +33,5 @@ namespace Kaguya.Discord
         public static readonly Color LighterGrey = Color.LighterGrey;
         public static readonly Color LightGrey = Color.LightGrey;
         public static readonly Color LightOrange = Color.LightOrange;
-
-        public static Color Create(byte r, byte g, byte b)
-        {
-            return new Color(r, g, b);
-        }
-        
-        public static Color Create(uint hex)
-        {
-            return new Color(hex);
-        }
     }
 }

@@ -263,7 +263,7 @@ namespace Kaguya.Discord.Commands.Administration
                 hex = $"0x{hex.ToUpper()}";
             }
             
-            Color color = KaguyaColors.Create(Convert.ToUInt32(hex, 16));
+            Color color = new Color(Convert.ToUInt32(hex, 16));
             
             try
             {
