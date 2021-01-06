@@ -8,7 +8,7 @@ Kaguya is designed to be an easy-to-use, all-in-one Discord bot solution. Kaguya
 To run Kaguya, please make sure you meet the following prerequisites:
 - A desktop platform with the [.NET 5.0 SDK](https://dotnet.microsoft.com/download) installed.
 - [MySQL Version 8.0.18](https://dev.mysql.com/downloads/mysql/) or later installed.
-- If modifying the code, we recommend use an IDE with intelligent code completion and syntax highlighting, such as [Visual Studio 2019+](https://visualstudio.microsoft.com/downloads/), [Jetbrains Rider](https://www.jetbrains.com/rider/), or [Visual Studio Code](https://visualstudio.microsoft.com/downloads/).
+- If modifying the code, I recommend using an IDE with intelligent code completion and syntax highlighting, such as [Visual Studio 2019+](https://visualstudio.microsoft.com/downloads/), [Jetbrains Rider](https://www.jetbrains.com/rider/), or [Visual Studio Code](https://visualstudio.microsoft.com/downloads/).
     - Ensure your IDE supports C# 9 and .NET 5.
 
 ## Downloading the source code
