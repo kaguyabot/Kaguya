@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210105174158_AntiraidConfigNumberTypes")]
+    partial class AntiraidConfigNumberTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +35,6 @@ namespace Kaguya.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsHidden")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsSystemAction")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<ulong>("ModeratorId")
@@ -76,7 +75,7 @@ namespace Kaguya.Migrations
                     b.Property<uint>("Seconds")
                         .HasColumnType("int unsigned");
 
-                    b.Property<uint>("UserThreshold")
+                    b.Property<uint>("Users")
                         .HasColumnType("int unsigned");
 
                     b.HasKey("ServerId");

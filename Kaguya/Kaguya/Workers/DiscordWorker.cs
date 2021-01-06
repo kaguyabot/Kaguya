@@ -258,7 +258,7 @@ namespace Kaguya.Workers
         private void InitOther()
         {
             LogConfiguration.LoadProperties();
-            _kaguyaEvents.Init();
+            _kaguyaEvents.InitEvents();
         }
 
         private async Task HandleCommandAsync(SocketMessage msg)

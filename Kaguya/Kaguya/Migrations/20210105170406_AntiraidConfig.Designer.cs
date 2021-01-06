@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210105170406_AntiraidConfig")]
+    partial class AntiraidConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +35,6 @@ namespace Kaguya.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsHidden")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsSystemAction")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<ulong>("ModeratorId")
@@ -64,6 +63,9 @@ namespace Kaguya.Migrations
                     b.Property<int>("Action")
                         .HasColumnType("int");
 
+                    b.Property<string>("ActionString")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("AntiraidPunishmentDirectMessage")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -73,11 +75,11 @@ namespace Kaguya.Migrations
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<uint>("Seconds")
-                        .HasColumnType("int unsigned");
+                    b.Property<int>("Seconds")
+                        .HasColumnType("int");
 
-                    b.Property<uint>("UserThreshold")
-                        .HasColumnType("int unsigned");
+                    b.Property<int>("Users")
+                        .HasColumnType("int");
 
                     b.HasKey("ServerId");
 

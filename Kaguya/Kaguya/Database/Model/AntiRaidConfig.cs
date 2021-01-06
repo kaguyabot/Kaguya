@@ -11,17 +11,16 @@ namespace Kaguya.Database.Model
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public ulong ServerId { get; set; }
 
-		public int Users { get; set; }
+		public uint UserThreshold { get; set; }
 
-		public int Seconds { get; set; }
+		public uint Seconds { get; set; }
 
 		public AntiraidAction Action { get; set; }
 		
-		public string ActionString { get; set; }
 		/// <summary>
-		/// At what time should the user be un-punished, if applicable?
+		/// How long should this user be punished for by the system?
 		/// </summary>
-		public DateTime? Expiration { get; set; }
+		public TimeSpan? PunishmentLength { get; set; }
 		
 		/// <summary>
 		/// Upon anti-raid execution, if this value is set, Kaguya will send a DM to whoever was punished

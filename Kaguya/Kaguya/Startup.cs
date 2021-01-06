@@ -5,6 +5,7 @@ using Discord.Rest;
 using Discord.WebSocket;
 using Interactivity;
 using Kaguya.Database.Context;
+using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Options;
 using Kaguya.Internal.Events;
@@ -50,6 +51,7 @@ namespace Kaguya
 			// All database repositories are added as scoped here.
 			
 			services.AddScoped<AdminActionRepository>();
+			services.AddScoped<AntiraidConfigRepository>();
 			services.AddScoped<BlacklistedEntityRepository>();
 			services.AddScoped<CommandHistoryRepository>();
 			services.AddScoped<FishRepository>();
@@ -62,6 +64,7 @@ namespace Kaguya
 			services.AddScoped<WordFilterRepository>();
 
 			services.AddSingleton<ITimerService, TimerService>();
+			services.AddSingleton<IAntiraidService, AntiraidService>();
 
 			services.AddControllers();
 
@@ -110,17 +113,11 @@ namespace Kaguya
 			});
 			
 			services.AddHostedService<TimerWorker>();
+			services.AddHostedService<AntiraidWorker>();
 			
 			services.AddHostedService<DiscordWorker>();
 
-			services.AddSingleton(provider =>
-			{
-				var logger = provider.GetRequiredService<ILogger<KaguyaEvents>>();
-				var client = provider.GetRequiredService<DiscordShardedClient>();
-
-				var events = new KaguyaEvents(logger, client);
-				return events;
-			});
+			services.AddSingleton<KaguyaEvents>();
 			
 			// Must be after discord.
 			services.AddHostedService<StatusRotationService>();

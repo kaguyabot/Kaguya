@@ -33,5 +33,9 @@ namespace Kaguya.Database.Model
 		public DateTime? Expiration { get; set; }
 		// Used if admins "erase history" for some data in their server to keep it from coming up in other commands.
 		public bool IsHidden { get; set; }
+		/// <summary>
+		/// Whether this action was performed by the system as part of an automated service.
+		/// </summary>
+		public bool IsSystemAction { get; init; }
 	}
 }
