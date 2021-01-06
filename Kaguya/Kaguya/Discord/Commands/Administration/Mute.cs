@@ -274,13 +274,18 @@ namespace Kaguya.Discord.Commands.Administration
 
         private bool DetermineIfMuteRoleExists(KaguyaServer server)
         {
-            SocketRole muteRole = Context.Guild.GetRole(server.MuteRoleId);
+            if (!server.MuteRoleId.HasValue)
+            {
+                return false;
+            }
+            
+            SocketRole muteRole = Context.Guild.GetRole(server.MuteRoleId.Value);
             return muteRole != null;
         }
 
         private async Task<IRole> GetMuteRoleAsync(KaguyaServer server)
         {
-            IRole match = Context.Guild.GetRole(server.MuteRoleId) ?? await CreateMuteRoleAsync();
+            IRole match = Context.Guild.GetRole(server.MuteRoleId ?? 0) ?? await CreateMuteRoleAsync();
             return match;
         }
         
@@ -372,7 +377,12 @@ namespace Kaguya.Discord.Commands.Administration
             return fieldBuilders;
         }
 
-        private static OverwritePermissions GetMuteOverwritePermissions()
+        // todo: Permissions are hardcoded for the mute role. Eventually add support for modifying this collection.
+        /// <summary>
+        /// A <see cref="OverwritePermissions"/> for any mute role created by Kaguya.
+        /// </summary>
+        /// <returns></returns>
+        public static OverwritePermissions GetMuteOverwritePermissions()
         {
             return new OverwritePermissions(PermValue.Deny, addReactions: PermValue.Deny, sendMessages: PermValue.Deny, muteMembers: PermValue.Deny,
                 useVoiceActivation: PermValue.Deny, attachFiles: PermValue.Deny, embedLinks: PermValue.Deny, connect: PermValue.Deny, speak: PermValue.Deny,
