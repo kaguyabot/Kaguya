@@ -70,8 +70,8 @@ namespace Kaguya.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime?>("Expiration")
-                        .HasColumnType("datetime(6)");
+                    b.Property<TimeSpan?>("PunishmentLength")
+                        .HasColumnType("time(6)");
 
                     b.Property<uint>("Seconds")
                         .HasColumnType("int unsigned");
@@ -234,7 +234,7 @@ namespace Kaguya.Migrations
                     b.Property<bool>("LevelAnnouncementsEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<ulong>("MuteRoleId")
+                    b.Property<ulong?>("MuteRoleId")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<int>("NextQuoteId")
@@ -248,6 +248,9 @@ namespace Kaguya.Migrations
 
                     b.Property<DateTime?>("PremiumExpiration")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<ulong?>("ShadowbanRoleId")
+                        .HasColumnType("bigint unsigned");
 
                     b.Property<int>("TotalAdminActions")
                         .HasColumnType("int");
@@ -343,37 +346,40 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Bans")
+                    b.Property<ulong?>("Antiraids")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("MessageDeleted")
+                    b.Property<ulong?>("Bans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("MessageUpdated")
+                    b.Property<ulong?>("MessageDeleted")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Shadowbans")
+                    b.Property<ulong?>("MessageUpdated")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UnBans")
+                    b.Property<ulong?>("Shadowbans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Unshadowbans")
+                    b.Property<ulong?>("UnBans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Unwarns")
+                    b.Property<ulong?>("Unshadowbans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UserJoins")
+                    b.Property<ulong?>("Unwarns")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UserLeaves")
+                    b.Property<ulong?>("UserJoins")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("VoiceUpdates")
+                    b.Property<ulong?>("UserLeaves")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Warns")
+                    b.Property<ulong?>("VoiceUpdates")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<ulong?>("Warns")
                         .HasColumnType("bigint unsigned");
 
                     b.HasKey("ServerId");
