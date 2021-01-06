@@ -14,14 +14,14 @@ To run Kaguya, please make sure you meet the following prerequisites:
 ## Downloading the source code
 Clone:
 ```
-cd (your installation directory)
-git clone https://github.com/kaguyabot/Kaguya.git
-cd Kaguya
+$ cd (your installation directory)
+$ git clone https://github.com/kaguyabot/Kaguya.git
+$ cd Kaguya
 ```
 
 Update to the latest version of the source code:
 ```
-git pull
+$ git pull
 ```
 
 ## Building
