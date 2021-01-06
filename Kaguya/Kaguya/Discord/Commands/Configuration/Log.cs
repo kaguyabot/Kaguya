@@ -25,12 +25,18 @@ namespace Kaguya.Discord.Commands.Configuration
     {
         private readonly ILogger<Log> _logger;
         private readonly LogConfigurationRepository _logConfigurationRepository;
-        private readonly IList<PropertyInfo> _logProperties = LogConfiguration.LogProperties ?? LogConfiguration.GetLogProperties();
+        private readonly IList<PropertyInfo> _logProperties;
         
         public Log(ILogger<Log> logger, LogConfigurationRepository logConfigurationRepository) : base(logger)
         {
             _logger = logger;
             _logConfigurationRepository = logConfigurationRepository;
+            _logProperties = LogConfiguration.LogProperties;
+            if (_logProperties == null)
+            {
+                LogConfiguration.LoadProperties();
+                _logProperties = LogConfiguration.LogProperties;
+            }
         }
 
         [Command]
