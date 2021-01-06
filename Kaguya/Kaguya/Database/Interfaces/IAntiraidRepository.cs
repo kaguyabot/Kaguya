@@ -4,6 +4,5 @@ namespace Kaguya.Database.Interfaces
 {
     public interface IAntiraidRepository : IRepository<ulong, AntiRaidConfig>
     {
-        
     }
 }
