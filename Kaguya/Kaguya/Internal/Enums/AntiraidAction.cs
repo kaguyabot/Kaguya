@@ -5,6 +5,6 @@
         Mute,
         Kick,
         Shadowban,
-        Ban,
+        Ban
     }
 }

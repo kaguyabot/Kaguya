@@ -10,6 +10,7 @@ using Discord;
 using Discord.WebSocket;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Commands.Administration;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Services.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,20 +25,18 @@ namespace Kaguya.Internal.Services
         private readonly IServiceProvider _provider;
         private readonly ITimerService _timerService;
         private readonly DiscordShardedClient _client;
-        private readonly AdminActionRepository _adminActionRepository;
         private readonly IAntiraidProcessorInternal _arProcessor;
         
         private readonly ConcurrentDictionary<ulong, ConcurrentQueue<(DateTime userJoinTime, ulong userId)>> _userIdCache = new();
         private readonly ConcurrentDictionary<ulong, AntiRaidConfig> _configsCache = new();
         
         public AntiraidWorker(ILogger<AntiraidWorker> logger, IServiceProvider provider, ITimerService timerService, 
-            IAntiraidService arService, DiscordShardedClient client, AdminActionRepository adminActionRepository)
+            IAntiraidService arService, DiscordShardedClient client)
         {
             _logger = logger;
             _provider = provider;
             _timerService = timerService;
             _client = client;
-            _adminActionRepository = adminActionRepository;
             _arProcessor = (IAntiraidProcessorInternal) arService;
         }
         
@@ -107,52 +106,70 @@ namespace Kaguya.Internal.Services
                 }
 
                 _logger.LogInformation($"Antiraid service triggered for guild {data.ServerId}");
-                
+
+                var sysActions = new SilentSysActions(_provider);
                 List<Task> taskList = new List<Task>();
-                foreach (ulong userId in curUserCollection.Select(x => x.userId).Distinct())
+
+                using (var scope = _provider.CreateScope())
                 {
-                    AntiraidAction action = curConfig.Action;
+                    var aaRepo = scope.ServiceProvider.GetRequiredService<AdminActionRepository>();
+                    var ksRepo = scope.ServiceProvider.GetRequiredService<KaguyaServerRepository>();
                     
-                    SocketGuild guild = _client.GetGuild(data.ServerId);
-                    SocketGuildUser user = guild?.GetUser(userId);
+                    KaguyaServer server = await ksRepo.GetOrCreateAsync(curConfig.ServerId);
                     
-                    if (user == null)
+                    foreach (ulong userId in curUserCollection.Select(x => x.userId).Distinct())
                     {
-                        continue;
+                        AntiraidAction action = curConfig.Action;
+
+                        SocketGuild guild = _client.GetGuild(data.ServerId);
+                        SocketGuildUser user = guild?.GetUser(userId);
+
+                        if (user == null)
+                        {
+                            continue;
+                        }
+
+                        string reason = "Kaguya Anti-Raid service";
+
+                        // todo: Enqueue into guild's discord logger, if applicable.
+                        var adminAction = new AdminAction
+                        {
+                            ServerId = data.ServerId,
+                            ModeratorId = _client.CurrentUser.Id, // Bot ID
+                            ActionedUserId = data.UserId,
+                            Action = null,
+                            Reason = "Automatic server protection (Kaguya Anti-Raid)",
+                            Expiration = curConfig.PunishmentLength.HasValue ? DateTime.Now.Add(curConfig.PunishmentLength.Value) : null,
+                            IsHidden = false,
+                            IsSystemAction = true
+                        };
+
+                        switch (action)
+                        {
+                            case AntiraidAction.Mute:
+                                adminAction.Action = AdminAction.MuteAction;
+                                taskList.Add(sysActions.SilentMuteUserAsync(user, server.MuteRoleId));
+
+                                break;
+                            case AntiraidAction.Kick:
+                                adminAction.Action = AdminAction.KickAction;
+                                taskList.Add(user.KickAsync(reason));
+
+                                break;
+                            case AntiraidAction.Shadowban:
+                                adminAction.Action = AdminAction.ShadowbanAction;
+                                await sysActions.SilentShadowbanUserAsync(user, server.ShadowbanRoleId);
+
+                                break;
+                            case AntiraidAction.Ban:
+                                adminAction.Action = AdminAction.BanAction;
+                                taskList.Add(user.BanAsync(1, reason));
+
+                                break;
+                        }
+
+                        await aaRepo.InsertAsync(adminAction);
                     }
-
-                    string reason = "Kaguya Anti-Raid service";
-
-                    // todo: Enqueue into guild's discord logger, if applicable.
-                    var adminAction = new AdminAction
-                    {
-                        ServerId = data.ServerId,
-                        ModeratorId = _client.CurrentUser.Id, // Bot ID
-                        ActionedUserId = data.UserId,
-                        Action = null,
-                        Reason = "Automatic server protection (Kaguya Anti-Raid)",
-                        Expiration =  curConfig.PunishmentLength.HasValue ? DateTime.Now.Add(curConfig.PunishmentLength.Value) : null,
-                        IsHidden = false,
-                        IsSystemAction = true
-                    };
-                    
-                    switch (action)
-                    {
-                        // case AntiraidAction.Mute:
-                            // todo: Mute user.
-                        case AntiraidAction.Kick:
-                            taskList.Add(user.KickAsync(reason));
-
-                            break;
-                        case AntiraidAction.Ban:
-                            taskList.Add(user.BanAsync(1, reason));
-
-                            break;
-                        // case AntiraidAction.Shadowban:
-                            // todo: Shadowban user
-                    }
-
-                    await _adminActionRepository.InsertAsync(adminAction);
                 }
 
                 await Task.WhenAll(taskList);
