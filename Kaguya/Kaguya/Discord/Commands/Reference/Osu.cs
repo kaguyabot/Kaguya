@@ -1,13 +1,13 @@
 ﻿using Discord.Commands;
-using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
-using Kaguya.Exceptions;
 using Kaguya.External.Osu;
+using Kaguya.Internal.Attributes;
+using Kaguya.Internal.Enums;
+using Kaguya.Internal.Exceptions;
 using OsuSharp;
 
 namespace Kaguya.Discord.Commands.Reference

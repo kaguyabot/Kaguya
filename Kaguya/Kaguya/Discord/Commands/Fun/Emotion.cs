@@ -2,9 +2,9 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Discord.Attributes;
-using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Attributes;
+using Kaguya.Internal.Enums;
 using Microsoft.Extensions.Logging;
 using NekosSharp;
 

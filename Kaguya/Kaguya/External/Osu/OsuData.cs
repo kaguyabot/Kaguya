@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Kaguya.Exceptions;
+using Kaguya.Internal.Exceptions;
 using OsuSharp;
 
 namespace Kaguya.External.Osu

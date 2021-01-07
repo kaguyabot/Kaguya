@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using Kaguya.Services;
+using Kaguya.Internal.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
@@ -38,7 +38,7 @@ namespace Kaguya.Workers
 			{
 				await _timerService.GetChannel().Reader.WaitToReadAsync(stoppingToken);
 
-				var (when, receiver, payload) = await _timerService.GetChannel().Reader.ReadAsync(stoppingToken);
+				(DateTime when, ITimerReceiver receiver, object payload) = await _timerService.GetChannel().Reader.ReadAsync(stoppingToken);
 				lock (_locker)
 				{
 					if (!_events.ContainsKey(when))

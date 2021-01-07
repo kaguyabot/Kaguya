@@ -28,10 +28,14 @@ namespace Kaguya.Database.Model
 		public ulong ServerId { get; init; }
 		public ulong ModeratorId { get; init; }
 		public ulong ActionedUserId { get; init; }
-		public string Action { get; init; }
+		public string Action { get; set; }
 		public string Reason { get; set; }
 		public DateTime? Expiration { get; set; }
 		// Used if admins "erase history" for some data in their server to keep it from coming up in other commands.
 		public bool IsHidden { get; set; }
+		/// <summary>
+		/// Whether this action was performed by the system as part of an automated service.
+		/// </summary>
+		public bool IsSystemAction { get; init; }
 	}
 }

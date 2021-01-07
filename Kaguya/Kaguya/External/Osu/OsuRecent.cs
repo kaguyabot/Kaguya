@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Discord;
 using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
-using Kaguya.Exceptions;
+using Kaguya.Internal.Exceptions;
 using OsuSharp;
 using OsuSharp.Oppai;
 

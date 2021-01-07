@@ -16,6 +16,7 @@ using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Options;
+using Kaguya.Internal.Events;
 using Kaguya.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -257,7 +258,7 @@ namespace Kaguya.Workers
         private void InitOther()
         {
             LogConfiguration.LoadProperties();
-            _kaguyaEvents.Init();
+            _kaguyaEvents.InitEvents();
         }
 
         private async Task HandleCommandAsync(SocketMessage msg)

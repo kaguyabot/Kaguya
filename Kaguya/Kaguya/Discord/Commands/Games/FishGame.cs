@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 using Discord.Commands;
-using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
@@ -10,9 +9,10 @@ using Humanizer;
 using Humanizer.Localisation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
-using Kaguya.Services;
+using Kaguya.Internal.Attributes;
+using Kaguya.Internal.Enums;
+using Kaguya.Internal.Services;
 
 namespace Kaguya.Discord.Commands.Games
 {

@@ -1,6 +1,5 @@
 using System;
 using Discord.Commands;
-using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
@@ -9,8 +8,9 @@ using Humanizer.Localisation;
 using Interactivity;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Attributes;
+using Kaguya.Internal.Enums;
 
 namespace Kaguya.Discord.Commands.Reference
 {

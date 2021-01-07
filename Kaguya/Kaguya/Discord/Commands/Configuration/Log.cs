@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Discord.Commands;
-using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
@@ -12,8 +11,9 @@ using Discord.WebSocket;
 using Humanizer;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Attributes;
+using Kaguya.Internal.Enums;
 
 namespace Kaguya.Discord.Commands.Configuration
 {
@@ -25,12 +25,18 @@ namespace Kaguya.Discord.Commands.Configuration
     {
         private readonly ILogger<Log> _logger;
         private readonly LogConfigurationRepository _logConfigurationRepository;
-        private readonly IList<PropertyInfo> _logProperties = LogConfiguration.LogProperties ?? LogConfiguration.GetLogProperties();
+        private readonly IList<PropertyInfo> _logProperties;
         
         public Log(ILogger<Log> logger, LogConfigurationRepository logConfigurationRepository) : base(logger)
         {
             _logger = logger;
             _logConfigurationRepository = logConfigurationRepository;
+            _logProperties = LogConfiguration.LogProperties;
+            if (_logProperties == null)
+            {
+                LogConfiguration.LoadProperties();
+                _logProperties = LogConfiguration.LogProperties;
+            }
         }
 
         [Command]

@@ -8,6 +8,7 @@ namespace Kaguya.Database.Context
 	public partial class KaguyaDbContext : DbContext
 	{
 		public DbSet<AdminAction> AdminActions { get; set; }
+		public DbSet<AntiRaidConfig> AntiRaidConfigs { get; set; }
 		public DbSet<BlacklistedEntity> BlacklistedEntities { get; set; }
 		public DbSet<CommandHistory> CommandHistories { get; set; }
 		public DbSet<FilteredWord> FilteredWords { get; set; }

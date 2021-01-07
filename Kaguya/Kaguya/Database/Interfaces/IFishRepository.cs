@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kaguya.Database.Model;
-using Kaguya.Services;
+using Kaguya.Internal.Services;
 
 namespace Kaguya.Database.Interfaces
 {

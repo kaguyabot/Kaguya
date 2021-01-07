@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Kaguya.Services;
+using Kaguya.Internal.Services;
 
 namespace Kaguya.Database.Model
 {

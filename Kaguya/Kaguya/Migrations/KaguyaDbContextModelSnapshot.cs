@@ -3,6 +3,7 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
@@ -34,6 +35,9 @@ namespace Kaguya.Migrations
                     b.Property<bool>("IsHidden")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsSystemAction")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<ulong>("ModeratorId")
                         .HasColumnType("bigint unsigned");
 
@@ -57,8 +61,8 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<string>("Action")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<int>("Action")
+                        .HasColumnType("int");
 
                     b.Property<string>("AntiraidPunishmentDirectMessage")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -66,15 +70,18 @@ namespace Kaguya.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("Seconds")
-                        .HasColumnType("int");
+                    b.Property<TimeSpan?>("PunishmentLength")
+                        .HasColumnType("time(6)");
 
-                    b.Property<int>("Users")
-                        .HasColumnType("int");
+                    b.Property<uint>("Seconds")
+                        .HasColumnType("int unsigned");
+
+                    b.Property<uint>("UserThreshold")
+                        .HasColumnType("int unsigned");
 
                     b.HasKey("ServerId");
 
-                    b.ToTable("AntiRaidConfig");
+                    b.ToTable("AntiRaidConfigs");
                 });
 
             modelBuilder.Entity("Kaguya.Database.Model.BlacklistedEntity", b =>
@@ -206,6 +213,9 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
+                    b.Property<ulong?>("AntiRaidServerId")
+                        .HasColumnType("bigint unsigned");
+
                     b.Property<string>("CommandPrefix")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -224,7 +234,7 @@ namespace Kaguya.Migrations
                     b.Property<bool>("LevelAnnouncementsEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<ulong>("MuteRoleId")
+                    b.Property<ulong?>("MuteRoleId")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<int>("NextQuoteId")
@@ -239,6 +249,9 @@ namespace Kaguya.Migrations
                     b.Property<DateTime?>("PremiumExpiration")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<ulong?>("ShadowbanRoleId")
+                        .HasColumnType("bigint unsigned");
+
                     b.Property<int>("TotalAdminActions")
                         .HasColumnType("int");
 
@@ -246,6 +259,8 @@ namespace Kaguya.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ServerId");
+
+                    b.HasIndex("AntiRaidServerId");
 
                     b.ToTable("Servers");
                 });
@@ -331,37 +346,40 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Bans")
+                    b.Property<ulong?>("Antiraids")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("MessageDeleted")
+                    b.Property<ulong?>("Bans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("MessageUpdated")
+                    b.Property<ulong?>("MessageDeleted")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Shadowbans")
+                    b.Property<ulong?>("MessageUpdated")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UnBans")
+                    b.Property<ulong?>("Shadowbans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Unshadowbans")
+                    b.Property<ulong?>("UnBans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Unwarns")
+                    b.Property<ulong?>("Unshadowbans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UserJoins")
+                    b.Property<ulong?>("Unwarns")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UserLeaves")
+                    b.Property<ulong?>("UserJoins")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("VoiceUpdates")
+                    b.Property<ulong?>("UserLeaves")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Warns")
+                    b.Property<ulong?>("VoiceUpdates")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<ulong?>("Warns")
                         .HasColumnType("bigint unsigned");
 
                     b.HasKey("ServerId");
@@ -454,19 +472,12 @@ namespace Kaguya.Migrations
                     b.ToTable("Rep");
                 });
 
-            modelBuilder.Entity("Kaguya.Database.Model.AntiRaidConfig", b =>
-                {
-                    b.HasOne("Kaguya.Database.Model.KaguyaServer", "Server")
-                        .WithOne("AntiRaid")
-                        .HasForeignKey("Kaguya.Database.Model.AntiRaidConfig", "ServerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Server");
-                });
-
             modelBuilder.Entity("Kaguya.Database.Model.KaguyaServer", b =>
                 {
+                    b.HasOne("Kaguya.Database.Model.AntiRaidConfig", "AntiRaid")
+                        .WithMany()
+                        .HasForeignKey("AntiRaidServerId");
+
                     b.Navigation("AntiRaid");
                 });
 #pragma warning restore 612, 618

@@ -1,14 +1,14 @@
 ﻿using System;
 using Discord.Commands;
-using Kaguya.Discord.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Humanizer;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Attributes.Enums;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Parsers;
+using Kaguya.Internal.Attributes;
+using Kaguya.Internal.Enums;
 
 namespace Kaguya.Discord.Commands.OwnerOnly
 {

@@ -9,6 +9,7 @@ namespace Kaguya.Database.Model
 {
     public enum KaguyaLogType
     {
+        Antiraid,
         Ban,
         Unban,
         Warn,
@@ -28,23 +29,24 @@ namespace Kaguya.Database.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public ulong ServerId { get; init; }
-        public ulong Bans { get; set; }
-        public ulong UnBans { get; set; }
-        public ulong Warns { get; set; }
-        public ulong Unwarns { get; set; }
-        public ulong Shadowbans { get; set; }
-        public ulong Unshadowbans { get; set; }
-        public ulong UserJoins { get; set; }
-        public ulong UserLeaves { get; set; }
-        public ulong VoiceUpdates { get; set; }
-        public ulong MessageDeleted { get; set; }
-        public ulong MessageUpdated { get; set; }
+        public ulong? Antiraids { get; set; }
+        public ulong? Bans { get; set; }
+        public ulong? UnBans { get; set; }
+        public ulong? Warns { get; set; }
+        public ulong? Unwarns { get; set; }
+        public ulong? Shadowbans { get; set; }
+        public ulong? Unshadowbans { get; set; }
+        public ulong? UserJoins { get; set; }
+        public ulong? UserLeaves { get; set; }
+        public ulong? VoiceUpdates { get; set; }
+        public ulong? MessageDeleted { get; set; }
+        public ulong? MessageUpdated { get; set; }
         
-        public static IList<PropertyInfo> GetLogProperties()
+        private static IList<PropertyInfo> GetLogProperties()
         {
             IList<PropertyInfo> properties = typeof(LogConfiguration).GetProperties()
                                                                      .Where(x => !x.Name.Equals("ServerId", StringComparison.OrdinalIgnoreCase) &&
-                                                                                 x.PropertyType == typeof(ulong))
+                                                                                 x.PropertyType == typeof(ulong?))
                                                                      .ToList();
 
             return properties;
