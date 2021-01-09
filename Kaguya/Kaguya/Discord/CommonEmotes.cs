@@ -13,35 +13,28 @@ namespace Kaguya.Discord
         private readonly DiscordShardedClient _client;
         private readonly IOptions<DiscordConfigurations> _configurations;
         public IEmote CheckMarkEmoji => new Emoji("✅");
+        public IEmote RedCrossEmote => GetEmote("RedCross");
 
-        private IEmote _redCrossEmote { get; set; }
-
-        public IEmote RedCrossEmote
+        private IEmote GetEmote(string emoteName)
         {
-            get
+            SocketGuild emoteGuild = _client.GetGuild(_configurations.Value.EmoteGuildId);
+
+            if (emoteGuild == null)
             {
-                if (_redCrossEmote == null)
-                {
-                    SocketGuild emoteGuild = _client.GetGuild(_configurations.Value.EmoteGuildId);
-
-                    if (emoteGuild == null)
-                    {
-                        _logger.LogWarning("Emote server could not be found. Some emotes will not be populated.");
-                    }
-
-                    _redCrossEmote = emoteGuild?.Emotes.FirstOrDefault(x => x.Name.ToLower() == "redcross");
-
-                    if (_redCrossEmote == null)
-                    {
-                        _logger.LogWarning("Redcross emote not populated. Using default ❌ emote.");
-                        _redCrossEmote = new Emoji("❌");
-                    }
-                }
-                
-                return _redCrossEmote;
+                _logger.LogWarning("Emote server could not be found. Some emotes will not be populated.");
             }
+
+            IEmote toModify = emoteGuild?.Emotes.FirstOrDefault(x => x.Name.ToLower() == emoteName.ToLower());
+
+            if (toModify == null)
+            {
+                _logger.LogWarning("Emote not populated. Using default ❌ emote.");
+                toModify = new Emoji("🦆");
+            }
+
+            return toModify;
         }
-        
+
         public CommonEmotes(ILogger<CommonEmotes> logger, DiscordShardedClient client, 
             IOptions<DiscordConfigurations> configurations)
         {
