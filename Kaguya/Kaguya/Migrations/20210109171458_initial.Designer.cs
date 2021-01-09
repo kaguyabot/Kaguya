@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    [Migration("20210106163106_KaguyaServer_NullableRoleIds")]
-    partial class KaguyaServer_NullableRoleIds
+    [Migration("20210109171458_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -348,37 +348,40 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Bans")
+                    b.Property<ulong?>("Antiraids")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("MessageDeleted")
+                    b.Property<ulong?>("Bans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("MessageUpdated")
+                    b.Property<ulong?>("MessageDeleted")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Shadowbans")
+                    b.Property<ulong?>("MessageUpdated")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UnBans")
+                    b.Property<ulong?>("Shadowbans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Unshadowbans")
+                    b.Property<ulong?>("UnBans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Unwarns")
+                    b.Property<ulong?>("Unshadowbans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UserJoins")
+                    b.Property<ulong?>("Unwarns")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UserLeaves")
+                    b.Property<ulong?>("UserJoins")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("VoiceUpdates")
+                    b.Property<ulong?>("UserLeaves")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("Warns")
+                    b.Property<ulong?>("VoiceUpdates")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<ulong?>("Warns")
                         .HasColumnType("bigint unsigned");
 
                     b.HasKey("ServerId");
