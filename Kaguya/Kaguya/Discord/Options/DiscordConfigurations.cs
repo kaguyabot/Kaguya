@@ -13,5 +13,6 @@ namespace Kaguya.Discord.Options
 
         public int? MessageCacheSize { get; set; }
         public bool? AlwaysDownloadUsers { get; set; }
+        public ulong EmoteGuildId { get; set; }
     }
 }
