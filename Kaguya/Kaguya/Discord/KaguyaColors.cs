@@ -9,7 +9,7 @@ namespace Kaguya.Discord
     {
         public static readonly Color Default = Color.Default;
 
-        public static readonly Color HotPink = new (0xFF00FF);
+        public static readonly Color NeonPurple = new (0xFF00FF);
         public static readonly Color IceBlue = new (0xABE3DE);
         public static readonly Color LightYellow = new (0xFFFF99);
 
