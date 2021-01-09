@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -10,7 +9,6 @@ using Discord;
 using Discord.WebSocket;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Commands.Administration;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Services.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,7 +58,7 @@ namespace Kaguya.Internal.Services
                         var antiraidConfigRepo = scope.ServiceProvider.GetRequiredService<AntiraidConfigRepository>();
                         curConfig = await antiraidConfigRepo.GetAsync(data.ServerId);
                     
-                        if (curConfig == null || !curConfig.Enabled)
+                        if (curConfig == null || !curConfig.ConfigEnabled)
                         {
                             continue;
                         }
@@ -194,7 +192,7 @@ namespace Kaguya.Internal.Services
                     {
                         AntiRaidConfig freshConfig = await antiraidConfigRepo.GetAsync(element.Key);
 
-                        if (freshConfig != null && freshConfig.Enabled)
+                        if (freshConfig != null && freshConfig.ConfigEnabled)
                         {
                             curConfig = freshConfig;
                             _configsCache.TryAdd(freshConfig.ServerId, freshConfig);

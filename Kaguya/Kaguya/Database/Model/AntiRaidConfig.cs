@@ -28,7 +28,8 @@ namespace Kaguya.Database.Model
 		/// </summary>
 		public string AntiraidPunishmentDirectMessage { get; set; }
 
-		public bool Enabled { get; set; }
+		public bool ConfigEnabled { get; set; }
+		public bool PunishmentDmEnabled { get; set; }
 
 		public bool IsExpirable => this.Action != AntiraidAction.Kick;
 	}
