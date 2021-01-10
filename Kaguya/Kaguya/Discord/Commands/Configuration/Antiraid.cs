@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
@@ -30,16 +29,16 @@ namespace Kaguya.Discord.Commands.Configuration
     [RequireBotPermission(GuildPermission.KickMembers)]
     [RequireBotPermission(GuildPermission.MuteMembers)]
     [RequireBotPermission(GuildPermission.DeafenMembers)]
-    public class AntiraidSetup : KaguyaBase<AntiraidSetup>
+    public class Antiraid : KaguyaBase<Antiraid>
     {
-        private readonly ILogger<AntiraidSetup> _logger;
+        private readonly ILogger<Antiraid> _logger;
         private readonly InteractivityService _interactivityService;
         private readonly KaguyaServerRepository _kaguyaServerRepository;
         private readonly AntiraidConfigRepository _antiraidConfigRepository;
         private readonly CommonEmotes _commonEmotes;
         private static readonly ConcurrentDictionary<ulong, bool> _currentlyActiveSetups = new();
 
-        public AntiraidSetup(ILogger<AntiraidSetup> logger, InteractivityService interactivityService,
+        public Antiraid(ILogger<Antiraid> logger, InteractivityService interactivityService,
             KaguyaServerRepository kaguyaServerRepository, AntiraidConfigRepository antiraidConfigRepository, 
             CommonEmotes commonEmotes) : base(logger)
         {
@@ -221,6 +220,35 @@ namespace Kaguya.Discord.Commands.Configuration
             
             await _antiraidConfigRepository.InsertOrUpdateAsync(newArConfig);
             await SendEmbedAsync(GetFinalEmbed(newArConfig, server.CommandPrefix));
+        }
+
+        [Command("-toggle")]
+        [Alias("-t")]
+        [Summary("Toggles the antiraid service on or off for this server.")]
+        public async Task AntiraidToggleCommand()
+        {
+            var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
+            var curConfig = await _antiraidConfigRepository.GetAsync(Context.Guild.Id);
+
+            if (curConfig == null)
+            {
+                await SendBasicErrorEmbedAsync("There is no antiraid configuration for this server. Set one up with " +
+                                               "the " +
+                                               $"{server.CommandPrefix}antiraid".AsCodeBlockSingleLine() +
+                                               " command.");
+
+                return;
+            }
+
+            bool enabled = curConfig.ConfigEnabled;
+            
+            string newState = !enabled ? "enabled" : "disabled";
+            curConfig.ConfigEnabled = !enabled;
+
+            await _antiraidConfigRepository.UpdateAsync(curConfig);
+            
+            await SendBasicEmbedAsync($"This antiraid config is now " + newState.AsBold() + ".\n\n" +
+                                      $"Config:\n{GetAntiraidConfigString(curConfig)}", KaguyaColors.LightYellow);
         }
 
         private async Task<bool> SendFailureEmbedAsync(int failureAttempts)
