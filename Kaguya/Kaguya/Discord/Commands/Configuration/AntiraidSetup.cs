@@ -54,8 +54,6 @@ namespace Kaguya.Discord.Commands.Configuration
         [Summary("Displays an interactive setup utility for configuring the Kaguya Antiraid service.")]
         public async Task AntiraidSetupCommand()
         {
-            /* todo: Ensure more than 1 setup cannot run in a given server at a time. */
-
             if (_currentlyActiveSetups.ContainsKey(Context.Guild.Id))
             {
                 await SendBasicErrorEmbedAsync("There is already an active antiraid setup running in this server. Please complete the first " +
