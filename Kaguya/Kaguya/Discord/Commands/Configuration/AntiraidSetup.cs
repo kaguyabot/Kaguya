@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
@@ -35,6 +37,7 @@ namespace Kaguya.Discord.Commands.Configuration
         private readonly KaguyaServerRepository _kaguyaServerRepository;
         private readonly AntiraidConfigRepository _antiraidConfigRepository;
         private readonly CommonEmotes _commonEmotes;
+        private static readonly ConcurrentDictionary<ulong, bool> _currentlyActiveSetups = new();
 
         public AntiraidSetup(ILogger<AntiraidSetup> logger, InteractivityService interactivityService,
             KaguyaServerRepository kaguyaServerRepository, AntiraidConfigRepository antiraidConfigRepository, 
@@ -52,26 +55,38 @@ namespace Kaguya.Discord.Commands.Configuration
         public async Task AntiraidSetupCommand()
         {
             /* todo: Ensure more than 1 setup cannot run in a given server at a time. */
+
+            if (_currentlyActiveSetups.ContainsKey(Context.Guild.Id))
+            {
+                await SendBasicErrorEmbedAsync("There is already an active antiraid setup running in this server. Please complete the first " +
+                                               "setup before beginning this one.");
+                return;
+            }
+
+            _currentlyActiveSetups.GetOrAdd(Context.Guild.Id, true);
+            
             var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
             var config = await _antiraidConfigRepository.GetAsync(Context.Guild.Id);
 
             if (config != null)
             {
-                bool confirm = await ConfirmConfigOverwriteAsync(config);
-                if (!confirm)
+                if (!await ConfirmConfigOverwriteAsync(config))
                 {
+                    Remove(server.ServerId);
                     return;
                 }
             }
 
             await SendEmbedAsync(GetStageOneEmbed());
 
+            var newArConfig = new AntiRaidConfig
+            {
+                ServerId = Context.Guild.Id
+            };
+            
             bool stageOneClear = false;
             bool stageTwoClear = false;
             bool stageThreeClear = false;
-            
-            var newArConfig = new AntiRaidConfig();
-            newArConfig.ServerId = Context.Guild.Id;
 
             int failureAttempts = 0;
             
@@ -85,6 +100,8 @@ namespace Kaguya.Discord.Commands.Configuration
 
                     if (await SendFailureEmbedAsync(failureAttempts))
                     {
+                        Remove(server.ServerId);
+
                         return;
                     }
                     
@@ -111,6 +128,8 @@ namespace Kaguya.Discord.Commands.Configuration
 
                     if (await SendFailureEmbedAsync(failureAttempts))
                     {
+                        Remove(server.ServerId);
+
                         return;
                     }
                     
@@ -139,6 +158,8 @@ namespace Kaguya.Discord.Commands.Configuration
                     
                     if (await SendFailureEmbedAsync(failureAttempts))
                     {
+                        Remove(server.ServerId);
+
                         return;
                     }
                     
@@ -176,6 +197,8 @@ namespace Kaguya.Discord.Commands.Configuration
                             
                             if (await SendFailureEmbedAsync(failureAttempts))
                             {
+                                Remove(server.ServerId);
+
                                 return;
                             }
                             
@@ -195,6 +218,9 @@ namespace Kaguya.Discord.Commands.Configuration
                 }
             }
 
+            // End
+            Remove(server.ServerId);
+            
             await _antiraidConfigRepository.InsertOrUpdateAsync(newArConfig);
             await SendEmbedAsync(GetFinalEmbed(newArConfig, server.CommandPrefix));
         }
@@ -426,6 +452,15 @@ namespace Kaguya.Discord.Commands.Configuration
                    .WithFooter($"Turn this off at any time through the \"{serverCmdPrefix}antiraid -toggle\" command.\n" +
                                $"Use the \"{serverCmdPrefix}antiraid -setmsg\" command to set a message to be sent to punished users.")
                    .Build();
+        }
+
+        /// <summary>
+        /// Shortcut method to remove id from the static concurrent collection
+        /// </summary>
+        /// <param name="id"></param>
+        private static void Remove(ulong id)
+        {
+            _currentlyActiveSetups.TryRemove(id, out var _);
         }
     }
     
