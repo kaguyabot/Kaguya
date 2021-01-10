@@ -5,8 +5,8 @@ using Discord.Rest;
 using Discord.WebSocket;
 using Interactivity;
 using Kaguya.Database.Context;
-using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord;
 using Kaguya.Discord.Options;
 using Kaguya.Internal.Events;
 using Kaguya.Internal.Services;
@@ -19,7 +19,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NekosSharp;
 using OsuSharp;
@@ -111,6 +110,9 @@ namespace Kaguya
 				var client = provider.GetRequiredService<DiscordShardedClient>();
 				return new InteractivityService(client, TimeSpan.FromMinutes(5));
 			});
+			
+			// CommonEmotes setup
+			services.AddSingleton<CommonEmotes>();
 			
 			services.AddHostedService<TimerWorker>();
 			services.AddHostedService<AntiraidWorker>();

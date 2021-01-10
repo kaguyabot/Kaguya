@@ -3,7 +3,6 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
@@ -67,7 +66,10 @@ namespace Kaguya.Migrations
                     b.Property<string>("AntiraidPunishmentDirectMessage")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<bool>("Enabled")
+                    b.Property<bool>("ConfigEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("PunishmentDmEnabled")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<TimeSpan?>("PunishmentLength")

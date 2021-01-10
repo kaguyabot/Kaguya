@@ -43,5 +43,17 @@ namespace Kaguya.Database.Repositories
             _dbContext.AntiRaidConfigs.Add(value);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task InsertOrUpdateAsync(AntiRaidConfig config)
+        {
+            if (await GetAsync(config.ServerId) == null)
+            {
+                await InsertAsync(config);
+            }
+            else
+            {
+                await UpdateAsync(config);
+            }
+        }
     }
 }
