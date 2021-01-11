@@ -129,8 +129,6 @@ namespace Kaguya.Discord.Commands.Reference
                 curPageBuilder.Description += $"```\nUse `{server.CommandPrefix}help <command name>` for command documentation.\n" +
                                               $"Example: `{server.CommandPrefix}help ban`\n\n";
 
-
-
                                               pages[i] = curPageBuilder;
             }
 
@@ -263,7 +261,6 @@ namespace Kaguya.Discord.Commands.Reference
             string restrictions = match.Module.Preconditions
                                        .Where(x => x.GetType() == typeof(RestrictionAttribute))
                                        .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
-
 
             if (string.IsNullOrWhiteSpace(restrictions))
             {
