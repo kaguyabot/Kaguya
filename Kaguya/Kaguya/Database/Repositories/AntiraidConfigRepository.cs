@@ -18,7 +18,7 @@ namespace Kaguya.Database.Repositories
 
         public async Task<AntiRaidConfig> GetAsync(ulong key)
         {
-            return await _dbContext.AntiRaidConfigs.AsQueryable().Where(x => x.ServerId == key).FirstOrDefaultAsync();
+            return await _dbContext.AntiRaidConfigs.AsQueryable().AsNoTrackingWithIdentityResolution().Where(x => x.ServerId == key).FirstOrDefaultAsync();
         }
 
         public async Task DeleteAsync(ulong key)
@@ -34,7 +34,7 @@ namespace Kaguya.Database.Repositories
 
         public async Task UpdateAsync(AntiRaidConfig value)
         {
-            _dbContext.AntiRaidConfigs.Update(value);
+            _dbContext.AntiRaidConfigs.Attach(value).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
 
@@ -47,6 +47,7 @@ namespace Kaguya.Database.Repositories
         public async Task InsertOrUpdateAsync(AntiRaidConfig config)
         {
             AntiRaidConfig current = await GetAsync(config.ServerId);
+            
             if (current == null)
             {
                 await InsertAsync(config);
