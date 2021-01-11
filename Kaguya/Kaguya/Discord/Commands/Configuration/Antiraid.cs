@@ -16,6 +16,7 @@ using Kaguya.Discord.Parsers;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Microsoft.Extensions.Logging;
+using ProfanityFilter;
 
 namespace Kaguya.Discord.Commands.Configuration
 {
@@ -70,7 +71,7 @@ namespace Kaguya.Discord.Commands.Configuration
         {
             if (_currentlyActiveSetups.ContainsKey(Context.Guild.Id))
             {
-                await SendSetupConflictErrorAsync();
+                await SendSetupConflictErrorEmbedAsync();
 
                 return;
             }
@@ -238,9 +239,6 @@ namespace Kaguya.Discord.Commands.Configuration
             await _antiraidConfigRepository.InsertOrUpdateAsync(newArConfig);
             await SendEmbedAsync(GetFinalEmbed(newArConfig, server.CommandPrefix));
         }
-        
-        private async Task SendSetupConflictErrorAsync() => await SendBasicErrorEmbedAsync("There is already an active antiraid setup running in this server. Please complete the first " +
-                                                                                           "setup before beginning this one.");
 
         [Priority(0)]
         [Command(RunMode = RunMode.Async)]
@@ -248,7 +246,7 @@ namespace Kaguya.Discord.Commands.Configuration
         {
             if (_currentlyActiveSetups.ContainsKey(Context.Guild.Id))
             {
-                await SendSetupConflictErrorAsync();
+                await SendSetupConflictErrorEmbedAsync();
 
                 return;
             }
@@ -373,21 +371,34 @@ namespace Kaguya.Discord.Commands.Configuration
         }
 
         [Command("-setmsg")]
+        [Alias("-msg")]
         [Summary("Sets and enables the antiraid direct messages (DMs) for this server. Antiraid DMs " +
                  "are messages that get sent to each individually actioned user by the antiraid service.\n\n" +
-                 "This is useful if you want to be sure legitimate users can be notified of why they " +
-                 "were actioned from your server (i.e. " +
-                 "legitimate user joins your server while a separate raid is in-progress). This message can " +
-                 "be whatever you want these users to read after being actioned. It's not a bad idea to include a " +
-                 "link to a ban appeal or a permanent invite link, depending on how you action raids in your server.\n\n" +
+                 "This is nice because in the event of a false-positive (i.e. legitimate user joins the server while a raid is in progress), " +
+                 "the legitimate user can be sent a custom DM with an invite link or ban appeal form, for example.\n\n" +
                  "__Keywords:__ (use these keywords to fill-in data dynamically)\n" +
                  "- `{USERNAME}` - Name of user e.g. Kaguya\n" +
                  "- `{USERMENTION}` - Mentions user e.g. @Kaguya#0000 (highlighted, etc.)\n" +
-                 "- `{ACTION}` - Name of action e.g. `ban`, `kick`, `mute`, or `shadowban`\n" +
-                 "- `{SERVERNAME}` - Name of the server they were actioned from.")]
+                 "- `{ACTION}` - Name of action in past-tense form e.g. `banned`, `kicked`, `muted`, or `shadowbanned`\n" +
+                 "- `{SERVERNAME}` - Name of the server they were actioned from.\n\n" +
+                 "__Notice:__\n" +
+                 "Servers with Antiraid DMs that violate Discord's " + Global.DiscordTermsLink + " or " + Global.DiscordCommunityGuidelinesLink + " " +
+                 "will receive a permanent, irrevocable blacklist from using Kaguya.")]
         [Remarks("<message>")]
+        [Example("Dear {USERNAME},\n\nYou were flagged as part of a raid and were {ACTION} from {SERVERNAME}.\n\n" +
+                 "Ban appeal form: (some URL)\n" +
+                 "Invite link: (some URL)\n\n" +
+                 "We apologize for the inconvenience, we hope to see you in our server soon!", ExampleStringFormat.CodeblockMultiLine)]
         public async Task SetAntiraidMessageCommand([Remainder]string message)
         {
+            var profanityFilter = new ProfanityFilter.ProfanityFilter();
+            if (profanityFilter.ContainsProfanity(message))
+            {
+                await SendBasicErrorEmbedAsync("You filthy animal...try again with a cleaner message.");
+                
+                return;
+            }
+
             var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
             var curConfig = await _antiraidConfigRepository.GetAsync(Context.Guild.Id);
             if (curConfig == null)
@@ -576,6 +587,9 @@ namespace Kaguya.Discord.Commands.Configuration
 
             await SendEmbedAsync(embed);
         }
+        
+        private async Task SendSetupConflictErrorEmbedAsync() => await SendBasicErrorEmbedAsync("There is already an active antiraid setup running in this server. Please complete the first " +
+                                                                                           "setup before beginning this one.");
 
         private Embed GetStageOneEmbed()
         {
