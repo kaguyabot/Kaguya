@@ -229,11 +229,17 @@ namespace Kaguya.Internal.Services
         private void PruneOldCache(ConcurrentQueue<(DateTime userJoinTime, ulong userId)> element, uint windowLength)
         {
             var threshold = DateTime.Now.AddSeconds(-windowLength);
-            for (element.TryPeek(out var userJoinData); userJoinData.userJoinTime < threshold; element.TryPeek(out userJoinData))
+            while(element.TryPeek(out var userJoinData) && userJoinData.userJoinTime < threshold)
             {
                 if (element.TryDequeue(out var _))
                 {
                     _logger.LogInformation($"Prune occurred with successful dequeue: [User id: {userJoinData.userId} | Join time: {userJoinData.userJoinTime}]");
+                }
+                else
+                {
+                    _logger.LogError($"Dequeue failed user id: {userJoinData.userId} user join time: {userJoinData.userJoinTime}");
+
+                    break;
                 }
             }
         }
