@@ -46,7 +46,8 @@ namespace Kaguya.Database.Repositories
 
         public async Task InsertOrUpdateAsync(AntiRaidConfig config)
         {
-            if (await GetAsync(config.ServerId) == null)
+            AntiRaidConfig current = await GetAsync(config.ServerId);
+            if (current == null)
             {
                 await InsertAsync(config);
             }
