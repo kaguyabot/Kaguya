@@ -34,7 +34,7 @@ namespace Kaguya.Database.Repositories
 
         public async Task UpdateAsync(AntiRaidConfig value)
         {
-            _dbContext.AntiRaidConfigs.Attach(value).State = EntityState.Modified;
+            _dbContext.AntiRaidConfigs.Update(value);
             await _dbContext.SaveChangesAsync();
         }
 
