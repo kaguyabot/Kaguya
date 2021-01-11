@@ -177,9 +177,9 @@ namespace Kaguya.Discord.Commands.Reference
 
             // Title = capitalize the first letter of the alias only. Ex: $ping -> Ping
             string title = $"Help: " + aliasString;
-            string description = match.Summary; // ?? match.Module.Summary
+            string description = match.Summary;
             string examples = null;
-            string remarks = match.Remarks; // ?? match.Module.Remarks;
+            string remarks = match.Remarks;
             string subCommands = match.Module.Commands
                                       .Where(c => !c.Aliases[0].Equals(match.Aliases[0]))
                                       .Select(x => x.Aliases[0])
@@ -248,15 +248,18 @@ namespace Kaguya.Discord.Commands.Reference
                                                  .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission).ToList());
             }
 
+            // Required Permissions
             string requiredPermissions = requiredPermissionsList.Humanize(x => 
                 x != null 
                 ? $"`{x.Value.Humanize(LetterCasing.Title)}`" 
                 : default);
 
+            // Module
             string module = match.Module.Attributes
                                  .Where(x => x.GetType() == typeof(ModuleAttribute))
                                  .Humanize(x => $"`{((ModuleAttribute) x).Module.Humanize(LetterCasing.Title)}`");
 
+            // Restrictions
             string restrictions = match.Module.Preconditions
                                        .Where(x => x.GetType() == typeof(RestrictionAttribute))
                                        .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
@@ -269,6 +272,7 @@ namespace Kaguya.Discord.Commands.Reference
                                     .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
             }
             
+            // Remarks
             if (string.IsNullOrWhiteSpace(remarks))
             {
                 remarks = $"`{prefix}{match.Aliases[0]}`";
@@ -276,7 +280,15 @@ namespace Kaguya.Discord.Commands.Reference
             else
             {
                 // Puts all remarks on a new line surrounded in backticks.
-                remarks = remarks.Split("\n").Humanize(remark => $"`{prefix}{match.Aliases[0]} {remark}`\n");
+                string[] remarksSplits = remarks.Split("\n");
+                string newRemarks = string.Empty;
+
+                foreach (var split in remarksSplits)
+                {
+                    newRemarks += $"`{prefix}{match.Aliases[0]} {split}`\n";
+                }
+
+                remarks = newRemarks;
             }
             
             var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
