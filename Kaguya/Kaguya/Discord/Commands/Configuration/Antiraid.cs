@@ -78,7 +78,8 @@ namespace Kaguya.Discord.Commands.Configuration
 
             var newArConfig = new AntiRaidConfig
             {
-                ServerId = Context.Guild.Id
+                ServerId = Context.Guild.Id,
+                ConfigEnabled = true
             };
             
             bool stageOneClear = false;
@@ -185,9 +186,10 @@ namespace Kaguya.Discord.Commands.Configuration
                     // Stage 5
                     await SendEmbedAsync(GetStageFiveEmbed());
                     
-                    var nextMessage = await _interactivityService.NextMessageAsync(x => x.Author == Context.User, null, TimeSpan.FromMinutes(2));
                     while (true)
                     {
+                        var nextMessage = await _interactivityService.NextMessageAsync(x => x.Author == Context.User, null, TimeSpan.FromMinutes(2));
+
                         if (!ValidateStageFiveInput(nextMessage.Value.Content))
                         {
                             failureAttempts++;
