@@ -185,24 +185,42 @@ namespace Kaguya.Discord.Commands.Reference
                                       .OrderBy(x => x)
                                       .Humanize(x => $"`{prefix}{x}`\n");
 
+            // Examples
             // If this match has specific usage examples...
             if (match.Attributes.Any(x => x.GetType() == typeof(ExampleAttribute)))
             {
-                IEnumerable<string> exampleAttributeStrings = match.Attributes
-                                                             .Where(x => x.GetType() == typeof(ExampleAttribute))
-                                                             .Select(x => ((ExampleAttribute) x).Examples);
+                IEnumerable<Attribute> exampleAttributeStrings = match.Attributes.Where(x => x.GetType() == typeof(ExampleAttribute));
+                
 
                 // Null / whitespace check is performed in the ExamplesAttribute class constructor, so we can assert not-null via "!"
                 var exampleBuilder = new StringBuilder();
 
-                foreach (string line in exampleAttributeStrings)
+                foreach (Attribute attribute in exampleAttributeStrings)
                 {
+                    var attr = (ExampleAttribute) attribute;
+                    string line = attr.Examples;
                     // This is needed in the event the example is an empty string.
                     // This is used to showcase the command can be used by itself.
                     
                     // Formatting
                     string lineCpy = string.IsNullOrWhiteSpace(line) ? string.Empty : " " + line;
-                    exampleBuilder.AppendLine($"`{prefix}{match.Aliases[0]}{lineCpy}`");
+
+                    string variantText = $"{prefix}{match.Aliases[0]}{lineCpy}";
+                    ExampleStringFormat stringFormat = attr.Format;
+
+                    switch (stringFormat)
+                    {
+                        case ExampleStringFormat.None:
+                            exampleBuilder.AppendLine(variantText);
+                            break;
+                        case ExampleStringFormat.CodeblockMultiLine:
+                            exampleBuilder.AppendLine($"```\n{variantText}\n```");
+
+                            break;
+                        default: // CodeblockSingleLine is default.
+                            exampleBuilder.AppendLine($"`{variantText}`");
+                            break;
+                    }
                 }
 
                 examples = exampleBuilder.ToString();
