@@ -191,7 +191,6 @@ namespace Kaguya.Discord.Commands.Reference
             {
                 IEnumerable<Attribute> exampleAttributeStrings = match.Attributes.Where(x => x.GetType() == typeof(ExampleAttribute));
                 
-
                 // Null / whitespace check is performed in the ExamplesAttribute class constructor, so we can assert not-null via "!"
                 var exampleBuilder = new StringBuilder();
 
