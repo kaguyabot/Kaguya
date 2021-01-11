@@ -231,7 +231,6 @@ namespace Kaguya.Internal.Services
             var threshold = DateTime.Now.AddSeconds(-windowLength);
             for (element.TryPeek(out var userJoinData); userJoinData.userJoinTime < threshold; element.TryPeek(out userJoinData))
             {
-                _logger.LogInformation("Test");
                 if (element.TryDequeue(out var _))
                 {
                     _logger.LogInformation($"Prune occurred with successful dequeue: [User id: {userJoinData.userId} | Join time: {userJoinData.userJoinTime}]");
