@@ -22,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NekosSharp;
 using OsuSharp;
+using Victoria;
 
 namespace Kaguya
 {
@@ -64,7 +65,7 @@ namespace Kaguya
 
 			services.AddSingleton<ITimerService, TimerService>();
 			services.AddSingleton<IAntiraidService, AntiraidService>();
-
+			
 			services.AddControllers();
 
 			services.AddSingleton(new NekoClient("kaguya-v4"));
@@ -105,6 +106,11 @@ namespace Kaguya
 				return client;
 			});
 
+			services.AddLavaNode(x =>
+			{
+				x.SelfDeaf = true;
+			});
+			
 			services.AddSingleton(provider =>
 			{
 				var client = provider.GetRequiredService<DiscordShardedClient>();
