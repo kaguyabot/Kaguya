@@ -110,9 +110,39 @@ namespace Kaguya.Discord.Commands.Reference
                         aliases = aliasSb.ToString();
                     }
                     
-                    if (modInfo.Attributes.Any(x => x.Equals(new RestrictionAttribute(ModuleRestriction.PremiumOnly))))
+                    // Check the module for premium attributes.
+                    if (modInfo.Preconditions.Any(x => x.GetType() == typeof(RestrictionAttribute)))
                     {
-                        premiumString = " {$}";
+                        var modRestrictionAttrs = modInfo.Preconditions.Where(x => x.GetType() == typeof(RestrictionAttribute));
+                        foreach (var attr in modRestrictionAttrs)
+                        {
+                            if ((((RestrictionAttribute) attr).Restriction & ModuleRestriction.PremiumOnly) != 0)
+                            {
+                                premiumString = " {All $}";
+
+                                break;
+                            }
+                        }
+                    }
+
+                    // Module itself is not restricted. Let's check sub-commands.
+                    int premCount = 0;
+                    if (premiumString == string.Empty && modInfo.Commands.Select(x => x.Preconditions).Any())
+                    {
+                        var matchingCmds = modInfo.Commands.Where(x => x.Preconditions.Any(y => y.GetType() == typeof(RestrictionAttribute)));
+                        foreach (var cmd in matchingCmds)
+                        {
+                            var preconditions = cmd.Preconditions;
+                            if (preconditions.Any(x => x.GetType() == typeof(RestrictionAttribute)))
+                            {
+                                premCount++;
+                            }
+                        }
+                    }
+
+                    if (premCount > 0)
+                    {
+                        premiumString = $" {{{premCount}x $}}";
                     }
                     
                     var cmdSb = new StringBuilder()
@@ -345,7 +375,7 @@ namespace Kaguya.Discord.Commands.Reference
             {
                 embed.Fields.Insert(1, new EmbedFieldBuilder
                 {
-                    IsInline = true,
+                    IsInline = false,
                     Name = "Restrictions",
                     Value = restrictions
                 });
