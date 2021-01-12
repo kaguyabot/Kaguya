@@ -240,6 +240,48 @@ namespace Kaguya.Discord.Commands.Administration
         [Remarks("<role name> [hex color code]")]
         [Example("\"birds who can't fly\"")]
         [Example("\"birds who can't fly\" ABE3DE")]
+        public async Task CreateRoleCommand(string roleName, string hex = null)
+        {
+            if (hex == null)
+            {
+                await CreateRoleCommand(roleName);
+
+                return;
+            }
+            if (!hex.StartsWith("0x"))
+            {
+                hex = $"0x{hex.ToUpper()}";
+            }
+
+            Color color;
+
+            try
+            {
+                uint convertedHex = Convert.ToUInt32(hex, 16);
+                color = new Color(convertedHex);
+            }
+            catch (Exception)
+            {
+                await SendBasicErrorEmbedAsync($"The color {hex.AsBold()} is invalid. If your role has spaces, please " +
+                                               $"wrap the role name in \"quotation marks\" and specify an optional color after that.");
+
+                return;
+            }
+            
+            try
+            {
+                await Context.Guild.CreateRoleAsync(roleName, null, color, false, null);
+            }
+            catch (Exception e)
+            {
+                await SendBasicErrorEmbedAsync("Failed to create role " + roleName.AsBold() + $"\nError: {e.Message.AsBold()}");
+
+                return;
+            }
+
+            await SendBasicEmbedAsync($"Created role {roleName.AsBold()} with color {hex.Replace("0x", "#").AsBold()}", color);
+        }
+        
         public async Task CreateRoleCommand(string roleName)
         {
             try
@@ -252,29 +294,6 @@ namespace Kaguya.Discord.Commands.Administration
             }
             
             await SendBasicEmbedAsync("Created role " + roleName.AsBold(), KaguyaColors.Default);
-        }
-        
-        [Command("-create")]
-        [Alias("-c")]
-        public async Task CreateRoleCommand(string roleName, string hex)
-        {
-            if (!hex.StartsWith("0x"))
-            {
-                hex = $"0x{hex.ToUpper()}";
-            }
-            
-            Color color = new Color(Convert.ToUInt32(hex, 16));
-            
-            try
-            {
-                await Context.Guild.CreateRoleAsync(roleName, null, color, false, null);
-            }
-            catch (Exception e)
-            {
-                await SendBasicErrorEmbedAsync("Failed to create role " + roleName.AsBold() + $"\nError: {e.Message.AsBold()}");
-            }
-            
-            await SendBasicEmbedAsync($"Created role {roleName.AsBold()} with color {hex.AsBold()}", color);
         }
 
         [Command("-createlist")]
