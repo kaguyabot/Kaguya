@@ -1,6 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
+using Kaguya.Discord;
 using Kaguya.Internal.Services;
+using Victoria;
+using Victoria.EventArgs;
 
 namespace Kaguya.Internal.Events
 {
@@ -22,6 +26,27 @@ namespace Kaguya.Internal.Events
             var serverId = user.Guild.Id;
 
             await _arService.TriggerAsync(serverId, userId);
+        }
+
+        public async Task OnTrackEnded(TrackEndedEventArgs args)
+        {
+            var queue = args.Player.Queue;
+            LavaTrack next = queue.Peek();
+            
+            if (next == null)
+            {
+                var disconnectEmbed = new KaguyaEmbedBuilder(Color.Blue)
+                                      .WithDescription("There are no tracks left in this queue. Disconnecting.")
+                                      .Build();
+                
+                await args.Player.VoiceChannel.DisconnectAsync();
+                await args.Player.TextChannel.SendMessageAsync(embed: disconnectEmbed);
+            }
+            else
+            {
+                // todo: Auto-play. Needs testing.
+                await args.Player.PlayAsync(next);
+            }
         }
     }
 }
