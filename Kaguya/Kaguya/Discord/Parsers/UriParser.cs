@@ -15,7 +15,7 @@ namespace Kaguya.Discord.Parsers
             var splits = input.Split(' ');
             foreach (string s in splits)
             {
-                if (Uri.TryCreate(s, UriKind.RelativeOrAbsolute, out var result))
+                if (Uri.TryCreate(s, UriKind.Absolute, out var result))
                 {
                     if (result.IsAbsoluteUri)
                     {
