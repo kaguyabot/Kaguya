@@ -13,9 +13,12 @@ namespace Kaguya
         /// <summary>
         /// Formatted as such: [Kaguya Premium](StoreUrl)
         /// </summary>
-        public const string StoreNameWithLink = "[Kaguya Premium](" + StoreUrl + ")";
+        public const string StoreLink = "[Kaguya Premium](" + StoreUrl + ")";
         public const string SupportDiscordUrl = "https://discord.gg/aumCJhr";
         public const string InviteUrl = "https://discord.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=536341759";
+        public const string DiscordTermsLink = "[Terms of Service](https://discord.com/terms)";
+        public const string DiscordCommunityGuidelinesLink = "[Community Guidelines](https://discord.com/guidelines)";
+        
         public static readonly string Version = "v4.0-beta-" + GetStartDate();
 
         /// <summary>

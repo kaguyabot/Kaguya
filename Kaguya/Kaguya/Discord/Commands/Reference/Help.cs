@@ -129,8 +129,6 @@ namespace Kaguya.Discord.Commands.Reference
                 curPageBuilder.Description += $"```\nUse `{server.CommandPrefix}help <command name>` for command documentation.\n" +
                                               $"Example: `{server.CommandPrefix}help ban`\n\n";
 
-
-
                                               pages[i] = curPageBuilder;
             }
 
@@ -177,9 +175,9 @@ namespace Kaguya.Discord.Commands.Reference
 
             // Title = capitalize the first letter of the alias only. Ex: $ping -> Ping
             string title = $"Help: " + aliasString;
-            string description = match.Summary; // ?? match.Module.Summary
+            string description = match.Summary;
             string examples = null;
-            string remarks = match.Remarks; // ?? match.Module.Remarks;
+            string remarks = match.Remarks;
             string subCommands = match.Module.Commands
                                       .Where(c => !c.Aliases[0].Equals(match.Aliases[0]))
                                       .Select(x => x.Aliases[0])
@@ -187,24 +185,41 @@ namespace Kaguya.Discord.Commands.Reference
                                       .OrderBy(x => x)
                                       .Humanize(x => $"`{prefix}{x}`\n");
 
+            // Examples
             // If this match has specific usage examples...
             if (match.Attributes.Any(x => x.GetType() == typeof(ExampleAttribute)))
             {
-                IEnumerable<string> exampleAttributeStrings = match.Attributes
-                                                             .Where(x => x.GetType() == typeof(ExampleAttribute))
-                                                             .Select(x => ((ExampleAttribute) x).Examples);
-
+                IEnumerable<Attribute> exampleAttributeStrings = match.Attributes.Where(x => x.GetType() == typeof(ExampleAttribute));
+                
                 // Null / whitespace check is performed in the ExamplesAttribute class constructor, so we can assert not-null via "!"
                 var exampleBuilder = new StringBuilder();
 
-                foreach (string line in exampleAttributeStrings)
+                foreach (Attribute attribute in exampleAttributeStrings)
                 {
+                    var attr = (ExampleAttribute) attribute;
+                    string line = attr.Examples;
                     // This is needed in the event the example is an empty string.
                     // This is used to showcase the command can be used by itself.
                     
                     // Formatting
                     string lineCpy = string.IsNullOrWhiteSpace(line) ? string.Empty : " " + line;
-                    exampleBuilder.AppendLine($"`{prefix}{match.Aliases[0]}{lineCpy}`");
+
+                    string variantText = $"{prefix}{match.Aliases[0]}{lineCpy}";
+                    ExampleStringFormat stringFormat = attr.Format;
+
+                    switch (stringFormat)
+                    {
+                        case ExampleStringFormat.None:
+                            exampleBuilder.AppendLine(variantText);
+                            break;
+                        case ExampleStringFormat.CodeblockMultiLine:
+                            exampleBuilder.AppendLine($"```\n{variantText}\n```");
+
+                            break;
+                        default: // CodeblockSingleLine is default.
+                            exampleBuilder.AppendLine($"`{variantText}`");
+                            break;
+                    }
                 }
 
                 examples = exampleBuilder.ToString();
@@ -248,19 +263,21 @@ namespace Kaguya.Discord.Commands.Reference
                                                  .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission).ToList());
             }
 
+            // Required Permissions
             string requiredPermissions = requiredPermissionsList.Humanize(x => 
                 x != null 
                 ? $"`{x.Value.Humanize(LetterCasing.Title)}`" 
                 : default);
 
+            // Module
             string module = match.Module.Attributes
                                  .Where(x => x.GetType() == typeof(ModuleAttribute))
                                  .Humanize(x => $"`{((ModuleAttribute) x).Module.Humanize(LetterCasing.Title)}`");
 
+            // Restrictions
             string restrictions = match.Module.Preconditions
                                        .Where(x => x.GetType() == typeof(RestrictionAttribute))
                                        .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
-
 
             if (string.IsNullOrWhiteSpace(restrictions))
             {
@@ -269,6 +286,7 @@ namespace Kaguya.Discord.Commands.Reference
                                     .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
             }
             
+            // Remarks
             if (string.IsNullOrWhiteSpace(remarks))
             {
                 remarks = $"`{prefix}{match.Aliases[0]}`";
@@ -276,7 +294,15 @@ namespace Kaguya.Discord.Commands.Reference
             else
             {
                 // Puts all remarks on a new line surrounded in backticks.
-                remarks = remarks.Split("\n").Humanize(remark => $"`{prefix}{match.Aliases[0]} {remark}`\n");
+                string[] remarksSplits = remarks.Split("\n");
+                string newRemarks = string.Empty;
+
+                foreach (var split in remarksSplits)
+                {
+                    newRemarks += $"`{prefix}{match.Aliases[0]} {split}`\n";
+                }
+
+                remarks = newRemarks;
             }
             
             var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)

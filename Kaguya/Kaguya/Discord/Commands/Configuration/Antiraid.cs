@@ -16,6 +16,7 @@ using Kaguya.Discord.Parsers;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Microsoft.Extensions.Logging;
+using ProfanityFilter;
 
 namespace Kaguya.Discord.Commands.Configuration
 {
@@ -49,18 +50,33 @@ namespace Kaguya.Discord.Commands.Configuration
             _commonEmotes = commonEmotes;
         }
 
+        [Priority(1)]
         [Command(RunMode = RunMode.Async)]
-        [Summary("Displays an interactive setup utility for configuring the Kaguya Antiraid service.")]
+        [Summary("Displays an interactive setup utility for configuring the Kaguya Antiraid service.\n\n" +
+                 "You can also use this command with parameters to bypass the interactive setup entirely.\n\n" +
+                 "Parameters:\n" +
+                 "`<# users>` - The threshold of users who join before it is classified as a raid.\n" +
+                 "`<# seconds>` - The rate of frequency, in seconds, that `<# users>` users join the server " +
+                 "before it is classified as a raid.\n" +
+                 "`<action>` - How to punish the raiders. `kick`, `mute`, `ban`, and `shadowban` are the only valid responses.\n" +
+                 "`[punishment duration]` - Optional time duration to punish users for, if an action is able to be made temporary. `kick`s are " +
+                 "unable to be made temporary, because a user has to rejoin a server manually. Example time: `30m` or `5d2h25m30s`.")]
+        [Remarks("\n<# users> <# seconds> <action> [punishment duration]")]
+        [Example("")]
+        [Example("5 20 kick")]
+        [Example("5 20 ban")]
+        [Example("5 20 mute 7d")]
+        [Example("5 20 shadowban 2h30m")]
         public async Task AntiraidSetupCommand()
         {
             if (_currentlyActiveSetups.ContainsKey(Context.Guild.Id))
             {
-                await SendBasicErrorEmbedAsync("There is already an active antiraid setup running in this server. Please complete the first " +
-                                               "setup before beginning this one.");
+                await SendSetupConflictErrorEmbedAsync();
+
                 return;
             }
 
-            _currentlyActiveSetups.GetOrAdd(Context.Guild.Id, true);
+            Add(Context.Guild.Id);
             
             var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
             var config = await _antiraidConfigRepository.GetAsync(Context.Guild.Id);
@@ -148,7 +164,7 @@ namespace Kaguya.Discord.Commands.Configuration
             {
                 var userMessage = await _interactivityService.NextMessageAsync(x => x.Author == Context.User, null, TimeSpan.FromMinutes(2));
                 
-                if (!ValidateStageThreeInput(userMessage.Value.Content))
+                if (!ValidateActionInput(userMessage.Value.Content))
                 {
                     failureAttempts++;
 
@@ -190,7 +206,7 @@ namespace Kaguya.Discord.Commands.Configuration
                     {
                         var nextMessage = await _interactivityService.NextMessageAsync(x => x.Author == Context.User, null, TimeSpan.FromMinutes(2));
 
-                        if (!ValidateStageFiveInput(nextMessage.Value.Content))
+                        if (!ValidatePunishmentDurationInput(nextMessage.Value.Content))
                         {
                             failureAttempts++;
                             
@@ -205,7 +221,7 @@ namespace Kaguya.Discord.Commands.Configuration
                         }
                         else
                         {
-                            newArConfig.PunishmentLength = GetStageFiveTimeSpan(nextMessage.Value.Content);
+                            newArConfig.PunishmentLength = GetPunishmentDurationTimeSpan(nextMessage.Value.Content);
 
                             break;
                         }
@@ -219,6 +235,107 @@ namespace Kaguya.Discord.Commands.Configuration
 
             // End
             Remove(server.ServerId);
+            
+            await _antiraidConfigRepository.InsertOrUpdateAsync(newArConfig);
+            await SendEmbedAsync(GetFinalEmbed(newArConfig, server.CommandPrefix));
+        }
+
+        [Priority(0)]
+        [Command(RunMode = RunMode.Async)]
+        public async Task AntiraidSetupCommand(uint userThreshold, uint secondsThreshold, string action, string timeString = null)
+        {
+            if (_currentlyActiveSetups.ContainsKey(Context.Guild.Id))
+            {
+                await SendSetupConflictErrorEmbedAsync();
+
+                return;
+            }
+         
+            Add(Context.Guild.Id);
+            
+            var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
+
+            if (!await ValidateUserThreshold(userThreshold))
+            {
+                Remove(Context.Guild.Id);
+                
+                return;
+            }
+
+            if (!await ValidateSecondsThreshold(secondsThreshold))
+            {
+                Remove(Context.Guild.Id);
+                
+                return;
+            }
+
+            if (!ValidateActionInput(action))
+            {
+                Remove(Context.Guild.Id);
+                
+                return;
+            }
+
+            AntiraidAction parsedAction = GetAntiraidActionEnum(action);
+            if (parsedAction == AntiraidAction.Kick && timeString != null)
+            {
+                Remove(Context.Guild.Id);
+                
+                await SendBasicErrorEmbedAsync("You cannot specify a punishment duration with the kick action.");
+                
+                return;
+            }
+
+            TimeSpan? parsedTime = null;
+            if (parsedAction != AntiraidAction.Kick && timeString != null)
+            {
+                if (!ValidatePunishmentDurationInput(timeString))
+                {
+                    Remove(Context.Guild.Id);
+
+                    await SendBasicErrorEmbedAsync($"I couldn't parse your punishment duration. Please review the `{server.CommandPrefix}help antiraid` command " +
+                                                   $"for proper usage examples.\n\n" +
+                                                   $"The duration must be at least 5 seconds and no more than 1 year.");
+                    return;
+                }
+                else
+                {
+                    parsedTime = GetPunishmentDurationTimeSpan(timeString);
+                }
+            }
+
+            bool overwrite = false;
+            var curArConfig = await _antiraidConfigRepository.GetAsync(Context.Guild.Id);
+            if (curArConfig != null)
+            {
+                if (!await ConfirmConfigOverwriteAsync(curArConfig))
+                {
+                    Remove(Context.Guild.Id);
+
+                    return;
+                }
+
+                overwrite = true;
+            }
+
+            var newArConfig = new AntiRaidConfig
+            {
+                ServerId = Context.Guild.Id,
+                UserThreshold = userThreshold,
+                Seconds = secondsThreshold,
+                Action = parsedAction,
+                PunishmentLength = parsedTime,
+                AntiraidPunishmentDirectMessage = overwrite ? curArConfig.AntiraidPunishmentDirectMessage : null,
+                ConfigEnabled = true,
+                PunishmentDmEnabled = false
+            };
+
+            if (newArConfig.AntiraidPunishmentDirectMessage != null)
+            {
+                newArConfig.PunishmentDmEnabled = true;
+            }
+
+            Remove(Context.Guild.Id);
             
             await _antiraidConfigRepository.InsertOrUpdateAsync(newArConfig);
             await SendEmbedAsync(GetFinalEmbed(newArConfig, server.CommandPrefix));
@@ -251,6 +368,54 @@ namespace Kaguya.Discord.Commands.Configuration
             
             await SendBasicEmbedAsync($"This antiraid config is now " + newState.AsBold() + ".\n\n" +
                                       $"Config:\n{GetAntiraidConfigString(curConfig)}", KaguyaColors.LightYellow);
+        }
+
+        [Command("-setmsg")]
+        [Alias("-msg")]
+        [Summary("Sets and enables the antiraid direct messages (DMs) for this server. Antiraid DMs " +
+                 "are messages that get sent to each individually actioned user by the antiraid service.\n\n" +
+                 "This is nice because in the event of a false-positive (i.e. legitimate user joins the server while a raid is in progress), " +
+                 "the legitimate user can be sent a custom DM with an invite link or ban appeal form, for example.\n\n" +
+                 "__Keywords:__ (use these keywords to fill-in data dynamically)\n" +
+                 "- `{USERNAME}` - Name of user e.g. Kaguya\n" +
+                 "- `{USERMENTION}` - Mentions user e.g. @Kaguya#0000 (highlighted, etc.)\n" +
+                 "- `{ACTION}` - Name of action in past-tense form e.g. `banned`, `kicked`, `muted`, or `shadowbanned`\n" +
+                 "- `{SERVERNAME}` - Name of the server they were actioned from.\n\n" +
+                 "__Notice:__\n" +
+                 "Servers with Antiraid DMs that violate Discord's " + Global.DiscordTermsLink + " or " + Global.DiscordCommunityGuidelinesLink + " " +
+                 "will receive a permanent, irrevocable blacklist from using Kaguya.")]
+        [Remarks("<message>")]
+        [Example("Dear {USERNAME},\n\nYou were flagged as part of a raid and were {ACTION} from {SERVERNAME}.\n\n" +
+                 "Ban appeal form: (some URL)\n" +
+                 "Invite link: (some URL)\n\n" +
+                 "We apologize for the inconvenience, we hope to see you in our server soon!", ExampleStringFormat.CodeblockMultiLine)]
+        public async Task SetAntiraidMessageCommand([Remainder]string message)
+        {
+            var profanityFilter = new ProfanityFilter.ProfanityFilter();
+            if (profanityFilter.ContainsProfanity(message))
+            {
+                await SendBasicErrorEmbedAsync("You filthy animal...try again with a cleaner message.");
+                
+                return;
+            }
+
+            var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
+            var curConfig = await _antiraidConfigRepository.GetAsync(Context.Guild.Id);
+            if (curConfig == null)
+            {
+                await SendBasicErrorEmbedAsync("I'm sorry, but you need to setup the antiraid configuration " +
+                                               $"for this server first through the `{server.CommandPrefix}antiraid` " +
+                                               $"command before configuring a DM message.");
+
+                return;
+            }
+
+            curConfig.AntiraidPunishmentDirectMessage = message;
+
+            await SendBasicSuccessEmbedAsync($"I've set this server's Antiraid DM to the following:\n\n" +
+                                             $"{message}\n\n" +
+                                             $"Any keywords used will be replaced with the correct information at the time " +
+                                             $"of a raid.");
         }
 
         private async Task<bool> SendFailureEmbedAsync(int failureAttempts)
@@ -306,7 +471,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
             string userPunishDuration = "User punishment duration: ";
             
-            if (config.Action == AntiraidAction.Ban || config.Action == AntiraidAction.Mute)
+            if (config.Action == AntiraidAction.Ban || config.Action == AntiraidAction.Mute || config.Action == AntiraidAction.Shadowban)
             {
                 string durStr = "Indefinite";
 
@@ -342,26 +507,45 @@ namespace Kaguya.Discord.Commands.Configuration
                 return false;
             }
 
+            if (!await ValidateUserThreshold(userThreshold))
+                return false;
+
+            return true;
+        }
+
+        private async Task<bool> ValidateUserThreshold(uint userThreshold)
+        {
             if (userThreshold < 2)
             {
                 await SendBasicErrorEmbedAsync("Please enter a user value that is greater than 1. " +
                                                "A raid of 1 user would mean any user who joins your server would be actioned.".AsItalics() +
                                                "\n\nPlease try again.");
-                    
+
                 return false;
             }
 
             if (userThreshold > 500)
             {
                 await SendBasicErrorEmbedAsync("The user threshold must be no greater than 500. Please try again with a new number.");
-                    
+
                 return false;
             }
-                
+
             return true;
         }
 
-        private bool ValidateStageThreeInput(string input)
+        private async Task<bool> ValidateSecondsThreshold(uint secondsThreshold)
+        {
+            if (secondsThreshold < 5 || secondsThreshold > 600)
+            {
+                await SendBasicErrorEmbedAsync("The seconds threshold must be at least 5 and no greater than 600.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateActionInput(string input)
         {
             return input.ToLower() switch
             {
@@ -373,7 +557,7 @@ namespace Kaguya.Discord.Commands.Configuration
             };
         }
 
-        private bool ValidateStageFiveInput(string input)
+        private bool ValidatePunishmentDurationInput(string input)
         {
             var timeParser = new TimeParser(input);
             var parsedTime = timeParser.ParseTime();
@@ -381,7 +565,7 @@ namespace Kaguya.Discord.Commands.Configuration
             return parsedTime != TimeSpan.Zero && parsedTime >= TimeSpan.FromSeconds(5) && parsedTime <= TimeSpan.FromDays(365);
         }
 
-        private TimeSpan GetStageFiveTimeSpan(string input) => new TimeParser(input).ParseTime();
+        private TimeSpan GetPunishmentDurationTimeSpan(string input) => new TimeParser(input).ParseTime();
 
         private AntiraidAction GetAntiraidActionEnum(string input)
         {
@@ -403,6 +587,9 @@ namespace Kaguya.Discord.Commands.Configuration
 
             await SendEmbedAsync(embed);
         }
+        
+        private async Task SendSetupConflictErrorEmbedAsync() => await SendBasicErrorEmbedAsync("There is already an active antiraid setup running in this server. Please complete the first " +
+                                                                                           "setup before beginning this one.");
 
         private Embed GetStageOneEmbed()
         {
@@ -490,8 +677,7 @@ namespace Kaguya.Discord.Commands.Configuration
         {
             _currentlyActiveSetups.TryRemove(id, out var _);
         }
+        
+        private static void Add(ulong id) => _currentlyActiveSetups.GetOrAdd(id, true);
     }
-    
-    // todo: Antiraid toggle command.
-    // todo: Antiraid -s command to skip setup process.
 }
