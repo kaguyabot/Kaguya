@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Microsoft.Extensions.Logging;
@@ -138,9 +137,15 @@ namespace Kaguya.Discord.Commands.Fun
         
         private async Task<Embed> GetEmotionEmbed(EmotionType emotion, string user = null)
         {
+            if (user == Context.User.Mention)
+            {
+                user = "themselves";
+            }
+            
+            string emotionString = user == null ? $"needs to be {GetEmotionPastTense(emotion)}." : $"just {GetEmotionPastTense(emotion)} {user}!";
             return new KaguyaEmbedBuilder(KaguyaColors.Blue)
                    .WithAuthor(Context.User.Username, Context.User.GetAvatarUrl())
-                   .WithDescription($"{Context.User.Mention} just " + GetEmotionPastTense(emotion) + " " + (user ?? "the air").AsBold() + "!")
+                   .WithDescription($"{Context.User.Mention} {emotionString}")
                    .WithImageUrl((await GetRequest(emotion)).ImageUrl)
                    .Build();
         }
