@@ -3,6 +3,7 @@ using Discord.Commands;
 using Kaguya.Internal.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Enums;
@@ -38,9 +39,13 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 
             var embed = new KaguyaEmbedBuilder(KaguyaColors.Orange)
                         .WithTitle("System Message")
-                        .WithDescription("The owner of the bot has sent you a message.\\n" +
+                        .WithDescription("The owner of the bot has sent you a message.\n\n" +
                                          "Contents:".AsBoldUnderlined() +
-                                         $"\n\n{message}");
+                                         $"\n{message}")
+                        .WithFooter(new EmbedFooterBuilder
+                        {
+                            Text = "Please note, replies in this chat channel will not be seen."
+                        });
             
             try
             {
