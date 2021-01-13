@@ -13,13 +13,13 @@ namespace Kaguya.Discord
         private readonly DiscordShardedClient _client;
         private readonly IOptions<DiscordConfigurations> _configurations;
 
-        public IEmote[] EmojisOneThroughFive =
+        public readonly IEmote[] EmojisOneThroughFive =
         {
             new Emoji("1️⃣"),
-            new Emoji("2️"),
-            new Emoji("3️"),
-            new Emoji("4️"),
-            new Emoji("5️")
+            new Emoji("2️⃣"),
+            new Emoji("3️⃣"),
+            new Emoji("4️⃣"),
+            new Emoji("5️⃣")
         };
         public IEmote CheckMarkEmoji => new Emoji("✅");
         public IEmote RedCrossEmote => GetEmote("RedCross");
