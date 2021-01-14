@@ -106,13 +106,13 @@ namespace Kaguya.Discord.Commands.Music
                 {
                     await player.PlayAsync(track);
                     _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(10), 
-                        embed: GetNowPlayingEmbedForTrack(track));
+                        embed: MusicEmbeds.GetNowPlayingEmbedForTrack(track));
                 }
                 else
                 {
                     player.Queue.Enqueue(track);
                     _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(10), 
-                        embed: GetQueuedEmbedForTrack(track, player.Queue.Count));
+                        embed: MusicEmbeds.GetQueuedEmbedForTrack(track, player.Queue.Count));
                 }
             }
         }
@@ -125,25 +125,6 @@ namespace Kaguya.Discord.Commands.Music
                 Value = $"Uploader: {track.Author}\n" +
                         $"Duration: {track.Duration.HumanizeTraditionalReadable()}\n"
             };
-        }
-
-        private Embed GetNowPlayingEmbedForTrack(LavaTrack track)
-        {
-            return new KaguyaEmbedBuilder(Color.Blue)
-                   .WithDescription($"🎵 Now playing:\n" +
-                                    $"Title: {track.Title.AsBold()}\n" +
-                                    $"Duration: {track.Duration.HumanizeTraditionalReadable().AsBold()}")
-                   .Build();
-        }
-
-        private Embed GetQueuedEmbedForTrack(LavaTrack track, int queueSize)
-        {
-            return new KaguyaEmbedBuilder(Color.Purple)
-                   .WithDescription($"⏳ Queued:\n" +
-                                    $"Title: {track.Title.AsBold()}\n" +
-                                    $"Duration: {track.Duration.HumanizeTraditionalReadable().AsBold()}\n" +
-                                    $"Queue Position: {queueSize}.")
-                   .Build();
         }
     }
 }
