@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Victoria;
@@ -22,7 +23,14 @@ namespace Kaguya.Internal.Music
 
             if (!lavaNode.HasPlayer(guildUser.Guild))
             {
-                await lavaNode.JoinAsync(voiceChannel, textChannel);
+                try
+                {
+                    await lavaNode.JoinAsync(voiceChannel, textChannel);
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
             }
 
             return true;
