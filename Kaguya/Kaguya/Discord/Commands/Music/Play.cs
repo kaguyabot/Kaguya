@@ -35,8 +35,9 @@ namespace Kaguya.Discord.Commands.Music
         [Command]
         [Summary("Immediately plays or enqueues the most popular result of the requested search.\n" +
                  "Use `-f` to play the song immediately, even if there is an existing queue. `-f` will " +
-                 "overwrite whatever song is currently playing. Use this carefully!")]
-        [Remarks("<search>\n-f <search>")]
+                 "overwrite whatever song is currently playing. Use this carefully!\n\n" +
+                 "This command can be invoked without any paramaters to resume a paused player.")]
+        [Remarks("\n<search>\n-f <search>")]
         [Example("Road of Resistance")]
         [Example("-f My song")]
         public async Task PlayCommand([Remainder]string search)
@@ -78,6 +79,29 @@ namespace Kaguya.Discord.Commands.Music
                 player.Queue.Enqueue(track);
                 _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
                     embed: MusicEmbeds.GetQueuedEmbedForTrack(track, player.Queue.Count));
+            }
+        }
+
+        [Command]
+        public async Task PlayCommand()
+        {
+            if (!await _lavaNode.SafeJoinAsync(Context.User, Context.Channel))
+            {
+                await SendBasicErrorEmbedAsync("Failed to join voice channel. Are you in a voice channel?");
+
+                return;
+            }
+
+            LavaPlayer player = _lavaNode.GetPlayer(Context.Guild);
+
+            if (player.PlayerState == PlayerState.Paused)
+            {
+                await player.ResumeAsync();
+                await SendBasicSuccessEmbedAsync("Resumed the player.");
+            }
+            else
+            {
+                await SendBasicErrorEmbedAsync("The player must be paused in order to resume it.");
             }
         }
     }
