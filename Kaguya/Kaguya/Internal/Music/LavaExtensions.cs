@@ -25,7 +25,7 @@ namespace Kaguya.Internal.Music
             {
                 try
                 {
-                    await lavaNode.JoinAsync(voiceChannel, textChannel);
+                    await (await lavaNode.JoinAsync(voiceChannel, textChannel)).UpdateVolumeAsync(100);
                 }
                 catch (Exception e)
                 {
