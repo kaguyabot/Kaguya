@@ -41,7 +41,13 @@ namespace Kaguya.Discord.Commands.Music
         [Example("-f My song")]
         public async Task PlayCommand([Remainder]string search)
         {
-            bool forcePlay = search.StartsWith("-f");
+            bool forcePlay = search.StartsWith("-f ");
+
+            if (forcePlay)
+            {
+                search = search[3..];
+            }
+            
             if (!await _lavaNode.SafeJoinAsync(Context.User, Context.Channel))
             {
                 await SendBasicErrorEmbedAsync("Failed to join voice channel. Are you in a voice channel?");
