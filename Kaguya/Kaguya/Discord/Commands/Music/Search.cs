@@ -105,13 +105,13 @@ namespace Kaguya.Discord.Commands.Music
                 if (player.Queue.Count == 0 && player.PlayerState != PlayerState.Playing)
                 {
                     await player.PlayAsync(track);
-                    _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(10), 
+                    _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
                         embed: MusicEmbeds.GetNowPlayingEmbedForTrack(track));
                 }
                 else
                 {
                     player.Queue.Enqueue(track);
-                    _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(10), 
+                    _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
                         embed: MusicEmbeds.GetQueuedEmbedForTrack(track, player.Queue.Count));
                 }
             }

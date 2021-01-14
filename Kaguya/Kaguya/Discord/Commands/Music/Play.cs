@@ -33,10 +33,15 @@ namespace Kaguya.Discord.Commands.Music
         }
 
         [Command]
-        [Summary("Immediately plays or enqueues the most popular result of the requested search.")]
-        [Remarks("<search>")] // Delete if no remarks needed.
+        [Summary("Immediately plays or enqueues the most popular result of the requested search.\n" +
+                 "Use `-f` to play the song immediately, even if there is an existing queue. `-f` will " +
+                 "overwrite whatever song is currently playing. Use this carefully!")]
+        [Remarks("<search>\n-f <search>")]
+        [Example("Road of Resistance")]
+        [Example("-f My song")]
         public async Task PlayCommand([Remainder]string search)
         {
+            bool forcePlay = search.StartsWith("-f");
             if (!await _lavaNode.SafeJoinAsync(Context.User, Context.Channel))
             {
                 await SendBasicErrorEmbedAsync("Failed to join voice channel. Are you in a voice channel?");
@@ -55,17 +60,17 @@ namespace Kaguya.Discord.Commands.Music
 
                 return;
             }
-
-            if (player.Queue.Count == 0 && player.PlayerState != PlayerState.Playing)
+            
+            if (forcePlay || player.Queue.Count == 0 && player.PlayerState != PlayerState.Playing)
             {
                 await player.PlayAsync(track);
-                _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(10), 
+                _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
                     embed: MusicEmbeds.GetNowPlayingEmbedForTrack(track));
             }
             else
             {
                 player.Queue.Enqueue(track);
-                _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(10), 
+                _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
                     embed: MusicEmbeds.GetQueuedEmbedForTrack(track, player.Queue.Count));
             }
         }
