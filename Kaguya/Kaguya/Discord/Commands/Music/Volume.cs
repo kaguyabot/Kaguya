@@ -12,7 +12,7 @@ namespace Kaguya.Discord.Commands.Music
 {
     [Module(CommandModule.Music)]
     [Group("volume")]
-    [Alias("v")]
+    [Alias("v", "vol")]
     [RequireUserPermission(GuildPermission.Connect)]
     [RequireBotPermission(GuildPermission.Connect)]
     [RequireBotPermission(GuildPermission.Speak)]
