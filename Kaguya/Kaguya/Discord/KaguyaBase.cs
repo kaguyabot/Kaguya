@@ -10,6 +10,7 @@ namespace Kaguya.Discord
     public class KaguyaBase<T> : ModuleBase<ScopedCommandContext>
     {
         private readonly ILogger<T> _logger;
+        
         protected KaguyaBase(ILogger<T> logger) { _logger = logger; }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace Kaguya.Discord
             {
                 x.Content = null;
                 x.Embed = new KaguyaEmbedBuilder(KaguyaColors.Orange)
-                          .WithTitle("Expired! ⏳")
+                          .WithTitle("⏳ Expired!")
                           .Build();
             });
 

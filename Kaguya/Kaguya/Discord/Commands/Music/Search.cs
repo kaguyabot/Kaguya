@@ -39,7 +39,8 @@ namespace Kaguya.Discord.Commands.Music
         }
 
         [Command(RunMode = RunMode.Async)]
-        [Summary("Searches for the desired song. Returns top 5 most popular results.")]
+        [Summary("Searches for the desired song. Returns top 5 most popular results. Click on one of the reaction icons to play " +
+                 "the appropriate track.")]
         [Remarks("<song name>")] // Delete if no remarks needed.
         public async Task SearchCommand([Remainder]string search)
         {
@@ -90,8 +91,29 @@ namespace Kaguya.Discord.Commands.Music
 
             if (result.IsSuccess)
             {
-                // todo: replace, play song etc.
-                await Context.Channel.SendMessageAsync(result.Value.ToString());
+                if (!_lavaNode.TryGetPlayer(Context.Guild, out var player))
+                {
+                    if (!await _lavaNode.SafeJoinAsync(Context.User, Context.Channel))
+                    {
+                        await SendBasicErrorEmbedAsync("There was no player found for this server. Please try again.");
+
+                        return;
+                    }
+                }
+
+                LavaTrack track = topResults.ElementAt(result.Value);
+                if (player.Queue.Count == 0 && player.PlayerState != PlayerState.Playing)
+                {
+                    await player.PlayAsync(track);
+                    _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(10), 
+                        embed: GetNowPlayingEmbedForTrack(track));
+                }
+                else
+                {
+                    player.Queue.Enqueue(track);
+                    _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(10), 
+                        embed: GetQueuedEmbedForTrack(track, player.Queue.Count));
+                }
             }
         }
 
@@ -99,10 +121,29 @@ namespace Kaguya.Discord.Commands.Music
         {
             return new EmbedFieldBuilder
             {
-                Name = $"#{pos}. {track.Title}",
+                Name = $"#{pos + 1}. {track.Title}",
                 Value = $"Uploader: {track.Author}\n" +
                         $"Duration: {track.Duration.HumanizeTraditionalReadable()}\n"
             };
+        }
+
+        private Embed GetNowPlayingEmbedForTrack(LavaTrack track)
+        {
+            return new KaguyaEmbedBuilder(Color.Blue)
+                   .WithDescription($"🎵 Now playing:\n" +
+                                    $"Title: {track.Title.AsBold()}\n" +
+                                    $"Duration: {track.Duration.HumanizeTraditionalReadable().AsBold()}")
+                   .Build();
+        }
+
+        private Embed GetQueuedEmbedForTrack(LavaTrack track, int queueSize)
+        {
+            return new KaguyaEmbedBuilder(Color.Purple)
+                   .WithDescription($"⏳ Queued:\n" +
+                                    $"Title: {track.Title.AsBold()}\n" +
+                                    $"Duration: {track.Duration.HumanizeTraditionalReadable().AsBold()}\n" +
+                                    $"Queue Position: {queueSize}.")
+                   .Build();
         }
     }
 }
