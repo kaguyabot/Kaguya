@@ -65,6 +65,8 @@ namespace Kaguya.Discord.Commands.Music
 
                 var embed = GetBasicSuccessEmbedBuilder($"Skipped {curTrack.Title.AsBold()}").Build();
                 _interactivityService.SendEmbedWithDeletion(Context, embed, TimeSpan.FromSeconds(15));
+                
+                _interactivityService.SendEmbedWithDeletion(Context, MusicEmbeds.GetNowPlayingEmbedForTrack(player.Track), TimeSpan.FromSeconds(15));
             }
         }
     }

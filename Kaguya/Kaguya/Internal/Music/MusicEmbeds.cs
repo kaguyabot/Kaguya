@@ -22,7 +22,7 @@ namespace Kaguya.Internal.Music
                    .WithDescription($"⏳ Queued:\n" +
                                     $"Title: {track.Title.AsBold()}\n" +
                                     $"Duration: {track.Duration.HumanizeTraditionalReadable().AsBold()}\n" +
-                                    $"Queue Position: {queueSize}.")
+                                    $"Queue Position: {queueSize.ToString().AsBold()}.")
                    .Build();
         }
     }
