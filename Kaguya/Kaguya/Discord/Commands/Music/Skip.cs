@@ -9,6 +9,7 @@ using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Music;
 using Victoria;
+using Victoria.Enums;
 
 namespace Kaguya.Discord.Commands.Music
 {
@@ -33,6 +34,9 @@ namespace Kaguya.Discord.Commands.Music
         [Command(RunMode = RunMode.Async)]
         [Summary("Skips the current song. Pass in a number to skip multiple songs at once.")]
         [Remarks("[# skips]")] // Delete if no remarks needed.
+        [Example("")]
+        [Example("2 (skips current + next song)")]
+        [Example("3 (skips current + next 2 songs)")]
         public async Task SkipCommand(int? skipCount = null)
         {
             if (!_lavaNode.TryGetPlayer(Context.Guild, out var player))
@@ -59,7 +63,7 @@ namespace Kaguya.Discord.Commands.Music
                 var embed = GetBasicEmbedBuilder($"Skipped {curTrack.Title.AsBold()}. No more tracks remaining.", Color.Purple).Build();
                 _interactivityService.SendEmbedWithDeletion(Context, embed, TimeSpan.FromSeconds(15));
             }
-            else
+            else if (!skipCount.HasValue)
             {
                 await player.SkipAsync();
 
@@ -67,6 +71,33 @@ namespace Kaguya.Discord.Commands.Music
                 _interactivityService.SendEmbedWithDeletion(Context, embed, TimeSpan.FromSeconds(15));
                 
                 _interactivityService.SendEmbedWithDeletion(Context, MusicEmbeds.GetNowPlayingEmbedForTrack(player.Track), TimeSpan.FromSeconds(15));
+            }
+            else
+            {
+                if (skipCount.Value < 2)
+                {
+                    await SendBasicErrorEmbedAsync("If you are specifiying a skip count, you must skip 2+ tracks.");
+
+                    return;
+                }
+
+                int actualSkipCount = 0;
+                for (int i = 0; i < skipCount.Value; i++)
+                {
+                    try
+                    {
+                        await player.SkipAsync();
+                        actualSkipCount++;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        await player.StopAsync();
+                        break;
+                    }
+                }
+
+                string s = actualSkipCount == 1 ? "" : "s";
+                await SendBasicSuccessEmbedAsync($"Skipped {actualSkipCount:N0} track{s}.");
             }
         }
     }

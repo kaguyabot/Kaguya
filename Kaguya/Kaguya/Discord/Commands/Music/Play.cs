@@ -10,6 +10,7 @@ using Kaguya.Internal.Enums;
 using Kaguya.Internal.Music;
 using Victoria;
 using Victoria.Enums;
+using Victoria.EventArgs;
 using Victoria.Responses.Rest;
 
 namespace Kaguya.Discord.Commands.Music

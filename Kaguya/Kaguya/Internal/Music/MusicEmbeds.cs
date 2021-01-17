@@ -7,15 +7,16 @@ namespace Kaguya.Internal.Music
 {
     public static class MusicEmbeds
     {
-        public static Embed GetNowPlayingEmbedForTrack(LavaTrack track)
+        public static Embed GetNowPlayingEmbedForTrack(LavaTrack track, bool autoPlay = false)
         {
+            string title = autoPlay ? "Now playing (auto-play):" : "Now playing";
             return new KaguyaEmbedBuilder(Color.Blue)
-                   .WithDescription($"🎵 Now playing:\n" +
+                   .WithDescription($"🎵 {title}:\n" +
                                     $"Title: {track.Title.AsBold()}\n" +
                                     $"Duration: {track.Duration.HumanizeTraditionalReadable().AsBold()}")
                    .Build();
         }
-
+        
         public static Embed GetQueuedEmbedForTrack(LavaTrack track, int queueSize)
         {
             return new KaguyaEmbedBuilder(Color.Purple)

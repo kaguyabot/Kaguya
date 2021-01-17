@@ -9,6 +9,7 @@ using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.Options;
 using Kaguya.Internal.Events;
+using Kaguya.Internal.Music;
 using Kaguya.Internal.Services;
 using Kaguya.Internal.Services.Recurring;
 using Kaguya.Options;
@@ -110,6 +111,8 @@ namespace Kaguya
 			{
 				x.SelfDeaf = true;
 			});
+			
+			services.AddSingleton<AudioService>();
 			
 			services.AddSingleton(provider =>
 			{

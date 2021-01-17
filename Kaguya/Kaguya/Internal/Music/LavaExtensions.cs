@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Victoria;
+using Victoria.Enums;
 
 namespace Kaguya.Internal.Music
 {
@@ -27,7 +28,7 @@ namespace Kaguya.Internal.Music
                 {
                     await (await lavaNode.JoinAsync(voiceChannel, textChannel)).UpdateVolumeAsync(100);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return false;
                 }
