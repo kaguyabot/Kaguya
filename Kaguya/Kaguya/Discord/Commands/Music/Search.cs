@@ -57,7 +57,6 @@ namespace Kaguya.Discord.Commands.Music
             {
                 await SendBasicErrorEmbedAsync("Sorry, I couldn't find any matches for this search.");
                 
-                
                 return;
             }
             

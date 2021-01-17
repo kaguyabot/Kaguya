@@ -68,7 +68,7 @@ namespace Kaguya.Discord.Commands.Music
                 return;
             }
             
-            if (forcePlay || player.Queue.Count == 0 && player.PlayerState != PlayerState.Playing)
+            if (forcePlay || (player.Queue.Count == 0 && player.PlayerState != PlayerState.Playing))
             {
                 await player.PlayAsync(track);
                 _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
