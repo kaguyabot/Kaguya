@@ -1,4 +1,6 @@
-﻿using Discord;
+﻿using System.Linq;
+using System.Text;
+using Discord;
 using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
 using Victoria;
@@ -24,6 +26,35 @@ namespace Kaguya.Internal.Music
                                     $"Title: {track.Title.AsBold()}\n" +
                                     $"Duration: {track.Duration.HumanizeTraditionalReadable().AsBold()}\n" +
                                     $"Queue Position: {queueSize.ToString().AsBold()}.")
+                   .Build();
+        }
+
+        public static Embed GetQueueEmbed(DefaultQueue<LavaTrack> queue, LavaTrack currentlyPlayingTrack)
+        {
+            var descSb = new StringBuilder();
+
+            if (currentlyPlayingTrack != null)
+            {
+                descSb.AppendLine("Now Playing:\n".AsBold() +
+                                  $"Title: {currentlyPlayingTrack.Title.AsBold()} " +
+                                  $"[{currentlyPlayingTrack.Position:mm\\:ss} / {currentlyPlayingTrack.Duration:mm\\:ss}]\n\n" +
+                                  $"Up Next ⬇️");
+            }
+
+            if (queue.Count == 0)
+            {
+                descSb.AppendLine("No tracks enqueued.".AsItalics());
+            }
+
+            for (int i = 0; i < queue.Count; i++)
+            {
+                LavaTrack track = queue.ElementAt(i);
+                descSb.AppendLine($"#{i + 1}. {track.Title.AsBold()} - {track.Author} ({track.Duration:mm\\:ss})");
+            }
+
+            return new KaguyaEmbedBuilder(Color.DarkTeal)
+                   .WithTitle("🔀 Kaguya Music Queue")
+                   .WithDescription(descSb.ToString())
                    .Build();
         }
     }
