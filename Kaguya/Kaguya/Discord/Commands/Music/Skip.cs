@@ -9,7 +9,6 @@ using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Music;
 using Victoria;
-using Victoria.Enums;
 
 namespace Kaguya.Discord.Commands.Music
 {

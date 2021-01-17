@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Discord.Commands;
-using Kaguya.Internal.Attributes;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Interactivity;
+using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Music;
+using Microsoft.Extensions.Logging;
 using Victoria;
 using Victoria.Enums;
-using Victoria.EventArgs;
 using Victoria.Responses.Rest;
 
 namespace Kaguya.Discord.Commands.Music

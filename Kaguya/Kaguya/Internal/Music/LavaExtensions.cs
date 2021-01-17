@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Victoria;
-using Victoria.Enums;
 
 namespace Kaguya.Internal.Music
 {

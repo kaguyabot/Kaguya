@@ -1,15 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
+﻿using System.Threading.Tasks;
 using Discord.WebSocket;
 using Interactivity;
-using Kaguya.Discord;
-using Kaguya.Discord.DiscordExtensions;
-using Kaguya.Internal.Music;
 using Kaguya.Internal.Services;
-using Victoria;
-using Victoria.EventArgs;
 
 namespace Kaguya.Internal.Events
 {
