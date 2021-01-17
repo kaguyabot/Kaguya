@@ -33,7 +33,7 @@ namespace Kaguya.Discord.Commands.Music
         {
             if (_lavaNode.HasPlayer(Context.Guild))
             {
-                await SendBasicErrorEmbedAsync("I'm already connected to a voice channel.");
+                await SendBasicErrorEmbedAsync("I'm already connected to a voice channel somewhere in this server.");
 
                 return;
             }
