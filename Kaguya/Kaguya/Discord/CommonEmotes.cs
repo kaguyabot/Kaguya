@@ -12,6 +12,15 @@ namespace Kaguya.Discord
         private readonly ILogger<CommonEmotes> _logger;
         private readonly DiscordShardedClient _client;
         private readonly IOptions<DiscordConfigurations> _configurations;
+
+        public readonly IEmote[] EmojisOneThroughFive =
+        {
+            new Emoji("1️⃣"),
+            new Emoji("2️⃣"),
+            new Emoji("3️⃣"),
+            new Emoji("4️⃣"),
+            new Emoji("5️⃣")
+        };
         public IEmote CheckMarkEmoji => new Emoji("✅");
         public IEmote RedCrossEmote => GetEmote("RedCross");
 

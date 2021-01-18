@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Discord.WebSocket;
+using Interactivity;
 using Kaguya.Internal.Services;
 
 namespace Kaguya.Internal.Events
@@ -9,11 +10,13 @@ namespace Kaguya.Internal.Events
     {
         private readonly DiscordShardedClient _client;
         private readonly IAntiraidService _arService;
+        private readonly InteractivityService _interactivityService;
 
-        public EventImplementations(DiscordShardedClient client, IAntiraidService arService)
+        public EventImplementations(DiscordShardedClient client, IAntiraidService arService, InteractivityService interactivityService)
         {
             _client = client;
             _arService = arService;
+            _interactivityService = interactivityService;
         }
 
         public async Task OnUserJoined(SocketGuildUser user)

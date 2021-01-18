@@ -9,6 +9,7 @@ using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.Options;
 using Kaguya.Internal.Events;
+using Kaguya.Internal.Music;
 using Kaguya.Internal.Services;
 using Kaguya.Internal.Services.Recurring;
 using Kaguya.Options;
@@ -22,6 +23,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NekosSharp;
 using OsuSharp;
+using Victoria;
 
 namespace Kaguya
 {
@@ -64,7 +66,7 @@ namespace Kaguya
 
 			services.AddSingleton<ITimerService, TimerService>();
 			services.AddSingleton<IAntiraidService, AntiraidService>();
-
+			
 			services.AddControllers();
 
 			services.AddSingleton(new NekoClient("kaguya-v4"));
@@ -105,6 +107,13 @@ namespace Kaguya
 				return client;
 			});
 
+			services.AddLavaNode(x =>
+			{
+				x.SelfDeaf = true;
+			});
+			
+			services.AddSingleton<AudioService>();
+			
 			services.AddSingleton(provider =>
 			{
 				var client = provider.GetRequiredService<DiscordShardedClient>();

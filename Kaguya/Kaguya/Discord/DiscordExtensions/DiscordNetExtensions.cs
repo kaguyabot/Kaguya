@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Interactivity;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.DiscordExtensions
@@ -44,5 +45,10 @@ namespace Kaguya.Discord.DiscordExtensions
 
         public static async Task<IUserMessage> SendEmbedAsync(this IUser user, EmbedBuilder embedBuilder) => await user.SendMessageAsync(embed: embedBuilder.Build());
         public static async Task<IUserMessage> SendEmbedAsync(this IUser user, Embed embed) => await user.SendMessageAsync(embed: embed);
+
+        public static void SendEmbedWithDeletion(this InteractivityService interactivityService, ICommandContext context, Embed embed, TimeSpan deletionDelay)
+        {
+            interactivityService.DelayedSendMessageAndDeleteAsync(context.Channel, embed: embed, deleteDelay: deletionDelay);
+        }
     }
 }

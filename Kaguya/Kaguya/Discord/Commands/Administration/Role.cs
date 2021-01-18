@@ -402,7 +402,6 @@ namespace Kaguya.Discord.Commands.Administration
             await SendEmbedAsync(embed);
         }
         
-        [Restriction(ModuleRestriction.PremiumOnly)]
         [RequireUserPermission(GuildPermission.Administrator)]
         [Command("-deleteall", RunMode = RunMode.Async)]
         [Summary("Deletes all roles in this server.")]
@@ -410,7 +409,7 @@ namespace Kaguya.Discord.Commands.Administration
         {
             Confirmation request = new ConfirmationBuilder()
                                    .WithContent(new PageBuilder().WithDescription("Are you sure that you wish to " + 
-                                                                           "delete all roles in this server?".AsBoldItalics() + "\n" + 
+                                                                           "delete ALL roles in this server?".AsBoldItalics() + "\n" + 
                                                                            "This cannot be undone!".AsBoldUnderlined())
                                                                  .WithColor(KaguyaColors.LightYellow))
                                    .Build();
@@ -459,7 +458,6 @@ namespace Kaguya.Discord.Commands.Administration
             }
         }
 
-        // [Restriction(ModuleRestriction.PremiumOnly)]
         [RequireUserPermission(GuildPermission.Administrator)]
         [Command("-deleteunused")]
         [Summary("Deletes all unused roles from the server. These are roles that are not assigned to any users.")]
