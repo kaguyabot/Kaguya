@@ -46,10 +46,11 @@ namespace Kaguya.Internal.Music
                 descSb.AppendLine("No tracks enqueued.".AsItalics());
             }
 
-            for (int i = 0; i < queue.Count; i++)
+            int dispCount = 1;
+            foreach (LavaTrack track in queue)
             {
-                LavaTrack track = queue.ElementAt(i);
-                descSb.AppendLine($"#{i + 1}. {track.Title.AsBold()} - {track.Author} ({track.Duration:mm\\:ss})");
+                descSb.AppendLine($"#{dispCount}. {track.Title.AsBold()} - {track.Author} ({track.Duration:mm\\:ss})");
+                dispCount++;
             }
 
             return new KaguyaEmbedBuilder(Color.DarkTeal)

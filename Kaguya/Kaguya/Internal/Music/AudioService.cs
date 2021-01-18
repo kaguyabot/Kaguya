@@ -55,21 +55,28 @@ namespace Kaguya.Internal.Music
                 return;
 
             LavaPlayer player = args.Player;
-            if (!player.Queue.TryDequeue(out LavaTrack queueable))
+            
+            bool canDequeue;
+            LavaTrack queueable;
+            while(true)
+            {
+                canDequeue = player.Queue.TryDequeue(out queueable);
+                if (queueable != null || !canDequeue)
+                {
+                    break;
+                }
+            }
+            
+            if (!canDequeue)
             {
                 _ = InitiateDisconnectAsync(args.Player, TimeSpan.FromSeconds(10));
 
                 return;
             }
 
-            if (!(queueable is LavaTrack track))
-            {
-                return;
-            }
+            await args.Player.PlayAsync(queueable);
 
-            await args.Player.PlayAsync(track);
-
-            var npEmbed = MusicEmbeds.GetNowPlayingEmbedForTrack(track, true);
+            var npEmbed = MusicEmbeds.GetNowPlayingEmbedForTrack(queueable, true);
             await args.Player.TextChannel.SendMessageAsync(embed: npEmbed);
         }
         
@@ -86,9 +93,9 @@ namespace Kaguya.Internal.Music
                 value = _disconnectTokens[player.VoiceChannel.Id];
             }
 
-            bool isCancelled = SpinWait.SpinUntil(() => value.IsCancellationRequested, timeSpan);
+            await Task.Delay(timeSpan, value.Token);
 
-            if (isCancelled)
+            if (value.IsCancellationRequested)
                 return;
 
             if (player.PlayerState == PlayerState.Playing)
