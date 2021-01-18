@@ -39,8 +39,19 @@
 
     <ItemGroup>
       <Reference Include="Discord.InteractivityAddon, Version=2.2.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\..\fork-interactivity-addon\InteractivityAddon\bin\Debug\netstandard2.0\Discord.InteractivityAddon.dll</HintPath>
+        <HintPath>..\..\References\Discord.InteractivityAddon.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\References\liboppai.so">
+        <Link>liboppai.so</Link>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="..\..\References\oppai.dll">
+        <Link>oppai.dll</Link>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
