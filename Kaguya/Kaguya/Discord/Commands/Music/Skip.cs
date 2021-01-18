@@ -32,7 +32,7 @@ namespace Kaguya.Discord.Commands.Music
 
         [Command(RunMode = RunMode.Async)]
         [Summary("Skips the current song. Pass in a number to skip multiple songs at once.")]
-        [Remarks("[# skips]")] // Delete if no remarks needed.
+        [Remarks("[# skips]")]
         [Example("")]
         [Example("2 (skips current + next song)")]
         [Example("3 (skips current + next 2 songs)")]
@@ -62,7 +62,7 @@ namespace Kaguya.Discord.Commands.Music
                 var embed = GetBasicEmbedBuilder($"Skipped {curTrack.Title.AsBold()}. No more tracks remaining.", Color.Purple).Build();
                 _interactivityService.SendEmbedWithDeletion(Context, embed, TimeSpan.FromSeconds(15));
             }
-            else if (!skipCount.HasValue)
+            else if (!skipCount.HasValue || skipCount.Value == 1)
             {
                 await player.SkipAsync();
 

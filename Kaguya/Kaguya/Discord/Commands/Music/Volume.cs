@@ -31,7 +31,7 @@ namespace Kaguya.Discord.Commands.Music
         [Summary("Changes the volume of the music player to the desired value. Range: 0-200. Please be careful using " +
                  "volume levels above 100, it can get extremely loud and damage your hearing.\n\n" +
                  "Use without a parameter to view the current player's volume.")]
-        [Remarks("[# volume]")] // Delete if no remarks needed.
+        [Remarks("[# volume]")]
         public async Task SetVolumeCommand(int? desiredVolume = null)
         {
             if (!_lavaNode.TryGetPlayer(Context.Guild, out var player))

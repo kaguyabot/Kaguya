@@ -41,7 +41,7 @@ namespace Kaguya.Discord.Commands.Music
         [Command(RunMode = RunMode.Async)]
         [Summary("Searches for the desired song. Returns top 5 most popular results. Click on one of the reaction icons to play " +
                  "the appropriate track.")]
-        [Remarks("<song name>")] // Delete if no remarks needed.
+        [Remarks("<song name>")]
         public async Task SearchCommand([Remainder]string search)
         {
             if (!await _lavaNode.SafeJoinAsync(Context.User, Context.Channel))

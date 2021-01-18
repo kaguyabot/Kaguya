@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Kaguya.Discord.DiscordExtensions;
@@ -37,8 +38,19 @@ namespace Kaguya.Discord.Commands.Music
                 return;
             }
 
-            await SendBasicSuccessEmbedAsync($"Disconnected from {player.VoiceChannel.Name.AsBold()}.");
-            await _lavaNode.LeaveAsync(player.VoiceChannel);
+            string vcName = player.VoiceChannel.Name.AsBold();
+
+            try
+            {
+                await _lavaNode.LeaveAsync(player.VoiceChannel);
+            }
+            catch (Exception e)
+            {
+                await SendBasicErrorEmbedAsync($"Failed to disconnect from {vcName}. If the issue " +
+                                               $"persists, please contact the developers for support.");
+                _logger.LogError(e, $"Failed to disconnect from voice channel '{vcName}' in {Context.Guild.Id} via $leave.");
+            }
+            await SendBasicSuccessEmbedAsync($"Disconnected from {vcName}.");
         }
     }
 }
