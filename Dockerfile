@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 COPY Kaguya/Kaguya /Kaguya
+COPY Kaguya/References /References
 COPY nuget.config /Kaguya
 WORKDIR /Kaguya
 RUN dotnet restore Kaguya.csproj
