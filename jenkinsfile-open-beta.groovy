@@ -13,8 +13,7 @@ pipeline {
         stage('Stop') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
-                    sh "docker stop kaguya"
-                    sh "docker rm kaguya"
+                    sh "sudo systemctl stop kaguya"
                 }
 
                 catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
