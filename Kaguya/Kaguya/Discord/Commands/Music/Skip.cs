@@ -38,6 +38,13 @@ namespace Kaguya.Discord.Commands.Music
         [Example("3 (skips current + next 2 songs)")]
         public async Task SkipCommand(int? skipCount = null)
         {
+            if (skipCount < 2)
+            {
+                await SendBasicErrorEmbedAsync("If you are specifiying a skip count, you must skip 2+ tracks.");
+
+                return;
+            }
+            
             if (!_lavaNode.TryGetPlayer(Context.Guild, out var player))
             {
                 var embed = GetBasicErrorEmbedBuilder("It doesn't look like there is an active player. Play some songs to use this command.").Build();
@@ -73,13 +80,6 @@ namespace Kaguya.Discord.Commands.Music
             }
             else
             {
-                if (skipCount.Value < 2)
-                {
-                    await SendBasicErrorEmbedAsync("If you are specifiying a skip count, you must skip 2+ tracks.");
-
-                    return;
-                }
-
                 int actualSkipCount = 0;
                 for (int i = 0; i < skipCount.Value; i++)
                 {
