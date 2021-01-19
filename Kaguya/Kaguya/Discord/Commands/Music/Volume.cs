@@ -28,11 +28,19 @@ namespace Kaguya.Discord.Commands.Music
         }
 
         [Command]
-        [Summary("Changes the volume of the music player to the desired value. Range: 0-200. Please be careful using " +
+        [Summary("Changes the volume of the music player to the desired value. Using a `+` or `-` " +
+                 "modifier allows for adjustment of the volume to your desired offset.\n\n" +
+                 "Valid inputs range from -200 to 200. Please be careful using " +
                  "volume levels above 100, it can get extremely loud and damage your hearing.\n\n" +
                  "Use without a parameter to view the current player's volume.")]
         [Remarks("[# volume]")]
-        public async Task SetVolumeCommand(int? desiredVolume = null)
+        [Example("50")]
+        [Example("+25")]
+        [Example("-70")]
+        [Example("200 (LOUD)")]
+        [Example("0 (Muted)")]
+        [Example("-200 (Muted)")]
+        public async Task SetVolumeCommand(string desiredVolume = null)
         {
             if (!_lavaNode.TryGetPlayer(Context.Guild, out var player))
             {
@@ -42,10 +50,9 @@ namespace Kaguya.Discord.Commands.Music
                 return;
             }
             
-            if (!desiredVolume.HasValue)
+            var curVolume = player.Volume;
+            if (string.IsNullOrWhiteSpace(desiredVolume))
             {
-                var curVolume = player.Volume;
-
                 if (curVolume == 0)
                 {
                     await SendBasicEmbedAsync($"The player is muted.", Color.Orange);
@@ -58,22 +65,31 @@ namespace Kaguya.Discord.Commands.Music
                 return;
             }
 
-            int volVal = desiredVolume.Value;
-            switch (volVal)
+            if (!short.TryParse(desiredVolume, out short result) || !(result is >= -200 and <= 200))
             {
-                case < 0:
-                    await SendBasicErrorEmbedAsync("The volume may not be set to a negative value.");
+                await SendBasicErrorEmbedAsync($"Invalid input received. Acceptable values are whole " +
+                                               $"numbers between -200 and 200.\n\n" +
+                                               $"Please review the `help volume` command for more details.");
 
-                    break;
-                case > 200:
-                    await SendBasicErrorEmbedAsync("The maximum volume value is 200.");
-
-                    break;
-                default:
-                    await player.UpdateVolumeAsync(Convert.ToUInt16(volVal));
-                    await SendBasicSuccessEmbedAsync($"Updated the volume to {volVal.ToString().AsBold()}.");
-                    break;
+                return;
             }
+
+            char beginning = desiredVolume[0];
+            bool negate = beginning == '-';
+            bool add = beginning == '+';
+
+            int newVolume;
+            if (!add && !negate)
+            {
+                newVolume = result;
+            }
+            else
+            {
+                newVolume = Math.Clamp(curVolume + result, 0, 200);
+            }
+            
+            await player.UpdateVolumeAsync((ushort)newVolume);
+            await SendBasicSuccessEmbedAsync($"Updated the volume to {newVolume.ToString().AsBold()}.");
         }
     }
 }
