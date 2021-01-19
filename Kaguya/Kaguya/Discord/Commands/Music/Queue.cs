@@ -11,6 +11,7 @@ namespace Kaguya.Discord.Commands.Music
 {
     [Module(CommandModule.Music)]
     [Group("queue")]
+    [Alias("q")]
     [RequireUserPermission(GuildPermission.Connect)]
     [RequireBotPermission(GuildPermission.Connect)]
     [RequireBotPermission(GuildPermission.Speak)]
