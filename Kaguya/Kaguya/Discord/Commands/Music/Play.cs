@@ -21,16 +21,18 @@ namespace Kaguya.Discord.Commands.Music
     [RequireBotPermission(GuildPermission.Speak)]
     public class Play : KaguyaBase<Play>
     {
-        private static readonly object _locker = new();
+        private static object _locker;
         private readonly ILogger<Play> _logger;
         private readonly LavaNode _lavaNode;
         private readonly InteractivityService _interactivityService;
 
-        public Play(ILogger<Play> logger, LavaNode lavaNode, InteractivityService interactivityService) : base(logger)
+        public Play(ILogger<Play> logger, LavaNode lavaNode, InteractivityService interactivityService,
+            AudioQueueLocker queueLocker) : base(logger)
         {
             _logger = logger;
             _lavaNode = lavaNode;
             _interactivityService = interactivityService;
+            _locker = queueLocker.Locker;
         }
 
         [Command]
