@@ -62,7 +62,8 @@ namespace Kaguya.External.Osu
                 await recentMapInfo.GetPPAsync(recentPlay.Mods, 95.0f),
                 await recentMapInfo.GetPPAsync(recentPlay.Mods, 98.0f),
                 await recentMapInfo.GetPPAsync(recentPlay.Mods, 99.0f),
-                await recentMapInfo.GetPPAsync(recentPlay.Mods, 100.0f)
+                await recentMapInfo.GetPPAsync(recentPlay.Mods, 100.0f),
+                await recentMapInfo.GetPPAsync(recentPlay.Mods, (float)recentPlay.Accuracy),
             };
             
             string modString = GetModString(recentPlay.Mods);
@@ -145,7 +146,7 @@ namespace Kaguya.External.Osu
             
             string line6 = $"{bpmInformation} {POINT_RIGHT} {drainInformation}" + (canDisplayCircleData ? $" {POINT_RIGHT} [{mapPropertyInformation}]" : "");
 
-            string ppInformation = "PP:".AsBold() + $" {recentPpInfo.Pp:N2}pp";
+            string ppInformation = "PP:".AsBold() + $" {recentPpInfo.Pp:N2}pp ({ppVariants[4].Pp:N0}pp for {recentPpInfo.Accuracy:N2}% FC)";
             string variantPpLine = $"95%: {ppVariants[0].Pp:N0}pp | 98%: {ppVariants[1].Pp:N0}pp | 99%: {ppVariants[2].Pp:N0}pp | 100%: {ppVariants[3].Pp:N0}pp";
             
             string line7 = $"{ppInformation}\n{POINT_RIGHT} {variantPpLine}";
