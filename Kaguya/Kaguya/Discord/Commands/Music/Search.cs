@@ -24,6 +24,7 @@ namespace Kaguya.Discord.Commands.Music
     [RequireBotPermission(GuildPermission.Speak)]
     public class Search : KaguyaBase<Search>
     {
+        private static readonly object _locker = new();
         private readonly ILogger<Search> _logger;
         private readonly LavaNode _lavaNode;
         private readonly InteractivityService _interactivityService;
@@ -109,7 +110,11 @@ namespace Kaguya.Discord.Commands.Music
                 }
                 else
                 {
-                    player.Queue.Enqueue(track);
+                    lock (_locker)
+                    {
+                        player.Queue.Enqueue(track);
+                    }
+                    
                     _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
                         embed: MusicEmbeds.GetQueuedEmbedForTrack(track, player.Queue.Count));
                 }
