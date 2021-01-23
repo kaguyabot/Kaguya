@@ -64,6 +64,7 @@ namespace Kaguya
 			services.AddScoped<LogConfigurationRepository>();
 			services.AddScoped<WordFilterRepository>();
 
+			services.AddSingleton<AudioQueueLocker>();
 			services.AddSingleton<ITimerService, TimerService>();
 			services.AddSingleton<IAntiraidService, AntiraidService>();
 			

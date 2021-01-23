@@ -24,18 +24,20 @@ namespace Kaguya.Discord.Commands.Music
     [RequireBotPermission(GuildPermission.Speak)]
     public class Search : KaguyaBase<Search>
     {
+        private static object _locker;
         private readonly ILogger<Search> _logger;
         private readonly LavaNode _lavaNode;
         private readonly InteractivityService _interactivityService;
         private readonly CommonEmotes _commonEmotes;
 
         public Search(ILogger<Search> logger, LavaNode lavaNode, InteractivityService interactivityService,
-            CommonEmotes commonEmotes) : base(logger)
+            CommonEmotes commonEmotes, AudioQueueLocker queueLocker) : base(logger)
         {
             _logger = logger;
             _lavaNode = lavaNode;
             _interactivityService = interactivityService;
             _commonEmotes = commonEmotes;
+            _locker = queueLocker.Locker;
         }
 
         [Command(RunMode = RunMode.Async)]
@@ -109,7 +111,11 @@ namespace Kaguya.Discord.Commands.Music
                 }
                 else
                 {
-                    player.Queue.Enqueue(track);
+                    lock (_locker)
+                    {
+                        player.Queue.Enqueue(track);
+                    }
+                    
                     _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
                         embed: MusicEmbeds.GetQueuedEmbedForTrack(track, player.Queue.Count));
                 }

@@ -21,15 +21,18 @@ namespace Kaguya.Discord.Commands.Music
     [RequireBotPermission(GuildPermission.Speak)]
     public class Play : KaguyaBase<Play>
     {
+        private static object _locker;
         private readonly ILogger<Play> _logger;
         private readonly LavaNode _lavaNode;
         private readonly InteractivityService _interactivityService;
 
-        public Play(ILogger<Play> logger, LavaNode lavaNode, InteractivityService interactivityService) : base(logger)
+        public Play(ILogger<Play> logger, LavaNode lavaNode, InteractivityService interactivityService,
+            AudioQueueLocker queueLocker) : base(logger)
         {
             _logger = logger;
             _lavaNode = lavaNode;
             _interactivityService = interactivityService;
+            _locker = queueLocker.Locker;
         }
 
         [Command]
@@ -76,7 +79,11 @@ namespace Kaguya.Discord.Commands.Music
             }
             else
             {
-                player.Queue.Enqueue(track);
+                lock (_locker)
+                {
+                    player.Queue.Enqueue(track);
+                }
+                
                 _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
                     embed: MusicEmbeds.GetQueuedEmbedForTrack(track, player.Queue.Count));
             }
