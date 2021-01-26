@@ -113,6 +113,44 @@ Your file should now look something like this (note that the "AdminSettings" sec
 
 Now, we need to use entity framework to setup the database for us.
 
+Setting up Entity Framework:
+Check to see that you have Entity Framework on your system:
+```
+$ dotnet ef
+
+(output)
+
+                     _/\__
+               ---==/    \\
+         ___  ___   |.    \|\
+        | __|| __|  |  )   \\\
+        | _| | _|   \_/ |  //|\\
+        |___||_|       /   \\\/\\
+
+Entity Framework Core .NET Command-line Tools 5.0.1
+
+Usage: dotnet ef [options] [command]
+
+Options:
+  --version        Show version information
+  -h|--help        Show help information
+  -v|--verbose     Show verbose output.
+  --no-color       Don't colorize output.
+  --prefix-output  Prefix output with level.
+
+Commands:
+  database    Commands to manage the database.
+  dbcontext   Commands to manage DbContext types.
+  migrations  Commands to manage migrations.
+
+Use "dotnet ef [command] --help" for more information about a command.
+```
+
+If you don't see the above output, you need to install Entity Framework:
+```
+$ dotnet tool install --global dotnet-ef
+```
+
 Navigate to the folder containing `Kaguya.csproj` if you have not already done so. Note that this is the same folder as the previous step.
 
 Run:
