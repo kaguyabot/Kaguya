@@ -22,27 +22,73 @@ namespace Kaguya.Discord.Commands.Reference
 		[Command]
 		[Summary("Takes a hexadecimal color value and outputs an embed with that color.")]
 		[Remarks("<hex value>")]
-		[Example("FFFFFF")]
-		[Example("0000FF")]
-		[Example("FF")]
-		[Example("00FF")]
+								// Various hex lenghts
+		[Example("0000FF")]		// 6
+		[Example("0F0")]		// 3
+		[Example("0xFFFF00")]	// 8
+		[Example("0x00F")]		// 5
+		[Example("#00FFFF")]	// 7
+		[Example("#F00")]		// 4
 		public async Task HexTestCommand(string hex)
 		{
-			if (hex.Length > 6)
+			// Validate hex length
+			if (!(hex.Length >= 3 && hex.Length <= 8))
 			{
-				await SendBasicErrorEmbedAsync($"Your hex value is too big. Please enter up to a maximum of 6 digits.");
+				if (hex.Length < 3)
+				{
+					await SendBasicErrorEmbedAsync($"Your hex value is too short. It must have a minimum length of 3.");
+				}
+				else if (hex.Length > 8)
+				{
+					await SendBasicErrorEmbedAsync($"Your hex value is too long. It must have a maximum length of 8.");
+				}
 
 				return;
 			}
 
-			string completeHex = hex;
+			// If hex has '0x' and '#' in the begining, remove them
+			string hexString = "";
 
-			// if the user adds less than 6 digits, append zeros to the remaining length of the input
-			for (int i = 0; i < 6 - hex.Length; i++)
+			// && (hex.Length == 5 || hex.Length == 8)
+			if (hex.Substring(0, 2) == "0x")
 			{
-				completeHex += "0";
+				hexString = hex.Substring(2);
+			}
+			// && (hex.Length == 4 || hex.Length == 7)
+			else if (hex.Substring(0, 1) == "#")
+			{
+				hexString = hex.Substring(1);
+			}
+			else
+			{
+				hexString = hex;
+			}
+			
+			if (!(hexString.Length == 3 || hexString.Length == 6))
+			{
+				await SendBasicErrorEmbedAsync($"Your hex value format is invalid.");
+
+				return;
 			}
 
+			// Get the complete hex string
+			string completeHex = "";
+
+			if (hexString.Length == 3)
+			{
+				completeHex += hexString[0];
+				completeHex += hexString[0];
+				completeHex += hexString[1];
+				completeHex += hexString[1];
+				completeHex += hexString[2];
+				completeHex += hexString[2];
+			}
+			else if (hexString.Length == 6)
+			{
+				completeHex = hexString;
+			}
+
+			// Get the color value
 			uint colorValue;
 
 			try
@@ -66,6 +112,7 @@ namespace Kaguya.Discord.Commands.Reference
 
 			var color = new Color(colorValue);
 
+			// Output embed
 			string message = 
 				$"Your hex value is **#{completeHex.ToUpper()}**.\n" +
 				$"The color of this embed is what your hex looks like.";
