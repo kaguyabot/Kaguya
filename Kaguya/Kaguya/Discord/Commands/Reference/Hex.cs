@@ -27,7 +27,26 @@ namespace Kaguya.Discord.Commands.Reference
 		[Example("FF0000")]
 		public async Task HexTestCommand(string hex)
 		{
-			uint colorValue = Convert.ToUInt32(hex, 16);
+			if (hex.Length < 6 || hex.Length > 6)
+			{
+				await SendBasicErrorEmbedAsync($"The hex value must have a length of 6 and your value has a length of {hex.Length}.");
+
+				return;
+			}
+
+			uint colorValue;
+
+			try
+			{
+				colorValue = Convert.ToUInt32(hex, 16);
+			}
+			catch (Exception)
+			{
+				await SendBasicErrorEmbedAsync($"Your hex value is not valid. The digits of a hexidecimal number must be from 0 to 9 and A to F.");
+
+				return;
+			}
+
 			uint maxValue = Convert.ToUInt32("FFFFFF", 16);
 
 			// If colorValue is FFFFFF, the color turns black, so we need to subtract one
