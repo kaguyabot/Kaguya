@@ -4,6 +4,7 @@ using Kaguya.Internal.Enums;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System;
+using Discord;
 
 namespace Kaguya.Discord.Commands.Reference
 {
@@ -35,12 +36,9 @@ namespace Kaguya.Discord.Commands.Reference
 				colorValue--;
 			}
 
-			var embed = new KaguyaEmbedBuilder(colorValue)
-			{
-				Description = "The color of this embed is what your hex looks like."
-			};
+			var color = new Color(colorValue);
 
-			await SendEmbedAsync(embed);
+			await SendBasicEmbedAsync("The color of this embed is what your hex looks like.", color);
 		}
 	}
 }
