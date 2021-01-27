@@ -9,7 +9,6 @@ namespace Kaguya.Discord.Commands.Reference
 {
 	[Module(CommandModule.Reference)]
 	[Group("hex")]
-	[Alias("hx")]
 	public class Hex : KaguyaBase<Hex>
 	{
 		private readonly ILogger<Hex> _logger;
@@ -22,17 +21,23 @@ namespace Kaguya.Discord.Commands.Reference
 		[Command]
 		[Summary("Takes a hexadecimal color value and outputs an embed with that color.")]
 		[Remarks("<hex value>")]
+		[Example("FFFFFF")]
+		[Example("0000FF")]
+		[Example("FF0000")]
 		public async Task HexTestCommand(string hex)
 		{
 			uint colorValue = Convert.ToUInt32(hex, 16);
 			uint maxValue = Convert.ToUInt32("FFFFFF", 16);
 
 			// If colorValue is FFFFFF, the color turns black, so we need to subtract one
-			if (colorValue == maxValue) --colorValue;
+			if (colorValue == maxValue)
+			{
+				colorValue--;
+			}
 
 			var embed = new KaguyaEmbedBuilder(colorValue)
 			{
-				Description = "Success!"
+				Description = "The color of this embed is what your hex looks like."
 			};
 
 			await SendEmbedAsync(embed);
