@@ -20,7 +20,8 @@ namespace Kaguya.Discord.Commands.Reference
 		}
 
 		[Command]
-		[Summary("Takes a hexadecimal color value and outputs an embed with that color.")]
+		[Summary("Takes a hexadecimal color value and outputs an embed with that color. Using " +
+		         "a 3-digit value will translate it into a 6-digit hex value (i.e. `0F0` => `00FF00`).")]
 		[Remarks("<hex value>")]
 								// Various hex lenghts
 		[Example("0000FF")]		// 6
@@ -47,7 +48,7 @@ namespace Kaguya.Discord.Commands.Reference
 			}
 
 			// If hex has '0x' and '#' in the begining, remove them
-			string hexString = "";
+			string hexString;
 
 			// && (hex.Length == 5 || hex.Length == 8)
 			if (hex.Substring(0, 2) == "0x")
