@@ -59,14 +59,20 @@ namespace Kaguya.Discord.Commands.Reference
 			{
 				hexString = hex.Substring(1);
 			}
-			else
+			else if (hex.Length == 3 || hex.Length == 6)
 			{
 				hexString = hex;
 			}
-			
-			if (!(hexString.Length == 3 || hexString.Length == 6))
+			else
 			{
 				await SendBasicErrorEmbedAsync($"Your hex value format is invalid.");
+
+				return;
+			}
+
+			if (hexString.Length != 3 && hexString.Length != 6)
+			{
+				await SendBasicErrorEmbedAsync($"Your hex value is invalid. The hexadecimal number must be 3 or 6 digits long.");
 
 				return;
 			}
@@ -97,7 +103,7 @@ namespace Kaguya.Discord.Commands.Reference
 			}
 			catch (Exception)
 			{
-				await SendBasicErrorEmbedAsync($"Your hex value is not valid. The digits of a hexidecimal number must be from 0 to 9 and A to F.");
+				await SendBasicErrorEmbedAsync($"Your hex value is invalid. The digits of a hexidecimal number must be from 0 to 9 and A to F.");
 
 				return;
 			}
