@@ -24,21 +24,30 @@ namespace Kaguya.Discord.Commands.Reference
 		[Remarks("<hex value>")]
 		[Example("FFFFFF")]
 		[Example("0000FF")]
-		[Example("FF0000")]
+		[Example("FF")]
+		[Example("00FF")]
 		public async Task HexTestCommand(string hex)
 		{
-			if (hex.Length < 6 || hex.Length > 6)
+			if (hex.Length > 6)
 			{
-				await SendBasicErrorEmbedAsync($"The hex value must have a length of 6 and your value has a length of {hex.Length}.");
+				await SendBasicErrorEmbedAsync($"Your hex value is too big. Please enter up to a maximum of 6 digits.");
 
 				return;
+			}
+
+			string completeHex = hex;
+
+			// if the user adds less than 6 digits, append zeros to the remaining length of the input
+			for (int i = 0; i < 6 - hex.Length; i++)
+			{
+				completeHex += "0";
 			}
 
 			uint colorValue;
 
 			try
 			{
-				colorValue = Convert.ToUInt32(hex, 16);
+				colorValue = Convert.ToUInt32(completeHex, 16);
 			}
 			catch (Exception)
 			{
@@ -57,7 +66,11 @@ namespace Kaguya.Discord.Commands.Reference
 
 			var color = new Color(colorValue);
 
-			await SendBasicEmbedAsync("The color of this embed is what your hex looks like.", color);
+			string message = 
+				$"Your hex value is **#{completeHex.ToUpper()}**.\n" +
+				$"The color of this embed is what your hex looks like.";
+
+			await SendBasicEmbedAsync(message, color);
 		}
 	}
 }
