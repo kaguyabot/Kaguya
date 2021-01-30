@@ -69,11 +69,12 @@ namespace Kaguya.Discord.Commands.Music
             }
             catch (HttpRequestException e)
             {
-                string error = "Lavalink is not connected. Please start lavalink in " + 
-                               Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\", "Lavalink.jar"));
-                _logger.LogError(e, error);
+                string pvtError = "Lavalink is not connected. Please start lavalink in " + 
+                                  Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\", "Lavalink.jar"));
+                _logger.LogError(e, pvtError);
                 
-                await SendBasicErrorEmbedAsync(error);
+                await SendBasicErrorEmbedAsync("Failure, core dependency missing. Please check the " +
+                                               "console logs for more details.");
 
                 return;
             }
