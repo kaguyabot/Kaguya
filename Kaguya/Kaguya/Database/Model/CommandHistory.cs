@@ -8,7 +8,7 @@ namespace Kaguya.Database.Model
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public uint Id { get; set; }
+		public int Id { get; set; }
 		public ulong UserId { get; set; }
 		public ulong ServerId { get; set; }
 		public string CommandName { get; set; }
