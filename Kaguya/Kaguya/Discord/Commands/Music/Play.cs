@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -60,9 +62,23 @@ namespace Kaguya.Discord.Commands.Music
             }
 
             LavaPlayer player = _lavaNode.GetPlayer(Context.Guild);
-            SearchResponse searchResponse = await _lavaNode.SearchYouTubeAsync(search);
+            SearchResponse searchResult;
+            try
+            {
+                searchResult = await _lavaNode.SearchYouTubeAsync(search);
+            }
+            catch (HttpRequestException e)
+            {
+                string error = "Lavalink is not connected. Please start lavalink in " + 
+                               Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\", "Lavalink.jar"));
+                _logger.LogError(e, error);
+                
+                await SendBasicErrorEmbedAsync(error);
 
-            var track = searchResponse.Tracks.FirstOrDefault();
+                return;
+            }
+
+            var track = searchResult.Tracks.FirstOrDefault();
 
             if (track == null)
             {

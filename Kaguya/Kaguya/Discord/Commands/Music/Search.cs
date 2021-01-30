@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Interactivity;
 using Interactivity.Selection;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Discord.Overrides;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Music;
@@ -53,7 +57,21 @@ namespace Kaguya.Discord.Commands.Music
                 return;
             }
 
-            SearchResponse searchResult = await _lavaNode.SearchYouTubeAsync(search);
+            SearchResponse searchResult;
+            try
+            {
+                searchResult = await _lavaNode.SearchYouTubeAsync(search);
+            }
+            catch (HttpRequestException e)
+            {
+                string error = "Lavalink is not connected. Please start lavalink in " + 
+                               Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\", "Lavalink.jar"));
+                _logger.LogError(e, error);
+                
+                await SendBasicErrorEmbedAsync(error);
+
+                return;
+            }
 
             if (searchResult.Tracks.Count == 0)
             {
@@ -81,9 +99,15 @@ namespace Kaguya.Discord.Commands.Music
                         .WithFields(embedFields);
 
             var toModify = await SendEmbedAsync(embed);
-            var builder = new ReactionSelectionBuilder<int>()
-                          .WithValues(0, 1, 2, 3, 4)
-                          .WithEmotes(_commonEmotes.EmojisOneThroughFive)
+            var builder = new KaguyaReactionSelectionBuilder<int>()
+                          .WithSelectables(new Dictionary<IEmote, int>
+                          {
+                              { _commonEmotes.EmojisOneThroughFive[0], 0 },
+                              { _commonEmotes.EmojisOneThroughFive[1], 1 },
+                              { _commonEmotes.EmojisOneThroughFive[2], 2 },
+                              { _commonEmotes.EmojisOneThroughFive[3], 3 },
+                              { _commonEmotes.EmojisOneThroughFive[4], 4 }
+                          })
                           .WithEnableDefaultSelectionDescription(false)
                           .WithDeletion(DeletionOptions.AfterCapturedContext | DeletionOptions.Invalids)
                           .WithUsers(Context.User);

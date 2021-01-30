@@ -55,6 +55,11 @@ namespace Kaguya.Internal.Music
                 return;
 
             LavaPlayer player = args.Player;
+
+            if (player == null) // Not sure when this could occur, but just to be safe...
+            {
+                return;
+            }
             
             bool canDequeue;
             LavaTrack queueable;
