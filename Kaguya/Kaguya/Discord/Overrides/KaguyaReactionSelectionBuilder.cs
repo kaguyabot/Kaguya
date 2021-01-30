@@ -59,16 +59,6 @@ namespace Kaguya.Discord.Overrides
         /// </summary>
         public bool EnableDefaultSelectionDescription { get; set; } = true;
 
-        /// <summary>
-        /// Creates a new <see cref="KaguyaReactionSelectionBuilder{TValue}"/> with default values.
-        /// </summary>
-        public KaguyaReactionSelectionBuilder() { }
-
-        /// <summary>
-        /// Creates a new <see cref="KaguyaReactionSelectionBuilder{TValue}"/> with default values.
-        /// </summary>
-        public static KaguyaReactionSelectionBuilder<TValue> Default => new KaguyaReactionSelectionBuilder<TValue>();
-
         public override BaseReactionSelection<TValue> Build()
         {
             if (Selectables == null)
@@ -92,7 +82,7 @@ namespace Kaguya.Discord.Overrides
                 throw new ArgumentNullException(nameof(CancelEmote));
             }
 
-            if (EnableDefaultSelectionDescription == true)
+            if (EnableDefaultSelectionDescription)
             {
                 var builder = new StringBuilder();
 
