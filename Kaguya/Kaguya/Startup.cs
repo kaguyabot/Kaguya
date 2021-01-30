@@ -20,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NekosSharp;
 using OsuSharp;
@@ -50,7 +51,6 @@ namespace Kaguya
 			});
 			
 			// All database repositories are added as scoped here.
-			
 			services.AddScoped<AdminActionRepository>();
 			services.AddScoped<AntiraidConfigRepository>();
 			services.AddScoped<BlacklistedEntityRepository>();
@@ -76,6 +76,18 @@ namespace Kaguya
 			services.AddSingleton(provider =>
 			{
 				var adminConfigs = provider.GetRequiredService<IOptions<AdminConfigurations>>();
+				var logger = provider.GetRequiredService<ILogger<Startup>>();
+				string apiKey = adminConfigs.Value.OsuApiKey;
+				if (string.IsNullOrWhiteSpace(apiKey))
+				{
+					logger.LogWarning("osu! api key not provided! All osu! features will fail on execution!");
+
+					return new OsuClient(new OsuSharpConfiguration
+					{
+						// Needed so that the bot doesn't encounter an immediate runtime error...
+						ApiKey = "I'M INVALID!!!"
+					});
+				}
 				
 				return new OsuClient(new OsuSharpConfiguration
 				{
