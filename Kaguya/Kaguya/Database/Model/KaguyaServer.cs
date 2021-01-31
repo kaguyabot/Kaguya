@@ -20,7 +20,6 @@ namespace Kaguya.Database.Model
 
 		public int PraiseCooldown { get; set; } = 24;
 
-		public int NextQuoteId { get; set; } = 1;
 		public ulong? MuteRoleId { get; set; }
 		
 		public ulong? ShadowbanRoleId { get; set; }
@@ -34,6 +33,7 @@ namespace Kaguya.Database.Model
 		/// cleared. Instead, we use this boolean to determine whether to skip the 'Deleted Message'
 		/// log event. We log bulk-deletion of messages by checking the audit log instead. This
 		/// value is not in the database.
+		/// todo: come up with a better solution - perhaps a concurrent dictionary somewhere else.
 		/// </summary>
 		[NotNull]
 		public bool IsCurrentlyPurgingMessages { get; set; }
@@ -43,8 +43,10 @@ namespace Kaguya.Database.Model
 		public bool CustomGreetingIsEnabled { get; set; } = false;
 
 		public bool LevelAnnouncementsEnabled { get; set; } = true;
-
-		public bool OsuLinkParsingEnabled { get; set; } = true;
+		/// <summary>
+		/// Should we scan for osu! links?
+		/// </summary>
+		public bool AutomaticOsuLinkParsingEnabled { get; set; } = false;
 
 		/// <summary>
 		/// Whether or not the server currently has an active premium subscription.

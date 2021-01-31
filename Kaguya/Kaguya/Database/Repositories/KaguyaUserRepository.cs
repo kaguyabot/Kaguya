@@ -28,7 +28,7 @@ namespace Kaguya.Database.Repositories
 		
 		public async Task<KaguyaUser> GetAsync(ulong key)
 		{
-			return await _dbContext.Users.AsQueryable().Where(x => x.UserId == key).FirstOrDefaultAsync();
+			return await _dbContext.KaguyaUsers.AsQueryable().Where(x => x.UserId == key).FirstOrDefaultAsync();
 		}
 		
 		public async Task DeleteAsync(ulong key)
@@ -40,7 +40,7 @@ namespace Kaguya.Database.Repositories
 				return;
 			}
 
-			_dbContext.Users.Remove(match);
+			_dbContext.KaguyaUsers.Remove(match);
 			await _dbContext.SaveChangesAsync();
             
 			_logger.LogDebug($"User deleted: {key}");
@@ -60,7 +60,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task InsertAsync(KaguyaUser value)
 		{ 
-			_dbContext.Users.Add(value);
+			_dbContext.KaguyaUsers.Add(value);
 			await _dbContext.SaveChangesAsync();
 		}
 
@@ -72,7 +72,7 @@ namespace Kaguya.Database.Repositories
 				return user;
 			}
 
-			user = _dbContext.Users.Add(new KaguyaUser
+			user = _dbContext.KaguyaUsers.Add(new KaguyaUser
 			                                {
 				                                UserId = id,
 				                                DateFirstTracked = DateTime.Now
@@ -86,7 +86,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<IEnumerable<KaguyaUser>> GetActiveRatelimitedUsersAsync(bool ignoreOwner = true)
 		{
-			var users = await _dbContext.Users.AsQueryable().Where(x => x.ActiveRateLimit > 0).ToListAsync();
+			var users = await _dbContext.KaguyaUsers.AsQueryable().Where(x => x.ActiveRateLimit > 0).ToListAsync();
 			if (ignoreOwner)
 			{
 				KaguyaUser owner = users.FirstOrDefault(x => x.UserId == _adminConfigurations.Value.OwnerId);
@@ -102,13 +102,13 @@ namespace Kaguya.Database.Repositories
 
 		public async Task UpdateRange(IEnumerable<KaguyaUser> users)
 		{
-			_dbContext.Users.UpdateRange(users);
+			_dbContext.KaguyaUsers.UpdateRange(users);
 			await _dbContext.SaveChangesAsync();
 		}
 
 		public async Task<int> GetCountOfUsersAsync()
 		{
-			return await _dbContext.Users.AsQueryable().CountAsync();
+			return await _dbContext.KaguyaUsers.AsQueryable().CountAsync();
 		}
 	}
 }

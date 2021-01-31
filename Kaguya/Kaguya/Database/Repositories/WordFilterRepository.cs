@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
@@ -22,10 +23,10 @@ namespace Kaguya.Database.Repositories
             _ksRepo = ksRepo;
         }
 
-        public async Task<FilteredWord> GetAsync(ulong key, string word)
+        public async Task<FilteredWord> GetAsync(ulong test, string word)
         {
             return await _dbContext.FilteredWords.AsQueryable().Where(x => 
-                x.ServerId == key && x.Word.Equals(word, StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+                x.ServerId == test && x.Word.Equals(word, StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(FilteredWord value)
@@ -34,28 +35,35 @@ namespace Kaguya.Database.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(FilteredWord value)
+        public async Task DeleteAsync(ulong key, string word)
         {
-            _dbContext.FilteredWords.Remove(value);
-            await _dbContext.SaveChangesAsync();
+            var match = await GetAsync(key, word);
+
+            if (match != null)
+            {
+                _dbContext.FilteredWords.Remove(match);
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
-        public async Task<bool> DeleteIfExistsAsync(FilteredWord value)
+        public async Task<bool> DeleteIfExistsAsync(ulong key, string word)
         {
-            if (value == null)
+            var dbMatch = await GetAsync(key, word);
+            
+            if (dbMatch == null)
                 return false;
             
-            var server = await _ksRepo.GetOrCreateAsync(value.ServerId);
+            var server = await _ksRepo.GetOrCreateAsync(dbMatch.ServerId);
             var curFilteres = await GetAllForServerAsync(server.ServerId, true);
 
-            var match = curFilteres.FirstOrDefault(x => x.Word.Equals(value.Word, StringComparison.OrdinalIgnoreCase));
+            var match = curFilteres.FirstOrDefault(x => x.Word.Equals(dbMatch.Word, StringComparison.OrdinalIgnoreCase));
             
             if (match == null)
             {
                 return false;
             }
 
-            await DeleteAsync(match);
+            await DeleteAsync(key, word);
 
             return true;
         }

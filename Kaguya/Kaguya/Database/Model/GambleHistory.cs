@@ -9,6 +9,7 @@ namespace Kaguya.Database.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public uint Id { get; set; }
         public ulong UserId { get; set; }
+        public ulong ServerId { get; set; }
         public GambleAction Action { get; set; }
         public int AmountBet { get; set; }
         public int AmountRewarded { get; set; }

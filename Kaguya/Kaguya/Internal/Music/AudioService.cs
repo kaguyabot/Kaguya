@@ -23,18 +23,20 @@ namespace Kaguya.Internal.Music
             _disconnectTokens = new ConcurrentDictionary<ulong, CancellationTokenSource>();
         }
 
-        public async Task OnTrackStarted(TrackStartEventArgs arg)
+        public Task OnTrackStarted(TrackStartEventArgs arg)
         {
             _logger.LogInformation($"Track started for guild {arg.Player.VoiceChannel.Guild.Id}:\n\t" +
                                    $"[Name: {arg.Track.Title} | Duration: {arg.Track.Duration.HumanizeTraditionalReadable()}]");
             
             if (!_disconnectTokens.TryGetValue(arg.Player.VoiceChannel.Id, out CancellationTokenSource value))
-                return;
+                return Task.CompletedTask;
 
             if (value.IsCancellationRequested)
-                return;
+                return Task.CompletedTask;
 
             value.Cancel(true);
+
+            return Task.CompletedTask;
         }
 
         public async Task OnTrackEnded(TrackEndedEventArgs args)

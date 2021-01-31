@@ -139,7 +139,8 @@ namespace Kaguya.Internal.Services
                             Reason = "Automatic server protection (Kaguya Anti-Raid)",
                             Expiration = curConfig.PunishmentLength.HasValue ? DateTime.Now.Add(curConfig.PunishmentLength.Value) : null,
                             IsHidden = false,
-                            IsSystemAction = true
+                            IsSystemAction = true,
+                            Timestamp = DateTime.Now
                         };
 
                         switch (action)

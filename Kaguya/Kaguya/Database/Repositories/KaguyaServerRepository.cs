@@ -28,7 +28,7 @@ namespace Kaguya.Database.Repositories
                 return server;
             }
 
-            server = _dbContext.Servers.Add(new KaguyaServer
+            server = _dbContext.KaguyaServers.Add(new KaguyaServer
             {
                 ServerId = id,
                 DateFirstTracked = DateTime.Now
@@ -42,7 +42,7 @@ namespace Kaguya.Database.Repositories
 
         public async Task<KaguyaServer> GetAsync(ulong key)
         {
-            return await _dbContext.Servers.AsQueryable().Where(x => x.ServerId == key).FirstOrDefaultAsync();
+            return await _dbContext.KaguyaServers.AsQueryable().Where(x => x.ServerId == key).FirstOrDefaultAsync();
         }
 
         public async Task DeleteAsync(ulong key)
@@ -54,7 +54,7 @@ namespace Kaguya.Database.Repositories
                 return;
             }
 
-            _dbContext.Servers.Remove(match);
+            _dbContext.KaguyaServers.Remove(match);
             await _dbContext.SaveChangesAsync();
             
             _logger.LogDebug($"Server deleted: {key}");
@@ -69,7 +69,7 @@ namespace Kaguya.Database.Repositories
 		        return null;
 	        }
 	        
-	        var updated = _dbContext.Servers.Update(value).Entity;
+	        var updated = _dbContext.KaguyaServers.Update(value).Entity;
 	        await _dbContext.SaveChangesAsync();
 
 	        return updated;
@@ -77,13 +77,13 @@ namespace Kaguya.Database.Repositories
 
         public async Task InsertAsync(KaguyaServer value)
         {
-	        _dbContext.Servers.Add(value);
+	        _dbContext.KaguyaServers.Add(value);
 	        await _dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(KaguyaServer value)
         {
-	        var current = await _dbContext.Servers
+	        var current = await _dbContext.KaguyaServers
                                           .AsQueryable()
                                           .Where(x => x.ServerId == value.ServerId)
                                           .FirstOrDefaultAsync();
@@ -91,7 +91,7 @@ namespace Kaguya.Database.Repositories
 	        if (current.Equals(value))
 		        return;
 	        
-	        _dbContext.Servers.Update(value);
+	        _dbContext.KaguyaServers.Update(value);
 	        await _dbContext.SaveChangesAsync();
         }
     }

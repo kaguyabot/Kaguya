@@ -152,7 +152,8 @@ namespace Kaguya.Discord.Commands.Administration
                 ActionedUserId = user.Id,
                 Action = AdminAction.MuteAction,
                 Reason = reason,
-                Expiration = expiration
+                Expiration = expiration,
+                Timestamp = DateTime.Now
             };
 
             bool muteRoleExists = DetermineIfMuteRoleExists(server);

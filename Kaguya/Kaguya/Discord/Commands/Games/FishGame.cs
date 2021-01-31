@@ -77,10 +77,11 @@ namespace Kaguya.Discord.Commands.Games
                 BaseCost = FishService.GetFishValue(rarity).fishPoints,
                 FishType = randomFish,
                 Rarity = rarity,
-                RarityString = rarity.Humanize(LetterCasing.Title),
-                TypeString = randomFish.Humanize(LetterCasing.Title)
             };
 
+            string rarityString = rarity.Humanize(LetterCasing.Title).AsBold();
+            string typeString = randomFish.Humanize(LetterCasing.Title);
+            
             await _fishRepository.InsertAsync(fish);
 
             int netPoints = fish.PointValue - pointsUsed;
@@ -101,7 +102,7 @@ namespace Kaguya.Discord.Commands.Games
             };
 
             // Grammar
-            string start = fish.TypeString[0].ToString().ToLower();
+            string start = typeString[0].ToString().ToLower();
             bool fishStartsWithVowel = start == "a" || start == "e" || start == "i" || start == "o" || start == "u";
             
             if (prefix.EndsWith("a", StringComparison.OrdinalIgnoreCase) && fishStartsWithVowel)
@@ -115,9 +116,9 @@ namespace Kaguya.Discord.Commands.Games
             }
             
             // End grammar
-            StringBuilder descBuilder = new StringBuilder($"🎣 | {Context.User.Mention} {prefix} {fish.TypeString.AsBold()}!\n\n")
+            StringBuilder descBuilder = new StringBuilder($"🎣 | {Context.User.Mention} {prefix} {typeString.AsBold()}!\n\n")
                                         .AppendLine($"Fish ID: {fish.FishId.ToString().AsBold()}")
-                                        .AppendLine($"Rarity: {rarity.Humanize(LetterCasing.Title).AsBold()}")
+                                        .AppendLine($"Rarity: {rarityString}")
                                         .AppendLine($"Market value: {fish.PointValue.ToString("N0").AsBold()} points")
                                         .AppendLine($"Experience gained: " + $"+{fish.ExpValue:N0}".AsBold() + " fishing exp")
                                         .AppendLine("Points remaining: " + $"{user.Points:N0}".AsBold());

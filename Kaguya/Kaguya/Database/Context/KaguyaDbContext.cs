@@ -7,18 +7,30 @@ namespace Kaguya.Database.Context
 {
 	public partial class KaguyaDbContext : DbContext
 	{
+		// All DbSets are listed here in alphabetical order.
 		public DbSet<AdminAction> AdminActions { get; set; }
 		public DbSet<AntiRaidConfig> AntiRaidConfigs { get; set; }
+		public DbSet<AutoAssignedRole> AutoAssignedRoles { get; set; }
 		public DbSet<BlacklistedEntity> BlacklistedEntities { get; set; }
 		public DbSet<CommandHistory> CommandHistories { get; set; }
+		public DbSet<Eightball> Eightballs { get; set; }
+		public DbSet<FavoriteTrack> FavoriteTracks { get; set; }
 		public DbSet<FilteredWord> FilteredWords { get; set; }
 		public DbSet<Fish> Fish { get; set; }
-		public DbSet<PremiumKey> PremiumKeys { get; set; }
+		public DbSet<GambleHistory> GambleHistories { get; set; }
+		public DbSet<Giveaway> Giveaways { get; set; }
+		public DbSet<KaguyaServer> KaguyaServers { get; set; }
+		public DbSet<KaguyaUser> KaguyaUsers { get; set; }
 		public DbSet<LogConfiguration> LogConfigurations { get; set; }
+		public DbSet<PremiumKey> PremiumKeys { get; set; }
+		public DbSet<Quote> Quotes { get; set; }
+		public DbSet<ReactionRole> ReactionRoles { get; set; }
 		public DbSet<Reminder> Reminders { get; set; }
 		public DbSet<Rep> Rep { get; set; }
-		public DbSet<KaguyaServer> Servers { get; set; }
-		public DbSet<KaguyaUser> Users { get; set; }
+		public DbSet<RoleReward> RoleRewards { get; set; }
+		public DbSet<ServerExperience> ServerExperience { get; set; }
+		public DbSet<Upvote> Upvotes { get; set; }
+		public DbSet<WarnConfiguration> WarnConfigurations { get; set; }
 
 		public KaguyaDbContext(DbContextOptions<KaguyaDbContext> options)
 			: base(options)
@@ -39,7 +51,7 @@ namespace Kaguya.Database.Context
 			
 			// Key: FilteredWord
 			modelBuilder.Entity<FilteredWord>().HasKey(w => new { w.ServerId, w.Word });
-			
+			// todo: Add remaining keys for classes that utilize multiple.
 			/* Indexing
 			 
 			 If indexing properties separately, make a new block. 

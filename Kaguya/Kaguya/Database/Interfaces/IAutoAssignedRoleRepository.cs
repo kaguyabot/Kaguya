@@ -2,8 +2,7 @@
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IAutoAssignedRoleRepository : IRepository<ulong, AutoAssignedRole>
+    public interface IAutoAssignedRoleRepository : IRepository<ulong, ulong, AutoAssignedRole>
     {
-        
     }
 }

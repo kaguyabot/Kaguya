@@ -12,7 +12,7 @@ namespace Kaguya.Database.Model
         [Key, Column(Order = 1)]
         public ulong RoleId { get; set; }
         /// <summary>
-        /// How long to wait before assigning the role automatically.
+        /// How long to wait before assigning the role automatically. A null value = assign immediately.
         /// </summary>
         public TimeSpan? Delay { get; set; }
     }

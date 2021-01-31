@@ -20,7 +20,7 @@ namespace Kaguya.Database.Model
 
 		public int GlobalExp { get; private set; } = 0;
 
-		public int FishExp { get; set; } = 0;
+		public int FishExp { get; private set; } = 0;
 
 		public int Points { get; private set; } = 0;
 

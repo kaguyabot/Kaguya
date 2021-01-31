@@ -161,7 +161,7 @@ namespace Kaguya.Discord.Commands.Administration
         public async Task CommandRemoveFromFilter([Remainder] string word)
         {
             FilteredWord fw = await _fwRepo.GetAsync(Context.Guild.Id, word);
-            if (!await _fwRepo.DeleteIfExistsAsync(fw))
+            if (!await _fwRepo.DeleteIfExistsAsync(fw.ServerId, fw.Word))
             {
                 await SendBasicErrorEmbedAsync("The word you specified doesn't exist in the word filter.");
 

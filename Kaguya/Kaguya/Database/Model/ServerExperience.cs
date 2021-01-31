@@ -14,14 +14,26 @@ namespace Kaguya.Database.Model
         public int Exp { get; private set; }
         public DateTime? LastGivenExp { get; set; }
 
-        public void AdjustExp(int amount)
+        /// <summary>
+        /// Adds the absolute value of <see cref="amount"/> to the current object's <see cref="Exp"/> value.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void AddExp(int amount) => Exp += Math.Abs(amount);
+
+        /// <summary>
+        /// Subtracts the absolute value of <see cref="amount"/> to the current object's <see cref="Exp"/> value.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void SubtractExp(int amount)
         {
-            if (amount + Exp < 0)
+            if (Math.Abs(amount) - Exp < 0)
             {
                 Exp = 0;
             }
-
-            Exp += amount;
-        }
+            else
+            {
+                Exp -= Math.Abs(amount);  
+            }
+        } 
     }
 }
