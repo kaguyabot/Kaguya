@@ -2,8 +2,5 @@
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IEightBallRepository : IRepository<Eightball>
-    {
-        
-    }
+    public interface IEightBallRepository : IRepository<Eightball> { }
 }

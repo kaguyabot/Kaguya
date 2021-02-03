@@ -3,7 +3,6 @@
     public enum GambleAction
     {
         Dice,
-        Roll,
-        
+        Roll
     }
 }
