@@ -5,10 +5,10 @@ namespace Kaguya.Database.Model
 {
     public class RoleReward
     {
-        [Key, Column(Order = 0)]
-        public ulong ServerId { get; set; }
-        [Key, Column(Order = 1)]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public ulong RoleId { get; set; }
+        public ulong ServerId { get; set; }
         public int Level { get; set; }
     }
 }
