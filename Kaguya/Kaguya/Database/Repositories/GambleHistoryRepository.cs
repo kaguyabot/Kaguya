@@ -19,7 +19,8 @@ namespace Kaguya.Database.Repositories
         }
         
         [Obsolete("Use the GetMostRecentForUserAsync method for this.", true)]
-        public async Task<GambleHistory> GetAsync(params object[] key)
+#pragma warning disable 108,114
+        public Task<GambleHistory> GetAsync(params object[] key)
         {
             throw new NotImplementedException();
         }
@@ -29,7 +30,7 @@ namespace Kaguya.Database.Repositories
         {
             throw new NotImplementedException();
         }
-
+#pragma warning restore 108,114
         public async Task<IList<GambleHistory>> GetAllForUserAsync(ulong userId)
         {
             return await _dbContext.GambleHistories

@@ -11,6 +11,5 @@ namespace Kaguya.Database.Interfaces
         public Task<IList<Fish>> GetAllForServerAsync(ulong serverId);
         public Task<IList<Fish>> GetAllOfTypeForUserAsync(ulong userId, FishType fish);
         public Task<IList<Fish>> GetAllOfRarityForUserAsync(ulong userId, FishRarity rarity);
-        public Task<int> GetCountAsync();
     }
 }

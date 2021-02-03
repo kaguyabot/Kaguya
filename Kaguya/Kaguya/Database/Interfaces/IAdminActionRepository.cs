@@ -14,6 +14,5 @@ namespace Kaguya.Database.Interfaces
 		public Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, bool showHidden = false);
 		public Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, string action, bool showHidden = false);
 		public Task HideAsync(AdminAction value);
-		public Task UpdateRangeAsync(IEnumerable<AdminAction> collection);
 	}
 }
