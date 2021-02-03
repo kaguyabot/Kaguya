@@ -5,6 +5,7 @@ using Discord.Rest;
 using Discord.WebSocket;
 using Interactivity;
 using Kaguya.Database.Context;
+using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.Options;
@@ -52,16 +53,26 @@ namespace Kaguya
 			// All database repositories are added as scoped here.
 			services.AddScoped<AdminActionRepository>();
 			services.AddScoped<AntiraidConfigRepository>();
+			services.AddScoped<AutoAssignedRoleRepository>();
 			services.AddScoped<BlacklistedEntityRepository>();
 			services.AddScoped<CommandHistoryRepository>();
+			services.AddScoped<EightballRepository>();
+			services.AddScoped<FavoriteTrackRepository>();
+			services.AddScoped<FilteredWordRepository>();
 			services.AddScoped<FishRepository>();
+			services.AddScoped<GambleHistoryRepository>();
 			services.AddScoped<KaguyaServerRepository>();
 			services.AddScoped<KaguyaUserRepository>();
+			services.AddScoped<LogConfigurationRepository>();
 			services.AddScoped<PremiumKeyRepository>();
+			services.AddScoped<QuoteRepository>();
+			services.AddScoped<ReactionRoleRepository>();
 			services.AddScoped<ReminderRepository>();
 			services.AddScoped<RepRepository>();
-			services.AddScoped<LogConfigurationRepository>();
-			services.AddScoped<FilteredWordRepository>();
+			services.AddScoped<RoleRewardRepository>();
+			services.AddScoped<ServerExperienceRepository>();
+			services.AddScoped<UpvoteRepository>();
+			services.AddScoped<WarnConfigurationRepository>();
 
 			services.AddSingleton<AudioQueueLocker>();
 			services.AddSingleton<ITimerService, TimerService>();
