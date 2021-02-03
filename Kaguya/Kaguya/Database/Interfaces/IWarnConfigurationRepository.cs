@@ -2,7 +2,7 @@
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IWarnConfigurationRepository : IRepository<ulong, WarnConfiguration>
+    public interface IWarnConfigurationRepository : IRepository<WarnConfiguration>
     {
         
     }

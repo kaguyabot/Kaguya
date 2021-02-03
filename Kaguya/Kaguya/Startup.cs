@@ -50,7 +50,6 @@ namespace Kaguya
 			});
 			
 			// All database repositories are added as scoped here.
-			
 			services.AddScoped<AdminActionRepository>();
 			services.AddScoped<AntiraidConfigRepository>();
 			services.AddScoped<BlacklistedEntityRepository>();
@@ -62,7 +61,7 @@ namespace Kaguya
 			services.AddScoped<ReminderRepository>();
 			services.AddScoped<RepRepository>();
 			services.AddScoped<LogConfigurationRepository>();
-			services.AddScoped<WordFilterRepository>();
+			services.AddScoped<FilteredWordRepository>();
 
 			services.AddSingleton<AudioQueueLocker>();
 			services.AddSingleton<ITimerService, TimerService>();

@@ -1,15 +1,16 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Kaguya.Database.Model
 {
     public class Giveaway
     {
         /// <summary>
-        /// Unique ID, generated and auto-incremented.
+        /// ID of the message that this giveaway is attached to. There can only be
+        /// 1 giveaway attached to a message id.
         /// </summary>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        [Key]
+        public ulong MessageId { get; set; }
         /// <summary>
         /// ID of the server that this giveaway is held in.
         /// </summary>
@@ -18,10 +19,6 @@ namespace Kaguya.Database.Model
         /// ID of the channel that this giveaway is held in.
         /// </summary>
         public ulong ChannelId { get; set; }
-        /// <summary>
-        /// ID of the message that this giveaway is attached to.
-        /// </summary>
-        public ulong MessageId { get; set; }
         /// <summary>
         /// The amount of exp to award a user who participates in this giveaway.
         /// </summary>

@@ -22,11 +22,11 @@ namespace Kaguya.Discord.Commands.Administration
     [RequireBotPermission(GuildPermission.ManageMessages)]
     public class Filter : KaguyaBase<Filter>
     {
-        private readonly WordFilterRepository _fwRepo;
+        private readonly FilteredWordRepository _fwRepo;
         private readonly InteractivityService _interactivityService;
         private readonly ILogger<Filter> _logger;
 
-        protected Filter(ILogger<Filter> logger, WordFilterRepository fwRepo, InteractivityService interactivityService) : base(logger)
+        protected Filter(ILogger<Filter> logger, FilteredWordRepository fwRepo, InteractivityService interactivityService) : base(logger)
         {
             _logger = logger;
             _fwRepo = fwRepo;

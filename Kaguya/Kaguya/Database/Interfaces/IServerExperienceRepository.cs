@@ -4,7 +4,7 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IServerExperienceRepository : IRepository<ulong, ulong, ServerExperience>
+    public interface IServerExperienceRepository : IRepository<ServerExperience>
     {
         public Task<ServerExperience> GetOrCreateAsync(ulong serverId, ulong userId);
         public Task<IList<ServerExperience>> GetAllExpForServer(ulong serverId);

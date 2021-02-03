@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Humanizer;
@@ -9,9 +8,9 @@ namespace Kaguya.Database.Model
 {
     public class PremiumKey
     {
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
+        [Key]
         public string Key { get; set; }
         public ulong KeyCreatorId { get; set; }
         public int LengthInSeconds { get; set; }

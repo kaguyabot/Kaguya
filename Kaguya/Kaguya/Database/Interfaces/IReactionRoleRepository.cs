@@ -2,8 +2,7 @@
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IReactionRoleRepository : IRepository<ulong, ulong, ReactionRole>
+    public interface IReactionRoleRepository : IRepository<ReactionRole>
     {
-        
     }
 }

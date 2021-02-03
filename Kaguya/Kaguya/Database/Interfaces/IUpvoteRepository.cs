@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IUpvoteRepository : IRepository<int, Upvote>
+    public interface IUpvoteRepository : IRepository<Upvote>
     {
         /// <summary>
         /// Determines if a user has upvoted within the last "x time", provided by <see cref="offset"/>.

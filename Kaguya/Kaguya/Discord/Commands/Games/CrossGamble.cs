@@ -249,7 +249,7 @@ namespace Kaguya.Discord.Commands.Games
             winnerUser.AdjustPoints(difference);
             loserUser.AdjustPoints(-difference);
 
-            await _kaguyaUserRepository.UpdateRange(new[]
+            await _kaguyaUserRepository.UpdateRangeAsync(new[]
             {
                 winnerUser,
                 loserUser

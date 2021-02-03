@@ -3,7 +3,7 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IAntiraidRepository : IRepository<ulong, AntiRaidConfig>
+    public interface IAntiraidRepository : IRepository<AntiRaidConfig>
     {
         public Task InsertOrUpdateAsync(AntiRaidConfig config);
     }

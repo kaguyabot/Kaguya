@@ -5,10 +5,8 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IPremiumKeyRepository : IRepository<long, PremiumKey>
+    public interface IPremiumKeyRepository : IRepository<PremiumKey>
     {
-        public Task BulkInsert(IList<PremiumKey> keys);
-        public Task<PremiumKey> GetAsync(string key);
         /// <summary>
         /// Generates and inserts a single key with the specified duration.
         /// </summary>

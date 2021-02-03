@@ -4,7 +4,7 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-	public interface IAdminActionRepository : IRepository<int, AdminAction>
+	public interface IAdminActionRepository : IRepository<AdminAction>
 	{
 		public Task ForceExpireAsync(AdminAction value);
 		public Task ForceExpireRangeAsync(IEnumerable<AdminAction> collection);

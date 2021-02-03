@@ -9,37 +9,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kaguya.Database.Repositories
 {
-    public class GambleHistoryRepository : IGambleHistoryRepository
+    public class GambleHistoryRepository : RepositoryBase<GambleHistory>, IGambleHistoryRepository
     {
         private readonly KaguyaDbContext _dbContext;
 
-        public GambleHistoryRepository(KaguyaDbContext dbContext)
+        public GambleHistoryRepository(KaguyaDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
         
         [Obsolete("Use the GetMostRecentForUserAsync method for this.", true)]
-        public Task<GambleHistory> GetAsync(ulong key)
+        public async Task<GambleHistory> GetAsync(params object[] key)
         {
             throw new NotImplementedException();
         }
 
         [Obsolete("Use the DeleteAsync(GambleHistory value) overload instead.", true)]
-        public Task DeleteAsync(ulong key)
+        public Task DeleteAsync(params object[] key)
         {
             throw new NotImplementedException();
-        }
-
-        public async Task UpdateAsync(GambleHistory value)
-        {
-            _dbContext.GambleHistories.Update(value);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task InsertAsync(GambleHistory value)
-        {
-            _dbContext.GambleHistories.Add(value);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IList<GambleHistory>> GetAllForUserAsync(ulong userId)
@@ -64,11 +52,6 @@ namespace Kaguya.Database.Repositories
                                    .AsQueryable()
                                    .Where(x => x.ServerId == serverId)
                                    .CountAsync();
-        }
-
-        public async Task<int> GetCountAsync()
-        {
-            return await _dbContext.GambleHistories.AsQueryable().CountAsync();
         }
 
         public async Task<GambleHistory> GetMostRecentForUserAsync(ulong userId)

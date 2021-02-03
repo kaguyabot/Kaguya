@@ -12,58 +12,20 @@ using Microsoft.Extensions.Options;
 
 namespace Kaguya.Database.Repositories
 {
-	public class KaguyaUserRepository : IKaguyaUserRepository
+	public class KaguyaUserRepository : RepositoryBase<KaguyaUser>, IKaguyaUserRepository
 	{
 		private readonly KaguyaDbContext _dbContext;
 		private readonly IOptions<AdminConfigurations> _adminConfigurations;
 		private readonly ILogger<KaguyaUserRepository> _logger;
 
 		public KaguyaUserRepository(ILogger<KaguyaUserRepository> logger, KaguyaDbContext dbContext, 
-			IOptions<AdminConfigurations> adminConfigurations)
+			IOptions<AdminConfigurations> adminConfigurations) : base(dbContext)
 		{
 			_dbContext = dbContext;
 			_adminConfigurations = adminConfigurations;
 			_logger = logger;
 		}
 		
-		public async Task<KaguyaUser> GetAsync(ulong key)
-		{
-			return await _dbContext.KaguyaUsers.AsQueryable().Where(x => x.UserId == key).FirstOrDefaultAsync();
-		}
-		
-		public async Task DeleteAsync(ulong key)
-		{
-			var match = await GetAsync(key);
-
-			if (match is null)
-			{
-				return;
-			}
-
-			_dbContext.KaguyaUsers.Remove(match);
-			await _dbContext.SaveChangesAsync();
-            
-			_logger.LogDebug($"User deleted: {key}");
-		}
-		
-		public async Task UpdateAsync(KaguyaUser value)
-		{
-			var current = await GetAsync(value.UserId);
-
-			if (current is null)
-			{
-				return;
-			}
-	        
-			await _dbContext.SaveChangesAsync();
-		}
-
-		public async Task InsertAsync(KaguyaUser value)
-		{ 
-			_dbContext.KaguyaUsers.Add(value);
-			await _dbContext.SaveChangesAsync();
-		}
-
 		public async Task<KaguyaUser> GetOrCreateAsync(ulong id)
 		{
 			var user = await GetAsync(id);
@@ -98,12 +60,6 @@ namespace Kaguya.Database.Repositories
 			}
 
 			return users;
-		}
-
-		public async Task UpdateRange(IEnumerable<KaguyaUser> users)
-		{
-			_dbContext.KaguyaUsers.UpdateRange(users);
-			await _dbContext.SaveChangesAsync();
 		}
 
 		public async Task<int> GetCountOfUsersAsync()

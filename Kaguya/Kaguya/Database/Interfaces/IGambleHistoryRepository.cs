@@ -4,7 +4,7 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IGambleHistoryRepository : IRepository<ulong, GambleHistory>
+    public interface IGambleHistoryRepository : IRepository<GambleHistory>
     {
         public Task<IList<GambleHistory>> GetAllForUserAsync(ulong userId);
         public Task<int> GetCountForUserAsync(ulong userId);

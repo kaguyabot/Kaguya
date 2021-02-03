@@ -4,7 +4,7 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IFavoriteTrackRepository : IRepository<ulong, string, FavoriteTrack>
+    public interface IFavoriteTrackRepository : IRepository<FavoriteTrack>
     {
         public Task<IList<FavoriteTrack>> GetAllForUserAsync(ulong userId);
     }
