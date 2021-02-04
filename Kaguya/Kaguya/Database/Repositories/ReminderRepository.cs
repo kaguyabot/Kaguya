@@ -8,39 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kaguya.Database.Repositories
 {
-    public class ReminderRepository : IReminderRepository
+    public class ReminderRepository : RepositoryBase<Reminder>, IReminderRepository
     {
         private readonly KaguyaDbContext _dbContext;
 
-        public ReminderRepository(KaguyaDbContext dbContext) { _dbContext = dbContext; }
-
-        public async Task<Reminder> GetAsync(long key)
-        {
-            return await _dbContext.Reminders.AsQueryable().Where(x => x.Id == key).FirstOrDefaultAsync();
-        }
-
-        public async Task DeleteAsync(long key)
-        {
-            Reminder match = await GetAsync(key);
-            
-            if (match != null)
-            {
-                _dbContext.Reminders.Remove(match);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task UpdateAsync(Reminder value)
-        {
-            _dbContext.Reminders.Update(value);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task InsertAsync(Reminder value)
-        {
-            _dbContext.Reminders.Add(value);
-            await _dbContext.SaveChangesAsync();
-        }
+        public ReminderRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
 
         public async Task<IList<Reminder>> GetAllForUserAsync(ulong id)
         {

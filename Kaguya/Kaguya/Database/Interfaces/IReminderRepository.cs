@@ -4,7 +4,7 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IReminderRepository : IRepository<long, Reminder>
+    public interface IReminderRepository : IRepository<Reminder>
     {
         public Task<IList<Reminder>> GetAllForUserAsync(ulong id);
         public Task<IList<Reminder>> GetAllToDeliverForUserAsync(ulong id);

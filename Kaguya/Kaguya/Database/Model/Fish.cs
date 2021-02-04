@@ -55,13 +55,5 @@ namespace Kaguya.Database.Model
         /// The rarity of the caught fish, ranging from Trash to Legendary.
         /// </summary>
         public FishRarity Rarity { get; set; }
-        /// <summary>
-        /// The written version of the <see cref="FishRarity"/>, formatted in "Title Case".
-        /// </summary>
-        public string RarityString { get; set; }
-        /// <summary>
-        /// The written version of the <see cref="FishType"/>, formatted in "Title Case".
-        /// </summary>
-        public string TypeString { get; set; }
     }
 }

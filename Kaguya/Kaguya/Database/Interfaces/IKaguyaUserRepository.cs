@@ -4,10 +4,9 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-	public interface IKaguyaUserRepository : IRepository<ulong, KaguyaUser>
+	public interface IKaguyaUserRepository : IRepository<KaguyaUser>
 	{
 		public Task<KaguyaUser> GetOrCreateAsync(ulong id);
 		public Task<IEnumerable<KaguyaUser>> GetActiveRatelimitedUsersAsync(bool ignoreOwner);
-		public Task UpdateRange(IEnumerable<KaguyaUser> users);
 	}
 }

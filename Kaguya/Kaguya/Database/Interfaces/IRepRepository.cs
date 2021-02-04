@@ -4,7 +4,7 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IRepRepository : IRepository<long, Rep>
+    public interface IRepRepository : IRepository<Rep>
     {
         public Task<IList<Rep>> GetAllForUserAsync(ulong userId);
         public Task<Rep> GetMostRecentForUserAsync(ulong userId);

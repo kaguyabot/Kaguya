@@ -22,11 +22,11 @@ namespace Kaguya.Discord.Commands.Administration
     [RequireBotPermission(GuildPermission.ManageMessages)]
     public class Filter : KaguyaBase<Filter>
     {
-        private readonly WordFilterRepository _fwRepo;
+        private readonly FilteredWordRepository _fwRepo;
         private readonly InteractivityService _interactivityService;
         private readonly ILogger<Filter> _logger;
 
-        protected Filter(ILogger<Filter> logger, WordFilterRepository fwRepo, InteractivityService interactivityService) : base(logger)
+        protected Filter(ILogger<Filter> logger, FilteredWordRepository fwRepo, InteractivityService interactivityService) : base(logger)
         {
             _logger = logger;
             _fwRepo = fwRepo;
@@ -161,7 +161,7 @@ namespace Kaguya.Discord.Commands.Administration
         public async Task CommandRemoveFromFilter([Remainder] string word)
         {
             FilteredWord fw = await _fwRepo.GetAsync(Context.Guild.Id, word);
-            if (!await _fwRepo.DeleteIfExistsAsync(fw))
+            if (!await _fwRepo.DeleteIfExistsAsync(fw.ServerId, fw.Word))
             {
                 await SendBasicErrorEmbedAsync("The word you specified doesn't exist in the word filter.");
 

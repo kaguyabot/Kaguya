@@ -24,7 +24,7 @@ namespace Kaguya.Database.Model
 		
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; private set; }
+		public int Id { get; set; }
 		public ulong ServerId { get; init; }
 		public ulong ModeratorId { get; init; }
 		public ulong ActionedUserId { get; init; }
@@ -37,5 +37,6 @@ namespace Kaguya.Database.Model
 		/// Whether this action was performed by the system as part of an automated service.
 		/// </summary>
 		public bool IsSystemAction { get; init; }
+		public DateTime Timestamp { get; set; }
 	}
 }

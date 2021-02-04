@@ -1,12 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IRepository<in TKey, TValue>
+    public interface IRepository<T> where T : class
     {
-        public Task<TValue> GetAsync(TKey key);
-        public Task DeleteAsync(TKey key);
-        public Task UpdateAsync(TValue value);
-        public Task InsertAsync(TValue value);
+        public Task<T> GetAsync(params object[] key);
+        public Task DeleteAsync(params object[] key);
+        public Task UpdateAsync(T value);
+        public Task UpdateRangeAsync(IEnumerable<T> values);
+        public Task InsertAsync(T value);
+        public Task BulkInsertAsync(IEnumerable<T> values);
+        public Task<IList<T>> GetAll();
+        public Task<int> GetCountAsync();
     }
 }

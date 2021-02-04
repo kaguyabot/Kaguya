@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Discord;
 using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;

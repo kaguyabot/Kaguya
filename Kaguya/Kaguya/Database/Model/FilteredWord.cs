@@ -18,7 +18,6 @@ namespace Kaguya.Database.Model
 		public ulong ServerId { get; set; }
 		[Key, Column(Order = 1)]
 		public string Word { get; set; }
-
 		public FilterReactionEnum FilterReaction { get; set; }
 		public string FilterReactionString => FilterReaction.ToString();
 	}

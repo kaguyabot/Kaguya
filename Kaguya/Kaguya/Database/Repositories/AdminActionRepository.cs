@@ -6,65 +6,18 @@ using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Database.Repositories
 {
-	public class AdminActionRepository : IAdminActionRepository
+	public class AdminActionRepository : RepositoryBase<AdminAction>, IAdminActionRepository
 	{
 		private readonly KaguyaDbContext _dbContext;
-		private readonly ILogger<AdminActionRepository> _logger;
 
-		public AdminActionRepository(KaguyaDbContext dbContext, ILogger<AdminActionRepository> logger)
+		public AdminActionRepository(KaguyaDbContext dbContext) : base(dbContext)
 		{
 			_dbContext = dbContext;
-			_logger = logger;
 		}
 
-		public async Task<AdminAction> GetAsync(int key)
-		{
-			return await _dbContext.AdminActions.AsQueryable().Where(x => x.Id == key).FirstOrDefaultAsync();
-		}
-
-		public async Task DeleteAsync(int key)
-		{
-			AdminAction match = await GetAsync(key);
-
-			if (match is null)
-			{
-				return;
-			}
-
-			_dbContext.AdminActions.Remove(match);
-			await _dbContext.SaveChangesAsync();
-
-			_logger.LogDebug($"Admin action deleted: Id: {match.Id} ServerId: {match.ServerId} Moderator Id: {match.ModeratorId} " +
-			                 $"Actioned User Id: {match.ActionedUserId} Action: {match.Action}.");
-		}
-
-		public async Task UpdateAsync(AdminAction value)
-		{
-			var current = await GetAsync(value.Id);
-
-			if (current is null)
-			{
-				return;
-			}
-
-			await _dbContext.SaveChangesAsync();
-		}
-
-		public async Task InsertAsync(AdminAction value)
-		{
-			_dbContext.AdminActions.Add(value);
-			await _dbContext.SaveChangesAsync();
-		}
-
-		public async Task UpdateRangeAsync(IEnumerable<AdminAction> collection)
-		{
-			_dbContext.AdminActions.UpdateRange(collection);
-			await _dbContext.SaveChangesAsync();
-		}
 		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId, bool showHidden = false)
 		{
 			var collection = _dbContext.AdminActions.AsQueryable()
@@ -142,7 +95,10 @@ namespace Kaguya.Database.Repositories
 
 			await UpdateRangeAsync(copy);
 		}
-		
-		public async Task<int> GetCountForServerAsync(ulong serverId) { return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == serverId).CountAsync(); }
+
+		public async Task<int> GetCountForServerAsync(ulong serverId)
+		{
+			return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == serverId).CountAsync();
+		}
 	}
 }

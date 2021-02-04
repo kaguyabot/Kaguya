@@ -9,64 +9,37 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Database.Repositories
 {
-    public class WordFilterRepository : IWordFilterRepository
+    public class FilteredWordRepository : RepositoryBase<FilteredWord>, IWordFilterRepository
     {
-        private readonly ILogger<WordFilterRepository> _logger;
         private readonly KaguyaDbContext _dbContext;
         private readonly KaguyaServerRepository _ksRepo;
 
-        public WordFilterRepository(ILogger<WordFilterRepository> logger, KaguyaDbContext dbContext, KaguyaServerRepository ksRepo)
+        public FilteredWordRepository(KaguyaDbContext dbContext, KaguyaServerRepository ksRepo) : base(dbContext)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _ksRepo = ksRepo;
         }
 
-        public async Task<FilteredWord> GetAsync(ulong key, string word)
+        public async Task<bool> DeleteIfExistsAsync(ulong key, string word)
         {
-            return await _dbContext.FilteredWords.AsQueryable().Where(x => 
-                x.ServerId == key && x.Word.Equals(word, StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
-        }
-
-        public async Task UpdateAsync(FilteredWord value)
-        {
-            _dbContext.FilteredWords.Update(value);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(FilteredWord value)
-        {
-            _dbContext.FilteredWords.Remove(value);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<bool> DeleteIfExistsAsync(FilteredWord value)
-        {
-            if (value == null)
+            var dbMatch = await GetAsync(key, word);
+            
+            if (dbMatch == null)
                 return false;
             
-            var server = await _ksRepo.GetOrCreateAsync(value.ServerId);
+            var server = await _ksRepo.GetOrCreateAsync(dbMatch.ServerId);
             var curFilteres = await GetAllForServerAsync(server.ServerId, true);
 
-            var match = curFilteres.FirstOrDefault(x => x.Word.Equals(value.Word, StringComparison.OrdinalIgnoreCase));
+            var match = curFilteres.FirstOrDefault(x => x.Word.Equals(dbMatch.Word, StringComparison.OrdinalIgnoreCase));
             
             if (match == null)
             {
                 return false;
             }
 
-            await DeleteAsync(match);
+            await DeleteAsync(key, word);
 
             return true;
-        }
-
-        public async Task InsertAsync(FilteredWord value)
-        {
-            if (value == null)
-                return;
-            
-            _dbContext.FilteredWords.Add(value);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<bool> InsertIfNotExistsAsync(FilteredWord value)

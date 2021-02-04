@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,26 +35,12 @@ namespace Kaguya.Discord.Commands.OwnerOnly
         [Remarks("<amount> <duration>\n10 30d")]
         public async Task PremiumGenCommand(int amount, string time)
         {
-            var collection = new List<PremiumKey>();
             var parser = new TimeParser(time);
+            
             TimeSpan parsedTime = parser.ParseTime();
-            
-            for (int i = 0; i < amount; i++)
-            {
-                collection.Add(new PremiumKey
-                {
-                    Key = PremiumKey.GenerateKey(),
-                    KeyCreatorId = Context.User.Id,
-                    LengthInSeconds = (int)parsedTime.TotalSeconds,
-                    Expiration = null,
-                    UserId = 0,
-                    ServerId = 0
-                });
-            }
-            
-            await _premiumKeyRepository.BulkInsert(collection);
-
             string timeString = parsedTime.Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day).AsBold();
+
+            var collection = await _premiumKeyRepository.GenerateAndInsertAsync(amount, parsedTime);
 
             await SendBasicSuccessEmbedAsync($"Successfully bulk-inserted {amount.ToString("N0").AsBold()} {timeString} premium keys.");
 

@@ -7,41 +7,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kaguya.Database.Repositories
 {
-    public class AntiraidConfigRepository : IAntiraidRepository
+    public class AntiraidConfigRepository : RepositoryBase<AntiRaidConfig>, IAntiraidRepository
     {
         private readonly KaguyaDbContext _dbContext;
 
-        public AntiraidConfigRepository(KaguyaDbContext dbContext)
+        public AntiraidConfigRepository(KaguyaDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
 
         public async Task<AntiRaidConfig> GetAsync(ulong key)
         {
+            // todo: Can we inherit from base getasync method?
             return await _dbContext.AntiRaidConfigs.AsQueryable().AsNoTrackingWithIdentityResolution().Where(x => x.ServerId == key).FirstOrDefaultAsync();
-        }
-
-        public async Task DeleteAsync(ulong key)
-        {
-            var match = await GetAsync(key);
-
-            if (match != null)
-            {
-                _dbContext.AntiRaidConfigs.Remove(match);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task UpdateAsync(AntiRaidConfig value)
-        {
-            _dbContext.AntiRaidConfigs.Update(value);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task InsertAsync(AntiRaidConfig value)
-        {
-            _dbContext.AntiRaidConfigs.Add(value);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task InsertOrUpdateAsync(AntiRaidConfig config)

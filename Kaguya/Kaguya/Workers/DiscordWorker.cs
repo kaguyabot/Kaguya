@@ -275,12 +275,12 @@ namespace Kaguya.Workers
             IServiceScope scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<KaguyaDbContext>();
 
-            KaguyaServer server = await dbContext.Servers.AsQueryable()
+            KaguyaServer server = await dbContext.KaguyaServers.AsQueryable()
                                                  .FirstOrDefaultAsync(s => s.ServerId == guildChannel.Guild.Id);
 
             if (server == null)
             {
-                server = (await dbContext.Servers.AddAsync(new KaguyaServer
+                server = (await dbContext.KaguyaServers.AddAsync(new KaguyaServer
                 {
                     ServerId = guildChannel.Guild.Id
                 })).Entity;
@@ -288,10 +288,10 @@ namespace Kaguya.Workers
                 await dbContext.SaveChangesAsync();
             }
 
-            KaguyaUser user = await dbContext.Users.AsQueryable().FirstOrDefaultAsync(u => u.UserId == message.Author.Id);
+            KaguyaUser user = await dbContext.KaguyaUsers.AsQueryable().FirstOrDefaultAsync(u => u.UserId == message.Author.Id);
             if (user == null)
             {
-                user = (await dbContext.Users.AddAsync(new KaguyaUser
+                user = (await dbContext.KaguyaUsers.AddAsync(new KaguyaUser
                 {
                     UserId = message.Author.Id
                 })).Entity;
@@ -338,7 +338,7 @@ namespace Kaguya.Workers
             }
 
             // Parsing of osu! beatmaps.
-            if (server.OsuLinkParsingEnabled)
+            if (server.AutomaticOsuLinkParsingEnabled)
             {
                 if (Regex.IsMatch(msg.Content,
                         @"https?://osu\.ppy\.sh/beatmapsets/[0-9]+#(?:osu|taiko|mania|fruits)/[0-9]+",
@@ -423,13 +423,21 @@ namespace Kaguya.Workers
         {
             // Large try-catch used as we cannot afford to let a scope go undisposed.
             IServiceScope scope = (ctx as ScopedCommandContext)?.Scope;
-            
+
             try
             {
                 IServiceProvider serviceProvider = scope?.ServiceProvider ?? _serviceProvider;
                 var ksRepo = serviceProvider.GetRequiredService<KaguyaServerRepository>();
-                // var userRepo = provider.GetService<KaguyaUserRepository>();
-                // var chRepo = provider.GetService<CommandHistoryRepository>();
+                var userRepo = serviceProvider.GetService<KaguyaUserRepository>();
+                var chRepo = serviceProvider.GetService<CommandHistoryRepository>();
+
+                if (ksRepo == null || userRepo == null || chRepo == null)
+                {
+                    string err = "One or more of server, user, or command history repositories were null.";
+                    _logger.LogCritical(err);
+                    
+                    throw new NullReferenceException(err);
+                }
 
                 if (!command.IsSpecified)
                     return;
@@ -453,9 +461,10 @@ namespace Kaguya.Workers
 
                 if (result.IsSuccess)
                 {
-                    //KaguyaUser user = await userRepo.GetOrCreateAsync(ctx.User.Id);
+                    // todo: Determine ratelimit for user.
+                    var user = await userRepo.GetOrCreateAsync(ctx.User.Id);
 
-                    //user.ActiveRateLimit++;
+                    user.TotalCommandUses++;
                     server.TotalCommandCount++;
 
                     var logCtxSb = new StringBuilder();
@@ -483,7 +492,10 @@ namespace Kaguya.Workers
                     if (result.Error != CommandError.UnknownCommand)
                     {
                         if (ch != null)
+                        {
                             ch.ExecutedSuccessfully = false;
+                            ch.ErrorMessage = result.ErrorReason;
+                        }
 
                         try
                         {
@@ -521,7 +533,7 @@ namespace Kaguya.Workers
                                 }
                                 catch (Exception)
                                 {
-                                    //
+                                    _logger.LogWarning($"Failed to notify server owner with id {owner.Id} of auto-ejection.");
                                 }
                                 
                                 await ctx.Guild.LeaveAsync();
