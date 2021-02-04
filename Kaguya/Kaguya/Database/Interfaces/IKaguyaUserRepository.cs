@@ -8,5 +8,6 @@ namespace Kaguya.Database.Interfaces
 	{
 		public Task<KaguyaUser> GetOrCreateAsync(ulong id);
 		public Task<IEnumerable<KaguyaUser>> GetActiveRatelimitedUsersAsync(bool ignoreOwner);
+		public Task<int> FetchExperienceRankAsync(ulong id);
 	}
 }

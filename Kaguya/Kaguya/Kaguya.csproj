@@ -49,4 +49,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Internal\Services\AntiraidWorker.cs" />
+    </ItemGroup>
+
 </Project>

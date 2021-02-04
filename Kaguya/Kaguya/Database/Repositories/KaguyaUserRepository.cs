@@ -62,9 +62,16 @@ namespace Kaguya.Database.Repositories
 			return users;
 		}
 
-		public async Task<int> GetCountOfUsersAsync()
+		public async Task<int> FetchExperienceRankAsync(ulong id)
 		{
-			return await _dbContext.KaguyaUsers.AsQueryable().CountAsync();
+			KaguyaUser match = await GetOrCreateAsync(id);
+			
+			// todo: Revisit. Current method is inefficient.
+			return (await _dbContext.KaguyaUsers
+			                        .AsQueryable()
+			                        .OrderByDescending(x => x.GlobalExp)
+			                        .ToListAsync())
+				.IndexOf(match) + 1;
 		}
 	}
 }

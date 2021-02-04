@@ -45,14 +45,28 @@ namespace Kaguya.Database.Repositories
         {
             ServerExperience match = await GetOrCreateAsync(serverId, userId);
             match.AddExp(amount);
-            await _dbContext.SaveChangesAsync();
+
+            await UpdateAsync(match);
         }
 
         public async Task Subtract(ulong serverId, ulong userId, int amount)
         {
             ServerExperience match = await GetOrCreateAsync(serverId, userId);
             match.SubtractExp(amount);
-            await _dbContext.SaveChangesAsync();
+
+            await UpdateAsync(match);
+        }
+
+        public async Task<int> FetchRankAsync(ulong serverId, ulong userId)
+        {
+            ServerExperience match = await GetOrCreateAsync(serverId, userId);
+            
+            // todo: Revisit. Current method is inefficient.
+            return (await _dbContext.ServerExperience
+                                    .AsQueryable()
+                                    .OrderByDescending(x => x.Exp)
+                                    .ToListAsync())
+                   .IndexOf(match) + 1;
         }
     }
 }

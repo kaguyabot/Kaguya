@@ -6,6 +6,6 @@ namespace Kaguya.Database.Repositories
 {
     public class WarnConfigurationRepository : RepositoryBase<WarnConfiguration>, IWarnConfigurationRepository
     {
-        protected WarnConfigurationRepository(KaguyaDbContext dbContext) : base(dbContext) { }
+        public WarnConfigurationRepository(KaguyaDbContext dbContext) : base(dbContext) { }
     }
 }
