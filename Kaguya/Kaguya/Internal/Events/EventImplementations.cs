@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using Interactivity;
 using Kaguya.Internal.Services;
+using Kaguya.Internal.Services.Recurring;
 
 namespace Kaguya.Internal.Events
 {

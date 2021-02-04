@@ -11,7 +11,7 @@ namespace Kaguya.Database.Repositories
     public class RoleRewardRepository : RepositoryBase<RoleReward>, IRoleRewardRepository
     {
         private readonly KaguyaDbContext _dbContext;
-        protected RoleRewardRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
+        public RoleRewardRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
 
         public async Task<IList<RoleReward>> GetAllForServerAsync(ulong serverId)
         {

@@ -17,6 +17,7 @@ using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Options;
 using Kaguya.Internal.Events;
+using Kaguya.Internal.Services;
 using Kaguya.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -323,10 +324,16 @@ namespace Kaguya.Workers
                 return; // If filtered phrase (and user isn't admin), return.
             }
 
-            // TODO: Implement experience handlers.
-            // await ExperienceHandler.TryAddExp(user, server, commandCtx);
-            // await ServerSpecificExperienceHandler.TryAddExp(user, server, commandCtx);
+            var expLogger = _serviceProvider.GetRequiredService<ILogger<ExperienceService>>();
+            var serverExpRepository = scope.ServiceProvider.GetRequiredService<ServerExperienceRepository>();
+            var userRepository = scope.ServiceProvider.GetRequiredService<KaguyaUserRepository>();
+            
+            var expService = new ExperienceService(expLogger, (ITextChannel) commandCtx.Channel, 
+                user, commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository);
 
+            await expService.TryAddGlobalExperienceAsync();
+            await expService.TryAddServerExperienceAsync();
+                        
             // If the channel is blacklisted and the user isn't an Admin, return.
             if (!commandCtx.Guild.GetUser(commandCtx.User.Id).GuildPermissions.Administrator &&
                 await dbContext.BlacklistedEntities.AsQueryable().AnyAsync(x =>

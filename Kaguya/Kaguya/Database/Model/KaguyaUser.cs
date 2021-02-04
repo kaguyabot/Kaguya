@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Internal.PrimitiveExtensions;
+using Kaguya.Internal.Services;
 using OsuSharp;
 
 namespace Kaguya.Database.Model
 {
-	public enum ExpChannel
+	public enum ExpNotificationPreference
 	{
 		Chat,
 		Dm,
@@ -47,7 +49,7 @@ namespace Kaguya.Database.Model
 		public int TotalUpvotes { get; set; } = 0;
 		public DateTime DateFirstTracked { get; set; }
 
-		public DateTime? LastGivenExp { get; set; }
+		public DateTime? LastGivenExp { get; private set; }
 
 		public DateTime? LastDailyBonus { get; set; }
 
@@ -68,7 +70,7 @@ namespace Kaguya.Database.Model
 		/// <summary>
 		/// If a user wants to receive level-up notifications, what type should it be?
 		/// </summary>
-		public ExpChannel ExpNotificationType { get; set; } = ExpChannel.Chat;
+		public ExpNotificationPreference ExpNotificationType { get; set; } = ExpNotificationPreference.Chat;
 
 		// public FishHandler.FishLevelBonuses FishLevelBonuses => new FishHandler.FishLevelBonuses(FishExp);
 		// public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
@@ -80,19 +82,19 @@ namespace Kaguya.Database.Model
 
 		public bool CanGetWeeklyPoints => !LastWeeklyBonus.HasValue || LastWeeklyBonus.Value < DateTime.Now.AddDays(-7);
 
-		public int GlobalExpLevel => ToFloor(ExactGlobalExpLevel);
+		public int GlobalExpLevel => ExactGlobalExpLevel.ToFloor();
 
 		/// <summary>
 		/// The user's level as returned by the experience formula.
 		/// </summary>
-		public double ExactGlobalExpLevel => CalculateLevel(this.GlobalExp);
+		public double ExactGlobalExpLevel => ExperienceService.CalculateLevel(this.GlobalExp);
 
-		public int FishLevel => ToFloor(ExactFishLevel);
+		public int FishLevel => ExactFishLevel.ToFloor();
 
-		public double ExactFishLevel => CalculateLevel(this.FishExp);
+		public double ExactFishLevel => ExperienceService.CalculateLevel(this.FishExp);
 
-		public int ExpToNextGlobalLevel => CalculateExpFromLevel(GlobalExpLevel + 1) - this.GlobalExp;
-		public double PercentToNextLevel => CalculatePercentToNextLevel();
+		public int ExpToNextGlobalLevel => ExperienceService.CalculateExpFromLevel(GlobalExpLevel + 1) - this.GlobalExp;
+		public double PercentToNextLevel => ExperienceService.CalculatePercentToNextLevel(this.ExactGlobalExpLevel, this.GlobalExp);
 
 		// public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
 
@@ -124,7 +126,8 @@ namespace Kaguya.Database.Model
 
 				return;
 			}
-			
+
+			this.LastGivenExp = DateTime.Now;
 			this.GlobalExp += amount;
 		}
 
@@ -145,30 +148,5 @@ namespace Kaguya.Database.Model
 		}
 
 		public override string ToString() => UserId.ToString();
-		
-		private static int ToFloor(double d) => (int)Math.Floor(d);
-		
-		private static double CalculateLevel(int exp)
-		{
-			if (exp < 64)
-				return 0;
-	        
-			return Math.Sqrt((exp / 8) - 8);
-		}
-
-		private static int CalculateExpFromLevel(double level)
-		{
-			return (int) (8 * Math.Pow(level, 2));
-		}
-
-		private double CalculatePercentToNextLevel()
-		{
-			int baseExp = CalculateExpFromLevel(GlobalExpLevel);
-			int nextExp = CalculateExpFromLevel(GlobalExpLevel + 1);
-			int difference = nextExp - baseExp;
-			int remaining = nextExp - this.GlobalExp;
-
-			return (difference - remaining) / (double)difference;
-		}
 	}
 }

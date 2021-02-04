@@ -15,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Kaguya.Internal.Services
+namespace Kaguya.Internal.Services.Recurring
 {
     public class AntiraidWorker : BackgroundService, ITimerReceiver
     {
@@ -44,7 +44,6 @@ namespace Kaguya.Internal.Services
             // First execution
             await _timerService.TriggerAtAsync(DateTime.Now.AddHours(1), this);
             
-            _logger.LogInformation("ExecuteAsync triggered.");
             while (!stoppingToken.IsCancellationRequested)
             {
                 await _arProcessor.GetChannel().Reader.WaitToReadAsync(stoppingToken);

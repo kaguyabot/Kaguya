@@ -5,6 +5,7 @@ using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
 using Kaguya.Discord.Commands.Administration;
+using Kaguya.Internal.Services.Recurring;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +13,7 @@ namespace Kaguya.Internal
 {
     /// <summary>
     /// Used for silent operations (mute, shadowban) during automated "user punishment" processes
-    /// such as the <see cref="Kaguya.Internal.Services.AntiraidWorker"/>.
+    /// such as the <see cref="AntiraidWorker"/>.
     /// </summary>
     public class SilentSysActions
     {

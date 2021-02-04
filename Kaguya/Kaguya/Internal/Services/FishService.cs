@@ -16,7 +16,6 @@ namespace Kaguya.Internal.Services
 	
 	public enum FishType
 	{
-		// TODO: Rarity calculation based on position in this list.
 		Megamouth, // Legendary
 		BigKahuna,
 		GoldenTrout,

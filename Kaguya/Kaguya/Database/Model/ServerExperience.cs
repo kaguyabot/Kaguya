@@ -18,7 +18,11 @@ namespace Kaguya.Database.Model
         /// Adds the absolute value of <see cref="amount"/> to the current object's <see cref="Exp"/> value.
         /// </summary>
         /// <param name="amount"></param>
-        public void AddExp(int amount) => Exp += Math.Abs(amount);
+        public void AddExp(int amount)
+        {
+            this.Exp += Math.Abs(amount);
+            this.LastGivenExp = DateTime.Now;
+        }
 
         /// <summary>
         /// Subtracts the absolute value of <see cref="amount"/> to the current object's <see cref="Exp"/> value.
@@ -28,11 +32,11 @@ namespace Kaguya.Database.Model
         {
             if (Math.Abs(amount) - Exp < 0)
             {
-                Exp = 0;
+                this.Exp = 0;
             }
             else
             {
-                Exp -= Math.Abs(amount);  
+                this.Exp -= Math.Abs(amount);  
             }
         } 
     }

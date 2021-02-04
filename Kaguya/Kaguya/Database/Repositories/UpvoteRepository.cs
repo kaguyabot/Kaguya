@@ -13,7 +13,7 @@ namespace Kaguya.Database.Repositories
     {
         private readonly KaguyaDbContext _dbContext;
 
-        protected UpvoteRepository(KaguyaDbContext dbContext) : base(dbContext)
+        public UpvoteRepository(KaguyaDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
