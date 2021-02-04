@@ -5,6 +5,7 @@ using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.PrimitiveExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Internal.Services
@@ -61,7 +62,7 @@ namespace Kaguya.Internal.Services
             if (HasLeveledUp(oldExp, newExp))
             {
                 _logger.LogInformation($"(Server Exp) User {_user} has leveled up! New level: {_user.GlobalExpLevel:N0}");
-                int newLevel = ToFloor(CalculateLevel(newExp));
+                int newLevel = CalculateLevel(newExp).ToFloor();
                 await SendBasedOnPreferencesAsync(await GetLevelUpEmbedAsync(newLevel, true));
             }
         }
@@ -198,11 +199,9 @@ namespace Kaguya.Internal.Services
 
         public static bool HasLeveledUp(int oldExp, int newExp)
         {
-            return ToFloor(CalculateLevel(oldExp)) < ToFloor(CalculateLevel(newExp));
+            return CalculateLevel(oldExp).ToFloor() < CalculateLevel(newExp).ToFloor();
         }
         
-        public static int ToFloor(double d) => (int)Math.Floor(d);
-		
         public static double CalculateLevel(int exp)
         {
             if (exp < 64)
