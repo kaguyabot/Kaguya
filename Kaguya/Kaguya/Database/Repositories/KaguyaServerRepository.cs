@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Database.Repositories

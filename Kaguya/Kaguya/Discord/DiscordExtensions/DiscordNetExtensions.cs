@@ -18,7 +18,7 @@ namespace Kaguya.Discord.DiscordExtensions
                 LogSeverity.Warning => LogLevel.Warning,
                 LogSeverity.Info => LogLevel.Information,
                 LogSeverity.Verbose => LogLevel.Trace,
-                LogSeverity.Debug => LogLevel.Debug,
+                LogSeverity.Debug => LogLevel.Trace,
                 _ => throw new ArgumentOutOfRangeException(nameof(severity), severity, null)
             };
         }

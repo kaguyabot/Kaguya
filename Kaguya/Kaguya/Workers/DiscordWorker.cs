@@ -48,7 +48,7 @@ namespace Kaguya.Workers
             _serviceProvider = serviceProvider;
             _kaguyaEvents = kaguyaEvents;
 
-            // TODO: add emote type handler 
+            // TODO: add emote type handler
             // TODO: add socket guild user list type handler
         }
 
@@ -65,9 +65,7 @@ namespace Kaguya.Workers
             };
 
             InitLogging();
-
             InitCommands();
-
             InitOther();
 
             await _client.LoginAsync(TokenType.Bot, _discordConfigs.Value.BotToken);

@@ -63,6 +63,7 @@ namespace Kaguya
 			services.AddScoped<FishRepository>();
 			services.AddScoped<GambleHistoryRepository>();
 			services.AddScoped<KaguyaServerRepository>();
+			services.AddScoped<KaguyaStatisticsRepository>();
 			services.AddScoped<KaguyaUserRepository>();
 			services.AddScoped<LogConfigurationRepository>();
 			services.AddScoped<PremiumKeyRepository>();
@@ -149,6 +150,7 @@ namespace Kaguya
 			
 			services.AddHostedService<TimerWorker>();
 			services.AddHostedService<AntiraidWorker>();
+			services.AddHostedService<StatisticsUploaderWorker>();
 			
 			services.AddHostedService<DiscordWorker>();
 

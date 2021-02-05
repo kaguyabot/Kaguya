@@ -73,5 +73,13 @@ namespace Kaguya.Database.Repositories
 			                        .ToListAsync())
 				.IndexOf(match) + 1;
 		}
+
+		public async Task<long> CountPointsAsync()
+		{
+			return await _dbContext.KaguyaUsers
+			                       .AsQueryable()
+			                       .Where(x => x.Points > 0)
+			                       .SumAsync(x => x.Points);
+		}
 	}
 }
