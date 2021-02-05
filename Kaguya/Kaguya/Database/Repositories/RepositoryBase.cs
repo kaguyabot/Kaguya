@@ -11,7 +11,7 @@ namespace Kaguya.Database.Repositories
         protected readonly KaguyaDbContext DbContext;
         protected readonly DbSet<T> Table;
 
-        protected RepositoryBase(KaguyaDbContext dbContext)
+        public RepositoryBase(KaguyaDbContext dbContext)
         {
             DbContext = dbContext;
             Table = dbContext.Set<T>();

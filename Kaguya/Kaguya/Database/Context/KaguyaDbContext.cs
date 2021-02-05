@@ -20,6 +20,7 @@ namespace Kaguya.Database.Context
 		public DbSet<GambleHistory> GambleHistories { get; set; }
 		public DbSet<Giveaway> Giveaways { get; set; }
 		public DbSet<KaguyaServer> KaguyaServers { get; set; }
+		public DbSet<KaguyaStatistics> KaguyaStatistics { get; set; }
 		public DbSet<KaguyaUser> KaguyaUsers { get; set; }
 		public DbSet<LogConfiguration> LogConfigurations { get; set; }
 		public DbSet<PremiumKey> PremiumKeys { get; set; }

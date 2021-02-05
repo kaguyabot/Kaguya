@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210205003113_kaguya_statistics")]
+    partial class kaguya_statistics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -390,47 +392,6 @@ namespace Kaguya.Migrations
                     b.HasIndex("AntiRaidServerId");
 
                     b.ToTable("KaguyaServers");
-                });
-
-            modelBuilder.Entity("Kaguya.Database.Model.KaguyaStatistics", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommandsExecuted")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Fish")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Gambles")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LatencyMilliseconds")
-                        .HasColumnType("int");
-
-                    b.Property<long>("Points")
-                        .HasColumnType("bigint");
-
-                    b.Property<double>("RamUsageMegabytes")
-                        .HasColumnType("double");
-
-                    b.Property<int>("Servers")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Shards")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Users")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Version")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("KaguyaStatistics");
                 });
 
             modelBuilder.Entity("Kaguya.Database.Model.KaguyaUser", b =>
