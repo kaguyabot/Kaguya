@@ -4,7 +4,7 @@ using Kaguya.Internal.Enums;
 
 namespace Kaguya.Internal.Events.ArgModels
 {
-    public class AntiraidEventArgs : EventArgs
+    public class AntiraidEventData
     {
         /// <summary>
         /// A collection of IDs to action

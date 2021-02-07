@@ -10,6 +10,7 @@ using Discord.WebSocket;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Events;
 using Kaguya.Internal.Services.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -141,7 +142,9 @@ namespace Kaguya.Internal.Services.Recurring
                             IsSystemAction = true,
                             Timestamp = DateTime.Now
                         };
-
+                        
+                        KaguyaEvents.OnAntiraidTrigger(adminAction, user);
+                        
                         switch (action)
                         {
                             case AntiraidAction.Mute:
