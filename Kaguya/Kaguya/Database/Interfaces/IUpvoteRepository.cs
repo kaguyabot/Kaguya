@@ -44,6 +44,6 @@ namespace Kaguya.Database.Interfaces
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public Task<IList<Upvote>> GetAllUpvotesForUserAsync(ulong userId);
+        public Task<IList<Upvote>> GetAllUpvotesAsync(ulong userId);
     }
 }

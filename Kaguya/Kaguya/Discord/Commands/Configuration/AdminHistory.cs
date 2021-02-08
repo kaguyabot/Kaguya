@@ -81,7 +81,7 @@ namespace Kaguya.Discord.Commands.Configuration
             }
 #endregion
             var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
-            List<AdminAction> unFilteredCollection = (await _adminActionRepository.GetAllForServerAsync(server.ServerId, showHidden)).ToList();
+            List<AdminAction> unFilteredCollection = (await _adminActionRepository.GetAllAsync(server.ServerId, showHidden)).ToList();
             List<AdminAction> collection = new List<AdminAction>();
             foreach (string filter in userInputFilters)
             {

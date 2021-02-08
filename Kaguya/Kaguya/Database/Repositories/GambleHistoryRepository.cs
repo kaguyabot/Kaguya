@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +31,7 @@ namespace Kaguya.Database.Repositories
             throw new NotImplementedException();
         }
 #pragma warning restore 108,114
-        public async Task<IList<GambleHistory>> GetAllForUserAsync(ulong userId)
+        public async Task<IList<GambleHistory>> GetAllAsync(ulong userId)
         {
             return await _dbContext.GambleHistories
                                    .AsQueryable()

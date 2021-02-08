@@ -14,14 +14,14 @@ namespace Kaguya.Database.Repositories
 
         public ReminderRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
 
-        public async Task<IList<Reminder>> GetAllForUserAsync(ulong id)
+        public async Task<IList<Reminder>> GetAllAsync(ulong userId)
         {
-            return await _dbContext.Reminders.AsQueryable().Where(x => x.UserId == id).ToListAsync();
+            return await _dbContext.Reminders.AsQueryable().Where(x => x.UserId == userId).ToListAsync();
         }
 
-        public async Task<IList<Reminder>> GetAllToDeliverForUserAsync(ulong id)
+        public async Task<IList<Reminder>> GetAllToDeliverAsync(ulong userId)
         {
-            return await _dbContext.Reminders.AsQueryable().Where(x => x.UserId == id && x.NeedsDelivery).ToListAsync();
+            return await _dbContext.Reminders.AsQueryable().Where(x => x.UserId == userId && x.NeedsDelivery).ToListAsync();
         }
 
         public async Task<IList<Reminder>> GetAllToDeliverAsync()

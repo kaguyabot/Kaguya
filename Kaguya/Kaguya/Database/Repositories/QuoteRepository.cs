@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ namespace Kaguya.Database.Repositories
 
         public QuoteRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
         
-        public async Task<IList<Quote>> GetAllForServerAsync(ulong serverId)
+        public async Task<IList<Quote>> GetAllAsync(ulong serverId)
         {
             return await _dbContext.Quotes.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
         }
@@ -23,7 +23,7 @@ namespace Kaguya.Database.Repositories
         public async Task<Quote> GetRandomQuoteAsync(ulong serverId)
         {
             Random r = new();
-            var quotes = await GetAllForServerAsync(serverId);
+            var quotes = await GetAllAsync(serverId);
             
             return quotes[r.Next(quotes.Count)];
         }
