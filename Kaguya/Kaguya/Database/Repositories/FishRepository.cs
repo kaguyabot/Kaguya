@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
@@ -29,12 +29,12 @@ namespace Kaguya.Database.Repositories
              return await _dbContext.Fish.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
         }
 
-        public async Task<IList<Fish>> GetAllOfTypeForUserAsync(ulong userId, FishType fish)
+        public async Task<IList<Fish>> GetAllOfTypeAsync(ulong userId, FishType fish)
         {
             return await _dbContext.Fish.AsQueryable().Where(x => x.UserId == userId && x.FishType == fish).ToListAsync();
         }
 
-        public async Task<IList<Fish>> GetAllOfRarityForUserAsync(ulong userId, FishRarity rarity)
+        public async Task<IList<Fish>> GetAllOfRarityAsync(ulong userId, FishRarity rarity)
         {
             return await _dbContext.Fish.AsQueryable().Where(x => x.UserId == userId && x.Rarity == rarity).ToListAsync();
         }

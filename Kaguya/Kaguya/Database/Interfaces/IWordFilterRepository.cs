@@ -7,7 +7,7 @@ namespace Kaguya.Database.Interfaces
     {
         public Task<bool> DeleteIfExistsAsync(ulong key1, string key2);
         public Task<bool> InsertIfNotExistsAsync(FilteredWord value);
-        public Task<FilteredWord[]> GetAllForServerAsync(ulong serverId, bool includeWildcards);
-        public Task DeleteAllForServerAsync(ulong serverId);
+        public Task<FilteredWord[]> GetAllAsync(ulong serverId, bool includeWildcards);
+        public Task DeleteAllAsync(ulong serverId);
     }
 }

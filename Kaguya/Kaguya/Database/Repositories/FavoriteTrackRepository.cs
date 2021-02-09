@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
@@ -14,7 +14,7 @@ namespace Kaguya.Database.Repositories
 
         public FavoriteTrackRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
 
-        public async Task<IList<FavoriteTrack>> GetAllForUserAsync(ulong userId)
+        public async Task<IList<FavoriteTrack>> GetAllAsync(ulong userId)
         {
             return await _dbContext.FavoriteTracks
                                    .AsQueryable()

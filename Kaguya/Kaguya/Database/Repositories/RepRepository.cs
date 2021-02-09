@@ -17,12 +17,12 @@ namespace Kaguya.Database.Repositories
             _dbContext = dbContext;
         }
         
-        public async Task<IList<Rep>> GetAllForUserAsync(ulong userId)
+        public async Task<IList<Rep>> GetAllAsync(ulong userId)
         {
             return await _dbContext.Rep.AsQueryable().Where(x => x.UserId == userId).ToListAsync();
         }
 
-        public async Task<Rep> GetMostRecentForUserAsync(ulong userId)
+        public async Task<Rep> GetMostRecentAsync(ulong userId)
         {
             return await _dbContext.Rep.AsQueryable()
                                         .OrderByDescending(x => x.TimeGiven)
@@ -30,9 +30,9 @@ namespace Kaguya.Database.Repositories
                                         .FirstOrDefaultAsync();
         }
 
-        public async Task<int> GetCountRepForUserAsync(ulong userid)
+        public async Task<int> GetCountRepAsync(ulong userId)
         {
-            return await _dbContext.Rep.AsQueryable().CountAsync(x => x.UserId == userid);
+            return await _dbContext.Rep.AsQueryable().CountAsync(x => x.UserId == userId);
         }
     }
 }

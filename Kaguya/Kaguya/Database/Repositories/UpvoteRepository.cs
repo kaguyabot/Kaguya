@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,7 +50,7 @@ namespace Kaguya.Database.Repositories
             // todo: needs testing.
             int count = 0;
             DateTime dt = DateTime.Now;
-            var upvotes = (await GetAllUpvotesForUserAsync(userId)).OrderByDescending(x => x.Timestamp);
+            var upvotes = (await GetAllUpvotesAsync(userId)).OrderByDescending(x => x.Timestamp);
             foreach (var uv in upvotes)
             {
                 if (uv.Timestamp > dt.Subtract(offset))
@@ -67,7 +67,7 @@ namespace Kaguya.Database.Repositories
             return count;
         }
 
-        public async Task<IList<Upvote>> GetAllUpvotesForUserAsync(ulong userId)
+        public async Task<IList<Upvote>> GetAllUpvotesAsync(ulong userId)
         {
             return await _dbContext.Upvotes.AsQueryable().Where(x => x.UserId == userId).ToListAsync();
         }
