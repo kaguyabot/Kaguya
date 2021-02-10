@@ -86,7 +86,7 @@ namespace Kaguya.Internal.Services.Recurring
                         _rotationIndex++;
                         var kaguyaUserRepository = scope.ServiceProvider.GetRequiredService<KaguyaUserRepository>();
 
-                        text = $"{await kaguyaUserRepository.GetCountAsync():N0} unique interactions";
+                        text = $"{await kaguyaUserRepository.GetCountAsync():N0} accounts";
                         
                         _statusSwapLog(_logger, text, default!);
                         return (text, ActivityType.Watching);

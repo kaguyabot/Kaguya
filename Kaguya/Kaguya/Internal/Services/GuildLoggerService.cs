@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
@@ -9,8 +8,8 @@ using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Internal.Events.ArgModels;
 using Kaguya.Internal.Services.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using OsuSharp;
 
 namespace Kaguya.Internal.Services
 {
@@ -23,23 +22,31 @@ namespace Kaguya.Internal.Services
         private readonly AntiraidConfigRepository _antiraidConfigRepository;
         private readonly CommonEmotes _commonEmotes;
 
-        public GuildLoggerService(ILogger<GuildLoggerService> logger, KaguyaServerRepository kaguyaServerRepository, 
-            LogConfigurationRepository logConfigurationRepository, DiscordShardedClient client, 
-            AntiraidConfigRepository antiraidConfigRepository, CommonEmotes commonEmotes)
+        public GuildLoggerService(IServiceProvider serviceProvider, ILogger<GuildLoggerService> logger,
+            DiscordShardedClient client, CommonEmotes commonEmotes)
         {
             _logger = logger;
-            _kaguyaServerRepository = kaguyaServerRepository;
-            _logConfigurationRepository = logConfigurationRepository;
             _client = client;
-            _antiraidConfigRepository = antiraidConfigRepository;
             _commonEmotes = commonEmotes;
+            
+            using (IServiceScope scope = serviceProvider.CreateScope())
+            {
+                _kaguyaServerRepository = scope.ServiceProvider.GetRequiredService<KaguyaServerRepository>();
+                _logConfigurationRepository = scope.ServiceProvider.GetRequiredService<LogConfigurationRepository>();
+                _antiraidConfigRepository = scope.ServiceProvider.GetRequiredService<AntiraidConfigRepository>();
+            }
         }
         
-        public async Task LogMessageDeleted(Cacheable<IMessage, ulong> cache, ISocketMessageChannel textChannel)
+        public async Task LogMessageDeletedAsync(Cacheable<IMessage, ulong> cache, ISocketMessageChannel textChannel)
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(((SocketGuildChannel) textChannel).Guild.Id);
             var config = await _logConfigurationRepository.GetOrCreateAsync(((SocketGuildChannel) textChannel).Guild.Id);
 
+            if (Memory.ServersCurrentlyPurgingMessages.ContainsKey(server.ServerId))
+            {
+                return;
+            }
+            
             if (!config.MessageDeleted.HasValue)
                 return;
 
@@ -85,7 +92,7 @@ namespace Kaguya.Internal.Services
             }
         }
 
-        public async Task LogMessageUpdated(Cacheable<IMessage, ulong> cache, SocketMessage message, ISocketMessageChannel textChannel)
+        public async Task LogMessageUpdatedAsync(Cacheable<IMessage, ulong> cache, SocketMessage message, ISocketMessageChannel textChannel)
         {
             if (!(textChannel is SocketGuildChannel channel))
                 return;
@@ -149,7 +156,7 @@ namespace Kaguya.Internal.Services
             }
         }
 
-        public async Task LogUserJoined(SocketGuildUser user)
+        public async Task LogUserJoinedAsync(SocketGuildUser user)
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(user.Guild.Id);
             var config = await _logConfigurationRepository.GetOrCreateAsync(user.Guild.Id);
@@ -175,7 +182,7 @@ namespace Kaguya.Internal.Services
             }
         }
 
-        public async Task LogUserLeft(SocketGuildUser user)
+        public async Task LogUserLeftAsync(SocketGuildUser user)
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(user.Guild.Id);
             var config = await _logConfigurationRepository.GetOrCreateAsync(user.Guild.Id);
@@ -203,7 +210,7 @@ namespace Kaguya.Internal.Services
             }
         }
 
-        public async Task LogAntiRaid(AdminAction action, SocketUser socketUser)
+        public async Task LogAntiRaidAsync(AdminAction action, SocketUser socketUser)
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(action.ServerId);
             var config = await _logConfigurationRepository.GetOrCreateAsync(action.ServerId);
@@ -232,7 +239,7 @@ namespace Kaguya.Internal.Services
             }
         }
 
-        public async Task LogUserBanned(SocketUser bannedUser, SocketGuild guild)
+        public async Task LogUserBannedAsync(SocketUser bannedUser, SocketGuild guild)
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(guild.Id);
             var config = await _logConfigurationRepository.GetOrCreateAsync(guild.Id);
@@ -260,7 +267,7 @@ namespace Kaguya.Internal.Services
             }
         }
 
-        public async Task LogUserUnbanned(SocketUser unbannedUser, SocketGuild guild)
+        public async Task LogUserUnbannedAsync(SocketUser unbannedUser, SocketGuild guild)
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(guild.Id);
             var config = await _logConfigurationRepository.GetOrCreateAsync(guild.Id);
@@ -287,7 +294,7 @@ namespace Kaguya.Internal.Services
             }
         }
 
-        public async Task LogUserVoiceStateUpdated(SocketUser user, SocketVoiceState curVoiceState, SocketVoiceState nextVoiceState)
+        public async Task LogUserVoiceStateUpdatedAsync(SocketUser user, SocketVoiceState curVoiceState, SocketVoiceState nextVoiceState)
         {
             KaguyaServer server;
             LogConfiguration config;
@@ -349,7 +356,7 @@ namespace Kaguya.Internal.Services
             }
         }
 
-        public async Task LogFilteredPhrase(FilteredWordEventData fwData)
+        public async Task LogFilteredWordAsync(FilteredWordEventData fwData)
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(fwData.ServerId);
             var config = await _logConfigurationRepository.GetOrCreateAsync(fwData.ServerId);
@@ -373,79 +380,19 @@ namespace Kaguya.Internal.Services
 
             try
             {
-                await _client.GetGuild(fwData.Server.ServerId).GetTextChannel(server.LogFilteredPhrases).SendMessageAsync(msg);
+                await _client.GetGuild(fwData.ServerId).GetTextChannel(config.FilteredWord.Value).SendMessageAsync(msg);
             }
             catch (Exception)
             {
-                await ConsoleLogger.LogAsync($"Failed to send filtered phrase log to channel {server.LogFilteredPhrases} " +
-                                             $"in guild {server.ServerId}. Resetting this log channel to null so it " +
-                                             "doesn't happen again!", LogLvl.WARN);
+                _logger.LogWarning($"Failed to send filtered phrase log to channel {config.FilteredWord.Value} " +
+                                   $"in guild {server.ServerId}. Resetting this log channel to null so it " +
+                                   "doesn't happen again!");
 
-                server.LogFilteredPhrases = 0;
-                await DatabaseQueries.UpdateAsync(server);
+                config.FilteredWord = null;
+                await _logConfigurationRepository.UpdateAsync(config);
             }
         }
         
-        public async Task LogWarn(IModeratorEventArgs mArgs)
-        {
-            if (!mArgs.Server.IsPremium) return;
-
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.WARN,
-                "🚔", GetFormattedTimestamp(), mArgs.Server.LogWarns);
-
-            await logger.LogModerationAction();
-        }
-
-        public async Task LogUnwarn(IModeratorEventArgs mArgs)
-        {
-            if (!mArgs.Server.IsPremium) return;
-
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNWARN,
-                "🛃 ☑", GetFormattedTimestamp(), mArgs.Server.LogUnwarns);
-
-            await logger.LogModerationAction();
-        }
-
-        public async Task LogShadowban(IModeratorEventArgs mArgs)
-        {
-            if (!mArgs.Server.IsPremium) return;
-
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.SHADOWBAN,
-                "👻 ⛔", GetFormattedTimestamp(), mArgs.Server.LogShadowbans);
-
-            await logger.LogModerationAction();
-        }
-
-        public async Task LogUnshadowban(IModeratorEventArgs mArgs)
-        {
-            if (!mArgs.Server.IsPremium) return;
-
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNSHADOWBAN,
-                "👻 ✅", GetFormattedTimestamp(), mArgs.Server.LogUnshadowbans);
-
-            await logger.LogModerationAction();
-        }
-
-        public async Task LogMute(IModeratorEventArgs mArgs)
-        {
-            if (!mArgs.Server.IsPremium) return;
-
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.MUTE,
-                "🔕", GetFormattedTimestamp(), mArgs.Server.LogMutes);
-
-            await logger.LogModerationAction();
-        }
-
-        public async Task LogUnmute(IModeratorEventArgs mArgs)
-        {
-            if (!mArgs.Server.IsPremium) return;
-
-            var logger = new ModeratorEventLogger(mArgs, InternalModerationAction.UNMUTE,
-                "🔔", GetFormattedTimestamp(), mArgs.Server.LogUnmutes);
-
-            await logger.LogModerationAction();
-        }
-
         private static string GetFormattedTimestamp()
         {
             DateTime d = DateTime.Now;

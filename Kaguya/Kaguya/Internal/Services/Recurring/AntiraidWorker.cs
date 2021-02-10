@@ -143,7 +143,7 @@ namespace Kaguya.Internal.Services.Recurring
                             Timestamp = DateTime.Now
                         };
                         
-                        KaguyaEvents.OnAntiraidTrigger(adminAction, user);
+                        Events.Events.OnAntiraidTrigger(adminAction, user);
                         
                         switch (action)
                         {

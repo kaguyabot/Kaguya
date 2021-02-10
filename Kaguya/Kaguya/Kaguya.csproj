@@ -51,6 +51,7 @@
 
     <ItemGroup>
       <Compile Remove="Internal\Services\AntiraidWorker.cs" />
+      <Compile Remove="Discord\Commands\OwnerOnly\MigrateData.cs" />
     </ItemGroup>
 
 </Project>

@@ -17,6 +17,7 @@ using Kaguya.Discord;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Options;
 using Kaguya.Internal.Events;
+using Kaguya.Internal.Events.ArgModels;
 using Kaguya.Internal.Services;
 using Kaguya.Options;
 using Microsoft.EntityFrameworkCore;
@@ -35,10 +36,10 @@ namespace Kaguya.Workers
         private readonly IOptions<DiscordConfigurations> _discordConfigs;
         private readonly ILogger<DiscordWorker> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private readonly KaguyaEvents _kaguyaEvents;
+        private readonly Events _events;
 
         public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
-            ILogger<DiscordWorker> logger, CommandService commandService, IServiceProvider serviceProvider, KaguyaEvents kaguyaEvents)
+            ILogger<DiscordWorker> logger, CommandService commandService, IServiceProvider serviceProvider, Events events)
         {
             _client = client;
             _adminConfigs = adminConfigs;
@@ -46,10 +47,7 @@ namespace Kaguya.Workers
             _logger = logger;
             _commandService = commandService;
             _serviceProvider = serviceProvider;
-            _kaguyaEvents = kaguyaEvents;
-
-            // TODO: add emote type handler
-            // TODO: add socket guild user list type handler
+            _events = events;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -91,7 +89,7 @@ namespace Kaguya.Workers
         {
             _client.ShardConnected += client =>
             {
-                _logger.Log(LogLevel.Trace, $"Shard {client.ShardId} connected.");
+                _logger.Log(LogLevel.Debug, $"Shard {client.ShardId} connected.");
 
                 return Task.CompletedTask;
             };
@@ -257,7 +255,7 @@ namespace Kaguya.Workers
         private void InitOther()
         {
             LogConfiguration.LoadProperties();
-            _kaguyaEvents.InitEvents();
+            _events.InitEvents();
         }
 
         private async Task HandleCommandAsync(SocketMessage msg)
@@ -384,7 +382,10 @@ namespace Kaguya.Workers
                 List<FilteredWord> filters = await dbContext.FilteredWords.AsQueryable().Where(w => w.ServerId == server.ServerId)
                                                             .ToListAsync();
 
-                if (filters.Count == 0) return false;
+                if (filters.Count == 0)
+                {
+                    return false;
+                }
 
                 foreach (FilteredWord filter in filters.Where(filter => FilterMatch(message.Content, filter.Word)))
                 {
@@ -392,9 +393,13 @@ namespace Kaguya.Workers
                     _logger.Log(LogLevel.Information,
                         $"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
 
-                    // TODO: implement
-                    // var fpArgs = new FilteredPhraseEventArgs(server, filter.Word, message);
-                    // KaguyaEvents.TriggerFilteredPhrase(fpArgs);
+                    Events.OnFilteredWordDetectedTrigger(new FilteredWordEventData
+                    {
+                        ServerId = server.ServerId,
+                        UserId = ctx.User.Id,
+                        Phrase = filter.Word,
+                        Message = message
+                    });
 
                     return true;
                 }
