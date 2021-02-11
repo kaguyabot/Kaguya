@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.OwnerOnly
 {
+    [Restriction(ModuleRestriction.OwnerOnly)]
     [Module(CommandModule.OwnerOnly)]
     [Group("premiumkeygen")]
     [Alias("pgen")]
@@ -40,7 +41,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
             TimeSpan parsedTime = parser.ParseTime();
             string timeString = parsedTime.Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day).AsBold();
 
-            var collection = await _premiumKeyRepository.GenerateAndInsertAsync(amount, parsedTime);
+            var collection = await _premiumKeyRepository.GenerateAndInsertAsync(amount, Context.User.Id, parsedTime);
 
             await SendBasicSuccessEmbedAsync($"Successfully bulk-inserted {amount.ToString("N0").AsBold()} {timeString} premium keys.");
 
