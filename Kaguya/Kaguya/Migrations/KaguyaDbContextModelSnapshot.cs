@@ -578,10 +578,10 @@ namespace Kaguya.Migrations
                     b.Property<int>("LengthInSeconds")
                         .HasColumnType("int");
 
-                    b.Property<ulong>("ServerId")
+                    b.Property<ulong?>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("UserId")
+                    b.Property<ulong?>("UserId")
                         .HasColumnType("bigint unsigned");
 
                     b.HasKey("Key");
