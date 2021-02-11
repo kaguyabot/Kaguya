@@ -14,6 +14,7 @@ using Kaguya.Internal.Music;
 using Kaguya.Internal.Services;
 using Kaguya.Internal.Services.Recurring;
 using Kaguya.Options;
+using Kaguya.Web.Options;
 using Kaguya.Workers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +44,7 @@ namespace Kaguya
 		{
 			services.Configure<AdminConfigurations>(Configuration.GetSection(AdminConfigurations.Position));
 			services.Configure<DiscordConfigurations>(Configuration.GetSection(DiscordConfigurations.Position));
+			services.Configure<TopGgConfigurations>(Configuration.GetSection(TopGgConfigurations.Position));
 			
 			services.AddDbContextPool<KaguyaDbContext>(builder =>
 			{

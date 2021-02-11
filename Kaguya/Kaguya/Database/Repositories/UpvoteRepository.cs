@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -70,6 +70,14 @@ namespace Kaguya.Database.Repositories
         public async Task<IList<Upvote>> GetAllUpvotesAsync(ulong userId)
         {
             return await _dbContext.Upvotes.AsQueryable().Where(x => x.UserId == userId).ToListAsync();
+        }
+
+        public async Task<IList<Upvote>> GetAllUpvotesForNotificationServiceAsync()
+        {
+            return await _dbContext.Upvotes.AsQueryable().Where(x => !x.ReminderSent &&
+                                                                     x.Type.ToLower() != "test" &&
+                                                                     x.Timestamp < DateTime.Now.AddHours(-12))
+                                   .ToListAsync();
         }
     }
 }

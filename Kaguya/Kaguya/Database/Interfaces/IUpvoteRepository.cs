@@ -45,5 +45,12 @@ namespace Kaguya.Database.Interfaces
         /// <param name="userId"></param>
         /// <returns></returns>
         public Task<IList<Upvote>> GetAllUpvotesAsync(ulong userId);
+
+        /// <summary>
+        /// Returns all upvotes that the expiration service will use to notify
+        /// users that they are able to earn more rewards if they continue to upvote.
+        /// </summary>
+        /// <returns></returns>
+        public Task<IList<Upvote>> GetAllUpvotesForNotificationServiceAsync();
     }
 }
