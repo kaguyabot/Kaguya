@@ -50,12 +50,16 @@ namespace Kaguya.Internal.Events
             var messageBuilder = new StringBuilder()
                                  .AppendLine($"Hello {owner.Username}, thanks for adding me to your server!")
                                  .AppendLine()
-                                 .AppendLine($"Here's a short list of links and suggestions to help you get started.")
+                                 .AppendLine("Here's a list of links and suggestions to help you get started.")
                                  .AppendLine()
                                  .AppendLine($"- [Quick start guide]({Global.WikiQuickStartUrl})")
                                  .AppendLine($"- [Privacy statement]({Global.WikiPrivacyUrl})")
                                  .AppendLine($"- [Kaguya Support]({Global.SupportDiscordUrl})")
                                  .AppendLine($"- [Invite Kaguya]({Global.InviteUrl})")
+                                 .AppendLine()
+                                 .AppendLine($"- [Kaguya Premium Store]({Global.StoreUrl})")
+                                 .AppendLine($"- [Kaguya Premium Benefits]({Global.WikiPremiumBenefitsUrl})")
+                                 .AppendLine()
                                  .AppendLine($"- Support us by upvoting on [top.gg]({Global.TopGgUpvoteUrl})!");
 
             var embed = new KaguyaEmbedBuilder(Color.Gold)
