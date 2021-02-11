@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Internal.Enums;
 using Kaguya.Options;
@@ -18,10 +19,10 @@ namespace Kaguya.Internal.Attributes
             Restriction = restriction;
         }
 
-        // todo: come back for users AND servers.
         public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var kaguyaUserRepository = services.GetRequiredService<KaguyaUserRepository>();
+            var kaguyaserverRepository = services.GetRequiredService<KaguyaServerRepository>();
             var adminConfigurations = services.GetRequiredService<IOptions<AdminConfigurations>>();
 			
             if ((Restriction & ModuleRestriction.OwnerOnly) != 0)
@@ -32,12 +33,21 @@ namespace Kaguya.Internal.Attributes
                 }
             }
 
-            if ((Restriction & ModuleRestriction.PremiumOnly) != 0)
+            if ((Restriction & ModuleRestriction.PremiumUser) != 0)
             {
-                var user = await kaguyaUserRepository.GetOrCreateAsync(context.User.Id);
+                KaguyaUser user = await kaguyaUserRepository.GetOrCreateAsync(context.User.Id);
 				
                 return user.IsPremium 
                     ? PreconditionResult.FromSuccess() 
+                    : PreconditionResult.FromError($"You must purchase a [Kaguya Premium]({Global.StoreUrl}) subscription to use this command.");
+            }
+            
+            if ((Restriction & ModuleRestriction.PremiumServer) != 0)
+            {
+                KaguyaServer server = await kaguyaserverRepository.GetOrCreateAsync(context.Guild.Id);
+				
+                return server.IsPremium 
+                    ? PreconditionResult.FromSuccess()
                     : PreconditionResult.FromError($"You must purchase a [Kaguya Premium]({Global.StoreUrl}) subscription to use this command.");
             }
 			

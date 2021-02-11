@@ -37,6 +37,7 @@ namespace Kaguya.Discord.Commands.Configuration
             _interactivityService = interactivityService;
         }
 
+        [Restriction(ModuleRestriction.PremiumServer)]
         [Command("-history", RunMode = RunMode.Async)]
         [Alias("-hist")]
         [Summary("Displays administration action history for events in this server. Filter down the results using the " +
