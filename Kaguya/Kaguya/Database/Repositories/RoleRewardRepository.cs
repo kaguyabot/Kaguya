@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
@@ -13,7 +13,7 @@ namespace Kaguya.Database.Repositories
         private readonly KaguyaDbContext _dbContext;
         public RoleRewardRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
 
-        public async Task<IList<RoleReward>> GetAllForServerAsync(ulong serverId)
+        public async Task<IList<RoleReward>> GetAllAsync(ulong serverId)
         {
             return await _dbContext.RoleRewards.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
         }

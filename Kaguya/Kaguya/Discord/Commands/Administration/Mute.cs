@@ -404,7 +404,7 @@ namespace Kaguya.Discord.Commands.Administration
 
         private async Task<IList<AdminAction>> GetUnexpiredMutesAsync(ulong userId, ulong serverId)
         {
-            return await _adminActionRepository.GetAllUnexpiredForUserInServerAsync(userId, serverId, AdminAction.MuteAction);
+            return await _adminActionRepository.GetAllUnexpiredAsync(userId, serverId, AdminAction.MuteAction);
         }
         
         private Embed GetFinalEmbed(SocketGuildUser target, DateTime? expiration, string reason, List<EmbedFieldBuilder> fields)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +18,7 @@ namespace Kaguya.Database.Repositories
 			_dbContext = dbContext;
 		}
 
-		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId, bool showHidden = false)
+		public async Task<IList<AdminAction>> GetAllAsync(ulong serverId, bool showHidden = false)
 		{
 			var collection = _dbContext.AdminActions.AsQueryable()
 			                                 .Where(x => x.ServerId == serverId);
@@ -26,7 +26,7 @@ namespace Kaguya.Database.Repositories
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
-		public async Task<IList<AdminAction>> GetAllForServerAsync(ulong serverId, string action, bool showHidden = false)
+		public async Task<IList<AdminAction>> GetAllAsync(ulong serverId, string action, bool showHidden = false)
 		{
 			var collection = _dbContext.AdminActions.AsQueryable()
 			                                 .Where(x => x.ServerId == serverId &&
@@ -35,7 +35,7 @@ namespace Kaguya.Database.Repositories
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
-		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, bool showHidden = false)
+		public async Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, bool showHidden = false)
 		{
 			var collection = _dbContext.AdminActions.AsQueryable()
 			                                 .Where(x => x.ActionedUserId == userId &&
@@ -45,7 +45,7 @@ namespace Kaguya.Database.Repositories
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 		
-		public async Task<IList<AdminAction>> GetAllUnexpiredForUserInServerAsync(ulong userId, ulong serverId, string action, bool showHidden = false)
+		public async Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, string action, bool showHidden = false)
 		{
 			var collection = _dbContext.AdminActions.AsQueryable()
 			                                 .Where(x => x.ActionedUserId == userId &&
@@ -96,7 +96,7 @@ namespace Kaguya.Database.Repositories
 			await UpdateRangeAsync(copy);
 		}
 
-		public async Task<int> GetCountForServerAsync(ulong serverId)
+		public async Task<int> GetCountAsync(ulong serverId)
 		{
 			return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == serverId).CountAsync();
 		}

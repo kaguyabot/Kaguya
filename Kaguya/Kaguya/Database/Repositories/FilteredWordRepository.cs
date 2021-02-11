@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
@@ -28,7 +28,7 @@ namespace Kaguya.Database.Repositories
                 return false;
             
             var server = await _ksRepo.GetOrCreateAsync(dbMatch.ServerId);
-            var curFilteres = await GetAllForServerAsync(server.ServerId, true);
+            var curFilteres = await GetAllAsync(server.ServerId, true);
 
             var match = curFilteres.FirstOrDefault(x => x.Word.Equals(dbMatch.Word, StringComparison.OrdinalIgnoreCase));
             
@@ -48,7 +48,7 @@ namespace Kaguya.Database.Repositories
                 return false;
             
             var server = await _ksRepo.GetOrCreateAsync(value.ServerId);
-            var curFilteres = await GetAllForServerAsync(server.ServerId, true);
+            var curFilteres = await GetAllAsync(server.ServerId, true);
 
             if (curFilteres.Any(x => x.Word.Equals(value.Word, StringComparison.OrdinalIgnoreCase)))
                 return false;
@@ -58,7 +58,7 @@ namespace Kaguya.Database.Repositories
             return true;
         }
 
-        public async Task<FilteredWord[]> GetAllForServerAsync(ulong serverId, bool includeWildcards)
+        public async Task<FilteredWord[]> GetAllAsync(ulong serverId, bool includeWildcards)
         {
             var words = _dbContext.FilteredWords.AsQueryable().Where(x => x.ServerId == serverId);
             if (!includeWildcards)
@@ -69,7 +69,7 @@ namespace Kaguya.Database.Repositories
             return await words.ToArrayAsync();
         }
 
-        public async Task DeleteAllForServerAsync(ulong serverId)
+        public async Task DeleteAllAsync(ulong serverId)
         {
             var matches = _dbContext.FilteredWords.AsQueryable().Where(x => x.ServerId == serverId);
 

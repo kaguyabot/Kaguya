@@ -37,7 +37,7 @@ namespace Kaguya.Discord.Commands.Administration
         [Summary("Displays the currently filtered words.")]
         public async Task CommandViewFilter()
         {
-            FilteredWord[] filter = await _fwRepo.GetAllForServerAsync(Context.Guild.Id, true);
+            FilteredWord[] filter = await _fwRepo.GetAllAsync(Context.Guild.Id, true);
 
             if (filter.Length == 0)
             {
@@ -175,7 +175,7 @@ namespace Kaguya.Discord.Commands.Administration
         [Summary("Clears the entire list of filtered phrases for the current server.")]
         public async Task CommandClearFilter()
         {
-            FilteredWord[] curFilters = await _fwRepo.GetAllForServerAsync(Context.Guild.Id, true);
+            FilteredWord[] curFilters = await _fwRepo.GetAllAsync(Context.Guild.Id, true);
             if (!curFilters.Any())
             {
                 await SendBasicErrorEmbedAsync("There are currently no filtered words.");
@@ -183,7 +183,7 @@ namespace Kaguya.Discord.Commands.Administration
                 return;
             }
 
-            await _fwRepo.DeleteAllForServerAsync(Context.Guild.Id);
+            await _fwRepo.DeleteAllAsync(Context.Guild.Id);
             await SendBasicSuccessEmbedAsync($"Successfully cleared the word filter for {Context.Guild.Name}.");
         }
     }
