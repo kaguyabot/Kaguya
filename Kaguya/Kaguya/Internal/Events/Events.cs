@@ -16,25 +16,28 @@ namespace Kaguya.Internal.Events
         private readonly LavaNode _lavaNode;
         private readonly AudioService _audioService;
         private readonly ILogger<KaguyaEvents> _logger;
+        private readonly ILogger<EventImplementations> _implementationsLogger;
 
         public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService,
-            LavaNode lavaNode, AudioService audioService)
+            LavaNode lavaNode, AudioService audioService, ILogger<EventImplementations> implementationsLogger)
         {
             _logger = logger;
             _client = client;
             _antiraidService = antiraidService;
             _lavaNode = lavaNode;
             _audioService = audioService;
+            _implementationsLogger = implementationsLogger;
         }
 
         public void InitEvents()
         {
-            var eventImplementations = new EventImplementations(_antiraidService);
+            var eventImplementations = new EventImplementations(_implementationsLogger, _antiraidService, _client);
             
             _logger.LogDebug("Kaguya Events initialized.");
             
             _client.ShardReady += ClientOnShardReady;
             _client.UserJoined += eventImplementations.OnUserJoined;
+            _client.JoinedGuild += eventImplementations.SendOwnerDmAsync;
 
             _lavaNode.OnTrackStarted += _audioService.OnTrackStarted;
             _lavaNode.OnTrackEnded += _audioService.OnTrackEnded;
