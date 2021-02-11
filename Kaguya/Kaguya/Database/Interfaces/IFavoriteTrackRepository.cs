@@ -6,6 +6,6 @@ namespace Kaguya.Database.Interfaces
 {
     public interface IFavoriteTrackRepository : IRepository<FavoriteTrack>
     {
-        public Task<IList<FavoriteTrack>> GetAllForUserAsync(ulong userId);
+        public Task<IList<FavoriteTrack>> GetAllAsync(ulong userId);
     }
 }

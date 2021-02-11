@@ -6,7 +6,7 @@ namespace Kaguya.Database.Interfaces
 {
     public interface IGambleHistoryRepository : IRepository<GambleHistory>
     {
-        public Task<IList<GambleHistory>> GetAllForUserAsync(ulong userId);
+        public Task<IList<GambleHistory>> GetAllAsync(ulong userId);
         public Task<int> GetCountForUserAsync(ulong userId);
         public Task<int> GetCountForServerAsync(ulong serverId);
         public Task<GambleHistory> GetMostRecentForUserAsync(ulong userId);

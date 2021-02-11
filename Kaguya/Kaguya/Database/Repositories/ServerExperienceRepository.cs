@@ -36,7 +36,7 @@ namespace Kaguya.Database.Repositories
                              .FirstOrDefaultAsync();
         }
         
-        public async Task<IList<ServerExperience>> GetAllExpForServer(ulong serverId)
+        public async Task<IList<ServerExperience>> GetAllExp(ulong serverId)
         {
             return await _dbContext.ServerExperience.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
         }

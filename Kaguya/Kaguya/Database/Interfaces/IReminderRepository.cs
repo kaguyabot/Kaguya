@@ -6,8 +6,8 @@ namespace Kaguya.Database.Interfaces
 {
     public interface IReminderRepository : IRepository<Reminder>
     {
-        public Task<IList<Reminder>> GetAllForUserAsync(ulong id);
-        public Task<IList<Reminder>> GetAllToDeliverForUserAsync(ulong id);
+        public Task<IList<Reminder>> GetAllAsync(ulong id);
+        public Task<IList<Reminder>> GetAllToDeliverAsync(ulong id);
         
         /// <summary>
         /// All reminders in which the expiration time has passed but the reminder

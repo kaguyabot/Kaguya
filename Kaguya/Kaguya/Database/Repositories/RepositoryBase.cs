@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
@@ -56,7 +56,7 @@ namespace Kaguya.Database.Repositories
             await DbContext.SaveChangesAsync();
         }
         
-        public async Task<IList<T>> GetAll()
+        public async Task<IList<T>> GetAllAsync()
         {
             return await Table.ToListAsync();
         }

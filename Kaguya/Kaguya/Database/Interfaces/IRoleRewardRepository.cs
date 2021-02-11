@@ -6,6 +6,6 @@ namespace Kaguya.Database.Interfaces
 {
     public interface IRoleRewardRepository
     {
-        public Task<IList<RoleReward>> GetAllForServerAsync(ulong serverId);
+        public Task<IList<RoleReward>> GetAllAsync(ulong serverId);
     }
 }

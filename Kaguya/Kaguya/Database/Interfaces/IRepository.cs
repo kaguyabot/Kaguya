@@ -11,7 +11,7 @@ namespace Kaguya.Database.Interfaces
         public Task UpdateRangeAsync(IEnumerable<T> values);
         public Task InsertAsync(T value);
         public Task BulkInsertAsync(IEnumerable<T> values);
-        public Task<IList<T>> GetAll();
+        public Task<IList<T>> GetAllAsync();
         public Task<int> GetCountAsync();
     }
 }

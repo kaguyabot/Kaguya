@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kaguya.Database.Model;
 using Kaguya.Internal.Services;
@@ -9,8 +9,8 @@ namespace Kaguya.Database.Interfaces
     {
         public Task<IList<Fish>> GetAllForUserAsync(ulong userId);
         public Task<IList<Fish>> GetAllForServerAsync(ulong serverId);
-        public Task<IList<Fish>> GetAllOfTypeForUserAsync(ulong userId, FishType fish);
-        public Task<IList<Fish>> GetAllOfRarityForUserAsync(ulong userId, FishRarity rarity);
         public Task<int> CountAllNonTrashAsync(ulong userId);
+        public Task<IList<Fish>> GetAllOfTypeAsync(ulong userId, FishType fish);
+        public Task<IList<Fish>> GetAllOfRarityAsync(ulong userId, FishRarity rarity);
     }
 }
