@@ -18,7 +18,7 @@ namespace Kaguya.Discord.Commands.Exp
         private readonly ILogger<Daily> _logger;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
 
-        private const int POINTS_GIVEN = 1250;
+        private const int POINTS_GIVEN = 750;
         private const int EXP_GIVEN = 250;
         
         public Daily(ILogger<Daily> logger, KaguyaUserRepository kaguyaUserRepository) : base(logger)
