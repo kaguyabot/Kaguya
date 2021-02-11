@@ -402,6 +402,7 @@ namespace Kaguya.Discord.Commands.Administration
             await SendEmbedAsync(embed);
         }
         
+        [Restriction(ModuleRestriction.PremiumServer)]
         [RequireUserPermission(GuildPermission.Administrator)]
         [Command("-deleteall", RunMode = RunMode.Async)]
         [Summary("Deletes all roles in this server.")]
@@ -458,6 +459,7 @@ namespace Kaguya.Discord.Commands.Administration
             }
         }
 
+        [Restriction(ModuleRestriction.PremiumServer)]
         [RequireUserPermission(GuildPermission.Administrator)]
         [Command("-deleteunused")]
         [Summary("Deletes all unused roles from the server. These are roles that are not assigned to any users.")]
