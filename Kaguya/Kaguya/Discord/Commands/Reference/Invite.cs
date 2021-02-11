@@ -19,8 +19,7 @@ namespace Kaguya.Discord.Commands.Reference
                  "Discord servers.")]
         public async Task InviteCommand()
         {
-            // todo: change to live URL before real deployment.
-            await SendBasicSuccessEmbedAsync($"[(BETA) Here you go!]({Global.BetaInviteUrl})");
+            await SendBasicSuccessEmbedAsync($"[Here you go!]({Global.InviteUrl})");
         }
     }
 }

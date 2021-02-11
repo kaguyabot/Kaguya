@@ -16,7 +16,6 @@ namespace Kaguya
         public const string StoreLink = "[Kaguya Premium](" + StoreUrl + ")";
         public const string SupportDiscordUrl = "https://discord.gg/aumCJhr";
         public const string InviteUrl = "https://discord.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=536341759";
-        public const string BetaInviteUrl = "https://discord.com/oauth2/authorize?client_id=367403886841036820&scope=bot&permissions=1610083583";
         public const string TopGgUpvoteUrl = "https://top.gg/bot/538910393918160916";
        
         public const string WikiPrivacyUrl = "https://github.com/kaguyabot/Kaguya/wiki/Privacy";
