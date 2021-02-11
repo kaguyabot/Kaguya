@@ -10,6 +10,7 @@ namespace Kaguya
     {
         public const string WebsiteUrl = "http://kaguyabot.xyz/";
         public const string StoreUrl = "https://sellix.io/KaguyaStore";
+        public const string VideoTutorialUrl = "https://youtu.be/ZXUbPwNYex0";
         /// <summary>
         /// Formatted as such: [Kaguya Premium](StoreUrl)
         /// </summary>
@@ -20,6 +21,7 @@ namespace Kaguya
         public const string TopGgUpvoteUrl = "https://top.gg/bot/538910393918160916";
         public const string WikiPrivacyUrl = "https://github.com/kaguyabot/Kaguya/wiki/Privacy";
         public const string WikiQuickStartUrl = "https://github.com/kaguyabot/Kaguya/wiki/Using-Kaguya:-Quick-Start-Guide";
+        
         public const string DiscordTermsLink = "[Terms of Service](https://discord.com/terms)";
         public const string DiscordCommunityGuidelinesLink = "[Community Guidelines](https://discord.com/guidelines)";
         
