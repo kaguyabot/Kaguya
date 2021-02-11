@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0.103-focal-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 COPY Kaguya/Kaguya /Kaguya
 COPY References /References
 COPY nuget.config /Kaguya
@@ -6,7 +6,7 @@ WORKDIR /Kaguya
 RUN dotnet restore Kaguya.csproj
 RUN dotnet publish Kaguya.csproj -c Release -o out --no-restore
 
-FROM  mcr.microsoft.com/dotnet/aspnet:5.0.3-focal-amd64
+FROM  mcr.microsoft.com/dotnet/aspnet:5.0-alpine
 COPY --from=build /Kaguya/out /KaguyaApp
 WORKDIR /KaguyaApp
 EXPOSE 80
