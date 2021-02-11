@@ -38,5 +38,10 @@ namespace Kaguya.Database.Repositories
         {
             return await _dbContext.Fish.AsQueryable().Where(x => x.UserId == userId && x.Rarity == rarity).ToListAsync();
         }
+
+        public async Task<int> CountAllNonTrashAsync(ulong userId)
+        {
+            return await _dbContext.Fish.AsQueryable().Where(x => x.UserId == userId && x.Rarity != FishRarity.Trash).CountAsync();
+        }
     }
 }
