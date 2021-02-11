@@ -16,6 +16,11 @@ namespace Kaguya.Internal.Services
         /// How much experience to add to users when they are eligible.
         /// </summary>
         public const int EXP_VALUE = 8;
+
+        /// <summary>
+        /// How many points a user should receive upon earning experience.
+        /// </summary>
+        public const int POINTS_VALUE = 2;
         /// <summary>
         /// The most frequent time period a user can concurrently earn experience.
         /// </summary>
@@ -77,10 +82,12 @@ namespace Kaguya.Internal.Services
             int oldExp = _user.GlobalExp;
             int newExp = oldExp + EXP_VALUE;
             
+            // Modify the user's exp and points values
             _user.AdjustExperienceGlobal(EXP_VALUE);
+            _user.AdjustPoints(POINTS_VALUE);
             await _kaguyaUserRepository.UpdateAsync(_user);
 
-            _logger.LogDebug($"(Global Exp) User {_user} has received {EXP_VALUE} EXP.");
+            _logger.LogDebug($"(Global Exp) User {_user} has received {EXP_VALUE} exp and {POINTS_VALUE} points. New total: {_user.GlobalExp:N0} exp, {_user.Points:N0} points");
             
             if (HasLeveledUp(oldExp, newExp))
             {
