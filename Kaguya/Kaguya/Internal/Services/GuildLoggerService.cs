@@ -28,32 +28,34 @@ namespace Kaguya.Internal.Services
             _logger = logger;
             _client = client;
             _commonEmotes = commonEmotes;
-            
-            using (IServiceScope scope = serviceProvider.CreateScope())
-            {
-                _kaguyaServerRepository = scope.ServiceProvider.GetRequiredService<KaguyaServerRepository>();
-                _logConfigurationRepository = scope.ServiceProvider.GetRequiredService<LogConfigurationRepository>();
-                _antiraidConfigRepository = scope.ServiceProvider.GetRequiredService<AntiraidConfigRepository>();
-            }
+
+            IServiceScope scope = serviceProvider.CreateScope(); // We leave the scope open.
+            _kaguyaServerRepository = scope.ServiceProvider.GetRequiredService<KaguyaServerRepository>();
+            _logConfigurationRepository = scope.ServiceProvider.GetRequiredService<LogConfigurationRepository>();
+            _antiraidConfigRepository = scope.ServiceProvider.GetRequiredService<AntiraidConfigRepository>();
         }
         
         public async Task LogMessageDeletedAsync(Cacheable<IMessage, ulong> cache, ISocketMessageChannel textChannel)
         {
-            var server = await _kaguyaServerRepository.GetOrCreateAsync(((SocketGuildChannel) textChannel).Guild.Id);
-            var config = await _logConfigurationRepository.GetOrCreateAsync(((SocketGuildChannel) textChannel).Guild.Id);
+            IMessage message = cache.Value;
 
-            if (Memory.ServersCurrentlyPurgingMessages.ContainsKey(server.ServerId))
+            if (message is null || message.Author.IsBot)
             {
                 return;
             }
             
+            var server = await _kaguyaServerRepository.GetOrCreateAsync(((SocketGuildChannel) textChannel).Guild.Id);
+            var config = await _logConfigurationRepository.GetOrCreateAsync(((SocketGuildChannel) textChannel).Guild.Id);
+
             if (!config.MessageDeleted.HasValue)
+            {
                 return;
-
-            IMessage message = cache.Value;
-
-            if (message is null || message.Author.IsBot)
+            }
+            
+            if (Memory.ServersCurrentlyPurgingMessages.ContainsKey(server.ServerId))
+            {
                 return;
+            }
 
             string content = string.IsNullOrEmpty(message.Content)
                 ? "<Message contained no text>"
@@ -94,10 +96,7 @@ namespace Kaguya.Internal.Services
 
         public async Task LogMessageUpdatedAsync(Cacheable<IMessage, ulong> cache, SocketMessage message, ISocketMessageChannel textChannel)
         {
-            if (!(textChannel is SocketGuildChannel channel))
-                return;
-
-            if (!cache.HasValue)
+            if (!cache.HasValue || !(textChannel is SocketGuildChannel channel))
             {
                 return;
             }
