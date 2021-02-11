@@ -35,7 +35,7 @@ namespace Kaguya.Internal.Services.Recurring
 
         public async Task HandleTimer(object payload)
         {
-            await _timerService.TriggerAtAsync(DateTime.Now.AddHours(1), this);
+            await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(1), this);
         }
     }
 }
