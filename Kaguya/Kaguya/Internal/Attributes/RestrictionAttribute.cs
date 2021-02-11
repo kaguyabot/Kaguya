@@ -19,7 +19,6 @@ namespace Kaguya.Internal.Attributes
             Restriction = restriction;
         }
 
-        // todo: come back for users AND servers.
         public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var kaguyaUserRepository = services.GetRequiredService<KaguyaUserRepository>();

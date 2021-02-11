@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Configuration
 {
+    [Restriction(ModuleRestriction.PremiumServer)]
     [Module(CommandModule.Configuration)]
     [Group("antiraid")]    
     [Alias("ar")]
