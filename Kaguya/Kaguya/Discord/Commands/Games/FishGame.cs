@@ -35,7 +35,8 @@ namespace Kaguya.Discord.Commands.Games
         }
 
         [Command]
-        [Summary("Allows you to play the fishing game! Each play costs 75 points (50 if premium).")]
+        [Summary("Allows you to play the fishing game! Each play costs 75 points (50 if command " +
+                 "user is a premium subscriber).")]
         public async Task FishCommand()
         {
             var user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);

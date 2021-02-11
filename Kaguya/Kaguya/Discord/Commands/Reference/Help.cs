@@ -116,7 +116,7 @@ namespace Kaguya.Discord.Commands.Reference
                         var modRestrictionAttrs = modInfo.Preconditions.Where(x => x.GetType() == typeof(RestrictionAttribute));
                         foreach (var attr in modRestrictionAttrs)
                         {
-                            if ((((RestrictionAttribute) attr).Restriction & ModuleRestriction.PremiumOnly) != 0)
+                            if ((((RestrictionAttribute) attr).Restriction & ModuleRestriction.PremiumUser) != 0)
                             {
                                 premiumString = " {All $}";
 
