@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,25 +21,21 @@ using Microsoft.Extensions.Logging;
 namespace Kaguya.Discord.Commands.Administration
 {
     [Module(CommandModule.Administration)]
-    [Group("mute")]
-    [Alias("m")]
-    [RequireUserPermission(GuildPermission.ManageChannels)]
-    [RequireUserPermission(GuildPermission.ManageRoles)]
-    [RequireUserPermission(GuildPermission.MuteMembers)]
-    [RequireUserPermission(GuildPermission.DeafenMembers)]
-    [RequireBotPermission(GuildPermission.ManageChannels)]
-    [RequireBotPermission(GuildPermission.ManageRoles)]
-    [RequireBotPermission(GuildPermission.MuteMembers)]
-    [RequireBotPermission(GuildPermission.DeafenMembers)]
-    public class Mute : KaguyaBase<Mute>
+    [Group("shadowban")]
+    [Alias("sb")]
+    [RequireUserPermission(GuildPermission.Administrator)]
+    [RequireBotPermission(GuildPermission.Administrator)]
+    public class Shadowban : KaguyaBase<Shadowban>
     {
-        private readonly ILogger<Mute> _logger;
+        private readonly ILogger<Shadowban> _logger;
         private readonly AdminActionRepository _adminActionRepository;
         private readonly KaguyaServerRepository _kaguyaServerRepository;
         private readonly InteractivityService _interactivityService;
 
-        public Mute(ILogger<Mute> logger, AdminActionRepository adminActionRepository, KaguyaServerRepository kaguyaServerRepository, 
-            InteractivityService interactivityService) : base(logger)
+        private const string ROLE_NAME = "kaguya-shadowban";
+
+        public Shadowban(ILogger<Shadowban> logger, AdminActionRepository adminActionRepository, 
+            KaguyaServerRepository kaguyaServerRepository, InteractivityService interactivityService) : base(logger)
         {
             _logger = logger;
             _adminActionRepository = adminActionRepository;
@@ -48,24 +44,24 @@ namespace Kaguya.Discord.Commands.Administration
         }
 
         [Command(RunMode = RunMode.Async)]
-        [Summary("Mutes a user indefinitely with an optional reason. The mute persists until the " +
-                 "user is unmuted via the `mute -u` command. If the mute role is manually removed from the user " +
-                 "by a moderator, the mute will not be automatically reapplied.")]
+        [Summary("Shadowbans a user indefinitely with an optional reason. The shadowban persists until the " +
+                 "user is unshadowbanned via the `shadowban -u` command. If the shadowban role is manually removed from the user " +
+                 "by a moderator, the shadowban will not be automatically reapplied.")]
         [Remarks("<user> [reason]")]
         [Example("@User#0000 Being really spammy in chat.")]
-        public async Task MuteCommand(SocketGuildUser user, [Remainder]string reason = null)
+        public async Task ShadowbanCommandAsync(SocketGuildUser user, [Remainder]string reason = null)
         {
             KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
-            await MuteUserAsync(user, null, reason, server);
+            await ShadowbanUserAsync(user, null, reason, server);
         }
         
         [Command("-t", RunMode = RunMode.Async)]
-        [Summary("Mutes a user for a specified duration, with an optional reason.")]
+        [Summary("Shadowbans a user for a specified duration, with an optional reason.")]
         [Remarks("<user> <duration> [reason]")]
         [Example("@User#0000 30m Being really spammy in chat.")]
         [Example("@User#0000 1d16h35m25s")]
         // ReSharper disable once MethodOverloadWithOptionalParameter
-        public async Task MuteCommand(SocketGuildUser user, string duration, [Remainder]string reason = null)
+        public async Task ShadowbanCommandAsync(SocketGuildUser user, string duration, [Remainder]string reason = null)
         {
             KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
 
@@ -77,92 +73,92 @@ namespace Kaguya.Discord.Commands.Administration
                 throw new TimeParseException(duration);
             }
             
-            DateTime? muteExpiration = DateTime.Now.Add(parsedDuration);
+            DateTime? shadowbanExpiration = DateTime.Now.Add(parsedDuration);
 
-            await MuteUserAsync(user, muteExpiration, reason, server);
+            await ShadowbanUserAsync(user, shadowbanExpiration, reason, server);
         }
 
         [Command("-u")]
-        [Summary("Unmutes a user.")]
+        [Summary("Unshadowbands a user.")]
         [Remarks("<user>")]
-        public async Task UnmuteUserCommand(SocketGuildUser user)
+        public async Task UnShadowbanUserCommandAsync(SocketGuildUser user)
         {
             KaguyaServer server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
-            IRole muteRole = await GetMuteRoleAsync(server);
-            bool isMuted = await UserIsCurrentlyMutedAsync(user, muteRole);
+            IRole shadowbanRole = await GetShadowbanRoleAsync(server);
+            bool isShadowbanned = await UserIsCurrentlyShadowbannedAsync(user, shadowbanRole);
 
-            if (!isMuted)
+            if (!isShadowbanned)
             {
-                await SendBasicErrorEmbedAsync("This user is not muted.");
+                await SendBasicErrorEmbedAsync("This user is not shadowbanned.");
 
                 return;
             }
 
-            IList<AdminAction> allUserMutes = await GetUnexpiredMutesAsync(user.Id, server.ServerId);
-            await _adminActionRepository.ForceExpireRangeAsync(allUserMutes);
+            IList<AdminAction> allUserShadowbans = await GetUnexpiredShadowbansAsync(user.Id, server.ServerId);
+            await _adminActionRepository.ForceExpireRangeAsync(allUserShadowbans);
             
-            // Remove mute role from user, if applicable.
-            if (user.Roles.Any(x => x.Id == muteRole.Id))
+            // Remove shadowban role from user, if applicable.
+            if (user.Roles.Any(x => x.Id == shadowbanRole.Id))
             {
                 try
                 {
-                    await user.RemoveRoleAsync(muteRole);
+                    await user.RemoveRoleAsync(shadowbanRole);
                 }
                 catch (Exception e)
                 {
-                    await SendBasicErrorEmbedAsync($"An error occurred when trying to remove {user.Mention}'s mute role:\n" +
+                    await SendBasicErrorEmbedAsync($"An error occurred when trying to remove {user.Mention}'s shadowban role:\n" +
                                                    $"Error message: {e.Message.AsBold()}");
 
                     return;
                 }
             }
 
-            await SendBasicSuccessEmbedAsync($"Unmuted user {user.Mention}.");
+            await SendBasicSuccessEmbedAsync($"Unshadowbanned user {user.Mention}.");
         }
 
         [Command("-sync")]
-        [Summary("Syncs all text, voice, and category channel permissions for this server's mute role. " +
-                 "This should be used after adding new public channels so that muted users won't be able to type in them.")]
-        public async Task MuteSyncCommand()
+        [Summary("Syncs all text, voice, and category channel permissions for this server's shadowban role. " +
+                 "This should be used after adding new public channels so that shadowbanned users won't be able to type in them.")]
+        public async Task ShadowbanSyncCommandAsync()
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
-            var muteRole = await GetMuteRoleAsync(server);
-            var embedFields = await SetMutePermissionsAsync(muteRole);
+            var shadowbanRole = await GetShadowbanRoleAsync(server);
+            var embedFields = await SetShadowbanPermissionsAsync(shadowbanRole);
 
             if (!embedFields.Any())
             {
-                await SendBasicErrorEmbedAsync("All mute permissions are already synced!");
+                await SendBasicErrorEmbedAsync("All shadowban permissions are already synced!");
 
                 return;
             }
 
-            var embed = GetBasicSuccessEmbedBuilder($"Synced permissions for the mute role {muteRole.Mention}.", true)
+            var embed = GetBasicSuccessEmbedBuilder($"Synced permissions for the shadowban role {shadowbanRole.Mention}.")
                         .WithFields(embedFields)
                         .Build();
 
             await SendEmbedAsync(embed);
         }
 
-        private async Task MuteUserAsync(SocketGuildUser user, DateTime? expiration, string reason, KaguyaServer server)
+        private async Task ShadowbanUserAsync(SocketGuildUser user, DateTime? expiration, string reason, KaguyaServer server)
         {
             var adminAction = new AdminAction
             {
                 ServerId = Context.Guild.Id,
                 ModeratorId = Context.User.Id,
                 ActionedUserId = user.Id,
-                Action = AdminAction.MuteAction,
+                Action = AdminAction.ShadowbanAction,
                 Reason = reason,
                 Expiration = expiration,
                 Timestamp = DateTime.Now
             };
 
-            bool muteRoleExists = DetermineIfMuteRoleExists(server);
+            bool shadowbanRoleExists = DetermineIfShadowbanRoleExists(server);
             bool updateServer = false;
             
-            IRole muteRole = await GetMuteRoleAsync(server);
+            IRole shadowbanRole = await GetShadowbanRoleAsync(server);
 
-            // We want to confirm with the user whether they want to overwrite the existing mute or leave the existing one.
-            if (await UserIsCurrentlyMutedAsync(user, muteRole))
+            // We want to confirm with the user whether they want to overwrite the existing shadowban or leave the existing one.
+            if (await UserIsCurrentlyShadowbannedAsync(user, shadowbanRole))
             {
                 await SendConfirmationMessageAsync(user, expiration);
             }
@@ -173,31 +169,31 @@ namespace Kaguya.Discord.Commands.Administration
             
             try
             {
-                permissionFields = await SetMutePermissionsAsync(muteRole);
+                permissionFields = await SetShadowbanPermissionsAsync(shadowbanRole);
             }
             catch (Exception e)
             {
                 await SendBasicErrorEmbedAsync("Warning: Failed to complete permission overwrite execution process. This error occurs from a " +
                                                $"lack of permissions.\n\nError: {e.Message.AsBold()}\n\n" +
-                                               $"The mute operation will still continue. " + "Use the ".AsBold() + "mute -sync".AsCodeBlockSingleLine().AsBold() + " " + 
+                                               $"The shadowban operation will still continue. " + "Use the ".AsBold() + "shadowban -sync".AsCodeBlockSingleLine().AsBold() + " " + 
                                                "command after updating my permissions to continue.".AsBold());
             }
             
             try
             {
-                await user.AddRoleAsync(muteRole);
+                await user.AddRoleAsync(shadowbanRole);
             }
             catch (Exception e)
             {
-                await SendBasicErrorEmbedAsync($"Failed to add role {muteRole.ToString().AsBold()} to user {user.ToString().AsBold()}.\nReason: {e.ToString().AsBold()}");
+                await SendBasicErrorEmbedAsync($"Failed to add role {shadowbanRole.ToString().AsBold()} to user {user.ToString().AsBold()}.\nReason: {e.ToString().AsBold()}");
 
                 return;
             }
 
-            if (!muteRoleExists)
+            if (!shadowbanRoleExists)
             {
                 updateServer = true;
-                server.MuteRoleId = muteRole.Id;
+                server.ShadowbanRoleId = shadowbanRole.Id;
             }
 
             if (updateServer)
@@ -211,47 +207,47 @@ namespace Kaguya.Discord.Commands.Administration
 
         private async Task SendConfirmationMessageAsync(SocketGuildUser user, DateTime? expiration)
         {
-            IList<AdminAction> currentUserMutes = await GetUnexpiredMutesAsync(user.Id, Context.Guild.Id);
+            IList<AdminAction> currentUserShadowbans = await GetUnexpiredShadowbansAsync(user.Id, Context.Guild.Id);
 
-            if (!currentUserMutes.Any())
+            if (!currentUserShadowbans.Any())
                 return;
             
-            bool permanentMute = currentUserMutes.Any(x => !x.Expiration.HasValue);
+            bool permanentShadowbans = currentUserShadowbans.Any(x => !x.Expiration.HasValue);
 
-            if (!permanentMute)
+            if (!permanentShadowbans)
             {
-                currentUserMutes = currentUserMutes.OrderByDescending(x => x.Expiration ?? DateTime.MinValue).ToList();
+                currentUserShadowbans = currentUserShadowbans.OrderByDescending(x => x.Expiration ?? DateTime.MinValue).ToList();
             }
 
-            AdminAction longestMute = permanentMute ? currentUserMutes.First(x => !x.Expiration.HasValue) : currentUserMutes[0];
+            AdminAction longestShadowban = permanentShadowbans ? currentUserShadowbans.First(x => !x.Expiration.HasValue) : currentUserShadowbans[0];
 
-            if (longestMute == null)
+            if (longestShadowban == null)
             {
                 return;
             }
             
-            string oldMuteDurationStr = (permanentMute ? "never".AsBold() : longestMute.Expiration.Humanize(false)).Humanize(LetterCasing.Sentence).AsBold();
-            string newMuteDurationStr = (!expiration.HasValue 
+            string oldShadowbanDurationStr = (permanentShadowbans ? "never".AsBold() : longestShadowban.Expiration.Humanize(false)).Humanize(LetterCasing.Sentence).AsBold();
+            string newShadowbanDurationStr = (!expiration.HasValue 
                 ? "permanent" 
                 : (expiration.Value - DateTime.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day) + " from now").AsBold();
 
-            string reasonStr = (longestMute.Reason ?? "<No reason provided>").AsItalics();
+            string reasonStr = (longestShadowban.Reason ?? "<No reason provided>").AsItalics();
             
-            SocketGuildUser oldMod = Context.Guild.GetUser(longestMute.ModeratorId);
+            SocketGuildUser oldMod = Context.Guild.GetUser(longestShadowban.ModeratorId);
 
             Confirmation request = new ConfirmationBuilder()
                                    .WithContent(
                                        new PageBuilder()
-                                           .WithDescription($"This user is already muted. Would you like to overwrite their current mute? Details of " +
-                                                            $"the current mute are described below:\n" +
-                                                            $"- Expiration: [current: {oldMuteDurationStr} | new: {newMuteDurationStr}]\n" +
+                                           .WithDescription($"This user is already shadowbanned. Would you like to overwrite their current shadowban? Details of " +
+                                                            $"the current shadowbans are described below:\n" +
+                                                            $"- Expiration: [current: {oldShadowbanDurationStr} | new: {newShadowbanDurationStr}]\n" +
                                                             $"- Reason: {reasonStr}\n" +
                                                             $"- Moderator: " +
                                                             (oldMod?.Mention ?? "Not found".AsItalics()) + "\n\n" +
                                                             "Response will expire in 60 seconds, defaulting to ✅.".AsItalics() + "\n" +
-                                                            "Note: Overwriting does not erase mute history.".AsItalics() + "\n\n" +
+                                                            "Note: Overwriting does not erase shadowban history.".AsItalics() + "\n\n" +
                                                             $"✅ = Replace old duration with new. (default)\n" +
-                                                            $"❌ = Don't replace old. User will be unmuted at latest possible time.")
+                                                            $"❌ = Don't replace old. User will be unshadowbanned at latest possible time.")
                                            .WithColor(KaguyaColors.Magenta))
                                    .Build();
 
@@ -260,43 +256,43 @@ namespace Kaguya.Discord.Commands.Administration
             // If the user wants to overwrite...
             if (result.Value)
             {
-                // We force expire as we want to keep the mute reason history.
+                // We force expire as we want to keep the shadowban reason history.
                 // Forcing expiration ensures it won't be actioned on by any background services.
-                await _adminActionRepository.ForceExpireRangeAsync(currentUserMutes);
-                await SendBasicSuccessEmbedAsync("Okay, I'll replace the old mute duration with the one you just provided.");
+                await _adminActionRepository.ForceExpireRangeAsync(currentUserShadowbans);
+                await SendBasicSuccessEmbedAsync("Okay, I'll replace the old shadowban duration with the one you just provided.");
             }
             else
             {
-                await SendBasicSuccessEmbedAsync("Okay, I'll insert this and log it, but if the user currently has mutes that expire later " +
-                                                 "than what you provided, they will be unmuted at that time.\n" +
-                                                 "Use the `mute -status` command to view this information.");
+                await SendBasicSuccessEmbedAsync("Okay, I'll insert this and log it, but if the user currently has shadowbans that expire later " +
+                                                 "than what you provided, they will be unshadowbanned at that time.\n" +
+                                                 "Use the `shadowban -status` command to view this information.");
             }
         }
 
-        private bool DetermineIfMuteRoleExists(KaguyaServer server)
+        private bool DetermineIfShadowbanRoleExists(KaguyaServer server)
         {
-            if (!server.MuteRoleId.HasValue)
+            if (!server.ShadowbanRoleId.HasValue)
             {
                 return false;
             }
             
-            SocketRole muteRole = Context.Guild.GetRole(server.MuteRoleId.Value);
-            return muteRole != null;
+            SocketRole shadowbanRole = Context.Guild.GetRole(server.ShadowbanRoleId.Value);
+            return shadowbanRole != null;
         }
 
-        private async Task<IRole> GetMuteRoleAsync(KaguyaServer server)
+        private async Task<IRole> GetShadowbanRoleAsync(KaguyaServer server)
         {
-            IRole match = Context.Guild.GetRole(server.MuteRoleId ?? 0) ?? await CreateMuteRoleAsync();
+            IRole match = Context.Guild.GetRole(server.ShadowbanRoleId ?? 0) ?? await CreateShadowbanRoleAsync();
             return match;
         }
         
-        private async Task<IRole> CreateMuteRoleAsync()
+        private async Task<IRole> CreateShadowbanRoleAsync()
         {
-            _logger.LogDebug($"Mute role created in guild {Context.Guild.Id}. Guild roles: {Context.Guild.Roles.Humanize()}");
-            return await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, KaguyaColors.Default, false, false);
+            _logger.LogDebug($"Shadowban role created in guild {Context.Guild.Id}. Guild roles: {Context.Guild.Roles.Humanize()}");
+            return await Context.Guild.CreateRoleAsync(ROLE_NAME, GuildPermissions.None, KaguyaColors.Default, false, false);
         }
 
-        private async Task<List<EmbedFieldBuilder>> SetMutePermissionsAsync(IRole role)
+        private async Task<List<EmbedFieldBuilder>> SetShadowbanPermissionsAsync(IRole role)
         {
             List<EmbedFieldBuilder> fieldBuilders = new();
             List<SocketTextChannel> textChannelsToUpdate = new();
@@ -370,7 +366,7 @@ namespace Kaguya.Discord.Commands.Administration
                 {
                     foreach (IGuildChannel channel in finalCollection)
                     {
-                        await channel.AddPermissionOverwriteAsync(role, GetMuteOverwritePermissions());
+                        await channel.AddPermissionOverwriteAsync(role, GetShadowbanOverwritePermissions(channel));
                     }
                 });
             }
@@ -378,33 +374,30 @@ namespace Kaguya.Discord.Commands.Administration
             return fieldBuilders;
         }
 
-        // todo: Permissions are hardcoded for the mute role. Eventually add support for modifying this collection.
         /// <summary>
-        /// A <see cref="OverwritePermissions"/> for any mute role created by Kaguya.
+        /// A <see cref="OverwritePermissions"/> for any shadowban role created by Kaguya.
         /// </summary>
         /// <returns></returns>
-        public static OverwritePermissions GetMuteOverwritePermissions()
+        public static OverwritePermissions GetShadowbanOverwritePermissions(IGuildChannel channel)
         {
-            return new OverwritePermissions(PermValue.Deny, addReactions: PermValue.Deny, sendMessages: PermValue.Deny, muteMembers: PermValue.Deny,
-                useVoiceActivation: PermValue.Deny, attachFiles: PermValue.Deny, embedLinks: PermValue.Deny, connect: PermValue.Deny, speak: PermValue.Deny,
-                useExternalEmojis: PermValue.Deny, viewChannel: PermValue.Inherit);
+            return OverwritePermissions.DenyAll(channel);
         }
 
-        private async Task<bool> UserIsCurrentlyMutedAsync(SocketGuildUser user, IRole muteRole)
+        private async Task<bool> UserIsCurrentlyShadowbannedAsync(SocketGuildUser user, IRole shadowbanRole)
         {
-            if (user.Roles.Any(x => x.Id == muteRole.Id))
+            if (user.Roles.Any(x => x.Id == shadowbanRole.Id))
             {
                 return true;
             }
             // unexpired = null expiration or expiration that has not already expired.
-            IList<AdminAction> unexpiredUserMutes = await GetUnexpiredMutesAsync(user.Id, Context.Guild.Id);
+            IList<AdminAction> unexpiredUserShadowbans = await GetUnexpiredShadowbansAsync(user.Id, Context.Guild.Id);
 
-            return unexpiredUserMutes.Any();
+            return unexpiredUserShadowbans.Any();
         }
 
-        private async Task<IList<AdminAction>> GetUnexpiredMutesAsync(ulong userId, ulong serverId)
+        private async Task<IList<AdminAction>> GetUnexpiredShadowbansAsync(ulong userId, ulong serverId)
         {
-            return await _adminActionRepository.GetAllUnexpiredAsync(userId, serverId, AdminAction.MuteAction);
+            return await _adminActionRepository.GetAllUnexpiredAsync(userId, serverId, AdminAction.ShadowbanAction);
         }
         
         private Embed GetFinalEmbed(SocketGuildUser target, DateTime? expiration, string reason, List<EmbedFieldBuilder> fields)
@@ -416,9 +409,9 @@ namespace Kaguya.Discord.Commands.Administration
             string reasonStr = reason == null ? "<No reason provided>".AsBold() : reason.AsBold();
 
             return new KaguyaEmbedBuilder(KaguyaColors.Purple)
-                   .WithDescription($"{Context.User.Mention} Muted user {target.Mention}{durationStr}." +
+                   .WithDescription($"{Context.User.Mention} Shadowbanned user {target.Mention}{durationStr}." +
                                     $"\nReason: {reasonStr}")
-                   .WithFooter("To unmute this user, use the mute -u command.")
+                   .WithFooter("To unshadowban this user, use the shadowban -u command.")
                    .WithFields(fields)
                    .Build();
         }
