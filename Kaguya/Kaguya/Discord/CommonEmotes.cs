@@ -23,6 +23,7 @@ namespace Kaguya.Discord
         };
         public IEmote CheckMarkEmoji => new Emoji("✅");
         public IEmote RedCrossEmote => GetEmote("RedCross");
+        public IEmote KaguyaDiamondsAnimated => GetEmote("KaguyaDiamonds");
 
         private IEmote GetEmote(string emoteName)
         {
