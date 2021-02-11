@@ -6,7 +6,7 @@ WORKDIR /Kaguya
 RUN dotnet restore Kaguya.csproj
 RUN dotnet publish Kaguya.csproj -c Release -o out --no-restore
 
-FROM  mcr.microsoft.com/dotnet/aspnet:5.0
+FROM  mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim
 COPY --from=build /Kaguya/out /KaguyaApp
 WORKDIR /KaguyaApp
 EXPOSE 80
