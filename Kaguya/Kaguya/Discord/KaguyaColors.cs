@@ -33,5 +33,10 @@ namespace Kaguya.Discord
         public static readonly Color LighterGrey = Color.LighterGrey;
         public static readonly Color LightGrey = Color.LightGrey;
         public static readonly Color LightOrange = Color.LightOrange;
+        
+        /// <summary>
+        /// The color which will be shown across all server configuration embeds, for consistency.
+        /// </summary>
+        public static readonly Color ConfigurationColor = LightYellow;
     }
 }

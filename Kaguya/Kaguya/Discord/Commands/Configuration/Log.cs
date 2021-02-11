@@ -25,12 +25,15 @@ namespace Kaguya.Discord.Commands.Configuration
     {
         private readonly ILogger<Log> _logger;
         private readonly LogConfigurationRepository _logConfigurationRepository;
+        private readonly KaguyaServerRepository _kaguyaServerRepository;
         private readonly IList<PropertyInfo> _logProperties;
         
-        public Log(ILogger<Log> logger, LogConfigurationRepository logConfigurationRepository) : base(logger)
+        public Log(ILogger<Log> logger, LogConfigurationRepository logConfigurationRepository,
+            KaguyaServerRepository kaguyaServerRepository) : base(logger)
         {
             _logger = logger;
             _logConfigurationRepository = logConfigurationRepository;
+            _kaguyaServerRepository = kaguyaServerRepository;
             _logProperties = LogConfiguration.LogProperties;
             if (_logProperties == null)
             {
@@ -43,6 +46,7 @@ namespace Kaguya.Discord.Commands.Configuration
         [Summary("Displays all log types and their assignments for this server.")]
         public async Task LogViewCommand()
         {
+            var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
             var logConfig = await _logConfigurationRepository.GetOrCreateAsync(Context.Guild.Id);
             var sb = new StringBuilder();
 
@@ -62,8 +66,6 @@ namespace Kaguya.Discord.Commands.Configuration
                 {
                     updateDb = true;
                     prop.SetValue(logConfig, (ulong)0);
-                    
-                    continue;
                 }
                 
                 sb.AppendLine($"{prop.Name} - {channel?.Mention ?? "Not Assigned".AsBold()}");
@@ -74,11 +76,13 @@ namespace Kaguya.Discord.Commands.Configuration
                 await _logConfigurationRepository.UpdateAsync(logConfig);
             }
 
-            var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
+            string sPrefix = server.CommandPrefix;
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.ConfigurationColor)
             {
                 Title = $"Log Configuration for {Context.Guild.Name}",
                 Description = sb.ToString()
-            };
+            }.WithFooter($"Use the {sPrefix}log -set all command to set all log types to one channel.\n" +
+                         $"Use the {sPrefix}log -reset command to disable logging for some or all log types.");
 
             await SendEmbedAsync(embed);
         }
