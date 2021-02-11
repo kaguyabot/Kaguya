@@ -40,6 +40,8 @@ namespace Kaguya.Discord.Commands.Reference
         public async Task RedeemCommand(string key)
         {
             PremiumKey match = await _premiumKeyRepository.GetAsync(key);
+            await Context.Message.DeleteAsync();
+
             if (match == null)
             {
                 var responseEmbed = GetBasicErrorEmbedBuilder("This premium key is invalid.").Build();
