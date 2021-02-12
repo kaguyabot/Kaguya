@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Linq;
-using Discord.Commands;
-using Kaguya.Internal.Attributes;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Interactivity;
 using Interactivity.Confirmation;
+using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.OwnerOnly
 {
