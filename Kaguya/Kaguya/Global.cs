@@ -26,8 +26,8 @@ namespace Kaguya
         
         public const string DiscordTermsLink = "[Terms of Service](https://discord.com/terms)";
         public const string DiscordCommunityGuidelinesLink = "[Community Guidelines](https://discord.com/guidelines)";
-        
-        public static readonly string Version = "v4.0-beta-" + GetStartDate();
+
+        public static readonly string Version = "v4.0";
 
         /// <summary>
         /// The number of shards currently logged into Discord.
