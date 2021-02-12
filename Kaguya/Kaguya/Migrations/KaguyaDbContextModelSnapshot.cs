@@ -364,10 +364,19 @@ namespace Kaguya.Migrations
                     b.Property<bool>("IsCurrentlyPurgingMessages")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsNsfwAllowed")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("LevelAnnouncementsEnabled")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<ulong?>("MuteRoleId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTime?>("NsfwAllowanceTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<ulong?>("NsfwAllowedId")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<int>("PraiseCooldown")
@@ -559,15 +568,15 @@ namespace Kaguya.Migrations
 
             modelBuilder.Entity("Kaguya.Database.Model.PremiumKey", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
                     b.Property<string>("Key")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
 
                     b.Property<ulong>("KeyCreatorId")
                         .HasColumnType("bigint unsigned");
@@ -581,7 +590,7 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("UserId")
                         .HasColumnType("bigint unsigned");
 
-                    b.HasKey("Key");
+                    b.HasKey("Id", "Key");
 
                     b.HasIndex("Key");
 
