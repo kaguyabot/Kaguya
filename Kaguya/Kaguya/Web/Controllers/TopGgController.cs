@@ -33,6 +33,7 @@ namespace Kaguya.Web.Controllers
             if (string.IsNullOrWhiteSpace(_configs.Value.ApiKey) || string.IsNullOrWhiteSpace(_configs.Value.AuthHeader) ||
                 auth != _configs.Value.AuthHeader)
             {
+                _logger.LogInformation("Unauthorized top.gg post request received.");
                 return Unauthorized();
             }
 
