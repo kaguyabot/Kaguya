@@ -91,8 +91,7 @@ namespace Kaguya.Discord.Commands.Reference
                 return default;
             }
             
-            
-            string description = $"{curModuleName}\n```ini\n";
+            string description = $"{curModuleName.AsBoldUnderlined()}\n```ini\n";
             
             foreach (ModuleInfo modInfo in curModuleCommands)
             {

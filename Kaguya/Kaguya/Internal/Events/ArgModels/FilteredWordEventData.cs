@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Kaguya.Database.Model;
 
 namespace Kaguya.Internal.Events.ArgModels
 {
