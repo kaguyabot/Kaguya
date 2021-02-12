@@ -13,6 +13,7 @@ using Kaguya.Internal.Enums;
 
 namespace Kaguya.Discord.Commands.OwnerOnly
 {
+    [Restriction(ModuleRestriction.OwnerOnly)]
     [Module(CommandModule.OwnerOnly)]
     [Group("commandfile")]
     public class CommandFile : KaguyaBase<CommandFile>

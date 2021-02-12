@@ -41,7 +41,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
             TimeSpan parsedTime = parser.ParseTime();
             string timeString = parsedTime.Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day).AsBold();
 
-            var collection = await _premiumKeyRepository.GenerateAndInsertAsync(amount, Context.User.Id, parsedTime);
+            var collection = await _premiumKeyRepository.GenerateAndInsertAsync(Context.User.Id, amount, parsedTime);
 
             await SendBasicSuccessEmbedAsync($"Successfully bulk-inserted {amount.ToString("N0").AsBold()} {timeString} premium keys.");
 

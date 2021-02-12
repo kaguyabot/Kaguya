@@ -10,17 +10,24 @@ namespace Kaguya.Database.Interfaces
         /// <summary>
         /// Generates and inserts a single key with the specified duration.
         /// </summary>
-        /// <param name="duration">How long the key should last for once it is redeemed.</param>
+        /// <param name="creatorId">The ID of the user who is generating the key, typically the bot owner.</param>
+        /// <param name="duration"></param>
         /// <returns></returns>
-        public Task GenerateAndInsertAsync(TimeSpan duration);
+        public Task GenerateAndInsertAsync(ulong creatorId, TimeSpan duration);
 
         /// <summary>
         /// Generates and inserts a collection of keys with the specified duration.
         /// </summary>
-        /// <param name="amount">The amount of keys to generate and insert</param>
-        /// <param name="creatorId">The Discord user ID of the person who is creating the keys (typically the bot owner)</param>
-        /// <param name="duration">How long each of these keys should last for once they're redeemed.</param>
+        /// <param name="creatorId">The ID of the user who is generating the key, typically the bot owner.</param>
+        /// <param name="amount"></param>
+        /// <param name="duration"></param>
         /// <returns></returns>
-        public Task<IList<PremiumKey>> GenerateAndInsertAsync(int amount, ulong creatorId, TimeSpan duration);
+        public Task<IList<PremiumKey>> GenerateAndInsertAsync(ulong creatorId, int amount, TimeSpan duration);
+        /// <summary>
+        /// Gets a key object by the string value of the key instead of the integer id.
+        /// </summary>
+        /// <param name="keyString"></param>
+        /// <returns></returns>
+        public Task<PremiumKey> GetKeyAsync(string keyString);
     }
 }

@@ -8,6 +8,7 @@ using Discord.Commands;
 using Humanizer;
 using Interactivity;
 using Interactivity.Pagination;
+using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Attributes;
@@ -28,6 +29,9 @@ namespace Kaguya.Discord.Commands.Reference
         private readonly InteractivityService _interactivityService;
         private readonly KaguyaServerRepository _ksRepo;
         private readonly IOptions<AdminConfigurations> _adminConfigurations;
+
+        private static readonly string _links = $"[Kaguya Website]({Global.WebsiteUrl}) | [Kaguya Support]({Global.SupportDiscordUrl}) | " +
+                                                $"[Kaguya Premium]({Global.StoreUrl})";
 
         protected Help(ILogger<Help> logger, CommandService commandService, InteractivityService interactivityService,
             KaguyaServerRepository ksRepo, IOptions<AdminConfigurations> adminConfigurations) : base(logger)
@@ -56,111 +60,16 @@ namespace Kaguya.Discord.Commands.Reference
         {
             var server = await _ksRepo.GetOrCreateAsync(Context.Guild.Id);
 
-            var modules = new List<CommandModule>();
-
-            foreach (var module in (CommandModule[]) Enum.GetValues(typeof(CommandModule)))
-            {
-                modules.Add(module);
-            }
-
             // If the user is not the bot owner, we don't want them 
             // viewing the owner only commands list.
-            if (Context.User.Id != _adminConfigurations.Value.OwnerId)
+            bool ownerExecution = Context.User.Id == _adminConfigurations.Value.OwnerId;
+
+            PageBuilder[] pages =
             {
-                modules.Remove(CommandModule.OwnerOnly);
-            }
-            
-            var pages = new PageBuilder[modules.Count];
-            
-            // Enumerate through all modules.
-            for (int i = 0; i < modules.Count; i++)
-            {
-                CommandModule curModule = modules[i];
-                string curModuleName = curModule.Humanize(LetterCasing.Title);
-                string links = $"[Kaguya Website]({Global.WebsiteUrl}) | [Kaguya Support]({Global.SupportDiscordUrl}) | [Kaguya Premium]({Global.StoreUrl})";
-                
-                PageBuilder curPageBuilder = new PageBuilder()
-                                             .WithTitle("Commands: " + curModuleName)
-                                             .WithColor(KaguyaColors.Magenta)
-                                             .WithDescription($"{links}\n\n```ini\n"); // Start description ini here. Closes later.
-                
-                IEnumerable<ModuleInfo> curModuleCommands = GetCommandsForModuleAlphabetized(curModule);
-
-                foreach (ModuleInfo modInfo in curModuleCommands)
-                {
-                    string cmdName = modInfo.Aliases[0];
-                    
-                    // We leave out aliases[0] because that is the name of the command itself.
-                    string aliases = string.Empty;
-                    string premiumString = string.Empty;
-
-                    if (modInfo.Aliases.Count > 1)
-                    {
-                        // Start with a space to separate it from the command name.
-                        var aliasSb = new StringBuilder(" ");
-                        var remaining = modInfo.Aliases.ToArray()[1..];
-
-                        foreach (var alias in remaining)
-                        {
-                            aliasSb.Append($"[{alias}] ");
-                        }
-
-                        // Removes trailing whitespace.
-                        aliasSb.Remove(aliasSb.Length - 1, 1);
-                        aliases = aliasSb.ToString();
-                    }
-                    
-                    // Check the module for premium attributes.
-                    if (modInfo.Preconditions.Any(x => x.GetType() == typeof(RestrictionAttribute)))
-                    {
-                        var modRestrictionAttrs = modInfo.Preconditions.Where(x => x.GetType() == typeof(RestrictionAttribute));
-                        foreach (var attr in modRestrictionAttrs)
-                        {
-                            if ((((RestrictionAttribute) attr).Restriction & ModuleRestriction.PremiumUser) != 0)
-                            {
-                                premiumString = " {All $}";
-
-                                break;
-                            }
-                        }
-                    }
-
-                    // Module itself is not restricted. Let's check sub-commands.
-                    int premCount = 0;
-                    if (premiumString == string.Empty && modInfo.Commands.Select(x => x.Preconditions).Any())
-                    {
-                        var matchingCmds = modInfo.Commands.Where(x => x.Preconditions.Any(y => y.GetType() == typeof(RestrictionAttribute)));
-                        foreach (var cmd in matchingCmds)
-                        {
-                            var preconditions = cmd.Preconditions;
-                            if (preconditions.Any(x => x.GetType() == typeof(RestrictionAttribute)))
-                            {
-                                premCount++;
-                            }
-                        }
-                    }
-
-                    if (premCount > 0)
-                    {
-                        premiumString = $" {{{premCount}x $}}";
-                    }
-                    
-                    var cmdSb = new StringBuilder()
-                                .Append($"{server.CommandPrefix}")
-                                .Append(cmdName)
-                                .Append(aliases)
-                                .Append(premiumString)
-                                .AppendLine();
-
-                    curPageBuilder.Description += cmdSb.ToString();
-                }
-
-                // Closes code block assigned at start and adds helpful data.
-                curPageBuilder.Description += $"```\nUse `{server.CommandPrefix}help <command name>` for command documentation.\n" +
-                                              $"Example: `{server.CommandPrefix}help ban`\n\n";
-
-                                              pages[i] = curPageBuilder;
-            }
+                GetFirstPage(server),
+                GetSecondPage(server),
+                GetThirdPage(server, ownerExecution)
+            };
 
             Paginator paginator = new StaticPaginatorBuilder()
                             .WithUsers(Context.User)
@@ -170,6 +79,151 @@ namespace Kaguya.Discord.Commands.Reference
                             .Build();
 
             await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(2));
+        }
+
+        private string GetCommandTextForModule(KaguyaServer server, CommandModule module)
+        {
+            string curModuleName = module.Humanize(LetterCasing.Title);
+
+            var curModuleCommands = GetCommandsForModuleAlphabetized(module).ToList();
+            if (!curModuleCommands.Any())
+            {
+                return default;
+            }
+            
+            
+            string description = $"{curModuleName}\n```ini\n";
+            
+            foreach (ModuleInfo modInfo in curModuleCommands)
+            {
+                string cmdName = modInfo.Aliases[0];
+                
+                // We leave out aliases[0] because that is the name of the command itself.
+                string aliases = string.Empty;
+                string premiumString = string.Empty;
+
+                if (modInfo.Aliases.Count > 1)
+                {
+                    // Start with a space to separate it from the command name.
+                    var aliasSb = new StringBuilder(" ");
+                    var remaining = modInfo.Aliases.ToArray()[1..];
+
+                    foreach (var alias in remaining)
+                    {
+                        aliasSb.Append($"[{alias}] ");
+                    }
+
+                    // Removes trailing whitespace.
+                    aliasSb.Remove(aliasSb.Length - 1, 1);
+                    aliases = aliasSb.ToString();
+                }
+                
+                // Check the module for premium attributes.
+                if (modInfo.Preconditions.Any(x => x.GetType() == typeof(RestrictionAttribute)))
+                {
+                    var modRestrictionAttrs = modInfo.Preconditions.Where(x => x.GetType() == typeof(RestrictionAttribute));
+                    foreach (var attr in modRestrictionAttrs)
+                    {
+                        if ((((RestrictionAttribute) attr).Restriction & ModuleRestriction.PremiumUser) != 0)
+                        {
+                            premiumString = " {All $}";
+
+                            break;
+                        }
+                    }
+                }
+
+                // Module itself is not restricted. Let's check sub-commands.
+                int premCount = 0;
+                if (premiumString == string.Empty && modInfo.Commands.Select(x => x.Preconditions).Any())
+                {
+                    var matchingCmds = modInfo.Commands.Where(x => x.Preconditions.Any(y => y.GetType() == typeof(RestrictionAttribute)));
+                    foreach (var cmd in matchingCmds)
+                    {
+                        var preconditions = cmd.Preconditions;
+                        if (preconditions.Any(x => x.GetType() == typeof(RestrictionAttribute)))
+                        {
+                            premCount++;
+                        }
+                    }
+                }
+
+                if (premCount > 0)
+                {
+                    premiumString = $" {{{premCount}x $}}";
+                }
+                
+                var cmdSb = new StringBuilder()
+                            .Append($"{server.CommandPrefix}")
+                            .Append(cmdName)
+                            .Append(aliases)
+                            .Append(premiumString)
+                            .AppendLine();
+
+                description += cmdSb.ToString();
+            }
+
+            description += "```\n"; // Extra new line for command lists underneath the current one.
+            return description;
+        }
+
+        private PageBuilder GetFirstPage(KaguyaServer server)
+        {
+            PageBuilder pageBuilder = new PageBuilder()
+                                      .WithTitle("Kaguya Commands")
+                                      .WithColor(KaguyaColors.Magenta)
+                                      .WithDescription($"{_links}\n\n"); // Start description ini here. Closes later.
+
+            pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Administration);
+            pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Configuration);
+            pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Exp);
+
+            // Closes code block assigned at start and adds helpful data.
+            pageBuilder.Description += $"Use `{server.CommandPrefix}help <command name>` for command documentation.\n" +
+                                          $"Example: `{server.CommandPrefix}help ban`\n\n";
+
+            return pageBuilder;
+        }
+        
+        private PageBuilder GetSecondPage(KaguyaServer server)
+        {
+            PageBuilder pageBuilder = new PageBuilder()
+                                      .WithTitle("Kaguya Commands")
+                                      .WithColor(KaguyaColors.Magenta)
+                                      .WithDescription($"{_links}\n\n"); // Start description ini here. Closes later.
+
+            pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Fun);
+            pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Games);
+            pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Music);
+
+            // Closes code block assigned at start and adds helpful data.
+            pageBuilder.Description += $"\nUse `{server.CommandPrefix}help <command name>` for command documentation.\n" +
+                                       $"Example: `{server.CommandPrefix}help ban`\n\n";
+
+            return pageBuilder;
+        }
+        
+        private PageBuilder GetThirdPage(KaguyaServer server, bool ownerExecution)
+        {
+            PageBuilder pageBuilder = new PageBuilder()
+                                      .WithTitle("Kaguya Commands")
+                                      .WithColor(KaguyaColors.Magenta)
+                                      .WithDescription($"{_links}\n\n"); // Start description ini here. Closes later.
+
+            pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Nsfw);
+            pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Reference);
+            pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Utility);
+
+            if (ownerExecution)
+            {
+                pageBuilder.Description += GetCommandTextForModule(server, CommandModule.OwnerOnly);
+            }
+            
+            // Closes code block assigned at start and adds helpful data.
+            pageBuilder.Description += $"Use `{server.CommandPrefix}help <command name>` for command documentation.\n" +
+                                       $"Example: `{server.CommandPrefix}help ban`";
+
+            return pageBuilder;
         }
 
         [Command(RunMode = RunMode.Async)]

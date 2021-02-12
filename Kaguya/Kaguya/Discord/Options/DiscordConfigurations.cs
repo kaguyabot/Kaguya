@@ -4,7 +4,7 @@ namespace Kaguya.Discord.Options
 {
     public class DiscordConfigurations
     {
-	    public static string Position { get; } = "DiscordSettings";
+	    public static string Position => "DiscordSettings";
 
 	    // login details
 

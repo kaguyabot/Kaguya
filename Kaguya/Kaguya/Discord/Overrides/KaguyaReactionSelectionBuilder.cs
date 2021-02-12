@@ -5,7 +5,6 @@ using System.Text;
 using Discord;
 using Discord.WebSocket;
 using Interactivity;
-using Interactivity.Extensions;
 using Interactivity.Selection;
 using Kaguya.Discord.Overrides.Extensions;
 

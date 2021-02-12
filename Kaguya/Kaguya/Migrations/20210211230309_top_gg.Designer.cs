@@ -3,13 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210211230309_top_gg")]
+    partial class top_gg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -363,19 +366,10 @@ namespace Kaguya.Migrations
                     b.Property<bool>("IsCurrentlyPurgingMessages")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<bool>("IsNsfwAllowed")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<bool>("LevelAnnouncementsEnabled")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<ulong?>("MuteRoleId")
-                        .HasColumnType("bigint unsigned");
-
-                    b.Property<DateTime?>("NsfwAllowanceTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<ulong?>("NsfwAllowedId")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<int>("PraiseCooldown")
@@ -530,9 +524,6 @@ namespace Kaguya.Migrations
                     b.Property<ulong?>("Bans")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong?>("FilteredWord")
-                        .HasColumnType("bigint unsigned");
-
                     b.Property<ulong?>("MessageDeleted")
                         .HasColumnType("bigint unsigned");
 
@@ -570,15 +561,15 @@ namespace Kaguya.Migrations
 
             modelBuilder.Entity("Kaguya.Database.Model.PremiumKey", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("Key")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<ulong>("KeyCreatorId")
                         .HasColumnType("bigint unsigned");
@@ -586,13 +577,13 @@ namespace Kaguya.Migrations
                     b.Property<int>("LengthInSeconds")
                         .HasColumnType("int");
 
-                    b.Property<ulong?>("ServerId")
+                    b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong?>("UserId")
+                    b.Property<ulong>("UserId")
                         .HasColumnType("bigint unsigned");
 
-                    b.HasKey("Id", "Key");
+                    b.HasKey("Key");
 
                     b.HasIndex("Key");
 

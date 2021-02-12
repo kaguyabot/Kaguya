@@ -2,7 +2,7 @@
 {
 	public class AdminConfigurations
 	{
-		public static string Position { get; } = "AdminSettings";
+		public static string Position => "AdminSettings";
 		public ulong OwnerId { get; set; }
 		public string OsuApiKey { get; set; }
 	}

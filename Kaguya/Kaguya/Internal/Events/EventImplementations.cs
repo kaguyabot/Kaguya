@@ -52,6 +52,8 @@ namespace Kaguya.Internal.Events
                                  .AppendLine()
                                  .AppendLine("Here's a list of links and suggestions to help you get started.")
                                  .AppendLine()
+                                 .AppendLine($"- [YouTube Tutorial]({Global.VideoTutorialUrl})")
+                                 .AppendLine()
                                  .AppendLine($"- [Quick start guide]({Global.WikiQuickStartUrl})")
                                  .AppendLine($"- [Privacy statement]({Global.WikiPrivacyUrl})")
                                  .AppendLine($"- [Kaguya Support]({Global.SupportDiscordUrl})")

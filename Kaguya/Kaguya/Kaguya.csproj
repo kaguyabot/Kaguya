@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="BooruSharp" Version="3.0.2" />
         <PackageReference Include="Discord.InteractivityAddon" Version="2.2.0-rc10" />
         <PackageReference Include="Discord.Net" Version="2.3.0-dev-20210121.1" />
         <PackageReference Include="Discord.Net.Commands" Version="2.3.0-dev-20210121.1" />
@@ -35,6 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="External\Services" />
       <Folder Include="Migrations" />
     </ItemGroup>
 
