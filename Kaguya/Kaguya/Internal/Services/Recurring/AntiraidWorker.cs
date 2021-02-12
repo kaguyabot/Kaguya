@@ -129,7 +129,6 @@ namespace Kaguya.Internal.Services.Recurring
 
                         string reason = "Kaguya Anti-Raid service";
 
-                        // todo: Enqueue into guild's discord logger, if applicable.
                         var adminAction = new AdminAction
                         {
                             ServerId = data.ServerId,
