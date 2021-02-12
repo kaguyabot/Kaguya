@@ -13,6 +13,7 @@ using Kaguya.Internal.Enums;
 namespace Kaguya.Discord.Commands.OwnerOnly
 {
     // TODO: Test if this owneronly actually blocks execution from non owners.
+    [Restriction(ModuleRestriction.OwnerOnly)]
     [Module(CommandModule.OwnerOnly)]
     [Group("blacklist")]
     public class Blacklist : KaguyaBase<Blacklist>

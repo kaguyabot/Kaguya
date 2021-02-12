@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.OwnerOnly
 {
+    [Restriction(ModuleRestriction.OwnerOnly)]
     [Module(CommandModule.OwnerOnly)]
     [Group("premiumkeygen")]
     [Alias("pgen")]
