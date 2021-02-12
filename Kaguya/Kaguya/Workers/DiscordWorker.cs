@@ -36,10 +36,10 @@ namespace Kaguya.Workers
         private readonly IOptions<DiscordConfigurations> _discordConfigs;
         private readonly ILogger<DiscordWorker> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private readonly Events _events;
+        private readonly KaguyaEvents _kaguyaEvents;
 
         public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
-            ILogger<DiscordWorker> logger, CommandService commandService, IServiceProvider serviceProvider, Events events)
+            ILogger<DiscordWorker> logger, CommandService commandService, IServiceProvider serviceProvider, KaguyaEvents kaguyaEvents)
         {
             _client = client;
             _adminConfigs = adminConfigs;
@@ -47,7 +47,7 @@ namespace Kaguya.Workers
             _logger = logger;
             _commandService = commandService;
             _serviceProvider = serviceProvider;
-            _events = events;
+            _kaguyaEvents = kaguyaEvents;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -255,7 +255,7 @@ namespace Kaguya.Workers
         private void InitOther()
         {
             LogConfiguration.LoadProperties();
-            _events.InitEvents();
+            _kaguyaEvents.InitEvents();
         }
 
         private async Task HandleCommandAsync(SocketMessage msg)
@@ -393,7 +393,7 @@ namespace Kaguya.Workers
                     _logger.Log(LogLevel.Information,
                         $"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
 
-                    Events.OnFilteredWordDetectedTrigger(new FilteredWordEventData
+                    KaguyaEvents.OnFilteredWordDetectedTrigger(new FilteredWordEventData
                     {
                         ServerId = server.ServerId,
                         UserId = ctx.User.Id,

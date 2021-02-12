@@ -13,14 +13,14 @@ using Victoria;
 
 namespace Kaguya.Internal.Events
 {
-    public class Events
+    public class KaguyaEvents
     {
         private readonly DiscordShardedClient _client;
         private readonly IAntiraidService _antiraidService;
         private readonly LavaNode _lavaNode;
         private readonly AudioService _audioService;
         private readonly GuildLoggerService _guildLoggerService;
-        private readonly ILogger<Events> _logger;
+        private readonly ILogger<KaguyaEvents> _logger;
 
         /// <summary>
         /// Fires whenever an Antiraid is detected in a guild and a user has been actioned.
@@ -43,7 +43,7 @@ namespace Kaguya.Internal.Events
         /// <param name="data"></param>
         public static void OnFilteredWordDetectedTrigger(FilteredWordEventData data) => OnFilteredWordDetected?.Invoke(data);
 
-        public Events(ILogger<Events> logger, DiscordShardedClient client, IAntiraidService antiraidService,
+        public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService,
             LavaNode lavaNode, AudioService audioService, GuildLoggerService guildLoggerService)
         {
             _logger = logger;

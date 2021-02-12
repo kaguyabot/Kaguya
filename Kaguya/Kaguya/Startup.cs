@@ -156,7 +156,7 @@ namespace Kaguya
 			
 			services.AddHostedService<DiscordWorker>();
 
-			services.AddSingleton<Events>();
+			services.AddSingleton<KaguyaEvents>();
 			
 			// Must be after discord.
 			services.AddHostedService<StatusRotationService>();
