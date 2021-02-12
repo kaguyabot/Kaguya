@@ -40,6 +40,8 @@ namespace Kaguya.Discord.Commands.Reference
         public async Task RedeemCommand(string key)
         {
             PremiumKey match = await _premiumKeyRepository.GetAsync(key);
+            await Context.Message.DeleteAsync();
+
             if (match == null)
             {
                 var responseEmbed = GetBasicErrorEmbedBuilder("This premium key is invalid.").Build();
@@ -86,11 +88,11 @@ namespace Kaguya.Discord.Commands.Reference
 
             TimeSpan userPremiumRemaining = user.PremiumExpiration.Value - DateTime.Now;
             TimeSpan serverPremiumRemaining = server.PremiumExpiration.Value - DateTime.Now;
-                        
+
             var response = new KaguyaEmbedBuilder(KaguyaColors.Gold)
                            .WithTitle("Kaguya Premium: Redemption Successful")
-                           .WithDescription($"{Context.User.Mention} You have successfully redeemed a {Global.StoreLink} key " +
-                                            $"with a duration of {match.HumanizedLength.AsBold()}.\n" +
+                           .WithDescription($"{Context.User.Mention} You have successfully redeemed a {Global.StoreLink} key!\n" +
+                                            $"Duration: {match.HumanizedLength.AsBold()}\n" +
                                             $"You have been awarded {additionalPoints.ToString("N0").AsBold()} points.")
                            .WithFooter(new EmbedFooterBuilder
                            {

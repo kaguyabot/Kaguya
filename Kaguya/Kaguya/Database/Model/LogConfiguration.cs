@@ -20,7 +20,8 @@ namespace Kaguya.Database.Model
         Userleave,
         Voiceupdate,
         Messagedeleted,
-        Messageupdated
+        Messageupdated,
+        Filteredword
     }
     public class LogConfiguration
     {
@@ -41,6 +42,7 @@ namespace Kaguya.Database.Model
         public ulong? VoiceUpdates { get; set; }
         public ulong? MessageDeleted { get; set; }
         public ulong? MessageUpdated { get; set; }
+        public ulong? FilteredWord { get; set; }
         
         private static IList<PropertyInfo> GetLogProperties()
         {

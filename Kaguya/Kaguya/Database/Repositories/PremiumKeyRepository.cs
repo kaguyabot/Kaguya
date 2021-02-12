@@ -25,7 +25,7 @@ namespace Kaguya.Database.Repositories
             await InsertAsync(key);
         }
 
-        public async Task<IList<PremiumKey>> GenerateAndInsertAsync(int amount, TimeSpan duration)
+        public async Task<IList<PremiumKey>> GenerateAndInsertAsync(int amount, ulong creatorId, TimeSpan duration)
         {
             var collection = new List<PremiumKey>();
             for (int i = 0; i < amount; i++)
@@ -33,6 +33,7 @@ namespace Kaguya.Database.Repositories
                 collection.Add(new PremiumKey
                 {
                     Key = GenerateKey(),
+                    KeyCreatorId = creatorId,
                     LengthInSeconds = (int)duration.TotalSeconds
                 });
             }

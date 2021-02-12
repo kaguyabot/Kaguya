@@ -76,6 +76,8 @@ namespace Kaguya
 			services.AddScoped<UpvoteRepository>();
 			services.AddScoped<WarnConfigurationRepository>();
 
+			services.AddSingleton<GuildLoggerService>();
+
 			services.AddSingleton<AudioQueueLocker>();
 			services.AddSingleton<ITimerService, TimerService>();
 			services.AddSingleton<IAntiraidService, AntiraidService>();
@@ -144,7 +146,7 @@ namespace Kaguya
 				var client = provider.GetRequiredService<DiscordShardedClient>();
 				return new InteractivityService(client, TimeSpan.FromMinutes(5));
 			});
-			
+
 			// CommonEmotes setup
 			services.AddSingleton<CommonEmotes>();
 			

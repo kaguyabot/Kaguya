@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210209154445_logging")]
+    partial class logging
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -578,10 +580,10 @@ namespace Kaguya.Migrations
                     b.Property<int>("LengthInSeconds")
                         .HasColumnType("int");
 
-                    b.Property<ulong?>("ServerId")
+                    b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong?>("UserId")
+                    b.Property<ulong>("UserId")
                         .HasColumnType("bigint unsigned");
 
                     b.HasKey("Key");

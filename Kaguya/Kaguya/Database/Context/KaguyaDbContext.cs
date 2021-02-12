@@ -1,5 +1,6 @@
 ﻿using Kaguya.Database.Model;
 using Microsoft.EntityFrameworkCore;
+// ReSharper disable PartialMethodWithSinglePart
 
 #nullable disable
 

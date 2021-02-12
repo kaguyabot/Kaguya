@@ -5,7 +5,17 @@ namespace Kaguya.Internal.Services.Models
     public class AntiraidData
     {
         public ulong ServerId { get; init; }
-        public DateTime JoinTime { get; init; }
         public ulong UserId { get; init; }
+        public string Action { get; init; }
+        public DateTime JoinTime { get; init; }
+        
+        public static string FormattedAntiraidPunishment(string punishmentStr) => punishmentStr switch
+        {
+            "kick" => "kicked",
+            "ban" => "banned",
+            "mute" => "muted",
+            "shadowban" => "shadowbanned",
+            _ => punishmentStr
+        };
     }
 }
