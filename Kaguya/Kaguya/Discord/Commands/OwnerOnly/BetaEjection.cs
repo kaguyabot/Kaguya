@@ -4,6 +4,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Interactivity;
 using Interactivity.Confirmation;
+using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Microsoft.Extensions.Logging;
@@ -55,7 +56,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
                 var ejectionEmbed = new KaguyaEmbedBuilder(KaguyaColors.Orange)
                 {
                     Title = "Announcement: End of Beta",
-                    Description = "Important announcement from the Kaguya Administration:\n\n" +
+                    Description = "Important announcement from the Kaguya Administration:\n\n".AsBold() +
                                   "Thank you all so much for participating in the open beta! " +
                                   "We have learned a lot from your feedback and have tried to make " +
                                   "Kaguya v4 an amazing option for every Discord server.\n\n" +

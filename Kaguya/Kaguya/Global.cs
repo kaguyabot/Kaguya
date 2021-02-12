@@ -19,8 +19,10 @@ namespace Kaguya
         public const string InviteUrl = "https://discord.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=536341759";
         public const string BetaInviteUrl = "https://discord.com/oauth2/authorize?client_id=367403886841036820&scope=bot&permissions=1610083583";
         public const string TopGgUpvoteUrl = "https://top.gg/bot/538910393918160916";
+        
         public const string WikiPrivacyUrl = "https://github.com/kaguyabot/Kaguya/wiki/Privacy";
         public const string WikiQuickStartUrl = "https://github.com/kaguyabot/Kaguya/wiki/Using-Kaguya:-Quick-Start-Guide";
+        public const string WikiV4ChangelogUrl = "https://github.com/kaguyabot/Kaguya/wiki/What's-new-in-v4%3F";
         
         public const string DiscordTermsLink = "[Terms of Service](https://discord.com/terms)";
         public const string DiscordCommunityGuidelinesLink = "[Community Guidelines](https://discord.com/guidelines)";
