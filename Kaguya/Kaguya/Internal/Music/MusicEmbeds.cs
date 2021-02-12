@@ -10,7 +10,7 @@ namespace Kaguya.Internal.Music
     {
         public static Embed GetNowPlayingEmbedForTrack(LavaTrack track, bool autoPlay = false)
         {
-            string title = autoPlay ? "Now playing (auto-play):" : "Now playing";
+            string title = autoPlay ? "Now playing (auto-play)" : "Now playing";
             return new KaguyaEmbedBuilder(Color.Blue)
                    .WithDescription($"🎵 {title}:\n" +
                                     $"Title: {track.Title.AsBold()}\n" +

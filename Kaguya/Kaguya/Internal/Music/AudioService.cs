@@ -27,12 +27,16 @@ namespace Kaguya.Internal.Music
         {
             _logger.LogInformation($"Track started for guild {arg.Player.VoiceChannel.Guild.Id}:\n\t" +
                                    $"[Name: {arg.Track.Title} | Duration: {arg.Track.Duration.HumanizeTraditionalReadable()}]");
-            
+
             if (!_disconnectTokens.TryGetValue(arg.Player.VoiceChannel.Id, out CancellationTokenSource value))
+            {
                 return Task.CompletedTask;
+            }
 
             if (value.IsCancellationRequested)
+            {
                 return Task.CompletedTask;
+            }
 
             value.Cancel(true);
 
@@ -52,9 +56,11 @@ namespace Kaguya.Internal.Music
 
                 return;
             }
-            
+
             if (!args.Reason.ShouldPlayNext() && args.Reason != TrackEndReason.Stopped)
+            {
                 return;
+            }
 
             LavaPlayer player = args.Player;
 
