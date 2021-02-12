@@ -41,11 +41,16 @@ namespace Kaguya.Database.Repositories
 
             return collection;
         }
-        
+
+        public async Task<PremiumKey> GetKeyAsync(string keyString)
+        {
+            return await Table.AsQueryable().Where(x => x.Key == keyString).FirstOrDefaultAsync();
+        }
+
         public static string GenerateKey()
         {
             Random r = new Random();
-            const string POSSIBLE_CHARS = "abcdefghijklmnopqrstuvwxyz1234567890!@#$%^&()_+";
+            const string POSSIBLE_CHARS = "abcdefghijklmnopqrstuvwxyz1234567890!@#$%^&()+";
             char[] chars = POSSIBLE_CHARS.ToCharArray();
             
             List<char> finalSequence = new List<char>();

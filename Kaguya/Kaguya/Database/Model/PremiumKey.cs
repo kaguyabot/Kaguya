@@ -8,9 +8,9 @@ namespace Kaguya.Database.Model
 {
     public class PremiumKey
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public string Key { get; set; }
         public ulong KeyCreatorId { get; set; }
         public int LengthInSeconds { get; set; }

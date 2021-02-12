@@ -20,5 +20,11 @@ namespace Kaguya.Database.Interfaces
         /// <param name="duration"></param>
         /// <returns></returns>
         public Task<IList<PremiumKey>> GenerateAndInsertAsync(int amount, TimeSpan duration);
+        /// <summary>
+        /// Gets a key object by the string value of the key instead of the integer id.
+        /// </summary>
+        /// <param name="keyString"></param>
+        /// <returns></returns>
+        public Task<PremiumKey> GetKeyAsync(string keyString);
     }
 }
