@@ -19,6 +19,7 @@ namespace Kaguya.Internal.Events
         private readonly IAntiraidService _antiraidService;
         private readonly LavaNode _lavaNode;
         private readonly AudioService _audioService;
+        private readonly ILogger<EventImplementations> _implementationsLogger;
         private readonly GuildLoggerService _guildLoggerService;
         private readonly ILogger<KaguyaEvents> _logger;
 
@@ -44,19 +45,21 @@ namespace Kaguya.Internal.Events
         public static void OnFilteredWordDetectedTrigger(FilteredWordEventData data) => OnFilteredWordDetected?.Invoke(data);
 
         public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService,
-            LavaNode lavaNode, AudioService audioService, GuildLoggerService guildLoggerService)
+            LavaNode lavaNode, AudioService audioService, ILogger<EventImplementations> implementationsLogger,
+            GuildLoggerService guildLoggerService)
         {
             _logger = logger;
             _client = client;
             _antiraidService = antiraidService;
             _lavaNode = lavaNode;
             _audioService = audioService;
+            _implementationsLogger = implementationsLogger;
             _guildLoggerService = guildLoggerService;
         }
 
         public void InitEvents()
         {
-            var eventImplementations = new EventImplementations(_antiraidService);
+            var eventImplementations = new EventImplementations(_implementationsLogger, _antiraidService, _client);
             
             _logger.LogDebug("Kaguya Events initialized.");
             
