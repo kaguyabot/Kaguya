@@ -3,7 +3,6 @@ using Discord.Commands;
 using Kaguya.Internal.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Discord;
 using Discord.WebSocket;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Enums;
