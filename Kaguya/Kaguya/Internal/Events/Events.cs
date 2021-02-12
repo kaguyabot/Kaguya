@@ -1,8 +1,6 @@
 using System.Threading.Tasks;
 using Discord.WebSocket;
-using Interactivity;
 using Kaguya.Internal.Music;
-using Kaguya.Internal.Services;
 using Kaguya.Internal.Services.Recurring;
 using Microsoft.Extensions.Logging;
 using Victoria;

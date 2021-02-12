@@ -5,7 +5,6 @@ using Discord.Rest;
 using Discord.WebSocket;
 using Interactivity;
 using Kaguya.Database.Context;
-using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.Options;

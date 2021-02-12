@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
@@ -6,7 +6,6 @@ using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
 using Kaguya.Internal.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Database.Repositories
 {

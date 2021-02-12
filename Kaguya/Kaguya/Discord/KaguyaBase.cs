@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.Rest;
-using Kaguya.Discord.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord
