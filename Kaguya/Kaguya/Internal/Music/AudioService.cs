@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Kaguya.Discord.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 using Victoria;
 using Victoria.Enums;
