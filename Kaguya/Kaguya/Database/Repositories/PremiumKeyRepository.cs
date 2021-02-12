@@ -6,7 +6,6 @@ using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Database.Repositories
 {
@@ -14,18 +13,19 @@ namespace Kaguya.Database.Repositories
     {
         public PremiumKeyRepository(KaguyaDbContext dbContext) : base(dbContext) { }
         
-        public async Task GenerateAndInsertAsync(TimeSpan duration)
+        public async Task GenerateAndInsertAsync(ulong creatorId, TimeSpan duration)
         {
             var key = new PremiumKey
             {
                 Key = GenerateKey(),
+                KeyCreatorId = creatorId,
                 LengthInSeconds = (int)duration.TotalSeconds
             };
 
             await InsertAsync(key);
         }
 
-        public async Task<IList<PremiumKey>> GenerateAndInsertAsync(int amount, TimeSpan duration)
+        public async Task<IList<PremiumKey>> GenerateAndInsertAsync(ulong creatorId, int amount, TimeSpan duration)
         {
             var collection = new List<PremiumKey>();
             for (int i = 0; i < amount; i++)
@@ -33,6 +33,7 @@ namespace Kaguya.Database.Repositories
                 collection.Add(new PremiumKey
                 {
                     Key = GenerateKey(),
+                    KeyCreatorId = creatorId,
                     LengthInSeconds = (int)duration.TotalSeconds
                 });
             }
