@@ -16,7 +16,7 @@ namespace Kaguya.Discord.Commands.Nsfw
 {
     [Restriction(ModuleRestriction.PremiumUser | ModuleRestriction.PremiumServer)]
     [Module(CommandModule.Nsfw)]
-    [Group("Nsfw")]
+    [Group("nsfw")]
     [Alias("n")]
     public class Nsfw : KaguyaBase<Nsfw>
     {
