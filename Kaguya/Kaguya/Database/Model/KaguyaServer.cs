@@ -26,6 +26,9 @@ namespace Kaguya.Database.Model
 		public DateTime DateFirstTracked { get; set; }
 
 		public DateTime? PremiumExpiration { get; set; }
+		public DateTime? NsfwAllowanceTime { get; set; }
+		public bool IsNsfwAllowed { get; set; } = false;
+		public ulong? NsfwAllowedId { get; set; }
 
 		/// <summary>
 		/// A boolean that determines whether the server is currently purging messages.
