@@ -42,6 +42,16 @@ namespace Kaguya.Internal.Events
         /// <param name="data"></param>
         public static void OnFilteredWordDetectedTrigger(FilteredWordEventData data) => OnFilteredWordDetected?.Invoke(data);
 
+        /// <summary>
+        /// Fired whenever an authorized top.gg upvote is received.
+        /// </summary>
+        public static event Action<Upvote> OnUpvote;
+        /// <summary>
+        /// Invokes the <see cref="OnUpvote"/> event.
+        /// </summary>
+        /// <param name="payload"></param>
+        public static void OnUpvoteTrigger(Upvote payload) => OnUpvote?.Invoke(payload);
+
         public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService,
             LavaNode lavaNode, AudioService audioService, ILogger<EventImplementations> implementationsLogger,
             GuildLoggerService guildLoggerService)
@@ -62,7 +72,8 @@ namespace Kaguya.Internal.Events
             _logger.LogDebug("Kaguya Events initialized.");
             
             _client.ShardReady += ClientOnShardReady;
-            _client.UserJoined += eventImplementations.OnUserJoined;
+            _client.UserJoined += eventImplementations.OnUserJoinedAsync;
+            _client.JoinedGuild += eventImplementations.SendOwnerDmAsync;
 
             _client.MessageDeleted += _guildLoggerService.LogMessageDeletedAsync;
             _client.MessageUpdated += _guildLoggerService.LogMessageUpdatedAsync;
@@ -74,6 +85,7 @@ namespace Kaguya.Internal.Events
             
             OnAntiraid += async (a, u) => await _guildLoggerService.LogAntiRaidAsync(a, u);
             OnFilteredWordDetected += async d => await _guildLoggerService.LogFilteredWordAsync(d);
+            OnUpvote += async uv => await eventImplementations.UpvoteNotifierAsync(uv);
             
             _lavaNode.OnTrackStarted += _audioService.OnTrackStarted;
             _lavaNode.OnTrackEnded += _audioService.OnTrackEnded;

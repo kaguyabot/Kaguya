@@ -3,7 +3,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using Kaguya.Database.Model;
 using Kaguya.Discord;
+using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Services.Recurring;
 using Microsoft.Extensions.Logging;
 
@@ -31,7 +33,7 @@ namespace Kaguya.Internal.Events
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task OnUserJoined(SocketGuildUser user)
+        public async Task OnUserJoinedAsync(SocketGuildUser user)
         {
             var userId = user.Id;
             var serverId = user.Guild.Id;
@@ -87,6 +89,34 @@ namespace Kaguya.Internal.Events
             catch (Exception e)
             {
                 _logger.LogDebug(e, $"Failed to send owner {owner.Id} the owner greeting message.");
+            }
+        }
+
+        public async Task UpvoteNotifierAsync(Upvote vote)
+        {
+            const int POINTS = 750;
+            const int EXP = 200;
+            
+            var user = _client.GetUser(vote.UserId);
+
+            var voteEmbed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
+            {
+                Title = "Top.GG Vote Rewards",
+                Description = "Thanks for upvoting on top.gg! You've been awarded:\n" +
+                              $"- {POINTS.ToString().AsBold()} points\n" +
+                              $"- {EXP.ToString().AsBold()} exp"
+            }
+            .WithFooter("You can vote again in 12 hours!")
+            .Build();
+
+            try
+            {
+                var dmChannel = await user.GetOrCreateDMChannelAsync();
+                await dmChannel.SendMessageAsync(embed: voteEmbed);
+            }
+            catch (Exception)
+            {
+                //
             }
         }
     }

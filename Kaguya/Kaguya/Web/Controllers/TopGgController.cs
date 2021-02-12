@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord;
+using Kaguya.Internal.Events;
 using Kaguya.Web.Contracts;
 using Kaguya.Web.Options;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +21,15 @@ namespace Kaguya.Web.Controllers
         private readonly IOptions<TopGgConfigurations> _configs;
         private readonly ILogger<TopGgController> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly DiscordShardedClient _client;
 
         public TopGgController(IOptions<TopGgConfigurations> configs, ILogger<TopGgController> logger,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider, DiscordShardedClient client)
         {
             _configs = configs;
             _logger = logger;
             _serviceProvider = serviceProvider;
+            _client = client;
         }
         
         [HttpPost("webhook")]
@@ -39,9 +44,10 @@ namespace Kaguya.Web.Controllers
 
             _logger.LogInformation($"Authorized Top.GG Webhook received for user {payload.UserId}.");
 
+            Upvote vote = null;
             try
             { 
-                var vote = new Upvote
+                vote = new Upvote
                 {
                     UserId = ulong.Parse(payload.UserId),
                     BotId = ulong.Parse(payload.BotId),
@@ -61,6 +67,11 @@ namespace Kaguya.Web.Controllers
             catch (Exception e)
             {
                 _logger.LogWarning(e, $"Failed to parse and upload top.gg webhook for user {payload.UserId}!");
+            }
+
+            if (vote != null)
+            {
+                KaguyaEvents.OnUpvoteTrigger(vote);
             }
 
             return Ok();
