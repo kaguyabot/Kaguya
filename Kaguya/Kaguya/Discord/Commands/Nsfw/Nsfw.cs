@@ -128,6 +128,7 @@ namespace Kaguya.Discord.Commands.Nsfw
 
         [RequireUserPermission(GuildPermission.Administrator)]
         [Command("-toggle")]
+        [Summary("Toggles the nsfw module for this server on or off.")]
         public async Task NsfwToggleCommand()
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
