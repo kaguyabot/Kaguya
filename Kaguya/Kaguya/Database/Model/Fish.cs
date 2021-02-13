@@ -35,11 +35,11 @@ namespace Kaguya.Database.Model
         public int ExpValue { get; set; }
         
         /// <summary>
-        /// How many points the user received for catching this fish.
+        /// How many coins the user received for catching this fish.
         /// </summary>
-        public int PointValue { get; set; }
+        public int CoinValue { get; set; }
         /// <summary>
-        /// How many points the user spent to catch this fish.
+        /// How many coins the user spent to catch this fish.
         /// </summary>
         public int CostOfPlay { get; set; }
         /// <summary>

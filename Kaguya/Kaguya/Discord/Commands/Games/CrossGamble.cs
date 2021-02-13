@@ -39,13 +39,13 @@ namespace Kaguya.Discord.Commands.Games
         [Command(RunMode = RunMode.Async)]
         [Summary("A multiplayer gambling game, inspired by World of Warcraft gold gambling.\n\n" +
                  "- Minimum 2 players.\n" +
-                 "- Everyone who plays must have at least `<max amount>` points to play.\n" +
-                 "- The game host starts a session by executing the command with a `<max amount>` points value. " +
+                 "- Everyone who plays must have at least `<max amount>` coins to play.\n" +
+                 "- The game host starts a session by executing the command with a `<max amount>` coins value. " +
                  "Other players can join the game through clicking on the reaction attached to the message.\n" +
                  "- All users who join the game will be randomly assigned a number between 1 and the `<max amount>`.\n\n" +
                  "The person with the **highest roll wins the difference between their roll and the lowest roll** in the game.\n" +
                  "For example: If the `<max amount>` is 10000, the highest roll is 7500, and the lowest roll is 1000, whoever " +
-                 "rolled 7500 wins 6500 of the loser's points.")]
+                 "rolled 7500 wins 6500 of the loser's coins.")]
         [Remarks("<max amount>")]
         [Example("30000")]
         [Example("1000000")]
@@ -54,9 +54,9 @@ namespace Kaguya.Discord.Commands.Games
             const int DELAY_SECONDS = 30;
             var hostUser = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
 
-            if (hostUser.Points < maxAmount)
+            if (hostUser.Coins < maxAmount)
             {
-                await SendBasicErrorEmbedAsync($"You cannot start a game for this many points. You only have `{hostUser.Points:N0}` points.");
+                await SendBasicErrorEmbedAsync($"You cannot start a game for this many coins. You only have `{hostUser.Coins:N0}` coins.");
 
                 return;
             }
@@ -83,7 +83,7 @@ namespace Kaguya.Discord.Commands.Games
             {
                 Title = "Cross-Gambling",
                 Description = $"A cross-gambling game has just begun! (2-25 players)\n" +
-                              $"{reactions[0]} - Click to join! " + $"Requires {maxAmount:N0} points".AsBold() + "\n" +
+                              $"{reactions[0]} - Click to join! " + $"Requires {maxAmount:N0} coins".AsBold() + "\n" +
                               $"{reactions[1]} - Click to leave the game.\n" +
                               $"{reactions[2]} - Starts game immediately (only usable by {Context.User.Mention}).\n" +
                               $"{reactions[3]} - Cancels the game session (only usable by {Context.User.Mention}).",
@@ -154,7 +154,7 @@ namespace Kaguya.Discord.Commands.Games
                 {
                     var kaguyaUser = await _kaguyaUserRepository.GetOrCreateAsync(newUser.Id);
 
-                    if (kaguyaUser.Points > maxAmount)
+                    if (kaguyaUser.Coins > maxAmount)
                     {
                         gamblerUserAccs.Add(kaguyaUser);
                     }
@@ -212,16 +212,16 @@ namespace Kaguya.Discord.Commands.Games
             KaguyaUser winnerUser = await _kaguyaUserRepository.GetOrCreateAsync(highRoll.Key.Id);
             KaguyaUser loserUser = await _kaguyaUserRepository.GetOrCreateAsync(lowRoll.Key.Id);
             
-            await UpdateWinnerLoserPointsAsync(winnerUser, difference, loserUser);
+            await UpdateWinnerLoserCoinsAsync(winnerUser, difference, loserUser);
 
             var finalEmbed = new KaguyaEmbedBuilder(KaguyaColors.Green)
                              .WithTitle("Cross Gambling: Result")
                              .WithDescription($"Maximum roll: {maxAmount.ToString("N0").AsBold()}\n\n" +
                                               $"{highRoll.Key.Mention} rolled {highRoll.Value.ToString("N0").AsBold()}.\n" +
                                               $"{lowRoll.Key.Mention} rolled {lowRoll.Value.ToString("N0").AsBold()}.\n\n" +
-                                              $"{highRoll.Key.Mention} won {difference.ToString("N0").AsBold()} of {lowRoll.Key.Mention}'s points!")
-                             .WithFooter($"{highRoll.Key.Username} now has {winnerUser.Points:N0} points! (+{difference:N0})\n" +
-                                         $"{lowRoll.Key.Username} now has {loserUser.Points:N0} points. (-{difference:N0})");
+                                              $"{highRoll.Key.Mention} won {difference.ToString("N0").AsBold()} of {lowRoll.Key.Mention}'s coins!")
+                             .WithFooter($"{highRoll.Key.Username} now has {winnerUser.Coins:N0} coins! (+{difference:N0})\n" +
+                                         $"{lowRoll.Key.Username} now has {loserUser.Coins:N0} coins. (-{difference:N0})");
 
             await SendEmbedAsync(finalEmbed);
         }
@@ -244,10 +244,10 @@ namespace Kaguya.Discord.Commands.Games
             return userRolls;
         }
 
-        private async Task UpdateWinnerLoserPointsAsync(KaguyaUser winnerUser, int difference, KaguyaUser loserUser)
+        private async Task UpdateWinnerLoserCoinsAsync(KaguyaUser winnerUser, int difference, KaguyaUser loserUser)
         {
-            winnerUser.AdjustPoints(difference);
-            loserUser.AdjustPoints(-difference);
+            winnerUser.AdjustCoins(difference);
+            loserUser.AdjustCoins(-difference);
 
             await _kaguyaUserRepository.UpdateRangeAsync(new[]
             {

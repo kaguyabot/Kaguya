@@ -94,7 +94,7 @@ namespace Kaguya.Internal.Events
 
         public async Task UpvoteNotifierAsync(Upvote vote)
         {
-            const int POINTS = 750;
+            const int COINS = 750;
             const int EXP = 200;
             
             var user = _client.GetUser(vote.UserId);
@@ -103,7 +103,7 @@ namespace Kaguya.Internal.Events
             {
                 Title = "Top.GG Vote Rewards",
                 Description = "Thanks for upvoting on top.gg! You've been awarded:\n" +
-                              $"- {POINTS.ToString().AsBold()} points\n" +
+                              $"- {COINS.ToString().AsBold()} coins\n" +
                               $"- {EXP.ToString().AsBold()} exp"
             }
             .WithFooter("You can vote again in 12 hours!")

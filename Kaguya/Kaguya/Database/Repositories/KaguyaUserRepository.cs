@@ -74,12 +74,37 @@ namespace Kaguya.Database.Repositories
 				.IndexOf(match) + 1;
 		}
 
-		public async Task<long> CountPointsAsync()
+		public async Task<long> CountCoinsAsync()
 		{
 			return await _dbContext.KaguyaUsers
 			                       .AsQueryable()
-			                       .Where(x => x.Points > 0)
-			                       .SumAsync(x => x.Points);
+			                       .Where(x => x.Coins > 0)
+			                       .SumAsync(x => x.Coins);
+		}
+
+		public async Task<IList<KaguyaUser>> GetTopCoinHoldersAsync(int count = 10)
+		{
+			return await _dbContext.KaguyaUsers.AsQueryable()
+			                       .OrderByDescending(x => x.Coins)
+			                       .Where(x => x.UserId != _adminConfigurations.Value.OwnerId)
+			                       .Take(count)
+			                       .ToListAsync();
+		}
+
+		public async Task<IList<KaguyaUser>> GetTopExpHoldersAsync(int count = 10)
+		{
+			return await _dbContext.KaguyaUsers.AsQueryable()
+			                       .OrderByDescending(x => x.GlobalExp)
+			                       .Take(count)
+			                       .ToListAsync();
+		}
+
+		public async Task<IList<KaguyaUser>> GetTopFishHoldersAsync(int count = 10)
+		{
+			return await _dbContext.KaguyaUsers.AsQueryable()
+			                       .OrderByDescending(x => x.FishExp)
+			                       .Take(count)
+			                       .ToListAsync();
 		}
 	}
 }

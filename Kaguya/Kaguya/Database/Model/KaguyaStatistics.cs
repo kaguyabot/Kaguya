@@ -13,7 +13,7 @@ namespace Kaguya.Database.Model
         public int Shards { get; init; }
         public int CommandsExecuted { get; init; }
         public int Fish { get; init; }
-        public long Points { get; init; }
+        public long Coins { get; init; }
         public int Gambles { get; init; }
         public double RamUsageMegabytes { get; init; }
         public int LatencyMilliseconds { get; init; }

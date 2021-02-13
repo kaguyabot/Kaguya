@@ -24,8 +24,8 @@ namespace Kaguya.Discord.Commands.Games
         private readonly ILogger<FishGame> _logger;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
         private readonly FishRepository _fishRepository;
-        private const int POINTS = 75;
-        private const int PREMIUM_POINTS = 50;
+        private const int COINS = 75;
+        private const int PREMIUM_COINS = 50;
         
         public FishGame(ILogger<FishGame> logger, KaguyaUserRepository kaguyaUserRepository, FishRepository fishRepository) : base(logger)
         {
@@ -35,19 +35,19 @@ namespace Kaguya.Discord.Commands.Games
         }
 
         [Command]
-        [Summary("Allows you to play the fishing game! Each play costs 75 points (50 if command " +
+        [Summary("Allows you to play the fishing game! Each play costs 75 coins (50 if command " +
                  "user is a premium subscriber).")]
         public async Task FishCommand()
         {
             var user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
-            int pointsUsed = user.IsPremium ? PREMIUM_POINTS : POINTS;
+            int coinsUsed = user.IsPremium ? PREMIUM_COINS : COINS;
             TimeSpan cooldown = user.IsPremium ? TimeSpan.FromSeconds(5) : TimeSpan.FromSeconds(15);
             
             // TODO: Get user fish level bonuses and apply them here.
-            if (user.Points < pointsUsed)
+            if (user.Coins < coinsUsed)
             {
-                await SendBasicErrorEmbedAsync("You do not have enough points to play the fishing game.\n" +
-                                          $"Points: {user.Points.ToString().AsBold()} ({pointsUsed - user.Points} needed)");
+                await SendBasicErrorEmbedAsync("You do not have enough coins to play the fishing game.\n" +
+                                          $"Coins: {user.Coins.ToString().AsBold()} ({coinsUsed - user.Coins} needed)");
 
                 return;
             }
@@ -64,7 +64,7 @@ namespace Kaguya.Discord.Commands.Games
             FishRarity rarity = FishService.SelectRandomRarity();
             FishType randomFish = FishService.SelectFish(rarity);
 
-            (int points, int exp) fishValue = FishService.GetFishValue(rarity);
+            (int coins, int exp) fishValue = FishService.GetFishValue(rarity);
 
             var fish = new Fish
             {
@@ -73,9 +73,9 @@ namespace Kaguya.Discord.Commands.Games
                 ChannelId = Context.Channel.Id,
                 TimeCaught = DateTime.Now,
                 ExpValue = fishValue.exp,
-                PointValue = fishValue.points,
-                CostOfPlay = pointsUsed,
-                BaseCost = FishService.GetFishValue(rarity).fishPoints,
+                CoinValue = fishValue.coins,
+                CostOfPlay = coinsUsed,
+                BaseCost = FishService.GetFishValue(rarity).fishCoins,
                 FishType = randomFish,
                 Rarity = rarity,
             };
@@ -85,8 +85,8 @@ namespace Kaguya.Discord.Commands.Games
             
             await _fishRepository.InsertAsync(fish);
 
-            int netPoints = fish.PointValue - pointsUsed;
-            user.AdjustPoints(netPoints);
+            int netCoins = fish.CoinValue - coinsUsed;
+            user.AdjustCoins(netCoins);
             user.AdjustFishExperience(fish.ExpValue);
             user.LastFished = DateTime.Now;
             await _kaguyaUserRepository.UpdateAsync(user);
@@ -120,15 +120,15 @@ namespace Kaguya.Discord.Commands.Games
             StringBuilder descBuilder = new StringBuilder($"🎣 | {Context.User.Mention} {prefix} {typeString.AsBold()}!\n\n")
                                         .AppendLine($"Fish ID: {fish.FishId.ToString().AsBold()}")
                                         .AppendLine($"Rarity: {rarityString}")
-                                        .AppendLine($"Market value: {fish.PointValue.ToString("N0").AsBold()} points")
+                                        .AppendLine($"Market value: {fish.CoinValue.ToString("N0").AsBold()} coins")
                                         .AppendLine($"Experience gained: " + $"+{fish.ExpValue:N0}".AsBold() + " fishing exp")
-                                        .AppendLine("Points remaining: " + $"{user.Points:N0}".AsBold());
+                                        .AppendLine("Coins remaining: " + $"{user.Coins:N0}".AsBold());
 
             var allFish = await _fishRepository.GetAllForUserAsync(user.UserId);
             int allCaught = allFish.Count;
-            int allPoints = allFish.Sum(x => x.PointValue);
+            int allCoins = allFish.Sum(x => x.CoinValue);
             
-            string footer = $"Fish Level: {user.FishLevel:N0} | Fish Caught: {allCaught:N0} | Points from Fishing: {allPoints:N0}";
+            string footer = $"Fish Level: {user.FishLevel:N0} | Fish Caught: {allCaught:N0} | Coins from Fishing: {allCoins:N0}";
             
             Color color = rarity switch
             {

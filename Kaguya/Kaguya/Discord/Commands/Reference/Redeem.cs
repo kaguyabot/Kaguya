@@ -78,7 +78,7 @@ namespace Kaguya.Discord.Commands.Reference
                 var user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
                 var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
 
-                var additionalPoints = (int) (((double) 25000 / 30) * TimeSpan.FromSeconds(match.LengthInSeconds).TotalDays);
+                var additionalCoins = (int) (((double) 25000 / 30) * TimeSpan.FromSeconds(match.LengthInSeconds).TotalDays);
                 var duration = new TimeSpan(0, 0, match.LengthInSeconds);
                 
                 // Modify PremiumKey
@@ -87,7 +87,7 @@ namespace Kaguya.Discord.Commands.Reference
                 match.ServerId = Context.Guild.Id;
                 
                 // Modify User
-                user.AdjustPoints(additionalPoints);
+                user.AdjustCoins(additionalCoins);
                 user.TotalDaysPremium += (int)duration.TotalDays;
                 user.TotalPremiumRedemptions++;
                 user.PremiumExpiration = user.PremiumExpiration <= DateTime.Now || !user.PremiumExpiration.HasValue 
@@ -113,7 +113,7 @@ namespace Kaguya.Discord.Commands.Reference
                                .WithTitle("Kaguya Premium: Redemption Successful")
                                .WithDescription($"{Context.User.Mention} You have successfully redeemed a {Global.StoreLink} key " +
                                                 $"with a duration of {match.HumanizedLength.AsBold()}.\n" +
-                                                $"You have been awarded {additionalPoints.ToString("N0").AsBold()} points.")
+                                                $"You have been awarded {additionalCoins.ToString("N0").AsBold()} coins.")
                                .WithFooter(new EmbedFooterBuilder
                                {
                                    Text = $"Premium Expiration: {Context.User.Username}: {userPremiumRemaining.Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day)} | " +

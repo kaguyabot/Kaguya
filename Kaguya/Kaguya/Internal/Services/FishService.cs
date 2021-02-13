@@ -103,7 +103,7 @@ namespace Kaguya.Internal.Services
 
 		public static FishRarity SelectRandomRarity()
 		{
-			// 110 / 200 chance to lose all points gambled.
+			// 110 / 200 chance to lose all coins gambled.
 			// 90 / 200 chance to profit.
 			// Expected value (using point values below): 74.3
 			var rangeLegendary = (0.9995, 1); // 1 / 200 chance
@@ -176,7 +176,7 @@ namespace Kaguya.Internal.Services
 			return allFish[random].Key;
 		}
 
-		public static (int fishPoints, int fishExp) GetFishValue(FishRarity rarity)
+		public static (int fishCoins, int fishExp) GetFishValue(FishRarity rarity)
 		{
 			// This has been calculated to have an exact expected value of 74.3
 			// which is just under 75 (how much it costs for a non-premium user to fish).

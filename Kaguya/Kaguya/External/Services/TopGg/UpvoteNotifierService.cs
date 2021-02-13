@@ -39,22 +39,22 @@ namespace Kaguya.External.Services.TopGg
                     var user = await _kaguyaUserRepository.GetOrCreateAsync(vote.UserId);
                     var socketUser = _client.GetUser(user.UserId);
 
-                    int points = 750;
+                    int coins = 750;
                     int exp = 500;
 
                     if (vote.IsWeekend)
                     {
-                        points *= 2;
+                        coins *= 2;
                         exp *= 2;
                     }
 
                     if (user.IsPremium)
                     {
-                        points *= 2;
+                        coins *= 2;
                         exp *= 2;
                     }
 
-                    user.AdjustPoints(points);
+                    user.AdjustCoins(coins);
                     user.AdjustExperienceGlobal(exp);
                     user.TotalUpvotes++;
 
@@ -63,14 +63,14 @@ namespace Kaguya.External.Services.TopGg
                         IDMChannel dmCh = await socketUser.GetOrCreateDMChannelAsync();
 
                         string weekendStr = $"Because you voted on the weekend, you have been given " +
-                                            $"double points and double exp!";
+                                            $"double coins and double exp!";
 
                         var embed = new KaguyaEmbedBuilder(KaguyaColors.IceBlue)
                         {
                             Title = "Kaguya Upvote Rewards",
                             Description =
                                 $"Thanks for upvoting me on [top.gg]({Global.TopGgUpvoteUrl})! " +
-                                $"You have been awarded `{points:N0} points` and `{exp:N0} exp`. " +
+                                $"You have been awarded `{coins:N0} coins` and `{exp:N0} exp`. " +
                                 $"{(vote.IsWeekend ? weekendStr : "")}"
                         };
 

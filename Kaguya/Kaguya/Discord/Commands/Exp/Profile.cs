@@ -64,7 +64,7 @@ namespace Kaguya.Discord.Commands.Exp
                                                        $"| Fish Caught: {fishCount.ToString("N0").AsBold()}")
                                            .AppendLine($"Global Rank: #{globalExpRank.ToString("N0").AsBold()} of {globalUserCount:N0} | " +
                                                        $"Server Rank: #{serverExpRank.ToString("N0").AsBold()} of {serverExpCount:N0}")
-                                           .AppendLine($"Points: {user.Points.ToString("N0").AsBold()}");
+                                           .AppendLine($"Coins: {user.Coins.ToString("N0").AsBold()}");
 
             if (user.IsPremium)
             {
