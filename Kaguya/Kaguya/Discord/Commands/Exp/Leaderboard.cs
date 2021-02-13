@@ -29,8 +29,7 @@ namespace Kaguya.Discord.Commands.Exp
         }
 
         [Command("-coins")]
-        [Alias("-p")]
-        [Summary("Displays the top 10 Kaguya Coin holders.")]
+        [Summary("Displays the top 10 Kaguya coin holders.")]
         public async Task CoinsLeaderboardCommandAsync()
         {
             var topHolders = await _kaguyaUserRepository.GetTopCoinHoldersAsync();
@@ -92,7 +91,7 @@ namespace Kaguya.Discord.Commands.Exp
         }
         
         [Command("-fish")]
-        [Summary("Displays the top 10 Kaguya fish exp holders.")]
+        [Summary("Displays the top 10 Kaguya fish holders.")]
         public async Task FishLeaderboardCommandAsync()
         {
             var topHolders = await _kaguyaUserRepository.GetTopFishHoldersAsync();
