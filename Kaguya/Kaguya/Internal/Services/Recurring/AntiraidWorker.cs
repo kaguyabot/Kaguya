@@ -143,6 +143,23 @@ namespace Kaguya.Internal.Services.Recurring
                         };
                         
                         KaguyaEvents.OnAntiraidTrigger(adminAction, user);
+
+                        if (curConfig.PunishmentDmEnabled)
+                        {
+                            string dmString = curConfig.AntiraidPunishmentDirectMessage;
+                            dmString = SerializeDmString(dmString, user, action, guild.Name);
+
+                            try
+                            {
+                                var dmChannel = await user.GetOrCreateDMChannelAsync();
+                                await dmChannel.SendMessageAsync(dmString);
+                            }
+                            catch (Exception e)
+                            {
+                                _logger.LogWarning($"Failed to DM user {user.Id} that they were {ActionPastTense(action)} " +
+                                                   $"as part of an antiraid event in guild {guild.Id}. Error: {e.Message}");
+                            }
+                        }
                         
                         switch (action)
                         {
@@ -235,7 +252,7 @@ namespace Kaguya.Internal.Services.Recurring
             {
                 if (element.TryDequeue(out var _))
                 {
-                    _logger.LogInformation($"Prune occurred with successful dequeue: [User id: {userJoinData.userId} | Join time: {userJoinData.userJoinTime}]");
+                    _logger.LogDebug($"Prune occurred with successful dequeue: [User id: {userJoinData.userId} | Join time: {userJoinData.userJoinTime}]");
                 }
                 else
                 {
@@ -244,6 +261,28 @@ namespace Kaguya.Internal.Services.Recurring
                     break;
                 }
             }
+        }
+
+        private string SerializeDmString(string dmString, SocketUser user, AntiraidAction action, string guildName)
+        {
+            dmString = dmString.Replace("{USERNAME}", user.Username);
+            dmString = dmString.Replace("{USERMENTION}", user.Mention);
+            dmString = dmString.Replace("{ACTION}", ActionPastTense(action));
+            dmString = dmString.Replace("{SERVERNAME}", guildName);
+
+            return dmString;
+        }
+
+        private string ActionPastTense(AntiraidAction action)
+        {
+            return action switch
+            {
+                AntiraidAction.Ban => "banned",
+                AntiraidAction.Kick => "kicked",
+                AntiraidAction.Mute => "muted",
+                AntiraidAction.Shadowban => "shadowbanned",
+                var _ => "<unknown action>"
+            };
         }
     }
 
