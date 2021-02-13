@@ -53,21 +53,25 @@ namespace Kaguya.Discord.Commands.Configuration
             bool updateDb = false;
             foreach (var prop in _logProperties.OrderBy(x => x.Name))
             {
-                object channelId = prop.GetValue(logConfig, null); // ID of the channel the log is assigned to.
+                ulong channelId;
 
-                if (channelId is not ulong id) // This also checks for null
+                try
                 {
-                    continue;
+                    channelId = (ulong) prop.GetValue(logConfig, null); // ID of the channel the log is assigned to.
                 }
+                catch (NullReferenceException)
+                {
+                    channelId = 0;
+                }
+                    
+                ITextChannel channel = Context.Guild.GetTextChannel(channelId);
 
-                ITextChannel channel = Context.Guild.GetTextChannel(id);
-
-                if (channel == null && id != 0)
+                if (channel == null && channelId != 0)
                 {
                     updateDb = true;
-                    prop.SetValue(logConfig, (ulong)0);
+                    prop.SetValue(logConfig, (ulong) 0);
                 }
-                
+            
                 sb.AppendLine($"{prop.Name} - {channel?.Mention ?? "Not Assigned".AsBold()}");
             }
 

@@ -37,7 +37,7 @@ namespace Kaguya.Discord.Commands.Exp
 
         [Command]
         [Summary("Displays your Kaguya profile.")]
-        public async Task ProfileCommand()
+        public async Task ProfileCommandAsync()
         {
             KaguyaUser user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
             ServerExperience serverExp = await _serverExperienceRepository.GetOrCreateAsync(Context.Guild.Id, user.UserId);
@@ -46,7 +46,7 @@ namespace Kaguya.Discord.Commands.Exp
             int globalUserCount = await _kaguyaUserRepository.GetCountAsync();
             
             int serverExpRank = await _serverExperienceRepository.FetchRankAsync(Context.Guild.Id, user.UserId);
-            int serverExpCount = await _serverExperienceRepository.GetCountAsync();
+            int serverExpCount = await _serverExperienceRepository.GetAllCountAsync(Context.Guild.Id);
             int serverExpLevel = ExperienceService.CalculateLevel(serverExp.Exp).ToFloor();
             
             int fishCount = await _fishRepository.CountAllNonTrashAsync(user.UserId);

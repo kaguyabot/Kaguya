@@ -16,6 +16,7 @@ using Kaguya.Discord.Parsers;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Microsoft.Extensions.Logging;
+using ProfanityFilter;
 
 namespace Kaguya.Discord.Commands.Configuration
 {
@@ -391,7 +392,12 @@ namespace Kaguya.Discord.Commands.Configuration
                  "We apologize for the inconvenience, we hope to see you in our server soon!", ExampleStringFormat.CodeblockMultiLine)]
         public async Task SetAntiraidMessageCommand([Remainder]string message)
         {
-            var profanityFilter = new ProfanityFilter.ProfanityFilter();
+            var profanityFilter = new ProfanityFilter.ProfanityFilter(new[]
+            {
+                // List of allowed "profanities"
+                "gai" // Was detecting "again"
+            });
+            
             if (profanityFilter.ContainsProfanity(message))
             {
                 await SendBasicErrorEmbedAsync("You filthy animal...try again with a cleaner message.");

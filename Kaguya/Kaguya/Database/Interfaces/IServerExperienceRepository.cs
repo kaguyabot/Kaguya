@@ -6,10 +6,49 @@ namespace Kaguya.Database.Interfaces
 {
     public interface IServerExperienceRepository : IRepository<ServerExperience>
     {
+        /// <summary>
+        /// Gets or creates a <see cref="ServerExperience"/> object for the provided <see cref="userId"/> and <see cref="serverId"/>.
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public Task<ServerExperience> GetOrCreateAsync(ulong serverId, ulong userId);
-        public Task<IList<ServerExperience>> GetAllExp(ulong serverId);
-        public Task Add(ulong serverId, ulong userId, int amount);
-        public Task Subtract(ulong serverId, ulong userId, int amount);
+        /// <summary>
+        /// Returns all <see cref="ServerExperience"/> objects that exist for the <see cref="serverId"/>.
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <returns></returns>
+        public Task<IList<ServerExperience>> GetAllExpAsync(ulong serverId);
+        /// <summary>
+        /// Adds the <see cref="amount"/> of exp to the <see cref="ServerExperience"/> object that
+        /// belongs to the given <see cref="serverId"/> and <see cref="userId"/>.
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="userId"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public Task AddAsync(ulong serverId, ulong userId, int amount);
+        /// <summary>
+        /// Subtracts the <see cref="amount"/> of exp to the <see cref="ServerExperience"/> object that
+        /// belongs to the given <see cref="serverId"/> and <see cref="userId"/>.
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="userId"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public Task SubtractAsync(ulong serverId, ulong userId, int amount);
+        /// <summary>
+        /// Returns the user's rank out of members in the <see cref="serverId"/>.
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public Task<int> FetchRankAsync(ulong serverId, ulong userId);
+        /// <summary>
+        /// Returns the count of server exp saved for the serverId provided.
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <returns></returns>
+        public Task<int> GetAllCountAsync(ulong serverId);
     }
 }

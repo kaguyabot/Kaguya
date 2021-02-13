@@ -22,7 +22,8 @@ namespace Kaguya
         public const string WikiPremiumBenefitsUrl = "https://github.com/kaguyabot/Kaguya/wiki/Premium";
         public const string WikiPrivacyUrl = "https://github.com/kaguyabot/Kaguya/wiki/Privacy";
         public const string WikiQuickStartUrl = "https://github.com/kaguyabot/Kaguya/wiki/Using-Kaguya:-Quick-Start-Guide";
-        public const string WikiV4ChangelogUrl = "https://github.com/kaguyabot/Kaguya/wiki/What's-new-in-v4%3F";
+        public const string WikiV4WhatIsNew = "https://github.com/kaguyabot/Kaguya/wiki/What's-new-in-v4%3F";
+        public const string WikiChangelog = "https://github.com/kaguyabot/Kaguya/wiki/Changelog";
         
         public const string DiscordTermsLink = "[Terms of Service](https://discord.com/terms)";
         public const string DiscordCommunityGuidelinesLink = "[Community Guidelines](https://discord.com/guidelines)";
