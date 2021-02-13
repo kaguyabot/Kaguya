@@ -95,7 +95,7 @@ namespace Kaguya.Internal.Events
         {
             Global.AddReadyShard(arg.ShardId);
 
-            if (!_lavaNode.IsConnected)
+            if (Global.ShardsReady.Count == _client.Shards.Count)
             {
                 await _lavaNode.ConnectAsync();
                 _logger.LogInformation($"Lava Node connected (shard {arg.ShardId:N0})");
