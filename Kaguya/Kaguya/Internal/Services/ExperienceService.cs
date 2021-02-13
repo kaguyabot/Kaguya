@@ -61,7 +61,7 @@ namespace Kaguya.Internal.Services
             int oldExp = match.Exp;
             int newExp = match.Exp + EXP_VALUE;
             
-            await _serverExperienceRepository.Add(_serverId, _user.UserId, EXP_VALUE);
+            await _serverExperienceRepository.AddAsync(_serverId, _user.UserId, EXP_VALUE);
             _logger.LogDebug($"(Server Exp) User {_user} has received {EXP_VALUE} EXP in server {_serverId}.");
 
             if (HasLeveledUp(oldExp, newExp))
