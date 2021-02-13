@@ -20,6 +20,8 @@ namespace Kaguya.Discord.Commands.Exp
         private readonly KaguyaUserRepository _kaguyaUserRepository;
         private readonly FishRepository _fishRepository;
 
+        private const int LEADERBOARD_COUNT = 10;
+
         public Leaderboard(ILogger<Leaderboard> logger, KaguyaUserRepository kaguyaUserRepository,
             FishRepository fishRepository) : base(logger)
         {
@@ -32,13 +34,23 @@ namespace Kaguya.Discord.Commands.Exp
         [Summary("Displays the top 10 Kaguya coin holders.")]
         public async Task CoinsLeaderboardCommandAsync()
         {
-            var topHolders = await _kaguyaUserRepository.GetTopCoinHoldersAsync();
+            var topHolders = await _kaguyaUserRepository.GetTopCoinHoldersAsync(20);
             var descSb = new StringBuilder();
 
             for (int i = 0; i < topHolders.Count; i++)
             {
+                if (i + 1 == LEADERBOARD_COUNT)
+                {
+                    break;
+                }
+                
                 var kaguyaUser = topHolders[i];
                 var socketUser = Context.Client.GetUser(topHolders[i].UserId);
+
+                if (kaguyaUser == null || socketUser == null)
+                {
+                    continue;
+                }
                 
                 if (i == 0)
                 {
@@ -46,7 +58,7 @@ namespace Kaguya.Discord.Commands.Exp
                 }
                 else
                 {
-                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - {kaguyaUser.Coins:N0} coins");
+                    descSb.AppendLine($"{i + 1}. {socketUser.Username ?? "Invalid user"} - {kaguyaUser.Coins:N0} coins");
                 }
             }
             
@@ -68,8 +80,18 @@ namespace Kaguya.Discord.Commands.Exp
 
             for (int i = 0; i < topHolders.Count; i++)
             {
+                if (i + 1 == LEADERBOARD_COUNT)
+                {
+                    break;
+                }
+                
                 var kaguyaUser = topHolders[i];
                 var socketUser = Context.Client.GetUser(topHolders[i].UserId);
+
+                if (kaguyaUser == null || socketUser == null)
+                {
+                    continue;
+                }
                 
                 if (i == 0)
                 {
@@ -99,8 +121,19 @@ namespace Kaguya.Discord.Commands.Exp
 
             for (int i = 0; i < topHolders.Count; i++)
             {
-                KaguyaUser kaguyaUser = topHolders[i];
-                SocketUser socketUser = Context.Client.GetUser(topHolders[i].UserId);
+                if (i + 1 == LEADERBOARD_COUNT)
+                {
+                    break;
+                }
+                
+                var kaguyaUser = topHolders[i];
+                var socketUser = Context.Client.GetUser(topHolders[i].UserId);
+
+                if (kaguyaUser == null || socketUser == null)
+                {
+                    continue;
+                }
+                
                 int userFish = await _fishRepository.CountAllNonTrashAsync(kaguyaUser.UserId);
                 
                 if (i == 0)
@@ -116,7 +149,7 @@ namespace Kaguya.Discord.Commands.Exp
             var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
             {
                 Title = "Kaguya Fishing Leaderboard",
-                Description = "🎣 " + descSb.ToString()
+                Description = "🎣 " + descSb
             };
 
             await SendEmbedAsync(embed);
