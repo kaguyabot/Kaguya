@@ -144,7 +144,7 @@ namespace Kaguya.Internal.Services.Recurring
                         
                         KaguyaEvents.OnAntiraidTrigger(adminAction, user);
 
-                        if (curConfig.PunishmentDmEnabled)
+                        if (curConfig.PunishmentDmEnabled && !string.IsNullOrWhiteSpace(curConfig.AntiraidPunishmentDirectMessage))
                         {
                             string dmString = curConfig.AntiraidPunishmentDirectMessage;
                             dmString = SerializeDmString(dmString, user, action, guild.Name);
