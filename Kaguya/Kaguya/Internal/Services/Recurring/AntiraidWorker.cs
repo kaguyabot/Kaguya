@@ -114,6 +114,12 @@ namespace Kaguya.Internal.Services.Recurring
                     var ksRepo = scope.ServiceProvider.GetRequiredService<KaguyaServerRepository>();
                     
                     KaguyaServer server = await ksRepo.GetOrCreateAsync(curConfig.ServerId);
+
+                    if (!server.IsPremium)
+                    {
+                        // We deny antiraid protections for non-premium servers.
+                        continue;
+                    }
                     
                     foreach (ulong userId in curUserCollection.Select(x => x.userId).Distinct())
                     {
