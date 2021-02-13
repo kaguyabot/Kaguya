@@ -36,11 +36,6 @@ namespace Kaguya
 			Configuration = configuration;
 		}
 
-#if !DEBUG
-		private const int NUM_SHARDS = 5;
-#else
-		private const int NUM_SHARDS = 1;
-#endif
 		public IConfiguration Configuration { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
@@ -127,7 +122,7 @@ namespace Kaguya
 
 				var restClient = new DiscordRestClient();
 				restClient.LoginAsync(TokenType.Bot, discordConfigs.Value.BotToken).GetAwaiter().GetResult();
-				int shards = NUM_SHARDS;
+				int shards = restClient.GetRecommendedShardCountAsync().GetAwaiter().GetResult();
 				
 				var client = new DiscordShardedClient(new DiscordSocketConfig
 							                    {
