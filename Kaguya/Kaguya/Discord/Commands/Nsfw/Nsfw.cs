@@ -120,7 +120,14 @@ namespace Kaguya.Discord.Commands.Nsfw
                     
                     using (var m = new MemoryStream(data))
                     {
-                        await Context.Channel.SendFileAsync(m, $"kaguya_nsfw_{urlEnd}");
+                        try
+                        {
+                            await Context.Channel.SendFileAsync(m, $"kaguya_nsfw_{urlEnd}");
+                        }
+                        catch (Exception)
+                        {
+                            // We can safely ignore these exceptions.
+                        }
                     }
                 }
             }
