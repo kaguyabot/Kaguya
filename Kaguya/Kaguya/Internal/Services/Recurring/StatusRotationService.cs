@@ -76,7 +76,7 @@ namespace Kaguya.Internal.Services.Recurring
                 default:
                     _rotationIndex = 1;
                     
-                    text = Global.Version;
+                    text = "v" + Global.Version;
                     
                     _statusSwapLog(_logger, text, default!);
                     return (text, ActivityType.Playing);
