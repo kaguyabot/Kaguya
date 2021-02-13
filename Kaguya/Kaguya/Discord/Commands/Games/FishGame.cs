@@ -128,7 +128,7 @@ namespace Kaguya.Discord.Commands.Games
             int allCaught = allFish.Count;
             int allPoints = allFish.Sum(x => x.PointValue);
             
-            string footer = $"Fish Level: {user.FishExp:N0} | Fish Caught: {allCaught:N0} | Points from Fishing: {allPoints:N0}";
+            string footer = $"Fish Level: {user.FishLevel:N0} | Fish Caught: {allCaught:N0} | Points from Fishing: {allPoints:N0}";
             
             Color color = rarity switch
             {
