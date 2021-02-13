@@ -98,5 +98,13 @@ namespace Kaguya.Database.Repositories
 			                       .Take(count)
 			                       .ToListAsync();
 		}
+
+		public async Task<IList<KaguyaUser>> GetTopFishHoldersAsync(int count = 10)
+		{
+			return await _dbContext.KaguyaUsers.AsQueryable()
+			                       .OrderByDescending(x => x.FishExp)
+			                       .Take(count)
+			                       .ToListAsync();
+		}
 	}
 }

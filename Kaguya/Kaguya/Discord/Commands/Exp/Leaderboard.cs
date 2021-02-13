@@ -3,6 +3,8 @@ using Discord.Commands;
 using Kaguya.Internal.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Enums;
@@ -16,11 +18,14 @@ namespace Kaguya.Discord.Commands.Exp
     {
         private readonly ILogger<Leaderboard> _logger;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
-        
-        public Leaderboard(ILogger<Leaderboard> logger, KaguyaUserRepository kaguyaUserRepository) : base(logger)
+        private readonly FishRepository _fishRepository;
+
+        public Leaderboard(ILogger<Leaderboard> logger, KaguyaUserRepository kaguyaUserRepository,
+            FishRepository fishRepository) : base(logger)
         {
             _logger = logger;
             _kaguyaUserRepository = kaguyaUserRepository;
+            _fishRepository = fishRepository;
         }
 
         [Command("-coins")]
@@ -50,6 +55,69 @@ namespace Kaguya.Discord.Commands.Exp
             {
                 Title = "Kaguya Coins Leaderboard",
                 Description = descSb.ToString()
+            };
+
+            await SendEmbedAsync(embed);
+        }
+        
+        [Command("-exp")]
+        [Summary("Displays the top 10 Kaguya exp holders.")]
+        public async Task ExpLeaderboardCommandAsync()
+        {
+            var topHolders = await _kaguyaUserRepository.GetTopExpHoldersAsync();
+            var descSb = new StringBuilder();
+
+            for (int i = 0; i < topHolders.Count; i++)
+            {
+                var kaguyaUser = topHolders[i];
+                var socketUser = Context.Client.GetUser(topHolders[i].UserId);
+                
+                if (i == 0)
+                {
+                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - {kaguyaUser.GlobalExp:N0} exp".AsBold());
+                }
+                else
+                {
+                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - {kaguyaUser.GlobalExp:N0} exp");
+                }
+            }
+            
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
+            {
+                Title = "Kaguya Exp Leaderboard",
+                Description = descSb.ToString()
+            };
+
+            await SendEmbedAsync(embed);
+        }
+        
+        [Command("-fish")]
+        [Summary("Displays the top 10 Kaguya fish exp holders.")]
+        public async Task FishLeaderboardCommandAsync()
+        {
+            var topHolders = await _kaguyaUserRepository.GetTopFishHoldersAsync();
+            var descSb = new StringBuilder();
+
+            for (int i = 0; i < topHolders.Count; i++)
+            {
+                KaguyaUser kaguyaUser = topHolders[i];
+                SocketUser socketUser = Context.Client.GetUser(topHolders[i].UserId);
+                int userFish = await _fishRepository.CountAllNonTrashAsync(kaguyaUser.UserId);
+                
+                if (i == 0)
+                {
+                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - Level {kaguyaUser.FishLevel:N0} - {userFish:N0}x fish".AsBold());
+                }
+                else
+                {
+                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - Level {kaguyaUser.FishLevel:N0} - {userFish:N0}x fish");
+                }
+            }
+            
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
+            {
+                Title = "Kaguya Fishing Leaderboard",
+                Description = "🎣 " + descSb.ToString()
             };
 
             await SendEmbedAsync(embed);

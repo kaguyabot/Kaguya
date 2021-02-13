@@ -28,5 +28,11 @@ namespace Kaguya.Database.Interfaces
 		/// <param name="count"></param>
 		/// <returns></returns>
 		public Task<IList<KaguyaUser>> GetTopExpHoldersAsync(int count = 10);
+		/// <summary>
+		/// Returns the top <see cref="count"/> fish holders out of all users.
+		/// </summary>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		public Task<IList<KaguyaUser>> GetTopFishHoldersAsync(int count = 10);
 	}
 }
