@@ -417,11 +417,33 @@ namespace Kaguya.Discord.Commands.Configuration
             }
 
             curConfig.AntiraidPunishmentDirectMessage = message;
+            curConfig.PunishmentDmEnabled = true;
 
             await SendBasicSuccessEmbedAsync($"I've set this server's Antiraid DM to the following:\n\n" +
                                              $"{message}\n\n" +
                                              $"Any keywords used will be replaced with the correct information at the time " +
                                              $"of a raid.");
+        }
+
+        [Command("-toggledm")]
+        [Summary("Toggles the antiraid config's DM message system on or off. ")]
+        public async Task AntiraidMessageToggleCommandAsync()
+        {
+            var config = await _antiraidConfigRepository.GetAsync(Context.Guild.Id);
+            bool enabled = config.PunishmentDmEnabled;
+            
+            config.PunishmentDmEnabled = !enabled;
+
+            await _antiraidConfigRepository.UpdateAsync(config);
+
+            if (enabled)
+            {
+                await SendBasicSuccessEmbedAsync("Successfully disabled antiraid DM notifications.");
+            }
+            else
+            {
+                await SendBasicSuccessEmbedAsync("Successfully enabled antiraid DM notifications.");
+            }
         }
 
         private async Task<bool> SendFailureEmbedAsync(int failureAttempts)
