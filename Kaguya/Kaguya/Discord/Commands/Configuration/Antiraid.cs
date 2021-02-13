@@ -419,6 +419,8 @@ namespace Kaguya.Discord.Commands.Configuration
             curConfig.AntiraidPunishmentDirectMessage = message;
             curConfig.PunishmentDmEnabled = true;
 
+            await _antiraidConfigRepository.UpdateAsync(curConfig);
+
             await SendBasicSuccessEmbedAsync($"I've set this server's Antiraid DM to the following:\n\n" +
                                              $"{message}\n\n" +
                                              $"Any keywords used will be replaced with the correct information at the time " +
