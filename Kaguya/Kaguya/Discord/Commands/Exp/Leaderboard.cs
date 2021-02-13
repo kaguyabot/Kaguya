@@ -25,7 +25,7 @@ namespace Kaguya.Discord.Commands.Exp
 
         [Command("-coins")]
         [Alias("-p")]
-        [Summary("Displays the top 10 Kaguya Coin")]
+        [Summary("Displays the top 10 Kaguya Coin holders.")]
         public async Task CoinsLeaderboardCommandAsync()
         {
             var topHolders = await _kaguyaUserRepository.GetTopCoinHoldersAsync();
