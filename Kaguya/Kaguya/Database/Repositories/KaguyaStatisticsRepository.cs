@@ -43,7 +43,7 @@ namespace Kaguya.Database.Repositories
             int fish = await _fishRepository.GetCountAsync();
             int gambles = await _gambleHistoryRepository.GetCountAsync();
             int latency = _client.Latency;
-            long points = await _kaguyaUserRepository.CountPointsAsync();
+            long coins = await _kaguyaUserRepository.CountCoinsAsync();
 
             var newStats = new KaguyaStatistics
             {
@@ -52,7 +52,7 @@ namespace Kaguya.Database.Repositories
                 Shards = shards,
                 CommandsExecuted = commandsExecuted,
                 Fish = fish,
-                Points = points,
+                Coins = coins,
                 Gambles = gambles,
                 RamUsageMegabytes = ramUsage,
                 LatencyMilliseconds = latency,

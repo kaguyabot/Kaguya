@@ -18,7 +18,7 @@ namespace Kaguya.Discord.Commands.Exp
         private readonly ILogger<Weekly> _logger;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
 
-        private const int POINTS_GIVEN = 12000;
+        private const int COINS_GIVEN = 5000;
         private const int EXP_GIVEN = 250;
         
         public Weekly(ILogger<Weekly> logger, KaguyaUserRepository kaguyaUserRepository) : base(logger)
@@ -33,25 +33,25 @@ namespace Kaguya.Discord.Commands.Exp
         {
             var user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
 
-            if (!user.CanGetWeeklyPoints)
+            if (!user.CanGetWeeklyCoins)
             {
                 string diff = (user.LastDailyBonus!.Value - DateTime.Now.AddDays(-7)).HumanizeTraditionalReadable();
                 await SendBasicErrorEmbedAsync($"Sorry, you must wait {diff.AsBold()} to use this command again.");
                 return;
             }
             
-            user.AdjustPoints(POINTS_GIVEN);
+            user.AdjustCoins(COINS_GIVEN);
             user.AdjustExperienceGlobal(EXP_GIVEN);
             user.LastWeeklyBonus = DateTime.Now;
 
             await _kaguyaUserRepository.UpdateAsync(user);
-            _logger.LogDebug($"User {user.UserId} has received {POINTS_GIVEN} points and {EXP_GIVEN} exp for their weekly bonus. " +
+            _logger.LogDebug($"User {user.UserId} has received {COINS_GIVEN} coins and {EXP_GIVEN} exp for their weekly bonus. " +
                              $"They may redeem again at {DateTime.Now.AddDays(7)}.");
 
             var embed = GetBasicSuccessEmbedBuilder("You have claimed your weekly premium bonus!\nYou may claim again in 7 days.\n" +
-                                                    $"Bonus: {POINTS_GIVEN.ToString("N0").AsBold()} points and {EXP_GIVEN.ToString("N0").AsBold()} exp.")
+                                                    $"Bonus: {COINS_GIVEN.ToString("N0").AsBold()} coins and {EXP_GIVEN.ToString("N0").AsBold()} exp.")
                         .WithColor(KaguyaColors.Gold)
-                        .WithFooter($"New total points: {user.Points:N0} | New total exp: {user.GlobalExp:N0}");
+                        .WithFooter($"New total coins: {user.Coins:N0} | New total exp: {user.GlobalExp:N0}");
 
             await SendEmbedAsync(embed);
         }

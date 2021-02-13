@@ -24,9 +24,9 @@ namespace Kaguya.Database.Model
         /// </summary>
         public int? Exp { get; set; }
         /// <summary>
-        /// The amount of points to award a user who participates in this giveaway.
+        /// The amount of coins to award a user who participates in this giveaway.
         /// </summary>
-        public int? Points { get; set; }
+        public int? Coins { get; set; }
         /// <summary>
         /// The item to give away
         /// </summary>

@@ -9,6 +9,10 @@ namespace Kaguya.Database.Interfaces
 		public Task<KaguyaUser> GetOrCreateAsync(ulong id);
 		public Task<IEnumerable<KaguyaUser>> GetActiveRatelimitedUsersAsync(bool ignoreOwner);
 		public Task<int> FetchExperienceRankAsync(ulong id);
-		public Task<long> CountPointsAsync();
+		/// <summary>
+		/// Counts the total amount of coins owned by all users.
+		/// </summary>
+		/// <returns></returns>
+		public Task<long> CountCoinsAsync();
 	}
 }

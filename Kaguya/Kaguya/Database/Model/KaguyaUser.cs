@@ -24,7 +24,7 @@ namespace Kaguya.Database.Model
 
 		public int FishExp { get; private set; } = 0;
 
-		public int Points { get; private set; } = 0;
+		public int Coins { get; private set; } = 0;
 
 		public long? OsuId { get; set; }
 		public GameMode? OsuGameMode { get; set; }
@@ -78,9 +78,9 @@ namespace Kaguya.Database.Model
 
 		public bool CanGiveRep => !LastGivenRep.HasValue || LastGivenRep.Value < DateTime.Now.AddHours(-24);
 
-		public bool CanGetDailyPoints => !LastDailyBonus.HasValue || LastDailyBonus.Value < DateTime.Now.AddHours(-24);
+		public bool CanGetDailyCoins => !LastDailyBonus.HasValue || LastDailyBonus.Value < DateTime.Now.AddHours(-24);
 
-		public bool CanGetWeeklyPoints => !LastWeeklyBonus.HasValue || LastWeeklyBonus.Value < DateTime.Now.AddDays(-7);
+		public bool CanGetWeeklyCoins => !LastWeeklyBonus.HasValue || LastWeeklyBonus.Value < DateTime.Now.AddDays(-7);
 
 		public int GlobalExpLevel => ExactGlobalExpLevel.ToFloor();
 
@@ -99,19 +99,19 @@ namespace Kaguya.Database.Model
 		// public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
 
 		/// <summary>
-		/// Adjusts the user's points by the <see cref="amount"/> given.
+		/// Adjusts the user's coins by the <see cref="amount"/> given.
 		/// </summary>
 		/// <param name="amount"></param>
-		public void AdjustPoints(int amount)
+		public void AdjustCoins(int amount)
 		{
-			if (this.Points + amount < 0)
+			if (this.Coins + amount < 0)
 			{
-				this.Points = 0;
+				this.Coins = 0;
 
 				return;
 			}
 			
-			this.Points += amount;
+			this.Coins += amount;
 		}
 
 		/// <summary>

@@ -100,7 +100,7 @@ namespace Kaguya.Database.Context
 			});
 			
 			If we do a where clause with *multiple* predicates, such as 
-			(x.UserId == <param> && x.Points < <param 2>), then we would compound the 
+			(x.UserId == <param> && x.Coins < <param 2>), then we would compound the 
 			index into one block. This is the only case in which we would combine more 
 			than one object parameter into one index block.
 			
