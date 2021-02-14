@@ -36,14 +36,17 @@ namespace Kaguya.External.Services.TopGg
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // First execution
-            await _timerService.TriggerAtAsync(DateTime.Now.AddSeconds(15), this);
-            _logger.LogDebug("Executed");
-            
             if (stoppingToken.IsCancellationRequested)
             {
                 return;
             }
+            
+            await _timerService.TriggerAtAsync(DateTime.Now, this);
+        }
+
+        public async Task HandleTimer(object payload)
+        {
+            await _timerService.TriggerAtAsync(DateTime.Now.AddSeconds(15), this);
 
             if (!_client.AllShardsReady())
             {
@@ -72,7 +75,7 @@ namespace Kaguya.External.Services.TopGg
                     {
                         var embed = new KaguyaEmbedBuilder(Color.Blue)
                         {
-                            Description = $"🛎️ ⬆️Top.GG Rewards Notification".AsBold() + "\n" +
+                            Description = $"🛎️ ⬆️ Top.GG Rewards Notification".AsBold() + "\n" +
                                           $"You may now vote for Kaguya on [top.gg]({Global.TopGgUpvoteUrl}) " +
                                           $"for bonus rewards!"
                         };
@@ -99,11 +102,6 @@ namespace Kaguya.External.Services.TopGg
                     await upvoteRepository.UpdateAsync(vote);
                 }
             }
-        }
-
-        public async Task HandleTimer(object payload)
-        {
-            await _timerService.TriggerAtAsync(DateTime.Now.AddSeconds(15), this);
         }
     }
 }

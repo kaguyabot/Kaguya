@@ -120,7 +120,7 @@ namespace Kaguya.Workers
             _client.ChannelCreated += channel =>
             {
                 _logger.Log(LogLevel.Debug,
-                    $"Channel Created [Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
+                    $"Channel Created [Type: {channel.GetType()} | Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
 
                 return Task.CompletedTask;
             };

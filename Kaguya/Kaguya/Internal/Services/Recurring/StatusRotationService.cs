@@ -36,7 +36,7 @@ namespace Kaguya.Internal.Services.Recurring
         {
             try
             {
-                _logger.LogDebug("Status rotation timer triggered.");
+                _logger.LogDebug("Status rotation timer triggered");
 
                 if (Global.ShardsReady.Count == _client.Shards.Count)
                 {
