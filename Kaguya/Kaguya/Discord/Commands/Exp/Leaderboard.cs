@@ -1,13 +1,13 @@
 ﻿using System.Text;
-using Discord.Commands;
-using Kaguya.Internal.Attributes;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Discord.WebSocket;
-using Kaguya.Database.Model;
+using Discord.Commands;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.PrimitiveExtensions;
+using Kaguya.Internal.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Exp
 {
@@ -19,54 +19,61 @@ namespace Kaguya.Discord.Commands.Exp
         private readonly ILogger<Leaderboard> _logger;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
         private readonly FishRepository _fishRepository;
-
-        private const int LEADERBOARD_COUNT = 10;
+        private readonly KaguyaStatisticsRepository _kaguyaStatisticsRepository;
+        private readonly ServerExperienceRepository _serverExperienceRepository;
+        
+        private static readonly string[] _lbEmojis = { "🥇", "🥈", "🥉" };
 
         public Leaderboard(ILogger<Leaderboard> logger, KaguyaUserRepository kaguyaUserRepository,
-            FishRepository fishRepository) : base(logger)
+            FishRepository fishRepository, KaguyaStatisticsRepository kaguyaStatisticsRepository,
+            ServerExperienceRepository serverExperienceRepository) : base(logger)
         {
             _logger = logger;
             _kaguyaUserRepository = kaguyaUserRepository;
             _fishRepository = fishRepository;
+            _kaguyaStatisticsRepository = kaguyaStatisticsRepository;
+            _serverExperienceRepository = serverExperienceRepository;
         }
 
         [Command("-coins")]
         [Summary("Displays the top 10 Kaguya coin holders.")]
         public async Task CoinsLeaderboardCommandAsync()
         {
-            var topHolders = await _kaguyaUserRepository.GetTopCoinHoldersAsync(20);
+            var topHolders = await _kaguyaUserRepository.GetTopCoinHoldersAsync();
+            var stats = await _kaguyaStatisticsRepository.GetMostRecentAsync();
             var descSb = new StringBuilder();
 
+            long totalCoins = stats.Coins;
+            long topTenSum = 0;
             for (int i = 0; i < topHolders.Count; i++)
             {
-                if (i + 1 == LEADERBOARD_COUNT)
-                {
-                    break;
-                }
-                
                 var kaguyaUser = topHolders[i];
-                var socketUser = Context.Client.GetUser(topHolders[i].UserId);
-
-                if (kaguyaUser == null || socketUser == null)
+                if (kaguyaUser == null)
                 {
                     continue;
                 }
                 
+                string userName = Context.Client.GetUser(kaguyaUser.UserId)?.Username ?? $"Unknown ({kaguyaUser.UserId})";
+                
+                string emote = GetMedallionString(i);
+                string rankNum = i < 3 ? emote : emote + $" {i + 1}.";
+                string curLine = $"{rankNum} {userName} - {kaguyaUser.Coins.ToShorthandFormat()} coins";
                 if (i == 0)
                 {
-                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - {kaguyaUser.Coins:N0} coins".AsBold());
+                    curLine = curLine.AsBold();
                 }
-                else
-                {
-                    descSb.AppendLine($"{i + 1}. {socketUser.Username ?? "Invalid user"} - {kaguyaUser.Coins:N0} coins");
-                }
+
+                topTenSum += kaguyaUser.Coins;
+
+                descSb.AppendLine(curLine);
             }
+
+            double percentOwnedByTop = ((double)topTenSum / totalCoins) * 100;
             
             var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
             {
-                Title = "Kaguya Coins Leaderboard",
-                Description = descSb.ToString()
-            };
+                Description = $"🤑 Wealth Leaderboard".AsBold() + "\n\n" + descSb
+            }.WithFooter($"{totalCoins.ToShorthandFormat()} total coins owned | {percentOwnedByTop:N1}% owned by top 10");
 
             await SendEmbedAsync(embed);
         }
@@ -76,37 +83,73 @@ namespace Kaguya.Discord.Commands.Exp
         public async Task ExpLeaderboardCommandAsync()
         {
             var topHolders = await _kaguyaUserRepository.GetTopExpHoldersAsync();
+            var stats = await _kaguyaStatisticsRepository.GetMostRecentAsync();
             var descSb = new StringBuilder();
 
             for (int i = 0; i < topHolders.Count; i++)
             {
-                if (i + 1 == LEADERBOARD_COUNT)
-                {
-                    break;
-                }
-                
                 var kaguyaUser = topHolders[i];
-                var socketUser = Context.Client.GetUser(topHolders[i].UserId);
-
-                if (kaguyaUser == null || socketUser == null)
+                if (kaguyaUser == null)
                 {
                     continue;
                 }
                 
+                string userName = Context.Client.GetUser(kaguyaUser.UserId)?.Username ?? $"Unknown ({kaguyaUser.UserId})";
+                
+                string emote = GetMedallionString(i);
+                string rankNum = i < 3 ? emote : emote + $" {i + 1}.";
+                string curLine = $"{rankNum} {userName} - Level {kaguyaUser.GlobalExpLevel:N0} - {kaguyaUser.GlobalExp.ToShorthandFormat()} EXP";
                 if (i == 0)
                 {
-                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - {kaguyaUser.GlobalExp:N0} exp".AsBold());
+                    curLine = curLine.AsBold();
                 }
-                else
-                {
-                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - {kaguyaUser.GlobalExp:N0} exp");
-                }
+
+                descSb.AppendLine(curLine);
             }
             
             var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
             {
-                Title = "Kaguya Exp Leaderboard",
-                Description = descSb.ToString()
+                Description = $"📢 Top Chatters (Out of {stats.Users.ToShorthandFormat()})".AsBold() + "\n\n" + descSb
+            };
+
+            await SendEmbedAsync(embed);
+        }
+        
+        [Command("-serverexp")]
+        [Alias("-sxp")]
+        [Summary("Displays the top 10 Kaguya exp holders in the current server.")]
+        public async Task ServerExpLeaderboardCommandAsync()
+        {
+            var topHolders = await _serverExperienceRepository.GetTopAsync(Context.Guild.Id);
+            var descSb = new StringBuilder();
+
+            int count = await _serverExperienceRepository.GetAllCountAsync(Context.Guild.Id);
+            for (int i = 0; i < topHolders.Count; i++)
+            {
+                var serverExpObj = topHolders[i];
+                if (serverExpObj == null)
+                {
+                    continue;
+                }
+                
+                string userName = Context.Client.GetUser(serverExpObj.UserId)?.Username ?? $"Unknown ({serverExpObj.UserId})";
+
+                int level = (int)ExperienceService.CalculateLevel(serverExpObj.Exp);
+                
+                string emote = GetMedallionString(i);
+                string rankNum = i < 3 ? emote : emote + $" {i + 1}.";
+                string curLine = $"{rankNum} {userName} - Level {level:N0} - {serverExpObj.Exp.ToShorthandFormat()} EXP";
+                if (i == 0)
+                {
+                    curLine = curLine.AsBold();
+                }
+
+                descSb.AppendLine(curLine);
+            }
+            
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
+            {
+                Description = $"📢 Top Chatters (Out of {count.ToShorthandFormat()}) [{Context.Guild.Name}]".AsBold() + "\n\n" + descSb
             };
 
             await SendEmbedAsync(embed);
@@ -121,38 +164,52 @@ namespace Kaguya.Discord.Commands.Exp
 
             for (int i = 0; i < topHolders.Count; i++)
             {
-                if (i + 1 == LEADERBOARD_COUNT)
-                {
-                    break;
-                }
-                
                 var kaguyaUser = topHolders[i];
-                var socketUser = Context.Client.GetUser(topHolders[i].UserId);
-
-                if (kaguyaUser == null || socketUser == null)
+                if (kaguyaUser == null)
                 {
                     continue;
                 }
                 
-                int userFish = await _fishRepository.CountAllNonTrashAsync(kaguyaUser.UserId);
+                string userName = Context.Client.GetUser(kaguyaUser.UserId)?.Username ?? $"Unknown ({kaguyaUser.UserId})";
                 
+                int userFish = await _fishRepository.CountAllNonTrashAsync(kaguyaUser.UserId);
+
+                string emote = GetMedallionString(i);
+                string rankNum = i < 3 ? emote : emote + $" {i + 1}.";
+                string curLine = $"{rankNum} {userName} - Level {kaguyaUser.FishLevel:N0} - {userFish:N0}x fish";
                 if (i == 0)
                 {
-                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - Level {kaguyaUser.FishLevel:N0} - {userFish:N0}x fish".AsBold());
+                    curLine = curLine.AsBold();
                 }
-                else
-                {
-                    descSb.AppendLine($"{i + 1}. {socketUser.Username} - Level {kaguyaUser.FishLevel:N0} - {userFish:N0}x fish");
-                }
+
+                descSb.AppendLine(curLine);
             }
             
             var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
             {
-                Title = "Kaguya Fishing Leaderboard",
-                Description = "🎣 " + descSb
+                Description = "🎣 Fishermen's Ladder".AsBold() + "\n\n" + descSb
             };
 
             await SendEmbedAsync(embed);
+        }
+
+        /// <summary>
+        /// Gets the corresponding medal emoji based on the current number
+        /// of items in the list.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        private static string GetMedallionString(int i)
+        {
+            string emote = i switch
+            {
+                0 => _lbEmojis[i],
+                1 => _lbEmojis[i],
+                2 => _lbEmojis[i],
+                var _ => default
+            };
+
+            return emote;
         }
     }
 }
