@@ -8,13 +8,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Internal.Services.Recurring
 {
-    public class StatisticsUploaderWorker : BackgroundService, ITimerReceiver
+    public class StatisticsUploaderService : BackgroundService, ITimerReceiver
     {
-        private readonly ILogger<StatisticsUploaderWorker> _logger;
+        private readonly ILogger<StatisticsUploaderService> _logger;
         private readonly ITimerService _timerService;
         private readonly IServiceProvider _serviceProvider;
 
-        public StatisticsUploaderWorker(ILogger<StatisticsUploaderWorker> logger, ITimerService timerService, IServiceProvider serviceProvider)
+        public StatisticsUploaderService(ILogger<StatisticsUploaderService> logger, ITimerService timerService, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _timerService = timerService;

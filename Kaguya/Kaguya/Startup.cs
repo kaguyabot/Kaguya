@@ -160,7 +160,7 @@ namespace Kaguya
 			services.AddHostedService<StatusRotationService>();
 			services.AddHostedService<TimerWorker>();
 			services.AddHostedService<AntiraidWorker>();
-			services.AddHostedService<StatisticsUploaderWorker>();
+			services.AddHostedService<StatisticsUploaderService>();
 			services.AddHostedService<UpvoteExpirationService>();
 		}
 
