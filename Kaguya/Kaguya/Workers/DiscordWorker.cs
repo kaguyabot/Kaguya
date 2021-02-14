@@ -316,7 +316,6 @@ namespace Kaguya.Workers
             if (await CheckFilteredPhrase(commandCtx, server, message))
             {
                 scope.Dispose();
-
                 return; // If filtered phrase (and user isn't admin), return.
             }
 
@@ -374,15 +373,16 @@ namespace Kaguya.Workers
                 GuildPermissions userPerms = (await ctx.Guild.GetUserAsync(ctx.User.Id)).GuildPermissions;
 
                 if (userPerms.Administrator)
+                {
                     return false;
+                }
 
                 IServiceProvider serviceProvider = (ctx as ScopedCommandContext)?.Scope.ServiceProvider ?? _serviceProvider;
-                var dbContext = serviceProvider.GetRequiredService<KaguyaDbContext>();
+                var filterRepository = serviceProvider.GetRequiredService<FilteredWordRepository>();
 
-                List<FilteredWord> filters = await dbContext.FilteredWords.AsQueryable().Where(w => w.ServerId == server.ServerId)
-                                                            .ToListAsync();
+                var filters = await filterRepository.GetAllAsync(server.ServerId, true);
 
-                if (filters.Count == 0)
+                if (!filters.Any())
                 {
                     return false;
                 }
@@ -390,8 +390,7 @@ namespace Kaguya.Workers
                 foreach (FilteredWord filter in filters.Where(filter => FilterMatch(message.Content, filter.Word)))
                 {
                     await ctx.Channel.DeleteMessageAsync(message);
-                    _logger.Log(LogLevel.Information,
-                        $"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
+                    _logger.Log(LogLevel.Information, $"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
 
                     KaguyaEvents.OnFilteredWordDetectedTrigger(new FilteredWordEventData
                     {
