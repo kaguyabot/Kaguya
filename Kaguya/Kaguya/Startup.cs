@@ -151,10 +151,9 @@ namespace Kaguya
 
 			// CommonEmotes setup
 			services.AddSingleton<CommonEmotes>();
-			
-			services.AddHostedService<DiscordWorker>();
-
 			services.AddSingleton<KaguyaEvents>();
+
+			services.AddHostedService<DiscordWorker>();
 			
 			// Must be after discord.
 			services.AddHostedService<StatusRotationService>();
