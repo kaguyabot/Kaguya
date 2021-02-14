@@ -97,7 +97,6 @@ namespace Kaguya.Discord.Commands.Music
                         .WithDescription($"{Context.User.Mention} {line1}")
                         .WithFields(embedFields);
 
-            var toModify = await SendEmbedAsync(embed);
             var builder = new KaguyaReactionSelectionBuilder<int>()
                           .WithSelectables(new Dictionary<IEmote, int>
                           {
@@ -107,11 +106,12 @@ namespace Kaguya.Discord.Commands.Music
                               { _commonEmotes.EmojisOneThroughFive[3], 3 },
                               { _commonEmotes.EmojisOneThroughFive[4], 4 }
                           })
-                          .WithEnableDefaultSelectionDescription(false)
                           .WithDeletion(DeletionOptions.AfterCapturedContext | DeletionOptions.Invalids)
+                          .WithEnableDefaultSelectionDescription(false)
+                          .WithSelectionEmbed(PageBuilder.FromEmbedBuilder(embed))
                           .WithUsers(Context.User);
 
-            var result = await _interactivityService.SendSelectionAsync(builder.Build(), Context.Channel, TimeSpan.FromMinutes(2), toModify);
+            var result = await _interactivityService.SendSelectionAsync(builder.Build(), Context.Channel, TimeSpan.FromMinutes(2));
 
             if (result.IsSuccess)
             {
