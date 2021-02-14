@@ -156,10 +156,11 @@ namespace Kaguya
 			services.AddHostedService<DiscordWorker>();
 			
 			// Must be after discord.
-			services.AddHostedService<StatusRotationService>();
-			services.AddHostedService<TimerWorker>();
 			services.AddHostedService<AntiraidWorker>();
+			services.AddHostedService<ReminderService>();
+			services.AddHostedService<StatusRotationService>();
 			services.AddHostedService<StatisticsUploaderService>();
+			services.AddHostedService<TimerWorker>();
 			services.AddHostedService<UpvoteExpirationService>();
 		}
 
