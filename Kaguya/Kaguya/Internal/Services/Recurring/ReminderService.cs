@@ -99,7 +99,6 @@ namespace Kaguya.Internal.Services.Recurring
                     {
                         reminder.HasTriggered = true;
                         await reminderRepository.UpdateAsync(reminder);
-                        
                     }
                 }
 
