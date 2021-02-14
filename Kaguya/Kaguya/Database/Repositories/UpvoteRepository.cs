@@ -74,9 +74,11 @@ namespace Kaguya.Database.Repositories
 
         public async Task<IList<Upvote>> GetAllUpvotesForNotificationServiceAsync()
         {
-            return await _dbContext.Upvotes.AsQueryable().Where(x => !x.ReminderSent &&
-                                                                     x.Type.ToLower() != "test" &&
-                                                                     x.Timestamp < DateTime.Now.AddHours(-12))
+            return await _dbContext.Upvotes
+                                   .AsQueryable()
+                                   .Where(x => !x.ReminderSent &&
+                                               x.Type.ToLower() != "test" &&
+                                               x.Timestamp < DateTime.Now.AddHours(-12))
                                    .ToListAsync();
         }
     }

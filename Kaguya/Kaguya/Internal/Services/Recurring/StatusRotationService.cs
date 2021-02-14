@@ -54,7 +54,7 @@ namespace Kaguya.Internal.Services.Recurring
             catch (Exception e)
             {
                 _rotationIndex = 0;
-                _logger.LogError(e, "Exception encountered within the status rotation service.");
+                _logger.LogError(e, "Exception encountered within the status rotation service");
             }
 
             // Puts ourself back in the queue...

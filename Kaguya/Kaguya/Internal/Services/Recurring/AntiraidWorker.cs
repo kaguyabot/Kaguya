@@ -92,7 +92,7 @@ namespace Kaguya.Internal.Services.Recurring
                 }
                 catch (Exception e)
                 {
-                    _logger.LogCritical(e, "Anti-raid cache pruning failure.");
+                    _logger.LogCritical(e, "Anti-raid cache pruning failure");
 
                     throw;
                 }

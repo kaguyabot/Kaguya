@@ -8,6 +8,7 @@ using Kaguya.Database.Context;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.Options;
+using Kaguya.External.Services.TopGg;
 using Kaguya.Internal.Events;
 using Kaguya.Internal.Music;
 using Kaguya.Internal.Services;
@@ -151,16 +152,16 @@ namespace Kaguya
 			// CommonEmotes setup
 			services.AddSingleton<CommonEmotes>();
 			
-			services.AddHostedService<TimerWorker>();
-			services.AddHostedService<AntiraidWorker>();
-			services.AddHostedService<StatisticsUploaderWorker>();
-			
 			services.AddHostedService<DiscordWorker>();
 
 			services.AddSingleton<KaguyaEvents>();
 			
 			// Must be after discord.
 			services.AddHostedService<StatusRotationService>();
+			services.AddHostedService<TimerWorker>();
+			services.AddHostedService<AntiraidWorker>();
+			services.AddHostedService<StatisticsUploaderWorker>();
+			services.AddHostedService<UpvoteExpirationService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
