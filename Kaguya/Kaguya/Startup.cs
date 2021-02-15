@@ -141,7 +141,6 @@ namespace Kaguya
 				return client;
 			});
 
-			
 			services.AddSingleton(provider =>
 			{
 				var client = provider.GetRequiredService<DiscordShardedClient>();
