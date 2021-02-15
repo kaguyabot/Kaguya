@@ -187,7 +187,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
             // Stage 4
             failureAttempts = 0;
-            if (newArConfig.Action == AntiraidAction.Mute || newArConfig.Action == AntiraidAction.Ban)
+            if (newArConfig.Action == ModerationAction.Mute || newArConfig.Action == ModerationAction.Ban)
             {
                 var confirmationBuilder = new ConfirmationBuilder()
                                           .WithConfirmEmote(_commonEmotes.CheckMarkEmoji)
@@ -277,8 +277,8 @@ namespace Kaguya.Discord.Commands.Configuration
                 return;
             }
 
-            AntiraidAction parsedAction = GetAntiraidActionEnum(action);
-            if (parsedAction == AntiraidAction.Kick && timeString != null)
+            ModerationAction parsedAction = GetAntiraidActionEnum(action);
+            if (parsedAction == ModerationAction.Kick && timeString != null)
             {
                 Remove(Context.Guild.Id);
                 
@@ -288,7 +288,7 @@ namespace Kaguya.Discord.Commands.Configuration
             }
 
             TimeSpan? parsedTime = null;
-            if (parsedAction != AntiraidAction.Kick && timeString != null)
+            if (parsedAction != ModerationAction.Kick && timeString != null)
             {
                 if (!ValidatePunishmentDurationInput(timeString))
                 {
@@ -501,7 +501,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
             string userPunishDuration = "User punishment duration: ";
             
-            if (config.Action == AntiraidAction.Ban || config.Action == AntiraidAction.Mute || config.Action == AntiraidAction.Shadowban)
+            if (config.Action == ModerationAction.Ban || config.Action == ModerationAction.Mute || config.Action == ModerationAction.Shadowban)
             {
                 string durStr = "Indefinite";
 
@@ -597,14 +597,14 @@ namespace Kaguya.Discord.Commands.Configuration
 
         private TimeSpan GetPunishmentDurationTimeSpan(string input) => new TimeParser(input).ParseTime();
 
-        private AntiraidAction GetAntiraidActionEnum(string input)
+        private ModerationAction GetAntiraidActionEnum(string input)
         {
             return input.ToLower() switch
             {
-                "mute" => AntiraidAction.Mute,
-                "kick" => AntiraidAction.Kick,
-                "ban" => AntiraidAction.Ban,
-                "shadowban" => AntiraidAction.Shadowban,
+                "mute" => ModerationAction.Mute,
+                "kick" => ModerationAction.Kick,
+                "ban" => ModerationAction.Ban,
+                "shadowban" => ModerationAction.Shadowban,
                 _ => throw new ArgumentException($"{input} could not be parsed into an AntiraidAction.")
             };
         }
@@ -654,7 +654,7 @@ namespace Kaguya.Discord.Commands.Configuration
                    .Build();
         }
 
-        private Embed GetStageFourConfirmationEmbed(AntiraidAction action)
+        private Embed GetStageFourConfirmationEmbed(ModerationAction action)
         {
             return new KaguyaEmbedBuilder(KaguyaColors.Magenta)
                    .WithTitle("Anti Raid: Temporary Action Setup")

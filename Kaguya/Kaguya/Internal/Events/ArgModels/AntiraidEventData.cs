@@ -13,7 +13,7 @@ namespace Kaguya.Internal.Events.ArgModels
         
         public string DmMessage { get; set; }
         
-        public AntiraidAction Action { get; set; }
+        public ModerationAction Action { get; set; }
         
         /// <summary>
         /// When the appropriate punishment would be lifted.

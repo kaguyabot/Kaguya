@@ -15,7 +15,7 @@ namespace Kaguya.Database.Model
 
 		public uint Seconds { get; set; }
 
-		public AntiraidAction Action { get; set; }
+		public ModerationAction Action { get; set; }
 		
 		/// <summary>
 		/// How long should this user be punished for by the system?

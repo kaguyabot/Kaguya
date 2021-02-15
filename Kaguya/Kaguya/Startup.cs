@@ -3,13 +3,13 @@ using Discord;
 using Discord.Commands;
 using Discord.Rest;
 using Discord.WebSocket;
-using DiscordBotsList.Api;
 using Interactivity;
 using Kaguya.Database.Context;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.Options;
 using Kaguya.External.Services.TopGg;
+using Kaguya.Internal;
 using Kaguya.Internal.Events;
 using Kaguya.Internal.Music;
 using Kaguya.Internal.Services;
@@ -28,6 +28,9 @@ using Microsoft.Extensions.Options;
 using NekosSharp;
 using OsuSharp;
 using Victoria;
+#if !DEBUG
+using DiscordBotsList.Api;
+#endif
 
 namespace Kaguya
 {
@@ -80,6 +83,7 @@ namespace Kaguya
 			services.AddScoped<WarnConfigurationRepository>();
 
 			services.AddSingleton<GuildLoggerService>();
+			services.AddSingleton<SilentSysActions>();
 
 			services.AddSingleton<AudioQueueLocker>();
 			services.AddSingleton<ITimerService, TimerService>();
@@ -159,6 +163,7 @@ namespace Kaguya
 			// Must be after discord.
 			services.AddHostedService<AntiraidWorker>();
 			services.AddHostedService<ReminderService>();
+			services.AddHostedService<RevertAdminActionService>();
 			services.AddHostedService<StatusRotationService>();
 			services.AddHostedService<StatisticsUploaderService>();
 			services.AddHostedService<TimerWorker>();

@@ -1,6 +1,6 @@
 ﻿namespace Kaguya.Internal.Enums
 {
-    public enum AntiraidAction
+    public enum ModerationAction
     {
         Mute,
         Kick,

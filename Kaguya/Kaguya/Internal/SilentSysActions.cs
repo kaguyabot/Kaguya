@@ -18,6 +18,9 @@ namespace Kaguya.Internal
     public class SilentSysActions
     {
         private readonly ILogger<SilentSysActions> _logger;
+        
+        private const string SHADOWBAN_ROLE_NAME = "kaguya-shadowban";
+        private const string MUTE_ROLE_NAME = "kaguya-mute";
 
         public SilentSysActions(IServiceProvider serviceProvider)
         {
@@ -49,7 +52,7 @@ namespace Kaguya.Internal
 
             if (role == null)
             {
-                string roleName = mute ? "kaguya-mute" : "kaguya-shadowban";
+                string roleName = mute ? MUTE_ROLE_NAME : SHADOWBAN_ROLE_NAME;
 
                 if (guild.Roles.Any(x => x.Name.Equals(roleName)))
                 {
@@ -119,6 +122,41 @@ namespace Kaguya.Internal
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public async Task SilentRemoveRoleByIdAsync(SocketGuildUser user, SocketGuild guild, ulong roleId)
+        {
+            var role = guild.GetRole(roleId);
+
+            if (role == null)
+            {
+                _logger.LogWarning($"Failed to silently remove role {roleId} from user {user.Id} in " +
+                                   $"guild {guild.Id} - role was null");
+            }
+            
+            if (!guild.Roles.Any(x => x.Id == roleId))
+            {
+                _logger.LogWarning($"Failed to silently remove role {roleId} from user {user.Id} in " +
+                                   $"guild {guild.Id} - role not found in guild");
+                return;
+            }
+
+            if (!user.Roles.Contains(role))
+            {
+                _logger.LogWarning($"Failed to silently remove role {roleId} from user {user.Id} in " +
+                                   $"guild {guild.Id} - user did not have the role.");
+                return;
+            }
+            
+            try
+            {
+                await user.RemoveRoleAsync(role);
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, $"Failed to silently remove role {role!.Name} from user {user.Id} " +
+                                   $"in guild {guild.Id}");
             }
         }
     }

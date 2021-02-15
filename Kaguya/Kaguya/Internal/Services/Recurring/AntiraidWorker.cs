@@ -24,18 +24,20 @@ namespace Kaguya.Internal.Services.Recurring
         private readonly IServiceProvider _provider;
         private readonly ITimerService _timerService;
         private readonly DiscordShardedClient _client;
+        private readonly SilentSysActions _sysActions;
         private readonly IAntiraidProcessorInternal _arProcessor;
         
         private readonly ConcurrentDictionary<ulong, ConcurrentQueue<(DateTime userJoinTime, ulong userId)>> _userIdCache = new();
         private readonly ConcurrentDictionary<ulong, AntiRaidConfig> _configsCache = new();
         
         public AntiraidWorker(ILogger<AntiraidWorker> logger, IServiceProvider provider, ITimerService timerService, 
-            IAntiraidService arService, DiscordShardedClient client)
+            IAntiraidService arService, DiscordShardedClient client, SilentSysActions sysActions)
         {
             _logger = logger;
             _provider = provider;
             _timerService = timerService;
             _client = client;
+            _sysActions = sysActions;
             _arProcessor = (IAntiraidProcessorInternal) arService;
         }
         
@@ -105,7 +107,6 @@ namespace Kaguya.Internal.Services.Recurring
 
                 _logger.LogInformation($"Antiraid service triggered for guild {data.ServerId}");
 
-                var sysActions = new SilentSysActions(_provider);
                 List<Task> taskList = new List<Task>();
 
                 using (var scope = _provider.CreateScope())
@@ -123,7 +124,7 @@ namespace Kaguya.Internal.Services.Recurring
                     
                     foreach (ulong userId in curUserCollection.Select(x => x.userId).Distinct())
                     {
-                        AntiraidAction action = curConfig.Action;
+                        ModerationAction action = curConfig.Action;
 
                         SocketGuild guild = _client.GetGuild(data.ServerId);
                         SocketGuildUser user = guild?.GetUser(userId);
@@ -169,22 +170,22 @@ namespace Kaguya.Internal.Services.Recurring
                         
                         switch (action)
                         {
-                            case AntiraidAction.Mute:
+                            case ModerationAction.Mute:
                                 adminAction.Action = AdminAction.MuteAction;
-                                taskList.Add(sysActions.SilentMuteUserAsync(user, server.MuteRoleId));
+                                taskList.Add(_sysActions.SilentMuteUserAsync(user, server.MuteRoleId));
 
                                 break;
-                            case AntiraidAction.Kick:
+                            case ModerationAction.Kick:
                                 adminAction.Action = AdminAction.KickAction;
                                 taskList.Add(user.KickAsync(reason));
 
                                 break;
-                            case AntiraidAction.Shadowban:
+                            case ModerationAction.Shadowban:
                                 adminAction.Action = AdminAction.ShadowbanAction;
-                                await sysActions.SilentShadowbanUserAsync(user, server.ShadowbanRoleId);
+                                await _sysActions.SilentShadowbanUserAsync(user, server.ShadowbanRoleId);
 
                                 break;
-                            case AntiraidAction.Ban:
+                            case ModerationAction.Ban:
                                 adminAction.Action = AdminAction.BanAction;
                                 taskList.Add(user.BanAsync(1, reason));
 
@@ -269,7 +270,7 @@ namespace Kaguya.Internal.Services.Recurring
             }
         }
 
-        private string SerializeDmString(string dmString, SocketUser user, AntiraidAction action, string guildName)
+        private string SerializeDmString(string dmString, SocketUser user, ModerationAction action, string guildName)
         {
             dmString = dmString.Replace("{USERNAME}", user.Username);
             dmString = dmString.Replace("{USERMENTION}", user.Mention);
@@ -279,14 +280,14 @@ namespace Kaguya.Internal.Services.Recurring
             return dmString;
         }
 
-        private string ActionPastTense(AntiraidAction action)
+        private string ActionPastTense(ModerationAction action)
         {
             return action switch
             {
-                AntiraidAction.Ban => "banned",
-                AntiraidAction.Kick => "kicked",
-                AntiraidAction.Mute => "muted",
-                AntiraidAction.Shadowban => "shadowbanned",
+                ModerationAction.Ban => "banned",
+                ModerationAction.Kick => "kicked",
+                ModerationAction.Mute => "muted",
+                ModerationAction.Shadowban => "shadowbanned",
                 var _ => "<unknown action>"
             };
         }

@@ -162,7 +162,8 @@ namespace Kaguya.Discord.Commands.Administration
 			        Action = AdminAction.BanAction,
 			        Reason = reason,
 			        Expiration = DateTime.Now + parsedTime,
-			        Timestamp = DateTime.Now
+			        Timestamp = DateTime.Now,
+			        HasTriggered = false // We specify this value if the user is temporarily actioned. Otherwise, leave it null.
 		        };
 		        
 		        await BanAsync(user, adminAction, reason);
