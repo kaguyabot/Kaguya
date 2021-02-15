@@ -30,11 +30,5 @@ namespace Kaguya.Database.Interfaces
         /// <param name="keyString"></param>
         /// <returns></returns>
         public Task<PremiumKey> GetKeyAsync(string keyString);
-        /// <summary>
-        /// Returns a collection of <see cref="ulong"/>s containing all
-        /// currently active premium key holders, unique by id.
-        /// </summary>
-        /// <returns></returns>
-        public Task<IList<ulong>> GetAllActiveKeyholdersAsync();
     }
 }

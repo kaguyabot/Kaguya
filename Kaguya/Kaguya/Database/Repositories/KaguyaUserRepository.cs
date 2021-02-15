@@ -106,5 +106,26 @@ namespace Kaguya.Database.Repositories
 			                       .Take(count)
 			                       .ToListAsync();
 		}
+
+		public async Task<IList<ulong>> GetAllActivePremiumAsync()
+		{
+			return await _dbContext.KaguyaUsers.AsQueryable()
+			                       .Where(x => x.PremiumExpiration.HasValue && 
+			                                   x.PremiumExpiration.Value > DateTime.Now)
+			                       .Select(x => x.UserId)
+			                       .Distinct()
+			                       .ToListAsync();
+		}
+
+		public async Task<IList<ulong>> GetAllExpiredPremiumAsync(int cutoffDays)
+		{
+			return await _dbContext.KaguyaUsers.AsQueryable()
+			                       .Where(x => x.PremiumExpiration.HasValue &&
+			                                   x.PremiumExpiration.Value < DateTime.Now &&
+			                                   x.PremiumExpiration.Value > DateTime.Now.AddDays(-cutoffDays))
+			                       .Select(x => x.UserId)
+			                       .Distinct()
+			                       .ToListAsync();
+		}
 	}
 }

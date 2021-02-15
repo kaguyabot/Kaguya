@@ -48,15 +48,6 @@ namespace Kaguya.Database.Repositories
             return await Table.AsQueryable().Where(x => x.Key == keyString).FirstOrDefaultAsync();
         }
 
-        public async Task<IList<ulong>> GetAllActiveKeyholdersAsync()
-        {
-            return await Table.AsQueryable()
-                              .Where(x => x.UserId.HasValue && x.Expiration > DateTime.Now)
-                              .Select(x => x.UserId.Value)
-                              .Distinct()
-                              .ToListAsync();
-        }
-
         public static string GenerateKey()
         {
             Random r = new Random();
