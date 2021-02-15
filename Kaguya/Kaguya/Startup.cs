@@ -3,6 +3,7 @@ using Discord;
 using Discord.Commands;
 using Discord.Rest;
 using Discord.WebSocket;
+using DiscordBotsList.Api;
 using Interactivity;
 using Kaguya.Database.Context;
 using Kaguya.Database.Repositories;
@@ -110,7 +111,7 @@ namespace Kaguya
 					ApiKey = adminConfigs.Value.OsuApiKey
 				});
 			});
-			
+
 			services.AddSingleton(_ =>
 			{
 				var cs = new CommandService();
@@ -136,17 +137,26 @@ namespace Kaguya
 				return client;
 			});
 
-			services.AddLavaNode(x =>
-			{
-				x.SelfDeaf = true;
-			});
-			
-			services.AddSingleton<AudioService>();
 			
 			services.AddSingleton(provider =>
 			{
 				var client = provider.GetRequiredService<DiscordShardedClient>();
 				return new InteractivityService(client, TimeSpan.FromMinutes(5));
+			});
+			
+			services.AddLavaNode(x =>
+			{
+				x.SelfDeaf = true;
+			});
+			services.AddSingleton<AudioService>();
+			
+			// Top.gg - Must be after Discord client
+			services.AddSingleton(provider =>
+			{
+				var topGgConfig = provider.GetRequiredService<IOptions<TopGgConfigurations>>();
+				var client = provider.GetRequiredService<DiscordShardedClient>();
+				
+				return new AuthDiscordBotListApi(client.CurrentUser.Id, topGgConfig.Value.ApiKey);
 			});
 
 			// CommonEmotes setup
@@ -161,6 +171,7 @@ namespace Kaguya
 			services.AddHostedService<StatusRotationService>();
 			services.AddHostedService<StatisticsUploaderService>();
 			services.AddHostedService<TimerWorker>();
+			services.AddHostedService<TopGgStatsUpdaterService>();
 			services.AddHostedService<UpvoteExpirationService>();
 		}
 
