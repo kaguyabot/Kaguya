@@ -8,6 +8,7 @@ using Kaguya.Database.Repositories;
 using Kaguya.Discord.Options;
 using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Options;
+using Kaguya.Web.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -86,8 +87,8 @@ namespace Kaguya.Internal.Services.Recurring
 
         private AuthDiscordBotListApi GetConfguredApi()
         {
-            string token = _serviceProvider.GetRequiredService<IOptions<DiscordConfigurations>>().Value.BotToken;
-            return new AuthDiscordBotListApi(_client.CurrentUser.Id, token);
+            string apiKey = _serviceProvider.GetRequiredService<IOptions<TopGgConfigurations>>().Value.ApiKey;
+            return new AuthDiscordBotListApi(_client.CurrentUser.Id, apiKey);
         }
     }
 }
