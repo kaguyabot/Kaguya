@@ -59,6 +59,12 @@ namespace Kaguya.Workers
 
             _client.Log += logMessage =>
             {
+                // These are API events unknown to the lib, we ignore these.
+                if(logMessage.Message.Contains("unknown dispatch", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Task.CompletedTask;
+                }
+
                 _logger.Log(logMessage.Severity.ToLogLevel(), logMessage.Exception, logMessage.Message);
 
                 return Task.CompletedTask;
