@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kaguya.Database.Model;
+using Kaguya.Discord.Commands.Reference;
 
 namespace Kaguya.Database.Interfaces
 {
@@ -29,5 +30,11 @@ namespace Kaguya.Database.Interfaces
         /// <param name="keyString"></param>
         /// <returns></returns>
         public Task<PremiumKey> GetKeyAsync(string keyString);
+        /// <summary>
+        /// Returns a collection of <see cref="ulong"/>s containing all
+        /// currently active premium key holders, unique by id.
+        /// </summary>
+        /// <returns></returns>
+        public Task<IList<ulong>> GetAllActiveKeyholdersAsync();
     }
 }

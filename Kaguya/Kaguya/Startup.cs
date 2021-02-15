@@ -162,6 +162,7 @@ namespace Kaguya
 			
 			// Must be after discord.
 			services.AddHostedService<AntiraidWorker>();
+			services.AddHostedService<KaguyaPremiumRoleService>();
 			services.AddHostedService<ReminderService>();
 			services.AddHostedService<RevertAdminActionService>();
 			services.AddHostedService<StatusRotationService>();
