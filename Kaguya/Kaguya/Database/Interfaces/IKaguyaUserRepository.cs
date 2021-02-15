@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kaguya.Database.Model;
@@ -34,5 +35,24 @@ namespace Kaguya.Database.Interfaces
 		/// <param name="count"></param>
 		/// <returns></returns>
 		public Task<IList<KaguyaUser>> GetTopFishHoldersAsync(int count = 10);
+		/// <summary>
+		/// Returns a collection of <see cref="ulong"/>s containing all
+		/// currently active premium subscribers, unique by id.
+		/// </summary>
+		/// <returns></returns>
+		public Task<IList<ulong>> GetAllActivePremiumAsync();
+
+		/// <summary>
+		/// Returns a list of <see cref="ulong"/>s containing all
+		/// expired premium key holders, unique by id.
+		/// </summary>
+		/// <param name="cutoffDays">A positive <see cref="int"/> value, in days,
+		/// representing the maximum farthest point in time behind the current <see cref="DateTime"/>
+		/// for which we should count a user in this collection.
+		/// 
+		/// A duration of 30 days will return all expired key holder IDs who
+		/// have redeemed a key within the last 30 days.</param>
+		/// <returns></returns>
+		public Task<IList<ulong>> GetAllExpiredPremiumAsync(int cutoffDays);
 	}
 }

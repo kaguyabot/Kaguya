@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord.WebSocket;
@@ -66,7 +67,14 @@ namespace Kaguya.Internal.Services.Recurring
 
                 try
                 {
-                    await _discordBotListApi.UpdateStats(_client.Guilds.Count, curStats.Shards);
+                    var dblBot = await _discordBotListApi.GetMeAsync();
+                    
+                    var guildCount = _client.Guilds.Count;
+                    var shardCount = _client.Shards.Count;
+                    var shards = _client.Shards.Select(x => x.ShardId).ToArray();
+                    
+                    await dblBot.UpdateStatsAsync(guildCount, shardCount, shards);
+                    
                     _logger.LogInformation($"top.gg stats updated: {_client.Guilds.Count} servers | {curStats.Shards} shards");
                 }
                 catch (Exception e)
