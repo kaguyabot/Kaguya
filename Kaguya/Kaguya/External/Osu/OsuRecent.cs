@@ -3,8 +3,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Kaguya.Discord;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Exceptions;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using OsuSharp;
 using OsuSharp.Oppai;
 

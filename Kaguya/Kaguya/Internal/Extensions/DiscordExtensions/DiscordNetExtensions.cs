@@ -6,7 +6,7 @@ using Discord.WebSocket;
 using Interactivity;
 using Microsoft.Extensions.Logging;
 
-namespace Kaguya.Discord.DiscordExtensions
+namespace Kaguya.Internal.Extensions.DiscordExtensions
 {
     public static class DiscordNetExtensions
     {

@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Humanizer;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Parsers;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 
 namespace Kaguya.Discord.Commands.OwnerOnly
 {

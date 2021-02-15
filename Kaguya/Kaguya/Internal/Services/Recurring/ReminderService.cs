@@ -6,7 +6,7 @@ using Discord;
 using Discord.WebSocket;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
-using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

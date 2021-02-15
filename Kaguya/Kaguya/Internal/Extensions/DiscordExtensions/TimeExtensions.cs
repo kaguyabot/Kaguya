@@ -2,7 +2,7 @@
 using Humanizer;
 using Humanizer.Localisation;
 
-namespace Kaguya.Discord.DiscordExtensions
+namespace Kaguya.Internal.Extensions.DiscordExtensions
 {
     public static class TimeExtensions
     {

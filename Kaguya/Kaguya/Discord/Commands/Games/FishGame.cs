@@ -9,9 +9,9 @@ using Humanizer;
 using Humanizer.Localisation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Internal.Services;
 
 namespace Kaguya.Discord.Commands.Games

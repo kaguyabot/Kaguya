@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Discord;
 using Kaguya.Discord;
-using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Victoria;
 
 namespace Kaguya.Internal.Music

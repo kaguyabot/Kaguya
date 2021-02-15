@@ -150,15 +150,6 @@ namespace Kaguya
 			});
 			services.AddSingleton<AudioService>();
 			
-			// Top.gg - Must be after Discord client
-			services.AddSingleton(provider =>
-			{
-				var topGgConfig = provider.GetRequiredService<IOptions<TopGgConfigurations>>();
-				var client = provider.GetRequiredService<DiscordShardedClient>();
-				
-				return new AuthDiscordBotListApi(client.CurrentUser.Id, topGgConfig.Value.ApiKey);
-			});
-
 			// CommonEmotes setup
 			services.AddSingleton<CommonEmotes>();
 			services.AddSingleton<KaguyaEvents>();
@@ -171,7 +162,9 @@ namespace Kaguya
 			services.AddHostedService<StatusRotationService>();
 			services.AddHostedService<StatisticsUploaderService>();
 			services.AddHostedService<TimerWorker>();
+#if !DEBUG
 			services.AddHostedService<TopGgStatsUpdaterService>();
+#endif
 			services.AddHostedService<UpvoteExpirationService>();
 		}
 

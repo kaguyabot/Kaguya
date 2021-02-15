@@ -1,8 +1,8 @@
 ﻿using Discord;
 
-namespace Kaguya.Discord.DiscordExtensions
+namespace Kaguya.Internal.Extensions.DiscordExtensions
 {
-	public static class DiscordStrings
+	public static class DiscordStringExtensions
 	{
 		public static string AsItalics(this string s) => Format.Italics(s);
 		public static string AsUnderline(this string s) => Format.Underline(s);

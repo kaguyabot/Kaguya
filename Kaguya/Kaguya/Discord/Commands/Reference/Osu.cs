@@ -3,11 +3,11 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.External.Osu;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Exceptions;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using OsuSharp;
 
 namespace Kaguya.Discord.Commands.Reference

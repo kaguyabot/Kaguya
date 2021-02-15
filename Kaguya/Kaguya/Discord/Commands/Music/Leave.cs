@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 using Victoria;
 

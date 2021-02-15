@@ -14,10 +14,10 @@ using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Options;
 using Kaguya.Internal.Events;
 using Kaguya.Internal.Events.ArgModels;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Internal.Services;
 using Kaguya.Options;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +53,9 @@ namespace Kaguya.Workers
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             using (IServiceScope moduleScope = _serviceProvider.CreateScope())
+            {
                 await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), moduleScope.ServiceProvider);
+            }
 
             _client.Log += logMessage =>
             {
