@@ -14,10 +14,10 @@ using Kaguya.Database.Context;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Options;
 using Kaguya.Internal.Events;
 using Kaguya.Internal.Events.ArgModels;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Internal.Services;
 using Kaguya.Options;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +53,9 @@ namespace Kaguya.Workers
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             using (IServiceScope moduleScope = _serviceProvider.CreateScope())
+            {
                 await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), moduleScope.ServiceProvider);
+            }
 
             _client.Log += logMessage =>
             {
@@ -120,7 +122,7 @@ namespace Kaguya.Workers
             _client.ChannelCreated += channel =>
             {
                 _logger.Log(LogLevel.Debug,
-                    $"Channel Created [Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
+                    $"Channel Created [Type: {channel.GetType()} | Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
 
                 return Task.CompletedTask;
             };
@@ -316,7 +318,6 @@ namespace Kaguya.Workers
             if (await CheckFilteredPhrase(commandCtx, server, message))
             {
                 scope.Dispose();
-
                 return; // If filtered phrase (and user isn't admin), return.
             }
 
@@ -374,15 +375,16 @@ namespace Kaguya.Workers
                 GuildPermissions userPerms = (await ctx.Guild.GetUserAsync(ctx.User.Id)).GuildPermissions;
 
                 if (userPerms.Administrator)
+                {
                     return false;
+                }
 
                 IServiceProvider serviceProvider = (ctx as ScopedCommandContext)?.Scope.ServiceProvider ?? _serviceProvider;
-                var dbContext = serviceProvider.GetRequiredService<KaguyaDbContext>();
+                var filterRepository = serviceProvider.GetRequiredService<FilteredWordRepository>();
 
-                List<FilteredWord> filters = await dbContext.FilteredWords.AsQueryable().Where(w => w.ServerId == server.ServerId)
-                                                            .ToListAsync();
+                var filters = await filterRepository.GetAllAsync(server.ServerId, true);
 
-                if (filters.Count == 0)
+                if (!filters.Any())
                 {
                     return false;
                 }
@@ -390,8 +392,7 @@ namespace Kaguya.Workers
                 foreach (FilteredWord filter in filters.Where(filter => FilterMatch(message.Content, filter.Word)))
                 {
                     await ctx.Channel.DeleteMessageAsync(message);
-                    _logger.Log(LogLevel.Information,
-                        $"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
+                    _logger.Log(LogLevel.Information, $"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
 
                     KaguyaEvents.OnFilteredWordDetectedTrigger(new FilteredWordEventData
                     {

@@ -20,6 +20,12 @@ namespace Kaguya.Database.Interfaces
         /// <returns></returns>
         public Task<IList<ServerExperience>> GetAllExpAsync(ulong serverId);
         /// <summary>
+        /// Returns the <see cref="count"/> of top experience point holders for the given <see cref="serverId"/>.
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <returns></returns>
+        public Task<IList<ServerExperience>> GetTopAsync(ulong serverId, int count = 10);
+        /// <summary>
         /// Adds the <see cref="amount"/> of exp to the <see cref="ServerExperience"/> object that
         /// belongs to the given <see cref="serverId"/> and <see cref="userId"/>.
         /// </summary>

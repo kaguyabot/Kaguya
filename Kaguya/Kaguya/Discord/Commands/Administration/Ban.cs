@@ -10,10 +10,10 @@ using Humanizer;
 using Humanizer.Localisation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Parsers;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Administration
@@ -162,7 +162,8 @@ namespace Kaguya.Discord.Commands.Administration
 			        Action = AdminAction.BanAction,
 			        Reason = reason,
 			        Expiration = DateTime.Now + parsedTime,
-			        Timestamp = DateTime.Now
+			        Timestamp = DateTime.Now,
+			        HasTriggered = false // We specify this value if the user is temporarily actioned. Otherwise, leave it null.
 		        };
 		        
 		        await BanAsync(user, adminAction, reason);

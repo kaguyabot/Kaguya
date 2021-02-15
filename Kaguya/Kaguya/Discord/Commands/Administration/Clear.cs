@@ -6,9 +6,9 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Interactivity;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Administration

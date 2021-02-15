@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Internal.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,6 +41,19 @@ namespace Kaguya.External.Services.TopGg
                 return;
             }
             
+            await _timerService.TriggerAtAsync(DateTime.Now, this);
+        }
+
+        public async Task HandleTimer(object payload)
+        {
+            await _timerService.TriggerAtAsync(DateTime.Now.AddSeconds(15), this);
+
+            if (!_client.AllShardsReady())
+            {
+                _logger.LogDebug("Shards not ready, aborting");
+                return;
+            }
+            
             using (IServiceScope scope = _serviceProvider.CreateScope())
             {
                 var upvoteRepository = scope.ServiceProvider.GetRequiredService<UpvoteRepository>();
@@ -61,8 +75,8 @@ namespace Kaguya.External.Services.TopGg
                     {
                         var embed = new KaguyaEmbedBuilder(Color.Blue)
                         {
-                            Title = "Top.GG Rewards",
-                            Description = $"You may now vote for Kaguya on [top.gg]({Global.TopGgUpvoteUrl}) " +
+                            Description = $"🛎️ ⬆️ Top.GG Rewards Notification".AsBold() + "\n" +
+                                          $"You may now vote for Kaguya on [top.gg]({Global.TopGgUpvoteUrl}) " +
                                           $"for bonus rewards!"
                         };
 
@@ -88,11 +102,6 @@ namespace Kaguya.External.Services.TopGg
                     await upvoteRepository.UpdateAsync(vote);
                 }
             }
-        }
-
-        public async Task HandleTimer(object payload)
-        {
-            await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(1), this);
         }
     }
 }

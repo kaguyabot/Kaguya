@@ -4,8 +4,8 @@ using Kaguya.Internal.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Victoria;
 
 namespace Kaguya.Discord.Commands.Music

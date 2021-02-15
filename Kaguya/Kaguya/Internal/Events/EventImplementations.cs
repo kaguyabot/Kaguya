@@ -5,7 +5,7 @@ using Discord;
 using Discord.WebSocket;
 using Kaguya.Database.Model;
 using Kaguya.Discord;
-using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Internal.Services.Recurring;
 using Microsoft.Extensions.Logging;
 

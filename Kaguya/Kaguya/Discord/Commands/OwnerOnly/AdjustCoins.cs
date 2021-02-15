@@ -2,9 +2,9 @@
 using Discord.Commands;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.OwnerOnly

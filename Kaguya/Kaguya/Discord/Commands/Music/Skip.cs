@@ -5,8 +5,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
 using Interactivity;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Internal.Music;
 using Victoria;
 

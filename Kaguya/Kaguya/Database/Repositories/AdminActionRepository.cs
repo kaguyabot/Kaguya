@@ -56,6 +56,19 @@ namespace Kaguya.Database.Repositories
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
+		public async Task<IList<AdminAction>> GetAllToUndoAsync()
+		{
+			return await _dbContext.AdminActions.AsQueryable()
+			                 .Where(x => x.Expiration.HasValue &&
+			                             x.HasTriggered.HasValue &&
+			                             !x.HasTriggered.Value &&
+			                             (x.Action == AdminAction.BanAction ||
+			                             x.Action == AdminAction.MuteAction || 
+										 x.Action == AdminAction.ShadowbanAction) &&
+			                             x.Expiration.Value < DateTime.Now)
+			                 .ToListAsync();
+		}
+
 		/// <summary>
 		/// Sets the `IsHidden` property of the <see cref="AdminAction"/> to true and updates it in the database.
 		/// </summary>

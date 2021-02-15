@@ -41,6 +41,16 @@ namespace Kaguya.Database.Repositories
             return await _dbContext.ServerExperience.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
         }
 
+        public async Task<IList<ServerExperience>> GetTopAsync(ulong serverId, int count = 10)
+        {
+            return await _dbContext.ServerExperience
+                                   .AsQueryable()
+                                   .Where(x => x.ServerId == serverId)
+                                   .OrderByDescending(x => x.Exp)
+                                   .Take(count)
+                                   .ToListAsync();
+        }
+
         public async Task AddAsync(ulong serverId, ulong userId, int amount)
         {
             ServerExperience match = await GetOrCreateAsync(serverId, userId);

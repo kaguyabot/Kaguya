@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using Interactivity;
 using Microsoft.Extensions.Logging;
 
-namespace Kaguya.Discord.DiscordExtensions
+namespace Kaguya.Internal.Extensions.DiscordExtensions
 {
     public static class DiscordNetExtensions
     {
@@ -50,5 +51,7 @@ namespace Kaguya.Discord.DiscordExtensions
         {
             interactivityService.DelayedSendMessageAndDeleteAsync(context.Channel, embed: embed, deleteDelay: deletionDelay);
         }
+
+        public static bool AllShardsReady(this DiscordShardedClient client) => client.Shards.Count == Global.ShardsReady.Count;
     }
 }

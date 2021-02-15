@@ -11,11 +11,11 @@ using Interactivity;
 using Interactivity.Confirmation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Discord.Parsers;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Exceptions;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Administration
@@ -153,7 +153,8 @@ namespace Kaguya.Discord.Commands.Administration
                 Action = AdminAction.MuteAction,
                 Reason = reason,
                 Expiration = expiration,
-                Timestamp = DateTime.Now
+                Timestamp = DateTime.Now,
+                HasTriggered = expiration.HasValue ? false : null // We specify this value if the user is temporarily actioned. Otherwise, leave it null.
             };
 
             bool muteRoleExists = DetermineIfMuteRoleExists(server);

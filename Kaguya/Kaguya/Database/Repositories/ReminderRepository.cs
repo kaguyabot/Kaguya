@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,12 +22,13 @@ namespace Kaguya.Database.Repositories
 
         public async Task<IList<Reminder>> GetAllToDeliverAsync(ulong userId)
         {
-            return await _dbContext.Reminders.AsQueryable().Where(x => x.UserId == userId && x.NeedsDelivery).ToListAsync();
+            return await _dbContext.Reminders.AsQueryable().Where(x => x.UserId == userId && x.Expiration < DateTime.Now && !x.HasTriggered).ToListAsync();
         }
 
         public async Task<IList<Reminder>> GetAllToDeliverAsync()
         {
-            return await _dbContext.Reminders.AsQueryable().Where(x => x.NeedsDelivery).ToListAsync();
+            // We cannot use x.NeedsDelivery for this query.
+            return await _dbContext.Reminders.AsQueryable().Where(x => x.Expiration < DateTime.Now && !x.HasTriggered).ToListAsync();
         }
     }
 }

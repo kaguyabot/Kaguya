@@ -37,6 +37,7 @@ namespace Kaguya.Database.Model
 		/// Whether this action was performed by the system as part of an automated service.
 		/// </summary>
 		public bool IsSystemAction { get; init; }
+		public bool? HasTriggered { get; set; }
 		public DateTime Timestamp { get; set; }
 	}
 }

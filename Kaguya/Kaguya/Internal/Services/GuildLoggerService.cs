@@ -372,7 +372,7 @@ namespace Kaguya.Internal.Services
 
             if (server.IsPremium)
             {
-                sb.Append($"\nMessage Contents: **{fwData.Message.Content}**");
+                sb.Append($"\nMessage Contents: \"**{fwData.Message.Content}**\"");
             }
 
             string msg = sb.ToString();

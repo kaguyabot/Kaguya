@@ -36,7 +36,7 @@ namespace Kaguya.Internal.Services.Recurring
         {
             try
             {
-                _logger.LogDebug("Status rotation timer triggered.");
+                _logger.LogDebug("Status rotation timer triggered");
 
                 if (Global.ShardsReady.Count == _client.Shards.Count)
                 {
@@ -54,7 +54,7 @@ namespace Kaguya.Internal.Services.Recurring
             catch (Exception e)
             {
                 _rotationIndex = 0;
-                _logger.LogError(e, "Exception encountered within the status rotation service.");
+                _logger.LogError(e, "Exception encountered within the status rotation service");
             }
 
             // Puts ourself back in the queue...

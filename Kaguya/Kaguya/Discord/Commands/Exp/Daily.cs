@@ -5,8 +5,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 
 namespace Kaguya.Discord.Commands.Exp
 {

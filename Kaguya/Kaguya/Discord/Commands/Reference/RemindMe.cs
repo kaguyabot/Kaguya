@@ -30,6 +30,8 @@ namespace Kaguya.Discord.Commands.Reference
         [Summary("Sets a reminder to be sent to your DM after the specified time. Please allow messages " +
                  "from server members for this feature to work correctly.")]
         [Remarks("<delay time> <text>")]
+        [Example("2h walk the dog")]
+        [Example("14d5h30m25s The game starts now!")]
         public async Task RemindCommand(string duration, [Remainder]string text)
         {
             TimeParser timeParser = new TimeParser(duration);

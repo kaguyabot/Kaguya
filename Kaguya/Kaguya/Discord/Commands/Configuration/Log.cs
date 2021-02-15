@@ -11,9 +11,9 @@ using Discord.WebSocket;
 using Humanizer;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.DiscordExtensions;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 
 namespace Kaguya.Discord.Commands.Configuration
 {

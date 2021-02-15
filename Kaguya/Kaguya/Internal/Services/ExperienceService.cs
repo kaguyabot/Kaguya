@@ -4,7 +4,7 @@ using Discord;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
-using Kaguya.Discord.DiscordExtensions;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Internal.PrimitiveExtensions;
 using Microsoft.Extensions.Logging;
 

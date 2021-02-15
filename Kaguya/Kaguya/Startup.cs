@@ -8,6 +8,8 @@ using Kaguya.Database.Context;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Discord.Options;
+using Kaguya.External.Services.TopGg;
+using Kaguya.Internal;
 using Kaguya.Internal.Events;
 using Kaguya.Internal.Music;
 using Kaguya.Internal.Services;
@@ -26,6 +28,9 @@ using Microsoft.Extensions.Options;
 using NekosSharp;
 using OsuSharp;
 using Victoria;
+#if !DEBUG
+using DiscordBotsList.Api;
+#endif
 
 namespace Kaguya
 {
@@ -78,6 +83,7 @@ namespace Kaguya
 			services.AddScoped<WarnConfigurationRepository>();
 
 			services.AddSingleton<GuildLoggerService>();
+			services.AddSingleton<SilentSysActions>();
 
 			services.AddSingleton<AudioQueueLocker>();
 			services.AddSingleton<ITimerService, TimerService>();
@@ -109,7 +115,7 @@ namespace Kaguya
 					ApiKey = adminConfigs.Value.OsuApiKey
 				});
 			});
-			
+
 			services.AddSingleton(_ =>
 			{
 				var cs = new CommandService();
@@ -135,32 +141,36 @@ namespace Kaguya
 				return client;
 			});
 
-			services.AddLavaNode(x =>
-			{
-				x.SelfDeaf = true;
-			});
-			
-			services.AddSingleton<AudioService>();
-			
 			services.AddSingleton(provider =>
 			{
 				var client = provider.GetRequiredService<DiscordShardedClient>();
 				return new InteractivityService(client, TimeSpan.FromMinutes(5));
 			});
-
+			
+			services.AddLavaNode(x =>
+			{
+				x.SelfDeaf = true;
+			});
+			services.AddSingleton<AudioService>();
+			
 			// CommonEmotes setup
 			services.AddSingleton<CommonEmotes>();
-			
-			services.AddHostedService<TimerWorker>();
-			services.AddHostedService<AntiraidWorker>();
-			services.AddHostedService<StatisticsUploaderWorker>();
-			
-			services.AddHostedService<DiscordWorker>();
-
 			services.AddSingleton<KaguyaEvents>();
+
+			services.AddHostedService<DiscordWorker>();
 			
 			// Must be after discord.
+			services.AddHostedService<AntiraidWorker>();
+			services.AddHostedService<KaguyaPremiumRoleService>();
+			services.AddHostedService<ReminderService>();
+			services.AddHostedService<RevertAdminActionService>();
 			services.AddHostedService<StatusRotationService>();
+			services.AddHostedService<StatisticsUploaderService>();
+			services.AddHostedService<TimerWorker>();
+#if !DEBUG
+			services.AddHostedService<TopGgStatsUpdaterService>();
+#endif
+			services.AddHostedService<UpvoteExpirationService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
