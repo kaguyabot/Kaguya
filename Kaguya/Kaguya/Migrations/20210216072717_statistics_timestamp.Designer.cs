@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210216072717_statistics_timestamp")]
+    partial class statistics_timestamp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

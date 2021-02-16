@@ -99,6 +99,8 @@ namespace Kaguya.Internal.Services.Recurring
                     {
                         reminder.HasTriggered = true;
                         await reminderRepository.UpdateAsync(reminder);
+                        
+                        _logger.LogInformation($"Sent reminder to user {socketUser.Id} to '{reminder.Text}'");
                     }
                 }
 

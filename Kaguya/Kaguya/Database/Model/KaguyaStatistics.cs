@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Kaguya.Database.Model
@@ -18,5 +19,6 @@ namespace Kaguya.Database.Model
         public double RamUsageMegabytes { get; init; }
         public int LatencyMilliseconds { get; init; }
         public string Version { get; init; }
+        public DateTime? Timestamp { get; init; }
     }
 }

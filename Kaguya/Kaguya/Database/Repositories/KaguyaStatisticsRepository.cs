@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
@@ -56,7 +57,8 @@ namespace Kaguya.Database.Repositories
                 Gambles = gambles,
                 RamUsageMegabytes = ramUsage,
                 LatencyMilliseconds = latency,
-                Version = Global.Version
+                Version = Global.Version,
+                Timestamp = DateTime.Now
             };
 
             await InsertAsync(newStats);
