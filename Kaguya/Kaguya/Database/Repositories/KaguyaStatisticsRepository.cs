@@ -38,6 +38,7 @@ namespace Kaguya.Database.Repositories
             
             int users = await _kaguyaUserRepository.GetCountAsync();
             int servers = await _kaguyaServerRepository.GetCountAsync();
+            int curServers = _client.Guilds.Count;
             int shards = _client.Shards.Count;
             int commandsExecuted = await _commandHistoryRepository.GetSuccessfulCountAsync();
             int fish = await _fishRepository.GetCountAsync();
@@ -49,6 +50,7 @@ namespace Kaguya.Database.Repositories
             {
                 Users = users,
                 Servers = servers,
+                ConnectedServers = curServers,
                 Shards = shards,
                 CommandsExecuted = commandsExecuted,
                 Fish = fish,
