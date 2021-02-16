@@ -51,7 +51,7 @@ namespace Kaguya.Internal.Services.Recurring
         {
             if (!_client.AllShardsReady())
             {
-                _logger.LogDebug("All shards not ready. Aborting. Retrying in 1 minute.");
+                _logger.LogInformation("All shards not ready. Aborting. Retrying in 1 minute");
                 await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(1), this);
 
                 return;
@@ -69,14 +69,13 @@ namespace Kaguya.Internal.Services.Recurring
                 try
                 {
                     var dblBot = await _discordBotListApi.GetMeAsync();
+
+                    int guildCount = curStats.ConnectedServers;
+                    int shardCount = curStats.Shards;
                     
-                    var guildCount = _client.Guilds.Count;
-                    var shardCount = _client.Shards.Count;
-                    var shards = _client.Shards.Select(x => x.ShardId).ToArray();
+                    await dblBot.UpdateStatsAsync(guildCount, shardCount);
                     
-                    await dblBot.UpdateStatsAsync(guildCount, shardCount, shards);
-                    
-                    _logger.LogInformation($"top.gg stats updated: {_client.Guilds.Count} servers | {curStats.Shards} shards");
+                    _logger.LogInformation($"top.gg stats updated: {guildCount} servers | {shardCount} shards");
                 }
                 catch (Exception e)
                 {

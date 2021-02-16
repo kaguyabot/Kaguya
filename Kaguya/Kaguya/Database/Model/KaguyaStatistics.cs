@@ -9,7 +9,14 @@ namespace Kaguya.Database.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; init; }
         public int Users { get; init; }
+        /// <summary>
+        /// How many servers the bot has ever connected to and has data on.
+        /// </summary>
         public int Servers { get; init; }
+        /// <summary>
+        /// How many servers the bot is currently connected to.
+        /// </summary>
+        public int ConnectedServers { get; init; }
         public int Shards { get; init; }
         public int CommandsExecuted { get; init; }
         public int Fish { get; init; }
