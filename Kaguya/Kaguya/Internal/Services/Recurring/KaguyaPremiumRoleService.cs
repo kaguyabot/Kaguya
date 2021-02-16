@@ -18,7 +18,7 @@ namespace Kaguya.Internal.Services.Recurring
         private readonly ITimerService _timerService;
         private readonly DiscordShardedClient _client;
 
-        private const ulong SUPPORT_GUILD_ID = 679540145963532325;
+        private const ulong SUPPORT_GUILD_ID = 546880579057221644;
         
         public KaguyaPremiumRoleService(ILogger<KaguyaPremiumRoleService> logger, IServiceProvider serviceProvider,
             ITimerService timerService, DiscordShardedClient client)
