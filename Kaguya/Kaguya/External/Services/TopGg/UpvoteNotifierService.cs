@@ -19,6 +19,9 @@ namespace Kaguya.External.Services.TopGg
         private static readonly BlockingCollection<Upvote> _voteQueue = new BlockingCollection<Upvote>();
         private Task _runner;
 
+        public const int COINS = 750;
+        public const int EXP = 500;
+
         public UpvoteNotifierService(ILogger<UpvoteNotifierService> logger,
             KaguyaUserRepository kaguyaUserRepository, UpvoteRepository upvoteRepository, 
             DiscordShardedClient client)
@@ -39,8 +42,8 @@ namespace Kaguya.External.Services.TopGg
                     var user = await _kaguyaUserRepository.GetOrCreateAsync(vote.UserId);
                     var socketUser = _client.GetUser(user.UserId);
 
-                    int coins = 750;
-                    int exp = 500;
+                    int coins = COINS;
+                    int exp = EXP;
 
                     if (vote.IsWeekend)
                     {
@@ -56,6 +59,7 @@ namespace Kaguya.External.Services.TopGg
 
                     user.AdjustCoins(coins);
                     user.AdjustExperienceGlobal(exp);
+                    user.LastUpvoted = DateTime.Now;
                     user.TotalUpvotes++;
 
                     if (socketUser != null)

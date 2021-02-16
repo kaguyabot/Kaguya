@@ -28,5 +28,7 @@ namespace Kaguya.Internal.Extensions.DiscordExtensions
 		/// <param name="s"></param>
 		/// <returns></returns>
 		public static string Sanitize(this string s) => Format.Sanitize(s);
+
+		public static string AsBlueCode(this string s, string url) => $"[`{s}`]({url})";
 	}
 }

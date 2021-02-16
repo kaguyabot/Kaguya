@@ -63,6 +63,7 @@ namespace Kaguya.Database.Model
 		public DateTime? LastFished { get; set; }
 
 		public DateTime? LastBlacklisted { get; set; }
+		public DateTime? LastUpvoted { get; set; }
 
 		public DateTime? PremiumExpiration { get; set; }
 		public DateTime? BlacklistExpiration { get; set; }
@@ -81,6 +82,10 @@ namespace Kaguya.Database.Model
 		public bool CanGetDailyCoins => !LastDailyBonus.HasValue || LastDailyBonus.Value < DateTime.Now.AddHours(-24);
 
 		public bool CanGetWeeklyCoins => !LastWeeklyBonus.HasValue || LastWeeklyBonus.Value < DateTime.Now.AddDays(-7);
+		/// <summary>
+		/// Whether or not the user can upvote on top.gg - checks for last 12 hours.
+		/// </summary>
+		public bool CanUpvote => !LastUpvoted.HasValue || LastUpvoted < DateTime.Now.AddHours(-12);
 
 		public int GlobalExpLevel => ExactGlobalExpLevel.ToFloor();
 

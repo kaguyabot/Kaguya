@@ -489,6 +489,9 @@ namespace Kaguya.Migrations
                     b.Property<DateTime?>("LastRatelimited")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime?>("LastUpvoted")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime?>("LastWeeklyBonus")
                         .HasColumnType("datetime(6)");
 
