@@ -1,4 +1,5 @@
 ﻿using Kaguya.Database.Model;
+using Kaguya.Database.Views;
 using Microsoft.EntityFrameworkCore;
 // ReSharper disable PartialMethodWithSinglePart
 
@@ -8,7 +9,7 @@ namespace Kaguya.Database.Context
 {
 	public partial class KaguyaDbContext : DbContext
 	{
-		// All DbSets are listed here in alphabetical order.
+		// DbSet (Models)
 		public DbSet<AdminAction> AdminActions { get; set; }
 		public DbSet<AntiRaidConfig> AntiRaidConfigs { get; set; }
 		public DbSet<AutoAssignedRole> AutoAssignedRoles { get; set; }
@@ -33,6 +34,9 @@ namespace Kaguya.Database.Context
 		public DbSet<ServerExperience> ServerExperience { get; set; }
 		public DbSet<Upvote> Upvotes { get; set; }
 		public DbSet<WarnConfiguration> WarnConfigurations { get; set; }
+		
+		// DbSet (Views)
+		public DbSet<KaguyaUserExperienceRank> KaguyaUserExperienceRanks { get; set; }
 
 		public KaguyaDbContext(DbContextOptions<KaguyaDbContext> options)
 			: base(options)
@@ -253,6 +257,14 @@ namespace Kaguya.Database.Context
 			{
 				x.UserId
 			});
+			
+			// VIEWS
+			modelBuilder.Entity<KaguyaUserExperienceRank>(x =>
+			{
+				x.HasNoKey();
+				x.ToView("KaguyaUserRanks");
+			});
+
 		}
 
 		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
