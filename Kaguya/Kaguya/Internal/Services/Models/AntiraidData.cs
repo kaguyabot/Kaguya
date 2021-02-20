@@ -7,7 +7,7 @@ namespace Kaguya.Internal.Services.Models
         public ulong ServerId { get; init; }
         public ulong UserId { get; init; }
         public string Action { get; init; }
-        public DateTime JoinTime { get; init; }
+        public DateTimeOffset JoinTime { get; init; }
         
         public static string FormattedAntiraidPunishment(string punishmentStr) => punishmentStr switch
         {

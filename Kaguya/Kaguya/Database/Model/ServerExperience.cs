@@ -21,7 +21,7 @@ namespace Kaguya.Database.Model
         public void AddExp(int amount)
         {
             this.Exp += Math.Abs(amount);
-            this.LastGivenExp = DateTime.Now;
+            this.LastGivenExp = DateTimeOffset.Now;
         }
 
         /// <summary>

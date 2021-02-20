@@ -41,7 +41,7 @@ namespace Kaguya
         /// <returns></returns>
         public static string GetUptimeString()
         {
-            return (DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day);
+            return (DateTimeOffset.Now - Process.GetCurrentProcess().StartTime).Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day);
         }
 
         public static string GetStartDate() { return Process.GetCurrentProcess().StartTime.ToLocalTime().ToShortDateString().Replace('/', '.'); }

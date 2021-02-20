@@ -63,7 +63,7 @@ namespace Kaguya.Database.Model
 		public DateTimeOffset? LastFished { get; set; }
 
 		public DateTimeOffset? LastBlacklisted { get; set; }
-		public DateTime? LastUpvoted { get; set; }
+		public DateTimeOffset? LastUpvoted { get; set; }
 
 		public DateTimeOffset? PremiumExpiration { get; set; }
 		public DateTimeOffset? BlacklistExpiration { get; set; }
@@ -75,17 +75,17 @@ namespace Kaguya.Database.Model
 
 		// public FishHandler.FishLevelBonuses FishLevelBonuses => new FishHandler.FishLevelBonuses(FishExp);
 		// public bool IsBotOwner => UserId == ConfigProperties.BotConfig.BotOwnerId;
-		public bool IsPremium => PremiumExpiration.HasValue && PremiumExpiration.Value > DateTime.Now;
+		public bool IsPremium => PremiumExpiration.HasValue && PremiumExpiration.Value > DateTimeOffset.Now;
 
-		public bool CanGiveRep => !LastGivenRep.HasValue || LastGivenRep.Value < DateTime.Now.AddHours(-24);
+		public bool CanGiveRep => !LastGivenRep.HasValue || LastGivenRep.Value < DateTimeOffset.Now.AddHours(-24);
 
-		public bool CanGetDailyCoins => !LastDailyBonus.HasValue || LastDailyBonus.Value < DateTime.Now.AddHours(-24);
+		public bool CanGetDailyCoins => !LastDailyBonus.HasValue || LastDailyBonus.Value < DateTimeOffset.Now.AddHours(-24);
 
-		public bool CanGetWeeklyCoins => !LastWeeklyBonus.HasValue || LastWeeklyBonus.Value < DateTime.Now.AddDays(-7);
+		public bool CanGetWeeklyCoins => !LastWeeklyBonus.HasValue || LastWeeklyBonus.Value < DateTimeOffset.Now.AddDays(-7);
 		/// <summary>
 		/// Whether or not the user can upvote on top.gg - checks for last 12 hours.
 		/// </summary>
-		public bool CanUpvote => !LastUpvoted.HasValue || LastUpvoted < DateTime.Now.AddHours(-12);
+		public bool CanUpvote => !LastUpvoted.HasValue || LastUpvoted < DateTimeOffset.Now.AddHours(-12);
 
 		public int GlobalExpLevel => ExactGlobalExpLevel.ToFloor();
 
@@ -132,7 +132,7 @@ namespace Kaguya.Database.Model
 				return;
 			}
 
-			this.LastGivenExp = DateTime.Now;
+			this.LastGivenExp = DateTimeOffset.Now;
 			this.GlobalExp += amount;
 		}
 

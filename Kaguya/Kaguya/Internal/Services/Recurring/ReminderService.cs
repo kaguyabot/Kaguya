@@ -36,14 +36,14 @@ namespace Kaguya.Internal.Services.Recurring
                 return;
             }
             
-            await _timerService.TriggerAtAsync(DateTime.Now, this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
         }
 
         // We have this flag to combat duplicate reminders when they are spam created.
         private static bool _processingReminders;
         public async Task HandleTimer(object payload)
         {
-            await _timerService.TriggerAtAsync(DateTime.Now.AddSeconds(5), this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddSeconds(5), this);
 
             if (_processingReminders)
             {

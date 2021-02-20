@@ -41,7 +41,7 @@ namespace Kaguya.Discord.Commands.Administration
             }
 
             IEnumerable<IMessage> messages = (await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync())
-                .Where(x => x.Timestamp >= DateTime.Now.AddDays(-14))
+                .Where(x => x.Timestamp >= DateTimeOffset.Now.AddDays(-14))
                 .ToList();
 
             if (user != null)

@@ -35,18 +35,18 @@ namespace Kaguya.Discord.Commands.Exp
 
             if (!user.CanGetDailyCoins)
             {
-                string diff = (user.LastDailyBonus!.Value - DateTime.Now.AddHours(-24)).HumanizeTraditionalReadable();
+                string diff = (user.LastDailyBonus!.Value - DateTimeOffset.Now.AddHours(-24)).HumanizeTraditionalReadable();
                 await SendBasicErrorEmbedAsync($"Sorry, you must wait {diff.AsBold()} to use this command again.");
                 return;
             }
             
             user.AdjustCoins(COINS_GIVEN);
             user.AdjustExperienceGlobal(EXP_GIVEN);
-            user.LastDailyBonus = DateTime.Now;
+            user.LastDailyBonus = DateTimeOffset.Now;
 
             await _kaguyaUserRepository.UpdateAsync(user);
             _logger.LogDebug($"User {user.UserId} has received {COINS_GIVEN} coins and {EXP_GIVEN} exp for their daily bonus. " +
-                             $"They may redeem again at {DateTime.Now.AddHours(24)}.");
+                             $"They may redeem again at {DateTimeOffset.Now.AddHours(24)}.");
 
             var embed = GetBasicSuccessEmbedBuilder("You have claimed your daily bonus!\nYou may claim again in 24 hours.\n" +
                                                     $"Bonus: {COINS_GIVEN.ToString("N0").AsBold()} coins and {EXP_GIVEN.ToString("N0").AsBold()} exp.")

@@ -102,7 +102,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
             if (!showExpired)
             {
-                collection.RemoveAll(x => x.Expiration < DateTime.Now && durationFilters.Contains(x.Reason));
+                collection.RemoveAll(x => x.Expiration < DateTimeOffset.Now && durationFilters.Contains(x.Reason));
             }
             
             const int PER_PAGE = 10;
@@ -165,9 +165,9 @@ namespace Kaguya.Discord.Commands.Configuration
                 {
                     string expiration = !current.Expiration.HasValue
                         ? "Permanent"
-                        : current.Expiration.Value < DateTime.Now
+                        : current.Expiration.Value < DateTimeOffset.Now
                             ? "Expired"
-                            : (current.Expiration - DateTime.Now).Value.HumanizeTraditionalReadable();
+                            : (current.Expiration - DateTimeOffset.Now).Value.HumanizeTraditionalReadable();
 
                     toAppend += $" | Duration: {expiration.AsBold()}";
                 }

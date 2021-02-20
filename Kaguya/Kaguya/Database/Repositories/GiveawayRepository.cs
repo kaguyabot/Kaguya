@@ -19,7 +19,7 @@ namespace Kaguya.Database.Repositories
         {
             return await _dbContext.Giveaways
                                    .AsQueryable()
-                                   .Where(x => x.Expiration < DateTime.Now)
+                                   .Where(x => x.Expiration < DateTimeOffset.Now)
                                    .ToListAsync();
         }
 
@@ -27,7 +27,7 @@ namespace Kaguya.Database.Repositories
         {
             return await _dbContext.Giveaways
                                    .AsQueryable()
-                                   .Where(x => x.ServerId == serverId && x.Expiration < DateTime.Now)
+                                   .Where(x => x.ServerId == serverId && x.Expiration < DateTimeOffset.Now)
                                    .ToListAsync();
         }
     }

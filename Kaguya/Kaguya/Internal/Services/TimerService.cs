@@ -12,33 +12,33 @@ namespace Kaguya.Internal.Services
 
 	public interface ITimerService
 	{
-		Task<bool> TriggerAtAsync(DateTime when, ITimerReceiver receiver, object payload);
-		Task<bool> TriggerAtAsync(DateTime when, ITimerReceiver receiver);
+		Task<bool> TriggerAtAsync(DateTimeOffset when, ITimerReceiver receiver, object payload);
+		Task<bool> TriggerAtAsync(DateTimeOffset when, ITimerReceiver receiver);
 	}
 
 	public interface ITimerInternal
 	{
-		public Channel<(DateTime when, ITimerReceiver receiver, object payload)> GetChannel();
+		public Channel<(DateTimeOffset when, ITimerReceiver receiver, object payload)> GetChannel();
 	}
 
 	public class TimerService : ITimerService, ITimerInternal
 	{
 		private readonly ILogger<TimerService> _logger;
 
-		private static readonly Channel<(DateTime when, ITimerReceiver receiver, object payload)> _timerChannel =
-			Channel.CreateUnbounded<(DateTime when, ITimerReceiver receiver, object payload)>();
+		private static readonly Channel<(DateTimeOffset when, ITimerReceiver receiver, object payload)> _timerChannel =
+			Channel.CreateUnbounded<(DateTimeOffset when, ITimerReceiver receiver, object payload)>();
 
 		public TimerService(ILogger<TimerService> logger)
 		{
 			_logger = logger;
 		}
 
-		public Channel<(DateTime when, ITimerReceiver receiver, object payload)> GetChannel()
+		public Channel<(DateTimeOffset when, ITimerReceiver receiver, object payload)> GetChannel()
 		{
 			return _timerChannel;
 		}
 
-		public async Task<bool> TriggerAtAsync(DateTime when, ITimerReceiver receiver, object payload)
+		public async Task<bool> TriggerAtAsync(DateTimeOffset when, ITimerReceiver receiver, object payload)
 		{
 			try
 			{
@@ -52,7 +52,7 @@ namespace Kaguya.Internal.Services
 			}
 		}
 
-		public async Task<bool> TriggerAtAsync(DateTime when, ITimerReceiver receiver)
+		public async Task<bool> TriggerAtAsync(DateTimeOffset when, ITimerReceiver receiver)
 		{
 			return await TriggerAtAsync(when, receiver, new { });
 		}

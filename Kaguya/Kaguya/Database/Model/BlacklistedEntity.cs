@@ -22,6 +22,6 @@ namespace Kaguya.Database.Model
 		public string Reason { get; set; }
 
 		[NotMapped]
-		public bool HasExpired => ExpirationTime.HasValue && ExpirationTime.Value < DateTime.Now;
+		public bool HasExpired => ExpirationTime.HasValue && ExpirationTime.Value < DateTimeOffset.Now;
 	}
 }

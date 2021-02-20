@@ -74,7 +74,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 
                 ms.Seek(0, SeekOrigin.Begin);
 
-                await Context.Channel.SendFileAsync(ms, $"Kaguya-Commands-" + DateTime.Now.ToShortDateString().Replace("/", "-") + ".txt");
+                await Context.Channel.SendFileAsync(ms, $"Kaguya-Commands-" + DateTimeOffset.Now.LocalDateTime.ToShortDateString().Replace("/", "-") + ".txt");
             }
         }
         

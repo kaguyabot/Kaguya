@@ -40,14 +40,14 @@ namespace Kaguya.Discord.Commands.OwnerOnly
             }
             else
             {
-                DateTime? expiration = null;
+                DateTimeOffset? expiration = null;
                 if (duration != null)
                 {
                     var parser = new TimeParser(duration);
                     var parsedDuration = parser.ParseTime();
                     if (parsedDuration != TimeSpan.Zero)
                     {
-                        expiration = DateTime.Now.Add(parsedDuration);
+                        expiration = DateTimeOffset.Now.Add(parsedDuration);
                     }
                 }
                 if (Enum.TryParse(type, true, out BlacklistedEntityType entityType))
@@ -84,7 +84,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
                 return;
             }
 
-            match.ExpirationTime = DateTime.Now;
+            match.ExpirationTime = DateTimeOffset.Now;
             await _blacklistedEntityRepository.UpdateAsync(match);
             
             await SendBasicSuccessEmbedAsync($"Unblacklisted entity with ID {id.ToString().AsBold()}");

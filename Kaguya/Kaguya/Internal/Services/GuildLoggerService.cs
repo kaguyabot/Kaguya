@@ -394,7 +394,7 @@ namespace Kaguya.Internal.Services
         
         private static string GetFormattedTimestamp()
         {
-            DateTime d = DateTime.Now;
+            DateTimeOffset d = DateTimeOffset.Now;
             var sb = new StringBuilder();
 
             sb.Append(d.Month.ToString("00") + "-");

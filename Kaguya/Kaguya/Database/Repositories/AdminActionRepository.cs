@@ -40,7 +40,7 @@ namespace Kaguya.Database.Repositories
 			var collection = _dbContext.AdminActions.AsQueryable()
 			                                 .Where(x => x.ActionedUserId == userId &&
 			                                             x.ServerId == serverId &&
-			                                             (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now));
+			                                             (!x.Expiration.HasValue || x.Expiration.Value >= DateTimeOffset.Now));
 
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
@@ -51,7 +51,7 @@ namespace Kaguya.Database.Repositories
 			                                 .Where(x => x.ActionedUserId == userId &&
 			                                             x.ServerId == serverId &&
 			                                             x.Action.Equals(action, StringComparison.OrdinalIgnoreCase) &&
-			                                             (!x.Expiration.HasValue || x.Expiration.Value >= DateTime.Now));
+			                                             (!x.Expiration.HasValue || x.Expiration.Value >= DateTimeOffset.Now));
 
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
@@ -65,7 +65,7 @@ namespace Kaguya.Database.Repositories
 			                             (x.Action == AdminAction.BanAction ||
 			                             x.Action == AdminAction.MuteAction || 
 										 x.Action == AdminAction.ShadowbanAction) &&
-			                             x.Expiration.Value < DateTime.Now)
+			                             x.Expiration.Value < DateTimeOffset.Now)
 			                 .ToListAsync();
 		}
 
@@ -87,7 +87,7 @@ namespace Kaguya.Database.Repositories
 		/// <returns></returns>
 		public async Task ForceExpireAsync(AdminAction value)
 		{
-			value.Expiration = DateTime.Now;
+			value.Expiration = DateTimeOffset.Now;
 			await UpdateAsync(value);
 		}
 
@@ -102,7 +102,7 @@ namespace Kaguya.Database.Repositories
 			for (int i = 0; i < copy.Length; i++)
 			{
 				var item = copy[i];
-				item.Expiration = DateTime.Now;
+				item.Expiration = DateTimeOffset.Now;
 				copy[i] = item;
 			}
 

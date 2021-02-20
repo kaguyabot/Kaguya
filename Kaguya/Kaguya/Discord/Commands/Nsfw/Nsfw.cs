@@ -152,7 +152,7 @@ namespace Kaguya.Discord.Commands.Nsfw
             {
                 server.IsNsfwAllowed = true;
                 server.NsfwAllowedId = Context.User.Id;
-                server.NsfwAllowanceTime = DateTime.Now;
+                server.NsfwAllowanceTime = DateTimeOffset.Now;
                 
                 await SendBasicSuccessEmbedAsync("You have successfully enabled the nsfw " +
                                                  "command set for this server.");

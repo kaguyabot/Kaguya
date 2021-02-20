@@ -18,7 +18,7 @@ namespace Kaguya.Workers
 		private Timer _timer;
 
 		private readonly object _locker = new();
-		private readonly SortedList<DateTime, List<(ITimerReceiver receiver, object payload)>> _events = new();
+		private readonly SortedList<DateTimeOffset, List<(ITimerReceiver receiver, object payload)>> _events = new();
 		
 		public TimerWorker(ITimerService timerService, ILogger<TimerWorker> logger)
 		{
@@ -38,7 +38,7 @@ namespace Kaguya.Workers
 			{
 				await _timerService.GetChannel().Reader.WaitToReadAsync(stoppingToken);
 
-				(DateTime when, ITimerReceiver receiver, object payload) = await _timerService.GetChannel().Reader.ReadAsync(stoppingToken);
+				(DateTimeOffset when, ITimerReceiver receiver, object payload) = await _timerService.GetChannel().Reader.ReadAsync(stoppingToken);
 				lock (_locker)
 				{
 					if (!_events.ContainsKey(when))
@@ -57,7 +57,7 @@ namespace Kaguya.Workers
 		{
 			lock (_locker)
 			{
-				while (_events.Count > 0 && _events.Keys[0] <= DateTime.Now)
+				while (_events.Count > 0 && _events.Keys[0] <= DateTimeOffset.Now)
 				{
 					foreach (var (receiver, payload) in _events[_events.Keys[0]])
 					{

@@ -45,7 +45,7 @@ namespace Kaguya.Discord.Commands.Reference
             else
             {
                 // They must have an upvote value if ineligible to vote.
-                string cooldown = DateTime.Now.Subtract(user.LastUpvoted!.Value).HumanizeTraditionalReadable();
+                string cooldown = DateTimeOffset.Now.Subtract(user.LastUpvoted!.Value).HumanizeTraditionalReadable();
                 topGgSb.AppendLine($"Cooldown: {cooldown.AsBold()}");
             }
 

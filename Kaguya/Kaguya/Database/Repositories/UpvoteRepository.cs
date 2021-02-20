@@ -30,7 +30,7 @@ namespace Kaguya.Database.Repositories
         {
             return await _dbContext.Upvotes
                                    .AsQueryable()
-                                   .Where(x => x.UserId == userId && x.Timestamp > DateTime.Now.Subtract(offset))
+                                   .Where(x => x.UserId == userId && x.Timestamp > DateTimeOffset.Now.Subtract(offset))
                                    .AnyAsync();
         }
 
@@ -49,7 +49,7 @@ namespace Kaguya.Database.Repositories
         {
             // todo: needs testing.
             int count = 0;
-            DateTime dt = DateTime.Now;
+            DateTimeOffset dt = DateTimeOffset.Now;
             var upvotes = (await GetAllUpvotesAsync(userId)).OrderByDescending(x => x.Timestamp);
             foreach (var uv in upvotes)
             {
@@ -78,7 +78,7 @@ namespace Kaguya.Database.Repositories
                                    .AsQueryable()
                                    .Where(x => !x.ReminderSent &&
                                                x.Type.ToLower() != "test" &&
-                                               x.Timestamp < DateTime.Now.AddHours(-12))
+                                               x.Timestamp < DateTimeOffset.Now.AddHours(-12))
                                    .ToListAsync();
         }
     }

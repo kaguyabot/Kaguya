@@ -44,7 +44,7 @@ namespace Kaguya.Internal.Services.Recurring
                 return;
             }
             
-            await _timerService.TriggerAtAsync(DateTime.Now, this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
         }
 
         public async Task HandleTimer(object payload)
@@ -52,12 +52,12 @@ namespace Kaguya.Internal.Services.Recurring
             if (!_client.AllShardsReady())
             {
                 _logger.LogInformation("All shards not ready. Aborting. Retrying in 1 minute");
-                await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(1), this);
+                await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(1), this);
 
                 return;
             }
             
-            await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(15), this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(15), this);
 
             _discordBotListApi ??= GetConfguredApi();
 

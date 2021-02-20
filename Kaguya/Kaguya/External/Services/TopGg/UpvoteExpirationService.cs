@@ -41,12 +41,12 @@ namespace Kaguya.External.Services.TopGg
                 return;
             }
             
-            await _timerService.TriggerAtAsync(DateTime.Now, this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
         }
 
         public async Task HandleTimer(object payload)
         {
-            await _timerService.TriggerAtAsync(DateTime.Now.AddSeconds(15), this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddSeconds(15), this);
 
             if (!_client.AllShardsReady())
             {

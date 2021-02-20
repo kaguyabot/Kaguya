@@ -60,7 +60,7 @@ namespace Kaguya.Database.Repositories
                 RamUsageMegabytes = ramUsage,
                 LatencyMilliseconds = latency,
                 Version = Global.Version,
-                Timestamp = DateTime.Now
+                Timestamp = DateTimeOffset.Now
             };
 
             await InsertAsync(newStats);

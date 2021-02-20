@@ -472,7 +472,7 @@ namespace Kaguya.Workers
                         CommandName = command.Value.GetFullCommandName(),
                         Message = ctx.Message.Content,
                         ExecutedSuccessfully = true,
-                        ExecutionTime = DateTime.Now
+                        ExecutionTime = DateTimeOffset.Now
                     };
                 }
 

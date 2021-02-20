@@ -53,7 +53,7 @@ namespace Kaguya.Discord.Commands.Administration
 		            Action = AdminAction.BanAction,
 		            Reason = reason,
 		            Expiration = null,
-		            Timestamp = DateTime.Now
+		            Timestamp = DateTimeOffset.Now
 	            };
 	            
 	            // Bans the user *and* updates the server admin actions in DB.
@@ -108,7 +108,7 @@ namespace Kaguya.Discord.Commands.Administration
 			                          Action = AdminAction.UnbanAction,
 			                          Reason = reason,
 			                          Expiration = null,
-			                          Timestamp = DateTime.Now
+			                          Timestamp = DateTimeOffset.Now
 		                          };
 
 		        await _adminActionRepository.InsertAsync(adminAction);
@@ -161,8 +161,8 @@ namespace Kaguya.Discord.Commands.Administration
 			        ActionedUserId = user.Id,
 			        Action = AdminAction.BanAction,
 			        Reason = reason,
-			        Expiration = DateTime.Now + parsedTime,
-			        Timestamp = DateTime.Now,
+			        Expiration = DateTimeOffset.Now + parsedTime,
+			        Timestamp = DateTimeOffset.Now,
 			        HasTriggered = false // We specify this value if the user is temporarily actioned. Otherwise, leave it null.
 		        };
 		        

@@ -26,6 +26,6 @@ namespace Kaguya.Database.Model
         public double RamUsageMegabytes { get; init; }
         public int LatencyMilliseconds { get; init; }
         public string Version { get; init; }
-        public DateTime? Timestamp { get; init; }
+        public DateTimeOffset? Timestamp { get; init; }
     }
 }

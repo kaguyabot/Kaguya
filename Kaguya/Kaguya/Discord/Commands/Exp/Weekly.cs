@@ -35,18 +35,18 @@ namespace Kaguya.Discord.Commands.Exp
 
             if (!user.CanGetWeeklyCoins)
             {
-                string diff = (user.LastDailyBonus!.Value - DateTime.Now.AddDays(-7)).HumanizeTraditionalReadable();
+                string diff = (user.LastDailyBonus!.Value - DateTimeOffset.Now.AddDays(-7)).HumanizeTraditionalReadable();
                 await SendBasicErrorEmbedAsync($"Sorry, you must wait {diff.AsBold()} to use this command again.");
                 return;
             }
             
             user.AdjustCoins(COINS_GIVEN);
             user.AdjustExperienceGlobal(EXP_GIVEN);
-            user.LastWeeklyBonus = DateTime.Now;
+            user.LastWeeklyBonus = DateTimeOffset.Now;
 
             await _kaguyaUserRepository.UpdateAsync(user);
             _logger.LogDebug($"User {user.UserId} has received {COINS_GIVEN} coins and {EXP_GIVEN} exp for their weekly bonus. " +
-                             $"They may redeem again at {DateTime.Now.AddDays(7)}.");
+                             $"They may redeem again at {DateTimeOffset.Now.AddDays(7)}.");
 
             var embed = GetBasicSuccessEmbedBuilder("You have claimed your weekly premium bonus!\nYou may claim again in 7 days.\n" +
                                                     $"Bonus: {COINS_GIVEN.ToString("N0").AsBold()} coins and {EXP_GIVEN.ToString("N0").AsBold()} exp.")

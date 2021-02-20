@@ -37,7 +37,7 @@ namespace Kaguya.Database.Repositories
 			user = _dbContext.KaguyaUsers.Add(new KaguyaUser
 			                                {
 				                                UserId = id,
-				                                DateFirstTracked = DateTime.Now
+				                                DateFirstTracked = DateTimeOffset.Now
 			                                }).Entity;
 
 			await _dbContext.SaveChangesAsync();
@@ -111,7 +111,7 @@ namespace Kaguya.Database.Repositories
 		{
 			return await _dbContext.KaguyaUsers.AsQueryable()
 			                       .Where(x => x.PremiumExpiration.HasValue && 
-			                                   x.PremiumExpiration.Value > DateTime.Now)
+			                                   x.PremiumExpiration.Value > DateTimeOffset.Now)
 			                       .Select(x => x.UserId)
 			                       .Distinct()
 			                       .ToListAsync();
@@ -121,8 +121,8 @@ namespace Kaguya.Database.Repositories
 		{
 			return await _dbContext.KaguyaUsers.AsQueryable()
 			                       .Where(x => x.PremiumExpiration.HasValue &&
-			                                   x.PremiumExpiration.Value < DateTime.Now &&
-			                                   x.PremiumExpiration.Value > DateTime.Now.AddDays(-cutoffDays))
+			                                   x.PremiumExpiration.Value < DateTimeOffset.Now &&
+			                                   x.PremiumExpiration.Value > DateTimeOffset.Now.AddDays(-cutoffDays))
 			                       .Select(x => x.UserId)
 			                       .Distinct()
 			                       .ToListAsync();
