@@ -38,6 +38,6 @@ namespace Kaguya.Database.Model
         /// <summary>
         /// When the giveaway expires.
         /// </summary>
-        public DateTime Expiration { get; set; }
+        public DateTimeOffset Expiration { get; set; }
     }
 }

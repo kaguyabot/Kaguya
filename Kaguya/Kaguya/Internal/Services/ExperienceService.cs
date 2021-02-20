@@ -140,7 +140,7 @@ namespace Kaguya.Internal.Services
         
         private bool CanReceiveGlobalExperience()
         {
-            return _user.LastGivenExp < DateTime.Now.Subtract(SpamPreventionWindow);
+            return _user.LastGivenExp < DateTimeOffset.Now.Subtract(SpamPreventionWindow);
         }
         
         private async Task<bool> CanReceiveServerExperienceAsync()
@@ -148,7 +148,7 @@ namespace Kaguya.Internal.Services
             ServerExperience serverExp = await FetchExperienceAsync();
                 
             // Whether the user was given server EXP in the last 2 minutes.
-            return serverExp.LastGivenExp < DateTime.Now.Subtract(SpamPreventionWindow);
+            return serverExp.LastGivenExp < DateTimeOffset.Now.Subtract(SpamPreventionWindow);
         }
 
         private async Task<ServerExperience> FetchExperienceAsync()

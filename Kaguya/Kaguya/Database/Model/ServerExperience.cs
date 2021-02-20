@@ -12,7 +12,7 @@ namespace Kaguya.Database.Model
         [Key, Column(Order = 1)]
         public ulong UserId { get; set; }
         public int Exp { get; private set; }
-        public DateTime? LastGivenExp { get; set; }
+        public DateTimeOffset? LastGivenExp { get; set; }
 
         /// <summary>
         /// Adds the absolute value of <see cref="amount"/> to the current object's <see cref="Exp"/> value.
@@ -21,7 +21,7 @@ namespace Kaguya.Database.Model
         public void AddExp(int amount)
         {
             this.Exp += Math.Abs(amount);
-            this.LastGivenExp = DateTime.Now;
+            this.LastGivenExp = DateTimeOffset.Now;
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace Kaguya.Discord.Commands.Reference
             {
                 UserId = Context.User.Id,
                 Text = text,
-                Expiration = DateTime.Now.Add(parsedTime),
+                Expiration = DateTimeOffset.Now.Add(parsedTime),
                 HasTriggered = false
             };
 

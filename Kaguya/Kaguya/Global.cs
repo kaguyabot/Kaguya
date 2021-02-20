@@ -28,7 +28,7 @@ namespace Kaguya
         public const string DiscordTermsLink = "[Terms of Service](https://discord.com/terms)";
         public const string DiscordCommunityGuidelinesLink = "[Community Guidelines](https://discord.com/guidelines)";
 
-        public static readonly string Version = "4.2.1";
+        public static readonly string Version = "4.2.2";
 
         /// <summary>
         /// The number of shards currently logged into Discord.
@@ -41,7 +41,7 @@ namespace Kaguya
         /// <returns></returns>
         public static string GetUptimeString()
         {
-            return (DateTime.Now - Process.GetCurrentProcess().StartTime).Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day);
+            return (DateTimeOffset.Now - Process.GetCurrentProcess().StartTime).Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day);
         }
 
         public static string GetStartDate() { return Process.GetCurrentProcess().StartTime.ToLocalTime().ToShortDateString().Replace('/', '.'); }

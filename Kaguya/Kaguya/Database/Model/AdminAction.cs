@@ -30,7 +30,7 @@ namespace Kaguya.Database.Model
 		public ulong ActionedUserId { get; init; }
 		public string Action { get; set; }
 		public string Reason { get; set; }
-		public DateTime? Expiration { get; set; }
+		public DateTimeOffset? Expiration { get; set; }
 		// Used if admins "erase history" for some data in their server to keep it from coming up in other commands.
 		public bool IsHidden { get; set; }
 		/// <summary>
@@ -38,6 +38,6 @@ namespace Kaguya.Database.Model
 		/// </summary>
 		public bool IsSystemAction { get; init; }
 		public bool? HasTriggered { get; set; }
-		public DateTime Timestamp { get; set; }
+		public DateTimeOffset Timestamp { get; set; }
 	}
 }

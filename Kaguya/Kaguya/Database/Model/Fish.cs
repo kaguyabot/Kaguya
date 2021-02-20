@@ -28,7 +28,7 @@ namespace Kaguya.Database.Model
         /// <summary>
         /// When this fish was caught.
         /// </summary>
-        public DateTime TimeCaught { get; set; }
+        public DateTimeOffset TimeCaught { get; set; }
         /// <summary>
         /// How much fish exp the user earned.
         /// </summary>

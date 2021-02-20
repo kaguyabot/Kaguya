@@ -29,7 +29,7 @@ namespace Kaguya.Database.Repositories
             server = _dbContext.KaguyaServers.Add(new KaguyaServer
             {
                 ServerId = id,
-                DateFirstTracked = DateTime.Now
+                DateFirstTracked = DateTimeOffset.Now
             }).Entity;
 
             await _dbContext.SaveChangesAsync();

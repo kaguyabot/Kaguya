@@ -60,11 +60,11 @@ namespace Kaguya.Internal.Services.Recurring
             // Puts ourself back in the queue...
             if (_triggeredOnce)
             {
-                await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(15), this);
+                await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(15), this);
             }
             else
             {
-                await _timerService.TriggerAtAsync(DateTime.Now.AddSeconds(10), this);   
+                await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddSeconds(10), this);   
             }
         }
 
@@ -124,7 +124,7 @@ namespace Kaguya.Internal.Services.Recurring
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _timerService.TriggerAtAsync(DateTime.Now, this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
         }
     }
 }

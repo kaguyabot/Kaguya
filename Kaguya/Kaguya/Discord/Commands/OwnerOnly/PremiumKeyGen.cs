@@ -73,7 +73,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
                         sw.Flush();
                         ms.Seek(0, SeekOrigin.Begin);
                         
-                        await Context.User.SendFileAsync(ms, $"{amount}-{timeString}-PremiumKeys-{DateTime.Now:yyyy-mm-dd--hh-mm-ss}.txt");
+                        await Context.User.SendFileAsync(ms, $"{amount}-{timeString}-PremiumKeys-{DateTimeOffset.Now:yyyy-mm-dd--hh-mm-ss}.txt");
                     }
                     catch (Exception e)
                     {

@@ -77,7 +77,7 @@ namespace Kaguya.Discord.Commands.Administration
                 throw new TimeParseException(duration);
             }
             
-            DateTime? muteExpiration = DateTime.Now.Add(parsedDuration);
+            DateTimeOffset? muteExpiration = DateTimeOffset.Now.Add(parsedDuration);
 
             await MuteUserAsync(user, muteExpiration, reason, server);
         }
@@ -143,7 +143,7 @@ namespace Kaguya.Discord.Commands.Administration
             await SendEmbedAsync(embed);
         }
 
-        private async Task MuteUserAsync(SocketGuildUser user, DateTime? expiration, string reason, KaguyaServer server)
+        private async Task MuteUserAsync(SocketGuildUser user, DateTimeOffset? expiration, string reason, KaguyaServer server)
         {
             var adminAction = new AdminAction
             {
@@ -153,7 +153,7 @@ namespace Kaguya.Discord.Commands.Administration
                 Action = AdminAction.MuteAction,
                 Reason = reason,
                 Expiration = expiration,
-                Timestamp = DateTime.Now,
+                Timestamp = DateTimeOffset.Now,
                 HasTriggered = expiration.HasValue ? false : null // We specify this value if the user is temporarily actioned. Otherwise, leave it null.
             };
 
@@ -210,7 +210,7 @@ namespace Kaguya.Discord.Commands.Administration
             await SendEmbedAsync(embed);
         }
 
-        private async Task SendConfirmationMessageAsync(SocketGuildUser user, DateTime? expiration)
+        private async Task SendConfirmationMessageAsync(SocketGuildUser user, DateTimeOffset? expiration)
         {
             IList<AdminAction> currentUserMutes = await GetUnexpiredMutesAsync(user.Id, Context.Guild.Id);
 
@@ -231,10 +231,10 @@ namespace Kaguya.Discord.Commands.Administration
                 return;
             }
             
-            string oldMuteDurationStr = (permanentMute ? "never".AsBold() : longestMute.Expiration.Humanize(false)).Humanize(LetterCasing.Sentence).AsBold();
+            string oldMuteDurationStr = (permanentMute ? "never".AsBold() : longestMute.Expiration.Humanize()).Humanize(LetterCasing.Sentence).AsBold();
             string newMuteDurationStr = (!expiration.HasValue 
                 ? "permanent" 
-                : (expiration.Value - DateTime.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day) + " from now").AsBold();
+                : (expiration.Value - DateTimeOffset.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day) + " from now").AsBold();
 
             string reasonStr = (longestMute.Reason ?? "<No reason provided>").AsItalics();
             
@@ -408,10 +408,10 @@ namespace Kaguya.Discord.Commands.Administration
             return await _adminActionRepository.GetAllUnexpiredAsync(userId, serverId, AdminAction.MuteAction);
         }
         
-        private Embed GetFinalEmbed(SocketGuildUser target, DateTime? expiration, string reason, List<EmbedFieldBuilder> fields)
+        private Embed GetFinalEmbed(SocketGuildUser target, DateTimeOffset? expiration, string reason, List<EmbedFieldBuilder> fields)
         {
             string durationStr = expiration.HasValue 
-                ? $" for {(expiration.Value - DateTime.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day).AsBold()}" 
+                ? $" for {(expiration.Value - DateTimeOffset.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day).AsBold()}" 
                 : string.Empty;
 
             string reasonStr = reason == null ? "<No reason provided>".AsBold() : reason.AsBold();

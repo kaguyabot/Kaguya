@@ -14,6 +14,6 @@ namespace Kaguya.Database.Model
         /// The server id in which this track was favorited in.
         /// </summary>
         public ulong ServerId { get; set; }
-        public DateTime DateAdded { get; set; }
+        public DateTimeOffset DateAdded { get; set; }
     }
 }

@@ -15,6 +15,6 @@ namespace Kaguya.Database.Model
 		public string Message { get; set; }
 		public bool ExecutedSuccessfully { get; set; }
 		public string ErrorMessage { get; set; }
-		public DateTime ExecutionTime { get; set; }
+		public DateTimeOffset ExecutionTime { get; set; }
 	}
 }

@@ -44,7 +44,7 @@ namespace Kaguya.Internal.Services.Recurring
                 return;
             }
             
-            await _timerService.TriggerAtAsync(DateTime.Now, this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
         }
 
         public async Task HandleTimer(object payload)
@@ -52,14 +52,32 @@ namespace Kaguya.Internal.Services.Recurring
             if (!_client.AllShardsReady())
             {
                 _logger.LogInformation("All shards not ready. Aborting. Retrying in 1 minute");
-                await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(1), this);
+                await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(1), this);
 
                 return;
             }
             
-            await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(15), this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(15), this);
 
             _discordBotListApi ??= GetConfguredApi();
+
+            if (_discordBotListApi == null)
+            {
+                _logger.LogWarning("Could not create a successfull connection to top.gg. Statistics will not be posted. " +
+                                   "This warning can be safely ignored by developer contributors");
+
+                return;
+            }
+            
+            var dblBot = await _discordBotListApi.GetMeAsync();
+            
+            if (dblBot == null)
+            {
+                _logger.LogWarning("Could not find current bot on top.gg. Statistics will not be posted. " +
+                                   "This warning can be safely ignored by developer contributors");
+
+                return;
+            }
             
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -68,8 +86,6 @@ namespace Kaguya.Internal.Services.Recurring
 
                 try
                 {
-                    var dblBot = await _discordBotListApi.GetMeAsync();
-
                     int guildCount = curStats.ConnectedServers;
                     int shardCount = curStats.Shards;
                     

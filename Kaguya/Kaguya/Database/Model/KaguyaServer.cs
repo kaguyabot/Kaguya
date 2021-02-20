@@ -23,10 +23,10 @@ namespace Kaguya.Database.Model
 		public ulong? MuteRoleId { get; set; }
 		
 		public ulong? ShadowbanRoleId { get; set; }
-		public DateTime DateFirstTracked { get; set; }
+		public DateTimeOffset DateFirstTracked { get; set; }
 
-		public DateTime? PremiumExpiration { get; set; }
-		public DateTime? NsfwAllowanceTime { get; set; }
+		public DateTimeOffset? PremiumExpiration { get; set; }
+		public DateTimeOffset? NsfwAllowanceTime { get; set; }
 		public bool IsNsfwAllowed { get; set; } = false;
 		public ulong? NsfwAllowedId { get; set; }
 
@@ -54,7 +54,7 @@ namespace Kaguya.Database.Model
 		/// <summary>
 		/// Whether or not the server currently has an active premium subscription.
 		/// </summary>
-		public bool IsPremium => PremiumExpiration.HasValue && PremiumExpiration.Value > DateTime.Now;
+		public bool IsPremium => PremiumExpiration.HasValue && PremiumExpiration.Value > DateTimeOffset.Now;
 
 		public AntiRaidConfig AntiRaid { get; set; }
 	}

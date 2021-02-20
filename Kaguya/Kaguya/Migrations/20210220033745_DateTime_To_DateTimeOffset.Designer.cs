@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210220033745_DateTime_To_DateTimeOffset")]
+    partial class DateTime_To_DateTimeOffset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -437,7 +439,7 @@ namespace Kaguya.Migrations
                     b.Property<int>("Shards")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("Timestamp")
+                    b.Property<DateTime?>("Timestamp")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("Users")
@@ -495,7 +497,7 @@ namespace Kaguya.Migrations
                     b.Property<DateTimeOffset?>("LastRatelimited")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTimeOffset?>("LastUpvoted")
+                    b.Property<DateTime?>("LastUpvoted")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTimeOffset?>("LastWeeklyBonus")

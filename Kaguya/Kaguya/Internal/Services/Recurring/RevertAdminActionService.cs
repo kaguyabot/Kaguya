@@ -43,12 +43,12 @@ namespace Kaguya.Internal.Services.Recurring
                 return;
             }
 
-            await _timerService.TriggerAtAsync(DateTime.Now, this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
         }
 
         public async Task HandleTimer(object payload)
         {
-            await _timerService.TriggerAtAsync(DateTime.Now.AddSeconds(5), this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddSeconds(5), this);
 
             using (IServiceScope scope = _serviceProvider.CreateScope())
             {

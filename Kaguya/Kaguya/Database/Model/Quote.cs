@@ -25,6 +25,6 @@ namespace Kaguya.Database.Model
         /// <summary>
         /// When the quote was recorded.
         /// </summary>
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
     }
 }

@@ -22,13 +22,13 @@ namespace Kaguya.Database.Repositories
 
         public async Task<IList<Reminder>> GetAllToDeliverAsync(ulong userId)
         {
-            return await _dbContext.Reminders.AsQueryable().Where(x => x.UserId == userId && x.Expiration < DateTime.Now && !x.HasTriggered).ToListAsync();
+            return await _dbContext.Reminders.AsQueryable().Where(x => x.UserId == userId && x.Expiration < DateTimeOffset.Now && !x.HasTriggered).ToListAsync();
         }
 
         public async Task<IList<Reminder>> GetAllToDeliverAsync()
         {
             // We cannot use x.NeedsDelivery for this query.
-            return await _dbContext.Reminders.AsQueryable().Where(x => x.Expiration < DateTime.Now && !x.HasTriggered).ToListAsync();
+            return await _dbContext.Reminders.AsQueryable().Where(x => x.Expiration < DateTimeOffset.Now && !x.HasTriggered).ToListAsync();
         }
     }
 }

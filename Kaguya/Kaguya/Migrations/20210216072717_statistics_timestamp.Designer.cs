@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210216072717_statistics_timestamp")]
+    partial class statistics_timestamp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ActionedUserId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<DateTimeOffset?>("Expiration")
+                    b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool?>("HasTriggered")
@@ -50,7 +52,7 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<DateTimeOffset>("Timestamp")
+                    b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -121,7 +123,7 @@ namespace Kaguya.Migrations
                     b.Property<int>("EntityType")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("ExpirationTime")
+                    b.Property<DateTime?>("ExpirationTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Reason")
@@ -147,7 +149,7 @@ namespace Kaguya.Migrations
                     b.Property<bool>("ExecutedSuccessfully")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTimeOffset>("ExecutionTime")
+                    b.Property<DateTime>("ExecutionTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Message")
@@ -187,7 +189,7 @@ namespace Kaguya.Migrations
                     b.Property<string>("SongId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<DateTimeOffset>("DateAdded")
+                    b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime(6)");
 
                     b.Property<ulong>("ServerId")
@@ -248,7 +250,7 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<DateTimeOffset>("TimeCaught")
+                    b.Property<DateTime>("TimeCaught")
                         .HasColumnType("datetime(6)");
 
                     b.Property<ulong>("UserId")
@@ -288,7 +290,7 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<DateTimeOffset>("Timestamp")
+                    b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime(6)");
 
                     b.Property<ulong>("UserId")
@@ -323,7 +325,7 @@ namespace Kaguya.Migrations
                     b.Property<int?>("Exp")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("Expiration")
+                    b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Item")
@@ -361,7 +363,7 @@ namespace Kaguya.Migrations
                     b.Property<bool>("CustomGreetingIsEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTimeOffset>("DateFirstTracked")
+                    b.Property<DateTime>("DateFirstTracked")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsCurrentlyPurgingMessages")
@@ -376,7 +378,7 @@ namespace Kaguya.Migrations
                     b.Property<ulong?>("MuteRoleId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<DateTimeOffset?>("NsfwAllowanceTime")
+                    b.Property<DateTime?>("NsfwAllowanceTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<ulong?>("NsfwAllowedId")
@@ -385,7 +387,7 @@ namespace Kaguya.Migrations
                     b.Property<int>("PraiseCooldown")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("PremiumExpiration")
+                    b.Property<DateTime?>("PremiumExpiration")
                         .HasColumnType("datetime(6)");
 
                     b.Property<ulong?>("ShadowbanRoleId")
@@ -416,9 +418,6 @@ namespace Kaguya.Migrations
                     b.Property<int>("CommandsExecuted")
                         .HasColumnType("int");
 
-                    b.Property<int>("ConnectedServers")
-                        .HasColumnType("int");
-
                     b.Property<int>("Fish")
                         .HasColumnType("int");
 
@@ -437,7 +436,7 @@ namespace Kaguya.Migrations
                     b.Property<int>("Shards")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("Timestamp")
+                    b.Property<DateTime?>("Timestamp")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("Users")
@@ -459,13 +458,13 @@ namespace Kaguya.Migrations
                     b.Property<int>("ActiveRateLimit")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("BlacklistExpiration")
+                    b.Property<DateTime?>("BlacklistExpiration")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("Coins")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("DateFirstTracked")
+                    b.Property<DateTime>("DateFirstTracked")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("ExpNotificationType")
@@ -477,28 +476,25 @@ namespace Kaguya.Migrations
                     b.Property<int>("GlobalExp")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("LastBlacklisted")
+                    b.Property<DateTime?>("LastBlacklisted")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTimeOffset?>("LastDailyBonus")
+                    b.Property<DateTime?>("LastDailyBonus")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTimeOffset?>("LastFished")
+                    b.Property<DateTime?>("LastFished")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTimeOffset?>("LastGivenExp")
+                    b.Property<DateTime?>("LastGivenExp")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTimeOffset?>("LastGivenRep")
+                    b.Property<DateTime?>("LastGivenRep")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTimeOffset?>("LastRatelimited")
+                    b.Property<DateTime?>("LastRatelimited")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTimeOffset?>("LastUpvoted")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTimeOffset?>("LastWeeklyBonus")
+                    b.Property<DateTime?>("LastWeeklyBonus")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int?>("OsuGameMode")
@@ -507,7 +503,7 @@ namespace Kaguya.Migrations
                     b.Property<long?>("OsuId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTimeOffset?>("PremiumExpiration")
+                    b.Property<DateTime?>("PremiumExpiration")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("RateLimitWarnings")
@@ -587,7 +583,7 @@ namespace Kaguya.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("Expiration")
+                    b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Key")
@@ -624,7 +620,7 @@ namespace Kaguya.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<DateTimeOffset>("Timestamp")
+                    b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime(6)");
 
                     b.Property<ulong>("UserId")
@@ -665,7 +661,7 @@ namespace Kaguya.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<DateTimeOffset>("Expiration")
+                    b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("HasTriggered")
@@ -698,7 +694,7 @@ namespace Kaguya.Migrations
                     b.Property<string>("Reason")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<DateTimeOffset>("TimeGiven")
+                    b.Property<DateTime>("TimeGiven")
                         .HasColumnType("datetime(6)");
 
                     b.Property<ulong>("UserId")
@@ -740,7 +736,7 @@ namespace Kaguya.Migrations
                     b.Property<int>("Exp")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("LastGivenExp")
+                    b.Property<DateTime?>("LastGivenExp")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("ServerId", "UserId");
@@ -766,7 +762,7 @@ namespace Kaguya.Migrations
                     b.Property<bool>("ReminderSent")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTimeOffset>("Timestamp")
+                    b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Type")

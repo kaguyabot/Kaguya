@@ -82,7 +82,7 @@ namespace Kaguya.Discord.Commands.Reference
                 var duration = new TimeSpan(0, 0, match.LengthInSeconds);
                 
                 // Modify PremiumKey
-                match.Expiration = DateTime.Now.Add(duration);
+                match.Expiration = DateTimeOffset.Now.Add(duration);
                 match.UserId = Context.User.Id;
                 match.ServerId = Context.Guild.Id;
                 
@@ -90,12 +90,12 @@ namespace Kaguya.Discord.Commands.Reference
                 user.AdjustCoins(additionalCoins);
                 user.TotalDaysPremium += (int)duration.TotalDays;
                 user.TotalPremiumRedemptions++;
-                user.PremiumExpiration = user.PremiumExpiration <= DateTime.Now || !user.PremiumExpiration.HasValue 
+                user.PremiumExpiration = user.PremiumExpiration <= DateTimeOffset.Now || !user.PremiumExpiration.HasValue 
                     ? match.Expiration 
                     : user.PremiumExpiration.Value.Add(duration);
                 
                 // Modify Server
-                server.PremiumExpiration = server.PremiumExpiration < DateTime.Now || !server.PremiumExpiration.HasValue 
+                server.PremiumExpiration = server.PremiumExpiration < DateTimeOffset.Now || !server.PremiumExpiration.HasValue 
                     ? match.Expiration 
                     : server.PremiumExpiration.Value.Add(duration);
 
@@ -104,8 +104,8 @@ namespace Kaguya.Discord.Commands.Reference
                 await _kaguyaServerRepository.UpdateAsync(server);
                 await _premiumKeyRepository.UpdateAsync(match);
 
-                TimeSpan userPremiumRemaining = user.PremiumExpiration.Value - DateTime.Now;
-                TimeSpan serverPremiumRemaining = server.PremiumExpiration.Value - DateTime.Now;
+                TimeSpan userPremiumRemaining = user.PremiumExpiration.Value - DateTimeOffset.Now;
+                TimeSpan serverPremiumRemaining = server.PremiumExpiration.Value - DateTimeOffset.Now;
                 
                 _logger.LogInformation($"User {Context.User.Id} has redeemed a Kaguya Premium key in guild {Context.Guild.Id}: duration = {match.HumanizedLength}.");
                 

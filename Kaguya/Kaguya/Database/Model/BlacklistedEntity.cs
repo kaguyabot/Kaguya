@@ -18,10 +18,10 @@ namespace Kaguya.Database.Model
 		public ulong EntityId { get; set; }
 		public BlacklistedEntityType EntityType { get; set; }
 		// null = forever muwahahaha
-		public DateTime? ExpirationTime { get; set; }
+		public DateTimeOffset? ExpirationTime { get; set; }
 		public string Reason { get; set; }
 
 		[NotMapped]
-		public bool HasExpired => ExpirationTime.HasValue && ExpirationTime.Value < DateTime.Now;
+		public bool HasExpired => ExpirationTime.HasValue && ExpirationTime.Value < DateTimeOffset.Now;
 	}
 }

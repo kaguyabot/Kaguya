@@ -52,9 +52,9 @@ namespace Kaguya.Discord.Commands.Games
                 return;
             }
 
-            if (user.LastFished > DateTime.Now - cooldown)
+            if (user.LastFished > DateTimeOffset.Now - cooldown)
             {
-	            await SendBasicErrorEmbedAsync($"Please wait " + (user.LastFished.Value - DateTime.Now.Subtract(cooldown))
+	            await SendBasicErrorEmbedAsync($"Please wait " + (user.LastFished.Value - DateTimeOffset.Now.Subtract(cooldown))
 	                                                             .Humanize(1, minUnit:  TimeUnit.Millisecond, maxUnit: TimeUnit.Second)
 	                                                             .AsBold() + " before fishing again.");
 
@@ -71,7 +71,7 @@ namespace Kaguya.Discord.Commands.Games
                 UserId = Context.User.Id,
                 ServerId = Context.Guild.Id,
                 ChannelId = Context.Channel.Id,
-                TimeCaught = DateTime.Now,
+                TimeCaught = DateTimeOffset.Now,
                 ExpValue = fishValue.exp,
                 CoinValue = fishValue.coins,
                 CostOfPlay = coinsUsed,
@@ -88,7 +88,7 @@ namespace Kaguya.Discord.Commands.Games
             int netCoins = fish.CoinValue - coinsUsed;
             user.AdjustCoins(netCoins);
             user.AdjustFishExperience(fish.ExpValue);
-            user.LastFished = DateTime.Now;
+            user.LastFished = DateTimeOffset.Now;
             await _kaguyaUserRepository.UpdateAsync(user);
 
             string prefix = rarity switch

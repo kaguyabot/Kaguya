@@ -52,7 +52,7 @@ namespace Kaguya.Web.Controllers
                     UserId = ulong.Parse(payload.UserId),
                     BotId = ulong.Parse(payload.BotId),
                     IsWeekend = payload.IsWeekend,
-                    Timestamp = DateTime.Now,
+                    Timestamp = DateTimeOffset.Now,
                     QueryParams = payload.Query,
                     ReminderSent = false,
                     Type = payload.Type

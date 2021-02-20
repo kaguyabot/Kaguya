@@ -46,7 +46,7 @@ namespace Kaguya.Discord.Commands.Exp
 
             if (!curUser.CanGiveRep)
             {
-                var difference = curUser.LastGivenRep - DateTime.Now.AddHours(-24);
+                var difference = curUser.LastGivenRep - DateTimeOffset.Now.AddHours(-24);
                 await SendBasicErrorEmbedAsync($"Sorry, you need to wait " + difference.Value.Humanize(2).AsBold() + 
                                                " before giving rep again.");
             }
@@ -56,11 +56,11 @@ namespace Kaguya.Discord.Commands.Exp
                 {
                     UserId = nextUser.UserId,
                     GivenBy = curUser.UserId,
-                    TimeGiven = DateTime.Now,
+                    TimeGiven = DateTimeOffset.Now,
                     Reason = reason
                 };
                 
-                curUser.LastGivenRep = DateTime.Now;
+                curUser.LastGivenRep = DateTimeOffset.Now;
 
                 await _kaguyaUserRepository.UpdateAsync(curUser);
                 await _kaguyaUserRepository.UpdateAsync(nextUser);
@@ -90,7 +90,7 @@ namespace Kaguya.Discord.Commands.Exp
 
                 string byText = guildRecentMatch != null ? guildRecentMatch.ToString() : recentMatch.UserId.ToString();
 
-                TimeSpan lastRepped = DateTime.Now - recentMatch.TimeGiven;
+                TimeSpan lastRepped = DateTimeOffset.Now - recentMatch.TimeGiven;
                 embed.Footer = new EmbedFooterBuilder
                 {
                     Text = $"Last given rep {lastRepped.Humanize()} ago by {byText}"

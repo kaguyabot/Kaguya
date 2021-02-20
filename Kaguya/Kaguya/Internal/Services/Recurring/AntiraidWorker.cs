@@ -27,7 +27,7 @@ namespace Kaguya.Internal.Services.Recurring
         private readonly SilentSysActions _sysActions;
         private readonly IAntiraidProcessorInternal _arProcessor;
         
-        private readonly ConcurrentDictionary<ulong, ConcurrentQueue<(DateTime userJoinTime, ulong userId)>> _userIdCache = new();
+        private readonly ConcurrentDictionary<ulong, ConcurrentQueue<(DateTimeOffset userJoinTime, ulong userId)>> _userIdCache = new();
         private readonly ConcurrentDictionary<ulong, AntiRaidConfig> _configsCache = new();
         
         public AntiraidWorker(ILogger<AntiraidWorker> logger, IServiceProvider provider, ITimerService timerService, 
@@ -45,7 +45,7 @@ namespace Kaguya.Internal.Services.Recurring
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // First execution
-            await _timerService.TriggerAtAsync(DateTime.Now.AddHours(1), this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddHours(1), this);
             
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -72,7 +72,7 @@ namespace Kaguya.Internal.Services.Recurring
                 // Populating caches
                 if (!_userIdCache.ContainsKey(data.ServerId))
                 {
-                    var stack = new ConcurrentQueue<(DateTime userJoinTime, ulong userId)>();
+                    var stack = new ConcurrentQueue<(DateTimeOffset userJoinTime, ulong userId)>();
                     stack.Enqueue((data.JoinTime, data.UserId));
                     
                     _userIdCache.TryAdd(data.ServerId, stack);
@@ -143,10 +143,10 @@ namespace Kaguya.Internal.Services.Recurring
                             ActionedUserId = data.UserId,
                             Action = null,
                             Reason = "Automatic server protection (Kaguya Anti-Raid)",
-                            Expiration = curConfig.PunishmentLength.HasValue ? DateTime.Now.Add(curConfig.PunishmentLength.Value) : null,
+                            Expiration = curConfig.PunishmentLength.HasValue ? DateTimeOffset.Now.Add(curConfig.PunishmentLength.Value) : null,
                             IsHidden = false,
                             IsSystemAction = true,
-                            Timestamp = DateTime.Now
+                            Timestamp = DateTimeOffset.Now
                         };
                         
                         KaguyaEvents.OnAntiraidTrigger(adminAction, user);
@@ -249,12 +249,12 @@ namespace Kaguya.Internal.Services.Recurring
             }
 
             // Re-queue for garbage collection every 15 minutes.
-            await _timerService.TriggerAtAsync(DateTime.Now.AddMinutes(15), this);
+            await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(15), this);
         }
 
-        private void PruneOldCache(ConcurrentQueue<(DateTime userJoinTime, ulong userId)> element, uint windowLength)
+        private void PruneOldCache(ConcurrentQueue<(DateTimeOffset userJoinTime, ulong userId)> element, uint windowLength)
         {
-            var threshold = DateTime.Now.AddSeconds(-windowLength);
+            var threshold = DateTimeOffset.Now.AddSeconds(-windowLength);
             while(element.TryPeek(out var userJoinData) && userJoinData.userJoinTime < threshold)
             {
                 if (element.TryDequeue(out var _))
@@ -318,7 +318,7 @@ namespace Kaguya.Internal.Services.Recurring
             await _antiraidChannel.Writer.WriteAsync(new AntiraidData
             {
                 ServerId = serverId,
-                JoinTime = DateTime.Now,
+                JoinTime = DateTimeOffset.Now,
                 UserId = userId
             });
         }
