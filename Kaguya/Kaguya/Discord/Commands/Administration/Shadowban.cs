@@ -226,7 +226,7 @@ namespace Kaguya.Discord.Commands.Administration
                 return;
             }
             
-            string oldShadowbanDurationStr = (permanentShadowbans ? "never".AsBold() : longestShadowban.Expiration.Humanize(false)).Humanize(LetterCasing.Sentence).AsBold();
+            string oldShadowbanDurationStr = (permanentShadowbans ? "never".AsBold() : longestShadowban.Expiration?.Humanize()).Humanize(LetterCasing.Sentence).AsBold();
             string newShadowbanDurationStr = (!expiration.HasValue 
                 ? "permanent" 
                 : (expiration.Value - DateTime.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day) + " from now").AsBold();

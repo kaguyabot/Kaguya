@@ -112,7 +112,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
             return $"ID: {entity.EntityId.ToString().AsBold()}\n" +
                    $"Type: {entity.EntityType.Humanize(LetterCasing.Title).AsBold()}\n" +
                    $"Reason: {entity.Reason ?? "<No reason>".AsBold()}\n" +
-                   $"Expiration: {entity.ExpirationTime?.Humanize(false).AsBold() ?? "Permanent".AsBold()}";
+                   $"Expiration: {entity.ExpirationTime?.Humanize().AsBold() ?? "Permanent".AsBold()}";
         }
     }
 }

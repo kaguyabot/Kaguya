@@ -11,7 +11,7 @@ namespace Kaguya.Database.Model
         public long Id { get; set; }
         public ulong UserId { get; set; }
         public ulong GivenBy { get; set; }
-        public DateTime TimeGiven { get; set; }
+        public DateTimeOffset TimeGiven { get; set; }
         public string Reason { get; set; }
     }
 }

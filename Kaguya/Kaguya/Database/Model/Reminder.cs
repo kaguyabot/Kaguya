@@ -24,7 +24,7 @@ namespace Kaguya.Database.Model
         /// <summary>
         /// When (in the future) this reminder needs to be sent to the user.
         /// </summary>
-        public DateTime Expiration { get; set; }
+        public DateTimeOffset Expiration { get; set; }
         /// <summary>
         /// Whether the reminder has been sent to the user.
         /// </summary>

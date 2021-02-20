@@ -47,26 +47,26 @@ namespace Kaguya.Database.Model
 		public int RateLimitWarnings { get; set; } = 0;
 
 		public int TotalUpvotes { get; set; } = 0;
-		public DateTime DateFirstTracked { get; set; }
+		public DateTimeOffset DateFirstTracked { get; set; }
 
-		public DateTime? LastGivenExp { get; private set; }
+		public DateTimeOffset? LastGivenExp { get; private set; }
 
-		public DateTime? LastDailyBonus { get; set; }
+		public DateTimeOffset? LastDailyBonus { get; set; }
 
-		public DateTime? LastWeeklyBonus { get; set; }
+		public DateTimeOffset? LastWeeklyBonus { get; set; }
 
-		public DateTime? LastGivenRep { get; set; }
+		public DateTimeOffset? LastGivenRep { get; set; }
 
-		public DateTime? LastRatelimited { get; set; }
+		public DateTimeOffset? LastRatelimited { get; set; }
 
 		// blub blub >))'>
-		public DateTime? LastFished { get; set; }
+		public DateTimeOffset? LastFished { get; set; }
 
-		public DateTime? LastBlacklisted { get; set; }
+		public DateTimeOffset? LastBlacklisted { get; set; }
 		public DateTime? LastUpvoted { get; set; }
 
-		public DateTime? PremiumExpiration { get; set; }
-		public DateTime? BlacklistExpiration { get; set; }
+		public DateTimeOffset? PremiumExpiration { get; set; }
+		public DateTimeOffset? BlacklistExpiration { get; set; }
 		
 		/// <summary>
 		/// If a user wants to receive level-up notifications, what type should it be?

@@ -24,7 +24,7 @@ namespace Kaguya.Database.Model
         /// <summary>
         /// When the vote was made
         /// </summary>
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
         /// <summary>
         /// Any extra arguments provided by the top.gg webhook - can be null.
         /// </summary>

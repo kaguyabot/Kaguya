@@ -14,6 +14,6 @@ namespace Kaguya.Database.Model
         public int AmountBet { get; set; }
         public int AmountRewarded { get; set; }
         public bool IsWinner { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
     }
 }

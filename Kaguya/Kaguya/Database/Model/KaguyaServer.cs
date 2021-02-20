@@ -23,10 +23,10 @@ namespace Kaguya.Database.Model
 		public ulong? MuteRoleId { get; set; }
 		
 		public ulong? ShadowbanRoleId { get; set; }
-		public DateTime DateFirstTracked { get; set; }
+		public DateTimeOffset DateFirstTracked { get; set; }
 
-		public DateTime? PremiumExpiration { get; set; }
-		public DateTime? NsfwAllowanceTime { get; set; }
+		public DateTimeOffset? PremiumExpiration { get; set; }
+		public DateTimeOffset? NsfwAllowanceTime { get; set; }
 		public bool IsNsfwAllowed { get; set; } = false;
 		public ulong? NsfwAllowedId { get; set; }
 

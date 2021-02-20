@@ -231,7 +231,7 @@ namespace Kaguya.Discord.Commands.Administration
                 return;
             }
             
-            string oldMuteDurationStr = (permanentMute ? "never".AsBold() : longestMute.Expiration.Humanize(false)).Humanize(LetterCasing.Sentence).AsBold();
+            string oldMuteDurationStr = (permanentMute ? "never".AsBold() : longestMute.Expiration.Humanize()).Humanize(LetterCasing.Sentence).AsBold();
             string newMuteDurationStr = (!expiration.HasValue 
                 ? "permanent" 
                 : (expiration.Value - DateTime.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day) + " from now").AsBold();
