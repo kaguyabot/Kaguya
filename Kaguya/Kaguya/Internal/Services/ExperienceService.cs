@@ -214,7 +214,7 @@ namespace Kaguya.Internal.Services
             if (exp < 64)
                 return 0;
 	        
-            return Math.Sqrt((exp / 8) - 8);
+            return Math.Sqrt((exp / 8) - 7);
         }
 
         public static int CalculateExpFromLevel(double level)
