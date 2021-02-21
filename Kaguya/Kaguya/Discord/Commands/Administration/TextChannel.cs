@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -18,8 +19,8 @@ namespace Kaguya.Discord.Commands.Administration
     {
         private readonly ILogger<TextChannel> _logger;
         private const int MAX_LENGTH = 100;
-
-        private static readonly char[] _invalidChars = "123456789abcdefghijklmnopqrstuvwxyz".ToCharArray();
+                                                    // MUST ALL BE LOWER CASE!!
+        private static readonly char[] _validChars = "1234567890abcdefghijklmnopqrstuvwxyz_ -".ToCharArray();
 
         public TextChannel(ILogger<TextChannel> logger) : base(logger) { _logger = logger; }
 
@@ -42,7 +43,9 @@ namespace Kaguya.Discord.Commands.Administration
             
             try
             {
-                await Context.Guild.CreateTextChannelAsync(name);
+                var restChannel = await Context.Guild.CreateTextChannelAsync(name);
+
+                await SendBasicSuccessEmbedAsync($"Successfully created channel {restChannel.Mention}.");
             }
             catch (Exception e)
             {
@@ -103,7 +106,7 @@ namespace Kaguya.Discord.Commands.Administration
             await SendBasicSuccessEmbedAsync($"Renamed " + $"#{channel.Name}".AsBold() + $" to {newName.AsBold()}");
         }
         
-        private static bool IsValidTextChannelName(string name, out string error)
+        public static bool IsValidTextChannelName(string name, out string error)
         {
             ReplaceSpaces(ref name);
 
@@ -115,18 +118,23 @@ namespace Kaguya.Discord.Commands.Administration
                 return false;
             }
 
-            foreach (char c in _invalidChars)
+            if (!name.Any())
             {
-                if (!name.Contains(c))
-                {
-                    error = "Your channel name contains invalid characters. " +
-                            "Please type the new channel name, like this: " +
-                            "`my channel` or `my-channel`. Only alphanumeric latin characters " +
-                            "are permitted (no symbols).";
+                error = "You cannot specify an empty channel name.";
 
-                    return false;
-                }
+                return false;
             }
+
+            if (name.ToLower().Any(x => !_validChars.Contains(x)))
+            {
+                error = "Your channel name contains invalid characters. " +
+                        "Please type the new channel name, like this: " +
+                        "`my channel` or `my-channel`. Only alphanumeric latin characters " +
+                        "are permitted (no symbols).";
+
+                return false;
+            }
+
 
             error = null;
             return true;
