@@ -67,13 +67,21 @@ namespace Kaguya.Internal.Events
 
         public void InitEvents()
         {
-            var eventImplementations = new EventImplementations(_implementationsLogger, _antiraidService, _client);
+            var eventImplementations = new EventImplementations(_implementationsLogger, _antiraidService, _client, _lavaNode);
             
-            _logger.LogDebug("Kaguya Events initialized.");
+            _logger.LogDebug("Kaguya Events initialized");
             
             _client.ShardReady += ClientOnShardReady;
             _client.UserJoined += eventImplementations.OnUserJoinedAsync;
             _client.JoinedGuild += eventImplementations.SendOwnerDmAsync;
+            
+            // Dispose any possible player on join / leave events to be 
+            // absolutely sure there isn't a lingering player that would otherwise 
+            // prevent the bot from playing music in that server.
+            _client.JoinedGuild += async s => await eventImplementations.DisposeMusicPlayerAsync(s, true);
+            _client.LeftGuild += async s => await eventImplementations.DisposeMusicPlayerAsync(s, false);
+            _client.UserVoiceStateUpdated += async (user, voiceState, voiceState2) => 
+                await eventImplementations.ProtectPlayerIntegrityOnDisconnectAsync(user, voiceState, voiceState2);
 
             _client.MessageDeleted += _guildLoggerService.LogMessageDeletedAsync;
             _client.MessageUpdated += _guildLoggerService.LogMessageUpdatedAsync;
