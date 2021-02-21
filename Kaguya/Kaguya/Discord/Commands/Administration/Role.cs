@@ -10,6 +10,7 @@ using Humanizer;
 using Interactivity;
 using Interactivity.Confirmation;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Overrides.Extensions;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Extensions.DiscordExtensions;
@@ -408,14 +409,15 @@ namespace Kaguya.Discord.Commands.Administration
         [Summary("Deletes all roles in this server.")]
         public async Task DeleteAllRolesInGuildCommand()
         {
-            Confirmation request = new ConfirmationBuilder()
-                                   .WithContent(new PageBuilder().WithDescription("Are you sure that you wish to " + 
-                                                                           "delete ALL roles in this server?".AsBoldItalics() + "\n" + 
-                                                                           "This cannot be undone!".AsBoldUnderlined())
-                                                                 .WithColor(KaguyaColors.LightYellow))
-                                   .Build();
-
-            var result = await _interactivityService.SendConfirmationAsync(request, Context.Channel);
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.LightYellow)
+            {
+                Description = "Are you sure that you wish to " +
+                              "delete ALL roles in this server?".AsBoldItalics() +
+                              "\n" +
+                              "This cannot be undone!".AsBoldUnderlined()
+            };
+            
+            var result = await _interactivityService.SendConfirmationAsync(embed, Context.Channel);
 
             if (result.Value)
             {

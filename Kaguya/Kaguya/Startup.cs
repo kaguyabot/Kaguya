@@ -83,6 +83,8 @@ namespace Kaguya
 			services.AddScoped<WarnConfigurationRepository>();
 
 			services.AddSingleton<GuildLoggerService>();
+			services.AddSingleton<GreetingService>();
+			
 			services.AddSingleton<SilentSysActions>();
 
 			services.AddSingleton<AudioQueueLocker>();
