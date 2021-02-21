@@ -127,9 +127,9 @@ namespace Kaguya.Discord.Commands.Configuration
                     _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, 
                         deleteDelay: TimeSpan.FromSeconds(15), embed: embed.Build());
                 }
-
-                await _serverRepository.UpdateAsync(server);
             }
+            
+            await _serverRepository.UpdateAsync(server);
         }
         
         [Command("-setchannel", RunMode = RunMode.Async)]
@@ -143,8 +143,6 @@ namespace Kaguya.Discord.Commands.Configuration
             bool hadPrevious = oldChannel.HasValue;
             
             server.CustomGreetingTextChannelId = textChannel.Id;
-            await _serverRepository.UpdateAsync(server);
-
             string response = $"Linked greetings to {textChannel.Mention}";
 
             if (hadPrevious && oldChannel.Value != Context.Channel.Id)
@@ -169,8 +167,6 @@ namespace Kaguya.Discord.Commands.Configuration
                 if (result.IsSuccess)
                 {
                     server.CustomGreetingIsEnabled = true;
-                    await _serverRepository.UpdateAsync(server);
-                    
                     await SendBasicSuccessEmbedAsync("Greeting messages enabled. They will be sent in " +
                                                      $"{textChannel.Mention} when new members join the server.");
                 }
@@ -180,6 +176,8 @@ namespace Kaguya.Discord.Commands.Configuration
                                                      $"`{server.CommandPrefix}greeting -toggle` command.");
                 }
             }
+            
+            await _serverRepository.UpdateAsync(server);
         }
         
         [Command("-clearmsg")]
