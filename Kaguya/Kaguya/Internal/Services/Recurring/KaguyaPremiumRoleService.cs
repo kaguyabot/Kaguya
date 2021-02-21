@@ -60,13 +60,14 @@ namespace Kaguya.Internal.Services.Recurring
                     // by other contributors.
                     var socketGuild = _client.GetGuild(SUPPORT_GUILD_ID);
 
+#if !DEBUG
                     if (socketGuild == null)
                     {
                         _logger.LogError("Socket guild was null!!");
 
                         return;
                     }
-
+#endif
                     var user = socketGuild.GetUser(id);
 
                     if (user == null)
