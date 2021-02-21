@@ -11,6 +11,7 @@ using Interactivity;
 using Interactivity.Confirmation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Overrides.Extensions;
 using Kaguya.Discord.Parsers;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
@@ -240,23 +241,24 @@ namespace Kaguya.Discord.Commands.Administration
             
             SocketGuildUser oldMod = Context.Guild.GetUser(longestMute.ModeratorId);
 
-            Confirmation request = new ConfirmationBuilder()
-                                   .WithContent(
-                                       new PageBuilder()
-                                           .WithDescription($"This user is already muted. Would you like to overwrite their current mute? Details of " +
-                                                            $"the current mute are described below:\n" +
-                                                            $"- Expiration: [current: {oldMuteDurationStr} | new: {newMuteDurationStr}]\n" +
-                                                            $"- Reason: {reasonStr}\n" +
-                                                            $"- Moderator: " +
-                                                            (oldMod?.Mention ?? "Not found".AsItalics()) + "\n\n" +
-                                                            "Response will expire in 60 seconds, defaulting to ✅.".AsItalics() + "\n" +
-                                                            "Note: Overwriting does not erase mute history.".AsItalics() + "\n\n" +
-                                                            $"✅ = Replace old duration with new. (default)\n" +
-                                                            $"❌ = Don't replace old. User will be unmuted at latest possible time.")
-                                           .WithColor(KaguyaColors.Magenta))
-                                   .Build();
-
-            var result = await _interactivityService.SendConfirmationAsync(request, Context.Channel, TimeSpan.FromSeconds(60));
+            var overwriteEmbed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
+            {
+                Description = $"This user is already muted. Would you like to overwrite their current mute? Details of " +
+                              $"the current mute are described below:\n" +
+                              $"- Expiration: [current: {oldMuteDurationStr} | new: {newMuteDurationStr}]\n" +
+                              $"- Reason: {reasonStr}\n" +
+                              $"- Moderator: " +
+                              (oldMod?.Mention ?? "Not found".AsItalics()) +
+                              "\n\n" +
+                              "Response will expire in 60 seconds, defaulting to ✅.".AsItalics() +
+                              "\n" +
+                              "Note: Overwriting does not erase mute history.".AsItalics() +
+                              "\n\n" +
+                              $"✅ = Replace old duration with new. (default)\n" +
+                              $"❌ = Don't replace old. User will be unmuted at latest possible time."
+            };
+                
+            var result = await _interactivityService.SendConfirmationAsync(overwriteEmbed, Context.Channel, TimeSpan.FromSeconds(60));
 
             // If the user wants to overwrite...
             if (result.Value)

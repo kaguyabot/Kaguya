@@ -11,6 +11,7 @@ using Interactivity;
 using Interactivity.Confirmation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Overrides.Extensions;
 using Kaguya.Discord.Parsers;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
@@ -235,23 +236,24 @@ namespace Kaguya.Discord.Commands.Administration
             
             SocketGuildUser oldMod = Context.Guild.GetUser(longestShadowban.ModeratorId);
 
-            Confirmation request = new ConfirmationBuilder()
-                                   .WithContent(
-                                       new PageBuilder()
-                                           .WithDescription($"This user is already shadowbanned. Would you like to overwrite their current shadowban? Details of " +
-                                                            $"the current shadowbans are described below:\n" +
-                                                            $"- Expiration: [current: {oldShadowbanDurationStr} | new: {newShadowbanDurationStr}]\n" +
-                                                            $"- Reason: {reasonStr}\n" +
-                                                            $"- Moderator: " +
-                                                            (oldMod?.Mention ?? "Not found".AsItalics()) + "\n\n" +
-                                                            "Response will expire in 60 seconds, defaulting to ✅.".AsItalics() + "\n" +
-                                                            "Note: Overwriting does not erase shadowban history.".AsItalics() + "\n\n" +
-                                                            $"✅ = Replace old duration with new. (default)\n" +
-                                                            $"❌ = Don't replace old. User will be unshadowbanned at latest possible time.")
-                                           .WithColor(KaguyaColors.Magenta))
-                                   .Build();
-
-            var result = await _interactivityService.SendConfirmationAsync(request, Context.Channel, TimeSpan.FromSeconds(60));
+            var overwriteEmbed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
+            {
+                Description = $"This user is already shadowbanned. Would you like to overwrite their current shadowban? Details of " +
+                              $"the current shadowbans are described below:\n" +
+                              $"- Expiration: [current: {oldShadowbanDurationStr} | new: {newShadowbanDurationStr}]\n" +
+                              $"- Reason: {reasonStr}\n" +
+                              $"- Moderator: " +
+                              (oldMod?.Mention ?? "Not found".AsItalics()) +
+                              "\n\n" +
+                              "Response will expire in 60 seconds, defaulting to ✅.".AsItalics() +
+                              "\n" +
+                              "Note: Overwriting does not erase shadowban history.".AsItalics() +
+                              "\n\n" +
+                              $"✅ = Replace old duration with new. (default)\n" +
+                              $"❌ = Don't replace old. User will be unshadowbanned at latest possible time."
+            };
+            
+            var result = await _interactivityService.SendConfirmationAsync(overwriteEmbed, Context.Channel, TimeSpan.FromSeconds(60));
 
             // If the user wants to overwrite...
             if (result.Value)
