@@ -2,6 +2,8 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Interactivity;
+using Kaguya.Discord;
 using Kaguya.Internal.Extensions.DiscordExtensions;
 using Microsoft.Extensions.Logging;
 using Victoria;
@@ -15,11 +17,14 @@ namespace Kaguya.Internal.Music
         private readonly ConcurrentDictionary<ulong, CancellationTokenSource> _disconnectTokens;
         private readonly LavaNode _lavaNode;
         private readonly ILogger<AudioService> _logger;
+        private readonly InteractivityService _interactivityService;
 
-        public AudioService(LavaNode lavaNode, ILogger<AudioService> logger)
+        public AudioService(LavaNode lavaNode, ILogger<AudioService> logger, 
+            InteractivityService interactivityService)
         {
             _lavaNode = lavaNode;
             _logger = logger;
+            _interactivityService = interactivityService;
             _disconnectTokens = new ConcurrentDictionary<ulong, CancellationTokenSource>();
         }
 
@@ -90,7 +95,8 @@ namespace Kaguya.Internal.Music
             await args.Player.PlayAsync(queueable);
 
             var npEmbed = MusicEmbeds.GetNowPlayingEmbedForTrack(queueable, true);
-            await args.Player.TextChannel.SendMessageAsync(embed: npEmbed);
+            _interactivityService.DelayedSendMessageAndDeleteAsync(args.Player.TextChannel, null,
+                TimeSpan.FromSeconds(10), embed: npEmbed);
         }
         
         private async Task InitiateDisconnectAsync(LavaPlayer player, TimeSpan timeSpan)
@@ -109,10 +115,22 @@ namespace Kaguya.Internal.Music
             await Task.Delay(timeSpan, value.Token);
 
             if (value.IsCancellationRequested)
+            {
                 return;
+            }
 
             if (player.PlayerState == PlayerState.Playing)
+            {
                 return;
+            }
+
+            var dcEmbed = new KaguyaEmbedBuilder(KaguyaColors.LightYellow)
+            {
+                Description = "🎵 No more songs in queue, disconnecting!"
+            };
+
+            _interactivityService.DelayedSendMessageAndDeleteAsync(player.TextChannel,
+                deleteDelay: TimeSpan.FromSeconds(10), embed: dcEmbed.Build());
 
             await _lavaNode.LeaveAsync(player.VoiceChannel);
         }
