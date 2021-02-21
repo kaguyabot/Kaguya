@@ -40,8 +40,8 @@ namespace Kaguya.Discord.Commands.Configuration
                  "Paramaters must be in all caps, otherwise they will not work.\n\n" +
                  "__**Message Parameters:**__\n" +
                  "- `{USERMENTION}` -> Mentions the user\n" +
-                 "- `{MEMBERCOUNT}` -> The count of members in your server, formatted as `1st`, `2nd`, `3rd`, `4th`\n" +
-                 "- `{SERVERNAME}` -> The name of this server")]
+                 "- `{MEMBERCOUNT}` -> The count of members in the server, formatted as `1st`, `2nd`, `3rd`, `4th`\n" +
+                 "- `{SERVERNAME}` -> The name of the server")]
         [Remarks("<message>")]
         [Example("Welcome {USERMENTION} to {SERVERNAME}, you are the {MEMBERCOUNT} member!", ExampleStringFormat.CodeblockMultiLine)]
         public async Task GreetingSetMessageCommandAsync([Remainder] string message)
