@@ -36,6 +36,7 @@ namespace Kaguya.Discord.Commands.Configuration
         [Command("-setmsg", RunMode = RunMode.Async)]
         [Summary("Allows you to set the custom greeting message for your server. This message " +
                  "will be displayed to new people when they join your server for the first time. " +
+                 "Greeting messages will not be sent for bots or webhooks." +
                  "Optional paramaterized options may also be specified in your greeting message. " +
                  "Paramaters must be in all caps, otherwise they will not work.\n\n" +
                  "__**Message Parameters:**__\n" +

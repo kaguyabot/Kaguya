@@ -19,6 +19,7 @@ namespace Kaguya.Internal.Events
         private readonly AudioService _audioService;
         private readonly ILogger<EventImplementations> _implementationsLogger;
         private readonly GuildLoggerService _guildLoggerService;
+        private readonly GreetingService _greetingService;
         private readonly ILogger<KaguyaEvents> _logger;
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Kaguya.Internal.Events
 
         public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService,
             LavaNode lavaNode, AudioService audioService, ILogger<EventImplementations> implementationsLogger,
-            GuildLoggerService guildLoggerService)
+            GuildLoggerService guildLoggerService, GreetingService greetingService)
         {
             _logger = logger;
             _client = client;
@@ -63,6 +64,7 @@ namespace Kaguya.Internal.Events
             _audioService = audioService;
             _implementationsLogger = implementationsLogger;
             _guildLoggerService = guildLoggerService;
+            _greetingService = greetingService;
         }
 
         public void InitEvents()
@@ -73,6 +75,8 @@ namespace Kaguya.Internal.Events
             
             _client.ShardReady += ClientOnShardReady;
             _client.UserJoined += eventImplementations.OnUserJoinedAsync;
+            _client.UserJoined += _greetingService.SendGreetingAsync;
+            
             _client.JoinedGuild += eventImplementations.SendOwnerDmAsync;
 
             _client.MessageDeleted += _guildLoggerService.LogMessageDeletedAsync;
