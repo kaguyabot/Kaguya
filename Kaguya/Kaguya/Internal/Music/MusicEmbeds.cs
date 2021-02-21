@@ -53,7 +53,7 @@ namespace Kaguya.Internal.Music
             }
 
             return new KaguyaEmbedBuilder(Color.DarkTeal)
-                   .WithTitle("🔀 Kaguya Music Queue")
+                   .WithTitle("🗒️ Kaguya Music Queue")
                    .WithDescription(descSb.ToString())
                    .Build();
         }
