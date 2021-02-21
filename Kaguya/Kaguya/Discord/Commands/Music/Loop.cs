@@ -30,7 +30,8 @@ namespace Kaguya.Discord.Commands.Music
         [Summary("Allows looping of the currently playing track. Default amount is 1, " +
                  "but if you want to repeat a song more than once, you can " +
                  "specify how many times you want to repeat the song using the " +
-                 "`amount` parameter.\n\n" +
+                 "`amount` parameter. Looped tracks are enqueued immediately after " +
+                 "the currently playing song.\n\n" +
                  "The `amount` parameter must be between 1 and 10.")]
         [Remarks("[amount]")] // Delete if no remarks needed.
         public async Task LoopMusicCommandAsync(int amount = 1)
