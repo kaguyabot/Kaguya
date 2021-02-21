@@ -43,9 +43,9 @@ namespace Kaguya.Discord
 
         protected async Task<RestUserMessage> SendBasicEmbedAsync(string description, Color color, bool mentionUser = true) => await SendEmbedAsync(GetBasicEmbedBuilder(description, color, mentionUser));
 
-        protected EmbedBuilder GetBasicErrorEmbedBuilder(string description, bool mentionUser = true) => GetBasicEmbedBuilder(description, KaguyaColors.Red, mentionUser);
+        protected EmbedBuilder GetBasicErrorEmbedBuilder(string description, bool mentionUser = true) => GetBasicEmbedBuilder("⛔ " + description, KaguyaColors.Red, mentionUser);
 
-        protected EmbedBuilder GetBasicSuccessEmbedBuilder(string description, bool mentionUser = true) => GetBasicEmbedBuilder(description, KaguyaColors.Green, mentionUser);
+        protected EmbedBuilder GetBasicSuccessEmbedBuilder(string description, bool mentionUser = true) => GetBasicEmbedBuilder("👍 " + description, KaguyaColors.Green, mentionUser);
 
         protected EmbedBuilder GetBasicEmbedBuilder(string description, Color color, bool mentionUser = true) => new KaguyaEmbedBuilder(color)
             .WithDescription(mentionUser ? Context.User.Mention + " " + description : description);
