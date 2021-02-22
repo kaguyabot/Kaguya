@@ -212,7 +212,9 @@ namespace Kaguya.Internal.Services
         public static double CalculateLevel(int exp)
         {
             if (exp < 64)
+            {
                 return 0;
+            }
 	        
             return Math.Sqrt((exp / 8) - 7);
         }
@@ -232,8 +234,7 @@ namespace Kaguya.Internal.Services
         /// <returns></returns>
         public static double CalculatePercentToNextLevel(double level) {
             double percentThrough = level - Math.Truncate(level);
-            double percentLeft = 1.0 - percentThrough;
-            return percentLeft * 100.0;
+            return percentThrough * 100.0;
         }
     }
 }
