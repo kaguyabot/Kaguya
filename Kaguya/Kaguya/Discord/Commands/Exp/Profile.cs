@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Exp
 {
-    [Module(CommandModule.Games)]
+    [Module(CommandModule.Reference)]
     [Group("profile")]
     [Alias("p")]
     public class Profile : KaguyaBase<Profile>
