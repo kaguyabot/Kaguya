@@ -5,6 +5,7 @@ namespace Kaguya.Internal.PrimitiveExtensions
     public static class MathExtensions
     {
         public static int ToFloor(this double d) => (int) Math.Floor(d);
+        public static int ToFloor(this decimal d) => (int) Math.Floor(d);
         /// <summary>
         /// Formats the <see cref="num"/> into a format as follows:
         ///
