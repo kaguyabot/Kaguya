@@ -10,6 +10,7 @@ using Humanizer;
 using Interactivity;
 using Interactivity.Confirmation;
 using Kaguya.Database.Repositories;
+using Kaguya.Discord.Overrides.Extensions;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Extensions.DiscordExtensions;
@@ -56,7 +57,9 @@ namespace Kaguya.Discord.Commands.Administration
 
         [Command("-remove")]
         [Alias("-rem", "-r")]
-        [Summary("Removes a role from a user. If the role name has spaces, wrap it in \"quotation marks.\"")]
+        [Summary("Removes a role from a user. If the role name has spaces, wrap it in \"quotation marks.\"\n\n" +
+                 "If you encounter any \"403 Forbidden\" errors, you need to move " +
+                 "my 'Kaguya' role above any other roles in the heirarchy and try again.")]
         [Remarks("<role> <user>")]
         public async Task RemoveRoleCommand(SocketRole role, SocketGuildUser guildUser)
         {
@@ -110,7 +113,9 @@ namespace Kaguya.Discord.Commands.Administration
         
         [Command("-removelist")]
         [Alias("-remlist", "-reml", "-rl")]
-        [Summary("Removes a list of roles from the user. If any roles have spaces, wrap each of them in \"quotation marks\".")]
+        [Summary("Removes a list of roles from the user. If any roles have spaces, wrap each of them in \"quotation marks\".\n\n" +
+                 "If you encounter any \"403 Forbidden\" errors, you need to move " +
+                 "my 'Kaguya' role above any other roles in the heirarchy and try again.")]
         [Remarks("<user> <role 1> [...]")]
         public async Task RemoveRoleCommand(SocketGuildUser guildUser, params SocketRole[] roles)
         {
@@ -162,7 +167,9 @@ namespace Kaguya.Discord.Commands.Administration
         [Alias("-a")]
         [Summary("Mass-assigns a role to a single user or a list of users. If any users are not found, this command " +
                  "will not apply the role to any users and will need to be re-run. If a user has a space in their name, use \"quotation marks\" " +
-                 "or mention them.")]
+                 "or mention them.\n\n" +
+                 "If you encounter any \"403 Forbidden\" errors, you need to move " +
+                 "my 'Kaguya' role above any other roles in the heirarchy and try again.")]
         [Remarks("<role> <user> {...}")]
         public async Task AssignRoleCommand(SocketRole role, params SocketGuildUser[] users)
         {
@@ -341,7 +348,9 @@ namespace Kaguya.Discord.Commands.Administration
         [Command("-delete")]
         [Alias("-d")]
         [Summary("Deletes a role or list of roles from the server. If a role name has spaces, " +
-                 "wrap it in \"quotation marks\".")]
+                 "wrap it in \"quotation marks\".\n\n" +
+                 "If you encounter any \"403 Forbidden\" errors, you need to move " +
+                 "my 'Kaguya' role above any other roles in the heirarchy and try again.")]
         [Remarks("<role> [role] [...]")]
         public async Task DeleteRoleCommand(params SocketRole[] roles)
         {
@@ -405,17 +414,20 @@ namespace Kaguya.Discord.Commands.Administration
         [Restriction(ModuleRestriction.PremiumServer)]
         [RequireUserPermission(GuildPermission.Administrator)]
         [Command("-deleteall", RunMode = RunMode.Async)]
-        [Summary("Deletes all roles in this server.")]
+        [Summary("Deletes all roles in this server.\n" +
+                 "If you encounter any \"403 Forbidden\" errors, you need to move " +
+                 "my 'Kaguya' role above any other roles in the heirarchy and try again.")]
         public async Task DeleteAllRolesInGuildCommand()
         {
-            Confirmation request = new ConfirmationBuilder()
-                                   .WithContent(new PageBuilder().WithDescription("Are you sure that you wish to " + 
-                                                                           "delete ALL roles in this server?".AsBoldItalics() + "\n" + 
-                                                                           "This cannot be undone!".AsBoldUnderlined())
-                                                                 .WithColor(KaguyaColors.LightYellow))
-                                   .Build();
-
-            var result = await _interactivityService.SendConfirmationAsync(request, Context.Channel);
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.LightYellow)
+            {
+                Description = "Are you sure that you wish to " +
+                              "delete ALL roles in this server?".AsBoldItalics() +
+                              "\n" +
+                              "This cannot be undone!".AsBoldUnderlined()
+            };
+            
+            var result = await _interactivityService.SendConfirmationAsync(embed, Context.Channel);
 
             if (result.Value)
             {
@@ -462,7 +474,9 @@ namespace Kaguya.Discord.Commands.Administration
         [Restriction(ModuleRestriction.PremiumServer)]
         [RequireUserPermission(GuildPermission.Administrator)]
         [Command("-deleteunused")]
-        [Summary("Deletes all unused roles from the server. These are roles that are not assigned to any users.")]
+        [Summary("Deletes all unused roles from the server. These are roles that are not assigned to any users.\n\n" +
+                 "If you encounter any \"403 Forbidden\" errors, you need to move " +
+                 "my 'Kaguya' role above any other roles in the heirarchy and try again.")]
         public async Task DeleteUnusedRolesCommand()
         {
             var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
@@ -559,7 +573,9 @@ namespace Kaguya.Discord.Commands.Administration
                  "with quotation marks. If the **new name** has spaces, do not wrap it with quotation marks.\n\n")]
         [Remarks("<role> <new name>")]
         [Example("penguins birds that can't fly")]
-        [Example("\"birds that can't fly\" ice chicken")]
+        [Example("\"birds that can't fly\" ice chicken\n\n" +
+                 "If you encounter any \"403 Forbidden\" errors, you need to move " +
+                 "my 'Kaguya' role above any other roles in the heirarchy and try again.")]
         public async Task RenameRoleCommand(SocketRole role, [Remainder]string newName)
         {
             try

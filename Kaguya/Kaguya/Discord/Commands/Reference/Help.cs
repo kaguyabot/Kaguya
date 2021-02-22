@@ -387,7 +387,8 @@ namespace Kaguya.Discord.Commands.Reference
 
                 remarks = newRemarks;
             }
-            
+
+            (int moduleIndex, int descriptionIndex, int usageIndex) embedIndicies = new(0, 1, 2);
             var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
             {
                 Title = title,
@@ -396,19 +397,19 @@ namespace Kaguya.Discord.Commands.Reference
                     new EmbedFieldBuilder
                     {
                         IsInline = true,
-                        Name = "Module",
+                        Name = "📂 Module",
                         Value = module
                     },
                     new EmbedFieldBuilder
                     {
                         IsInline = false,
-                        Name = "Description",
+                        Name = "📝 Description",
                         Value = description
                     },
                     new EmbedFieldBuilder
                     {
                         IsInline = false,
-                        Name = "Usage",
+                        Name = "⌨️ Usage",
                         Value = remarks
                     }
                 }
@@ -419,30 +420,36 @@ namespace Kaguya.Discord.Commands.Reference
                 embed.Fields.Insert(0, new EmbedFieldBuilder
                 {
                     IsInline = false,
-                    Name = "Required Permissions",
+                    Name = "🙅‍♀️ Required Permissions",
                     Value = requiredPermissions
                 });
+
+                embedIndicies.moduleIndex++;
+                embedIndicies.descriptionIndex++;
+                embedIndicies.usageIndex++;
             }
 
             if (!string.IsNullOrWhiteSpace(restrictions))
             {
-                embed.Fields.Insert(1, new EmbedFieldBuilder
+                embed.Fields.Insert(0, new EmbedFieldBuilder
                 {
                     IsInline = false,
-                    Name = "Restrictions",
+                    Name = "📜 Restrictions",
                     Value = restrictions
                 });
+                
+                embedIndicies.moduleIndex++;
+                embedIndicies.descriptionIndex++;
+                embedIndicies.usageIndex++;
             }
 
             if (!string.IsNullOrWhiteSpace(examples))
             {
-                EmbedFieldBuilder usageField = embed.Fields.FirstOrDefault(x => x.Name == "Usage");
-                int usageIndex = embed.Fields.IndexOf(usageField);
-                int examplesIndex = usageIndex + 1;
+                int examplesIndex = embedIndicies.usageIndex + 1;
                 
                 embed.Fields.Insert(examplesIndex, new EmbedFieldBuilder
                 {
-                    Name = "Examples",
+                    Name = "📢 Examples",
                     Value = examples
                 });
             }
@@ -454,7 +461,7 @@ namespace Kaguya.Discord.Commands.Reference
                 embed.AddField(new EmbedFieldBuilder
                 {
                     IsInline = false,
-                    Name = "Aliases",
+                    Name = "🔖 Aliases",
                     Value = otherAliases.Humanize(x => $"`{prefix}{x}`\n")
                 });
             }
@@ -464,7 +471,7 @@ namespace Kaguya.Discord.Commands.Reference
                 embed.AddField(new EmbedFieldBuilder
                 {
                     IsInline = false,
-                    Name = "Sub Commands",
+                    Name = "🗃️ Sub Commands",
                     Value = ChopSubcommandLines(subCommands)
                 });
             }

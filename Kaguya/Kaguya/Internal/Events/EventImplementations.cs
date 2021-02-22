@@ -8,6 +8,7 @@ using Kaguya.Discord;
 using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Internal.Services.Recurring;
 using Microsoft.Extensions.Logging;
+using Victoria;
 
 namespace Kaguya.Internal.Events
 {
@@ -19,13 +20,15 @@ namespace Kaguya.Internal.Events
         private readonly ILogger<EventImplementations> _logger;
         private readonly IAntiraidService _arService;
         private readonly DiscordShardedClient _client;
+        private readonly LavaNode _lavaNode;
 
         public EventImplementations(ILogger<EventImplementations> logger, IAntiraidService arService,
-            DiscordShardedClient client)
+            DiscordShardedClient client, LavaNode lavaNode)
         {
             _logger = logger;
             _arService = arService;
             _client = client;
+            _lavaNode = lavaNode;
         }
 
         /// <summary>
@@ -113,6 +116,58 @@ namespace Kaguya.Internal.Events
             {
                 var dmChannel = await user.GetOrCreateDMChannelAsync();
                 await dmChannel.SendMessageAsync(embed: voteEmbed);
+            }
+            catch (Exception)
+            {
+                //
+            }
+        }
+
+        /// <summary>
+        /// Disposes any active music player for a particular <see cref="SocketGuild"/>.
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="join">Whether this method was triggered by a guild join event. Should be
+        /// false if the opposite is true. Should be null if invoking from elsewhere within the program.
+        /// </param>
+        /// <returns></returns>
+        public async Task DisposeMusicPlayerAsync(SocketGuild arg, bool? join)
+        {
+            if (_lavaNode.TryGetPlayer(arg, out var player))
+            {
+                try
+                {
+                    await _lavaNode.LeaveAsync(player.VoiceChannel);
+                    await player.DisposeAsync();
+                    _logger.LogInformation($"Guild {arg.Id} had an active music player. " +
+                                           $"It has been properly disposed of.");
+                }
+                catch (Exception)
+                {
+                    //
+                }
+            }
+        }
+
+        /// <summary>
+        /// Disconnects the player from the voice channel the bot was disconnected from. This is to
+        /// protect against lingering players from hanging around in a server and blocking new
+        /// song queues. This can happen if the bot is force disconnected from a voice channel.
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        /// <returns></returns>
+        public async Task ProtectPlayerIntegrityOnDisconnectAsync(SocketUser arg1, SocketVoiceState arg2, SocketVoiceState arg3)
+        {
+            if (arg1.Id != _client.CurrentUser.Id || arg3.VoiceChannel != null)
+            {
+                return;
+            }
+
+            try
+            {
+                await _lavaNode.LeaveAsync(arg2.VoiceChannel ?? arg3.VoiceChannel);
             }
             catch (Exception)
             {

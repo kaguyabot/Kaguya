@@ -34,9 +34,22 @@ namespace Kaguya.Internal.Music
 
             if (currentlyPlayingTrack != null)
             {
+                string trackDurCur, trackDurTotal;
+
+                if (currentlyPlayingTrack.Duration.TotalMinutes > 60)
+                {
+                    trackDurCur = currentlyPlayingTrack.Position.ToString("hh\\:mm\\:ss");
+                    trackDurTotal = currentlyPlayingTrack.Duration.ToString("hh\\:mm\\:ss");
+                }
+                else
+                {
+                    trackDurCur = currentlyPlayingTrack.Position.ToString("mm\\:ss");
+                    trackDurTotal = currentlyPlayingTrack.Duration.ToString("mm\\:ss");
+                }
+                
                 descSb.AppendLine("Now Playing:\n".AsBold() +
                                   $"Title: {currentlyPlayingTrack.Title.AsBold()} " +
-                                  $"[{currentlyPlayingTrack.Position:mm\\:ss} / {currentlyPlayingTrack.Duration:mm\\:ss}]\n\n" +
+                                  $"[{trackDurCur} / {trackDurTotal}]\n\n" +
                                   $"Up Next ⬇️");
             }
 
@@ -53,7 +66,7 @@ namespace Kaguya.Internal.Music
             }
 
             return new KaguyaEmbedBuilder(Color.DarkTeal)
-                   .WithTitle("🔀 Kaguya Music Queue")
+                   .WithTitle("🗒️ Kaguya Music Queue")
                    .WithDescription(descSb.ToString())
                    .Build();
         }

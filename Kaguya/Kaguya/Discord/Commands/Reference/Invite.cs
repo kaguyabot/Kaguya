@@ -3,6 +3,9 @@ using Kaguya.Internal.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Kaguya.Internal.Enums;
+using Kaguya.Internal.Extensions.DiscordExtensions;
+using Kaguya.Options;
+using Microsoft.Extensions.Options;
 
 namespace Kaguya.Discord.Commands.Reference
 {
@@ -11,15 +14,30 @@ namespace Kaguya.Discord.Commands.Reference
     public class Invite : KaguyaBase<Invite>
     {
         private readonly ILogger<Invite> _logger;
-
-        public Invite(ILogger<Invite> logger) : base(logger) { _logger = logger; }
+        private readonly IOptions<AdminConfigurations> _adminConfig;
+        public Invite(ILogger<Invite> logger, IOptions<AdminConfigurations> adminConfig) : base(logger)
+        {
+            _logger = logger;
+            _adminConfig = adminConfig;
+        }
 
         [Command]
         [Summary("Displays an invitation URL for Kaguya. You can use this to add Kaguya to your " +
                  "Discord servers.")]
         public async Task InviteCommand()
         {
-            await SendBasicSuccessEmbedAsync($"[Here you go!]({Global.InviteUrl})");
+            ulong ownerId = _adminConfig.Value.OwnerId;
+            ulong curUserId = Context.User.Id;
+
+            if (ownerId == curUserId)
+            {
+                await SendBasicSuccessEmbedAsync($"Invite Kaguya".AsBold() + $"\n\n[Here you go!]({Global.InviteUrl})\n" +
+                                                 $"[Development]({Global.LocalDebugInviteUrl})", false);
+            }
+            else
+            {
+                await SendBasicSuccessEmbedAsync($"Invite Kaguya".AsBold() + $"\n\n[Here you go!]({Global.InviteUrl})");
+            }
         }
     }
 }

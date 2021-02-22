@@ -44,6 +44,7 @@ namespace Kaguya.Database.Model
 		public string CustomGreeting { get; set; }
 
 		public bool CustomGreetingIsEnabled { get; set; } = false;
+		public ulong? CustomGreetingTextChannelId { get; set; }
 
 		public bool LevelAnnouncementsEnabled { get; set; } = true;
 		/// <summary>

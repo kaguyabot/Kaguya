@@ -214,7 +214,7 @@ namespace Kaguya.Internal.Services
             if (exp < 64)
                 return 0;
 	        
-            return Math.Sqrt((exp / 8) - 8);
+            return Math.Sqrt((exp / 8) - 7);
         }
 
         public static int CalculateExpFromLevel(double level)
@@ -224,8 +224,9 @@ namespace Kaguya.Internal.Services
 
         public static double CalculatePercentToNextLevel(double level, int exp)
         {
-            int baseExp = CalculateExpFromLevel(level);
-            int nextExp = CalculateExpFromLevel(level + 1);
+            int levelFloored = level.ToFloor();
+            int baseExp = CalculateExpFromLevel(levelFloored);
+            int nextExp = CalculateExpFromLevel(levelFloored + 1);
             int difference = nextExp - baseExp;
             int remaining = nextExp - exp;
 

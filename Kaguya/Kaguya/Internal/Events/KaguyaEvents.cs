@@ -19,6 +19,7 @@ namespace Kaguya.Internal.Events
         private readonly AudioService _audioService;
         private readonly ILogger<EventImplementations> _implementationsLogger;
         private readonly GuildLoggerService _guildLoggerService;
+        private readonly GreetingService _greetingService;
         private readonly ILogger<KaguyaEvents> _logger;
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Kaguya.Internal.Events
 
         public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService,
             LavaNode lavaNode, AudioService audioService, ILogger<EventImplementations> implementationsLogger,
-            GuildLoggerService guildLoggerService)
+            GuildLoggerService guildLoggerService, GreetingService greetingService)
         {
             _logger = logger;
             _client = client;
@@ -63,17 +64,28 @@ namespace Kaguya.Internal.Events
             _audioService = audioService;
             _implementationsLogger = implementationsLogger;
             _guildLoggerService = guildLoggerService;
+            _greetingService = greetingService;
         }
 
         public void InitEvents()
         {
-            var eventImplementations = new EventImplementations(_implementationsLogger, _antiraidService, _client);
+            var eventImplementations = new EventImplementations(_implementationsLogger, _antiraidService, _client, _lavaNode);
             
-            _logger.LogDebug("Kaguya Events initialized.");
+            _logger.LogDebug("Kaguya Events initialized");
             
             _client.ShardReady += ClientOnShardReady;
             _client.UserJoined += eventImplementations.OnUserJoinedAsync;
+            _client.UserJoined += _greetingService.SendGreetingAsync;
+            
             _client.JoinedGuild += eventImplementations.SendOwnerDmAsync;
+            
+            // Dispose any possible player on join / leave events to be 
+            // absolutely sure there isn't a lingering player that would otherwise 
+            // prevent the bot from playing music in that server.
+            _client.JoinedGuild += async s => await eventImplementations.DisposeMusicPlayerAsync(s, true);
+            _client.LeftGuild += async s => await eventImplementations.DisposeMusicPlayerAsync(s, false);
+            _client.UserVoiceStateUpdated += async (user, voiceState, voiceState2) => 
+                await eventImplementations.ProtectPlayerIntegrityOnDisconnectAsync(user, voiceState, voiceState2);
 
             _client.MessageDeleted += _guildLoggerService.LogMessageDeletedAsync;
             _client.MessageUpdated += _guildLoggerService.LogMessageUpdatedAsync;

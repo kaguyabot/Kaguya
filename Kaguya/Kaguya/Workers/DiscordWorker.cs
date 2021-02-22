@@ -516,11 +516,12 @@ namespace Kaguya.Workers
 
                         try
                         {
-                            string cmdString = $"{server.CommandPrefix}help {command.Value.GetFullCommandName()}".AsBold();
+                            string cmdString = $"{server.CommandPrefix}{command.Value.GetFullCommandName()}".AsBold();
+                            string helpCmdString = $"{server.CommandPrefix}help {command.Value.GetFullCommandName()}".AsBold();
                             Embed embed = new KaguyaEmbedBuilder(KaguyaColors.Red)
-                                          .WithDescription($"{ctx.User.Mention} There was an error executing the command {cmdString}.\n" +
-                                                           $"Error Reason: {result.ErrorReason.AsBold()}\n" +
-                                                           $"Please use {cmdString} for this command's documentation.")
+                                          .WithDescription($"{ctx.User.Mention} ⛔ Command Error: {cmdString}.\n" +
+                                                           $"🗒️ Error Reason: {result.ErrorReason.AsBold()}\n" +
+                                                           $"💡 Please use {helpCmdString} for this command's documentation.")
                                           .Build();
 
                             await ctx.Channel.SendMessageAsync(embed: embed);

@@ -65,13 +65,11 @@ namespace Kaguya.Database.Repositories
 		public async Task<int> FetchExperienceRankAsync(ulong id)
 		{
 			KaguyaUser match = await GetOrCreateAsync(id);
-			
-			// todo: Revisit. Current method is inefficient.
-			return (await _dbContext.KaguyaUsers
+
+			return (await _dbContext.KaguyaUserExperienceRanks
 			                        .AsQueryable()
-			                        .OrderByDescending(x => x.GlobalExp)
-			                        .ToListAsync())
-				.IndexOf(match) + 1;
+			                        .Where(x => x.UserId == match.UserId)
+			                        .FirstOrDefaultAsync()).Rank;
 		}
 
 		public async Task<long> CountCoinsAsync()
