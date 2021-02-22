@@ -34,7 +34,7 @@ namespace Kaguya.Internal.Services
                 KaguyaServer server = await kaguyaServerRepository.GetOrCreateAsync(user.Guild.Id);
                 SocketTextChannel channel = user.Guild.GetTextChannel(server.CustomGreetingTextChannelId.GetValueOrDefault());
            
-                if (channel == null)
+                if (channel == null && server.CustomGreetingTextChannelId != null)
                 {
                     _logger.LogWarning($"Failed to send greeting in guild {user.Guild.Id}. Text " +
                                        $"channel was null. Disabling to suppress warnings.");
