@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord;
 using Kaguya.Internal.Events;
 using Kaguya.Web.Contracts;
 using Kaguya.Web.Options;

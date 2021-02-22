@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using DiscordBotsList.Api;
 using Kaguya.Database.Repositories;
-using Kaguya.Discord.Options;
 using Kaguya.Internal.Extensions.DiscordExtensions;
-using Kaguya.Options;
 using Kaguya.Web.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

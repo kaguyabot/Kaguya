@@ -8,7 +8,6 @@ using Discord.WebSocket;
 using Humanizer;
 using Humanizer.Localisation;
 using Interactivity;
-using Interactivity.Confirmation;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Overrides.Extensions;

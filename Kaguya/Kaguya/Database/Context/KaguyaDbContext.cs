@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kaguya.Database.Context
 {
+	// ReSharper disable once PartialTypeWithSinglePart
 	public partial class KaguyaDbContext : DbContext
 	{
 		// DbSet (Models)

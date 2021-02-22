@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kaguya.Database.Model;
-using Kaguya.Discord.Commands.Reference;
 
 namespace Kaguya.Database.Interfaces
 {

@@ -16,7 +16,6 @@ using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Extensions.DiscordExtensions;
 using Microsoft.Extensions.Logging;
-using ProfanityFilter;
 
 namespace Kaguya.Discord.Commands.Configuration
 {
