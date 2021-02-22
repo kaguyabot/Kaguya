@@ -58,7 +58,7 @@ namespace Kaguya.Discord.Commands.Exp
             string title = $"Kaguya Profile";
             StringBuilder profileBuilder = new StringBuilder()
                                            .AppendLine($"Global Exp: {user.GlobalExp.ToString("N0").AsBold()} | Level: {user.GlobalExpLevel.ToString("N0").AsBold()} " +
-                                                       $"| ({(percent * 100):N2}% to {user.GlobalExpLevel + 1})")
+                                                       $"| ({percent:N2}% to {user.GlobalExpLevel + 1})")
                                            .AppendLine($"Server Exp: {serverExp.Exp.ToString("N0").AsBold()} | Server Level: {serverExpLevel.ToString("N0").AsBold()}")
                                            .AppendLine($"Fish Exp: {user.FishExp.ToString("N0").AsBold()} | Fish Level: {user.FishLevel.ToString("N0").AsBold()} " +
                                                        $"| Fish Caught: {fishCount.ToString("N0").AsBold()}")

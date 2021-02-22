@@ -222,6 +222,14 @@ namespace Kaguya.Internal.Services
             return (int) (8 * Math.Pow(level, 2)) + 56;
         }
 
+        /// <summary>
+        /// Returns a double (range 0.00 - 100.00) representing how far along the user is
+        /// towards the next level, expressed as a percentage.
+        ///
+        /// If the user is 36.55% to the next level, this method returns 36.55
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
         public static double CalculatePercentToNextLevel(double level) {
             double percentThrough = level - Math.Truncate(level);
             double percentLeft = 1.0 - percentThrough;
