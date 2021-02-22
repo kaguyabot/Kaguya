@@ -92,11 +92,12 @@ namespace Kaguya.Discord.Commands.Configuration
         }
         
         [Command("-set")]
-        [Summary("Sets a logtype to a text channel. All logs for the logtype will be " +
+        [Summary("Sets a logtype to a text channel. If no text channel is provided, the " +
+                 "channel the command is invoked from is selected. All logs for the logtype will be " +
                  "sent to the specified channel. You may also use the 'all' logtype to set " +
                  "everything to the same channel simultaneously.")]
-        [Remarks("<log type> <text channel>")]
-        public async Task LogSetCommand(string logType, SocketTextChannel textChannel)
+        [Remarks("<log type> [text channel]")]
+        public async Task LogSetCommand(string logType, SocketTextChannel textChannel = null)
         {
             await ModifyLogConfigAsync(logType, textChannel);
         }
@@ -112,6 +113,11 @@ namespace Kaguya.Discord.Commands.Configuration
 
         private async Task ModifyLogConfigAsync(string logType, SocketTextChannel textChannel)
         {
+            if (textChannel == null)
+            {
+                textChannel = Context.Channel as SocketTextChannel;
+            }
+            
             IList<PropertyInfo> properties = _logProperties;
             LogConfiguration logConfig = await _logConfigurationRepository.GetOrCreateAsync(Context.Guild.Id);
 
