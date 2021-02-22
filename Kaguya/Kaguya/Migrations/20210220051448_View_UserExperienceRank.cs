@@ -6,7 +6,7 @@ namespace Kaguya.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("CREATE VIEW IF NOT EXISTS KaguyaUserRanks AS " +
+            migrationBuilder.Sql("CREATE OR REPLACE VIEW KaguyaUserRanks AS " +
             "SELECT ROW_NUMBER() OVER(ORDER BY GlobalExp DESC) AS 'rank', UserId, GlobalExp " + 
             "FROM KaguyaUsers");
         }
