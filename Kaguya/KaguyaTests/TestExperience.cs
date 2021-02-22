@@ -32,6 +32,8 @@ namespace KaguyaTests
         [InlineData(0.01, 1)]
         [InlineData(100.999, 99.9)]
         [InlineData(1.5, 50)]
+        [InlineData(1.00, 0.00)]
+        [InlineData(1.9999999999999, 99.99999999999)]
         public void TestPercentToNextLevelCalculation(decimal level, decimal check)
         {
             decimal progress = ExperienceService.CalculatePercentToNextLevel(level);
