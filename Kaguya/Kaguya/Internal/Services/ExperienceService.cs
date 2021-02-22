@@ -219,7 +219,7 @@ namespace Kaguya.Internal.Services
 
         public static int CalculateExpFromLevel(double level)
         {
-            return (int) (8 * Math.Pow(level, 2));
+            return (int) (8 * Math.Pow(level, 2)) + 56;
         }
 
         public static double CalculatePercentToNextLevel(double level, int exp)
