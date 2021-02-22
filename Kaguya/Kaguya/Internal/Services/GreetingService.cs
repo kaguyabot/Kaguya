@@ -22,7 +22,8 @@ namespace Kaguya.Internal.Services
         
         public async Task SendGreetingAsync(SocketGuildUser user)
         {
-            if (user.IsBot || user.IsWebhook)
+            // Apparently, users can be null.
+            if (user == null || user.IsBot || user.IsWebhook)
             {
                 return;
             }
