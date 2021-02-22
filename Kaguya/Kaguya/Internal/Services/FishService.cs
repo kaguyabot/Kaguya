@@ -54,6 +54,16 @@ namespace Kaguya.Internal.Services
 	
 	public class FishService
 	{
+		// 110 / 200 chance to lose all coins gambled.
+		// 90 / 200 chance to profit.
+		// Expected value (using point values below): 74.3
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeLegendary = (0.995M, 1M);    // 1 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeUltraRare = (0.98M, 0.994M); // 4 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeRare = (0.85M, 0.97M);       // 26 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeUncommon = (0.55M, 0.84M);   // 60 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeCommon = (0.30M, 0.54M);     // 50 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeTrash = (0.0M, 0.29M);     // 60 / 200 chance
+		
 		private static readonly Random _random = new Random();
 		
 		public static readonly Dictionary<FishType, FishRarity> FishMap = new Dictionary<FishType, FishRarity>
@@ -101,52 +111,36 @@ namespace Kaguya.Internal.Services
 		private static KeyValuePair<FishType, FishRarity>[] CommonFish => FishMap.Where(x => x.Value == FishRarity.Common).ToArray(); 
 		private static KeyValuePair<FishType, FishRarity>[] TrashFish => FishMap.Where(x => x.Value == FishRarity.Trash).ToArray(); 
 
-		public static FishRarity SelectRandomRarity()
+		public static FishRarity SelectRarity(decimal roll)
 		{
-			// 110 / 200 chance to lose all coins gambled.
-			// 90 / 200 chance to profit.
-			// Expected value (using point values below): 74.3
-			var rangeLegendary = (0.9995, 1); // 1 / 200 chance
-			var rangeUltraRare = (0.98, 0.99995); // 4 / 200 chance
-			var rangeRare = (0.85, 0.98); // 26 / 200 chance
-			var rangeUncommon = (0.55, 0.85); // 60 / 200 chance
-			var rangeCommon = (0.30, 0.55); // 50 / 200 chance
-			var rangeTrash = (0.0, 0.30); // 60 / 200 chance
-			
-			double roll;
-			lock (_random)
+			if (IsBetween(roll, RangeLegendary))
 			{
-				roll = _random.NextDouble();
-			}
-
-			if (IsBetween(roll, rangeTrash))
-			{
-				return FishRarity.Trash;
+				return FishRarity.Legendary;
 			}
 			
-			if (IsBetween(roll, rangeCommon))
-			{
-				return FishRarity.Common;
-			}
-
-			if (IsBetween(roll, rangeUncommon))
-			{
-				return FishRarity.Uncommon;
-			}
-
-			if (IsBetween(roll, rangeRare))
-			{
-				return FishRarity.Rare;
-			}
-
-			if (IsBetween(roll, rangeUltraRare))
+			if (IsBetween(roll, RangeUltraRare))
 			{
 				return FishRarity.UltraRare;
 			}
-
-			if (IsBetween(roll, rangeLegendary))
+			
+			if (IsBetween(roll, RangeRare))
 			{
-				return FishRarity.Legendary;
+				return FishRarity.Rare;
+			}
+			
+			if (IsBetween(roll, RangeUncommon))
+			{
+				return FishRarity.Uncommon;
+			}
+			
+			if (IsBetween(roll, RangeCommon))
+			{
+				return FishRarity.Common;
+			}
+			
+			if (IsBetween(roll, RangeTrash))
+			{
+				return FishRarity.Trash;
 			}
 
 			throw new Exception($"No valid FishRarity could be found for the roll {roll}.");
@@ -192,7 +186,7 @@ namespace Kaguya.Internal.Services
 			};
 		}
 
-		private static bool IsBetween(double num, (double min, double max) range)
+		private static bool IsBetween(decimal num, (decimal min, decimal max) range)
 		{
 			return range.min <= num && num <= range.max;
 		}
