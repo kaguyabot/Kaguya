@@ -99,7 +99,7 @@ namespace Kaguya.Database.Model
 		public double ExactFishLevel => ExperienceService.CalculateLevel(this.FishExp);
 
 		public int ExpToNextGlobalLevel => ExperienceService.CalculateExpFromLevel(GlobalExpLevel + 1) - this.GlobalExp;
-		public double PercentToNextLevel => ExperienceService.CalculatePercentToNextLevel(this.ExactGlobalExpLevel, this.GlobalExp);
+		public double PercentToNextLevel => ExperienceService.CalculatePercentToNextLevel(this.ExactGlobalExpLevel);
 
 		// public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
 

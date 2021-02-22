@@ -222,15 +222,10 @@ namespace Kaguya.Internal.Services
             return (int) (8 * Math.Pow(level, 2)) + 56;
         }
 
-        public static double CalculatePercentToNextLevel(double level, int exp)
-        {
-            int levelFloored = level.ToFloor();
-            int baseExp = CalculateExpFromLevel(levelFloored);
-            int nextExp = CalculateExpFromLevel(levelFloored + 1);
-            int difference = nextExp - baseExp;
-            int remaining = nextExp - exp;
-
-            return (difference - remaining) / (double)difference;
+        public static double CalculatePercentToNextLevel(double level) {
+            double percentThrough = level - Math.Truncate(level);
+            double percentLeft = 1.0 - percentThrough;
+            return percentLeft * 100.0;
         }
     }
 }
