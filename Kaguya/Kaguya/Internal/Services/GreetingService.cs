@@ -33,6 +33,12 @@ namespace Kaguya.Internal.Services
                 var kaguyaServerRepository = scope.ServiceProvider.GetRequiredService<KaguyaServerRepository>();
                 
                 KaguyaServer server = await kaguyaServerRepository.GetOrCreateAsync(user.Guild.Id);
+                
+                if (String.IsNullOrWhiteSpace(server.CustomGreeting))
+                {
+                    return;
+                }
+                
                 SocketTextChannel channel = user.Guild.GetTextChannel(server.CustomGreetingTextChannelId.GetValueOrDefault());
            
                 if (channel == null && server.CustomGreetingTextChannelId != null)
@@ -45,7 +51,7 @@ namespace Kaguya.Internal.Services
 
                     return;
                 }
-
+                
                 string parsedMessage = ParseGreetingString(server.CustomGreeting, user);
 
                 try
