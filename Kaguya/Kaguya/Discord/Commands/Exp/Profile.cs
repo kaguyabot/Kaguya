@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Kaguya.Discord.Commands.Exp
 {
-    [Module(CommandModule.Games)]
+    [Module(CommandModule.Reference)]
     [Group("profile")]
     [Alias("p")]
     public class Profile : KaguyaBase<Profile>
@@ -51,7 +51,7 @@ namespace Kaguya.Discord.Commands.Exp
             
             int fishCount = await _fishRepository.CountAllNonTrashAsync(user.UserId);
 
-            double percent = user.PercentToNextLevel;
+            decimal percent = user.PercentToNextLevel;
 
             IEmote diamondsEmote = _commonEmotes.KaguyaDiamondsAnimated;
             

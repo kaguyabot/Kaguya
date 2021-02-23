@@ -209,12 +209,13 @@ namespace Kaguya.Internal.Services
             return CalculateLevel(oldExp).ToFloor() < CalculateLevel(newExp).ToFloor();
         }
         
-        public static double CalculateLevel(int exp)
+        public static decimal CalculateLevel(int exp)
         {
             if (exp < 64)
+            {
                 return 0;
-	        
-            return Math.Sqrt((exp / 8) - 7);
+            }
+            return (decimal)Math.Sqrt((exp / 8) - 7);
         }
 
         public static int CalculateExpFromLevel(double level)
@@ -230,10 +231,9 @@ namespace Kaguya.Internal.Services
         /// </summary>
         /// <param name="level"></param>
         /// <returns></returns>
-        public static double CalculatePercentToNextLevel(double level) {
-            double percentThrough = level - Math.Truncate(level);
-            double percentLeft = 1.0 - percentThrough;
-            return percentLeft * 100.0;
+        public static decimal CalculatePercentToNextLevel(decimal level) {
+            decimal percentThrough = level - Math.Truncate(level);
+            return percentThrough * 100.0M;
         }
     }
 }

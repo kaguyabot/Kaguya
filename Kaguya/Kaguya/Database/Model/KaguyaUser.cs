@@ -92,14 +92,14 @@ namespace Kaguya.Database.Model
 		/// <summary>
 		/// The user's level as returned by the experience formula.
 		/// </summary>
-		public double ExactGlobalExpLevel => ExperienceService.CalculateLevel(this.GlobalExp);
+		public decimal ExactGlobalExpLevel => ExperienceService.CalculateLevel(this.GlobalExp);
 
 		public int FishLevel => ExactFishLevel.ToFloor();
 
-		public double ExactFishLevel => ExperienceService.CalculateLevel(this.FishExp);
+		public decimal ExactFishLevel => ExperienceService.CalculateLevel(this.FishExp);
 
 		public int ExpToNextGlobalLevel => ExperienceService.CalculateExpFromLevel(GlobalExpLevel + 1) - this.GlobalExp;
-		public double PercentToNextLevel => ExperienceService.CalculatePercentToNextLevel(this.ExactGlobalExpLevel);
+		public decimal PercentToNextLevel => ExperienceService.CalculatePercentToNextLevel(this.ExactGlobalExpLevel);
 
 		// public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
 

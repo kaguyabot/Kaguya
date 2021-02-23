@@ -27,6 +27,8 @@ namespace Kaguya.Discord.Commands.Games
         private const int COINS = 75;
         private const int PREMIUM_COINS = 50;
         
+        private static readonly Random _random = new Random();
+        
         public FishGame(ILogger<FishGame> logger, KaguyaUserRepository kaguyaUserRepository, FishRepository fishRepository) : base(logger)
         {
             _logger = logger;
@@ -61,7 +63,13 @@ namespace Kaguya.Discord.Commands.Games
 	            return;
             }
 
-            FishRarity rarity = FishService.SelectRandomRarity();
+            decimal roll;
+            lock (_random)
+            {
+                roll = (decimal)_random.NextDouble();
+            }
+            
+            FishRarity rarity = FishService.SelectRarity(roll);
             FishType randomFish = FishService.SelectFish(rarity);
 
             (int coins, int exp) fishValue = FishService.GetFishValue(rarity);
