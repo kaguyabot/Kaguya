@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using Kaguya.Database.Repositories;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -48,6 +49,11 @@ namespace Kaguya.Internal.Services.Recurring
 
         private async Task CheckNew()
         {
+            if (!_client.AllShardsReady())
+            {
+                return;
+            }
+            
             using (var scope = _serviceProvider.CreateScope())
             {
                 var userRepository = scope.ServiceProvider.GetRequiredService<KaguyaUserRepository>();
