@@ -160,6 +160,11 @@ namespace Kaguya.Internal.Events
         /// <returns></returns>
         public async Task ProtectPlayerIntegrityOnDisconnectAsync(SocketUser arg1, SocketVoiceState arg2, SocketVoiceState arg3)
         {
+            if (!_client.AllShardsReady())
+            {
+                return;
+            }
+            
             if (arg1.Id != _client.CurrentUser.Id || arg3.VoiceChannel != null)
             {
                 return;
