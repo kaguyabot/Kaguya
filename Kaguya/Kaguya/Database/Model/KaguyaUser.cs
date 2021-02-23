@@ -101,8 +101,6 @@ namespace Kaguya.Database.Model
 		public int ExpToNextGlobalLevel => ExperienceService.CalculateExpFromLevel(GlobalExpLevel + 1) - this.GlobalExp;
 		public decimal PercentToNextLevel => ExperienceService.CalculatePercentToNextLevel(this.ExactGlobalExpLevel);
 
-		// public IEnumerable<Praise> Praise => DatabaseQueries.GetAllForUserAsync<Praise>(UserId).Result;
-
 		/// <summary>
 		/// Adjusts the user's coins by the <see cref="amount"/> given.
 		/// </summary>

@@ -268,13 +268,19 @@ namespace Kaguya.Workers
         private async Task HandleCommandAsync(SocketMessage msg)
         {
             if (!(msg is SocketUserMessage message) || message.Author.IsBot)
+            {
                 return;
+            }
 
             if (message.Channel.GetType() != typeof(SocketTextChannel))
+            {
                 return;
+            }
 
             if (!(message.Channel is SocketGuildChannel guildChannel))
+            {
                 return;
+            }
 
             IServiceScope scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<KaguyaDbContext>();
