@@ -58,11 +58,11 @@ namespace Kaguya.Internal.Services
 		// 90 / 200 chance to profit.
 		// Expected value (using point values below): 74.3
 		public static readonly (decimal rangeMin, decimal rangeMax) RangeLegendary = (0.995M, 1M);    // 1 / 200 chance
-		public static readonly (decimal rangeMin, decimal rangeMax) RangeUltraRare = (0.98M, 0.994M); // 4 / 200 chance
-		public static readonly (decimal rangeMin, decimal rangeMax) RangeRare = (0.85M, 0.97M);       // 26 / 200 chance
-		public static readonly (decimal rangeMin, decimal rangeMax) RangeUncommon = (0.55M, 0.84M);   // 60 / 200 chance
-		public static readonly (decimal rangeMin, decimal rangeMax) RangeCommon = (0.30M, 0.54M);     // 50 / 200 chance
-		public static readonly (decimal rangeMin, decimal rangeMax) RangeTrash = (0.0M, 0.29M);     // 60 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeUltraRare = (0.98M, 0.995M); // 4 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeRare = (0.85M, 0.98M);       // 26 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeUncommon = (0.55M, 0.85M);   // 60 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeCommon = (0.30M, 0.55M);     // 50 / 200 chance
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeTrash = (0.0M, 0.30M);     // 60 / 200 chance
 		
 		private static readonly Random _random = new Random();
 		
