@@ -137,7 +137,8 @@ namespace Kaguya
 							                        AlwaysDownloadUsers = discordConfigs.Value.AlwaysDownloadUsers ?? true,
 							                        MessageCacheSize = discordConfigs.Value.MessageCacheSize ?? 50,
 							                        TotalShards = shards,
-							                        LogLevel = LogSeverity.Debug
+							                        LogLevel = LogSeverity.Debug,
+							                        ExclusiveBulkDelete = true // todo bug: reflect in guild logger!!
 							                    });
 
 				return client;
