@@ -9,12 +9,10 @@ namespace Kaguya.Database.Repositories
 {
     public class KaguyaServerRepository : RepositoryBase<KaguyaServer>, IKaguyaServerRepository
     {
-        private readonly KaguyaDbContext _dbContext;
         private readonly ILogger<KaguyaServerRepository> _logger;
 
         public KaguyaServerRepository(KaguyaDbContext dbContext, ILogger<KaguyaServerRepository> logger) : base(dbContext)
         {
-            _dbContext = dbContext;
             _logger = logger;
         }
         
@@ -26,13 +24,13 @@ namespace Kaguya.Database.Repositories
                 return server;
             }
 
-            server = _dbContext.KaguyaServers.Add(new KaguyaServer
+            server = Table.Add(new KaguyaServer
             {
                 ServerId = id,
                 DateFirstTracked = DateTimeOffset.Now
             }).Entity;
 
-            await _dbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
             
             _logger.LogDebug($"Server created: {id}");
             return server;

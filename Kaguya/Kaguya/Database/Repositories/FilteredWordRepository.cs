@@ -22,9 +22,11 @@ namespace Kaguya.Database.Repositories
         public async Task<bool> DeleteIfExistsAsync(ulong key, string word)
         {
             var dbMatch = await GetAsync(key, word);
-            
+
             if (dbMatch == null)
+            {
                 return false;
+            }
             
             var server = await _ksRepo.GetOrCreateAsync(dbMatch.ServerId);
             var curFilteres = await GetAllAsync(server.ServerId, true);
@@ -44,7 +46,9 @@ namespace Kaguya.Database.Repositories
         public async Task<bool> InsertIfNotExistsAsync(FilteredWord value)
         {
             if (value == null)
+            {
                 return false;
+            }
             
             var server = await _ksRepo.GetOrCreateAsync(value.ServerId);
             var curFilteres = await GetAllAsync(server.ServerId, true);
@@ -59,7 +63,7 @@ namespace Kaguya.Database.Repositories
 
         public async Task<FilteredWord[]> GetAllAsync(ulong serverId, bool includeWildcards)
         {
-            var words = _dbContext.FilteredWords.AsQueryable().Where(x => x.ServerId == serverId);
+            var words = Table.AsNoTracking().Where(x => x.ServerId == serverId);
             if (!includeWildcards)
             {
                 words = words.Where(x => !x.Word.EndsWith('*'));
@@ -70,15 +74,15 @@ namespace Kaguya.Database.Repositories
 
         public async Task DeleteAllAsync(ulong serverId)
         {
-            var matches = _dbContext.FilteredWords.AsQueryable().Where(x => x.ServerId == serverId);
+            var matches = Table.AsNoTracking().Where(x => x.ServerId == serverId);
 
             if (!matches.Any())
             {
                 return;
             }
             
-            _dbContext.FilteredWords.RemoveRange(matches);
-            await _dbContext.SaveChangesAsync();
+            Table.RemoveRange(matches);
+            await DbContext.SaveChangesAsync();
         }
     }
 }

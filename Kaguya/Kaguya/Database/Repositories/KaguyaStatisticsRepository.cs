@@ -68,7 +68,7 @@ namespace Kaguya.Database.Repositories
 
         public async Task<KaguyaStatistics> GetMostRecentAsync()
         {
-            return await Table.AsQueryable().OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+            return await Table.AsNoTracking().OrderByDescending(x => x.Id).FirstOrDefaultAsync();
         }
     }
 }

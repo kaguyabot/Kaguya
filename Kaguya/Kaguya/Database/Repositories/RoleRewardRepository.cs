@@ -10,12 +10,11 @@ namespace Kaguya.Database.Repositories
 {
     public class RoleRewardRepository : RepositoryBase<RoleReward>, IRoleRewardRepository
     {
-        private readonly KaguyaDbContext _dbContext;
-        public RoleRewardRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
+        public RoleRewardRepository(KaguyaDbContext dbContext) : base(dbContext) { }
 
         public async Task<IList<RoleReward>> GetAllAsync(ulong serverId)
         {
-            return await _dbContext.RoleRewards.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
+            return await Table.AsNoTracking().Where(x => x.ServerId == serverId).ToListAsync();
         }
     }
 }

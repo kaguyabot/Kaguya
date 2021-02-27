@@ -13,7 +13,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<int> GetSuccessfulCountAsync()
 		{
-			return await Table.AsQueryable().Where(x => x.ExecutedSuccessfully).CountAsync();
+			return await Table.AsNoTracking().Where(x => x.ExecutedSuccessfully).CountAsync();
 		}
 	}
 }

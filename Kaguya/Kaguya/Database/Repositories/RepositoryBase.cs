@@ -19,7 +19,10 @@ namespace Kaguya.Database.Repositories
         
         public async Task<T> GetAsync(params object[] key)
         {
-            return await Table.FindAsync(key);
+            T entity = await Table.FindAsync(key);
+            DbContext.Entry(entity).State = EntityState.Detached;
+
+            return entity;
         }
 
         public async Task DeleteAsync(params object[] key)
@@ -58,12 +61,12 @@ namespace Kaguya.Database.Repositories
         
         public async Task<IList<T>> GetAllAsync()
         {
-            return await Table.ToListAsync();
+            return await Table.AsNoTracking().ToListAsync();
         }
 
         public async Task<int> GetCountAsync()
         {
-            return await Table.CountAsync();
+            return await Table.AsNoTracking().CountAsync();
         }
     }
 }
