@@ -11,13 +11,11 @@ namespace Kaguya.Database.Repositories
 {
     public class QuoteRepository : RepositoryBase<Quote>, IQuoteRepository
     {
-        private readonly KaguyaDbContext _dbContext;
-
-        public QuoteRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
+        public QuoteRepository(KaguyaDbContext dbContext) : base(dbContext) { }
         
         public async Task<IList<Quote>> GetAllAsync(ulong serverId)
         {
-            return await _dbContext.Quotes.AsQueryable().Where(x => x.ServerId == serverId).ToListAsync();
+            return await Table.AsNoTracking().Where(x => x.ServerId == serverId).ToListAsync();
         }
 
         public async Task<Quote> GetRandomQuoteAsync(ulong serverId)

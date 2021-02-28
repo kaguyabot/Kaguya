@@ -11,12 +11,8 @@ namespace Kaguya.Database.Repositories
 {
     public class UpvoteRepository : RepositoryBase<Upvote>, IUpvoteRepository
     {
-        private readonly KaguyaDbContext _dbContext;
-
         public UpvoteRepository(KaguyaDbContext dbContext) : base(dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        { }
 
         /// <summary>
         /// Determines whether the user has upvoted within the most recent
@@ -28,15 +24,14 @@ namespace Kaguya.Database.Repositories
         /// <returns></returns>
         public async Task<bool> HasRecentlyUpvotedAsync(ulong userId, TimeSpan offset)
         {
-            return await _dbContext.Upvotes
-                                   .AsQueryable()
-                                   .Where(x => x.UserId == userId && x.Timestamp > DateTimeOffset.Now.Subtract(offset))
-                                   .AnyAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.UserId == userId && x.Timestamp > DateTimeOffset.Now.Subtract(offset))
+                              .AnyAsync();
         }
 
         public async Task<int> CountUpvotesAsync(ulong userId)
         {
-            return await _dbContext.Upvotes.AsQueryable().Where(x => x.UserId == userId).CountAsync();
+            return await Table.AsNoTracking().Where(x => x.UserId == userId).CountAsync();
         }
 
         /// <summary>
@@ -69,17 +64,16 @@ namespace Kaguya.Database.Repositories
 
         public async Task<IList<Upvote>> GetAllUpvotesAsync(ulong userId)
         {
-            return await _dbContext.Upvotes.AsQueryable().Where(x => x.UserId == userId).ToListAsync();
+            return await Table.AsNoTracking().Where(x => x.UserId == userId).ToListAsync();
         }
 
         public async Task<IList<Upvote>> GetAllUpvotesForNotificationServiceAsync()
         {
-            return await _dbContext.Upvotes
-                                   .AsQueryable()
-                                   .Where(x => !x.ReminderSent &&
-                                               x.Type.ToLower() != "test" &&
-                                               x.Timestamp < DateTimeOffset.Now.AddHours(-12))
-                                   .ToListAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => !x.ReminderSent &&
+                                          x.Type.ToLower() != "test" &&
+                                          x.Timestamp < DateTimeOffset.Now.AddHours(-12))
+                              .ToListAsync();
         }
     }
 }
