@@ -37,5 +37,13 @@ namespace Kaguya.Database.Model
         /// The type of upvote. Can be "upvote" or "test"
         /// </summary>
         public string Type { get; set; }
+        /// <summary>
+        /// The amount of points awarded for this upvote
+        /// </summary>
+        public int CoinsAwarded { get; set; }
+        /// <summary>
+        /// The amount of experience awarded for this upvote
+        /// </summary>
+        public int ExpAwarded { get; set; }
     }
 }

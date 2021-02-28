@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
+using Kaguya.External.Services.TopGg;
 using Kaguya.Internal.Events;
 using Kaguya.Web.Contracts;
 using Kaguya.Web.Options;
@@ -37,7 +38,7 @@ namespace Kaguya.Web.Controllers
             if (string.IsNullOrWhiteSpace(_configs.Value.ApiKey) || string.IsNullOrWhiteSpace(_configs.Value.AuthHeader) ||
                 auth != _configs.Value.AuthHeader)
             {
-                _logger.LogInformation("Unauthorized top.gg post request received.");
+                _logger.LogInformation("Unauthorized top.gg post request received");
                 return Unauthorized();
             }
 
@@ -54,7 +55,9 @@ namespace Kaguya.Web.Controllers
                     Timestamp = DateTimeOffset.Now,
                     QueryParams = payload.Query,
                     ReminderSent = false,
-                    Type = payload.Type
+                    Type = payload.Type,
+                    CoinsAwarded = UpvoteNotifierService.COINS,
+                    ExpAwarded = UpvoteNotifierService.EXP
                 };
 
                 using (var scope = _serviceProvider.CreateScope())
@@ -70,6 +73,9 @@ namespace Kaguya.Web.Controllers
 
             if (vote != null)
             {
+                // Triggers the OnUpvote event, triggering the
+                // Kaguya.External.Services.TopGg.UpvoteNotifierService Enqueue() method.
+                // This method is responsible for DMing the user and awarding points.
                 KaguyaEvents.OnUpvoteTrigger(vote);
             }
 

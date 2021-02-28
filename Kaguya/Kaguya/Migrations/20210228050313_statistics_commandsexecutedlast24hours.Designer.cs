@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210228050313_statistics_commandsexecutedlast24hours")]
+    partial class statistics_commandsexecutedlast24hours
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -759,12 +761,6 @@ namespace Kaguya.Migrations
 
                     b.Property<ulong>("BotId")
                         .HasColumnType("bigint unsigned");
-
-                    b.Property<int>("CoinsAwarded")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExpAwarded")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsWeekend")
                         .HasColumnType("tinyint(1)");

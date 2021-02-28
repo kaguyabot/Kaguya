@@ -84,6 +84,7 @@ namespace Kaguya
 
 			services.AddSingleton<GuildLoggerService>();
 			services.AddSingleton<GreetingService>();
+			services.AddSingleton<UpvoteNotifierService>();
 			
 			services.AddSingleton<SilentSysActions>();
 
