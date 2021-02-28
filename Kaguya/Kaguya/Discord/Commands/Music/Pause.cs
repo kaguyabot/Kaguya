@@ -44,12 +44,12 @@ namespace Kaguya.Discord.Commands.Music
             if (player.PlayerState == PlayerState.Paused)
             {
                 await player.ResumeAsync();
-                await SendBasicSuccessEmbedAsync("👍 Resumed the player.");
+                await SendBasicSuccessEmbedAsync("Resumed the player.");
             }
             else if (player.PlayerState == PlayerState.Playing)
             {
                 await player.PauseAsync();
-                await SendBasicSuccessEmbedAsync("👍 Paused the player.");
+                await SendBasicSuccessEmbedAsync("Paused the player.");
             }
             else
             {
