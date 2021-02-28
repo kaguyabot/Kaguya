@@ -101,6 +101,10 @@ namespace Kaguya.Database.Model
 		/// </summary>
 		public int TotalGambleLosses { get; set; }
 		/// <summary>
+		/// The total amount of points the user has offered up for gamble before any wins or losses.
+		/// </summary>
+		public int TotalCoinsGambled { get; set; }
+		/// <summary>
 		/// The gross sum of coins the user has won from gambling games.
 		/// </summary>
 		public int GrossGambleCoinWinnings { get; set; }
