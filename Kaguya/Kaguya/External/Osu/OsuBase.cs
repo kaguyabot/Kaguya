@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Kaguya.Internal;
 using OsuSharp;
 
 namespace Kaguya.External.Osu
@@ -16,25 +17,23 @@ namespace Kaguya.External.Osu
         protected string GetModString(Mode input)
         {
             var newMods = new List<string>();
-            Array enumCollection = Enum.GetValues(input.GetType());
+            Mode[] enumCollection = Utilities.GetValues<Mode>();
             
-            foreach (Enum value in enumCollection)
+            foreach (Mode value in enumCollection)
             {
                 if (input.HasFlag(value))
                 {
-                    Mode val = value is Mode mod ? mod : Mode.None;
-
-                    if (val == Mode.None && enumCollection.Length == 1)
+                    if (value == Mode.None && enumCollection.Length == 1)
                     {
                         return "No Mod";
                     }
 
-                    if (val == Mode.None && enumCollection.Length > 1)
+                    if (value == Mode.None && enumCollection.Length > 1)
                     {
                         continue;
                     }
                     
-                    newMods.Add(val.ToModeString(_osuClient));
+                    newMods.Add(value.ToModeString(_osuClient));
                 }
             }
 

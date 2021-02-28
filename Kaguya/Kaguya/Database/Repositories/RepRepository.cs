@@ -11,14 +11,13 @@ namespace Kaguya.Database.Repositories
     public class RepRepository : RepositoryBase<Rep>, IRepRepository
     {
         public RepRepository(KaguyaDbContext dbContext) : base(dbContext)
-        {
-        }
+        { }
         
         public async Task<IList<Rep>> GetAllAsync(ulong userId)
         {
             return await Table.AsNoTracking().Where(x => x.UserId == userId).ToListAsync();
         }
-
+        
         public async Task<Rep> GetMostRecentAsync(ulong userId)
         {
             return await Table.AsNoTracking()
@@ -27,9 +26,14 @@ namespace Kaguya.Database.Repositories
                               .FirstOrDefaultAsync();
         }
 
-        public async Task<int> GetCountRepAsync(ulong userId)
+        public async Task<int> GetCountRepReceivedAsync(ulong userId)
         {
-            return await Table.AsNoTracking().CountAsync(x => x.UserId == userId);
+            return await Table.AsNoTracking().Where(x => x.UserId == userId).CountAsync();
+        }
+
+        public async Task<int> GetCountRepGivenAsync(ulong userId)
+        {
+            return await Table.AsNoTracking().Where(x => x.GivenBy == userId).CountAsync();
         }
     }
 }

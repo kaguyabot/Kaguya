@@ -74,7 +74,7 @@ namespace Kaguya.Discord.Commands.Exp
         public async Task RepCommand()
         {
             var curUser = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
-            int repNum = await _repRepository.GetCountRepAsync(curUser.UserId);
+            int repNum = await _repRepository.GetCountRepReceivedAsync(curUser.UserId);
 
             var recentMatch = await _repRepository.GetMostRecentAsync(curUser.UserId);
             bool showFooter = recentMatch != null;

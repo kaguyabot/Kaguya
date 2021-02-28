@@ -62,8 +62,8 @@ namespace Kaguya.External.Services.TopGg
 
                         user.AdjustCoins(coins);
                         user.AdjustExperienceGlobal(exp);
-                        user.LastUpvoted = DateTimeOffset.Now;
-                        user.TotalUpvotes++;
+                        user.LastUpvotedTopGg = DateTimeOffset.Now;
+                        user.TotalUpvotesTopGg++;
 
                         if (socketUser != null)
                         {

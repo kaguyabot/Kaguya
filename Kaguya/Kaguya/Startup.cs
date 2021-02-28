@@ -139,7 +139,7 @@ namespace Kaguya
 							                        MessageCacheSize = discordConfigs.Value.MessageCacheSize ?? 50,
 							                        TotalShards = shards,
 							                        LogLevel = LogSeverity.Debug,
-							                        ExclusiveBulkDelete = true // todo bug: reflect in guild logger!!
+							                        ExclusiveBulkDelete = true // todo: reflect in guild logger with custom logtype!!
 							                    });
 
 				return client;

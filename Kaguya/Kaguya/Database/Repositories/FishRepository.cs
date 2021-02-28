@@ -35,6 +35,11 @@ namespace Kaguya.Database.Repositories
             return await Table.AsNoTracking().Where(x => x.UserId == userId && x.Rarity == rarity).ToListAsync();
         }
 
+        public async Task<IList<Fish>> GetAllNonTrashAsync(ulong userId)
+        {
+            return await Table.AsNoTracking().Where(x => x.UserId == userId && x.Rarity != FishRarity.Trash).ToListAsync();
+        }
+
         public async Task<int> CountAllNonTrashAsync(ulong userId)
         {
             return await Table.AsNoTracking().Where(x => x.UserId == userId && x.Rarity != FishRarity.Trash).CountAsync();
