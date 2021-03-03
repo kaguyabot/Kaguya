@@ -32,5 +32,11 @@ namespace Kaguya.Database.Interfaces
 		/// <param name="threshold">A positive timespan representing the time constraint.</param>
 		/// <returns></returns>
 		public Task<int> GetRecentSuccessfulCountAsync(ulong userId, TimeSpan threshold);
+		/// <summary>
+		/// Returns the most commonly used command for the given user.
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns></returns>
+		public Task<string> GetFavoriteCommandAsync(ulong userId);
 	}
 }

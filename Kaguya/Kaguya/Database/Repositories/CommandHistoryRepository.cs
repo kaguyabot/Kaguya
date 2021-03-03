@@ -41,5 +41,14 @@ namespace Kaguya.Database.Repositories
 			                                             x.ExecutionTime > constraint)
 			                  .CountAsync();
 		}
+
+		public async Task<string> GetFavoriteCommandAsync(ulong userId)
+		{
+			return await Table.AsNoTracking().Where(x => x.UserId == userId && x.ExecutedSuccessfully)
+			                  .GroupBy(x => x.CommandName)
+			                  .OrderByDescending(x => x.Count())
+			                  .Select(x => x.Key)
+			                  .FirstOrDefaultAsync();
+		}
 	}
 }

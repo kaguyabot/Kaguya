@@ -17,11 +17,13 @@ namespace Kaguya.Internal.Models.Statistics.User
     public class UserStatistics : UserStatisticsBase
     {
         private readonly KaguyaUser _user;
+        private readonly KaguyaServer _server;
         private readonly IServiceProvider _serviceProvider;
 
-        public UserStatistics(KaguyaUser user, IServiceProvider serviceProvider) : base(user)
+        public UserStatistics(KaguyaUser user, KaguyaServer server, IServiceProvider serviceProvider) : base(user)
         {
             _user = user;
+            _server = server;
             _serviceProvider = serviceProvider;
             
             using (var scope = _serviceProvider.CreateScope())
@@ -30,6 +32,7 @@ namespace Kaguya.Internal.Models.Statistics.User
                 var fishRepository = scope.ServiceProvider.GetRequiredService<FishRepository>();
                 var repRepository = scope.ServiceProvider.GetRequiredService<RepRepository>();
                 var commandHistoryRepository = scope.ServiceProvider.GetRequiredService<CommandHistoryRepository>();
+                var serverExpRepository = scope.ServiceProvider.GetRequiredService<ServerExperience>();
 
                 this.RestUser = client.Rest.GetUserAsync(user.UserId).GetAwaiter().GetResult();
                 this.AllFish = fishRepository.GetAllNonTrashAsync(user.UserId).GetAwaiter().GetResult();
@@ -46,14 +49,18 @@ namespace Kaguya.Internal.Models.Statistics.User
                 this.TotalFishAttempts = this.RaritiesCount.Sum(x => x.count);
                 this.RepGiven = repRepository.GetCountRepGivenAsync(user.UserId).GetAwaiter().GetResult();
                 this.RepReceived = repRepository.GetCountRepReceivedAsync(user.UserId).GetAwaiter().GetResult();
+
+                this.CommandsExecuted = commandHistoryRepository.GetSuccessfulCountAsync(user.UserId).GetAwaiter().GetResult();
+                this.CommandsExecutedLastTwentyFourHours = commandHistoryRepository.GetRecentSuccessfulCountAsync(user.UserId, TimeSpan.FromHours(24)).GetAwaiter().GetResult();
+                this.MostUsedCommand = commandHistoryRepository.GetFavoriteCommandAsync(user.UserId).GetAwaiter().GetResult();
             }
         }
         
         public override RestUser RestUser { get; }
-        public override IList<Fish> AllFish { get; }
-        public override int GrossCoinsFromFishing { get; }
+        public sealed override IList<Fish> AllFish { get; }
+        public sealed override int GrossCoinsFromFishing { get; }
         public override int NetCoinsFishing { get; }
-        public override IList<(FishRarity rarity, int count, int coinsSum)> RaritiesCount { get; }
+        public sealed override IList<(FishRarity rarity, int count, int coinsSum)> RaritiesCount { get; }
         public override int TotalFishAttempts { get; }
 
         public override async Task<bool> HasRecentlyVotedAsync(TimeSpan threshold)
@@ -125,10 +132,26 @@ namespace Kaguya.Internal.Models.Statistics.User
 
         public string GetGamblingStatsString()
         {
+            IUserGambleStatistics gambleStats = this;
+            
             var sb = new StringBuilder();
 
-            IUserGambleStatistics statsCpy = this;
+            sb.AppendLine("Total Gambles:".AsBold() + $" {gambleStats.TotalGambles} ({gambleStats.TotalGambleWins} wins / {gambleStats.TotalGambleLosses} losses)");
+            sb.AppendLine("Win %:".AsBold() + $" {(double.IsNaN(gambleStats.PercentWinGambling) ? "N/A" : (gambleStats.PercentWinGambling * 100).ToString("N0"))}");
+            sb.AppendLine("Winnings:".AsBold() + $" {gambleStats.TotalCoinsGambled:N0} (Net: {gambleStats.NetCoinsGambling})");
             
+            return sb.ToString();
+        }
+
+        public string GetCommandStatsString()
+        {
+            IUserCommandStatistics commandStats = this;
+
+            var sb = new StringBuilder();
+            
+            sb.AppendLine("Favorite Command:".AsBold() + $" {_server.CommandPrefix}{commandStats.MostUsedCommand}");
+            sb.AppendLine("Commands Executed:".AsBold() + $" {commandStats.CommandsExecuted:N0}");
+            sb.AppendLine("Commands Executed (Last 24H):".AsBold() + $" {commandStats.CommandsExecutedLastTwentyFourHours:N0}");
             
             return sb.ToString();
         }

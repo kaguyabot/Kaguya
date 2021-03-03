@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Discord.Commands;
-using Kaguya.Internal.Attributes;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Rest;
-using Kaguya.Database.Model;
+using Discord.Commands;
 using Kaguya.Database.Repositories;
+using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Internal.Models.Statistics.User;
 using Kaguya.Options;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Kaguya.Discord.Commands.Reference
@@ -27,10 +25,11 @@ namespace Kaguya.Discord.Commands.Reference
         private readonly FishRepository _fishRepository;
         private readonly IOptions<AdminConfigurations> _adminConfig;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
+        private readonly KaguyaServerRepository _kaguyaServerRepository;
 
         public Stats(ILogger<Stats> logger, IServiceProvider serviceProvider, KaguyaStatisticsRepository statisticsRepository,
             FishRepository fishRepository, IOptions<AdminConfigurations> adminConfig,
-            KaguyaUserRepository kaguyaUserRepository) : base(logger)
+            KaguyaUserRepository kaguyaUserRepository, KaguyaServerRepository kaguyaServerRepository) : base(logger)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
@@ -38,6 +37,7 @@ namespace Kaguya.Discord.Commands.Reference
             _fishRepository = fishRepository;
             _adminConfig = adminConfig;
             _kaguyaUserRepository = kaguyaUserRepository;
+            _kaguyaServerRepository = kaguyaServerRepository;
         }
 
         // [Command]
@@ -73,10 +73,9 @@ namespace Kaguya.Discord.Commands.Reference
             id ??= Context.User.Id;
 
             var user = await _kaguyaUserRepository.GetOrCreateAsync(id.Value);
-            var userStats = new UserStatistics(user, _serviceProvider);
+            var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
+            var userStats = new UserStatistics(user, server, _serviceProvider);
 
-            var commandStats = userStats as IUserCommandStatistics;
-            
             var embed = new KaguyaEmbedBuilder(KaguyaColors.LightOrange)
             {
                 Description = $"Stats for {userStats.RestUser.Mention}".AsBoldUnderlined(),
@@ -104,6 +103,12 @@ namespace Kaguya.Discord.Commands.Reference
                     {
                         Name = "Gambling Stats",
                         Value = userStats.GetGamblingStatsString(),
+                        IsInline = true
+                    },
+                    new EmbedFieldBuilder
+                    {
+                        Name = "Command Stats",
+                        Value = userStats.GetCommandStatsString(),
                         IsInline = true
                     }
                 }
