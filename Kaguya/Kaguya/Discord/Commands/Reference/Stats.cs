@@ -101,13 +101,13 @@ namespace Kaguya.Discord.Commands.Reference
                     },
                     new EmbedFieldBuilder
                     {
-                        Name = "Gambling Stats",
+                        Name = "🎲 Gambling Stats",
                         Value = userStats.GetGamblingStatsString(),
                         IsInline = true
                     },
                     new EmbedFieldBuilder
                     {
-                        Name = "Command Stats",
+                        Name = "📢 Command Stats",
                         Value = userStats.GetCommandStatsString(),
                         IsInline = true
                     }

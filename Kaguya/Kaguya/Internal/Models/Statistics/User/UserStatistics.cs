@@ -32,7 +32,7 @@ namespace Kaguya.Internal.Models.Statistics.User
                 var fishRepository = scope.ServiceProvider.GetRequiredService<FishRepository>();
                 var repRepository = scope.ServiceProvider.GetRequiredService<RepRepository>();
                 var commandHistoryRepository = scope.ServiceProvider.GetRequiredService<CommandHistoryRepository>();
-                var serverExpRepository = scope.ServiceProvider.GetRequiredService<ServerExperience>();
+                var serverExpRepository = scope.ServiceProvider.GetRequiredService<ServerExperienceRepository>();
 
                 this.RestUser = client.Rest.GetUserAsync(user.UserId).GetAwaiter().GetResult();
                 this.AllFish = fishRepository.GetAllNonTrashAsync(user.UserId).GetAwaiter().GetResult();
