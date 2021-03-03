@@ -26,7 +26,15 @@ namespace Kaguya.Internal.Models.Statistics.User
         /// A collection of rarities and counts for this user. The count
         /// variable represents how many fish of the given Rarity the user has caught.
         /// This list should contain 1 entry for each FishRarity that exists.
+        ///
+        /// The "rarity" entry is the <see cref="FishRarity"/> for the given set.
+        /// The "count" entry is the amount of fish caught by the user for the given rarity.
+        /// The "pointsSum" entry is the gross amount of points earned by catching fish for the given rarity.
         /// </summary>
-        public IList<(FishRarity rarity, int count)> RaritiesCount { get; }
+        public IList<(FishRarity rarity, int count, int coinsSum)> RaritiesCount { get; }
+        /// <summary>
+        /// The all-time sum of times the user has played the fishing game.
+        /// </summary>
+        public int TotalFishAttempts { get; }
     }
 }

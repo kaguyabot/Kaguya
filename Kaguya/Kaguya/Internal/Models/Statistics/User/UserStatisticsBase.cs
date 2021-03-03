@@ -20,10 +20,14 @@ namespace Kaguya.Internal.Models.Statistics.User
         public abstract IList<Fish> AllFish { get; }
         public abstract int GrossCoinsFromFishing { get; }
         public abstract int NetCoinsFishing { get; }
-        public abstract IList<(FishRarity rarity, int count)> RaritiesCount { get; }
+        public abstract IList<(FishRarity rarity, int count, int coinsSum)> RaritiesCount { get; }
+        public abstract int TotalFishAttempts { get; }
         public abstract Task<bool> HasRecentlyVotedAsync(TimeSpan threshold);
         public abstract int RepGiven { get; }
         public abstract int RepReceived { get; }
+        public abstract int CommandsExecuted { get; }
+        public abstract int CommandsExecutedLastTwentyFourHours { get; }
+        public abstract string MostUsedCommand { get; }
 
         public int FishExp => _user.FishExp;
         public int TotalGambles => _user.TotalGambles;

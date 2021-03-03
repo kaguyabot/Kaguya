@@ -448,7 +448,7 @@ namespace Kaguya.Workers
 
             try
             {
-                IServiceProvider serviceProvider = scope?.ServiceProvider ?? _serviceProvider;
+                IServiceProvider serviceProvider = scope?.ServiceProvider ?? _serviceProvider.CreateScope().ServiceProvider;
                 var ksRepo = serviceProvider.GetRequiredService<KaguyaServerRepository>();
                 var userRepo = serviceProvider.GetService<KaguyaUserRepository>();
                 var chRepo = serviceProvider.GetService<CommandHistoryRepository>();
