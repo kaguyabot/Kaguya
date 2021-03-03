@@ -16,14 +16,29 @@ namespace Kaguya.Database.Repositories
 		{
 			return await Table.AsNoTracking().Where(x => x.ExecutedSuccessfully).CountAsync();
 		}
-		
-		public async Task<int> GetRecentSuccessfulCountAsync(TimeSpan offset)
+
+		public async Task<int> GetSuccessfulCountAsync(ulong userId)
 		{
-			DateTimeOffset constraint = DateTimeOffset.Now - offset;
+			return await Table.AsNoTracking().Where(x => x.ExecutedSuccessfully && x.UserId == userId).CountAsync();
+		}
+
+		public async Task<int> GetRecentSuccessfulCountAsync(TimeSpan threshold)
+		{
+			DateTimeOffset constraint = DateTimeOffset.Now - threshold;
 
 			return await Table.AsNoTracking()
 			                  .Where(x => x.ExecutedSuccessfully &&
 			                              x.ExecutionTime > constraint)
+			                  .CountAsync();
+		}
+
+		public async Task<int> GetRecentSuccessfulCountAsync(ulong userId, TimeSpan threshold)
+		{
+			DateTimeOffset constraint = DateTimeOffset.Now - threshold;
+
+			return await Table.AsNoTracking().Where(x => x.ExecutedSuccessfully &&
+			                                             x.UserId == userId &&
+			                                             x.ExecutionTime > constraint)
 			                  .CountAsync();
 		}
 	}
