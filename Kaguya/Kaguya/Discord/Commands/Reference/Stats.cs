@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -8,6 +9,8 @@ using Kaguya.Database.Repositories;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Extensions.DiscordExtensions;
+using Kaguya.Internal.Models.Statistics;
+using Kaguya.Internal.Models.Statistics.Bot;
 using Kaguya.Internal.Models.Statistics.User;
 using Kaguya.Options;
 using Microsoft.Extensions.Logging;
@@ -19,34 +22,33 @@ namespace Kaguya.Discord.Commands.Reference
     [Group("stats")]
     public class Stats : KaguyaBase<Stats>
     {
-        private readonly ILogger<Stats> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private readonly KaguyaStatisticsRepository _statisticsRepository;
-        private readonly FishRepository _fishRepository;
         private readonly IOptions<AdminConfigurations> _adminConfig;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
         private readonly KaguyaServerRepository _kaguyaServerRepository;
 
-        public Stats(ILogger<Stats> logger, IServiceProvider serviceProvider, KaguyaStatisticsRepository statisticsRepository,
-            FishRepository fishRepository, IOptions<AdminConfigurations> adminConfig,
+        public Stats(ILogger<Stats> logger, IServiceProvider serviceProvider, IOptions<AdminConfigurations> adminConfig,
             KaguyaUserRepository kaguyaUserRepository, KaguyaServerRepository kaguyaServerRepository) : base(logger)
         {
-            _logger = logger;
             _serviceProvider = serviceProvider;
-            _statisticsRepository = statisticsRepository;
-            _fishRepository = fishRepository;
             _adminConfig = adminConfig;
             _kaguyaUserRepository = kaguyaUserRepository;
             _kaguyaServerRepository = kaguyaServerRepository;
         }
 
-        // [Command]
-        // [Summary("Displays various bot statistics.")]
-        // public async Task StatisticsCommandAsync()
-        // {
-        //     KaguyaStatistics stats = await _statisticsRepository.GetMostRecentAsync();
-        //     
-        // }
+        [Command]
+        [Summary("Displays various bot statistics.")]
+        public async Task StatisticsCommandAsync()
+        {
+            var stats = new BotStatistics(_serviceProvider);
+            
+            var embed = new KaguyaEmbedBuilder(KaguyaColors.Tan)
+            {
+                Fields = GetStatsFields(stats)
+            };
+
+            await SendEmbedAsync(embed);
+        }
 
         [Priority(0)]
         [Command("-u")]
@@ -79,41 +81,8 @@ namespace Kaguya.Discord.Commands.Reference
             var embed = new KaguyaEmbedBuilder(KaguyaColors.LightOrange)
             {
                 Description = $"Stats for {userStats.RestUser.Mention}".AsBoldUnderlined(),
-                Fields = new List<EmbedFieldBuilder>
-                {
-                    new EmbedFieldBuilder
-                    {
-                        Name = "📈 Discord Stats",
-                        Value = userStats.GetDiscordStatsString(),
-                        IsInline = true
-                    },
-                    new EmbedFieldBuilder
-                    {
-                        Name = "🐠 Fishing Stats",
-                        Value = userStats.GetFishStatsString(),
-                        IsInline = true
-                    },
-                    new EmbedFieldBuilder
-                    {
-                        Name = "🔍 Kaguya Stats",
-                        Value = userStats.GetKaguyaStatsString(),
-                        IsInline = true
-                    },
-                    new EmbedFieldBuilder
-                    {
-                        Name = "🎲 Gambling Stats",
-                        Value = userStats.GetGamblingStatsString(),
-                        IsInline = true
-                    },
-                    new EmbedFieldBuilder
-                    {
-                        Name = "📢 Command Stats",
-                        Value = userStats.GetCommandStatsString(),
-                        IsInline = true
-                    }
-                }
+                Fields = GetStatsFields(userStats)
             };
-
 
             await SendEmbedAsync(embed);
         }
@@ -126,7 +95,41 @@ namespace Kaguya.Discord.Commands.Reference
             await UserStatisticsCommandAsync(id.ToString());
         }
 
-        // todo: $stats -u to fetch other user's stats OR stats of user
-        // todo: $stats -fish to view personal fish stats OR of other users.
+        private List<EmbedFieldBuilder> GetStatsFields(IDisplayableStats displayableStats)
+        {
+            return new List<EmbedFieldBuilder>
+            {
+                new EmbedFieldBuilder
+                {
+                    Name = "📈 Discord Stats",
+                    Value = displayableStats.GetDiscordStatsString(),
+                    IsInline = true
+                },
+                new EmbedFieldBuilder
+                {
+                    Name = "🐠 Fishing Stats",
+                    Value = displayableStats.GetFishingStatsString(),
+                    IsInline = true
+                },
+                new EmbedFieldBuilder
+                {
+                    Name = "🔍 Kaguya Stats",
+                    Value = displayableStats.GetKaguyaStatsString(),
+                    IsInline = true
+                },
+                new EmbedFieldBuilder
+                {
+                    Name = "🎲 Gambling Stats",
+                    Value = displayableStats.GetGamblingStatsString(),
+                    IsInline = true
+                },
+                new EmbedFieldBuilder
+                {
+                    Name = "📢 Command Stats",
+                    Value = displayableStats.GetCommandStatsString(),
+                    IsInline = true
+                }
+            };
+        }
     }
 }

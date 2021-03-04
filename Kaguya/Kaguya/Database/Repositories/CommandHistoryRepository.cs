@@ -50,5 +50,22 @@ namespace Kaguya.Database.Repositories
 			                  .Select(x => x.Key)
 			                  .FirstOrDefaultAsync();
 		}
+
+		public async Task<(string cmdName, int count)> GetMostPopularCommandAsync()
+		{
+			string name = await Table.AsNoTracking()
+			                         .GroupBy(x => x.CommandName)
+			                         .OrderByDescending(x => x.Count())
+			                         .Select(x => x.Key)
+			                         .FirstOrDefaultAsync();
+			
+			int count = await Table.AsNoTracking()
+			                       .GroupBy(x => x.CommandName)
+			                       .OrderByDescending(x => x.Count())
+			                       .Select(x => x.Count())
+			                       .FirstOrDefaultAsync();
+
+			return (name, count);
+		}
 	}
 }

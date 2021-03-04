@@ -77,5 +77,25 @@ namespace Kaguya.Database.Repositories
             Table.Remove(value);
             await DbContext.SaveChangesAsync();
         }
+
+        public async Task<int> TotalGambleWins()
+        {
+            return await Table.AsNoTracking().Where(x => x.IsWinner).CountAsync();
+        }
+
+        public async Task<int> TotalGambleLosses()
+        {
+            return await Table.AsNoTracking().Where(x => !x.IsWinner).CountAsync();
+        }
+
+        public async Task<long> TotalGambleWinsCoins()
+        {
+            return await Table.AsNoTracking().SumAsync(x => x.AmountRewarded);
+        }
+
+        public async Task<long> TotalGambleLossesCoins()
+        {
+            return await Table.AsNoTracking().SumAsync(x => x.AmountBet);
+        }
     }
 }

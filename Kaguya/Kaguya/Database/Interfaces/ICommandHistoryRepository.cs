@@ -38,5 +38,10 @@ namespace Kaguya.Database.Interfaces
 		/// <param name="userId"></param>
 		/// <returns></returns>
 		public Task<string> GetFavoriteCommandAsync(ulong userId);
+		/// <summary>
+		/// Returns the most popular command and how many times it has been executed.
+		/// </summary>
+		/// <returns></returns>
+		public Task<(string cmdName, int count)> GetMostPopularCommandAsync();
 	}
 }

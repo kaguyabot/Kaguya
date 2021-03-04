@@ -11,7 +11,6 @@ namespace Kaguya.Database.Repositories
 {
     public class FishRepository : RepositoryBase<Fish>, IFishRepository
     {
-		
         public FishRepository(KaguyaDbContext dbContext) : base(dbContext)
         { }
 
@@ -34,10 +33,28 @@ namespace Kaguya.Database.Repositories
         {
             return await Table.AsNoTracking().Where(x => x.UserId == userId && x.Rarity == rarity).ToListAsync();
         }
-
+        
         public async Task<IList<Fish>> GetAllNonTrashAsync(ulong userId)
         {
             return await Table.AsNoTracking().Where(x => x.UserId == userId && x.Rarity != FishRarity.Trash).ToListAsync();
+        }
+
+        public async Task<int> CountAllOfRarityAsync(FishRarity rarity)
+        {
+            return await Table.AsNoTracking().Where(x => x.Rarity == rarity).CountAsync();
+        }
+
+        public async Task<int> CountAllCoinsEarnedAsync()
+        {
+            return await Table.AsNoTracking().SumAsync(x => x.CoinValue);
+        }
+
+        public async Task<int> CountNetCoinsEarnedAsync()
+        {
+            int gross = await CountAllCoinsEarnedAsync();
+            int loss = await Table.AsNoTracking().SumAsync(x => x.CostOfPlay);
+
+            return gross - loss;
         }
 
         public async Task<int> CountAllNonTrashAsync(ulong userId)

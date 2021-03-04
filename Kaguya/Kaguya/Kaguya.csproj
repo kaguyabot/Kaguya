@@ -38,7 +38,6 @@
 
     <ItemGroup>
       <Folder Include="External\Services" />
-      <Folder Include="Internal\Models\Statistics" />
     </ItemGroup>
 
     <ItemGroup>

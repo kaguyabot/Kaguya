@@ -2,7 +2,7 @@ using Discord.Rest;
 
 namespace Kaguya.Internal.Models.Statistics.User
 {
-    public interface IUserStatistics : IUserFishStatistics, IUserGambleStatistics, IUserUpvoteStatistics, IUserCommandStatistics
+    public interface IUserStatistics : IDisplayableStats, IUserFishStatistics, IUserGambleStatistics, IUserUpvoteStatistics, IUserCommandStatistics
     {
         /// <summary>
         /// A RestUser object retreived from the client for this user.
