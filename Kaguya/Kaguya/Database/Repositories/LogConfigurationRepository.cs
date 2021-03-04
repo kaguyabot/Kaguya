@@ -7,27 +7,24 @@ namespace Kaguya.Database.Repositories
 {
     public class LogConfigurationRepository : RepositoryBase<LogConfiguration>, ILogConfigurationRepository
     {
-        private readonly KaguyaDbContext _dbContext;
-
         public LogConfigurationRepository(KaguyaDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
         
         public async Task<LogConfiguration> GetOrCreateAsync(ulong key)
         {
             var config = await GetAsync(key);
-            if (config is not null)
+            if (config != null)
             {
                 return config;
             }
 
-            config = _dbContext.LogConfigurations.Add(new LogConfiguration
+            config = Table.Add(new LogConfiguration
             {
                 ServerId = key
             }).Entity;
 
-            await _dbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
             
             return config;
         }
