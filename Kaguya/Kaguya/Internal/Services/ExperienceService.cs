@@ -33,9 +33,11 @@ namespace Kaguya.Internal.Services
         private readonly ulong _serverId;
         private readonly ServerExperienceRepository _serverExperienceRepository;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
+        private readonly KaguyaServerRepository _kaguyaServerRepository;
 
         public ExperienceService(ILogger<ExperienceService> logger, ITextChannel textChannel, KaguyaUser user, IUser discordUser, 
-            ulong serverId, ServerExperienceRepository serverExperienceRepository, KaguyaUserRepository kaguyaUserRepository)
+            ulong serverId, ServerExperienceRepository serverExperienceRepository, KaguyaUserRepository kaguyaUserRepository,
+            KaguyaServerRepository kaguyaServerRepository)
         {
             _logger = logger;
             _textChannel = textChannel;
@@ -44,6 +46,7 @@ namespace Kaguya.Internal.Services
             _serverId = serverId;
             _serverExperienceRepository = serverExperienceRepository;
             _kaguyaUserRepository = kaguyaUserRepository;
+            _kaguyaServerRepository = kaguyaServerRepository;
         }
 
         /// <summary>
@@ -129,7 +132,13 @@ namespace Kaguya.Internal.Services
         {
             try
             {
-                await _textChannel.SendMessageAsync(embed: embed);
+                // We don't send into servers unless they have enabled the level notifications.
+                var server = await _kaguyaServerRepository.GetOrCreateAsync(_serverId);
+
+                if (server.LevelAnnouncementsEnabled)
+                {
+                    await _textChannel.SendMessageAsync(embed: embed);
+                }
             }
             catch (Exception e)
             {

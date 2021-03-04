@@ -335,12 +335,14 @@ namespace Kaguya.Workers
             var expLogger = _serviceProvider.GetRequiredService<ILogger<ExperienceService>>();
             var serverExpRepository = scope.ServiceProvider.GetRequiredService<ServerExperienceRepository>();
             var userRepository = scope.ServiceProvider.GetRequiredService<KaguyaUserRepository>();
+            var serverRepository = scope.ServiceProvider.GetRequiredService<KaguyaServerRepository>();
+            
             
             // We only want to attempt to add EXP if all shards are ready.
-            if (_client.AllShardsReady() && server.LevelAnnouncementsEnabled)
+            if (_client.AllShardsReady())
             {
                 var expService = new ExperienceService(expLogger, (ITextChannel) commandCtx.Channel, 
-                    user, commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository);
+                    user, commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository, serverRepository);
                 
                 await expService.TryAddGlobalExperienceAsync();
                 await expService.TryAddServerExperienceAsync();
