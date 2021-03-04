@@ -11,62 +11,55 @@ namespace Kaguya.Database.Repositories
 {
 	public class AdminActionRepository : RepositoryBase<AdminAction>, IAdminActionRepository
 	{
-		private readonly KaguyaDbContext _dbContext;
-
 		public AdminActionRepository(KaguyaDbContext dbContext) : base(dbContext)
-		{
-			_dbContext = dbContext;
-		}
+		{ }
 
 		public async Task<IList<AdminAction>> GetAllAsync(ulong serverId, bool showHidden = false)
 		{
-			var collection = _dbContext.AdminActions.AsQueryable()
-			                                 .Where(x => x.ServerId == serverId);
+			IQueryable<AdminAction> collection = Table.AsNoTracking().Where(x => x.ServerId == serverId);
 			
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
 		public async Task<IList<AdminAction>> GetAllAsync(ulong serverId, string action, bool showHidden = false)
 		{
-			var collection = _dbContext.AdminActions.AsQueryable()
-			                                 .Where(x => x.ServerId == serverId &&
-			                                             x.Action == action);
+			IQueryable<AdminAction> collection = Table.AsNoTracking().Where(x => x.ServerId == serverId && x.Action == action);
 			
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
 		public async Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, bool showHidden = false)
 		{
-			var collection = _dbContext.AdminActions.AsQueryable()
-			                                 .Where(x => x.ActionedUserId == userId &&
-			                                             x.ServerId == serverId &&
-			                                             (!x.Expiration.HasValue || x.Expiration.Value >= DateTimeOffset.Now));
+			IQueryable<AdminAction> collection = Table.AsNoTracking()
+			                                          .Where(x => x.ActionedUserId == userId &&
+			                                                      x.ServerId == serverId &&
+			                                                      (!x.Expiration.HasValue || x.Expiration.Value >= DateTimeOffset.Now));
 
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 		
 		public async Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, string action, bool showHidden = false)
 		{
-			var collection = _dbContext.AdminActions.AsQueryable()
-			                                 .Where(x => x.ActionedUserId == userId &&
-			                                             x.ServerId == serverId &&
-			                                             x.Action.Equals(action, StringComparison.OrdinalIgnoreCase) &&
-			                                             (!x.Expiration.HasValue || x.Expiration.Value >= DateTimeOffset.Now));
+			IQueryable<AdminAction> collection = Table.AsNoTracking()
+			                                          .Where(x => x.ActionedUserId == userId &&
+			                                                      x.ServerId == serverId &&
+			                                                      x.Action.Equals(action, StringComparison.OrdinalIgnoreCase) &&
+			                                                      (!x.Expiration.HasValue || x.Expiration.Value >= DateTimeOffset.Now));
 
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
 		public async Task<IList<AdminAction>> GetAllToUndoAsync()
 		{
-			return await _dbContext.AdminActions.AsQueryable()
-			                 .Where(x => x.Expiration.HasValue &&
-			                             x.HasTriggered.HasValue &&
-			                             !x.HasTriggered.Value &&
-			                             (x.Action == AdminAction.BanAction ||
-			                             x.Action == AdminAction.MuteAction || 
-										 x.Action == AdminAction.ShadowbanAction) &&
-			                             x.Expiration.Value < DateTimeOffset.Now)
-			                 .ToListAsync();
+			return await Table.AsNoTracking()
+			                  .Where(x => x.Expiration.HasValue &&
+			                              x.HasTriggered.HasValue &&
+			                              !x.HasTriggered.Value &&
+			                              (x.Action == AdminAction.BanAction ||
+			                               x.Action == AdminAction.MuteAction ||
+			                               x.Action == AdminAction.ShadowbanAction) &&
+			                              x.Expiration.Value < DateTimeOffset.Now)
+			                  .ToListAsync();
 		}
 
 		/// <summary>
@@ -111,7 +104,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<int> GetCountAsync(ulong serverId)
 		{
-			return await _dbContext.AdminActions.AsQueryable().Where(x => x.ServerId == serverId).CountAsync();
+			return await Table.AsNoTracking().Where(x => x.ServerId == serverId).CountAsync();
 		}
 	}
 }

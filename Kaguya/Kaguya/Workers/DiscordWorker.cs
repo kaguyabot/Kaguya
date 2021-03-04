@@ -268,13 +268,19 @@ namespace Kaguya.Workers
         private async Task HandleCommandAsync(SocketMessage msg)
         {
             if (!(msg is SocketUserMessage message) || message.Author.IsBot)
+            {
                 return;
+            }
 
             if (message.Channel.GetType() != typeof(SocketTextChannel))
+            {
                 return;
+            }
 
             if (!(message.Channel is SocketGuildChannel guildChannel))
+            {
                 return;
+            }
 
             IServiceScope scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<KaguyaDbContext>();
@@ -442,7 +448,7 @@ namespace Kaguya.Workers
 
             try
             {
-                IServiceProvider serviceProvider = scope?.ServiceProvider ?? _serviceProvider;
+                IServiceProvider serviceProvider = scope?.ServiceProvider ?? _serviceProvider.CreateScope().ServiceProvider;
                 var ksRepo = serviceProvider.GetRequiredService<KaguyaServerRepository>();
                 var userRepo = serviceProvider.GetService<KaguyaUserRepository>();
                 var chRepo = serviceProvider.GetService<CommandHistoryRepository>();

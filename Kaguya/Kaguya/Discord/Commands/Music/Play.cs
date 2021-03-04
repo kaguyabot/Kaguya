@@ -88,7 +88,7 @@ namespace Kaguya.Discord.Commands.Music
                 return;
             }
             
-            if (forcePlay || (player.Queue.Count == 0 && player.PlayerState != PlayerState.Playing))
+            if ((forcePlay || player.Queue.Count == 0) && player.PlayerState != PlayerState.Playing && player.PlayerState != PlayerState.Paused)
             {
                 await player.PlayAsync(track);
                 _interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15), 
@@ -121,7 +121,7 @@ namespace Kaguya.Discord.Commands.Music
             if (player.PlayerState == PlayerState.Paused)
             {
                 await player.ResumeAsync();
-                await SendBasicSuccessEmbedAsync("👍 Resumed the player.");
+                await SendBasicSuccessEmbedAsync("Resumed the player.");
             }
             else
             {

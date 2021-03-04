@@ -11,12 +11,8 @@ namespace Kaguya.Database.Repositories
 {
     public class GambleHistoryRepository : RepositoryBase<GambleHistory>, IGambleHistoryRepository
     {
-        private readonly KaguyaDbContext _dbContext;
-
         public GambleHistoryRepository(KaguyaDbContext dbContext) : base(dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        { }
         
         [Obsolete("Use the GetMostRecentForUserAsync method for this.", true)]
 #pragma warning disable 108,114
@@ -33,59 +29,73 @@ namespace Kaguya.Database.Repositories
 #pragma warning restore 108,114
         public async Task<IList<GambleHistory>> GetAllAsync(ulong userId)
         {
-            return await _dbContext.GambleHistories
-                                   .AsQueryable()
-                                   .Where(x => x.UserId == userId)
-                                   .ToListAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.UserId == userId)
+                              .ToListAsync();
         }
 
         public async Task<int> GetCountForUserAsync(ulong userId)
         {
-            return await _dbContext.GambleHistories
-                                   .AsQueryable()
-                                   .Where(x => x.UserId == userId)
-                                   .CountAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.UserId == userId)
+                              .CountAsync();
         }
 
         public async Task<int> GetCountForServerAsync(ulong serverId)
         {
-            return await _dbContext.GambleHistories
-                                   .AsQueryable()
-                                   .Where(x => x.ServerId == serverId)
-                                   .CountAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.ServerId == serverId)
+                              .CountAsync();
         }
 
         public async Task<GambleHistory> GetMostRecentForUserAsync(ulong userId)
         {
-            return await _dbContext.GambleHistories
-                                   .AsQueryable()
-                                   .Where(x => x.UserId == userId)
-                                   .OrderByDescending(x => x.Timestamp)
-                                   .FirstOrDefaultAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.UserId == userId)
+                              .OrderByDescending(x => x.Timestamp)
+                              .FirstOrDefaultAsync();
         }
         
         public async Task<GambleHistory> GetBiggestLossAsync(ulong userId)
         {
-            return await _dbContext.GambleHistories
-                                   .AsQueryable()
-                                   .Where(x => x.UserId == userId && x.IsWinner == false)
-                                   .OrderByDescending(x => x.AmountBet)
-                                   .FirstOrDefaultAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.UserId == userId && x.IsWinner == false)
+                              .OrderByDescending(x => x.AmountBet)
+                              .FirstOrDefaultAsync();
         }
 
         public async Task<GambleHistory> GetBiggestWinAsync(ulong userId)
         {
-            return await _dbContext.GambleHistories
-                                   .AsQueryable()
-                                   .Where(x => x.UserId == userId && x.IsWinner)
-                                   .OrderByDescending(x => x.AmountBet)
-                                   .FirstOrDefaultAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.UserId == userId && x.IsWinner)
+                              .OrderByDescending(x => x.AmountBet)
+                              .FirstOrDefaultAsync();
         }
 
         public async Task DeleteAsync(GambleHistory value)
         {
-            _dbContext.GambleHistories.Remove(value);
-            await _dbContext.SaveChangesAsync();
+            Table.Remove(value);
+            await DbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> TotalGambleWins()
+        {
+            return await Table.AsNoTracking().Where(x => x.IsWinner).CountAsync();
+        }
+
+        public async Task<int> TotalGambleLosses()
+        {
+            return await Table.AsNoTracking().Where(x => !x.IsWinner).CountAsync();
+        }
+
+        public async Task<long> TotalGambleWinsCoins()
+        {
+            return await Table.AsNoTracking().SumAsync(x => x.AmountRewarded);
+        }
+
+        public async Task<long> TotalGambleLossesCoins()
+        {
+            return await Table.AsNoTracking().SumAsync(x => x.AmountBet);
         }
     }
 }

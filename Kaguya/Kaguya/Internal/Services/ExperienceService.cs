@@ -87,7 +87,8 @@ namespace Kaguya.Internal.Services
             _user.AdjustCoins(COINS_VALUE);
             await _kaguyaUserRepository.UpdateAsync(_user);
 
-            _logger.LogDebug($"(Global Exp) User {_user} has received {EXP_VALUE} exp and {COINS_VALUE} coins. New total: {_user.GlobalExp:N0} exp, {_user.Coins:N0} coins");
+            _logger.LogDebug($"(Global Exp) User {_user} has received {EXP_VALUE} exp and " +
+                             $"{COINS_VALUE} coins. New total: {_user.GlobalExp:N0} exp, {_user.Coins:N0} coins");
             
             if (HasLeveledUp(oldExp, newExp))
             {
@@ -174,7 +175,7 @@ namespace Kaguya.Internal.Services
                 total = await _serverExperienceRepository.GetCountAsync();
                 exp = (await FetchExperienceAsync()).Exp;
                 
-                embed = new KaguyaEmbedBuilder(Color.Gold)
+                embed = new KaguyaEmbedBuilder(Color.Orange)
                 {
                     Title = "Server Level Up!",
                     Description = $"{_discordUser.Mention} You've reached server level {level.ToString().AsBold()}!\n",
@@ -207,6 +208,11 @@ namespace Kaguya.Internal.Services
         public static bool HasLeveledUp(int oldExp, int newExp)
         {
             return CalculateLevel(oldExp).ToFloor() < CalculateLevel(newExp).ToFloor();
+        }
+
+        public static bool HasLeveledUp(decimal oldLevel, decimal newLevel)
+        {
+            return oldLevel.ToFloor() < newLevel.ToFloor();
         }
         
         public static decimal CalculateLevel(int exp)

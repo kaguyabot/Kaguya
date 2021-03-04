@@ -11,24 +11,20 @@ namespace Kaguya.Database.Repositories
 {
     public class GiveawayRepository : RepositoryBase<Giveaway>, IGiveawayRepository
     {
-        private readonly KaguyaDbContext _dbContext;
-
-        public GiveawayRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
+        public GiveawayRepository(KaguyaDbContext dbContext) : base(dbContext) { }
         
         public async Task<IList<Giveaway>> GetActiveGiveawaysAsync()
         {
-            return await _dbContext.Giveaways
-                                   .AsQueryable()
-                                   .Where(x => x.Expiration < DateTimeOffset.Now)
-                                   .ToListAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.Expiration < DateTimeOffset.Now)
+                              .ToListAsync();
         }
 
         public async Task<IList<Giveaway>> GetActiveGiveawaysAsync(ulong serverId)
         {
-            return await _dbContext.Giveaways
-                                   .AsQueryable()
-                                   .Where(x => x.ServerId == serverId && x.Expiration < DateTimeOffset.Now)
-                                   .ToListAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.ServerId == serverId && x.Expiration < DateTimeOffset.Now)
+                              .ToListAsync();
         }
     }
 }

@@ -56,9 +56,16 @@ namespace Kaguya.Discord.Commands.Games
 
             if (user.LastFished > DateTimeOffset.Now - cooldown)
             {
-	            await SendBasicErrorEmbedAsync($"Please wait " + (user.LastFished.Value - DateTimeOffset.Now.Subtract(cooldown))
-	                                                             .Humanize(1, minUnit:  TimeUnit.Millisecond, maxUnit: TimeUnit.Second)
-	                                                             .AsBold() + " before fishing again.");
+                TimeSpan diff = user.LastFished.Value - DateTimeOffset.Now.Subtract(cooldown);
+                if (diff.TotalSeconds < 1)
+                {
+                    diff = TimeSpan.FromSeconds(1);
+                }
+
+                await SendBasicErrorEmbedAsync($"Please wait " +
+                                               diff.Humanize(1, minUnit: TimeUnit.Millisecond, maxUnit: TimeUnit.Second)
+                                                   .AsBold() +
+                                               " before fishing again.");
 
 	            return;
             }

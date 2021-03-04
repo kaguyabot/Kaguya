@@ -2,12 +2,14 @@ using System;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using Kaguya.Database.Model;
+using Kaguya.External.Services.TopGg;
 using Kaguya.Internal.Events.ArgModels;
 using Kaguya.Internal.Music;
 using Kaguya.Internal.Services;
 using Kaguya.Internal.Services.Recurring;
 using Microsoft.Extensions.Logging;
 using Victoria;
+// ReSharper disable ContextualLoggerProblem
 
 namespace Kaguya.Internal.Events
 {
@@ -20,6 +22,7 @@ namespace Kaguya.Internal.Events
         private readonly ILogger<EventImplementations> _implementationsLogger;
         private readonly GuildLoggerService _guildLoggerService;
         private readonly GreetingService _greetingService;
+        private readonly UpvoteNotifierService _upvoteNotifierService;
         private readonly ILogger<KaguyaEvents> _logger;
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace Kaguya.Internal.Events
 
         public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService,
             LavaNode lavaNode, AudioService audioService, ILogger<EventImplementations> implementationsLogger,
-            GuildLoggerService guildLoggerService, GreetingService greetingService)
+            GuildLoggerService guildLoggerService, GreetingService greetingService, UpvoteNotifierService upvoteNotifierService)
         {
             _logger = logger;
             _client = client;
@@ -65,6 +68,7 @@ namespace Kaguya.Internal.Events
             _implementationsLogger = implementationsLogger;
             _guildLoggerService = guildLoggerService;
             _greetingService = greetingService;
+            _upvoteNotifierService = upvoteNotifierService;
         }
 
         public void InitEvents()
@@ -97,7 +101,7 @@ namespace Kaguya.Internal.Events
             
             OnAntiraid += async (a, u) => await _guildLoggerService.LogAntiRaidAsync(a, u);
             OnFilteredWordDetected += async d => await _guildLoggerService.LogFilteredWordAsync(d);
-            OnUpvote += async uv => await eventImplementations.UpvoteNotifierAsync(uv);
+            OnUpvote += _upvoteNotifierService.Enqueue;
             
             _lavaNode.OnTrackStarted += _audioService.OnTrackStarted;
             _lavaNode.OnTrackEnded += _audioService.OnTrackEnded;
