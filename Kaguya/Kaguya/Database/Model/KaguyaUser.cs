@@ -76,7 +76,6 @@ namespace Kaguya.Database.Model
 		/// <summary>
 		/// How many ratelimit warnings the user has accumulated.
 		/// </summary>
-
 		public int RateLimitWarnings { get; set; }
 		/// <summary>
 		/// The all-time sum of unique upvotes the user has performed on top.gg. A user

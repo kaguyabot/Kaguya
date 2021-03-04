@@ -49,7 +49,7 @@ namespace Kaguya.Internal.Models.Statistics.Bot
                 TotalGambleLosses = gambleHistoryRepository.TotalGambleLosses().GetAwaiter().GetResult();
                 TotalGambleWinsCoins = gambleHistoryRepository.TotalGambleWinsCoins().GetAwaiter().GetResult();
                 TotalGambleLossesCoins = gambleHistoryRepository.TotalGambleLossesCoins().GetAwaiter().GetResult();
-                TotalGambleWinPercent = TotalGambleWins / (double) TotalGambleWins + TotalGambleLosses;
+                TotalGambleWinPercent = TotalGambleWins / ((double) TotalGambleWins + TotalGambleLosses);
             }
         }
 
