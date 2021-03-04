@@ -186,14 +186,16 @@ namespace Kaguya.Internal.Services
                 total = await _serverExperienceRepository.GetCountAsync();
                 exp = (await FetchExperienceAsync()).Exp;
                 
+                //todo: get proper ranking values
+                
                 embed = new KaguyaEmbedBuilder(Color.Orange)
                 {
                     Title = "Server Level Up!",
                     Description = $"{_discordUser.Mention} You've reached server level {level.ToString().AsBold()}!\n",
-                    Footer = new EmbedFooterBuilder
-                    {
-                        Text = $"Server Rank: #{rank:N0} / {total:N0} | Server Exp: {exp:N0}"
-                    }
+                    // Footer = new EmbedFooterBuilder
+                    // {
+                    //     Text = $"Server Rank: #{rank:N0} / {total:N0} | Server Exp: {exp:N0}"
+                    // }
                 }.Build();
             }
             else
