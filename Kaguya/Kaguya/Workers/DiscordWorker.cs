@@ -336,12 +336,16 @@ namespace Kaguya.Workers
             var serverExpRepository = scope.ServiceProvider.GetRequiredService<ServerExperienceRepository>();
             var userRepository = scope.ServiceProvider.GetRequiredService<KaguyaUserRepository>();
             
-            var expService = new ExperienceService(expLogger, (ITextChannel) commandCtx.Channel, 
-                user, commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository);
-
-            await expService.TryAddGlobalExperienceAsync();
-            await expService.TryAddServerExperienceAsync();
-                        
+            // We only want to attempt to add EXP if all shards are ready.
+            if (_client.AllShardsReady())
+            {
+                var expService = new ExperienceService(expLogger, (ITextChannel) commandCtx.Channel, 
+                    user, commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository);
+                
+                await expService.TryAddGlobalExperienceAsync();
+                await expService.TryAddServerExperienceAsync();
+            }
+            
             // If the channel is blacklisted and the user isn't an Admin, return.
             if (!commandCtx.Guild.GetUser(commandCtx.User.Id).GuildPermissions.Administrator &&
                 await dbContext.BlacklistedEntities.AsQueryable().AnyAsync(x =>

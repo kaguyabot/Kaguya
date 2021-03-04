@@ -29,11 +29,8 @@ namespace Kaguya.Database.Interfaces
         /// Adds the <see cref="amount"/> of exp to the <see cref="ServerExperience"/> object that
         /// belongs to the given <see cref="serverId"/> and <see cref="userId"/>.
         /// </summary>
-        /// <param name="serverId"></param>
-        /// <param name="userId"></param>
-        /// <param name="amount"></param>
         /// <returns></returns>
-        public Task AddAsync(ulong serverId, ulong userId, int amount);
+        public Task AddOrUpdateAsync(ServerExperience value);
         /// <summary>
         /// Subtracts the <see cref="amount"/> of exp to the <see cref="ServerExperience"/> object that
         /// belongs to the given <see cref="serverId"/> and <see cref="userId"/>.

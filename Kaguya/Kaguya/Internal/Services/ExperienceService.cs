@@ -61,7 +61,10 @@ namespace Kaguya.Internal.Services
             int oldExp = match.Exp;
             int newExp = match.Exp + EXP_VALUE;
             
-            await _serverExperienceRepository.AddAsync(_serverId, _user.UserId, EXP_VALUE);
+            match.LastGivenExp = DateTimeOffset.Now;
+            match.AddExp(EXP_VALUE);
+            
+            await _serverExperienceRepository.AddOrUpdateAsync(match);
             _logger.LogDebug($"(Server Exp) User {_user} has received {EXP_VALUE} EXP in server {_serverId}.");
 
             if (HasLeveledUp(oldExp, newExp))
@@ -124,7 +127,15 @@ namespace Kaguya.Internal.Services
 
         private async Task SendToChannelAsync(Embed embed)
         {
-            await _textChannel.SendMessageAsync(embed: embed);
+            try
+            {
+                await _textChannel.SendMessageAsync(embed: embed);
+            }
+            catch (Exception e)
+            {
+                _logger.LogDebug(e, $"Failed to send level up message to channel {_textChannel.Id} in guild " +
+                                    $"{_textChannel.GuildId}");
+            }
         }
 
         private async Task SendToDmAsync(Embed embed, IDMChannel channel)

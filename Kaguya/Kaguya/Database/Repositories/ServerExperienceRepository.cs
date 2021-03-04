@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaguya.Database.Context;
@@ -20,7 +21,7 @@ namespace Kaguya.Database.Repositories
                 {
                     ServerId = serverId,
                     UserId = userId,
-                    LastGivenExp = null
+                    LastGivenExp = DateTimeOffset.Now
                 }).Entity;
 
                 await DbContext.SaveChangesAsync();
@@ -42,17 +43,23 @@ namespace Kaguya.Database.Repositories
         {
             return await Table.AsNoTracking()
                               .Where(x => x.ServerId == serverId)
-                                             .OrderByDescending(x => x.Exp)
-                                             .Take(count)
-                                             .ToListAsync();
+                              .OrderByDescending(x => x.Exp)
+                              .Take(count)
+                              .ToListAsync();
         }
 
-        public async Task AddAsync(ulong serverId, ulong userId, int amount)
+        public async Task AddOrUpdateAsync(ServerExperience value)
         {
-            ServerExperience match = await GetOrCreateAsync(serverId, userId);
-            match.AddExp(amount);
+            var match = await GetOrCreateAsync(value.ServerId, value.UserId);
 
-            await UpdateAsync(match);
+            if (match == null)
+            {
+                await InsertAsync(value);
+
+                return;
+            }
+
+            await UpdateAsync(value);
         }
 
         public async Task SubtractAsync(ulong serverId, ulong userId, int amount)
