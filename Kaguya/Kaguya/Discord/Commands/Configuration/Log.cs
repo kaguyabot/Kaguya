@@ -99,7 +99,7 @@ namespace Kaguya.Discord.Commands.Configuration
         [Remarks("<log type> [text channel]")]
         public async Task LogSetCommand(string logType, SocketTextChannel textChannel = null)
         {
-            await ModifyLogConfigAsync(logType, textChannel);
+            await ModifyLogConfigAsync(logType, textChannel, false);
         }
         
         [Command("-reset")]
@@ -108,14 +108,21 @@ namespace Kaguya.Discord.Commands.Configuration
         [Remarks("<log type>")]
         public async Task LogSetCommand(string logType)
         {
-            await ModifyLogConfigAsync(logType, null);
+            await ModifyLogConfigAsync(logType, null, true);
         }
 
-        private async Task ModifyLogConfigAsync(string logType, SocketTextChannel textChannel)
+        private async Task ModifyLogConfigAsync(string logType, SocketTextChannel textChannel, bool reset)
         {
-            if (textChannel == null)
+            if (textChannel == null && !reset)
             {
                 textChannel = Context.Channel as SocketTextChannel;
+
+                if (textChannel == null)
+                {
+                    await SendBasicErrorEmbedAsync("Invalid text channel. Channel could not be found or does not exist.");
+
+                    return;
+                }
             }
             
             IList<PropertyInfo> properties = _logProperties;
@@ -126,7 +133,7 @@ namespace Kaguya.Discord.Commands.Configuration
             if (logType.Equals("all", StringComparison.OrdinalIgnoreCase))
             {
                 all = true;
-                MassModifyConfig(ref logConfig, textChannel?.Id ?? 0);
+                MassModifyConfig(ref logConfig, reset ? 0 : textChannel?.Id ?? 0);
             }
 
             if (!properties.Any())
@@ -167,11 +174,11 @@ namespace Kaguya.Discord.Commands.Configuration
                     return;
                 }
                 
-                propMatch.SetValue(logConfig, textChannel?.Id ?? 0);
+                propMatch.SetValue(logConfig, reset ? 0 : textChannel.Id);
                 
                 await _logConfigurationRepository.UpdateAsync(logConfig);
 
-                if (textChannel == null)
+                if (reset)
                 {
                     await SendBasicSuccessEmbedAsync($"Reset logtype {propMatch.Name.AsBold()}.");
                 }
@@ -184,12 +191,12 @@ namespace Kaguya.Discord.Commands.Configuration
             {
                 foreach (PropertyInfo prop in _logProperties)
                 {
-                    prop.SetValue(logConfig, textChannel?.Id ?? 0);
+                    prop.SetValue(logConfig, reset ? 0 : textChannel.Id);
                 }
                 
                 await _logConfigurationRepository.UpdateAsync(logConfig);
 
-                if (textChannel == null)
+                if (reset)
                 {
                     await SendBasicSuccessEmbedAsync("Reset all logtypes.");
                 }

@@ -45,7 +45,7 @@ namespace Kaguya.Database.Repositories
 
         public async Task<PremiumKey> GetKeyAsync(string keyString)
         {
-            return await Table.AsQueryable().Where(x => x.Key == keyString).FirstOrDefaultAsync();
+            return await Table.AsNoTracking().Where(x => x.Key == keyString).FirstOrDefaultAsync();
         }
 
         public static string GenerateKey()

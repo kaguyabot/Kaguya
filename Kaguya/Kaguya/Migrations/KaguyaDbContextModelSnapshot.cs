@@ -3,6 +3,7 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
@@ -366,9 +367,6 @@ namespace Kaguya.Migrations
                     b.Property<DateTimeOffset>("DateFirstTracked")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("IsCurrentlyPurgingMessages")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<bool>("IsNsfwAllowed")
                         .HasColumnType("tinyint(1)");
 
@@ -416,6 +414,9 @@ namespace Kaguya.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("CommandsExecuted")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommandsExecutedTwentyFourHours")
                         .HasColumnType("int");
 
                     b.Property<int>("ConnectedServers")
@@ -479,6 +480,12 @@ namespace Kaguya.Migrations
                     b.Property<int>("GlobalExp")
                         .HasColumnType("int");
 
+                    b.Property<int>("GrossGambleCoinLosses")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GrossGambleCoinWinnings")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset?>("LastBlacklisted")
                         .HasColumnType("datetime(6)");
 
@@ -497,7 +504,10 @@ namespace Kaguya.Migrations
                     b.Property<DateTimeOffset?>("LastRatelimited")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTimeOffset?>("LastUpvoted")
+                    b.Property<DateTimeOffset?>("LastUpvotedDiscordBoats")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset?>("LastUpvotedTopGg")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTimeOffset?>("LastWeeklyBonus")
@@ -515,16 +525,31 @@ namespace Kaguya.Migrations
                     b.Property<int>("RateLimitWarnings")
                         .HasColumnType("int");
 
+                    b.Property<int>("TotalCoinsGambled")
+                        .HasColumnType("int");
+
                     b.Property<int>("TotalCommandUses")
                         .HasColumnType("int");
 
                     b.Property<int>("TotalDaysPremium")
                         .HasColumnType("int");
 
+                    b.Property<int>("TotalGambleLosses")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalGambleWins")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalGambles")
+                        .HasColumnType("int");
+
                     b.Property<int>("TotalPremiumRedemptions")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalUpvotes")
+                    b.Property<int>("TotalUpvotesDiscordBoats")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalUpvotesTopGg")
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
@@ -759,6 +784,12 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("BotId")
                         .HasColumnType("bigint unsigned");
 
+                    b.Property<int>("CoinsAwarded")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExpAwarded")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsWeekend")
                         .HasColumnType("tinyint(1)");
 
@@ -805,6 +836,17 @@ namespace Kaguya.Migrations
                     b.HasKey("ServerId");
 
                     b.ToTable("WarnConfigurations");
+                });
+
+            modelBuilder.Entity("Kaguya.Database.Views.KaguyaUserExperienceRank", b =>
+                {
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
+
+                    b.Property<ulong>("UserId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.ToView("KaguyaUserRanks");
                 });
 
             modelBuilder.Entity("Kaguya.Database.Model.KaguyaServer", b =>

@@ -10,29 +10,30 @@ namespace Kaguya.Database.Repositories
 {
     public class RepRepository : RepositoryBase<Rep>, IRepRepository
     {
-        private readonly KaguyaDbContext _dbContext;
-        
         public RepRepository(KaguyaDbContext dbContext) : base(dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        { }
         
         public async Task<IList<Rep>> GetAllAsync(ulong userId)
         {
-            return await _dbContext.Rep.AsQueryable().Where(x => x.UserId == userId).ToListAsync();
+            return await Table.AsNoTracking().Where(x => x.UserId == userId).ToListAsync();
         }
-
+        
         public async Task<Rep> GetMostRecentAsync(ulong userId)
         {
-            return await _dbContext.Rep.AsQueryable()
-                                        .OrderByDescending(x => x.TimeGiven)
-                                        .Where(x => x.UserId == userId)
-                                        .FirstOrDefaultAsync();
+            return await Table.AsNoTracking()
+                              .OrderByDescending(x => x.TimeGiven)
+                              .Where(x => x.UserId == userId)
+                              .FirstOrDefaultAsync();
         }
 
-        public async Task<int> GetCountRepAsync(ulong userId)
+        public async Task<int> GetCountRepReceivedAsync(ulong userId)
         {
-            return await _dbContext.Rep.AsQueryable().CountAsync(x => x.UserId == userId);
+            return await Table.AsNoTracking().Where(x => x.UserId == userId).CountAsync();
+        }
+
+        public async Task<int> GetCountRepGivenAsync(ulong userId)
+        {
+            return await Table.AsNoTracking().Where(x => x.GivenBy == userId).CountAsync();
         }
     }
 }

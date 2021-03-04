@@ -42,6 +42,7 @@ namespace Kaguya.Database.Repositories
             int curServers = _client.Guilds.Count;
             int shards = _client.Shards.Count;
             int commandsExecuted = await _commandHistoryRepository.GetSuccessfulCountAsync();
+            int commandsLastTwentyFourHours = await _commandHistoryRepository.GetRecentSuccessfulCountAsync(TimeSpan.FromHours(24));
             int fish = await _fishRepository.GetCountAsync();
             int gambles = await _gambleHistoryRepository.GetCountAsync();
             int latency = _client.Latency;
@@ -54,6 +55,7 @@ namespace Kaguya.Database.Repositories
                 ConnectedServers = curServers,
                 Shards = shards,
                 CommandsExecuted = commandsExecuted,
+                CommandsExecutedTwentyFourHours = commandsLastTwentyFourHours,
                 Fish = fish,
                 Coins = coins,
                 Gambles = gambles,
@@ -68,7 +70,7 @@ namespace Kaguya.Database.Repositories
 
         public async Task<KaguyaStatistics> GetMostRecentAsync()
         {
-            return await Table.AsQueryable().OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+            return await Table.AsNoTracking().OrderByDescending(x => x.Id).FirstOrDefaultAsync();
         }
     }
 }

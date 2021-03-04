@@ -7,6 +7,7 @@ using Discord.Commands;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Humanizer;
+using Kaguya.Internal;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Kaguya.Internal.Extensions.DiscordExtensions;
@@ -35,7 +36,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 
             var modules = new List<CommandModule>();
 
-            foreach (var module in (CommandModule[]) Enum.GetValues(typeof(CommandModule)))
+            foreach (var module in Utilities.GetValues<CommandModule>())
             {
                 modules.Add(module);
             }

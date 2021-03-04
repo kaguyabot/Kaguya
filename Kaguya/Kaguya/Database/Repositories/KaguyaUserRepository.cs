@@ -14,14 +14,12 @@ namespace Kaguya.Database.Repositories
 {
 	public class KaguyaUserRepository : RepositoryBase<KaguyaUser>, IKaguyaUserRepository
 	{
-		private readonly KaguyaDbContext _dbContext;
 		private readonly IOptions<AdminConfigurations> _adminConfigurations;
 		private readonly ILogger<KaguyaUserRepository> _logger;
 
-		public KaguyaUserRepository(ILogger<KaguyaUserRepository> logger, KaguyaDbContext dbContext, 
+		public KaguyaUserRepository(ILogger<KaguyaUserRepository> logger, KaguyaDbContext dbContext,
 			IOptions<AdminConfigurations> adminConfigurations) : base(dbContext)
 		{
-			_dbContext = dbContext;
 			_adminConfigurations = adminConfigurations;
 			_logger = logger;
 		}
@@ -34,13 +32,13 @@ namespace Kaguya.Database.Repositories
 				return user;
 			}
 
-			user = _dbContext.KaguyaUsers.Add(new KaguyaUser
-			                                {
-				                                UserId = id,
-				                                DateFirstTracked = DateTimeOffset.Now
-			                                }).Entity;
+			user = Table.Add(new KaguyaUser
+			{
+				UserId = id,
+				DateFirstTracked = DateTimeOffset.Now
+			}).Entity;
 
-			await _dbContext.SaveChangesAsync();
+			await DbContext.SaveChangesAsync();
             
 			_logger.LogDebug($"User created: {id}");
 			return user;
@@ -48,7 +46,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<IEnumerable<KaguyaUser>> GetActiveRatelimitedUsersAsync(bool ignoreOwner = true)
 		{
-			var users = await _dbContext.KaguyaUsers.AsQueryable().Where(x => x.ActiveRateLimit > 0).ToListAsync();
+			var users = await Table.AsNoTracking().Where(x => x.ActiveRateLimit > 0).ToListAsync();
 			if (ignoreOwner)
 			{
 				KaguyaUser owner = users.FirstOrDefault(x => x.UserId == _adminConfigurations.Value.OwnerId);
@@ -66,64 +64,64 @@ namespace Kaguya.Database.Repositories
 		{
 			KaguyaUser match = await GetOrCreateAsync(id);
 
-			return (await _dbContext.KaguyaUserExperienceRanks
-			                        .AsQueryable()
-			                        .Where(x => x.UserId == match.UserId)
-			                        .FirstOrDefaultAsync()).Rank;
+			return (await DbContext.KaguyaUserExperienceRanks
+			                       .AsNoTracking()
+			                       .Where(x => x.UserId == match.UserId)
+			                       .FirstOrDefaultAsync()).Rank;
 		}
 
 		public async Task<long> CountCoinsAsync()
 		{
-			return await _dbContext.KaguyaUsers
-			                       .AsQueryable()
-			                       .Where(x => x.Coins > 0)
-			                       .SumAsync(x => x.Coins);
+			return await DbContext.KaguyaUsers
+			                      .AsNoTracking()
+			                      .Where(x => x.Coins > 0)
+			                      .SumAsync(x => x.Coins);
 		}
 
 		public async Task<IList<KaguyaUser>> GetTopCoinHoldersAsync(int count = 10)
 		{
-			return await _dbContext.KaguyaUsers.AsQueryable()
-			                       .OrderByDescending(x => x.Coins)
-			                       .Where(x => x.UserId != _adminConfigurations.Value.OwnerId)
-			                       .Take(count)
-			                       .ToListAsync();
+			return await DbContext.KaguyaUsers.AsNoTracking()
+			                      .OrderByDescending(x => x.Coins)
+			                      .Where(x => x.UserId != _adminConfigurations.Value.OwnerId)
+			                      .Take(count)
+			                      .ToListAsync();
 		}
 
 		public async Task<IList<KaguyaUser>> GetTopExpHoldersAsync(int count = 10)
 		{
-			return await _dbContext.KaguyaUsers.AsQueryable()
-			                       .OrderByDescending(x => x.GlobalExp)
-			                       .Take(count)
-			                       .ToListAsync();
+			return await DbContext.KaguyaUsers.AsNoTracking()
+			                      .OrderByDescending(x => x.GlobalExp)
+			                      .Take(count)
+			                      .ToListAsync();
 		}
 
 		public async Task<IList<KaguyaUser>> GetTopFishHoldersAsync(int count = 10)
 		{
-			return await _dbContext.KaguyaUsers.AsQueryable()
-			                       .OrderByDescending(x => x.FishExp)
-			                       .Take(count)
-			                       .ToListAsync();
+			return await DbContext.KaguyaUsers.AsNoTracking()
+			                      .OrderByDescending(x => x.FishExp)
+			                      .Take(count)
+			                      .ToListAsync();
 		}
 
 		public async Task<IList<ulong>> GetAllActivePremiumAsync()
 		{
-			return await _dbContext.KaguyaUsers.AsQueryable()
-			                       .Where(x => x.PremiumExpiration.HasValue && 
-			                                   x.PremiumExpiration.Value > DateTimeOffset.Now)
-			                       .Select(x => x.UserId)
-			                       .Distinct()
-			                       .ToListAsync();
+			return await DbContext.KaguyaUsers.AsNoTracking()
+			                      .Where(x => x.PremiumExpiration.HasValue &&
+			                                  x.PremiumExpiration.Value > DateTimeOffset.Now)
+			                      .Select(x => x.UserId)
+			                      .Distinct()
+			                      .ToListAsync();
 		}
 
 		public async Task<IList<ulong>> GetAllExpiredPremiumAsync(int cutoffDays)
 		{
-			return await _dbContext.KaguyaUsers.AsQueryable()
-			                       .Where(x => x.PremiumExpiration.HasValue &&
-			                                   x.PremiumExpiration.Value < DateTimeOffset.Now &&
-			                                   x.PremiumExpiration.Value > DateTimeOffset.Now.AddDays(-cutoffDays))
-			                       .Select(x => x.UserId)
-			                       .Distinct()
-			                       .ToListAsync();
+			return await DbContext.KaguyaUsers.AsNoTracking()
+			                      .Where(x => x.PremiumExpiration.HasValue &&
+			                                  x.PremiumExpiration.Value < DateTimeOffset.Now &&
+			                                  x.PremiumExpiration.Value > DateTimeOffset.Now.AddDays(-cutoffDays))
+			                      .Select(x => x.UserId)
+			                      .Distinct()
+			                      .ToListAsync();
 		}
 	}
 }

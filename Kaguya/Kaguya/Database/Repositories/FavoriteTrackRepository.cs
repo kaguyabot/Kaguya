@@ -10,16 +10,13 @@ namespace Kaguya.Database.Repositories
 {
     public class FavoriteTrackRepository : RepositoryBase<FavoriteTrack>, IFavoriteTrackRepository
     {
-        private readonly KaguyaDbContext _dbContext;
-
-        public FavoriteTrackRepository(KaguyaDbContext dbContext) : base(dbContext) { _dbContext = dbContext; }
+        public FavoriteTrackRepository(KaguyaDbContext dbContext) : base(dbContext) { }
 
         public async Task<IList<FavoriteTrack>> GetAllAsync(ulong userId)
         {
-            return await _dbContext.FavoriteTracks
-                                   .AsQueryable()
-                                   .Where(x => x.UserId == userId)
-                                   .ToListAsync();
+            return await Table.AsNoTracking()
+                              .Where(x => x.UserId == userId)
+                              .ToListAsync();
         }
     }
 }
