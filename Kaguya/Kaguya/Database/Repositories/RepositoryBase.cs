@@ -20,6 +20,12 @@ namespace Kaguya.Database.Repositories
         public async Task<T> GetAsync(params object[] key)
         {
             T entity = await Table.FindAsync(key);
+
+            if (entity == null)
+            {
+                return null;
+            }
+            
             DbContext.Entry(entity).State = EntityState.Detached;
 
             return entity;
