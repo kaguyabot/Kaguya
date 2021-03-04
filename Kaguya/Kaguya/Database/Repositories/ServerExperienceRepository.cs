@@ -15,7 +15,9 @@ namespace Kaguya.Database.Repositories
 
         public async Task<ServerExperience> GetOrCreateAsync(ulong serverId, ulong userId)
         {
-            if (await GetAsync(serverId, userId) == null)
+            var match = await GetAsync(serverId, userId);
+            
+            if (match == null)
             {
                 ServerExperience entity = Table.Add(new ServerExperience
                 {
@@ -29,9 +31,7 @@ namespace Kaguya.Database.Repositories
                 return entity;
             }
 
-            return await Table.AsNoTracking()
-                              .Where(x => x.ServerId == serverId && x.UserId == userId)
-                              .FirstOrDefaultAsync();
+            return match;
         }
         
         public async Task<IList<ServerExperience>> GetAllExpAsync(ulong serverId)
