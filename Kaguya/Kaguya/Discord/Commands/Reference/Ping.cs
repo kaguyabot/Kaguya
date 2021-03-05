@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Kaguya.Internal.Attributes;
@@ -26,7 +27,7 @@ namespace Kaguya.Discord.Commands.Reference
 		public async Task CommandPing()
 		{
 			string latency = (_client.Latency.ToString("N0") + "ms").AsBold();
-			await SendBasicSuccessEmbedAsync($"🏓 Pong! Latency: {latency}");
+			await SendBasicEmbedAsync($"🏓 Pong! Latency: {latency}", Color.Green);
 		}
 	}
 }
