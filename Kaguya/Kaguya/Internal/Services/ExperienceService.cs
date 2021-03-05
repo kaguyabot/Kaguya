@@ -29,19 +29,21 @@ namespace Kaguya.Internal.Services
         private readonly ILogger<ExperienceService> _logger;
         private readonly ITextChannel _textChannel;
         private readonly KaguyaUser _user;
+        private readonly KaguyaServer _server;
         private readonly IUser _discordUser;
         private readonly ulong _serverId;
         private readonly ServerExperienceRepository _serverExperienceRepository;
         private readonly KaguyaUserRepository _kaguyaUserRepository;
         private readonly KaguyaServerRepository _kaguyaServerRepository;
 
-        public ExperienceService(ILogger<ExperienceService> logger, ITextChannel textChannel, KaguyaUser user, IUser discordUser, 
+        public ExperienceService(ILogger<ExperienceService> logger, ITextChannel textChannel, KaguyaUser user, KaguyaServer server, IUser discordUser, 
             ulong serverId, ServerExperienceRepository serverExperienceRepository, KaguyaUserRepository kaguyaUserRepository,
             KaguyaServerRepository kaguyaServerRepository)
         {
             _logger = logger;
             _textChannel = textChannel;
             _user = user;
+            _server = server;
             _discordUser = discordUser;
             _serverId = serverId;
             _serverExperienceRepository = serverExperienceRepository;
@@ -72,9 +74,13 @@ namespace Kaguya.Internal.Services
 
             if (HasLeveledUp(oldExp, newExp))
             {
-                _logger.LogInformation($"(Server Exp) User {_user} has leveled up! New level: {_user.GlobalExpLevel:N0}");
+                _logger.LogDebug($"(Server Exp) User {_user} has leveled up! New level: {_user.GlobalExpLevel:N0}");
                 int newLevel = CalculateLevel(newExp).ToFloor();
-                await SendBasedOnPreferencesAsync(await GetLevelUpEmbedAsync(newLevel, true));
+                
+                if (_server.LevelNotifications == LevelNotifications.ServerOnly || _server.LevelNotifications == LevelNotifications.ServerAndGlobal)
+                {
+                    await SendToChannelAsync(await GetLevelUpEmbedAsync(newLevel, true), _server.LevelAnnouncementsChannelId.GetValueOrDefault());
+                }   
             }
         }
 
@@ -98,47 +104,31 @@ namespace Kaguya.Internal.Services
             
             if (HasLeveledUp(oldExp, newExp))
             {
-                _logger.LogInformation($"(Global Exp) User {_user} has leveled up! New level: {_user.GlobalExpLevel:N0}");
-                await SendBasedOnPreferencesAsync(await GetLevelUpEmbedAsync(_user.GlobalExpLevel, false));
+                _logger.LogDebug($"(Global Exp) User {_user} has leveled up! New level: {_user.GlobalExpLevel:N0}");
+
+                if (_server.LevelNotifications == LevelNotifications.GlobalOnly || _server.LevelNotifications == LevelNotifications.ServerAndGlobal)
+                {
+                    await SendToChannelAsync(await GetLevelUpEmbedAsync(_user.GlobalExpLevel, false), _server.LevelAnnouncementsChannelId.GetValueOrDefault());
+                }                
             }
         }
 
-        private async Task SendBasedOnPreferencesAsync(Embed embed)
+        /// <summary>
+        /// Attempts to deliver level-up notifications to the specified channelId.
+        /// </summary>
+        /// <returns></returns>
+        private async Task SendToChannelAsync(Embed embed, ulong channelId)
         {
-            ExpNotificationPreference notifType = _user.ExpNotificationType;
-            IDMChannel dmChannel = await _discordUser.GetOrCreateDMChannelAsync();
-            
-            switch (notifType)
+            var textChannel = await _textChannel.Guild.GetTextChannelAsync(channelId);
+
+            if (textChannel == null)
             {
-                case ExpNotificationPreference.Both:
-                    await SendToChannelAsync(embed);
-                    await SendToDmAsync(embed, dmChannel);
-
-                    break;
-                case ExpNotificationPreference.Dm:
-                    await SendToDmAsync(embed, dmChannel);
-
-                    break;
-                case ExpNotificationPreference.Disabled:
-                    break;
-                default: // If set to chat only.
-                    await SendToChannelAsync(embed);
-
-                    break;
+                return;
             }
-        }
 
-        private async Task SendToChannelAsync(Embed embed)
-        {
             try
             {
-                // We don't send into servers unless they have enabled the level notifications.
-                var server = await _kaguyaServerRepository.GetOrCreateAsync(_serverId);
-
-                if (server.LevelAnnouncementsEnabled)
-                {
-                    await _textChannel.SendMessageAsync(embed: embed);
-                }
+                await textChannel.SendMessageAsync(embed: embed);
             }
             catch (Exception e)
             {
@@ -147,18 +137,6 @@ namespace Kaguya.Internal.Services
             }
         }
 
-        private async Task SendToDmAsync(Embed embed, IDMChannel channel)
-        {
-            try
-            {
-                await channel.SendMessageAsync(embed: embed);
-            }
-            catch (Exception e)
-            {
-                _logger.LogDebug($"Failed to send level-up DM to user {channel.Recipient.Id}: {e.Message}.");
-            }
-        }
-        
         private bool CanReceiveGlobalExperience()
         {
             return !_user.LastGivenExp.HasValue || _user.LastGivenExp.Value < DateTimeOffset.Now.Subtract(SpamPreventionWindow);

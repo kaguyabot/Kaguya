@@ -342,7 +342,7 @@ namespace Kaguya.Workers
             if (_client.AllShardsReady())
             {
                 var expService = new ExperienceService(expLogger, (ITextChannel) commandCtx.Channel, 
-                    user, commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository, serverRepository);
+                    user, server, commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository, serverRepository);
                 
                 await expService.TryAddGlobalExperienceAsync();
                 await expService.TryAddServerExperienceAsync();

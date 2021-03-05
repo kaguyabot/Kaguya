@@ -5,6 +5,14 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Kaguya.Database.Model
 {
+	public enum LevelNotifications
+	{
+		ServerOnly,
+		GlobalOnly,
+		ServerAndGlobal,
+		Disabled
+	}
+	
 	public class KaguyaServer
 	{
 		[Key]
@@ -22,13 +30,13 @@ namespace Kaguya.Database.Model
 		public DateTimeOffset DateFirstTracked { get; set; }
 		public DateTimeOffset? PremiumExpiration { get; set; }
 		public DateTimeOffset? NsfwAllowanceTime { get; set; }
-		public bool IsNsfwAllowed { get; set; } = false;
+		public bool IsNsfwAllowed { get; set; }
 		public ulong? NsfwAllowedId { get; set; }
 		public string CustomGreeting { get; set; }
-		public bool CustomGreetingIsEnabled { get; set; } = false;
+		public bool CustomGreetingIsEnabled { get; set; }
 		public ulong? CustomGreetingTextChannelId { get; set; }
-
-		public bool LevelAnnouncementsEnabled { get; set; } = true;
+		public LevelNotifications LevelNotifications { get; set; } = LevelNotifications.ServerOnly;
+		public ulong? LevelAnnouncementsChannelId { get; set; }
 		/// <summary>
 		/// Should we scan for osu! links?
 		/// </summary>
@@ -38,7 +46,5 @@ namespace Kaguya.Database.Model
 		/// Whether or not the server currently has an active premium subscription.
 		/// </summary>
 		public bool IsPremium => PremiumExpiration.HasValue && PremiumExpiration.Value > DateTimeOffset.Now;
-
-		public AntiRaidConfig AntiRaid { get; set; }
 	}
 }

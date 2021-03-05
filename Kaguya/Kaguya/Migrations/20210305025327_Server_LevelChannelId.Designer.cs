@@ -3,14 +3,16 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
     [DbContext(typeof(KaguyaDbContext))]
-    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210305025327_Server_LevelChannelId")]
+    partial class Server_LevelChannelId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -373,8 +375,8 @@ namespace Kaguya.Migrations
                     b.Property<ulong?>("LevelAnnouncementsChannelId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<int>("LevelNotifications")
-                        .HasColumnType("int");
+                    b.Property<bool>("LevelAnnouncementsEnabled")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<ulong?>("MuteRoleId")
                         .HasColumnType("bigint unsigned");

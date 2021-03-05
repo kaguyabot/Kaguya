@@ -7,13 +7,6 @@ using OsuSharp;
 
 namespace Kaguya.Database.Model
 {
-	public enum ExpNotificationPreference
-	{
-		Chat,
-		Dm,
-		Both,
-		Disabled
-	}
 	public class KaguyaUser
 	{
 		/// <summary>
@@ -164,10 +157,6 @@ namespace Kaguya.Database.Model
 		/// When this user's blacklist will expire. Null if the user has never been blacklisted.
 		/// </summary>
 		public DateTimeOffset? BlacklistExpiration { get; set; }
-		/// <summary>
-		/// If a user wants to receive level-up notifications, what type should it be?
-		/// </summary>
-		public ExpNotificationPreference ExpNotificationType { get; set; } = ExpNotificationPreference.Chat;
 		/// <summary>
 		/// An all-time value representing the "net income" the user has earned
 		/// or lost from gambling. This is equivalent to the <see cref="GrossGambleCoinWinnings"/>
