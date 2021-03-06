@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
-    public class ReactionRole
+    public class ReactionRole : IServerSearchable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key, Column(Order = 0)]

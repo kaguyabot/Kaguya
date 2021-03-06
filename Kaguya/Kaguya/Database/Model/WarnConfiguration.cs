@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
-    public class WarnConfiguration
+    public class WarnConfiguration : IServerSearchable
     {
         [Key]
         public ulong ServerId { get; set; }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
 using Kaguya.Internal.Enums;
 
 namespace Kaguya.Database.Model
 {
-	public class AntiRaidConfig
+	public class AntiRaidConfig : IServerSearchable
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]

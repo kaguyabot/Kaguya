@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Discord;
 using Humanizer;
 using Humanizer.Localisation;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {

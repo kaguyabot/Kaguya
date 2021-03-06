@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
 using Kaguya.Internal.Enums;
 
 namespace Kaguya.Database.Model
 {
-    public class GambleHistory
+    public class GambleHistory : IUserSearchable, IServerSearchable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public uint Id { get; set; }

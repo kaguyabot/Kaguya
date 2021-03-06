@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
@@ -11,7 +12,7 @@ namespace Kaguya.Database.Model
 		Ban,
 		ShadowBan
 	}
-	public class FilteredWord
+	public class FilteredWord : IServerSearchable
 	{
 		[Key, Column(Order = 0)]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]

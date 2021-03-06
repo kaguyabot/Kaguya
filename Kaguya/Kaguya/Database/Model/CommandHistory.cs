@@ -1,10 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
+using Microsoft.AspNetCore.Hosting.Server;
 
 namespace Kaguya.Database.Model
 {
-	public class CommandHistory
+	public class CommandHistory : IUserSearchable, IServerSearchable
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]

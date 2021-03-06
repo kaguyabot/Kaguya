@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
@@ -23,7 +24,7 @@ namespace Kaguya.Database.Model
         Messageupdated,
         Filteredword
     }
-    public class LogConfiguration
+    public class LogConfiguration : IServerSearchable
     {
         public static IList<PropertyInfo> LogProperties { get; private set; }
         

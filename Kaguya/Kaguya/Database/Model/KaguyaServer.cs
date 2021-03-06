@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
@@ -13,7 +14,7 @@ namespace Kaguya.Database.Model
 		Disabled
 	}
 	
-	public class KaguyaServer
+	public class KaguyaServer : IServerSearchable
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]

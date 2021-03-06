@@ -1,13 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
 using Kaguya.Internal.PrimitiveExtensions;
 using Kaguya.Internal.Services;
 using OsuSharp;
 
 namespace Kaguya.Database.Model
 {
-	public class KaguyaUser
+	public class KaguyaUser : IUserSearchable
 	{
 		/// <summary>
 		/// The Discord ID for the user. Unique.
