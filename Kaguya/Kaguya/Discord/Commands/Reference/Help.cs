@@ -88,7 +88,7 @@ namespace Kaguya.Discord.Commands.Reference
             {
                 if (e.DiscordCode.GetValueOrDefault() == 10018)
                 {
-                    _logger.LogDebug("(DISCORD ERR 10018) $help message deleted before timeout, message not found");
+                    _logger.LogDebug("DISCORD ERR 10018 $help message deleted before timeout, message not found");
                     return;
                 }
 
