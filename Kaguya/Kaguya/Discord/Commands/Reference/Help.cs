@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Net;
 using Humanizer;
 using Interactivity;
 using Interactivity.Pagination;
@@ -78,7 +80,27 @@ namespace Kaguya.Discord.Commands.Reference
                             .WithFooter(PaginatorFooter.PageNumber | PaginatorFooter.Users)
                             .Build();
 
-            await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(2));
+            try
+            {
+                await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromSeconds(10));
+            }
+            catch (HttpException e)
+            {
+                if (e.DiscordCode.GetValueOrDefault() == 10018)
+                {
+                    _logger.LogDebug("(DISCORD ERR 10018) $help message deleted before timeout, message not found");
+                    return;
+                }
+
+                if (e.HttpCode == HttpStatusCode.NotFound)
+                {
+                    _logger.LogDebug("DISCORD ERR 404 $help message deleted before reactions could be added");
+                    return;
+                }
+                
+                _logger.LogError(e, "Unknown http exception encountered during $help paginator");
+                await SendBasicErrorEmbedAsync("An unknown error occurred.");
+            }
         }
 
         private string GetCommandTextForModule(KaguyaServer server, CommandModule module)
