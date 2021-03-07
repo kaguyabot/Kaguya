@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord.WebSocket;
@@ -56,6 +57,8 @@ namespace Kaguya.Internal.Services.Recurring
             
             await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(15), this);
 
+            // We init here because we cannot init through DI. This is because the bot ID is 
+            // retrieved through the client, which is not logged in at the time of injection.
             _discordBotListApi ??= GetConfguredApi();
 
             if (_discordBotListApi == null)
@@ -86,7 +89,7 @@ namespace Kaguya.Internal.Services.Recurring
                     int guildCount = curStats.ConnectedServers;
                     int shardCount = curStats.Shards;
                     
-                    await dblBot.UpdateStatsAsync(guildCount, shardCount);
+                    await dblBot.UpdateStatsAsync(guildCount, shardCount, _client.Shards.Select(x => x.ShardId).ToArray());
                     
                     _logger.LogInformation($"top.gg stats updated: {guildCount} servers | {shardCount} shards");
                 }
