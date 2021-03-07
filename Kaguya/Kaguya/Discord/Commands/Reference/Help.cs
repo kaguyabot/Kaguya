@@ -30,7 +30,7 @@ namespace Kaguya.Discord.Commands.Reference
         private readonly KaguyaServerRepository _ksRepo;
         private readonly IOptions<AdminConfigurations> _adminConfigurations;
 
-        private static readonly string _links = $"[Kaguya Website]({Global.WebsiteUrl}) | [Kaguya Support]({Global.SupportDiscordUrl}) | " +
+        private static readonly string _links = $"[Kaguya Support]({Global.SupportDiscordUrl}) | " +
                                                 $"[Kaguya Premium]({Global.StoreUrl})";
 
         protected Help(ILogger<Help> logger, CommandService commandService, InteractivityService interactivityService,
