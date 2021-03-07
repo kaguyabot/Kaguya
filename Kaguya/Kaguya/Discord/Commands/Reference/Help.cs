@@ -82,7 +82,7 @@ namespace Kaguya.Discord.Commands.Reference
 
             try
             {
-                await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromSeconds(10));
+                await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(2));
             }
             catch (HttpException e)
             {
