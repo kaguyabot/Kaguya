@@ -24,7 +24,7 @@ namespace Kaguya.Discord.Commands.Configuration
             _kaguyaServerRepository = kaguyaServerRepository;
         }
 
-        [Command] // TODO: Hyperlink 'command prefix' to a doc of some sort.
+        [Command]
         [Summary("Changes the command prefix for this server. Maximum length is 5 characters, and may not contain spaces. " +
                  "Remember, prefixes are case sensitive phrases.")]
         [Remarks("<prefix>")]
@@ -62,6 +62,8 @@ namespace Kaguya.Discord.Commands.Configuration
             }
 
             server.CommandPrefix = prefix;
+            await _kaguyaServerRepository.UpdateAsync(server);
+
             EmbedBuilder embed = GetBasicSuccessEmbedBuilder($"Successfully changed this server's command prefix to " + prefix.AsCodeBlockSingleLine(), true)
                 .WithFooter(new EmbedFooterBuilder
                 {
