@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kaguya.Database.Interfaces;
+using Kaguya.Internal.Models.User;
 using Kaguya.Internal.PrimitiveExtensions;
 using Kaguya.Internal.Services;
 using OsuSharp;
@@ -93,10 +94,12 @@ namespace Kaguya.Database.Model
 		/// The total amount of times the user has lost while playing a gambling game.
 		/// </summary>
 		public int TotalGambleLosses { get; set; }
+
 		/// <summary>
 		/// The total amount of points the user has offered up for gamble before any wins or losses.
 		/// </summary>
 		public int TotalCoinsGambled { get; set; }
+
 		/// <summary>
 		/// The gross sum of coins the user has won from gambling games.
 		/// </summary>
@@ -213,6 +216,10 @@ namespace Kaguya.Database.Model
 		/// If the user is 30% towards achieving the next level, this value is 30.00M.
 		/// </summary>
 		public decimal PercentToNextLevel => ExperienceService.CalculatePercentToNextLevel(this.ExactGlobalExpLevel);
+		/// <summary>
+		/// This user's cooldowns for voting, daily bonuses, etc.
+		/// </summary>
+		public IUserCooldowns Cooldowns => new UserCooldowns(this);
 		/// <summary>
 		/// Adjusts the user's coins by the <see cref="amount"/> given.
 		/// </summary>

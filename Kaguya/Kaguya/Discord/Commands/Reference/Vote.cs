@@ -6,6 +6,7 @@ using Kaguya.Internal.Attributes;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Discord;
+using Humanizer;
 using Kaguya.Internal.Enums;
 using Kaguya.Database.Repositories;
 using Kaguya.External.Services.TopGg;
@@ -44,13 +45,12 @@ namespace Kaguya.Discord.Commands.Reference
             }
             else
             {
-                // They must have an upvote value if ineligible to vote.
-                string cooldown = DateTimeOffset.Now.Subtract(user.LastUpvotedTopGg!.Value).HumanizeTraditionalReadable();
-                topGgSb.AppendLine($"Cooldown: {cooldown.AsBold()}");
+                // They must have an upvote cooldown value if eligible to vote.
+                topGgSb.AppendLine($"Cooldown: {user.Cooldowns.TopGgVoteCooldown!.Value.HumanizeTraditionalReadable()}");
             }
 
-            int coins = UpvoteNotifierService.COINS;
-            int exp = UpvoteNotifierService.EXP;
+            const int COINS = UpvoteNotifierService.COINS;
+            const int EXP = UpvoteNotifierService.EXP;
 
             var embed = new KaguyaEmbedBuilder(KaguyaColors.LightYellow)
             {
@@ -61,8 +61,8 @@ namespace Kaguya.Discord.Commands.Reference
                     new EmbedFieldBuilder
                     {
                         Name = "Rewards",
-                        Value = $"`{coins} coins`\n" +
-                                $"`{exp} global exp`"
+                        Value = $"`{COINS} coins`\n" +
+                                $"`{EXP} global exp`"
                     }
                 }
             }.WithFooter("Earn 2x rewards on weekends!");
