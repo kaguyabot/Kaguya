@@ -36,7 +36,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 			var parser = new TimeParser(time);
 
 			var parsedTime = parser.ParseTime();
-			string timeString = parsedTime.Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day).AsBold();
+			string timeString = parsedTime.HumanizeTraditionalReadable().AsBold();
 
 			var collection = await _premiumKeyRepository.GenerateAndInsertAsync(Context.User.Id, amount, parsedTime);
 

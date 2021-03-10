@@ -254,7 +254,7 @@ namespace Kaguya.Discord.Commands.Administration
 
 			string newShadowbanDurationStr = (!expiration.HasValue
 				? "permanent"
-				: (expiration.Value - DateTimeOffset.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day) +
+				: (expiration.Value - DateTimeOffset.Now).HumanizeTraditionalReadable() +
 				  " from now").AsBold();
 
 			string reasonStr = (longestShadowban.Reason ?? "<No reason provided>").AsItalics();
@@ -445,7 +445,7 @@ namespace Kaguya.Discord.Commands.Administration
 			List<EmbedFieldBuilder> fields)
 		{
 			string durationStr = expiration.HasValue
-				? $" for {(expiration.Value - DateTimeOffset.Now).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day).AsBold()}"
+				? $" for {(expiration.Value - DateTimeOffset.Now).HumanizeTraditionalReadable().AsBold()}"
 				: string.Empty;
 
 			string reasonStr = reason == null ? "<No reason provided>".AsBold() : reason.AsBold();

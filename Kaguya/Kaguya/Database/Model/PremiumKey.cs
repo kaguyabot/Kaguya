@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Humanizer;
 using Humanizer.Localisation;
+using Kaguya.Internal.Extensions.DiscordExtensions;
 
 namespace Kaguya.Database.Model
 {
@@ -17,7 +18,7 @@ namespace Kaguya.Database.Model
         public DateTimeOffset? Expiration { get; set; }
         public ulong? UserId { get; set; }
         public ulong? ServerId { get; set; }
-        public string HumanizedLength => TimeSpan.FromSeconds(this.LengthInSeconds).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day);
+        public string HumanizedLength => TimeSpan.FromSeconds(this.LengthInSeconds).HumanizeTraditionalReadable();
         public bool IsRedeemed => Expiration.HasValue;
     }
 }
