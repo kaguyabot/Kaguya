@@ -11,6 +11,8 @@ To run Kaguya, please make sure you meet the following prerequisites:
 - If modifying the code, I recommend using an IDE with intelligent code completion and syntax highlighting, such as [Visual Studio 2019+](https://visualstudio.microsoft.com/downloads/), [Jetbrains Rider](https://www.jetbrains.com/rider/), or [Visual Studio Code](https://visualstudio.microsoft.com/downloads/).
     - Ensure your IDE supports C# 9 and .NET 5.
 - Before submitting your code for review, please review [the C# styling guidelines](https://www.dofactory.com/reference/csharp-coding-standards) that this project adheres to.
+  - If using an IDE that supports a `.editorconfig` file, such as [Jetbrains Rider](https://www.jetbrains.com/rider/), you can use the 
+  predefined configurations located within this file for automatic code refactoring before submitting.
 
 ## Downloading the source code
 Clone:
