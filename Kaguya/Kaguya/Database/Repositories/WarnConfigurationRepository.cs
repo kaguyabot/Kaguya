@@ -4,8 +4,8 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Repositories
 {
-    public class WarnConfigurationRepository : RepositoryBase<WarnConfiguration>, IWarnConfigurationRepository
-    {
-        public WarnConfigurationRepository(KaguyaDbContext dbContext) : base(dbContext) { }
-    }
+	public class WarnConfigurationRepository : RepositoryBase<WarnConfiguration>, IWarnConfigurationRepository
+	{
+		public WarnConfigurationRepository(KaguyaDbContext dbContext) : base(dbContext) {}
+	}
 }

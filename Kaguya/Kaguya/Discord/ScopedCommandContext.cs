@@ -4,14 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Kaguya.Discord
 {
-    public class ScopedCommandContext : ShardedCommandContext
-    {
-        public IServiceScope Scope { get; }
+	public class ScopedCommandContext : ShardedCommandContext
+	{
+		public ScopedCommandContext(IServiceScope scope, DiscordShardedClient client, SocketUserMessage msg) :
+			base(client, msg)
+		{
+			this.Scope = scope;
+		}
 
-        public ScopedCommandContext(IServiceScope scope, DiscordShardedClient client, SocketUserMessage msg) :
-            base(client, msg)
-        {
-            Scope = scope;
-        }
-    }
+		public IServiceScope Scope { get; }
+	}
 }

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.Net;
 using Discord.WebSocket;
 using Kaguya.Database.Context;
+using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
@@ -24,575 +18,612 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Kaguya.Workers
 {
-    public class DiscordWorker : IHostedService
-    {
-        private readonly IOptions<AdminConfigurations> _adminConfigs;
-        private readonly DiscordShardedClient _client;
-        private readonly CommandService _commandService;
-        private readonly IOptions<DiscordConfigurations> _discordConfigs;
-        private readonly ILogger<DiscordWorker> _logger;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly KaguyaEvents _kaguyaEvents;
+	public class DiscordWorker : IHostedService
+	{
+		private readonly IOptions<AdminConfigurations> _adminConfigs;
+		private readonly DiscordShardedClient _client;
+		private readonly CommandService _commandService;
+		private readonly IOptions<DiscordConfigurations> _discordConfigs;
+		private readonly KaguyaEvents _kaguyaEvents;
+		private readonly ILogger<DiscordWorker> _logger;
+		private readonly IServiceProvider _serviceProvider;
 
-        public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs, IOptions<DiscordConfigurations> discordConfigs,
-            ILogger<DiscordWorker> logger, CommandService commandService, IServiceProvider serviceProvider, KaguyaEvents kaguyaEvents)
-        {
-            _client = client;
-            _adminConfigs = adminConfigs;
-            _discordConfigs = discordConfigs;
-            _logger = logger;
-            _commandService = commandService;
-            _serviceProvider = serviceProvider;
-            _kaguyaEvents = kaguyaEvents;
-        }
+		public DiscordWorker(DiscordShardedClient client,
+			IOptions<AdminConfigurations> adminConfigs,
+			IOptions<DiscordConfigurations> discordConfigs,
+			ILogger<DiscordWorker> logger,
+			CommandService commandService,
+			IServiceProvider serviceProvider,
+			KaguyaEvents kaguyaEvents)
+		{
+			_client = client;
+			_adminConfigs = adminConfigs;
+			_discordConfigs = discordConfigs;
+			_logger = logger;
+			_commandService = commandService;
+			_serviceProvider = serviceProvider;
+			_kaguyaEvents = kaguyaEvents;
+		}
 
-        public async Task StartAsync(CancellationToken cancellationToken)
-        {
-            using (IServiceScope moduleScope = _serviceProvider.CreateScope())
-            {
-                await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), moduleScope.ServiceProvider);
-            }
+		public async Task StartAsync(CancellationToken cancellationToken)
+		{
+			using (var moduleScope = _serviceProvider.CreateScope())
+			{
+				await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), moduleScope.ServiceProvider);
+			}
 
-            _client.Log += logMessage =>
-            {
-                // These are API events unknown to the lib, we ignore these.
-                if(logMessage.Message.Contains("unknown dispatch", StringComparison.OrdinalIgnoreCase))
-                {
-                    return Task.CompletedTask;
-                }
+			_client.Log += logMessage =>
+			{
+				// These are API events unknown to the lib, we ignore these.
+				if (logMessage.Message.Contains("unknown dispatch", StringComparison.OrdinalIgnoreCase))
+				{
+					return Task.CompletedTask;
+				}
 
-                _logger.Log(logMessage.Severity.ToLogLevel(), logMessage.Exception, logMessage.Message);
+				_logger.Log(logMessage.Severity.ToLogLevel(), logMessage.Exception, logMessage.Message);
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            InitLogging();
-            InitCommands();
-            InitOther();
+			InitLogging();
+			InitCommands();
+			InitOther();
 
-            await _client.LoginAsync(TokenType.Bot, _discordConfigs.Value.BotToken);
+			await _client.LoginAsync(TokenType.Bot, _discordConfigs.Value.BotToken);
 
-            await _client.StartAsync();
-        }
-        
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await _client.StopAsync();
-            try
-            {
-                _client.Dispose();
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, ex, "Failed to dispose discord");
-            }
-        }
+			await _client.StartAsync();
+		}
+
+		public async Task StopAsync(CancellationToken cancellationToken)
+		{
+			await _client.StopAsync();
+			try
+			{
+				_client.Dispose();
+			}
+			catch (Exception ex)
+			{
+				_logger.Log(LogLevel.Error, ex, "Failed to dispose discord");
+			}
+		}
 
 #region Logging
-        private void InitLogging()
-        {
-            _client.ShardConnected += client =>
-            {
-                _logger.Log(LogLevel.Debug, $"Shard {client.ShardId} connected.");
+		private void InitLogging()
+		{
+			_client.ShardConnected += client =>
+			{
+				_logger.Log(LogLevel.Debug, $"Shard {client.ShardId} connected.");
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.ShardDisconnected += (ex, client) =>
-            {
-                _logger.Log(LogLevel.Error, ex,
-                    $"Shard {client.ShardId} disconnected");
+			_client.ShardDisconnected += (ex, client) =>
+			{
+				_logger.Log(LogLevel.Error, ex, $"Shard {client.ShardId} disconnected");
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.ShardReady += client =>
-            {
-                _logger.Log(LogLevel.Information, $"Shard {client.ShardId} ready. Guilds: {client.Guilds.Count:N0}");
+			_client.ShardReady += client =>
+			{
+				_logger.Log(LogLevel.Information, $"Shard {client.ShardId} ready. Guilds: {client.Guilds.Count:N0}");
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.ShardLatencyUpdated += (oldLatency, newLatency, client) =>
-            {
-                _logger.Log(LogLevel.Trace,
-                    $"Shard {client.ShardId} latency has updated. [Old: {oldLatency}ms | New: {newLatency}ms]");
+			_client.ShardLatencyUpdated += (oldLatency, newLatency, client) =>
+			{
+				_logger.Log(LogLevel.Trace,
+					$"Shard {client.ShardId} latency has updated. [Old: {oldLatency}ms | New: {newLatency}ms]");
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.ChannelCreated += channel =>
-            {
-                _logger.Log(LogLevel.Debug,
-                    $"Channel Created [Type: {channel.GetType()} | Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
+			_client.ChannelCreated += channel =>
+			{
+				_logger.Log(LogLevel.Debug,
+					$"Channel Created [Type: {channel.GetType()} | Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.ChannelDestroyed += channel =>
-            {
-                _logger.Log(LogLevel.Debug,
-                    $"Channel Deleted [Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
+			_client.ChannelDestroyed += channel =>
+			{
+				_logger.Log(LogLevel.Debug,
+					$"Channel Deleted [Name: #{(channel as SocketGuildChannel)?.Name} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.ChannelUpdated += (channel, channel2) =>
-            {
-                _logger.Log(LogLevel.Trace,
-                    $"Channel Updated [Name: #{channel} | New Name: #{channel2} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
+			_client.ChannelUpdated += (channel, channel2) =>
+			{
+				_logger.Log(LogLevel.Trace,
+					$"Channel Updated [Name: #{channel} | New Name: #{channel2} | ID: {channel.Id} | Guild: {(channel as SocketGuildChannel)?.Guild}]");
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.JoinedGuild += guild =>
-            {
-                _logger.Log(LogLevel.Information, $"Joined Guild [Name: {guild.Name} | ID: {guild.Id}]");
+			_client.JoinedGuild += guild =>
+			{
+				_logger.Log(LogLevel.Information, $"Joined Guild [Name: {guild.Name} | ID: {guild.Id}]");
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.LeftGuild += guild =>
-            {
-                _logger.Log(LogLevel.Information, $"Left Guild [Name: {guild.Name} | ID: {guild.Id}]");
+			_client.LeftGuild += guild =>
+			{
+				_logger.Log(LogLevel.Information, $"Left Guild [Name: {guild.Name} | ID: {guild.Id}]");
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.MessageDeleted += (cache, _) =>
-            {
-                if (cache.Value is null) return Task.CompletedTask;
-                _logger.Log(LogLevel.Trace, $"Message Deleted [Author: {cache.Value.Author} | ID: {cache.Id}]");
+			_client.MessageDeleted += (cache, _) =>
+			{
+				if (cache.Value is null)
+				{
+					return Task.CompletedTask;
+				}
 
-                return Task.CompletedTask;
-            };
+				_logger.Log(LogLevel.Trace, $"Message Deleted [Author: {cache.Value.Author} | ID: {cache.Id}]");
 
-            _client.MessageUpdated += (cache, msg, _) =>
-            {
-                if (cache.Value is null) return Task.CompletedTask;
-                if (cache.Value.Embeds != null && cache.Value.Content == msg.Content) return Task.CompletedTask;
-                _logger.Log(LogLevel.Trace, $"Message Updated [Author: {cache.Value.Author} | ID: {cache.Id}]");
+				return Task.CompletedTask;
+			};
 
-                return Task.CompletedTask;
-            };
+			_client.MessageUpdated += (cache, msg, _) =>
+			{
+				if (cache.Value is null)
+				{
+					return Task.CompletedTask;
+				}
 
-            _client.MessageReceived += msg =>
-            {
-                _logger.Log(LogLevel.Trace,
-                    $"Message Received [Author: {msg.Author} | ID: {msg.Id} | Bot: {msg.Author.IsBot}]");
+				if (cache.Value.Embeds != null && cache.Value.Content == msg.Content)
+				{
+					return Task.CompletedTask;
+				}
 
-                return Task.CompletedTask;
-            };
+				_logger.Log(LogLevel.Trace, $"Message Updated [Author: {cache.Value.Author} | ID: {cache.Id}]");
 
-            _client.RoleCreated += role =>
-            {
-                _logger.Log(LogLevel.Debug,
-                    $"Role Created [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]");
+				return Task.CompletedTask;
+			};
 
-                return Task.CompletedTask;
-            };
+			_client.MessageReceived += msg =>
+			{
+				_logger.Log(LogLevel.Trace,
+					$"Message Received [Author: {msg.Author} | ID: {msg.Id} | Bot: {msg.Author.IsBot}]");
 
-            _client.RoleDeleted += role =>
-            {
-                _logger.Log(LogLevel.Debug,
-                    $"Role Deleted [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]");
+				return Task.CompletedTask;
+			};
 
-                return Task.CompletedTask;
-            };
+			_client.RoleCreated += role =>
+			{
+				_logger.Log(LogLevel.Debug,
+					$"Role Created [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]");
 
-            _client.RoleUpdated += (role, role2) =>
-            {
-                _logger.Log(LogLevel.Trace,
-                    $"Role Updated [Name: {role.Name} | New Name: {role2.Name} | ID: {role.Id} | Guild: {role.Guild}]");
+				return Task.CompletedTask;
+			};
 
-                return Task.CompletedTask;
-            };
+			_client.RoleDeleted += role =>
+			{
+				_logger.Log(LogLevel.Debug,
+					$"Role Deleted [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]");
 
-            _client.UserBanned += (user, guild) =>
-            {
-                _logger.Log(LogLevel.Debug,
-                    $"User Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]");
+				return Task.CompletedTask;
+			};
 
-                return Task.CompletedTask;
-            };
+			_client.RoleUpdated += (role, role2) =>
+			{
+				_logger.Log(LogLevel.Trace,
+					$"Role Updated [Name: {role.Name} | New Name: {role2.Name} | ID: {role.Id} | Guild: {role.Guild}]");
 
-            _client.UserUnbanned += (user, guild) =>
-            {
-                _logger.Log(LogLevel.Debug,
-                    $"User Un-Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]");
+				return Task.CompletedTask;
+			};
 
-                return Task.CompletedTask;
-            };
+			_client.UserBanned += (user, guild) =>
+			{
+				_logger.Log(LogLevel.Debug, $"User Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]");
 
-            _client.UserJoined += user =>
-            {
-                _logger.Log(LogLevel.Debug,
-                    $"User Joined Guild [User: {user} | User ID: {user.Id} | Guild: {user.Guild}]");
+				return Task.CompletedTask;
+			};
 
-                return Task.CompletedTask;
-            };
+			_client.UserUnbanned += (user, guild) =>
+			{
+				_logger.Log(LogLevel.Debug,
+					$"User Un-Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]");
 
-            _client.UserVoiceStateUpdated += (user, _, _) =>
-            {
-                _logger.Log(LogLevel.Trace, $"User Voice State Updated: [User: {user}]");
+				return Task.CompletedTask;
+			};
 
-                return Task.CompletedTask;
-            };
-        }
+			_client.UserJoined += user =>
+			{
+				_logger.Log(LogLevel.Debug,
+					$"User Joined Guild [User: {user} | User ID: {user.Id} | Guild: {user.Guild}]");
+
+				return Task.CompletedTask;
+			};
+
+			_client.UserVoiceStateUpdated += (user, _, _) =>
+			{
+				_logger.Log(LogLevel.Trace, $"User Voice State Updated: [User: {user}]");
+
+				return Task.CompletedTask;
+			};
+		}
 #endregion
 
 #region Commands
-        private void InitCommands()
-        {
-            _commandService.CommandExecuted += CommandExecutedAsync;
-            _commandService.Log += logMessage =>
-            {
-                if (logMessage.Exception is CommandException cmdEx)
-                    _logger.Log(LogLevel.Error, cmdEx, $"Exception encountered when executing command. Message: {logMessage.Message}");
+		private void InitCommands()
+		{
+			_commandService.CommandExecuted += CommandExecutedAsync;
+			_commandService.Log += logMessage =>
+			{
+				if (logMessage.Exception is CommandException cmdEx)
+				{
+					_logger.Log(LogLevel.Error, cmdEx,
+						$"Exception encountered when executing command. Message: {logMessage.Message}");
+				}
 
-                return Task.CompletedTask;
-            };
+				return Task.CompletedTask;
+			};
 
-            _client.MessageReceived += HandleCommandAsync;
-        }
+			_client.MessageReceived += HandleCommandAsync;
+		}
 
-        private void InitOther()
-        {
-            LogConfiguration.LoadProperties();
-            _kaguyaEvents.InitEvents();
-        }
+		private void InitOther()
+		{
+			LogConfiguration.LoadProperties();
+			_kaguyaEvents.InitEvents();
+		}
 
-        private async Task HandleCommandAsync(SocketMessage msg)
-        {
-            if (!(msg is SocketUserMessage message) || message.Author.IsBot)
-            {
-                return;
-            }
+		private async Task HandleCommandAsync(SocketMessage msg)
+		{
+			if (!(msg is SocketUserMessage message) || message.Author.IsBot)
+			{
+				return;
+			}
 
-            if (message.Channel.GetType() != typeof(SocketTextChannel))
-            {
-                return;
-            }
+			if (message.Channel.GetType() != typeof(SocketTextChannel))
+			{
+				return;
+			}
 
-            if (!(message.Channel is SocketGuildChannel guildChannel))
-            {
-                return;
-            }
+			if (!(message.Channel is SocketGuildChannel guildChannel))
+			{
+				return;
+			}
 
-            IServiceScope scope = _serviceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<KaguyaDbContext>();
+			var scope = _serviceProvider.CreateScope();
+			var dbContext = scope.ServiceProvider.GetRequiredService<KaguyaDbContext>();
 
-            KaguyaServer server = await dbContext.KaguyaServers.AsQueryable()
-                                                 .FirstOrDefaultAsync(s => s.ServerId == guildChannel.Guild.Id);
+			var server = await dbContext.KaguyaServers.AsQueryable()
+			                            .FirstOrDefaultAsync(s => s.ServerId == guildChannel.Guild.Id);
 
-            if (server == null)
-            {
-                server = (await dbContext.KaguyaServers.AddAsync(new KaguyaServer
-                {
-                    ServerId = guildChannel.Guild.Id
-                })).Entity;
+			if (server == null)
+			{
+				server = (await dbContext.KaguyaServers.AddAsync(new KaguyaServer
+				{
+					ServerId = guildChannel.Guild.Id
+				})).Entity;
 
-                await dbContext.SaveChangesAsync();
-            }
+				await dbContext.SaveChangesAsync();
+			}
 
-            KaguyaUser user = await dbContext.KaguyaUsers.AsQueryable().FirstOrDefaultAsync(u => u.UserId == message.Author.Id);
-            if (user == null)
-            {
-                user = (await dbContext.KaguyaUsers.AddAsync(new KaguyaUser
-                {
-                    UserId = message.Author.Id
-                })).Entity;
+			var user = await dbContext.KaguyaUsers.AsQueryable()
+			                          .FirstOrDefaultAsync(u => u.UserId == message.Author.Id);
 
-                await dbContext.SaveChangesAsync();
-            }
+			if (user == null)
+			{
+				user = (await dbContext.KaguyaUsers.AddAsync(new KaguyaUser
+				{
+					UserId = message.Author.Id
+				})).Entity;
 
-            if (user.UserId != _adminConfigs.Value.OwnerId)
-            {
-                if (await dbContext.BlacklistedEntities.AsQueryable().AnyAsync(b =>
-                    new[]
-                    {
-                        user.UserId,
-                        server.ServerId
-                    }.Contains(b.EntityId)))
-                {
-                    scope.Dispose();
+				await dbContext.SaveChangesAsync();
+			}
 
-                    return;
-                }
-            }
+			if (user.UserId != _adminConfigs.Value.OwnerId)
+			{
+				if (await dbContext.BlacklistedEntities.AsQueryable()
+				                   .AnyAsync(b => new[]
+				                   {
+					                   user.UserId,
+					                   server.ServerId
+				                   }.Contains(b.EntityId)))
+				{
+					scope.Dispose();
 
-            var commandCtx = new ScopedCommandContext(scope, _client, message);
+					return;
+				}
+			}
 
-            if (await CheckFilteredPhrase(commandCtx, server, message))
-            {
-                scope.Dispose();
-                return; // If filtered phrase (and user isn't admin), return.
-            }
+			var commandCtx = new ScopedCommandContext(scope, _client, message);
 
-            var expLogger = _serviceProvider.GetRequiredService<ILogger<ExperienceService>>();
-            var serverExpRepository = scope.ServiceProvider.GetRequiredService<ServerExperienceRepository>();
-            var userRepository = scope.ServiceProvider.GetRequiredService<KaguyaUserRepository>();
-            var serverRepository = scope.ServiceProvider.GetRequiredService<KaguyaServerRepository>();
-            
-            
-            // We only want to attempt to add EXP if all shards are ready.
-            if (_client.AllShardsReady())
-            {
-                var expService = new ExperienceService(expLogger, (ITextChannel) commandCtx.Channel, 
-                    user, server, commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository, serverRepository);
-                
-                await expService.TryAddGlobalExperienceAsync();
-                await expService.TryAddServerExperienceAsync();
-            }
-            
-            // If the channel is blacklisted and the user isn't an Admin, return.
-            if (!commandCtx.Guild.GetUser(commandCtx.User.Id).GuildPermissions.Administrator &&
-                await dbContext.BlacklistedEntities.AsQueryable().AnyAsync(x =>
-                    x.EntityId == commandCtx.Channel.Id && x.EntityType == BlacklistedEntityType.Channel))
-            {
-                scope.Dispose();
+			if (await CheckFilteredPhrase(commandCtx, server, message))
+			{
+				scope.Dispose();
+				return; // If filtered phrase (and user isn't admin), return.
+			}
 
-                return;
-            }
+			var expLogger = _serviceProvider.GetRequiredService<ILogger<ExperienceService>>();
+			var serverExpRepository = scope.ServiceProvider.GetRequiredService<ServerExperienceRepository>();
+			var userRepository = scope.ServiceProvider.GetRequiredService<KaguyaUserRepository>();
 
-            // Parsing of osu! beatmaps.
-            if (server.AutomaticOsuLinkParsingEnabled)
-            {
-                if (Regex.IsMatch(msg.Content,
-                        @"https?://osu\.ppy\.sh/beatmapsets/[0-9]+#(?:osu|taiko|mania|fruits)/[0-9]+",
-                        RegexOptions.IgnoreCase) ||
-                    Regex.IsMatch(msg.Content, @"https?://osu\.ppy\.sh/b/[0-9]+"))
-                {
-                    // TODO: implement
-                    // await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, commandCtx);
-                }
-            }
+			// We only want to attempt to add EXP if all shards are ready.
+			if (_client.AllShardsReady())
+			{
+				var expService = new ExperienceService(expLogger, (ITextChannel) commandCtx.Channel, user, server,
+					commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository);
 
-            int argPos = 0;
+				await expService.TryAddGlobalExperienceAsync();
+				await expService.TryAddServerExperienceAsync();
+			}
 
-            if (message.Author.IsBot ||
-                !(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
-                  message.HasMentionPrefix(_client.CurrentUser, ref argPos)))
-            {
-                scope.Dispose();
+			// If the channel is blacklisted and the user isn't an Admin, return.
+			if (!commandCtx.Guild.GetUser(commandCtx.User.Id).GuildPermissions.Administrator &&
+			    await dbContext.BlacklistedEntities.AsQueryable()
+			                   .AnyAsync(x =>
+				                   x.EntityId == commandCtx.Channel.Id &&
+				                   x.EntityType == BlacklistedEntityType.Channel))
+			{
+				scope.Dispose();
 
-                return;
-            }
-            
-            await _commandService.ExecuteAsync(commandCtx, argPos, scope.ServiceProvider);
-        }
+				return;
+			}
 
-        private async Task<bool> CheckFilteredPhrase(ICommandContext ctx, KaguyaServer server, IMessage message)
-        {
-            try
-            {
-                GuildPermissions userPerms = (await ctx.Guild.GetUserAsync(ctx.User.Id)).GuildPermissions;
+			// Parsing of osu! beatmaps.
+			if (server.AutomaticOsuLinkParsingEnabled)
+			{
+				if (Regex.IsMatch(msg.Content,
+					    @"https?://osu\.ppy\.sh/beatmapsets/[0-9]+#(?:osu|taiko|mania|fruits)/[0-9]+",
+					    RegexOptions.IgnoreCase) ||
+				    Regex.IsMatch(msg.Content, @"https?://osu\.ppy\.sh/b/[0-9]+"))
+				{
+					// TODO: implement
+					// await AutomaticBeatmapLinkParserService.LinkParserMethod(msg, commandCtx);
+				}
+			}
 
-                if (userPerms.Administrator)
-                {
-                    return false;
-                }
+			int argPos = 0;
 
-                IServiceProvider serviceProvider = (ctx as ScopedCommandContext)?.Scope.ServiceProvider ?? _serviceProvider;
-                var filterRepository = serviceProvider.GetRequiredService<FilteredWordRepository>();
+			if (message.Author.IsBot ||
+			    !(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
+			      message.HasMentionPrefix(_client.CurrentUser, ref argPos)))
+			{
+				scope.Dispose();
 
-                var filters = await filterRepository.GetAllAsync(server.ServerId, true);
+				return;
+			}
 
-                if (!filters.Any())
-                {
-                    return false;
-                }
+			await _commandService.ExecuteAsync(commandCtx, argPos, scope.ServiceProvider);
+		}
 
-                foreach (FilteredWord filter in filters.Where(filter => FilterMatch(message.Content, filter.Word)))
-                {
-                    await ctx.Channel.DeleteMessageAsync(message);
-                    _logger.Log(LogLevel.Information, $"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
+		private async Task<bool> CheckFilteredPhrase(ICommandContext ctx, IServerSearchable server, IMessage message)
+		{
+			try
+			{
+				var userPerms = (await ctx.Guild.GetUserAsync(ctx.User.Id)).GuildPermissions;
 
-                    KaguyaEvents.OnFilteredWordDetectedTrigger(new FilteredWordEventData
-                    {
-                        ServerId = server.ServerId,
-                        UserId = ctx.User.Id,
-                        Phrase = filter.Word,
-                        Message = message
-                    });
+				if (userPerms.Administrator)
+				{
+					return false;
+				}
 
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogCritical(e, $"Error occurred when processing filtered phrase detection for guild {server.ServerId}.");
-            }
+				var serviceProvider = (ctx as ScopedCommandContext)?.Scope.ServiceProvider ?? _serviceProvider;
+				var filterRepository = serviceProvider.GetRequiredService<FilteredWordRepository>();
 
-            return false;
-        }
+				var filters = await filterRepository.GetAllAsync(server.ServerId, true);
 
-        public static bool FilterMatch(string message, string pattern)
-        {
-            (bool start, bool end) = (pattern.StartsWith("*"), pattern.EndsWith("*"));
-            string wordlet = Regex.Escape(pattern.Substring(start ? 1 : 0,
-                end
-                    ? pattern.Length - (start ? 2 : 1)
-                    : pattern.Length - (start ? 1 : 0)));
+				if (!filters.Any())
+				{
+					return false;
+				}
 
-            if (start)
-                wordlet = "[^ ]*" + wordlet;
+				foreach (var filter in filters.Where(filter => FilterMatch(message.Content, filter.Word)))
+				{
+					await ctx.Channel.DeleteMessageAsync(message);
+					_logger.Log(LogLevel.Information,
+						$"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
 
-            if (end)
-                wordlet += "[^ ]*";
+					KaguyaEvents.OnFilteredWordDetectedTrigger(new FilteredWordEventData
+					{
+						ServerId = server.ServerId,
+						UserId = ctx.User.Id,
+						Phrase = filter.Word,
+						Message = message
+					});
 
-            return Regex.IsMatch(message, $"(?:^|[ ]){wordlet}(?:$|[ ])", RegexOptions.IgnoreCase);
-        }
+					return true;
+				}
+			}
+			catch (Exception e)
+			{
+				_logger.LogCritical(e,
+					$"Error occurred when processing filtered phrase detection for guild {server.ServerId}.");
+			}
 
-        private async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext ctx, IResult result)
-        {
-            // Large try-catch used as we cannot afford to let a scope go undisposed.
-            IServiceScope scope = (ctx as ScopedCommandContext)?.Scope;
+			return false;
+		}
 
-            try
-            {
-                IServiceProvider serviceProvider = scope?.ServiceProvider ?? _serviceProvider.CreateScope().ServiceProvider;
-                var ksRepo = serviceProvider.GetRequiredService<KaguyaServerRepository>();
-                var userRepo = serviceProvider.GetService<KaguyaUserRepository>();
-                var chRepo = serviceProvider.GetService<CommandHistoryRepository>();
+		public static bool FilterMatch(string message, string pattern)
+		{
+			(bool start, bool end) = (pattern.StartsWith("*"), pattern.EndsWith("*"));
+			string wordlet = Regex.Escape(pattern.Substring(start ? 1 : 0,
+				end ? pattern.Length - (start ? 2 : 1) : pattern.Length - (start ? 1 : 0)));
 
-                if (ksRepo == null || userRepo == null || chRepo == null)
-                {
-                    string err = "One or more of server, user, or command history repositories were null.";
-                    _logger.LogCritical(err);
-                    
-                    throw new NullReferenceException(err);
-                }
+			if (start)
+			{
+				wordlet = "[^ ]*" + wordlet;
+			}
 
-                if (!command.IsSpecified)
-                    return;
+			if (end)
+			{
+				wordlet += "[^ ]*";
+			}
 
-                KaguyaServer server = await ksRepo.GetOrCreateAsync(ctx.Guild.Id);
-                int guildShard = _client.GetShardIdFor(ctx.Guild);
+			return Regex.IsMatch(message, $"(?:^|[ ]){wordlet}(?:$|[ ])", RegexOptions.IgnoreCase);
+		}
 
-                CommandHistory ch = null;
-                if (command.GetValueOrDefault() != null)
-                {
-                    ch = new CommandHistory
-                    {
-                        UserId = ctx.User.Id,
-                        ServerId = ctx.Guild.Id,
-                        CommandName = command.Value.GetFullCommandName(),
-                        Message = ctx.Message.Content,
-                        ExecutedSuccessfully = true,
-                        ExecutionTime = DateTimeOffset.Now
-                    };
-                }
+		private async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext ctx, IResult result)
+		{
+			// Large try-catch used as we cannot afford to let a scope go undisposed.
+			var scope = (ctx as ScopedCommandContext)?.Scope;
 
-                if (result.IsSuccess)
-                {
-                    // todo: Determine ratelimit for user.
-                    var user = await userRepo.GetOrCreateAsync(ctx.User.Id);
+			try
+			{
+				var serviceProvider = scope?.ServiceProvider ?? _serviceProvider.CreateScope().ServiceProvider;
+				var ksRepo = serviceProvider.GetRequiredService<KaguyaServerRepository>();
+				var userRepo = serviceProvider.GetService<KaguyaUserRepository>();
+				var chRepo = serviceProvider.GetService<CommandHistoryRepository>();
 
-                    user.TotalCommandUses++;
-                    server.TotalCommandCount++;
+				if (ksRepo == null || userRepo == null || chRepo == null)
+				{
+					string err = "One or more of server, user, or command history repositories were null.";
+					_logger.LogCritical(err);
 
-                    var logCtxSb = new StringBuilder();
+					throw new NullReferenceException(err);
+				}
 
-                    logCtxSb.AppendLine($"Command Executed [Name: {command.Value.Name} | Message: {ctx.Message}]");
-                    logCtxSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
-                    logCtxSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
-                    logCtxSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
+				if (!command.IsSpecified)
+				{
+					return;
+				}
 
-                    _logger.LogInformation(logCtxSb.ToString());
-                }
-                else
-                {
-                    var logErrorSb = new StringBuilder();
+				var server = await ksRepo.GetOrCreateAsync(ctx.Guild.Id);
+				int guildShard = _client.GetShardIdFor(ctx.Guild);
 
-                    logErrorSb.AppendLine($"Command Failed [Message: {ctx.Message}]");
-                    logErrorSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
-                    logErrorSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
-                    logErrorSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
+				CommandHistory ch = null;
+				if (command.GetValueOrDefault() != null)
+				{
+					ch = new CommandHistory
+					{
+						UserId = ctx.User.Id,
+						ServerId = ctx.Guild.Id,
+						CommandName = command.Value.GetFullCommandName(),
+						Message = ctx.Message.Content,
+						ExecutedSuccessfully = true,
+						ExecutionTime = DateTimeOffset.Now
+					};
+				}
 
-                    _logger.LogDebug(logErrorSb.ToString());
+				if (result.IsSuccess)
+				{
+					// todo: Determine ratelimit for user.
+					var user = await userRepo.GetOrCreateAsync(ctx.User.Id);
 
-                    // We don't want to spam users with "Unknown command" if they are invoking a 
-                    // command from another bot with the same prefix.
-                    if (result.Error != CommandError.UnknownCommand)
-                    {
-                        if (ch != null)
-                        {
-                            ch.ExecutedSuccessfully = false;
-                            ch.ErrorMessage = result.ErrorReason;
-                        }
+					user.TotalCommandUses++;
+					server.TotalCommandCount++;
 
-                        try
-                        {
-                            string cmdString = $"{server.CommandPrefix}{command.Value.GetFullCommandName()}".AsBold();
-                            string helpCmdString = $"{server.CommandPrefix}help {command.Value.GetFullCommandName()}".AsBold();
-                            Embed embed = new KaguyaEmbedBuilder(KaguyaColors.Red)
-                                          .WithDescription($"{ctx.User.Mention} ⛔ Command Error: {cmdString}.\n" +
-                                                           $"🗒️ Error Reason: {result.ErrorReason.AsBold()}\n" +
-                                                           $"💡 Please use {helpCmdString} for this command's documentation.")
-                                          .Build();
+					var logCtxSb = new StringBuilder();
 
-                            await ctx.Channel.SendMessageAsync(embed: embed);
-                        }
-                        catch (HttpException httpException)
-                        {
-                            // We auto-eject from guilds that don't give us permission to respond to command errors.
-                            // Code 50013 is missing permissions: https://discord.com/developers/docs/topics/opcodes-and-status-codes
-                            if (httpException.DiscordCode.HasValue && httpException.DiscordCode.Value == 50013)
-                            {
-                                var owner = await ctx.Guild.GetOwnerAsync();
-                                var embed = new KaguyaEmbedBuilder(KaguyaColors.Red)
-                                            .WithTitle("Kaguya Auto-Ejection: Missing Permissions")
-                                            .WithDescription("Urgent Notice:\n\n".AsBold() + 
-                                                             "I was unable to send a command response into the text channel " +
-                                                             $"#{ctx.Channel.Name.AsBold()}! I have auto-ejected myself from this server " +
-                                                             $"to prevent further errors. If you wish to reinvite me, you may do " +
-                                                             $"so [here]({Global.InviteUrl}).")
-                                            .Build();
+					logCtxSb.AppendLine($"Command Executed [Name: {command.Value.Name} | Message: {ctx.Message}]");
+					logCtxSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
+					logCtxSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
+					logCtxSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
 
-                                bool ownerNotified = false;
-                                
-                                try
-                                {
-                                    await owner.SendMessageAsync(embed: embed);
-                                    ownerNotified = true;
-                                }
-                                catch (Exception)
-                                {
-                                    _logger.LogWarning($"Failed to notify server owner with id {owner.Id} of auto-ejection.");
-                                }
-                                
-                                await ctx.Guild.LeaveAsync();
-                                
-                                _logger.LogInformation($"Auto-ejected from guild {ctx.Guild.Id}. Bot was unable to send command response into text channel " +
-                                                       $"[Name: {ctx.Channel.Name} | ID: {ctx.Channel.Id}]. Owner notified? {ownerNotified}");
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            _logger.LogError($"Failed to send message in guild {ctx.Guild.Id} due to an exception.");
-                        }
-                    }
-                }
+					_logger.LogInformation(logCtxSb.ToString());
+				}
+				else
+				{
+					var logErrorSb = new StringBuilder();
 
-                var dbContext = serviceProvider.GetRequiredService<KaguyaDbContext>();
+					logErrorSb.AppendLine($"Command Failed [Message: {ctx.Message}]");
+					logErrorSb.AppendLine($"User [Name: {ctx.User} | ID: {ctx.User.Id}]");
+					logErrorSb.AppendLine($"Guild [Name: {ctx.Guild} | ID: {ctx.Guild.Id} | Shard: {guildShard:N0}]");
+					logErrorSb.AppendLine($"Channel [Name: {ctx.Channel} | ID: {ctx.Channel.Id}]");
 
-                if (ch != null)
-                {
-                    dbContext.CommandHistories.Add(ch);
-                }
+					_logger.LogDebug(logErrorSb.ToString());
 
-                await dbContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                scope?.Dispose();
-                _logger.LogCritical(e, "Error occurred during post-execution handling.");
-            }
-        }
+					// We don't want to spam users with "Unknown command" if they are invoking a 
+					// command from another bot with the same prefix.
+					if (result.Error != CommandError.UnknownCommand)
+					{
+						if (ch != null)
+						{
+							ch.ExecutedSuccessfully = false;
+							ch.ErrorMessage = result.ErrorReason;
+						}
+
+						try
+						{
+							string cmdString = $"{server.CommandPrefix}{command.Value.GetFullCommandName()}".AsBold();
+							string helpCmdString = $"{server.CommandPrefix}help {command.Value.GetFullCommandName()}"
+								.AsBold();
+
+							var embed = new KaguyaEmbedBuilder(KaguyaColors.Red).WithDescription(
+								                                                    $"{ctx.User.Mention} ⛔ Command Error: {cmdString}.\n" +
+								                                                    $"🗒️ Error Reason: {result.ErrorReason.AsBold()}\n" +
+								                                                    $"💡 Please use {helpCmdString} for this command's documentation.")
+							                                                    .Build();
+
+							await ctx.Channel.SendMessageAsync(embed: embed);
+						}
+						catch (HttpException httpException)
+						{
+							// We auto-eject from guilds that don't give us permission to respond to command errors.
+							// Code 50013 is missing permissions: https://discord.com/developers/docs/topics/opcodes-and-status-codes
+							if (httpException.DiscordCode.HasValue && httpException.DiscordCode.Value == 50013)
+							{
+								var owner = await ctx.Guild.GetOwnerAsync();
+								var embed = new KaguyaEmbedBuilder(KaguyaColors.Red)
+								            .WithTitle("Kaguya Auto-Ejection: Missing Permissions")
+								            .WithDescription("Urgent Notice:\n\n".AsBold() +
+								                             "I was unable to send a command response into the text channel " +
+								                             $"#{ctx.Channel.Name.AsBold()}! I have auto-ejected myself from this server " +
+								                             "to prevent further errors. If you wish to reinvite me, you may do " +
+								                             $"so [here]({Global.InviteUrl}).")
+								            .Build();
+
+								bool ownerNotified = false;
+
+								try
+								{
+									await owner.SendMessageAsync(embed: embed);
+									ownerNotified = true;
+								}
+								catch (Exception)
+								{
+									_logger.LogWarning(
+										$"Failed to notify server owner with id {owner.Id} of auto-ejection.");
+								}
+
+								await ctx.Guild.LeaveAsync();
+
+								_logger.LogInformation(
+									$"Auto-ejected from guild {ctx.Guild.Id}. Bot was unable to send command response into text channel " +
+									$"[Name: {ctx.Channel.Name} | ID: {ctx.Channel.Id}]. Owner notified? {ownerNotified}");
+							}
+						}
+						catch (Exception)
+						{
+							_logger.LogError($"Failed to send message in guild {ctx.Guild.Id} due to an exception.");
+						}
+					}
+				}
+
+				var dbContext = serviceProvider.GetRequiredService<KaguyaDbContext>();
+
+				if (ch != null)
+				{
+					dbContext.CommandHistories.Add(ch);
+				}
+
+				await dbContext.SaveChangesAsync();
+			}
+			catch (Exception e)
+			{
+				scope?.Dispose();
+				_logger.LogCritical(e, "Error occurred during post-execution handling");
+			}
+		}
 #endregion
-    }
+	}
 }

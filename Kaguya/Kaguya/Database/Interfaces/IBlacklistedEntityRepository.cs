@@ -2,7 +2,5 @@
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IBlacklistedEntityRepository : IRepository<BlacklistedEntity>
-    {
-    }
+	public interface IBlacklistedEntityRepository : IRepository<BlacklistedEntity> {}
 }

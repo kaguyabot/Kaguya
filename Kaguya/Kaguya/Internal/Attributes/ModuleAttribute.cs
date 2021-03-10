@@ -1,12 +1,12 @@
-﻿using System;
-using Kaguya.Internal.Enums;
+﻿using Kaguya.Internal.Enums;
+using System;
 
 namespace Kaguya.Internal.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    internal class ModuleAttribute : Attribute
-    {
-        public CommandModule Module { get; }
-        public ModuleAttribute(CommandModule module) { Module = module; }
-    }
+	[AttributeUsage(AttributeTargets.Class)]
+	internal class ModuleAttribute : Attribute
+	{
+		public ModuleAttribute(CommandModule module) { this.Module = module; }
+		public CommandModule Module { get; }
+	}
 }

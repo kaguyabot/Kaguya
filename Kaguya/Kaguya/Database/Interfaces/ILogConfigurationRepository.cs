@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using Kaguya.Database.Model;
+﻿using Kaguya.Database.Model;
+using System.Threading.Tasks;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface ILogConfigurationRepository : IRepository<LogConfiguration>
-    {
-        public Task<LogConfiguration> GetOrCreateAsync(ulong key);
-    }
+	public interface ILogConfigurationRepository : IRepository<LogConfiguration>
+	{
+		public Task<LogConfiguration> GetOrCreateAsync(ulong key);
+	}
 }

@@ -4,8 +4,8 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Repositories
 {
-    public class ReactionRoleRepository : RepositoryBase<ReactionRole>, IReactionRoleRepository
-    {
-        public ReactionRoleRepository(KaguyaDbContext dbContext) : base(dbContext) { }
-    }
+	public class ReactionRoleRepository : RepositoryBase<ReactionRole>, IReactionRoleRepository
+	{
+		public ReactionRoleRepository(KaguyaDbContext dbContext) : base(dbContext) {}
+	}
 }

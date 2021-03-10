@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kaguya.Database.Interfaces;
-using Microsoft.AspNetCore.Hosting.Server;
 
 namespace Kaguya.Database.Model
 {

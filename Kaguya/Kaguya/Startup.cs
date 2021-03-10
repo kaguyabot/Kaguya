@@ -1,4 +1,3 @@
-using System;
 using Discord;
 using Discord.Commands;
 using Discord.Rest;
@@ -27,7 +26,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NekosSharp;
 using OsuSharp;
+using System;
 using Victoria;
+
 #if !DEBUG
 using DiscordBotsList.Api;
 #endif
@@ -36,27 +37,22 @@ namespace Kaguya
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
-		{
-			Configuration = configuration;
-		}
-
+		public Startup(IConfiguration configuration) { this.Configuration = configuration; }
 		public IConfiguration Configuration { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.Configure<AdminConfigurations>(Configuration.GetSection(AdminConfigurations.Position));
-			services.Configure<DiscordConfigurations>(Configuration.GetSection(DiscordConfigurations.Position));
-			services.Configure<TopGgConfigurations>(Configuration.GetSection(TopGgConfigurations.Position));
-			
+			services.Configure<AdminConfigurations>(this.Configuration.GetSection(AdminConfigurations.Position));
+			services.Configure<DiscordConfigurations>(this.Configuration.GetSection(DiscordConfigurations.Position));
+			services.Configure<TopGgConfigurations>(this.Configuration.GetSection(TopGgConfigurations.Position));
+
 			services.AddDbContextPool<KaguyaDbContext>(builder =>
 			{
-				builder
-					.UseMySql(Configuration.GetConnectionString("Database"),
-						ServerVersion.AutoDetect(Configuration.GetConnectionString("Database")));
+				builder.UseMySql(this.Configuration.GetConnectionString("Database"),
+					ServerVersion.AutoDetect(this.Configuration.GetConnectionString("Database")));
 			});
-			
+
 			// All database repositories are added as scoped here.
 			services.AddScoped<AdminActionRepository>();
 			services.AddScoped<AntiraidConfigRepository>();
@@ -85,17 +81,17 @@ namespace Kaguya
 			services.AddSingleton<GuildLoggerService>();
 			services.AddSingleton<GreetingService>();
 			services.AddSingleton<UpvoteNotifierService>();
-			
+
 			services.AddSingleton<SilentSysActions>();
 
 			services.AddSingleton<AudioQueueLocker>();
 			services.AddSingleton<ITimerService, TimerService>();
 			services.AddSingleton<IAntiraidService, AntiraidService>();
-			
+
 			services.AddControllers();
 
 			services.AddSingleton(new NekoClient("kaguya-v4"));
-			
+
 			// Osu setup (OsuSharp)
 			services.AddSingleton(provider =>
 			{
@@ -112,7 +108,7 @@ namespace Kaguya
 						ApiKey = "I'M INVALID!!!"
 					});
 				}
-				
+
 				return new OsuClient(new OsuSharpConfiguration
 				{
 					ApiKey = adminConfigs.Value.OsuApiKey
@@ -132,15 +128,15 @@ namespace Kaguya
 				var restClient = new DiscordRestClient();
 				restClient.LoginAsync(TokenType.Bot, discordConfigs.Value.BotToken).GetAwaiter().GetResult();
 				int shards = restClient.GetRecommendedShardCountAsync().GetAwaiter().GetResult();
-				
+
 				var client = new DiscordShardedClient(new DiscordSocketConfig
-							                    {
-							                        AlwaysDownloadUsers = discordConfigs.Value.AlwaysDownloadUsers ?? true,
-							                        MessageCacheSize = discordConfigs.Value.MessageCacheSize ?? 50,
-							                        TotalShards = shards,
-							                        LogLevel = LogSeverity.Debug,
-							                        ExclusiveBulkDelete = true // todo: reflect in guild logger with custom logtype!!
-							                    });
+				{
+					AlwaysDownloadUsers = discordConfigs.Value.AlwaysDownloadUsers ?? true,
+					MessageCacheSize = discordConfigs.Value.MessageCacheSize ?? 50,
+					TotalShards = shards,
+					LogLevel = LogSeverity.Debug,
+					ExclusiveBulkDelete = true // todo: reflect in guild logger with custom logtype!!
+				});
 
 				return client;
 			});
@@ -150,19 +146,16 @@ namespace Kaguya
 				var client = provider.GetRequiredService<DiscordShardedClient>();
 				return new InteractivityService(client, TimeSpan.FromMinutes(5));
 			});
-			
-			services.AddLavaNode(x =>
-			{
-				x.SelfDeaf = true;
-			});
+
+			services.AddLavaNode(x => { x.SelfDeaf = true; });
 			services.AddSingleton<AudioService>();
-			
+
 			// CommonEmotes setup
 			services.AddSingleton<CommonEmotes>();
 			services.AddSingleton<KaguyaEvents>();
 
 			services.AddHostedService<DiscordWorker>();
-			
+
 			// Must be after discord.
 			services.AddHostedService<AntiraidWorker>();
 			services.AddHostedService<KaguyaPremiumRoleService>();

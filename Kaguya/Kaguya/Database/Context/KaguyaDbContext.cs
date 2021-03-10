@@ -1,8 +1,8 @@
 ﻿using Kaguya.Database.Model;
 using Kaguya.Database.Views;
 using Microsoft.EntityFrameworkCore;
-// ReSharper disable PartialMethodWithSinglePart
 
+// ReSharper disable PartialMethodWithSinglePart
 #nullable disable
 
 namespace Kaguya.Database.Context
@@ -10,6 +10,8 @@ namespace Kaguya.Database.Context
 	// ReSharper disable once PartialTypeWithSinglePart
 	public partial class KaguyaDbContext : DbContext
 	{
+		public KaguyaDbContext(DbContextOptions<KaguyaDbContext> options) : base(options) {}
+
 		// DbSet (Models)
 		public DbSet<AdminAction> AdminActions { get; set; }
 		public DbSet<AntiRaidConfig> AntiRaidConfigs { get; set; }
@@ -35,20 +37,13 @@ namespace Kaguya.Database.Context
 		public DbSet<ServerExperience> ServerExperience { get; set; }
 		public DbSet<Upvote> Upvotes { get; set; }
 		public DbSet<WarnConfiguration> WarnConfigurations { get; set; }
-		
+
 		// DbSet (Views)
 		public DbSet<KaguyaUserExperienceRank> KaguyaUserExperienceRanks { get; set; }
 
-		public KaguyaDbContext(DbContextOptions<KaguyaDbContext> options)
-			: base(options)
-		{
-		}
-
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			if (!optionsBuilder.IsConfigured)
-			{
-			}
+			if (!optionsBuilder.IsConfigured) {}
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,36 +51,41 @@ namespace Kaguya.Database.Context
 			OnModelCreatingPartial(modelBuilder);
 			// Keys - Only specify if key is complex (unique by more than 1 property)
 
-			modelBuilder.Entity<AutoAssignedRole>().HasKey(x => new
-			{
-				x.ServerId,
-				x.RoleId
-			});
-			
-			modelBuilder.Entity<FavoriteTrack>().HasKey(x => new
-			{
-				x.UserId,
-				x.SongId
-			});
+			modelBuilder.Entity<AutoAssignedRole>()
+			            .HasKey(x => new
+			            {
+				            x.ServerId,
+				            x.RoleId
+			            });
 
-			modelBuilder.Entity<FilteredWord>().HasKey(x => new
-			{
-				x.ServerId,
-				x.Word
-			});
-			
-			modelBuilder.Entity<ReactionRole>().HasKey(x => new
-			{
-				x.MessageId,
-				x.RoleId
-			});
-			
-			modelBuilder.Entity<ServerExperience>().HasKey(x => new
-			{
-				x.ServerId,
-				x.UserId
-			});
-			
+			modelBuilder.Entity<FavoriteTrack>()
+			            .HasKey(x => new
+			            {
+				            x.UserId,
+				            x.SongId
+			            });
+
+			modelBuilder.Entity<FilteredWord>()
+			            .HasKey(x => new
+			            {
+				            x.ServerId,
+				            x.Word
+			            });
+
+			modelBuilder.Entity<ReactionRole>()
+			            .HasKey(x => new
+			            {
+				            x.MessageId,
+				            x.RoleId
+			            });
+
+			modelBuilder.Entity<ServerExperience>()
+			            .HasKey(x => new
+			            {
+				            x.ServerId,
+				            x.UserId
+			            });
+
 			/* Indexing
 			 
 			 If indexing properties separately, make a new block. 
@@ -113,159 +113,182 @@ namespace Kaguya.Database.Context
 			*/
 
 			// Index: AdminAction
-			modelBuilder.Entity<AdminAction>().HasIndex(x => new
-			{
-				x.ServerId
-			});
-			
-			modelBuilder.Entity<AdminAction>().HasIndex(x => new
-			{
-				x.ServerId,
-				x.Action
-			});
-			
-			modelBuilder.Entity<AdminAction>().HasIndex(x => new
-			{
-				x.ActionedUserId,
-				x.ServerId,
-				x.Expiration
-			});
-			
-			modelBuilder.Entity<AdminAction>().HasIndex(x => new
-			{
-				x.ActionedUserId,
-				x.ServerId,
-				x.Action,
-				x.Expiration
-			});
+			modelBuilder.Entity<AdminAction>()
+			            .HasIndex(x => new
+			            {
+				            x.ServerId
+			            });
+
+			modelBuilder.Entity<AdminAction>()
+			            .HasIndex(x => new
+			            {
+				            x.ServerId,
+				            x.Action
+			            });
+
+			modelBuilder.Entity<AdminAction>()
+			            .HasIndex(x => new
+			            {
+				            x.ActionedUserId,
+				            x.ServerId,
+				            x.Expiration
+			            });
+
+			modelBuilder.Entity<AdminAction>()
+			            .HasIndex(x => new
+			            {
+				            x.ActionedUserId,
+				            x.ServerId,
+				            x.Action,
+				            x.Expiration
+			            });
 
 			// Index: CommandHistory
-			modelBuilder.Entity<CommandHistory>().HasIndex(x => new
-			{
-				x.UserId,
-				x.ServerId,
-				x.CommandName
-			});
-			
+			modelBuilder.Entity<CommandHistory>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId,
+				            x.ServerId,
+				            x.CommandName
+			            });
+
 			// Index: FavoriteTrack
-			modelBuilder.Entity<FavoriteTrack>().HasIndex(x => new
-			{
-				x.UserId
-			});
-			
+			modelBuilder.Entity<FavoriteTrack>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId
+			            });
+
 			// Index: FilteredWord
-			modelBuilder.Entity<FilteredWord>().HasIndex(x => new
-			{
-				x.ServerId
-			});
+			modelBuilder.Entity<FilteredWord>()
+			            .HasIndex(x => new
+			            {
+				            x.ServerId
+			            });
 
 			// Index: Fish
-			modelBuilder.Entity<Fish>().HasIndex(x => new
-			{
-				x.UserId
-			});
-			
-			modelBuilder.Entity<Fish>().HasIndex(x => new
-			{
-				x.ServerId
-			});
-			
-			modelBuilder.Entity<Fish>().HasIndex(x => new
-			{
-				x.UserId,
-				x.FishType
-			});
-			
-			modelBuilder.Entity<Fish>().HasIndex(x => new
-			{
-				x.UserId,
-				x.Rarity
-			});
-			
+			modelBuilder.Entity<Fish>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId
+			            });
+
+			modelBuilder.Entity<Fish>()
+			            .HasIndex(x => new
+			            {
+				            x.ServerId
+			            });
+
+			modelBuilder.Entity<Fish>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId,
+				            x.FishType
+			            });
+
+			modelBuilder.Entity<Fish>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId,
+				            x.Rarity
+			            });
+
 			// Index: GambleHistory
-			modelBuilder.Entity<GambleHistory>().HasIndex(x => new
-			{
-				x.UserId
-			});
-			
-			modelBuilder.Entity<GambleHistory>().HasIndex(x => new
-			{
-				x.ServerId
-			});
-			
-			modelBuilder.Entity<GambleHistory>().HasIndex(x => new
-			{
-				x.UserId,
-				x.IsWinner
-			});
-			
+			modelBuilder.Entity<GambleHistory>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId
+			            });
+
+			modelBuilder.Entity<GambleHistory>()
+			            .HasIndex(x => new
+			            {
+				            x.ServerId
+			            });
+
+			modelBuilder.Entity<GambleHistory>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId,
+				            x.IsWinner
+			            });
+
 			// Index: Giveaway
-			modelBuilder.Entity<Giveaway>().HasIndex(x => new
-			{
-				x.Expiration
-			});
-			
-			modelBuilder.Entity<Giveaway>().HasIndex(x => new
-			{
-				x.ServerId,
-				x.Expiration
-			});
-			
+			modelBuilder.Entity<Giveaway>()
+			            .HasIndex(x => new
+			            {
+				            x.Expiration
+			            });
+
+			modelBuilder.Entity<Giveaway>()
+			            .HasIndex(x => new
+			            {
+				            x.ServerId,
+				            x.Expiration
+			            });
+
 			// Index: KaguyaUser
-			modelBuilder.Entity<KaguyaUser>().HasIndex(x => new
-			{
-				x.ActiveRateLimit
-			});
-			
+			modelBuilder.Entity<KaguyaUser>()
+			            .HasIndex(x => new
+			            {
+				            x.ActiveRateLimit
+			            });
+
 			// Index: PremiumKey
-			modelBuilder.Entity<PremiumKey>().HasIndex(x => new
-			{
-				x.Key
-			});
-			
+			modelBuilder.Entity<PremiumKey>()
+			            .HasIndex(x => new
+			            {
+				            x.Key
+			            });
+
 			// Index: Quote
-			modelBuilder.Entity<Quote>().HasIndex(x => new
-			{
-				x.ServerId
-			});
-			
+			modelBuilder.Entity<Quote>()
+			            .HasIndex(x => new
+			            {
+				            x.ServerId
+			            });
+
 			// Index: Reminder
-			modelBuilder.Entity<Reminder>().HasIndex(x => new
-			{
-				x.UserId
-			});
-			
-			modelBuilder.Entity<Reminder>().HasIndex(x => new
-			{
-				x.UserId,
-				x.Expiration // Utilized in the "NeedsDelivery" method of the Reminder class.
-			});
-			
+			modelBuilder.Entity<Reminder>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId
+			            });
+
+			modelBuilder.Entity<Reminder>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId,
+				            x.Expiration // Utilized in the "NeedsDelivery" method of the Reminder class.
+			            });
+
 			// Index: Rep
-			modelBuilder.Entity<Rep>().HasIndex(x => new
-			{
-				x.UserId
-			});
-			
+			modelBuilder.Entity<Rep>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId
+			            });
+
 			// Index: RoleReward
-			modelBuilder.Entity<RoleReward>().HasIndex(x => new
-			{
-				x.ServerId
-			});
-			
+			modelBuilder.Entity<RoleReward>()
+			            .HasIndex(x => new
+			            {
+				            x.ServerId
+			            });
+
 			// Index: Upvote
-			modelBuilder.Entity<Upvote>().HasIndex(x => new
-			{
-				x.UserId
-			});
-			
+			modelBuilder.Entity<Upvote>()
+			            .HasIndex(x => new
+			            {
+				            x.UserId
+			            });
+
 			// VIEWS
 			modelBuilder.Entity<KaguyaUserExperienceRank>(x =>
 			{
 				x.HasNoKey();
 				x.ToView("KaguyaUserRanks");
 			});
-
 		}
 
 		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

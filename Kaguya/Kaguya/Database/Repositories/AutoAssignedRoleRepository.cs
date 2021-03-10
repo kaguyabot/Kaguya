@@ -4,8 +4,8 @@ using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Repositories
 {
-    public class AutoAssignedRoleRepository : RepositoryBase<AutoAssignedRole>, IAutoAssignedRoleRepository
-    {
-        public AutoAssignedRoleRepository(KaguyaDbContext dbContext) : base(dbContext) { }
-    }
+	public class AutoAssignedRoleRepository : RepositoryBase<AutoAssignedRole>, IAutoAssignedRoleRepository
+	{
+		public AutoAssignedRoleRepository(KaguyaDbContext dbContext) : base(dbContext) {}
+	}
 }

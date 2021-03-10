@@ -47,7 +47,7 @@ namespace KaguyaTests
 		{
 			Assert.True(DiscordWorker.FilterMatch(content, pattern));
 		}
-        
+
 		[Theory]
 		[InlineData("the quick brown fox jumped over the lazy dog", "*QASDF")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "*FLOOP")]
@@ -61,7 +61,7 @@ namespace KaguyaTests
 		{
 			Assert.False(DiscordWorker.FilterMatch(content, pattern));
 		}
-        
+
 		[Theory]
 		[InlineData("the quick brown fox jumped over the lazy dog", "TH*")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "QUI*")]
@@ -75,7 +75,7 @@ namespace KaguyaTests
 		{
 			Assert.True(DiscordWorker.FilterMatch(content, pattern));
 		}
-        
+
 		[Theory]
 		[InlineData("the quick brown fox jumped over the lazy dog", "MORK*")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "MINDI*")]

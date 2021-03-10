@@ -1,10 +1,10 @@
 ﻿namespace Kaguya.Internal.Enums
 {
-    public enum ModerationAction
-    {
-        Mute,
-        Kick,
-        Shadowban,
-        Ban
-    }
+	public enum ModerationAction
+	{
+		Mute,
+		Kick,
+		Shadowban,
+		Ban
+	}
 }

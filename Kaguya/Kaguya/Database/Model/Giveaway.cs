@@ -15,7 +15,7 @@ namespace Kaguya.Database.Model
         /// <summary>
         /// The ID of the user who created the giveaway
         /// </summary>
-        public ulong UserId { get; }
+        public ulong UserId { get; set; }
         /// <summary>
         /// ID of the server that this giveaway is held in.
         /// </summary>

@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using Kaguya.Database.Model;
+﻿using Kaguya.Database.Model;
+using System.Threading.Tasks;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IAntiraidRepository : IRepository<AntiRaidConfig>
-    {
-        public Task InsertOrUpdateAsync(AntiRaidConfig config);
-    }
+	public interface IAntiraidRepository : IRepository<AntiRaidConfig>
+	{
+		public Task InsertOrUpdateAsync(AntiRaidConfig config);
+	}
 }

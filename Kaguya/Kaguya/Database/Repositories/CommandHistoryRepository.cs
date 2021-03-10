@@ -1,16 +1,16 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Kaguya.Database.Context;
 using Kaguya.Database.Interfaces;
 using Kaguya.Database.Model;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Kaguya.Database.Repositories
 {
 	public class CommandHistoryRepository : RepositoryBase<CommandHistory>, ICommandHistoryRepository
 	{
-		public CommandHistoryRepository(KaguyaDbContext dbContext) : base(dbContext) { }
+		public CommandHistoryRepository(KaguyaDbContext dbContext) : base(dbContext) {}
 
 		public async Task<int> GetSuccessfulCountAsync()
 		{
@@ -24,27 +24,26 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<int> GetRecentSuccessfulCountAsync(TimeSpan threshold)
 		{
-			DateTimeOffset constraint = DateTimeOffset.Now - threshold;
+			var constraint = DateTimeOffset.Now - threshold;
 
 			return await Table.AsNoTracking()
-			                  .Where(x => x.ExecutedSuccessfully &&
-			                              x.ExecutionTime > constraint)
+			                  .Where(x => x.ExecutedSuccessfully && x.ExecutionTime > constraint)
 			                  .CountAsync();
 		}
 
 		public async Task<int> GetRecentSuccessfulCountAsync(ulong userId, TimeSpan threshold)
 		{
-			DateTimeOffset constraint = DateTimeOffset.Now - threshold;
+			var constraint = DateTimeOffset.Now - threshold;
 
-			return await Table.AsNoTracking().Where(x => x.ExecutedSuccessfully &&
-			                                             x.UserId == userId &&
-			                                             x.ExecutionTime > constraint)
+			return await Table.AsNoTracking()
+			                  .Where(x => x.ExecutedSuccessfully && x.UserId == userId && x.ExecutionTime > constraint)
 			                  .CountAsync();
 		}
 
 		public async Task<string> GetFavoriteCommandAsync(ulong userId)
 		{
-			return await Table.AsNoTracking().Where(x => x.UserId == userId && x.ExecutedSuccessfully)
+			return await Table.AsNoTracking()
+			                  .Where(x => x.UserId == userId && x.ExecutedSuccessfully)
 			                  .GroupBy(x => x.CommandName)
 			                  .OrderByDescending(x => x.Count())
 			                  .Select(x => x.Key)
@@ -58,7 +57,7 @@ namespace Kaguya.Database.Repositories
 			                         .OrderByDescending(x => x.Count())
 			                         .Select(x => x.Key)
 			                         .FirstOrDefaultAsync();
-			
+
 			int count = await Table.AsNoTracking()
 			                       .GroupBy(x => x.CommandName)
 			                       .OrderByDescending(x => x.Count())

@@ -1,7 +1,7 @@
 namespace Kaguya.Internal.Music
 {
-    public class AudioQueueLocker
-    {
-        public object Locker = new();
-    }
+	public class AudioQueueLocker
+	{
+		public object Locker = new();
+	}
 }

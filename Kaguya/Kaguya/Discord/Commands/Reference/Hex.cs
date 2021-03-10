@@ -1,10 +1,10 @@
+using Discord;
 using Discord.Commands;
 using Kaguya.Internal.Attributes;
 using Kaguya.Internal.Enums;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 using System;
-using Discord;
+using System.Threading.Tasks;
 
 namespace Kaguya.Discord.Commands.Reference
 {
@@ -12,24 +12,20 @@ namespace Kaguya.Discord.Commands.Reference
 	[Group("hex")]
 	public class Hex : KaguyaBase<Hex>
 	{
-		private readonly ILogger<Hex> _logger;
-
-		public Hex(ILogger<Hex> logger) : base(logger)
-		{
-			_logger = logger;
-		}
+		public Hex(ILogger<Hex> logger) : base(logger) {}
 
 		[Command]
 		[Summary("Takes a hexadecimal color value and outputs an embed with that color. Using " +
 		         "a 3-digit value will translate it into a 6-digit hex value (i.e. `0F0` => `00FF00`).")]
 		[Remarks("<hex value>")]
-								// Various hex lenghts
-		[Example("0000FF")]		// 6
-		[Example("0F0")]		// 3
-		[Example("0xFFFF00")]	// 8
-		[Example("0x00F")]		// 5
-		[Example("#00FFFF")]	// 7
-		[Example("#F00")]		// 4
+		// Various hex lenghts
+		[Example("0000FF")]   // 6
+		[Example("0F0")]      // 3
+		[Example("0xFFFF00")] // 8
+		[Example("0x00F")]    // 5
+		[Example("#00FFFF")]  // 7
+		[Example("#F00")]
+		// 4
 		public async Task HexTestCommand(string hex)
 		{
 			// Validate hex length
@@ -37,11 +33,11 @@ namespace Kaguya.Discord.Commands.Reference
 			{
 				if (hex.Length < 3)
 				{
-					await SendBasicErrorEmbedAsync($"Your hex value is too short. It must have a minimum length of 3.");
+					await SendBasicErrorEmbedAsync("Your hex value is too short. It must have a minimum length of 3.");
 				}
 				else if (hex.Length > 8)
 				{
-					await SendBasicErrorEmbedAsync($"Your hex value is too long. It must have a maximum length of 8.");
+					await SendBasicErrorEmbedAsync("Your hex value is too long. It must have a maximum length of 8.");
 				}
 
 				return;
@@ -66,14 +62,15 @@ namespace Kaguya.Discord.Commands.Reference
 			}
 			else
 			{
-				await SendBasicErrorEmbedAsync($"Your hex value format is invalid.");
+				await SendBasicErrorEmbedAsync("Your hex value format is invalid.");
 
 				return;
 			}
 
 			if (hexString.Length != 3 && hexString.Length != 6)
 			{
-				await SendBasicErrorEmbedAsync($"Your hex value is invalid. The hexadecimal number must be 3 or 6 digits long.");
+				await SendBasicErrorEmbedAsync(
+					"Your hex value is invalid. The hexadecimal number must be 3 or 6 digits long.");
 
 				return;
 			}
@@ -104,7 +101,8 @@ namespace Kaguya.Discord.Commands.Reference
 			}
 			catch (Exception)
 			{
-				await SendBasicErrorEmbedAsync($"Your hex value is invalid. The digits of a hexidecimal number must be from 0 to 9 and A to F.");
+				await SendBasicErrorEmbedAsync(
+					"Your hex value is invalid. The digits of a hexidecimal number must be from 0 to 9 and A to F.");
 
 				return;
 			}
@@ -120,9 +118,8 @@ namespace Kaguya.Discord.Commands.Reference
 			var color = new Color(colorValue);
 
 			// Output embed
-			string message = 
-				$"Your hex value is **#{completeHex.ToUpper()}**.\n" +
-				$"The color of this embed is what your hex looks like.";
+			string message = $"Your hex value is **#{completeHex.ToUpper()}**.\n" +
+			                 "The color of this embed is what your hex looks like.";
 
 			await SendBasicEmbedAsync(message, color);
 		}
