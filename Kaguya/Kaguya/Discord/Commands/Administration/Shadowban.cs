@@ -2,7 +2,6 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Humanizer;
-using Humanizer.Localisation;
 using Interactivity;
 using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
@@ -254,8 +253,7 @@ namespace Kaguya.Discord.Commands.Administration
 
 			string newShadowbanDurationStr = (!expiration.HasValue
 				? "permanent"
-				: (expiration.Value - DateTimeOffset.Now).HumanizeTraditionalReadable() +
-				  " from now").AsBold();
+				: (expiration.Value - DateTimeOffset.Now).HumanizeTraditionalReadable() + " from now").AsBold();
 
 			string reasonStr = (longestShadowban.Reason ?? "<No reason provided>").AsItalics();
 

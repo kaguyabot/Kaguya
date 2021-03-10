@@ -1,7 +1,5 @@
 using Discord;
 using Discord.Commands;
-using Humanizer;
-using Humanizer.Localisation;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord.Parsers;
 using Kaguya.Internal.Attributes;
