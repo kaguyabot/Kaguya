@@ -8,6 +8,8 @@ using Kaguya.Internal.PrimitiveExtensions;
 using Kaguya.Internal.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 
 namespace Kaguya.Internal.Models.Statistics.Bot
@@ -15,8 +17,7 @@ namespace Kaguya.Internal.Models.Statistics.Bot
 	/// <summary>
 	///  Serves as a main class for all bot-related statistics, primarily used in the $stats command.
 	/// </summary>
-	public class BotStatistics : IDisplayableStats, IBotFishingStatistics, IBotDiscordStatistics, IBotCommandStatistics,
-		IBotGamblingStatistics
+	public class BotStatistics : IBotStatistics, IDisplayableStats
 	{
 		public BotStatistics(IServiceProvider serviceProvider)
 		{
@@ -29,7 +30,7 @@ namespace Kaguya.Internal.Models.Statistics.Bot
 				var commandHistoryRepository = scope.ServiceProvider.GetRequiredService<CommandHistoryRepository>();
 				var gambleHistoryRepository = scope.ServiceProvider.GetRequiredService<GambleHistoryRepository>();
 
-				this.DbStats = kaguyaStatisticsRepository.GetMostRecentAsync().GetAwaiter().GetResult();
+				this.DatabaseStatistics = kaguyaStatisticsRepository.GetMostRecentAsync().GetAwaiter().GetResult();
 				this.RestUser = client.Rest.CurrentUser;
 
 				this.CountTrash = fishRepository.CountAllOfRarityAsync(FishRarity.Trash).GetAwaiter().GetResult();
@@ -63,17 +64,20 @@ namespace Kaguya.Internal.Models.Statistics.Bot
 				this.TotalGambleLossesCoins = gambleHistoryRepository.TotalGambleLossesCoins().GetAwaiter().GetResult();
 				this.TotalGambleWinPercent =
 					this.TotalGambleWins / ((double) this.TotalGambleWins + this.TotalGambleLosses);
+
+				this.Uptime = DateTimeOffset.UtcNow - Process.GetCurrentProcess().StartTime.ToUniversalTime();
 			}
 		}
 
 		/// <summary>
 		///  Stats that are pre-loaded from the most recent <see cref="KaguyaStatistics" /> object in the DB.
 		/// </summary>
-		public KaguyaStatistics DbStats { get; }
+		public KaguyaStatistics DatabaseStatistics { get; }
 		public int SuccessfulCommandCount { get; }
 		public int SuccessfulCommandCountLast24Hours { get; }
 		public (string cmdName, int count) MostPopularCommand { get; }
 		public RestSelfUser RestUser { get; }
+		public TimeSpan Uptime { get; }
 		public int CountTrash { get; }
 		public int CountCommon { get; }
 		public int CountUncommon { get; }
@@ -124,15 +128,17 @@ namespace Kaguya.Internal.Models.Statistics.Bot
 		{
 			var sb = new StringBuilder();
 
-			sb.AppendLine("Version:".AsBold() + $" {this.DbStats.Version}");
-			sb.AppendLine("Shards:".AsBold() + $" {this.DbStats.Shards}");
-			sb.AppendLine("Latency:".AsBold() + $" {this.DbStats.LatencyMilliseconds}ms");
-			sb.AppendLine("RAM:".AsBold() + $" {this.DbStats.RamUsageMegabytes:N2}MB");
-			sb.AppendLine("Coins:".AsBold() + $" {this.DbStats.Coins.ToShorthandFormat()}");
-			sb.AppendLine("Accounts:".AsBold() + $" {this.DbStats.Users.ToShorthandFormat()}");
-			sb.AppendLine("Servers:".AsBold() + $" {this.DbStats.ConnectedServers:N0}");
+			sb.AppendLine("Version:".AsBold() + $" {this.DatabaseStatistics.Version}");
+			sb.AppendLine("Shards:".AsBold() + $" {this.DatabaseStatistics.Shards}");
+			sb.AppendLine("Latency:".AsBold() + $" {this.DatabaseStatistics.LatencyMilliseconds}ms");
+			sb.AppendLine("RAM:".AsBold() + $" {this.DatabaseStatistics.RamUsageMegabytes:N2}MB");
+			sb.AppendLine("Coins:".AsBold() + $" {this.DatabaseStatistics.Coins.ToShorthandFormat()}");
+			sb.AppendLine("Accounts:".AsBold() + $" {this.DatabaseStatistics.Users.ToShorthandFormat()}");
+			sb.AppendLine("Servers:".AsBold() + $" {this.DatabaseStatistics.ConnectedServers:N0}");
 			sb.AppendLine("Retention %:".AsBold() +
-			              $" {(this.DbStats.ConnectedServers / (double) this.DbStats.Servers) * 100:N2}");
+			              $" {(this.DatabaseStatistics.ConnectedServers / (double) this.DatabaseStatistics.Servers) * 100:N2}");
+
+			sb.AppendLine($"Uptime:".AsBold() + $" {this.Uptime.HumanizeTraditionalReadable()}");
 
 			return sb.ToString();
 		}
@@ -166,7 +172,8 @@ namespace Kaguya.Internal.Models.Statistics.Bot
 			sb.AppendLine("Total Losses:".AsBold() + $" {stats.TotalGambleLosses:N0}");
 			sb.AppendLine("Average Win %:".AsBold() + $" {winPercentDisp}");
 			sb.AppendLine("Total Winnings (Coins):".AsBold() +
-			              $" {stats.TotalGambleWinsCoins.ToShorthandFormat()} (Net: {(stats.TotalGambleWinsCoins - stats.TotalGambleLossesCoins).ToShorthandFormat()})");
+			              $" {stats.TotalGambleWinsCoins.ToShorthandFormat()} " +
+			              $"(Net: {(stats.TotalGambleWinsCoins - stats.TotalGambleLossesCoins).ToShorthandFormat()})");
 
 			return sb.ToString();
 		}
