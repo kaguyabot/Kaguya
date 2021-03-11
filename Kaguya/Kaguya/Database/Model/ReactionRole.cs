@@ -7,9 +7,9 @@ namespace Kaguya.Database.Model
     public class ReactionRole : IServerSearchable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Key, Column(Order = 0)]
+        [Key][Column(Order = 0)]
         public ulong MessageId { get; set; }
-        [Key, Column(Order = 1)]
+        [Key][Column(Order = 1)]
         public ulong RoleId { get; set; }
         public ulong ServerId { get; set; }
         public string Emote { get; set; }

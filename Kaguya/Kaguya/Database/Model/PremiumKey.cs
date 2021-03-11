@@ -19,6 +19,6 @@ namespace Kaguya.Database.Model
         public ulong? UserId { get; set; }
         public ulong? ServerId { get; set; }
         public string HumanizedLength => TimeSpan.FromSeconds(this.LengthInSeconds).HumanizeTraditionalReadable();
-        public bool IsRedeemed => Expiration.HasValue;
+        public bool IsRedeemed => this.Expiration.HasValue;
     }
 }

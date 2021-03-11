@@ -7,10 +7,10 @@ namespace Kaguya.Database.Model
 {
     public class AutoAssignedRole : IServerSearchable
     {
-        [Key, Column(Order = 0)]
+        [Key][Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public ulong ServerId { get; set; }
-        [Key, Column(Order = 1)]
+        [Key][Column(Order = 1)]
         public ulong RoleId { get; set; }
         /// <summary>
         /// How long to wait before assigning the role automatically. A null value = assign immediately.

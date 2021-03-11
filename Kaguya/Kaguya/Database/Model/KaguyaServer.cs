@@ -46,6 +46,6 @@ namespace Kaguya.Database.Model
 		/// <summary>
 		/// Whether or not the server currently has an active premium subscription.
 		/// </summary>
-		public bool IsPremium => PremiumExpiration.HasValue && PremiumExpiration.Value > DateTimeOffset.Now;
+		public bool IsPremium => this.PremiumExpiration.HasValue && this.PremiumExpiration.Value > DateTimeOffset.Now;
 	}
 }
