@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 
 namespace Kaguya.Internal.Models.User
 {
@@ -7,8 +7,13 @@ namespace Kaguya.Internal.Models.User
 	/// </summary>
 	public interface IUserCooldowns
 	{
-		public TimeSpan? TopGgVoteCooldown { get; }
-		public TimeSpan? DailyCooldown { get; }
-		public TimeSpan? WeeklyCooldown { get; }
+		public IInternalCooldown TopGgVoteCooldown { get; }
+		public IInternalCooldown DailyCooldown { get; }
+		public IInternalCooldown WeeklyCooldown { get; }
+		/// <summary>
+		/// Returns a list of all of the user's cooldowns.
+		/// </summary>
+		/// <returns></returns>
+		public List<IInternalCooldown> ToList();
 	}
 }

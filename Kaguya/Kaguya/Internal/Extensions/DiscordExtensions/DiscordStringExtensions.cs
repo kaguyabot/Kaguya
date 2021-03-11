@@ -31,6 +31,6 @@ namespace Kaguya.Internal.Extensions.DiscordExtensions
 		/// <returns></returns>
 		public static string Sanitize(this string s) { return Format.Sanitize(s); }
 
-		public static string AsBlueCode(this string s, string url) { return $"[`{s}`]({url})"; }
+		public static string AsBlueCode(this string s, string url = Global.TopGgUpvoteUrl) { return $"[`{s}`]({url})"; }
 	}
 }

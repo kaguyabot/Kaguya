@@ -36,13 +36,13 @@ namespace Kaguya.Discord.Commands.Reference
 
 			if (user.CanUpvote)
 			{
-				topGgSb.AppendLine("Available Now!".AsBlueCode(url));
+				topGgSb.AppendLine("Available Now!".AsBlueCode());
 			}
 			else
 			{
 				// They must have an upvote cooldown value if eligible to vote.
 				topGgSb.AppendLine(
-					$"Cooldown: {user.Cooldowns.TopGgVoteCooldown!.Value.HumanizeTraditionalReadable()}");
+					$"Cooldown: {user.Cooldowns.TopGgVoteCooldown.CooldownRemaining()!.Value.HumanizeTraditionalReadable()}");
 			}
 
 			const int coins = UpvoteNotifierService.Coins;
