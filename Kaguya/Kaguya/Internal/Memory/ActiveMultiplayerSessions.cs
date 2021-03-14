@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Kaguya.Discord.Memory
+namespace Kaguya.Internal.Memory
 {
 	public enum MultiplayerGameType
 	{

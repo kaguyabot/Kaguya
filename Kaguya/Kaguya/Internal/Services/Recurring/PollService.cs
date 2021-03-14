@@ -5,6 +5,7 @@ using Kaguya.Database.Model;
 using Kaguya.Database.Repositories;
 using Kaguya.Discord;
 using Kaguya.Internal.Extensions.DiscordExtensions;
+using Kaguya.Internal.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,7 @@ namespace Kaguya.Internal.Services.Recurring
 		private const char PROGRESS_NULL_CHAR = '░';
 		private const char PROGRESS_FILL_CHAR = '█';
 		private const int PROGRESS_SIZE = 10;
+		private readonly ActivePolls _activePolls;
 		private readonly DiscordShardedClient _client;
 		private readonly CommonEmotes _commonEmotes;
 		private readonly ILogger<PollService> _logger;
@@ -29,13 +31,14 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly ITimerService _timerService;
 
 		public PollService(ILogger<PollService> logger, IServiceProvider serviceProvider, ITimerService timerService,
-			DiscordShardedClient client, CommonEmotes commonEmotes)
+			DiscordShardedClient client, CommonEmotes commonEmotes, ActivePolls activePolls)
 		{
 			_logger = logger;
 			_serviceProvider = serviceProvider;
 			_timerService = timerService;
 			_client = client;
 			_commonEmotes = commonEmotes;
+			_activePolls = activePolls;
 		}
 
 		public async Task HandleTimer(object payload)
@@ -55,6 +58,7 @@ namespace Kaguya.Internal.Services.Recurring
 
 					if (restMessage == null)
 					{
+						await ClearPoll(poll, pollRepository);
 						// We've already logged any errors in the above method. Just return.
 						return;
 					}
@@ -64,6 +68,7 @@ namespace Kaguya.Internal.Services.Recurring
 						var currentEmbed = restMessage.Embeds.FirstOrDefault();
 						if (await IsInvalidEmbed(currentEmbed, poll, pollRepository))
 						{
+							// We do not use await ClearPoll(poll, pollRepository); here because IsInvalidEmbed() does so already.
 							return;
 						}
 
@@ -151,10 +156,9 @@ namespace Kaguya.Internal.Services.Recurring
 						}
 
 						var remainingDuration = poll.Expiration - DateTimeOffset.Now;
-						var fresh = new KaguyaEmbedBuilder(KaguyaColors.PollColor)
-						            .WithDescription(descSb.ToString())
-						            .WithFooter(GetPollEmbedFooterText(remainingDuration))
-						            .Build();
+						var fresh = new KaguyaEmbedBuilder(KaguyaColors.PollColor).WithDescription(descSb.ToString())
+						                                                          .WithFooter(GetPollEmbedFooterText(remainingDuration))
+						                                                          .Build();
 
 						await restMessage.ModifyAsync(x => x.Embed = fresh);
 					}
@@ -162,7 +166,7 @@ namespace Kaguya.Internal.Services.Recurring
 					{
 						_logger.LogWarning(e, $"Poll ID {poll.Id} - Failed to modify RestUserMessage! Deleting from database...");
 
-						await pollRepository.DeleteAsync(poll.Id);
+						await ClearPoll(poll, pollRepository);
 						return;
 					}
 				}
@@ -185,6 +189,7 @@ namespace Kaguya.Internal.Services.Recurring
 						var currentEmbed = restMessage.Embeds.FirstOrDefault();
 						if (await IsInvalidEmbed(currentEmbed, poll, pollRepository))
 						{
+							// We do not use await ClearPoll(poll, pollRepository); here because IsInvalidEmbed() does so already.
 							return;
 						}
 
@@ -199,23 +204,23 @@ namespace Kaguya.Internal.Services.Recurring
 								popularLine = line;
 							}
 						}
-						
+
 						// The space splits always ends with a progress bar, so get the last item before it.
 						string[] spaceSplits = popularLine.Split(' ');
 						int haltIdx = spaceSplits.Length - 1;
 
 						string winner = String.Join(" ", spaceSplits[1..haltIdx]);
-						
+
 						// This should NEVER be the case. Therefore, print "NO WINNER" if it is the case.
 						if (popularLine.Equals(lines[0]))
 						{
 							winner = "NO WINNER";
 						}
-						
+
 						var fresh = currentEmbed.ToEmbedBuilder().WithFooter("POLL CLOSED | Winner: " + winner);
 
 						await restMessage.ModifyAsync(x => x.Embed = fresh.Build());
-						
+
 						// Update in the database.
 						poll.HasTriggered = true;
 						await pollRepository.UpdateAsync(poll);
@@ -224,7 +229,7 @@ namespace Kaguya.Internal.Services.Recurring
 					{
 						_logger.LogWarning(e, $"Poll ID {poll.Id} - Failed to modify RestUserMessage!");
 
-						await pollRepository.DeleteAsync(poll.Id);
+						await ClearPoll(poll, pollRepository);
 						return;
 					}
 				}
@@ -265,10 +270,9 @@ namespace Kaguya.Internal.Services.Recurring
 			var channel = _client.GetChannel(poll.ChannelId);
 			if (channel is not ISocketMessageChannel msgChannel)
 			{
-				_logger.LogWarning($"Poll ID {poll.Id} - Message channel was not an ISocketMessageChannel. " +
-				                   "Deleting this entry.");
+				_logger.LogWarning($"Poll ID {poll.Id} - Message channel was not an ISocketMessageChannel. " + "Deleting this entry.");
 
-				await pollRepository.DeleteAsync(poll.Id);
+				await ClearPoll(poll, pollRepository);
 
 				return null;
 			}
@@ -280,7 +284,7 @@ namespace Kaguya.Internal.Services.Recurring
 			{
 				_logger.LogWarning($"Poll ID {poll.Id} - Message not found! Deleting poll so it doesn't happen again.");
 
-				await pollRepository.DeleteAsync(poll.Id);
+				await ClearPoll(poll, pollRepository);
 				return null;
 			}
 
@@ -289,7 +293,8 @@ namespace Kaguya.Internal.Services.Recurring
 				_logger.LogWarning($"Poll ID {poll.Id} - Message was not an IUserMessage. Cannot modify! " +
 				                   "Deleting poll so it doesn't happen again.");
 
-				await pollRepository.DeleteAsync(poll.Id);
+				await ClearPoll(poll, pollRepository);
+
 				return null;
 			}
 
@@ -342,7 +347,7 @@ namespace Kaguya.Internal.Services.Recurring
 			{
 				return GetEmptyProgressBar();
 			}
-			
+
 			if (itemVotes == totalVotes)
 			{
 				return GetFullProgressBar();
@@ -372,13 +377,24 @@ namespace Kaguya.Internal.Services.Recurring
 		}
 
 		/// <summary>
-		/// Returns the standard footer used by all non-expired poll embeds.
+		///  Returns the standard footer used by all non-expired poll embeds.
 		/// </summary>
 		/// <param name="remainingDuration"></param>
 		/// <returns></returns>
 		public static string GetPollEmbedFooterText(TimeSpan remainingDuration)
 		{
 			return "React to vote! | Poll ends in: " + remainingDuration.HumanizeTraditionalReadable();
+		}
+
+		/// <summary>
+		///  Deletes the poll from the database and removes it from the <see cref="ActivePolls" /> cache.
+		///  This method should only be called when we are erroring out.
+		/// </summary>
+		/// <returns></returns>
+		private async Task ClearPoll(Poll p, PollRepository pollRepository)
+		{
+			ActivePolls.RemoveId(p.ServerId);
+			await pollRepository.DeleteAsync(p.Id);
 		}
 	}
 }

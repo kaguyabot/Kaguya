@@ -52,11 +52,6 @@ namespace Kaguya.Internal.Services
 					return;
 				}
 
-				if (Memory.ServersCurrentlyPurgingMessages.ContainsKey(server.ServerId))
-				{
-					return;
-				}
-
 				string content = string.IsNullOrEmpty(message.Content)
 					? "<Message contained no text>"
 					: $"{message.Content}";

@@ -59,9 +59,6 @@ namespace Kaguya.Discord.Commands.Administration
 				return;
 			}
 
-			// This is done for GuildLogger.cs. We don't want log messages being sent for 
-			// mass-deletion of messages, as that would cause rate limiting.
-			Internal.Memory.ServersCurrentlyPurgingMessages.GetOrAdd(Context.Guild.Id, true);
 			await ((ITextChannel) Context.Channel).DeleteMessagesAsync(messages);
 
 			string userString = "";
@@ -74,9 +71,6 @@ namespace Kaguya.Discord.Commands.Administration
 
 			_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null, TimeSpan.FromSeconds(3), null,
 				false, new KaguyaEmbedBuilder(KaguyaColors.Magenta).WithDescription(delString).Build());
-
-			await Task.Delay(5000);
-			Internal.Memory.ServersCurrentlyPurgingMessages.TryRemove(Context.Guild.Id, out bool _);
 		}
 
 		[Command(RunMode = RunMode.Async)]

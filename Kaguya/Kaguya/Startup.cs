@@ -10,6 +10,7 @@ using Kaguya.Discord.Options;
 using Kaguya.External.Services.TopGg;
 using Kaguya.Internal;
 using Kaguya.Internal.Events;
+using Kaguya.Internal.Memory;
 using Kaguya.Internal.Music;
 using Kaguya.Internal.Services;
 using Kaguya.Internal.Services.Recurring;
@@ -79,6 +80,8 @@ namespace Kaguya
 			services.AddScoped<UpvoteRepository>();
 			services.AddScoped<WarnConfigurationRepository>();
 
+			// Active polls is a largely static class but needs to be constructed by the IOC. 
+			services.AddSingleton<ActivePolls>();
 			services.AddSingleton<GuildLoggerService>();
 			services.AddSingleton<GreetingService>();
 			services.AddSingleton<UpvoteNotifierService>();
@@ -105,7 +108,9 @@ namespace Kaguya
 
 					return new OsuClient(new OsuSharpConfiguration
 					{
-						// Needed so that the bot doesn't encounter an immediate runtime error...
+						// Needed so that the bot doesn't encounter an immediate runtime error
+						// if an empty API key is provided. OsuSharp doesn't actually check for a valid 
+						// API key but will throw an exception if the API key is null/empty.
 						ApiKey = "I'M INVALID!!!"
 					});
 				}

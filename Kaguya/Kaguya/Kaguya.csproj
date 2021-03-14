@@ -33,6 +33,7 @@
         <PackageReference Include="Profanity.Detector" Version="0.1.8" />
         <PackageReference Include="Qommon" Version="1.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+        <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
         <PackageReference Include="Victoria" Version="5.1.11" />
     </ItemGroup>
 
