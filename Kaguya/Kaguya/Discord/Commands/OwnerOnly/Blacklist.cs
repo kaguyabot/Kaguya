@@ -30,10 +30,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 		[Summary("Blacklists the entity based on ID for an optional duration.\n" +
 		         "Valid entity types are `channel`, `user`, and `server`.")]
 		[Remarks("<entity id> <entity type> [duration] [reason]")]
-		public async Task BlacklistEntityCommand(ulong id,
-			string type,
-			string duration = null,
-			[Remainder]
+		public async Task BlacklistEntityCommand(ulong id, string type, string duration = null, [Remainder]
 			string reason = null)
 		{
 			var entity = await _blacklistedEntityRepository.GetAsync(id);

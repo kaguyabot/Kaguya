@@ -17,8 +17,7 @@ namespace Kaguya.Database.Repositories
 		private readonly IOptions<AdminConfigurations> _adminConfigurations;
 		private readonly ILogger<KaguyaUserRepository> _logger;
 
-		public KaguyaUserRepository(ILogger<KaguyaUserRepository> logger,
-			KaguyaDbContext dbContext,
+		public KaguyaUserRepository(ILogger<KaguyaUserRepository> logger, KaguyaDbContext dbContext,
 			IOptions<AdminConfigurations> adminConfigurations) : base(dbContext)
 		{
 			_adminConfigurations = adminConfigurations;

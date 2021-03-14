@@ -28,6 +28,7 @@ namespace Kaguya.Database.Context
 		public DbSet<KaguyaStatistics> KaguyaStatistics { get; set; }
 		public DbSet<KaguyaUser> KaguyaUsers { get; set; }
 		public DbSet<LogConfiguration> LogConfigurations { get; set; }
+		public DbSet<Poll> Polls { get; set; }
 		public DbSet<PremiumKey> PremiumKeys { get; set; }
 		public DbSet<Quote> Quotes { get; set; }
 		public DbSet<ReactionRole> ReactionRoles { get; set; }

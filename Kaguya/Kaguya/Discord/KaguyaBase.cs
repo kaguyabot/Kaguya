@@ -14,7 +14,8 @@ namespace Kaguya.Discord
 		protected KaguyaBase(ILogger<T> logger) { _logger = logger; }
 
 		/// <summary>
-		///  Builds and sends an <see cref="EmbedBuilder" /> to the current <see cref="ICommandContext" />'s <see cref="ITextChannel" />.
+		///  Builds and sends an <see cref="EmbedBuilder" /> to the current <see cref="ICommandContext" />'s
+		///  <see cref="ITextChannel" />.
 		///  If the message could not be sent, this method will return null.
 		/// </summary>
 		/// <param name="embed"></param>
@@ -51,8 +52,7 @@ namespace Kaguya.Discord
 			return await SendEmbedAsync(GetBasicSuccessEmbedBuilder(description, mentionUser).Build());
 		}
 
-		protected async Task<RestUserMessage> SendBasicEmbedAsync(string description,
-			Color color,
+		protected async Task<RestUserMessage> SendBasicEmbedAsync(string description, Color color,
 			bool mentionUser = true)
 		{
 			return await SendEmbedAsync(GetBasicEmbedBuilder(description, color, mentionUser));

@@ -24,10 +24,8 @@ namespace Kaguya.External.Services.TopGg
 		private readonly IServiceProvider _serviceProvider;
 		private readonly ITimerService _timerService;
 
-		public UpvoteExpirationService(ILogger<UpvoteExpirationService> logger,
-			ITimerService timerService,
-			IServiceProvider serviceProvider,
-			DiscordShardedClient client)
+		public UpvoteExpirationService(ILogger<UpvoteExpirationService> logger, ITimerService timerService,
+			IServiceProvider serviceProvider, DiscordShardedClient client)
 		{
 			_logger = logger;
 			_timerService = timerService;

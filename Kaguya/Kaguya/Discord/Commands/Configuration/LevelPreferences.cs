@@ -37,10 +37,8 @@ namespace Kaguya.Discord.Commands.Configuration
 		private readonly KaguyaServerRepository _kaguyaServerRepository;
 		private readonly ILogger<LevelPreferences> _logger;
 
-		public LevelPreferences(ILogger<LevelPreferences> logger,
-			KaguyaServerRepository kaguyaServerRepository,
-			InteractivityService interactivityService,
-			CommonEmotes commonEmotes) : base(logger)
+		public LevelPreferences(ILogger<LevelPreferences> logger, KaguyaServerRepository kaguyaServerRepository,
+			InteractivityService interactivityService, CommonEmotes commonEmotes) : base(logger)
 		{
 			_logger = logger;
 			_kaguyaServerRepository = kaguyaServerRepository;

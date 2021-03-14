@@ -30,12 +30,8 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly ConcurrentDictionary<ulong, ConcurrentQueue<(DateTimeOffset userJoinTime, ulong userId)>>
 			_userIdCache = new();
 
-		public AntiraidWorker(ILogger<AntiraidWorker> logger,
-			IServiceProvider provider,
-			ITimerService timerService,
-			IAntiraidService arService,
-			DiscordShardedClient client,
-			SilentSysActions sysActions)
+		public AntiraidWorker(ILogger<AntiraidWorker> logger, IServiceProvider provider, ITimerService timerService,
+			IAntiraidService arService, DiscordShardedClient client, SilentSysActions sysActions)
 		{
 			_logger = logger;
 			_provider = provider;

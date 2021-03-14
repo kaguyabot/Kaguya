@@ -53,8 +53,7 @@ namespace Kaguya.Discord.Commands.Nsfw
 		[Priority(0)]
 		[RequireNsfw]
 		[Command(RunMode = RunMode.Async)]
-		public async Task SendNsfwCommandAsync(int count,
-			[Remainder]
+		public async Task SendNsfwCommandAsync(int count, [Remainder]
 			string tags)
 		{
 			string[] splits = tags.Split(' ');

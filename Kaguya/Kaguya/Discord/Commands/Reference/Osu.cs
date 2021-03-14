@@ -21,9 +21,7 @@ namespace Kaguya.Discord.Commands.Reference
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 		private readonly OsuClient _osuClient;
 
-		public Osu(ILogger<Osu> logger,
-			OsuClient osuClient,
-			KaguyaUserRepository kaguyaUserRepository,
+		public Osu(ILogger<Osu> logger, OsuClient osuClient, KaguyaUserRepository kaguyaUserRepository,
 			KaguyaServerRepository kaguyaServerRepository) : base(logger)
 		{
 			_osuClient = osuClient;
@@ -40,8 +38,7 @@ namespace Kaguya.Discord.Commands.Reference
 		[Example("std name with spaces")]
 		[Example("mania 99999999")]
 		[Example("ctb really good ctb player")]
-		public async Task OsuSetCommand(string gameModeString,
-			[Remainder]
+		public async Task OsuSetCommand(string gameModeString, [Remainder]
 			string username)
 		{
 			var data = new OsuData(username, gameModeString, _osuClient);
@@ -73,8 +70,7 @@ namespace Kaguya.Discord.Commands.Reference
 		         GAME_MODE_STRING)]
 		[Remarks("\n<gamemode> [username]")]
 		// ReSharper disable once MethodOverloadWithOptionalParameter
-		public async Task OsuRecentCommand(string gameMode = null,
-			[Remainder]
+		public async Task OsuRecentCommand(string gameMode = null, [Remainder]
 			string username = null)
 		{
 			var kaguyaUser = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);

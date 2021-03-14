@@ -26,8 +26,7 @@ namespace Kaguya.Discord.Commands.Games
 		private readonly DiscordShardedClient _client;
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 
-		public CrossGambling(ILogger<CrossGambling> logger,
-			KaguyaUserRepository kaguyaUserRepository,
+		public CrossGambling(ILogger<CrossGambling> logger, KaguyaUserRepository kaguyaUserRepository,
 			DiscordShardedClient client) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;
@@ -108,8 +107,7 @@ namespace Kaguya.Discord.Commands.Games
 
 				_client.ReactionAdded += OnClientReactionAdded;
 
-				Task OnClientReactionAdded(Cacheable<IUserMessage, ulong> cacheable,
-					ISocketMessageChannel channel,
+				Task OnClientReactionAdded(Cacheable<IUserMessage, ulong> cacheable, ISocketMessageChannel channel,
 					SocketReaction reaction)
 				{
 					bool validSysReaction = cacheable.HasValue &&
@@ -262,8 +260,7 @@ namespace Kaguya.Discord.Commands.Games
 			});
 		}
 
-		private async Task AbortAsync(RestUserMessage curMsg,
-			string abortReason,
+		private async Task AbortAsync(RestUserMessage curMsg, string abortReason,
 			Func<Cacheable<IUserMessage, ulong>, ISocketMessageChannel, SocketReaction, Task> reactionTask)
 		{
 			_client.ReactionAdded -= reactionTask;

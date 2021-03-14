@@ -22,10 +22,8 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly IServiceProvider _serviceProvider;
 		private readonly ITimerService _timerService;
 
-		public ReminderService(ILogger<ReminderService> logger,
-			IServiceProvider serviceProvider,
-			ITimerService timerService,
-			DiscordShardedClient client)
+		public ReminderService(ILogger<ReminderService> logger, IServiceProvider serviceProvider,
+			ITimerService timerService, DiscordShardedClient client)
 		{
 			_logger = logger;
 			_serviceProvider = serviceProvider;

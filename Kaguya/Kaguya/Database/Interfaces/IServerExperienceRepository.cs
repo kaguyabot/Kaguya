@@ -7,7 +7,8 @@ namespace Kaguya.Database.Interfaces
 	public interface IServerExperienceRepository : IRepository<ServerExperience>
 	{
 		/// <summary>
-		///  Gets or creates a <see cref="ServerExperience" /> object for the provided <see cref="userId" /> and <see cref="serverId" />.
+		///  Gets or creates a <see cref="ServerExperience" /> object for the provided <see cref="userId" /> and
+		///  <see cref="serverId" />.
 		/// </summary>
 		/// <param name="serverId"></param>
 		/// <param name="userId"></param>

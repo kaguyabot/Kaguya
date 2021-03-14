@@ -23,10 +23,8 @@ namespace Kaguya.Discord.Commands.Reference
 		private readonly ILogger<Redeem> _logger;
 		private readonly PremiumKeyRepository _premiumKeyRepository;
 
-		public Redeem(ILogger<Redeem> logger,
-			PremiumKeyRepository premiumKeyRepository,
-			InteractivityService interactivityService,
-			KaguyaUserRepository kaguyaUserRepository,
+		public Redeem(ILogger<Redeem> logger, PremiumKeyRepository premiumKeyRepository,
+			InteractivityService interactivityService, KaguyaUserRepository kaguyaUserRepository,
 			KaguyaServerRepository kaguyaServerRepository) : base(logger)
 		{
 			_logger = logger;

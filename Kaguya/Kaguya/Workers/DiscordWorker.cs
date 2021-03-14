@@ -38,13 +38,9 @@ namespace Kaguya.Workers
 		private readonly ILogger<DiscordWorker> _logger;
 		private readonly IServiceProvider _serviceProvider;
 
-		public DiscordWorker(DiscordShardedClient client,
-			IOptions<AdminConfigurations> adminConfigs,
-			IOptions<DiscordConfigurations> discordConfigs,
-			ILogger<DiscordWorker> logger,
-			CommandService commandService,
-			IServiceProvider serviceProvider,
-			KaguyaEvents kaguyaEvents)
+		public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs,
+			IOptions<DiscordConfigurations> discordConfigs, ILogger<DiscordWorker> logger,
+			CommandService commandService, IServiceProvider serviceProvider, KaguyaEvents kaguyaEvents)
 		{
 			_client = client;
 			_adminConfigs = adminConfigs;

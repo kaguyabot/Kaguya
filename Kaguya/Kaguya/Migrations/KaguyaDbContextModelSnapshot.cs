@@ -3,12 +3,12 @@ using System;
 using Kaguya.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaguya.Migrations
 {
-    // ReSharper disable once PartialTypeWithSinglePart
     [DbContext(typeof(KaguyaDbContext))]
-    internal partial class KaguyaDbContextModelSnapshot : ModelSnapshot
+    partial class KaguyaDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -332,6 +332,9 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
+                    b.Property<ulong>("UserId")
+                        .HasColumnType("bigint unsigned");
+
                     b.HasKey("MessageId");
 
                     b.HasIndex("Expiration");
@@ -601,6 +604,41 @@ namespace Kaguya.Migrations
                     b.HasKey("ServerId");
 
                     b.ToTable("LogConfigurations");
+                });
+
+            modelBuilder.Entity("Kaguya.Database.Model.Poll", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Args")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<ulong>("ChannelId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTimeOffset>("Expiration")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("HasTriggered")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<ulong>("MessageId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<ulong>("ServerId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<ulong>("UserId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Polls");
                 });
 
             modelBuilder.Entity("Kaguya.Database.Model.PremiumKey", b =>

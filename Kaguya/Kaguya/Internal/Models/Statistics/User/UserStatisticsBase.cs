@@ -96,8 +96,7 @@ namespace Kaguya.Internal.Models.Statistics.User
 			sb.AppendLine("Rep Given:".AsBold() + $" {this.RepGiven}");
 			sb.AppendLine("Rep Received:".AsBold() + $" {this.RepReceived}");
 			sb.AppendLine("Total Upvotes (top.gg):".AsBold() + $" {this.TotalVotesTopGg}");
-			sb.AppendLine("Eligible to Vote?".AsBold() +
-			              $" {(this.EligibleToVote ? "Yes".AsBlueCode(Global.TopGgUpvoteUrl) : "No")}");
+			sb.AppendLine("Eligible to Vote?".AsBold() + $" {(this.EligibleToVote ? "Yes".AsBlueCode() : "No")}");
 
 			sb.AppendLine("Is Premium?".AsBold() + $" {(_user.IsPremium ? "Yes" : "No")}");
 

@@ -9,7 +9,6 @@ using Kaguya.Internal.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Text;
 
 namespace Kaguya.Internal.Models.Statistics.Bot
@@ -138,7 +137,7 @@ namespace Kaguya.Internal.Models.Statistics.Bot
 			sb.AppendLine("Retention %:".AsBold() +
 			              $" {(this.DatabaseStatistics.ConnectedServers / (double) this.DatabaseStatistics.Servers) * 100:N2}");
 
-			sb.AppendLine($"Uptime:".AsBold() + $" {this.Uptime.HumanizeTraditionalReadable()}");
+			sb.AppendLine("Uptime:".AsBold() + $" {this.Uptime.HumanizeTraditionalReadable()}");
 
 			return sb.ToString();
 		}

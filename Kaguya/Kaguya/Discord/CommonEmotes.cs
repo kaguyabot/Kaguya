@@ -12,17 +12,20 @@ namespace Kaguya.Discord
 		private readonly DiscordShardedClient _client;
 		private readonly IOptions<DiscordConfigurations> _configurations;
 		private readonly ILogger<CommonEmotes> _logger;
-		public readonly IEmote[] EmojisOneThroughFive =
+		public readonly IEmote[] EmojisOneThroughNine =
 		{
 			new Emoji("1️⃣"),
 			new Emoji("2️⃣"),
 			new Emoji("3️⃣"),
 			new Emoji("4️⃣"),
-			new Emoji("5️⃣")
+			new Emoji("5️⃣"),
+			new Emoji("6️⃣"),
+			new Emoji("7️⃣"),
+			new Emoji("8️⃣"),
+			new Emoji("9️⃣")
 		};
 
-		public CommonEmotes(ILogger<CommonEmotes> logger,
-			DiscordShardedClient client,
+		public CommonEmotes(ILogger<CommonEmotes> logger, DiscordShardedClient client,
 			IOptions<DiscordConfigurations> configurations)
 		{
 			_logger = logger;

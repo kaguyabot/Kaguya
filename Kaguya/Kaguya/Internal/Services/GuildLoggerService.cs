@@ -20,10 +20,8 @@ namespace Kaguya.Internal.Services
 		private readonly ILogger<GuildLoggerService> _logger;
 		private readonly IServiceProvider _serviceProvider;
 
-		public GuildLoggerService(IServiceProvider serviceProvider,
-			ILogger<GuildLoggerService> logger,
-			DiscordShardedClient client,
-			CommonEmotes commonEmotes)
+		public GuildLoggerService(IServiceProvider serviceProvider, ILogger<GuildLoggerService> logger,
+			DiscordShardedClient client, CommonEmotes commonEmotes)
 		{
 			_serviceProvider = serviceProvider;
 			_logger = logger;
@@ -102,8 +100,7 @@ namespace Kaguya.Internal.Services
 			}
 		}
 
-		public async Task LogMessageUpdatedAsync(Cacheable<IMessage, ulong> cache,
-			SocketMessage message,
+		public async Task LogMessageUpdatedAsync(Cacheable<IMessage, ulong> cache, SocketMessage message,
 			ISocketMessageChannel textChannel)
 		{
 			if (!cache.HasValue || !(textChannel is SocketGuildChannel channel))
@@ -355,8 +352,7 @@ namespace Kaguya.Internal.Services
 			}
 		}
 
-		public async Task LogUserVoiceStateUpdatedAsync(SocketUser user,
-			SocketVoiceState curVoiceState,
+		public async Task LogUserVoiceStateUpdatedAsync(SocketUser user, SocketVoiceState curVoiceState,
 			SocketVoiceState nextVoiceState)
 		{
 			using (var scope = _serviceProvider.CreateScope())

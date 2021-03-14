@@ -68,6 +68,7 @@ namespace Kaguya
 			services.AddScoped<KaguyaStatisticsRepository>();
 			services.AddScoped<KaguyaUserRepository>();
 			services.AddScoped<LogConfigurationRepository>();
+			services.AddScoped<PollRepository>();
 			services.AddScoped<PremiumKeyRepository>();
 			services.AddScoped<QuoteRepository>();
 			services.AddScoped<ReactionRoleRepository>();
@@ -166,6 +167,7 @@ namespace Kaguya
 			services.AddHostedService<TimerWorker>();
 			services.AddHostedService<TopGgStatsUpdaterService>();
 			services.AddHostedService<UpvoteExpirationService>();
+			services.AddHostedService<PollService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

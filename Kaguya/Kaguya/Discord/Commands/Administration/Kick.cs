@@ -24,8 +24,7 @@ namespace Kaguya.Discord.Commands.Administration
 		private readonly KaguyaServerRepository _kaguyaServerRepository;
 		private readonly ILogger<Kick> _logger;
 
-		public Kick(ILogger<Kick> logger,
-			AdminActionRepository adminActionRepository,
+		public Kick(ILogger<Kick> logger, AdminActionRepository adminActionRepository,
 			KaguyaServerRepository kaguyaServerRepository) : base(logger)
 		{
 			_logger = logger;
@@ -36,8 +35,7 @@ namespace Kaguya.Discord.Commands.Administration
 		[Command]
 		[Summary("Kicks a user from the server.")]
 		[Remarks("<user> [reason]")]
-		public async Task KickCommand(SocketGuildUser user,
-			[Remainder]
+		public async Task KickCommand(SocketGuildUser user, [Remainder]
 			string reason = null)
 		{
 			var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);

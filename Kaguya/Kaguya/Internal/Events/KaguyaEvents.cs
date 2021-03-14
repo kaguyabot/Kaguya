@@ -25,14 +25,9 @@ namespace Kaguya.Internal.Events
 		private readonly ILogger<KaguyaEvents> _logger;
 		private readonly UpvoteNotifierService _upvoteNotifierService;
 
-		public KaguyaEvents(ILogger<KaguyaEvents> logger,
-			DiscordShardedClient client,
-			IAntiraidService antiraidService,
-			LavaNode lavaNode,
-			AudioService audioService,
-			ILogger<EventImplementations> implementationsLogger,
-			GuildLoggerService guildLoggerService,
-			GreetingService greetingService,
+		public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService,
+			LavaNode lavaNode, AudioService audioService, ILogger<EventImplementations> implementationsLogger,
+			GuildLoggerService guildLoggerService, GreetingService greetingService,
 			UpvoteNotifierService upvoteNotifierService)
 		{
 			_logger = logger;

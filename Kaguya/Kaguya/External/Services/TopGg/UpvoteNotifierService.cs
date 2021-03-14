@@ -20,8 +20,7 @@ namespace Kaguya.External.Services.TopGg
 		private readonly IServiceProvider _serviceProvider;
 		private Task _runner;
 
-		public UpvoteNotifierService(ILogger<UpvoteNotifierService> logger,
-			IServiceProvider serviceProvider,
+		public UpvoteNotifierService(ILogger<UpvoteNotifierService> logger, IServiceProvider serviceProvider,
 			DiscordShardedClient client)
 		{
 			_logger = logger;

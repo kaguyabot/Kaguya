@@ -38,10 +38,8 @@ namespace Kaguya.Discord.Commands.Configuration
 		private readonly InteractivityService _interactivityService;
 		private readonly KaguyaServerRepository _kaguyaServerRepository;
 
-		public Antiraid(ILogger<Antiraid> logger,
-			InteractivityService interactivityService,
-			KaguyaServerRepository kaguyaServerRepository,
-			AntiraidConfigRepository antiraidConfigRepository,
+		public Antiraid(ILogger<Antiraid> logger, InteractivityService interactivityService,
+			KaguyaServerRepository kaguyaServerRepository, AntiraidConfigRepository antiraidConfigRepository,
 			CommonEmotes commonEmotes) : base(logger)
 		{
 			_interactivityService = interactivityService;
@@ -250,9 +248,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
 		[Priority(0)]
 		[Command(RunMode = RunMode.Async)]
-		public async Task AntiraidSetupCommand(uint userThreshold,
-			uint secondsThreshold,
-			string action,
+		public async Task AntiraidSetupCommand(uint userThreshold, uint secondsThreshold, string action,
 			string timeString = null)
 		{
 			if (_currentlyActiveSetups.ContainsKey(Context.Guild.Id))

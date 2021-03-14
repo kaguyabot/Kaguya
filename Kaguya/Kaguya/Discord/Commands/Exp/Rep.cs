@@ -31,8 +31,7 @@ namespace Kaguya.Discord.Commands.Exp
 		         "Discord server this command is used from. An optional reason may be " +
 		         "passed through at the end. Use without the user parameter to view your own rep.")]
 		[Remarks("[user] [reason]")]
-		public async Task RepCommand(SocketGuildUser user,
-			[Remainder]
+		public async Task RepCommand(SocketGuildUser user, [Remainder]
 			string reason = "No reason provided.")
 		{
 			if (user.IsEqual(Context.User))

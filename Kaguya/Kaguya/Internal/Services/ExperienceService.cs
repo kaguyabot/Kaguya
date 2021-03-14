@@ -33,14 +33,9 @@ namespace Kaguya.Internal.Services
 		private readonly ITextChannel _textChannel;
 		private readonly KaguyaUser _user;
 
-		public ExperienceService(ILogger<ExperienceService> logger,
-			ITextChannel textChannel,
-			KaguyaUser user,
-			KaguyaServer server,
-			IUser discordUser,
-			ulong serverId,
-			ServerExperienceRepository serverExperienceRepository,
-			KaguyaUserRepository kaguyaUserRepository)
+		public ExperienceService(ILogger<ExperienceService> logger, ITextChannel textChannel, KaguyaUser user,
+			KaguyaServer server, IUser discordUser, ulong serverId,
+			ServerExperienceRepository serverExperienceRepository, KaguyaUserRepository kaguyaUserRepository)
 		{
 			_logger = logger;
 			_textChannel = textChannel;

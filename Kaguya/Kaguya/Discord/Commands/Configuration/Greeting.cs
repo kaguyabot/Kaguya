@@ -24,8 +24,7 @@ namespace Kaguya.Discord.Commands.Configuration
 		private readonly InteractivityService _interactivityService;
 		private readonly KaguyaServerRepository _serverRepository;
 
-		public Greeting(ILogger<Greeting> logger,
-			KaguyaServerRepository serverRepository,
+		public Greeting(ILogger<Greeting> logger, KaguyaServerRepository serverRepository,
 			InteractivityService interactivityService) : base(logger)
 		{
 			_serverRepository = serverRepository;

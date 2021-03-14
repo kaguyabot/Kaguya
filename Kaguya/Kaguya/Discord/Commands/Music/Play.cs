@@ -28,9 +28,7 @@ namespace Kaguya.Discord.Commands.Music
 		private readonly LavaNode _lavaNode;
 		private readonly ILogger<Play> _logger;
 
-		public Play(ILogger<Play> logger,
-			LavaNode lavaNode,
-			InteractivityService interactivityService,
+		public Play(ILogger<Play> logger, LavaNode lavaNode, InteractivityService interactivityService,
 			AudioQueueLocker queueLocker) : base(logger)
 		{
 			_logger = logger;

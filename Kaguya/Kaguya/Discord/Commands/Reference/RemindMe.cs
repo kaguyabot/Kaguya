@@ -30,8 +30,7 @@ namespace Kaguya.Discord.Commands.Reference
 		[Remarks("<delay time> <text>")]
 		[Example("2h walk the dog")]
 		[Example("14d5h30m25s The game starts now!")]
-		public async Task RemindCommand(string duration,
-			[Remainder]
+		public async Task RemindCommand(string duration, [Remainder]
 			string text)
 		{
 			var timeParser = new TimeParser(duration);

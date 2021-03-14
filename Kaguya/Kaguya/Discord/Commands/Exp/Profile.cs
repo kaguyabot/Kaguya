@@ -22,10 +22,8 @@ namespace Kaguya.Discord.Commands.Exp
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 		private readonly ServerExperienceRepository _serverExperienceRepository;
 
-		public Profile(ILogger<Profile> logger,
-			KaguyaUserRepository kaguyaUserRepository,
-			ServerExperienceRepository serverExperienceRepository,
-			FishRepository fishRepository,
+		public Profile(ILogger<Profile> logger, KaguyaUserRepository kaguyaUserRepository,
+			ServerExperienceRepository serverExperienceRepository, FishRepository fishRepository,
 			CommonEmotes commonEmotes) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;

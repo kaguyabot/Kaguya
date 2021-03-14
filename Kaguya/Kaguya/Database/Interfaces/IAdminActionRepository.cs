@@ -13,9 +13,7 @@ namespace Kaguya.Database.Interfaces
 		public Task<int> GetCountAsync(ulong serverId);
 		public Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, bool showHidden = false);
 
-		public Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId,
-			ulong serverId,
-			string action,
+		public Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, string action,
 			bool showHidden = false);
 
 		/// <summary>

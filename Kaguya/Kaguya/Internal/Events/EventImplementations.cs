@@ -21,10 +21,8 @@ namespace Kaguya.Internal.Events
 		private readonly LavaNode _lavaNode;
 		private readonly ILogger<EventImplementations> _logger;
 
-		public EventImplementations(ILogger<EventImplementations> logger,
-			IAntiraidService arService,
-			DiscordShardedClient client,
-			LavaNode lavaNode)
+		public EventImplementations(ILogger<EventImplementations> logger, IAntiraidService arService,
+			DiscordShardedClient client, LavaNode lavaNode)
 		{
 			_logger = logger;
 			_arService = arService;
@@ -132,8 +130,7 @@ namespace Kaguya.Internal.Events
 		/// <param name="arg2"></param>
 		/// <param name="arg3"></param>
 		/// <returns></returns>
-		public async Task ProtectPlayerIntegrityOnDisconnectAsync(SocketUser arg1,
-			SocketVoiceState arg2,
+		public async Task ProtectPlayerIntegrityOnDisconnectAsync(SocketUser arg1, SocketVoiceState arg2,
 			SocketVoiceState arg3)
 		{
 			if (!_client.AllShardsReady())

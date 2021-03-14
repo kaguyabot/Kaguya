@@ -19,12 +19,9 @@ namespace Kaguya.Database.Repositories
 		private readonly KaguyaServerRepository _kaguyaServerRepository;
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 
-		public KaguyaStatisticsRepository(KaguyaDbContext dbContext,
-			KaguyaUserRepository kaguyaUserRepository,
-			KaguyaServerRepository kaguyaServerRepository,
-			DiscordShardedClient client,
-			CommandHistoryRepository commandHistoryRepository,
-			FishRepository fishRepository,
+		public KaguyaStatisticsRepository(KaguyaDbContext dbContext, KaguyaUserRepository kaguyaUserRepository,
+			KaguyaServerRepository kaguyaServerRepository, DiscordShardedClient client,
+			CommandHistoryRepository commandHistoryRepository, FishRepository fishRepository,
 			GambleHistoryRepository gambleHistoryRepository) : base(dbContext)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;

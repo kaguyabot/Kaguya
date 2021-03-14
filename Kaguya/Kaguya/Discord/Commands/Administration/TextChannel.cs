@@ -81,8 +81,7 @@ namespace Kaguya.Discord.Commands.Administration
 		[Summary("Renames the text channel to the desired name.")]
 		[Remarks("<channel> <new name>")]
 		[Example("#my-channel my new name")]
-		public async Task RenameTextChannelCommandAsync(ITextChannel channel,
-			[Remainder]
+		public async Task RenameTextChannelCommandAsync(ITextChannel channel, [Remainder]
 			string newName)
 		{
 			if (!IsValidTextChannelName(newName, out string error))

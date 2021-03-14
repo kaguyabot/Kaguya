@@ -25,8 +25,7 @@ namespace Kaguya.Discord.Commands.Administration
 		private readonly FilteredWordRepository _fwRepo;
 		private readonly InteractivityService _interactivityService;
 
-		protected Filter(ILogger<Filter> logger,
-			FilteredWordRepository fwRepo,
+		protected Filter(ILogger<Filter> logger, FilteredWordRepository fwRepo,
 			InteractivityService interactivityService) : base(logger)
 		{
 			_fwRepo = fwRepo;
@@ -99,8 +98,7 @@ namespace Kaguya.Discord.Commands.Administration
 		         "`Ban` - Ban the user permanently\n" +
 		         "`Shadowban` - Shadowban the user indefinitely")]
 		[Remarks("[punishment] <word>")]
-		public async Task CommandAddToFilter(string punishment,
-			[Remainder]
+		public async Task CommandAddToFilter(string punishment, [Remainder]
 			string word)
 		{
 			if (!Enum.TryParse(punishment, true, out FilterReactionEnum reaction))

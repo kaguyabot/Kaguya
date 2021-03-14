@@ -10,8 +10,9 @@ namespace Kaguya.Internal.Models.User
 		public IInternalCooldown TopGgVoteCooldown { get; }
 		public IInternalCooldown DailyCooldown { get; }
 		public IInternalCooldown WeeklyCooldown { get; }
+
 		/// <summary>
-		/// Returns a list of all of the user's cooldowns.
+		///  Returns a list of all of the user's cooldowns.
 		/// </summary>
 		/// <returns></returns>
 		public List<IInternalCooldown> ToList();

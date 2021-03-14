@@ -25,10 +25,8 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly ITimerService _timerService;
 		private AuthDiscordBotListApi _discordBotListApi;
 
-		public TopGgStatsUpdaterService(ILogger<TopGgStatsUpdaterService> logger,
-			IServiceProvider serviceProvider,
-			ITimerService timerService,
-			DiscordShardedClient client)
+		public TopGgStatsUpdaterService(ILogger<TopGgStatsUpdaterService> logger, IServiceProvider serviceProvider,
+			ITimerService timerService, DiscordShardedClient client)
 		{
 			_serviceProvider = serviceProvider;
 			_logger = logger;

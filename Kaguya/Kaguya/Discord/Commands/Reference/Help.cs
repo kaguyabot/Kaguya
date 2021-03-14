@@ -34,11 +34,8 @@ namespace Kaguya.Discord.Commands.Reference
 		private readonly KaguyaServerRepository _ksRepo;
 		private readonly ILogger<Help> _logger;
 
-		protected Help(ILogger<Help> logger,
-			CommandService commandService,
-			InteractivityService interactivityService,
-			KaguyaServerRepository ksRepo,
-			IOptions<AdminConfigurations> adminConfigurations) : base(logger)
+		protected Help(ILogger<Help> logger, CommandService commandService, InteractivityService interactivityService,
+			KaguyaServerRepository ksRepo, IOptions<AdminConfigurations> adminConfigurations) : base(logger)
 		{
 			_logger = logger;
 			_commandService = commandService;

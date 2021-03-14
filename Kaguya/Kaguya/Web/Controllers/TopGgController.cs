@@ -21,8 +21,7 @@ namespace Kaguya.Web.Controllers
 		private readonly ILogger<TopGgController> _logger;
 		private readonly IServiceProvider _serviceProvider;
 
-		public TopGgController(IOptions<TopGgConfigurations> configs,
-			ILogger<TopGgController> logger,
+		public TopGgController(IOptions<TopGgConfigurations> configs, ILogger<TopGgController> logger,
 			IServiceProvider serviceProvider)
 		{
 			_configs = configs;
@@ -32,8 +31,7 @@ namespace Kaguya.Web.Controllers
 
 		[HttpPost("webhook")]
 		public async Task<IActionResult> Post([FromBody]
-			TopGgWebhookPayload payload,
-			[FromHeader(Name = "Authorization")]
+			TopGgWebhookPayload payload, [FromHeader(Name = "Authorization")]
 			string auth)
 		{
 			if (string.IsNullOrWhiteSpace(_configs.Value.ApiKey) ||

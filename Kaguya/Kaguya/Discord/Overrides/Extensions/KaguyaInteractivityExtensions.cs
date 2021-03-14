@@ -24,18 +24,14 @@ namespace Kaguya.Discord.Overrides.Extensions
 		}
 
 		public static async Task<InteractivityResult<bool>> SendConfirmationAsync(
-			this InteractivityService interactivityService,
-			EmbedBuilder embed,
-			ISocketMessageChannel channel,
+			this InteractivityService interactivityService, EmbedBuilder embed, ISocketMessageChannel channel,
 			TimeSpan? timeout = null)
 		{
 			return await SendConfirmationAsync(interactivityService, embed.Build(), channel, timeout);
 		}
 
 		public static async Task<InteractivityResult<bool>> SendConfirmationAsync(
-			this InteractivityService interactivityService,
-			Embed embed,
-			ISocketMessageChannel channel,
+			this InteractivityService interactivityService, Embed embed, ISocketMessageChannel channel,
 			TimeSpan? timeout = null)
 		{
 			var confirmation = new ConfirmationBuilder().WithContent(PageBuilder.FromEmbed(embed)).Build();

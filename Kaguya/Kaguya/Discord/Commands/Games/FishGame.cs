@@ -26,8 +26,7 @@ namespace Kaguya.Discord.Commands.Games
 		private readonly FishRepository _fishRepository;
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 
-		public FishGame(ILogger<FishGame> logger,
-			KaguyaUserRepository kaguyaUserRepository,
+		public FishGame(ILogger<FishGame> logger, KaguyaUserRepository kaguyaUserRepository,
 			FishRepository fishRepository) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;

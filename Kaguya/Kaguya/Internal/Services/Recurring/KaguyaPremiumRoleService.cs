@@ -19,10 +19,8 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly IServiceProvider _serviceProvider;
 		private readonly ITimerService _timerService;
 
-		public KaguyaPremiumRoleService(ILogger<KaguyaPremiumRoleService> logger,
-			IServiceProvider serviceProvider,
-			ITimerService timerService,
-			DiscordShardedClient client)
+		public KaguyaPremiumRoleService(ILogger<KaguyaPremiumRoleService> logger, IServiceProvider serviceProvider,
+			ITimerService timerService, DiscordShardedClient client)
 		{
 			_logger = logger;
 			_serviceProvider = serviceProvider;

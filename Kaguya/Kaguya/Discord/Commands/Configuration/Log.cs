@@ -27,8 +27,7 @@ namespace Kaguya.Discord.Commands.Configuration
 		private readonly LogConfigurationRepository _logConfigurationRepository;
 		private readonly IList<PropertyInfo> _logProperties;
 
-		public Log(ILogger<Log> logger,
-			LogConfigurationRepository logConfigurationRepository,
+		public Log(ILogger<Log> logger, LogConfigurationRepository logConfigurationRepository,
 			KaguyaServerRepository kaguyaServerRepository) : base(logger)
 		{
 			_logConfigurationRepository = logConfigurationRepository;

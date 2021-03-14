@@ -1,5 +1,4 @@
 using Discord.Rest;
-using System;
 
 namespace Kaguya.Internal.Models.Statistics.Bot
 {

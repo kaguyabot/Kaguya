@@ -26,11 +26,8 @@ namespace Kaguya.Discord.Commands.Reference
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 		private readonly IServiceProvider _serviceProvider;
 
-		public Stats(ILogger<Stats> logger,
-			IServiceProvider serviceProvider,
-			IOptions<AdminConfigurations> adminConfig,
-			KaguyaUserRepository kaguyaUserRepository,
-			KaguyaServerRepository kaguyaServerRepository) : base(logger)
+		public Stats(ILogger<Stats> logger, IServiceProvider serviceProvider, IOptions<AdminConfigurations> adminConfig,
+			KaguyaUserRepository kaguyaUserRepository, KaguyaServerRepository kaguyaServerRepository) : base(logger)
 		{
 			_serviceProvider = serviceProvider;
 			_adminConfig = adminConfig;

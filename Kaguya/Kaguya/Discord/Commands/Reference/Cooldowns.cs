@@ -17,8 +17,7 @@ namespace Kaguya.Discord.Commands.Reference
 		private readonly CommonEmotes _commonEmotes;
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 
-		public Cooldowns(ILogger<Cooldowns> logger,
-			KaguyaUserRepository kaguyaUserRepository,
+		public Cooldowns(ILogger<Cooldowns> logger, KaguyaUserRepository kaguyaUserRepository,
 			CommonEmotes commonEmotes) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;

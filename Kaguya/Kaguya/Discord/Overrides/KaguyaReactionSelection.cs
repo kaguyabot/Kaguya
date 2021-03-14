@@ -9,20 +9,16 @@ using System.Threading.Tasks;
 namespace Kaguya.Discord.Overrides
 {
 	/// <summary>
-	///  Represents the default implementation of <see cref="BaseReactionSelection{TValue}" /> which comes with a lot of options suitable for most users.
+	///  Represents the default implementation of <see cref="BaseReactionSelection{TValue}" /> which comes with a lot of
+	///  options suitable for most users.
 	///  This class is immutable!
 	/// </summary>
 	/// <typeparam name="TValue">The type of the values to select from</typeparam>
 	public sealed class KaguyaReactionSelection<TValue> : BaseReactionSelection<TValue>
 	{
 		public KaguyaReactionSelection(IReadOnlyDictionary<IEmote, TValue> selectables,
-			IReadOnlyCollection<SocketUser> users,
-			Page selectionPage,
-			Page cancelledPage,
-			Page timeoutedPage,
-			bool allowCancel,
-			IEmote cancelEmote,
-			DeletionOptions deletion) : base(users, deletion)
+			IReadOnlyCollection<SocketUser> users, Page selectionPage, Page cancelledPage, Page timeoutedPage,
+			bool allowCancel, IEmote cancelEmote, DeletionOptions deletion) : base(users, deletion)
 		{
 			this.Selectables = selectables;
 			this.SelectionPage = selectionPage;

@@ -55,9 +55,7 @@ namespace Kaguya.Internal.Extensions.DiscordExtensions
 		}
 
 		public static void SendEmbedWithDeletion(this InteractivityService interactivityService,
-			ICommandContext context,
-			Embed embed,
-			TimeSpan deletionDelay)
+			ICommandContext context, Embed embed, TimeSpan deletionDelay)
 		{
 			interactivityService.DelayedSendMessageAndDeleteAsync(context.Channel, embed: embed,
 				deleteDelay: deletionDelay);

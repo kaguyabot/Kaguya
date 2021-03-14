@@ -27,10 +27,8 @@ namespace Kaguya.Discord.Commands.Configuration
 		private readonly InteractivityService _interactivityService;
 		private readonly KaguyaServerRepository _kaguyaServerRepository;
 
-		public AdminHistory(ILogger<AdminHistory> logger,
-			AdminActionRepository adminActionRepository,
-			KaguyaServerRepository kaguyaServerRepository,
-			InteractivityService interactivityService) : base(logger)
+		public AdminHistory(ILogger<AdminHistory> logger, AdminActionRepository adminActionRepository,
+			KaguyaServerRepository kaguyaServerRepository, InteractivityService interactivityService) : base(logger)
 		{
 			_adminActionRepository = adminActionRepository;
 			_kaguyaServerRepository = kaguyaServerRepository;
@@ -153,8 +151,7 @@ namespace Kaguya.Discord.Commands.Configuration
 			await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(30));
 		}
 
-		private string GetPageDescription(List<AdminAction> curCollection,
-			string[] durationFilters,
+		private string GetPageDescription(List<AdminAction> curCollection, string[] durationFilters,
 			KaguyaServer server)
 		{
 			var sb = new StringBuilder();

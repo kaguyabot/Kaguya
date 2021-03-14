@@ -27,8 +27,7 @@ namespace Kaguya.Discord.Commands.Administration
 		private readonly InteractivityService _interactivityService;
 		private readonly KaguyaServerRepository _kaguyaServerRepository;
 
-		public Role(ILogger<Role> logger,
-			InteractivityService interactivityService,
+		public Role(ILogger<Role> logger, InteractivityService interactivityService,
 			KaguyaServerRepository kaguyaServerRepository) : base(logger)
 		{
 			_interactivityService = interactivityService;
@@ -587,8 +586,7 @@ namespace Kaguya.Discord.Commands.Administration
 		[Example("\"birds that can't fly\" ice chicken\n\n" +
 		         "If you encounter any \"403 Forbidden\" errors, you need to move " +
 		         "my 'Kaguya' role above any other roles in the heirarchy and try again.")]
-		public async Task RenameRoleCommand(SocketRole role,
-			[Remainder]
+		public async Task RenameRoleCommand(SocketRole role, [Remainder]
 			string newName)
 		{
 			try

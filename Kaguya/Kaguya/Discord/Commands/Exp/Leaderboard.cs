@@ -31,10 +31,8 @@ namespace Kaguya.Discord.Commands.Exp
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 		private readonly ServerExperienceRepository _serverExperienceRepository;
 
-		public Leaderboard(ILogger<Leaderboard> logger,
-			KaguyaUserRepository kaguyaUserRepository,
-			FishRepository fishRepository,
-			KaguyaStatisticsRepository kaguyaStatisticsRepository,
+		public Leaderboard(ILogger<Leaderboard> logger, KaguyaUserRepository kaguyaUserRepository,
+			FishRepository fishRepository, KaguyaStatisticsRepository kaguyaStatisticsRepository,
 			ServerExperienceRepository serverExperienceRepository) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;

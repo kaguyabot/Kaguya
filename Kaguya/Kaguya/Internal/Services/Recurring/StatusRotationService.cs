@@ -21,10 +21,8 @@ namespace Kaguya.Internal.Services.Recurring
 		private int _rotationIndex;
 		private bool _triggeredOnce;
 
-		public StatusRotationService(ILogger<StatusRotationService> logger,
-			ITimerService timerService,
-			DiscordShardedClient client,
-			IServiceProvider serviceProvider)
+		public StatusRotationService(ILogger<StatusRotationService> logger, ITimerService timerService,
+			DiscordShardedClient client, IServiceProvider serviceProvider)
 		{
 			_logger = logger;
 			_timerService = timerService;

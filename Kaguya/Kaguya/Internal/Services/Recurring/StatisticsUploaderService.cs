@@ -14,8 +14,7 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly IServiceProvider _serviceProvider;
 		private readonly ITimerService _timerService;
 
-		public StatisticsUploaderService(ILogger<StatisticsUploaderService> logger,
-			ITimerService timerService,
+		public StatisticsUploaderService(ILogger<StatisticsUploaderService> logger, ITimerService timerService,
 			IServiceProvider serviceProvider)
 		{
 			_logger = logger;

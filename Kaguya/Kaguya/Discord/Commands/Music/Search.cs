@@ -32,11 +32,8 @@ namespace Kaguya.Discord.Commands.Music
 		private readonly LavaNode _lavaNode;
 		private readonly ILogger<Search> _logger;
 
-		public Search(ILogger<Search> logger,
-			LavaNode lavaNode,
-			InteractivityService interactivityService,
-			CommonEmotes commonEmotes,
-			AudioQueueLocker queueLocker) : base(logger)
+		public Search(ILogger<Search> logger, LavaNode lavaNode, InteractivityService interactivityService,
+			CommonEmotes commonEmotes, AudioQueueLocker queueLocker) : base(logger)
 		{
 			_logger = logger;
 			_lavaNode = lavaNode;
@@ -107,11 +104,11 @@ namespace Kaguya.Discord.Commands.Music
 
 			var builder = new KaguyaReactionSelectionBuilder<int>().WithSelectables(new Dictionary<IEmote, int>
 			                                                       {
-				                                                       {_commonEmotes.EmojisOneThroughFive[0], 0},
-				                                                       {_commonEmotes.EmojisOneThroughFive[1], 1},
-				                                                       {_commonEmotes.EmojisOneThroughFive[2], 2},
-				                                                       {_commonEmotes.EmojisOneThroughFive[3], 3},
-				                                                       {_commonEmotes.EmojisOneThroughFive[4], 4}
+				                                                       {_commonEmotes.EmojisOneThroughNine[0], 0},
+				                                                       {_commonEmotes.EmojisOneThroughNine[1], 1},
+				                                                       {_commonEmotes.EmojisOneThroughNine[2], 2},
+				                                                       {_commonEmotes.EmojisOneThroughNine[3], 3},
+				                                                       {_commonEmotes.EmojisOneThroughNine[4], 4}
 			                                                       })
 			                                                       .WithDeletion(DeletionOptions.AfterCapturedContext |
 			                                                                     DeletionOptions.Invalids)

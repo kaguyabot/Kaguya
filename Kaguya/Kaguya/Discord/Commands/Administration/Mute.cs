@@ -37,10 +37,8 @@ namespace Kaguya.Discord.Commands.Administration
 		private readonly KaguyaServerRepository _kaguyaServerRepository;
 		private readonly ILogger<Mute> _logger;
 
-		public Mute(ILogger<Mute> logger,
-			AdminActionRepository adminActionRepository,
-			KaguyaServerRepository kaguyaServerRepository,
-			InteractivityService interactivityService) : base(logger)
+		public Mute(ILogger<Mute> logger, AdminActionRepository adminActionRepository,
+			KaguyaServerRepository kaguyaServerRepository, InteractivityService interactivityService) : base(logger)
 		{
 			_logger = logger;
 			_adminActionRepository = adminActionRepository;
@@ -54,8 +52,7 @@ namespace Kaguya.Discord.Commands.Administration
 		         "by a moderator, the mute will not be automatically reapplied.")]
 		[Remarks("<user> [reason]")]
 		[Example("@User#0000 Being really spammy in chat.")]
-		public async Task MuteCommand(SocketGuildUser user,
-			[Remainder]
+		public async Task MuteCommand(SocketGuildUser user, [Remainder]
 			string reason = null)
 		{
 			var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
@@ -68,9 +65,7 @@ namespace Kaguya.Discord.Commands.Administration
 		[Example("@User#0000 30m Being really spammy in chat.")]
 		[Example("@User#0000 1d16h35m25s")]
 		// ReSharper disable once MethodOverloadWithOptionalParameter
-		public async Task MuteCommand(SocketGuildUser user,
-			string duration,
-			[Remainder]
+		public async Task MuteCommand(SocketGuildUser user, string duration, [Remainder]
 			string reason = null)
 		{
 			var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
@@ -150,9 +145,7 @@ namespace Kaguya.Discord.Commands.Administration
 			await SendEmbedAsync(embed);
 		}
 
-		private async Task MuteUserAsync(SocketGuildUser user,
-			DateTimeOffset? expiration,
-			string reason,
+		private async Task MuteUserAsync(SocketGuildUser user, DateTimeOffset? expiration, string reason,
 			KaguyaServer server)
 		{
 			var adminAction = new AdminAction
@@ -445,9 +438,7 @@ namespace Kaguya.Discord.Commands.Administration
 			return await _adminActionRepository.GetAllUnexpiredAsync(userId, serverId, AdminAction.MuteAction);
 		}
 
-		private Embed GetFinalEmbed(SocketGuildUser target,
-			DateTimeOffset? expiration,
-			string reason,
+		private Embed GetFinalEmbed(SocketGuildUser target, DateTimeOffset? expiration, string reason,
 			List<EmbedFieldBuilder> fields)
 		{
 			string durationStr = expiration.HasValue

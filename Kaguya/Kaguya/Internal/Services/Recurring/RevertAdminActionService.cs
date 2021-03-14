@@ -25,11 +25,8 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly SilentSysActions _sysActions;
 		private readonly ITimerService _timerService;
 
-		public RevertAdminActionService(ILogger<RevertAdminActionService> logger,
-			ITimerService timerService,
-			IServiceProvider serviceProvider,
-			DiscordShardedClient client,
-			SilentSysActions sysActions)
+		public RevertAdminActionService(ILogger<RevertAdminActionService> logger, ITimerService timerService,
+			IServiceProvider serviceProvider, DiscordShardedClient client, SilentSysActions sysActions)
 		{
 			_logger = logger;
 			_timerService = timerService;

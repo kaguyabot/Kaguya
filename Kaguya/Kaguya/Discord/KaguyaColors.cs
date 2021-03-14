@@ -36,5 +36,9 @@ namespace Kaguya.Discord
 		///  The color which will be shown across all server configuration embeds, for consistency.
 		/// </summary>
 		public static readonly Color ConfigurationColor = LightYellow;
+		/// <summary>
+		/// The color which is used for all poll embeds.
+		/// </summary>
+		public static readonly Color PollColor = IceBlue;
 	}
 }

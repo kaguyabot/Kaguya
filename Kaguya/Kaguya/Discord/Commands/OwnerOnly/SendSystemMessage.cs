@@ -26,8 +26,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 		[Command]
 		[Summary("Sends a message to the user from the bot account.")]
 		[Remarks("<user id> <message>")]
-		public async Task SystemMessageCommand(ulong userId,
-			[Remainder]
+		public async Task SystemMessageCommand(ulong userId, [Remainder]
 			string message)
 		{
 			var socketUser = _client.GetUser(userId);

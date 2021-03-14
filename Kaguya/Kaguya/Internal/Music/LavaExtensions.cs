@@ -8,8 +8,7 @@ namespace Kaguya.Internal.Music
 {
 	public static class LavaExtensions
 	{
-		public static async Task<bool> SafeJoinAsync(this LavaNode lavaNode,
-			SocketUser user,
+		public static async Task<bool> SafeJoinAsync(this LavaNode lavaNode, SocketUser user,
 			ISocketMessageChannel channel)
 		{
 			if (user is not SocketGuildUser guildUser || channel is not ITextChannel textChannel)
