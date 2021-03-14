@@ -25,6 +25,8 @@ namespace Kaguya.Discord.Commands.Reference
 		private readonly InteractivityService _interactivity;
 		private readonly PollRepository _pollRepository;
 
+		private static readonly TimeSpan _maxDuration = TimeSpan.FromDays(30);
+
 		public Poll(ILogger<Poll> logger, CommonEmotes commonEmotes, PollRepository pollRepository,
 			InteractivityService interactivity) : base(logger)
 		{
@@ -36,9 +38,10 @@ namespace Kaguya.Discord.Commands.Reference
 		[Command(RunMode = RunMode.Async)]
 		[Summary(
 			"Allows you to create a poll that members of the server can vote on. Members will vote on the poll through " +
-			"reactions. Follow the examples below for guidelines.")]
+			"reactions. Maximum poll duration is 30 days. Follow the examples below for guidelines.\n\n" +
+			"To stop a poll, simply delete the poll message.")]
 		[Remarks("<name> [#channel] <time> <item 1,item 2[, ...]>")]
-		[Example(@"""Do you like penguins or icebirds?"" 24h penguins,icebirds")]
+		[Example(@"""Do you like penguins or icebirds?"" 24h penguins, icebirds")]
 		[Example(
 			@"""Who's gonna win the battle?"" #poll-chat 5d18h25m19s elon musk,bitcoin,both,neither,dogecoin all the way")]
 		[Example(@"""Test"" 30s n,n2,n3,n4,n5,n6,n7,n8,n9,n10")]
@@ -76,6 +79,21 @@ namespace Kaguya.Discord.Commands.Reference
 
 			var timeParser = new TimeParser(time);
 			var parsedTime = timeParser.ParseTime();
+
+			if (parsedTime.Equals(TimeSpan.Zero))
+			{
+				await SendBasicErrorEmbedAsync(
+					"Invalid time. Try something like `5d` for 5 days, or `2h30m` for 2 hours " + "and 30 minutes.");
+
+				return;
+			}
+
+			if (parsedTime > _maxDuration)
+			{
+				await SendBasicErrorEmbedAsync("Please use a shorter time. Maximum duration is 30 days.");
+				return;
+			}
+			
 			poll.Expiration = DateTimeOffset.Now.Add(parsedTime);
 
 			if (splits.Length > 9)
@@ -116,7 +134,26 @@ namespace Kaguya.Discord.Commands.Reference
 				// Can be safely ignored. An exception is thrown if the 
 				// message is deleted before reactions can be added to it.
 			}
+		}
+		
+		[Command("-end")]
+		[Summary("Forces the poll to end prematurely. The message ID must link to an active poll.")]
+		[Remarks("<message ID>")]
+		public async Task PollEndEarlyCommandAsync(ulong messageId)
+		{
+			var match = await _pollRepository.GetAsync(messageId);
+
+			if (match == null)
+			{
+				await SendBasicErrorEmbedAsync("No matching poll found for " + messageId.ToString().AsBold());
+				return;
+			}
 			
+			match.Expiration = DateTimeOffset.Now;
+			await _pollRepository.UpdateAsync(match);
+			
+			await SendBasicSuccessEmbedAsync("Successfully ended the poll.");
+			return;
 		}
 	}
 }

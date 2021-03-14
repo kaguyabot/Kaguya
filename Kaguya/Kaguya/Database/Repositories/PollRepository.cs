@@ -22,5 +22,10 @@ namespace Kaguya.Database.Repositories
 		{
 			return await Table.AsNoTracking().Where(x => x.Expiration > DateTimeOffset.Now).ToListAsync();
 		}
+
+		public async Task<Poll> GetAsync(ulong messageId)
+		{
+			return await Table.AsNoTracking().Where(x => x.MessageId == messageId && !x.HasTriggered).FirstOrDefaultAsync();
+		}
 	}
 }

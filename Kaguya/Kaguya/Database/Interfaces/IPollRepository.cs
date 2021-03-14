@@ -17,5 +17,11 @@ namespace Kaguya.Database.Interfaces
 		/// </summary>
 		/// <returns></returns>
 		public Task<IList<Poll>> GetAllOngoingAsync();
+		/// <summary>
+		/// Returns a poll with the given message ID. Message IDs are unique.
+		/// </summary>
+		/// <param name="messageId"></param>
+		/// <returns></returns>
+		public Task<Poll> GetAsync(ulong messageId);
 	}
 }
