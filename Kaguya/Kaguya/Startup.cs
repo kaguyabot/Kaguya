@@ -30,10 +30,6 @@ using OsuSharp;
 using System;
 using Victoria;
 
-#if !DEBUG
-using DiscordBotsList.Api;
-#endif
-
 namespace Kaguya
 {
 	public class Startup

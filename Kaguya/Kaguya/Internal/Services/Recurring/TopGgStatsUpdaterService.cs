@@ -1,5 +1,4 @@
 ﻿using Discord.WebSocket;
-using DiscordBotsList.Api;
 using Kaguya.Database.Repositories;
 using Kaguya.Internal.Extensions.DiscordExtensions;
 using Kaguya.Web.Options;
@@ -7,8 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
-using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +25,6 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly ILogger<TopGgStatsUpdaterService> _logger;
 		private readonly IServiceProvider _serviceProvider;
 		private readonly ITimerService _timerService;
-		private AuthDiscordBotListApi _discordBotListApi;
 
 		public TopGgStatsUpdaterService(ILogger<TopGgStatsUpdaterService> logger, IServiceProvider serviceProvider,
 			ITimerService timerService, DiscordShardedClient client)
@@ -44,29 +45,7 @@ namespace Kaguya.Internal.Services.Recurring
 				return;
 			}
 
-			//await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(15), this);
-
-			// We init here because we cannot init through DI. This is because the bot ID is 
-			// retrieved through the client, which is not logged in at the time of injection.
-			_discordBotListApi ??= GetConfguredApi();
-
-			if (_discordBotListApi == null)
-			{
-				_logger.LogWarning("Could not create a successfull connection to top.gg. Statistics will not be posted. " +
-				                   "This warning can be safely ignored by developer contributors");
-
-				return;
-			}
-
-			var dblBot = await _discordBotListApi.GetMeAsync();
-
-			if (dblBot == null)
-			{
-				_logger.LogWarning("Could not find current bot on top.gg. Statistics will not be posted. " +
-				                   "This warning can be safely ignored by developer contributors");
-
-				return;
-			}
+			await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(15), this);
 
 			using (var scope = _serviceProvider.CreateScope())
 			{
@@ -78,9 +57,10 @@ namespace Kaguya.Internal.Services.Recurring
 					int guildCount = curStats.ConnectedServers;
 					int shardCount = curStats.Shards;
 
-					await dblBot.UpdateStatsAsync(guildCount, shardCount, _client.Shards.Select(x => x.ShardId).ToArray());
+					// DOES NOT WORK. USING MANUAL POST REQUEST AS TEMPORARY SOLUTION.
+					// await dblBot.UpdateStatsAsync(guildCount, shardCount, _client.Shards.Select(x => x.ShardId).ToArray());
 
-					_logger.LogInformation($"top.gg stats updated: {guildCount} servers | {shardCount} shards");
+					await POSTData(guildCount, shardCount);
 				}
 				catch (Exception e)
 				{
@@ -91,15 +71,56 @@ namespace Kaguya.Internal.Services.Recurring
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			if (stoppingToken.IsCancellationRequested) {}
+			if (stoppingToken.IsCancellationRequested)
+			{
+				return;
+			}
 
-			//await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
+			await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
 		}
 
-		private AuthDiscordBotListApi GetConfguredApi()
+		// ReSharper disable once InconsistentNaming
+		private async Task POSTData(int serverCount, int shardCount)
 		{
-			string apiKey = _serviceProvider.GetRequiredService<IOptions<TopGgConfigurations>>().Value.ApiKey;
-			return new AuthDiscordBotListApi(_client.CurrentUser.Id, apiKey);
+			var config = _serviceProvider.GetRequiredService<IOptions<TopGgConfigurations>>().Value;
+
+			if (config == null)
+			{
+				_logger.LogCritical("Top.GG stats POST failed. IOptions<TopGgConfigurations> did not have a value! " + 
+				                    "Please ensure the config file is setup correctly!");
+
+				return;
+			}
+			
+			string url = $"https://top.gg/api/bots/538910393918160916/stats";
+			
+			var body = new TopGgStatsPostBody(serverCount, shardCount);
+			string json = JsonConvert.SerializeObject(body, Formatting.Indented);
+
+			var data = new StringContent(json, Encoding.UTF8, "application/json");
+			
+			using (var client = new HttpClient())
+			{
+				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.ApiKey);
+				var response = await client.PostAsync(url, data);
+				
+				_logger.LogInformation($"Stats posted to top.gg -- response code: " +
+				                       $"{(int) response.StatusCode} | Message: {response.ReasonPhrase}");
+			}
+		}
+
+		private class TopGgStatsPostBody
+		{
+			[JsonProperty("server_count")]
+			public int ServerCount { get; }
+			[JsonProperty("shard_count")]
+			public int ShardsCount { get; }
+			
+			public TopGgStatsPostBody(int serverCount, int shardsCount)
+			{
+				this.ServerCount = serverCount;
+				this.ShardsCount = shardsCount;
+			}
 		}
 	}
 }
