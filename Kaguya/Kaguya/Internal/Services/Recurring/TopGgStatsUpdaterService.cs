@@ -86,41 +86,41 @@ namespace Kaguya.Internal.Services.Recurring
 
 			if (config == null)
 			{
-				_logger.LogCritical("Top.GG stats POST failed. IOptions<TopGgConfigurations> did not have a value! " + 
+				_logger.LogCritical("Top.GG stats POST failed. IOptions<TopGgConfigurations> did not have a value! " +
 				                    "Please ensure the config file is setup correctly!");
 
 				return;
 			}
-			
-			string url = $"https://top.gg/api/bots/538910393918160916/stats";
-			
+
+			string url = "https://top.gg/api/bots/538910393918160916/stats";
+
 			var body = new TopGgStatsPostBody(serverCount, shardCount);
 			string json = JsonConvert.SerializeObject(body, Formatting.Indented);
 
 			var data = new StringContent(json, Encoding.UTF8, "application/json");
-			
+
 			using (var client = new HttpClient())
 			{
 				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.ApiKey);
 				var response = await client.PostAsync(url, data);
-				
-				_logger.LogInformation($"Stats posted to top.gg -- response code: " +
+
+				_logger.LogInformation("Stats posted to top.gg -- response code: " +
 				                       $"{(int) response.StatusCode} | Message: {response.ReasonPhrase}");
 			}
 		}
 
 		private class TopGgStatsPostBody
 		{
-			[JsonProperty("server_count")]
-			public int ServerCount { get; }
-			[JsonProperty("shard_count")]
-			public int ShardsCount { get; }
-			
 			public TopGgStatsPostBody(int serverCount, int shardsCount)
 			{
 				this.ServerCount = serverCount;
 				this.ShardsCount = shardsCount;
 			}
+
+			[JsonProperty("server_count")]
+			public int ServerCount { get; }
+			[JsonProperty("shard_count")]
+			public int ShardsCount { get; }
 		}
 	}
 }
