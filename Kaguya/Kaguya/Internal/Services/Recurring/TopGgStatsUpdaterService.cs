@@ -92,7 +92,7 @@ namespace Kaguya.Internal.Services.Recurring
 				return;
 			}
 
-			string url = "https://top.gg/api/bots/538910393918160916/stats";
+			string url = $"https://top.gg/api/bots/{_client.CurrentUser.Id}/stats";
 
 			var body = new TopGgStatsPostBody(serverCount, shardCount);
 			string json = JsonConvert.SerializeObject(body, Formatting.Indented);

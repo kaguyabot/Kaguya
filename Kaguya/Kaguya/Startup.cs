@@ -167,7 +167,9 @@ namespace Kaguya
 			services.AddHostedService<StatusRotationService>();
 			services.AddHostedService<StatisticsUploaderService>();
 			services.AddHostedService<TimerWorker>();
+#if !DEBUG
 			services.AddHostedService<TopGgStatsUpdaterService>();
+#endif
 			services.AddHostedService<UpvoteExpirationService>();
 			services.AddHostedService<PollService>();
 		}
