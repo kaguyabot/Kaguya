@@ -1,20 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
+using Kaguya.Internal.Models.User;
 using Kaguya.Internal.PrimitiveExtensions;
 using Kaguya.Internal.Services;
 using OsuSharp;
 
 namespace Kaguya.Database.Model
 {
-	public enum ExpNotificationPreference
-	{
-		Chat,
-		Dm,
-		Both,
-		Disabled
-	}
-	public class KaguyaUser
+	public class KaguyaUser : IUserSearchable
 	{
 		/// <summary>
 		/// The Discord ID for the user. Unique.
@@ -99,10 +94,12 @@ namespace Kaguya.Database.Model
 		/// The total amount of times the user has lost while playing a gambling game.
 		/// </summary>
 		public int TotalGambleLosses { get; set; }
+
 		/// <summary>
 		/// The total amount of points the user has offered up for gamble before any wins or losses.
 		/// </summary>
 		public int TotalCoinsGambled { get; set; }
+
 		/// <summary>
 		/// The gross sum of coins the user has won from gambling games.
 		/// </summary>
@@ -165,40 +162,36 @@ namespace Kaguya.Database.Model
 		/// </summary>
 		public DateTimeOffset? BlacklistExpiration { get; set; }
 		/// <summary>
-		/// If a user wants to receive level-up notifications, what type should it be?
-		/// </summary>
-		public ExpNotificationPreference ExpNotificationType { get; set; } = ExpNotificationPreference.Chat;
-		/// <summary>
 		/// An all-time value representing the "net income" the user has earned
 		/// or lost from gambling. This is equivalent to the <see cref="GrossGambleCoinWinnings"/>
 		/// minus the <see cref="GrossGambleCoinLosses"/>.
 		/// </summary>
-		public int NetGambleCoingEarnings => GrossGambleCoinWinnings - GrossGambleCoinLosses;
+		public int NetGambleCoingEarnings => this.GrossGambleCoinWinnings - this.GrossGambleCoinLosses;
 		/// <summary>
 		/// Whether or not this user is a premium user.
 		/// </summary>
-		public bool IsPremium => PremiumExpiration.HasValue && PremiumExpiration.Value > DateTimeOffset.Now;
+		public bool IsPremium => this.PremiumExpiration.HasValue && this.PremiumExpiration.Value > DateTimeOffset.Now;
 		/// <summary>
 		/// Whether or not this user is eligible to give rep to another user.
 		/// </summary>
-		public bool CanGiveRep => !LastGivenRep.HasValue || LastGivenRep.Value < DateTimeOffset.Now.AddHours(-24);
+		public bool CanGiveRep => !this.LastGivenRep.HasValue || this.LastGivenRep.Value < DateTimeOffset.Now.AddHours(-24);
 		/// <summary>
 		/// Whether or not this user is eligible to receive daily coins via $daily.
 		/// </summary>
-		public bool CanGetDailyCoins => !LastDailyBonus.HasValue || LastDailyBonus.Value < DateTimeOffset.Now.AddHours(-24);
+		public bool CanGetDailyCoins => !this.LastDailyBonus.HasValue || this.LastDailyBonus.Value < DateTimeOffset.Now.AddHours(-24);
 		/// <summary>
 		/// Whether or not this user is eligible to receive weekly coins via $weekly.
 		/// </summary>
-		public bool CanGetWeeklyCoins => !LastWeeklyBonus.HasValue || LastWeeklyBonus.Value < DateTimeOffset.Now.AddDays(-7);
+		public bool CanGetWeeklyCoins => !this.LastWeeklyBonus.HasValue || this.LastWeeklyBonus.Value < DateTimeOffset.Now.AddDays(-7);
 		/// <summary>
 		/// Whether or not the user can upvote on top.gg - checks for last 12 hours.
 		/// </summary>
-		public bool CanUpvote => !LastUpvotedTopGg.HasValue || LastUpvotedTopGg < DateTimeOffset.Now.AddHours(-12);
+		public bool CanUpvote => !this.LastUpvotedTopGg.HasValue || this.LastUpvotedTopGg < DateTimeOffset.Now.AddHours(-12);
 		/// <summary>
 		/// A user-facing global experience level. This property should be used to display (to a user) what
 		/// their global experience level is.
 		/// </summary>
-		public int GlobalExpLevel => ExactGlobalExpLevel.ToFloor();
+		public int GlobalExpLevel => this.ExactGlobalExpLevel.ToFloor();
 		/// <summary>
 		/// The user's level as returned by the experience formula. This is used for exact,
 		/// internal calculations, such as progress through the level.
@@ -207,7 +200,7 @@ namespace Kaguya.Database.Model
 		/// <summary>
 		/// A user-facing fishing experience level.
 		/// </summary>
-		public int FishLevel => ExactFishLevel.ToFloor();
+		public int FishLevel => this.ExactFishLevel.ToFloor();
 		/// <summary>
 		/// The user's fishing level as returned by the experience formula. This is used for exact,
 		/// internal calculations, such as progress through the level.
@@ -217,19 +210,23 @@ namespace Kaguya.Database.Model
 		/// A positive value representing how many experience points the user needs in order to
 		/// reach the next global experience level.
 		/// </summary>
-		public int ExpToNextGlobalLevel => ExperienceService.CalculateExpFromLevel(GlobalExpLevel + 1) - this.GlobalExp;
+		public int ExpToNextGlobalLevel => ExperienceService.CalculateExpFromLevel(this.GlobalExpLevel + 1) - this.GlobalExp;
 		/// <summary>
 		/// A decimal value (range 0.00M - 99.99...M) that displays the user's % to the next level.
 		/// If the user is 30% towards achieving the next level, this value is 30.00M.
 		/// </summary>
 		public decimal PercentToNextLevel => ExperienceService.CalculatePercentToNextLevel(this.ExactGlobalExpLevel);
 		/// <summary>
+		/// This user's cooldowns for voting, daily bonuses, etc.
+		/// </summary>
+		public IUserCooldowns Cooldowns => new UserCooldowns(this);
+		/// <summary>
 		/// Adjusts the user's coins by the <see cref="amount"/> given.
 		/// </summary>
 		/// <param name="amount"></param>
 		public void AdjustCoins(int amount)
 		{
-			if (this.Coins + amount < 0)
+			if ((this.Coins + amount) < 0)
 			{
 				this.Coins = 0;
 
@@ -245,7 +242,7 @@ namespace Kaguya.Database.Model
 		/// <param name="amount"></param>
 		public void AdjustExperienceGlobal(int amount)
 		{
-			if (this.GlobalExp + amount < 0)
+			if ((this.GlobalExp + amount) < 0)
 			{
 				this.GlobalExp = 0;
 
@@ -262,7 +259,7 @@ namespace Kaguya.Database.Model
 		/// <param name="amount"></param>
 		public void AdjustFishExperience(int amount)
 		{
-			if (this.FishExp + amount < 0)
+			if ((this.FishExp + amount) < 0)
 			{
 				this.FishExp = 0;
 
@@ -275,6 +272,6 @@ namespace Kaguya.Database.Model
 		/// Displays the user's ID.
 		/// </summary>
 		/// <returns></returns>
-		public override string ToString() => UserId.ToString();
+		public override string ToString() { return this.UserId.ToString(); }
 	}
 }

@@ -13,7 +13,7 @@ namespace Kaguya.Internal.Services
 		Common,
 		Trash
 	}
-	
+
 	public enum FishType
 	{
 		Megamouth, // Legendary
@@ -51,7 +51,7 @@ namespace Kaguya.Internal.Services
 		Shoe,
 		BaitStolen
 	}
-	
+
 	public class FishService
 	{
 		// 110 / 200 chance to lose all coins gambled.
@@ -62,54 +62,51 @@ namespace Kaguya.Internal.Services
 		public static readonly (decimal rangeMin, decimal rangeMax) RangeRare = (0.85M, 0.98M);       // 26 / 200 chance
 		public static readonly (decimal rangeMin, decimal rangeMax) RangeUncommon = (0.55M, 0.85M);   // 60 / 200 chance
 		public static readonly (decimal rangeMin, decimal rangeMax) RangeCommon = (0.30M, 0.55M);     // 50 / 200 chance
-		public static readonly (decimal rangeMin, decimal rangeMax) RangeTrash = (0.0M, 0.30M);     // 60 / 200 chance
-		
-		private static readonly Random _random = new Random();
-		
-		public static readonly Dictionary<FishType, FishRarity> FishMap = new Dictionary<FishType, FishRarity>
+		public static readonly (decimal rangeMin, decimal rangeMax) RangeTrash = (0.0M, 0.30M);       // 60 / 200 chance
+		private static readonly Random _random = new();
+		public static readonly Dictionary<FishType, FishRarity> FishMap = new()
 		{
-		   {FishType.Megamouth, FishRarity.Legendary},
-		   {FishType.BigKahuna, FishRarity.Legendary},
-		   {FishType.GoldenTrout, FishRarity.Legendary},
-		   {FishType.PacificBluefinTuna, FishRarity.UltraRare},
-		   {FishType.KingSalmon, FishRarity.UltraRare},
-		   {FishType.GiantSquid, FishRarity.UltraRare},
-		   {FishType.YellowfinTuna, FishRarity.UltraRare},
-		   {FishType.BlueMarlin, FishRarity.UltraRare},
-		   {FishType.GreatWhiteShark, FishRarity.UltraRare},
-		   {FishType.HammerheadShark, FishRarity.UltraRare},
-		   {FishType.Blowfish, FishRarity.Rare},
-		   {FishType.Piranha, FishRarity.Rare},
-		   {FishType.StoneCrab, FishRarity.Rare},
-		   {FishType.Bluefish, FishRarity.Rare},
-		   {FishType.RedDrum, FishRarity.Rare},
-		   {FishType.LargeSalmon, FishRarity.Rare},
-		   {FishType.LargeBass, FishRarity.Rare},
-		   {FishType.Frogfish, FishRarity.Uncommon},
-		   {FishType.SandShark, FishRarity.Uncommon},
-		   {FishType.Dogfish, FishRarity.Uncommon},
-		   {FishType.Pigfish, FishRarity.Uncommon},
-		   {FishType.Stingray, FishRarity.Uncommon},
-		   {FishType.PinFish, FishRarity.Common},
-		   {FishType.Bass, FishRarity.Common},
-		   {FishType.Catfish, FishRarity.Common},
-		   {FishType.Carp, FishRarity.Common},
-		   {FishType.Snapper, FishRarity.Common},
-		   {FishType.AlgaeEater, FishRarity.Common},
-		   {FishType.Anglerfish, FishRarity.Common},
-		   {FishType.Jellyfish, FishRarity.Common},
-		   {FishType.PlasticBottle, FishRarity.Trash},
-		   {FishType.Rock, FishRarity.Trash},
-		   {FishType.Shoe, FishRarity.Trash},
-		   {FishType.BaitStolen, FishRarity.Trash}
+			{FishType.Megamouth, FishRarity.Legendary},
+			{FishType.BigKahuna, FishRarity.Legendary},
+			{FishType.GoldenTrout, FishRarity.Legendary},
+			{FishType.PacificBluefinTuna, FishRarity.UltraRare},
+			{FishType.KingSalmon, FishRarity.UltraRare},
+			{FishType.GiantSquid, FishRarity.UltraRare},
+			{FishType.YellowfinTuna, FishRarity.UltraRare},
+			{FishType.BlueMarlin, FishRarity.UltraRare},
+			{FishType.GreatWhiteShark, FishRarity.UltraRare},
+			{FishType.HammerheadShark, FishRarity.UltraRare},
+			{FishType.Blowfish, FishRarity.Rare},
+			{FishType.Piranha, FishRarity.Rare},
+			{FishType.StoneCrab, FishRarity.Rare},
+			{FishType.Bluefish, FishRarity.Rare},
+			{FishType.RedDrum, FishRarity.Rare},
+			{FishType.LargeSalmon, FishRarity.Rare},
+			{FishType.LargeBass, FishRarity.Rare},
+			{FishType.Frogfish, FishRarity.Uncommon},
+			{FishType.SandShark, FishRarity.Uncommon},
+			{FishType.Dogfish, FishRarity.Uncommon},
+			{FishType.Pigfish, FishRarity.Uncommon},
+			{FishType.Stingray, FishRarity.Uncommon},
+			{FishType.PinFish, FishRarity.Common},
+			{FishType.Bass, FishRarity.Common},
+			{FishType.Catfish, FishRarity.Common},
+			{FishType.Carp, FishRarity.Common},
+			{FishType.Snapper, FishRarity.Common},
+			{FishType.AlgaeEater, FishRarity.Common},
+			{FishType.Anglerfish, FishRarity.Common},
+			{FishType.Jellyfish, FishRarity.Common},
+			{FishType.PlasticBottle, FishRarity.Trash},
+			{FishType.Rock, FishRarity.Trash},
+			{FishType.Shoe, FishRarity.Trash},
+			{FishType.BaitStolen, FishRarity.Trash}
 		};
-
-		private static KeyValuePair<FishType, FishRarity>[] LegendaryFish => FishMap.Where(x => x.Value == FishRarity.Legendary).ToArray(); 
-		private static KeyValuePair<FishType, FishRarity>[] UltraRareFish => FishMap.Where(x => x.Value == FishRarity.UltraRare).ToArray(); 
-		private static KeyValuePair<FishType, FishRarity>[] RareFish => FishMap.Where(x => x.Value == FishRarity.Rare).ToArray(); 
-		private static KeyValuePair<FishType, FishRarity>[] UncommonFish => FishMap.Where(x => x.Value == FishRarity.Uncommon).ToArray(); 
-		private static KeyValuePair<FishType, FishRarity>[] CommonFish => FishMap.Where(x => x.Value == FishRarity.Common).ToArray(); 
-		private static KeyValuePair<FishType, FishRarity>[] TrashFish => FishMap.Where(x => x.Value == FishRarity.Trash).ToArray(); 
+		private static KeyValuePair<FishType, FishRarity>[] LegendaryFish => FishMap.Where(x => x.Value == FishRarity.Legendary).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] UltraRareFish => FishMap.Where(x => x.Value == FishRarity.UltraRare).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] RareFish => FishMap.Where(x => x.Value == FishRarity.Rare).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] UncommonFish => FishMap.Where(x => x.Value == FishRarity.Uncommon).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] CommonFish => FishMap.Where(x => x.Value == FishRarity.Common).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] TrashFish => FishMap.Where(x => x.Value == FishRarity.Trash).ToArray();
 
 		public static FishRarity SelectRarity(decimal roll)
 		{
@@ -117,27 +114,27 @@ namespace Kaguya.Internal.Services
 			{
 				return FishRarity.Legendary;
 			}
-			
+
 			if (IsBetween(roll, RangeUltraRare))
 			{
 				return FishRarity.UltraRare;
 			}
-			
+
 			if (IsBetween(roll, RangeRare))
 			{
 				return FishRarity.Rare;
 			}
-			
+
 			if (IsBetween(roll, RangeUncommon))
 			{
 				return FishRarity.Uncommon;
 			}
-			
+
 			if (IsBetween(roll, RangeCommon))
 			{
 				return FishRarity.Common;
 			}
-			
+
 			if (IsBetween(roll, RangeTrash))
 			{
 				return FishRarity.Trash;
@@ -158,7 +155,7 @@ namespace Kaguya.Internal.Services
 				FishRarity.Legendary => LegendaryFish,
 				_ => CommonFish
 			};
-			
+
 			int max = allFish.Length;
 			int random;
 
@@ -186,9 +183,6 @@ namespace Kaguya.Internal.Services
 			};
 		}
 
-		private static bool IsBetween(decimal num, (decimal min, decimal max) range)
-		{
-			return range.min <= num && num <= range.max;
-		}
+		private static bool IsBetween(decimal num, (decimal min, decimal max) range) { return range.min <= num && num <= range.max; }
 	}
 }

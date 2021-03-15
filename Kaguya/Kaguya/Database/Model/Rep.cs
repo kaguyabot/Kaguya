@@ -1,10 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
-    public class Rep
+    public class Rep : IUserSearchable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

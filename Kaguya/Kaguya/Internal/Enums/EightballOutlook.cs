@@ -1,9 +1,9 @@
 ﻿namespace Kaguya.Internal.Enums
 {
-    public enum EightballOutlook
-    {
-        Positive,
-        Negative,
-        Neutral
-    }
+	public enum EightballOutlook
+	{
+		Positive,
+		Negative,
+		Neutral
+	}
 }

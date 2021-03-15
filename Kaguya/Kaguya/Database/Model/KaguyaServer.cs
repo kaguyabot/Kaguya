@@ -2,10 +2,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
-	public class KaguyaServer
+	public enum LevelNotifications
+	{
+		ServerOnly,
+		GlobalOnly,
+		ServerAndGlobal,
+		Disabled
+	}
+	
+	public class KaguyaServer : IServerSearchable
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -22,13 +31,13 @@ namespace Kaguya.Database.Model
 		public DateTimeOffset DateFirstTracked { get; set; }
 		public DateTimeOffset? PremiumExpiration { get; set; }
 		public DateTimeOffset? NsfwAllowanceTime { get; set; }
-		public bool IsNsfwAllowed { get; set; } = false;
+		public bool IsNsfwAllowed { get; set; }
 		public ulong? NsfwAllowedId { get; set; }
 		public string CustomGreeting { get; set; }
-		public bool CustomGreetingIsEnabled { get; set; } = false;
+		public bool CustomGreetingIsEnabled { get; set; }
 		public ulong? CustomGreetingTextChannelId { get; set; }
-
-		public bool LevelAnnouncementsEnabled { get; set; } = true;
+		public LevelNotifications LevelNotifications { get; set; } = LevelNotifications.ServerOnly;
+		public ulong? LevelAnnouncementsChannelId { get; set; }
 		/// <summary>
 		/// Should we scan for osu! links?
 		/// </summary>
@@ -37,8 +46,6 @@ namespace Kaguya.Database.Model
 		/// <summary>
 		/// Whether or not the server currently has an active premium subscription.
 		/// </summary>
-		public bool IsPremium => PremiumExpiration.HasValue && PremiumExpiration.Value > DateTimeOffset.Now;
-
-		public AntiRaidConfig AntiRaid { get; set; }
+		public bool IsPremium => this.PremiumExpiration.HasValue && this.PremiumExpiration.Value > DateTimeOffset.Now;
 	}
 }

@@ -24,6 +24,7 @@
 *.suo
 *.user
 .vs/
+.vscode/
 [Bb]in/
 [Oo]bj/
 _UpgradeReport_Files/

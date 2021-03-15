@@ -1,5 +1,5 @@
-using System;
 using Kaguya.Discord.Parsers;
+using System;
 using Xunit;
 
 namespace KaguyaTests
@@ -16,7 +16,7 @@ namespace KaguyaTests
 			var p = new TimeParser(input);
 			Assert.True(IsValid(p.ParseTime()));
 		}
-		
+
 		[Theory]
 		[InlineData("1s1m")]
 		[InlineData("1s1h")]
@@ -30,17 +30,17 @@ namespace KaguyaTests
 			var p = new TimeParser(input);
 			Assert.True(IsValid(p.ParseTime()));
 		}
-		
+
 		[Theory]
 		[InlineData("35d21h134m99s")]
 		public void ShouldParseExact(string input)
 		{
 			var p = new TimeParser(input);
 			var pTime = p.ParseTime();
-			
+
 			Assert.True(IsValid(pTime) && pTime == new TimeSpan(35, 21, 134, 99));
 		}
 
-		private bool IsValid(TimeSpan ts) => ts != TimeSpan.Zero;
+		private bool IsValid(TimeSpan ts) { return ts != TimeSpan.Zero; }
 	}
 }

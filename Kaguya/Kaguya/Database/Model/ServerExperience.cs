@@ -1,15 +1,16 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
-    public class ServerExperience
+    public class ServerExperience : IUserSearchable, IServerSearchable
     {
-        [Key, Column(Order = 0)]
+        [Key][Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public ulong ServerId { get; set; }
-        [Key, Column(Order = 1)]
+        [Key][Column(Order = 1)]
         public ulong UserId { get; set; }
         public int Exp { get; private set; }
         public DateTimeOffset? LastGivenExp { get; set; }
@@ -30,7 +31,7 @@ namespace Kaguya.Database.Model
         /// <param name="amount"></param>
         public void SubtractExp(int amount)
         {
-            if (Math.Abs(amount) - Exp < 0)
+            if ((Math.Abs(amount) - this.Exp) < 0)
             {
                 this.Exp = 0;
             }

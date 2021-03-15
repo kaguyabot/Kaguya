@@ -2,10 +2,10 @@
 
 namespace Kaguya.Internal.Enums
 {
-    [Flags]
-    public enum CommandMetadata
-    {
-        Summary = 1,
-        Remarks = 2
-    }
+	[Flags]
+	public enum CommandMetadata
+	{
+		Summary = 1,
+		Remarks = 2
+	}
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
-    public class Quote
+    public class Quote : IUserSearchable, IServerSearchable
     {
         /// <summary>
         /// Unique, generated + auto-incremented ID.

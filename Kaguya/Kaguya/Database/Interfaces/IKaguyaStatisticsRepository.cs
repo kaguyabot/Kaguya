@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
-using Kaguya.Database.Model;
+﻿using Kaguya.Database.Model;
+using System.Threading.Tasks;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IKaguyaStatisticsRepository : IRepository<KaguyaStatistics>
-    {
-        public Task PostNewAsync();
-        public Task<KaguyaStatistics> GetMostRecentAsync();
-    }
+	public interface IKaguyaStatisticsRepository : IRepository<KaguyaStatistics>
+	{
+		public Task PostNewAsync();
+		public Task<KaguyaStatistics> GetMostRecentAsync();
+	}
 }

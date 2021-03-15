@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Kaguya.Database.Interfaces;
 
 namespace Kaguya.Database.Model
 {
-    public class Giveaway
+    public class Giveaway : IUserSearchable, IServerSearchable
     {
         /// <summary>
         /// ID of the message that this giveaway is attached to. There can only be
@@ -11,6 +12,10 @@ namespace Kaguya.Database.Model
         /// </summary>
         [Key]
         public ulong MessageId { get; set; }
+        /// <summary>
+        /// The ID of the user who created the giveaway
+        /// </summary>
+        public ulong UserId { get; set; }
         /// <summary>
         /// ID of the server that this giveaway is held in.
         /// </summary>

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Kaguya.Database.Model;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Kaguya.Database.Model;
 
 namespace Kaguya.Database.Interfaces
 {
-    public interface IFavoriteTrackRepository : IRepository<FavoriteTrack>
-    {
-        public Task<IList<FavoriteTrack>> GetAllAsync(ulong userId);
-    }
+	public interface IFavoriteTrackRepository : IRepository<FavoriteTrack>
+	{
+		public Task<IList<FavoriteTrack>> GetAllAsync(ulong userId);
+	}
 }

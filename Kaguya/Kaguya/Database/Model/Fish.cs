@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kaguya.Database.Interfaces;
 using Kaguya.Internal.Services;
 
 namespace Kaguya.Database.Model
 {
-    public class Fish
+    public class Fish : IUserSearchable, IServerSearchable
     {
         /// <summary>
         /// A auto-incrementing ID for this unique fish.

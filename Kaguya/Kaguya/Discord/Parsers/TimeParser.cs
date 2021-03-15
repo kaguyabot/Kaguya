@@ -1,8 +1,8 @@
+using Humanizer;
+using Humanizer.Localisation;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Humanizer;
-using Humanizer.Localisation;
 
 namespace Kaguya.Discord.Parsers
 {
@@ -18,18 +18,18 @@ namespace Kaguya.Discord.Parsers
 		}
 
 		/// <summary>
-		/// Parses a string, formatted as 'XdXmXhXs' into a <see cref="System.TimeSpan"/>.
-		/// Returns TimeSpan.Zero if the string could not be parsed.
+		///  Parses a string, formatted as 'XdXmXhXs' into a <see cref="System.TimeSpan" />.
+		///  Returns TimeSpan.Zero if the string could not be parsed.
 		/// </summary>
 		/// <returns></returns>
 		public TimeSpan ParseTime()
 		{
 			Regex[] regexs =
 			{
-				new Regex("(([0-9])*s)"),
-				new Regex("(([0-9])*m)"),
-				new Regex("(([0-9])*h)"),
-				new Regex("(([0-9])*d)")
+				new("(([0-9])*s)"),
+				new("(([0-9])*m)"),
+				new("(([0-9])*h)"),
+				new("(([0-9])*d)")
 			};
 
 			string s = regexs[0].Match(_input).Value;
@@ -52,16 +52,24 @@ namespace Kaguya.Discord.Parsers
 
 			int sec = default, min = default, hour = default, day = default;
 			if (!string.IsNullOrWhiteSpace(seconds))
+			{
 				int.TryParse(seconds, out sec);
+			}
 
 			if (!string.IsNullOrWhiteSpace(minutes))
+			{
 				int.TryParse(minutes, out min);
+			}
 
 			if (!string.IsNullOrWhiteSpace(hours))
+			{
 				int.TryParse(hours, out hour);
+			}
 
 			if (!string.IsNullOrWhiteSpace(days))
+			{
 				int.TryParse(days, out day);
+			}
 
 			return new TimeSpan(day, hour, min, sec);
 		}

@@ -1,35 +1,26 @@
-﻿using System;
+﻿using Kaguya.Internal.Services;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using Kaguya.Internal.Services;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Timer = System.Timers.Timer;
 
 namespace Kaguya.Workers
 {
 	public class TimerWorker : BackgroundService
 	{
-		private readonly ITimerInternal _timerService;
-		private readonly ILogger<TimerWorker> _logger;
 		private const double TIMER_RESOLUTION = 1000;
-		private Timer _timer;
-
-		private readonly object _locker = new();
 		private readonly SortedList<DateTimeOffset, List<(ITimerReceiver receiver, object payload)>> _events = new();
-		
-		public TimerWorker(ITimerService timerService, ILogger<TimerWorker> logger)
-		{
-			_timerService = timerService as ITimerInternal;
-			_logger = logger;
-		}
-		
+		private readonly object _locker = new();
+		private readonly ITimerInternal _timerService;
+		private System.Timers.Timer _timer;
+		public TimerWorker(ITimerService timerService) { _timerService = timerService as ITimerInternal; }
+
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
 			await Task.CompletedTask;
-			_timer = new Timer(TIMER_RESOLUTION);
+			_timer = new System.Timers.Timer(TIMER_RESOLUTION);
 			_timer.AutoReset = false;
 			_timer.Elapsed += HandleTimer;
 			_timer.Start();
@@ -38,12 +29,16 @@ namespace Kaguya.Workers
 			{
 				await _timerService.GetChannel().Reader.WaitToReadAsync(stoppingToken);
 
-				(DateTimeOffset when, ITimerReceiver receiver, object payload) = await _timerService.GetChannel().Reader.ReadAsync(stoppingToken);
+				(var when, var receiver, var payload) = await _timerService.GetChannel().Reader.ReadAsync(stoppingToken);
+
 				lock (_locker)
 				{
 					if (!_events.ContainsKey(when))
 					{
-						_events.Add(when, new List<(ITimerReceiver receiver, object payload)> {(receiver, payload)});
+						_events.Add(when, new List<(ITimerReceiver receiver, object payload)>
+						{
+							(receiver, payload)
+						});
 					}
 					else
 					{
@@ -59,7 +54,7 @@ namespace Kaguya.Workers
 			{
 				while (_events.Count > 0 && _events.Keys[0] <= DateTimeOffset.Now)
 				{
-					foreach (var (receiver, payload) in _events[_events.Keys[0]])
+					foreach ((var receiver, var payload) in _events[_events.Keys[0]])
 					{
 						// fire and forget yay!
 						receiver.HandleTimer(payload);

@@ -1,9 +1,9 @@
 ﻿namespace Kaguya.Internal.Enums
 {
-    public enum ExampleStringFormat
-    {
-        CodeblockSingleLine,
-        CodeblockMultiLine,
-        None
-    }
+	public enum ExampleStringFormat
+	{
+		CodeblockSingleLine,
+		CodeblockMultiLine,
+		None
+	}
 }

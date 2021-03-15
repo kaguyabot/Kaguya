@@ -97,20 +97,25 @@ namespace Kaguya.Migrations
                     b.ToTable("AntiRaidConfigs");
                 });
 
-            modelBuilder.Entity("Kaguya.Database.Model.AutoAssignedRole", b =>
+            modelBuilder.Entity("Kaguya.Database.Model.AutoRole", b =>
                 {
-                    b.Property<ulong>("ServerId")
-                        .HasColumnType("bigint unsigned");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<ulong>("RoleId")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<TimeSpan?>("Delay")
-                        .HasColumnType("time(6)");
+                    b.Property<ulong>("ServerId")
+                        .HasColumnType("bigint unsigned");
 
-                    b.HasKey("ServerId", "RoleId");
+                    b.HasKey("Id");
 
-                    b.ToTable("AutoAssignedRoles");
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("ServerId");
+
+                    b.ToTable("AutoRoles");
                 });
 
             modelBuilder.Entity("Kaguya.Database.Model.BlacklistedEntity", b =>
@@ -332,6 +337,9 @@ namespace Kaguya.Migrations
                     b.Property<ulong>("ServerId")
                         .HasColumnType("bigint unsigned");
 
+                    b.Property<ulong>("UserId")
+                        .HasColumnType("bigint unsigned");
+
                     b.HasKey("MessageId");
 
                     b.HasIndex("Expiration");
@@ -344,9 +352,6 @@ namespace Kaguya.Migrations
             modelBuilder.Entity("Kaguya.Database.Model.KaguyaServer", b =>
                 {
                     b.Property<ulong>("ServerId")
-                        .HasColumnType("bigint unsigned");
-
-                    b.Property<ulong?>("AntiRaidServerId")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<bool>("AutomaticOsuLinkParsingEnabled")
@@ -370,8 +375,11 @@ namespace Kaguya.Migrations
                     b.Property<bool>("IsNsfwAllowed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<bool>("LevelAnnouncementsEnabled")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<ulong?>("LevelAnnouncementsChannelId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<int>("LevelNotifications")
+                        .HasColumnType("int");
 
                     b.Property<ulong?>("MuteRoleId")
                         .HasColumnType("bigint unsigned");
@@ -398,8 +406,6 @@ namespace Kaguya.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ServerId");
-
-                    b.HasIndex("AntiRaidServerId");
 
                     b.ToTable("KaguyaServers");
                 });
@@ -470,9 +476,6 @@ namespace Kaguya.Migrations
 
                     b.Property<DateTimeOffset>("DateFirstTracked")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("ExpNotificationType")
-                        .HasColumnType("int");
 
                     b.Property<int>("FishExp")
                         .HasColumnType("int");
@@ -606,6 +609,41 @@ namespace Kaguya.Migrations
                     b.HasKey("ServerId");
 
                     b.ToTable("LogConfigurations");
+                });
+
+            modelBuilder.Entity("Kaguya.Database.Model.Poll", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Args")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<ulong>("ChannelId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTimeOffset>("Expiration")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("HasTriggered")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<ulong>("MessageId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<ulong>("ServerId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<ulong>("UserId")
+                        .HasColumnType("bigint unsigned");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Polls");
                 });
 
             modelBuilder.Entity("Kaguya.Database.Model.PremiumKey", b =>
@@ -847,15 +885,6 @@ namespace Kaguya.Migrations
                         .HasColumnType("bigint unsigned");
 
                     b.ToView("KaguyaUserRanks");
-                });
-
-            modelBuilder.Entity("Kaguya.Database.Model.KaguyaServer", b =>
-                {
-                    b.HasOne("Kaguya.Database.Model.AntiRaidConfig", "AntiRaid")
-                        .WithMany()
-                        .HasForeignKey("AntiRaidServerId");
-
-                    b.Navigation("AntiRaid");
                 });
 #pragma warning restore 612, 618
         }
