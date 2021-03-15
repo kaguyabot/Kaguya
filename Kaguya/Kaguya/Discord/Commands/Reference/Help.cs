@@ -26,8 +26,7 @@ namespace Kaguya.Discord.Commands.Reference
 	[Alias("h")]
 	public class Help : KaguyaBase<Help>
 	{
-		private static readonly string _links = $"[Kaguya Support]({Global.SupportDiscordUrl}) | " +
-		                                        $"[Kaguya Premium]({Global.StoreUrl})";
+		private static readonly string _links = $"[Kaguya Support]({Global.SupportDiscordUrl}) | " + $"[Kaguya Premium]({Global.StoreUrl})";
 		private readonly IOptions<AdminConfigurations> _adminConfigurations;
 		private readonly CommandService _commandService;
 		private readonly InteractivityService _interactivityService;
@@ -45,18 +44,17 @@ namespace Kaguya.Discord.Commands.Reference
 		}
 
 		[Command(RunMode = RunMode.Async)]
-		[Summary(
-			"If used without any parameters, this command displays all command modules with all of their commands. " +
-			"The command executor may scroll between pages using the provided reactions.\n" +
-			"If used with the name of a command (or command alias), the documentation for that command will be displayed.\n\n" +
-			"Commands are displayed as: `<name> [alias 1] [alias 2] ... [premium?]`\n" +
-			"Display Definitions:\n" +
-			"`filter [f]` -> Command `filter` with alias `f`.\n" +
-			"`weekly {$}` -> Command `weekly` with no aliases and marked as premium.\n\n" +
-			"Usage Examples:\n" +
-			"`help` -> Displays all commands.\n" +
-			"`help filter` -> Displays documentation for filter.\n" +
-			"`help f` -> Also displays documentation for filter, as `f` is an alias of `filter`.")]
+		[Summary("If used without any parameters, this command displays all command modules with all of their commands. " +
+		         "The command executor may scroll between pages using the provided reactions.\n" +
+		         "If used with the name of a command (or command alias), the documentation for that command will be displayed.\n\n" +
+		         "Commands are displayed as: `<name> [alias 1] [alias 2] ... [premium?]`\n" +
+		         "Display Definitions:\n" +
+		         "`filter [f]` -> Command `filter` with alias `f`.\n" +
+		         "`weekly {$}` -> Command `weekly` with no aliases and marked as premium.\n\n" +
+		         "Usage Examples:\n" +
+		         "`help` -> Displays all commands.\n" +
+		         "`help filter` -> Displays documentation for filter.\n" +
+		         "`help f` -> Also displays documentation for filter, as `f` is an alias of `filter`.")]
 		[Remarks("[command or alias name]")]
 		public async Task CommandHelp()
 		{
@@ -141,8 +139,7 @@ namespace Kaguya.Discord.Commands.Reference
 				// Check the module for premium attributes.
 				if (modInfo.Preconditions.Any(x => x.GetType() == typeof(RestrictionAttribute)))
 				{
-					var modRestrictionAttrs =
-						modInfo.Preconditions.Where(x => x.GetType() == typeof(RestrictionAttribute));
+					var modRestrictionAttrs = modInfo.Preconditions.Where(x => x.GetType() == typeof(RestrictionAttribute));
 
 					foreach (var attr in modRestrictionAttrs)
 					{
@@ -159,8 +156,7 @@ namespace Kaguya.Discord.Commands.Reference
 				int premCount = 0;
 				if (premiumString == string.Empty && modInfo.Commands.Select(x => x.Preconditions).Any())
 				{
-					var matchingCmds = modInfo.Commands.Where(x =>
-						x.Preconditions.Any(y => y.GetType() == typeof(RestrictionAttribute)));
+					var matchingCmds = modInfo.Commands.Where(x => x.Preconditions.Any(y => y.GetType() == typeof(RestrictionAttribute)));
 
 					foreach (var cmd in matchingCmds)
 					{
@@ -194,8 +190,7 @@ namespace Kaguya.Discord.Commands.Reference
 		{
 			var pageBuilder = new PageBuilder().WithTitle("Kaguya Commands")
 			                                   .WithColor(KaguyaColors.Magenta)
-			                                   .WithDescription(
-				                                   $"{_links}\n\n"); // Start description ini here. Closes later.
+			                                   .WithDescription($"{_links}\n\n"); // Start description ini here. Closes later.
 
 			pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Administration);
 			pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Configuration);
@@ -212,17 +207,15 @@ namespace Kaguya.Discord.Commands.Reference
 		{
 			var pageBuilder = new PageBuilder().WithTitle("Kaguya Commands")
 			                                   .WithColor(KaguyaColors.Magenta)
-			                                   .WithDescription(
-				                                   $"{_links}\n\n"); // Start description ini here. Closes later.
+			                                   .WithDescription($"{_links}\n\n"); // Start description ini here. Closes later.
 
 			pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Fun);
 			pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Games);
 			pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Music);
 
 			// Closes code block assigned at start and adds helpful data.
-			pageBuilder.Description +=
-				$"\nUse `{server.CommandPrefix}help <command name>` for command documentation.\n" +
-				$"Example: `{server.CommandPrefix}help ban`\n\n";
+			pageBuilder.Description += $"\nUse `{server.CommandPrefix}help <command name>` for command documentation.\n" +
+			                           $"Example: `{server.CommandPrefix}help ban`\n\n";
 
 			return pageBuilder;
 		}
@@ -231,8 +224,7 @@ namespace Kaguya.Discord.Commands.Reference
 		{
 			var pageBuilder = new PageBuilder().WithTitle("Kaguya Commands")
 			                                   .WithColor(KaguyaColors.Magenta)
-			                                   .WithDescription(
-				                                   $"{_links}\n\n"); // Start description ini here. Closes later.
+			                                   .WithDescription($"{_links}\n\n"); // Start description ini here. Closes later.
 
 			pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Nsfw);
 			pageBuilder.Description += GetCommandTextForModule(server, CommandModule.Reference);
@@ -267,8 +259,7 @@ namespace Kaguya.Discord.Commands.Reference
 				return;
 			}
 
-			var match = commands.FirstOrDefault(c =>
-				c.Aliases.Any(name => name.Equals(commandName, StringComparison.OrdinalIgnoreCase)));
+			var match = commands.FirstOrDefault(c => c.Aliases.Any(name => name.Equals(commandName, StringComparison.OrdinalIgnoreCase)));
 
 			if (match == null)
 			{
@@ -361,16 +352,14 @@ namespace Kaguya.Discord.Commands.Reference
 			description ??= "No description loaded.".AsItalics();
 
 			// Formats all required precondition attributes.
-			var requiredPermissionsList = match.Module.Preconditions
-			                                   .Where(x => x.GetType() == typeof(RequireUserPermissionAttribute))
+			var requiredPermissionsList = match.Module.Preconditions.Where(x => x.GetType() == typeof(RequireUserPermissionAttribute))
 			                                   .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission)
 			                                   .ToList();
 
 			// If the command has more specific preconditions...
 			if (!match.Preconditions.Equals(match.Module.Preconditions))
 			{
-				requiredPermissionsList.AddRange(match.Preconditions
-				                                      .Where(x => x.GetType() == typeof(RequireUserPermissionAttribute))
+				requiredPermissionsList.AddRange(match.Preconditions.Where(x => x.GetType() == typeof(RequireUserPermissionAttribute))
 				                                      .Select(x => ((RequireUserPermissionAttribute) x).GuildPermission)
 				                                      .ToList());
 			}
@@ -385,14 +374,12 @@ namespace Kaguya.Discord.Commands.Reference
 
 			// Restrictions
 			string restrictions = match.Module.Preconditions.Where(x => x.GetType() == typeof(RestrictionAttribute))
-			                           .Humanize(x =>
-				                           $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
+			                           .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
 
 			if (string.IsNullOrWhiteSpace(restrictions))
 			{
 				restrictions = match.Preconditions.Where(x => x.GetType() == typeof(RestrictionAttribute))
-				                    .Humanize(x =>
-					                    $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
+				                    .Humanize(x => $"`{((RestrictionAttribute) x).Restriction.Humanize(LetterCasing.Title)}`");
 			}
 
 			// Remarks

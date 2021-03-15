@@ -31,9 +31,8 @@ namespace Kaguya.Discord.Commands.Exp
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 		private readonly ServerExperienceRepository _serverExperienceRepository;
 
-		public Leaderboard(ILogger<Leaderboard> logger, KaguyaUserRepository kaguyaUserRepository,
-			FishRepository fishRepository, KaguyaStatisticsRepository kaguyaStatisticsRepository,
-			ServerExperienceRepository serverExperienceRepository) : base(logger)
+		public Leaderboard(ILogger<Leaderboard> logger, KaguyaUserRepository kaguyaUserRepository, FishRepository fishRepository,
+			KaguyaStatisticsRepository kaguyaStatisticsRepository, ServerExperienceRepository serverExperienceRepository) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;
 			_fishRepository = fishRepository;
@@ -57,8 +56,7 @@ namespace Kaguya.Discord.Commands.Exp
 			var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
 			{
 				Description = "🤑 Wealth Leaderboard".AsBold() + "\n\n" + lbString
-			}.WithFooter(
-				$"{stats.Coins.ToShorthandFormat()} total coins owned | {percentOwnedByTop:N1}% owned by top 10");
+			}.WithFooter($"{stats.Coins.ToShorthandFormat()} total coins owned | {percentOwnedByTop:N1}% owned by top 10");
 
 			await SendEmbedAsync(embed);
 		}
@@ -71,17 +69,11 @@ namespace Kaguya.Discord.Commands.Exp
 			var stats = await _kaguyaStatisticsRepository.GetMostRecentAsync();
 
 			string lbString = await GetTopTenString(topHolders,
-				user =>
-				{
-					return Task.FromResult(
-						$"Level {user.GlobalExpLevel:N0} - {user.GlobalExp.ToShorthandFormat()} EXP");
-				});
+				user => { return Task.FromResult($"Level {user.GlobalExpLevel:N0} - {user.GlobalExp.ToShorthandFormat()} EXP"); });
 
 			var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
 			{
-				Description = $"📢 Top Chatters (Out of {stats.Users.ToShorthandFormat()} Users)".AsBold() +
-				              "\n\n" +
-				              lbString
+				Description = $"📢 Top Chatters (Out of {stats.Users.ToShorthandFormat()} Users)".AsBold() + "\n\n" + lbString
 			};
 
 			await SendEmbedAsync(embed);
@@ -103,9 +95,7 @@ namespace Kaguya.Discord.Commands.Exp
 
 			var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
 			{
-				Description = $"📢 Top Chatters (Out of {count.ToShorthandFormat()}) [{Context.Guild.Name}]".AsBold() +
-				              "\n\n" +
-				              lbString
+				Description = $"📢 Top Chatters (Out of {count.ToShorthandFormat()}) [{Context.Guild.Name}]".AsBold() + "\n\n" + lbString
 			};
 
 			await SendEmbedAsync(embed);
@@ -157,8 +147,7 @@ namespace Kaguya.Discord.Commands.Exp
 		/// <param name="collection"></param>
 		/// <param name="predicate">The data to come after the user portion of the line.</param>
 		/// <returns></returns>
-		private async Task<string> GetTopTenString<T>(IEnumerable<T> collection, Func<T, Task<string>> predicate)
-			where T : IUserSearchable
+		private async Task<string> GetTopTenString<T>(IEnumerable<T> collection, Func<T, Task<string>> predicate) where T : IUserSearchable
 		{
 			var sb = new StringBuilder();
 			int countSuccess = 0;

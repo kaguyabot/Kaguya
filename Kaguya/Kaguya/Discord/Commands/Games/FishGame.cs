@@ -26,16 +26,14 @@ namespace Kaguya.Discord.Commands.Games
 		private readonly FishRepository _fishRepository;
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 
-		public FishGame(ILogger<FishGame> logger, KaguyaUserRepository kaguyaUserRepository,
-			FishRepository fishRepository) : base(logger)
+		public FishGame(ILogger<FishGame> logger, KaguyaUserRepository kaguyaUserRepository, FishRepository fishRepository) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;
 			_fishRepository = fishRepository;
 		}
 
 		[Command]
-		[Summary("Allows you to play the fishing game! Each play costs 75 coins (50 if command " +
-		         "user is a premium subscriber).")]
+		[Summary("Allows you to play the fishing game! Each play costs 75 coins (50 if command " + "user is a premium subscriber).")]
 		public async Task FishCommand()
 		{
 			var user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
@@ -60,8 +58,7 @@ namespace Kaguya.Discord.Commands.Games
 				}
 
 				await SendBasicErrorEmbedAsync("Please wait " +
-				                               diff.Humanize(1, minUnit: TimeUnit.Millisecond, maxUnit: TimeUnit.Second)
-				                                   .AsBold() +
+				                               diff.Humanize(1, minUnit: TimeUnit.Millisecond, maxUnit: TimeUnit.Second).AsBold() +
 				                               " before fishing again.");
 
 				return;
@@ -140,8 +137,7 @@ namespace Kaguya.Discord.Commands.Games
 			int allCaught = allFish.Count;
 			int allCoins = allFish.Sum(x => x.CoinValue);
 
-			string footer =
-				$"Fish Level: {user.FishLevel:N0} | Fish Caught: {allCaught:N0} | Coins from Fishing: {allCoins:N0}";
+			string footer = $"Fish Level: {user.FishLevel:N0} | Fish Caught: {allCaught:N0} | Coins from Fishing: {allCoins:N0}";
 
 			var color = rarity switch
 			{
@@ -154,9 +150,7 @@ namespace Kaguya.Discord.Commands.Games
 				_ => KaguyaColors.Green
 			};
 
-			var embed = new KaguyaEmbedBuilder(color).WithDescription(descBuilder.ToString())
-			                                         .WithFooter(footer)
-			                                         .Build();
+			var embed = new KaguyaEmbedBuilder(color).WithDescription(descBuilder.ToString()).WithFooter(footer).Build();
 
 			await SendEmbedAsync(embed);
 		}

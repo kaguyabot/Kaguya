@@ -20,8 +20,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 	{
 		private readonly BlacklistedEntityRepository _blacklistedEntityRepository;
 
-		public Blacklist(ILogger<Blacklist> logger, BlacklistedEntityRepository blacklistedEntityRepository) :
-			base(logger)
+		public Blacklist(ILogger<Blacklist> logger, BlacklistedEntityRepository blacklistedEntityRepository) : base(logger)
 		{
 			_blacklistedEntityRepository = blacklistedEntityRepository;
 		}
@@ -63,8 +62,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 
 					await _blacklistedEntityRepository.InsertAsync(newEntity);
 
-					await SendBasicSuccessEmbedAsync(
-						$"Blacklisted entity with ID {newEntity.EntityId.ToString().AsBold()}.");
+					await SendBasicSuccessEmbedAsync($"Blacklisted entity with ID {newEntity.EntityId.ToString().AsBold()}.");
 				}
 				else
 				{

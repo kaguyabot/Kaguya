@@ -29,8 +29,7 @@ namespace Kaguya.Workers
 			{
 				await _timerService.GetChannel().Reader.WaitToReadAsync(stoppingToken);
 
-				(var when, var receiver, var payload) =
-					await _timerService.GetChannel().Reader.ReadAsync(stoppingToken);
+				(var when, var receiver, var payload) = await _timerService.GetChannel().Reader.ReadAsync(stoppingToken);
 
 				lock (_locker)
 				{

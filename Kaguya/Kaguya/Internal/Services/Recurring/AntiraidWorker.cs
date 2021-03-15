@@ -27,8 +27,7 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly IServiceProvider _provider;
 		private readonly SilentSysActions _sysActions;
 		private readonly ITimerService _timerService;
-		private readonly ConcurrentDictionary<ulong, ConcurrentQueue<(DateTimeOffset userJoinTime, ulong userId)>>
-			_userIdCache = new();
+		private readonly ConcurrentDictionary<ulong, ConcurrentQueue<(DateTimeOffset userJoinTime, ulong userId)>> _userIdCache = new();
 
 		public AntiraidWorker(ILogger<AntiraidWorker> logger, IServiceProvider provider, ITimerService timerService,
 			IAntiraidService arService, DiscordShardedClient client, SilentSysActions sysActions)
@@ -189,10 +188,9 @@ namespace Kaguya.Internal.Services.Recurring
 							ActionedUserId = data.UserId,
 							Action = null,
 							Reason = "Automatic server protection (Kaguya Anti-Raid)",
-							Expiration =
-								curConfig.PunishmentLength.HasValue
-									? DateTimeOffset.Now.Add(curConfig.PunishmentLength.Value)
-									: null,
+							Expiration = curConfig.PunishmentLength.HasValue
+								? DateTimeOffset.Now.Add(curConfig.PunishmentLength.Value)
+								: null,
 							IsHidden = false,
 							IsSystemAction = true,
 							Timestamp = DateTimeOffset.Now
@@ -200,8 +198,7 @@ namespace Kaguya.Internal.Services.Recurring
 
 						KaguyaEvents.OnAntiraidTrigger(adminAction, user);
 
-						if (curConfig.PunishmentDmEnabled &&
-						    !string.IsNullOrWhiteSpace(curConfig.AntiraidPunishmentDirectMessage))
+						if (curConfig.PunishmentDmEnabled && !string.IsNullOrWhiteSpace(curConfig.AntiraidPunishmentDirectMessage))
 						{
 							string dmString = curConfig.AntiraidPunishmentDirectMessage;
 							dmString = SerializeDmString(dmString, user, action, guild.Name);
@@ -213,9 +210,8 @@ namespace Kaguya.Internal.Services.Recurring
 							}
 							catch (Exception e)
 							{
-								_logger.LogWarning(
-									$"Failed to DM user {user.Id} that they were {ActionPastTense(action)} " +
-									$"as part of an antiraid event in guild {guild.Id}. Error: {e.Message}");
+								_logger.LogWarning($"Failed to DM user {user.Id} that they were {ActionPastTense(action)} " +
+								                   $"as part of an antiraid event in guild {guild.Id}. Error: {e.Message}");
 							}
 						}
 
@@ -257,8 +253,7 @@ namespace Kaguya.Internal.Services.Recurring
 			}
 		}
 
-		private void PruneOldCache(ConcurrentQueue<(DateTimeOffset userJoinTime, ulong userId)> element,
-			uint windowLength)
+		private void PruneOldCache(ConcurrentQueue<(DateTimeOffset userJoinTime, ulong userId)> element, uint windowLength)
 		{
 			var threshold = DateTimeOffset.Now.AddSeconds(-windowLength);
 			while (element.TryPeek(out var userJoinData) && userJoinData.userJoinTime < threshold)
@@ -270,8 +265,7 @@ namespace Kaguya.Internal.Services.Recurring
 				}
 				else
 				{
-					_logger.LogError(
-						$"Dequeue failed user id: {userJoinData.userId} user join time: {userJoinData.userJoinTime}");
+					_logger.LogError($"Dequeue failed user id: {userJoinData.userId} user join time: {userJoinData.userJoinTime}");
 
 					break;
 				}

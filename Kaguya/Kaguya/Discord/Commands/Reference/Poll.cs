@@ -29,7 +29,8 @@ namespace Kaguya.Discord.Commands.Reference
 		private readonly InteractivityService _interactivity;
 		private readonly PollRepository _pollRepository;
 
-		public Poll(ILogger<Poll> logger, CommonEmotes commonEmotes, PollRepository pollRepository, InteractivityService interactivity) : base(logger)
+		public Poll(ILogger<Poll> logger, CommonEmotes commonEmotes, PollRepository pollRepository,
+			InteractivityService interactivity) : base(logger)
 		{
 			_commonEmotes = commonEmotes;
 			_pollRepository = pollRepository;

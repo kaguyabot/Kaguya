@@ -18,8 +18,8 @@ namespace Kaguya.Database.Repositories
 		}
 
 		/// <summary>
-		/// Finds and returns a detached entity via the <see cref="Table"/>.FindAsync() method. If the
-		/// entity could not be found, null is returned.
+		///  Finds and returns a detached entity via the <see cref="Table" />.FindAsync() method. If the
+		///  entity could not be found, null is returned.
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns>The entity with the given primary key values or null if it was not found.</returns>
@@ -38,9 +38,9 @@ namespace Kaguya.Database.Repositories
 		}
 
 		/// <summary>
-		/// Safely deletes an object identified by the given primary key(s) if it exists and saves the change to the database.
+		///  Safely deletes an object identified by the given primary key(s) if it exists and saves the change to the database.
 		/// </summary>
-		/// <param name="key">A collection of primary key values used to uniquely identify the given <see cref="T"/> object.</param>
+		/// <param name="key">A collection of primary key values used to uniquely identify the given <see cref="T" /> object.</param>
 		/// <returns></returns>
 		public async Task DeleteAsync(params object[] key)
 		{
@@ -53,7 +53,7 @@ namespace Kaguya.Database.Repositories
 		}
 
 		/// <summary>
-		/// Updates the given <see cref="value"/> and saves the changes to the database.
+		///  Updates the given <see cref="value" /> and saves the changes to the database.
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
@@ -64,7 +64,7 @@ namespace Kaguya.Database.Repositories
 		}
 
 		/// <summary>
-		/// Updates all of the provided <see cref="values"/> and saves the changes to the database.
+		///  Updates all of the provided <see cref="values" /> and saves the changes to the database.
 		/// </summary>
 		/// <param name="values"></param>
 		/// <returns></returns>
@@ -75,7 +75,7 @@ namespace Kaguya.Database.Repositories
 		}
 
 		/// <summary>
-		/// Inserts the <see cref="value"/> and saves the change to the database.
+		///  Inserts the <see cref="value" /> and saves the change to the database.
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
@@ -86,8 +86,8 @@ namespace Kaguya.Database.Repositories
 		}
 
 		/// <summary>
-		/// Bulk inserts all <see cref="values"/> by calling <see cref="Table"/>.AddRange() on the collection and
-		/// saves the changes to the database.
+		///  Bulk inserts all <see cref="values" /> by calling <see cref="Table" />.AddRange() on the collection and
+		///  saves the changes to the database.
 		/// </summary>
 		/// <param name="values"></param>
 		/// <returns></returns>
@@ -98,12 +98,13 @@ namespace Kaguya.Database.Repositories
 		}
 
 		/// <summary>
-		/// Returns the entire <see cref="Table"/> as a <see cref="List"/>.
+		///  Returns the entire <see cref="Table" /> as a <see cref="List" />.
 		/// </summary>
 		/// <returns></returns>
 		public async Task<IList<T>> GetAllAsync() { return await Table.AsNoTracking().ToListAsync(); }
+
 		/// <summary>
-		/// Returns the count of all elements in the current <see cref="Table"/>.
+		///  Returns the count of all elements in the current <see cref="Table" />.
 		/// </summary>
 		/// <returns></returns>
 		public async Task<int> GetCountAsync() { return await Table.AsNoTracking().CountAsync(); }

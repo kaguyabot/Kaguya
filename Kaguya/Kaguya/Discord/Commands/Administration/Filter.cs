@@ -25,8 +25,7 @@ namespace Kaguya.Discord.Commands.Administration
 		private readonly FilteredWordRepository _fwRepo;
 		private readonly InteractivityService _interactivityService;
 
-		protected Filter(ILogger<Filter> logger, FilteredWordRepository fwRepo,
-			InteractivityService interactivityService) : base(logger)
+		protected Filter(ILogger<Filter> logger, FilteredWordRepository fwRepo, InteractivityService interactivityService) : base(logger)
 		{
 			_fwRepo = fwRepo;
 			_interactivityService = interactivityService;

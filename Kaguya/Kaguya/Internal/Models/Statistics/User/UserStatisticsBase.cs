@@ -74,8 +74,7 @@ namespace Kaguya.Internal.Models.Statistics.User
 			sb.AppendLine("Fish Exp:".AsBold() + " " + this.FishExp.ToString("N0"));
 
 			char sign = this.NetCoinsFishing >= 0 ? '+' : '-';
-			sb.AppendLine("Coins Earned:".AsBold() +
-			              $" {this.GrossCoinsFromFishing:N0} (Net: {sign}{this.NetCoinsFishing:N0})");
+			sb.AppendLine("Coins Earned:".AsBold() + $" {this.GrossCoinsFromFishing:N0} (Net: {sign}{this.NetCoinsFishing:N0})");
 
 			return sb.ToString();
 		}
@@ -115,8 +114,7 @@ namespace Kaguya.Internal.Models.Statistics.User
 			sb.AppendLine("Win %:".AsBold() +
 			              $" {(double.IsNaN(gambleStats.PercentWinGambling) ? "N/A" : (gambleStats.PercentWinGambling * 100).ToString("N0"))}");
 
-			sb.AppendLine("Winnings:".AsBold() +
-			              $" {gambleStats.TotalCoinsGambled:N0} (Net: {gambleStats.NetCoinsGambling})");
+			sb.AppendLine("Winnings:".AsBold() + $" {gambleStats.TotalCoinsGambled:N0} (Net: {gambleStats.NetCoinsGambling})");
 
 			return sb.ToString();
 		}
@@ -129,8 +127,7 @@ namespace Kaguya.Internal.Models.Statistics.User
 
 			sb.AppendLine("Favorite Command:".AsBold() + $" {_server.CommandPrefix}{commandStats.MostUsedCommand}");
 			sb.AppendLine("Commands Executed:".AsBold() + $" {commandStats.CommandsExecuted:N0}");
-			sb.AppendLine("Commands Executed (Last 24H):".AsBold() +
-			              $" {commandStats.CommandsExecutedLastTwentyFourHours:N0}");
+			sb.AppendLine("Commands Executed (Last 24H):".AsBold() + $" {commandStats.CommandsExecutedLastTwentyFourHours:N0}");
 
 			return sb.ToString();
 		}

@@ -6,8 +6,7 @@ namespace Kaguya.Discord
 {
 	public class ScopedCommandContext : ShardedCommandContext
 	{
-		public ScopedCommandContext(IServiceScope scope, DiscordShardedClient client, SocketUserMessage msg) :
-			base(client, msg)
+		public ScopedCommandContext(IServiceScope scope, DiscordShardedClient client, SocketUserMessage msg) : base(client, msg)
 		{
 			this.Scope = scope;
 		}

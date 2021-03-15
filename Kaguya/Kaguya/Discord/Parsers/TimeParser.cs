@@ -74,9 +74,6 @@ namespace Kaguya.Discord.Parsers
 			return new TimeSpan(day, hour, min, sec);
 		}
 
-		public string FormattedTimestring()
-		{
-			return _time.Humanize(3, maxUnit: TimeUnit.Day, minUnit: TimeUnit.Second);
-		}
+		public string FormattedTimestring() { return _time.Humanize(3, maxUnit: TimeUnit.Day, minUnit: TimeUnit.Second); }
 	}
 }

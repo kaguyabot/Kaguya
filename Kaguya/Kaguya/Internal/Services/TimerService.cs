@@ -27,11 +27,7 @@ namespace Kaguya.Internal.Services
 			Channel.CreateUnbounded<(DateTimeOffset when, ITimerReceiver receiver, object payload)>();
 		private readonly ILogger<TimerService> _logger;
 		public TimerService(ILogger<TimerService> logger) { _logger = logger; }
-
-		public Channel<(DateTimeOffset when, ITimerReceiver receiver, object payload)> GetChannel()
-		{
-			return _timerChannel;
-		}
+		public Channel<(DateTimeOffset when, ITimerReceiver receiver, object payload)> GetChannel() { return _timerChannel; }
 
 		public async Task<bool> TriggerAtAsync(DateTimeOffset when, ITimerReceiver receiver, object payload)
 		{

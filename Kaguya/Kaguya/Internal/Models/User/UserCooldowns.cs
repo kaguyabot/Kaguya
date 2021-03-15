@@ -13,10 +13,8 @@ namespace Kaguya.Internal.Models.User
 		public UserCooldowns(KaguyaUser user) { _user = user; }
 		public IInternalCooldown TopGgVoteCooldown =>
 			new InternalCooldown(TOP_GG_VOTE_COOLDOWN_HOURS, _user.LastUpvotedTopGg, "Top GG Voting");
-		public IInternalCooldown DailyCooldown =>
-			new InternalCooldown(DAILY_COOLDOWN_HOURS, _user.LastDailyBonus, "Daily Bonus");
-		public IInternalCooldown WeeklyCooldown =>
-			new InternalCooldown(WEEKLY_COOLDOWN_HOURS, _user.LastWeeklyBonus, "Weekly Bonus");
+		public IInternalCooldown DailyCooldown => new InternalCooldown(DAILY_COOLDOWN_HOURS, _user.LastDailyBonus, "Daily Bonus");
+		public IInternalCooldown WeeklyCooldown => new InternalCooldown(WEEKLY_COOLDOWN_HOURS, _user.LastWeeklyBonus, "Weekly Bonus");
 
 		public List<IInternalCooldown> ToList()
 		{

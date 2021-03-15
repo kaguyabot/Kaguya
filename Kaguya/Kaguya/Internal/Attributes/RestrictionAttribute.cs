@@ -15,8 +15,8 @@ namespace Kaguya.Internal.Attributes
 		public RestrictionAttribute(ModuleRestriction restriction) { this.Restriction = restriction; }
 		public ModuleRestriction Restriction { get; }
 
-		public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context,
-			CommandInfo command, IServiceProvider services)
+		public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command,
+			IServiceProvider services)
 		{
 			var kaguyaUserRepository = services.GetRequiredService<KaguyaUserRepository>();
 			var kaguyaserverRepository = services.GetRequiredService<KaguyaServerRepository>();

@@ -59,15 +59,12 @@ namespace Kaguya.Discord.Commands.Administration
 			catch (Exception e)
 			{
 				string errorString = new StringBuilder()
-				                     .AppendLine(
-					                     $"{Context.User.Mention} Failed to kick user {user.ToString().AsBold()}.")
+				                     .AppendLine($"{Context.User.Mention} Failed to kick user {user.ToString().AsBold()}.")
 				                     .AppendLine("Do I have enough permissions?".AsItalics())
 				                     .AppendLine(
 					                     "This error can also occur if the user you are trying to kick has more permissions than me."
 						                     .AsItalics())
-				                     .AppendLine(
-					                     "Ensure my role is also at the top of the role heirarchy, then try again."
-						                     .AsItalics())
+				                     .AppendLine("Ensure my role is also at the top of the role heirarchy, then try again.".AsItalics())
 				                     .Append($"Error: {e.Message.AsBold()}")
 				                     .ToString();
 

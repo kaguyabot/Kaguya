@@ -19,8 +19,7 @@ namespace Kaguya.Discord.Commands.Exp
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 		private readonly RepRepository _repRepository;
 
-		public Rep(ILogger<Rep> logger, KaguyaUserRepository kaguyaUserRepository, RepRepository repRepository) :
-			base(logger)
+		public Rep(ILogger<Rep> logger, KaguyaUserRepository kaguyaUserRepository, RepRepository repRepository) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;
 			_repRepository = repRepository;

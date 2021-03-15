@@ -39,8 +39,8 @@ namespace Kaguya.Workers
 		private readonly IServiceProvider _serviceProvider;
 
 		public DiscordWorker(DiscordShardedClient client, IOptions<AdminConfigurations> adminConfigs,
-			IOptions<DiscordConfigurations> discordConfigs, ILogger<DiscordWorker> logger,
-			CommandService commandService, IServiceProvider serviceProvider, KaguyaEvents kaguyaEvents)
+			IOptions<DiscordConfigurations> discordConfigs, ILogger<DiscordWorker> logger, CommandService commandService,
+			IServiceProvider serviceProvider, KaguyaEvents kaguyaEvents)
 		{
 			_client = client;
 			_adminConfigs = adminConfigs;
@@ -119,8 +119,7 @@ namespace Kaguya.Workers
 
 			_client.ShardLatencyUpdated += (oldLatency, newLatency, client) =>
 			{
-				_logger.Log(LogLevel.Trace,
-					$"Shard {client.ShardId} latency has updated. [Old: {oldLatency}ms | New: {newLatency}ms]");
+				_logger.Log(LogLevel.Trace, $"Shard {client.ShardId} latency has updated. [Old: {oldLatency}ms | New: {newLatency}ms]");
 
 				return Task.CompletedTask;
 			};
@@ -194,24 +193,21 @@ namespace Kaguya.Workers
 
 			_client.MessageReceived += msg =>
 			{
-				_logger.Log(LogLevel.Trace,
-					$"Message Received [Author: {msg.Author} | ID: {msg.Id} | Bot: {msg.Author.IsBot}]");
+				_logger.Log(LogLevel.Trace, $"Message Received [Author: {msg.Author} | ID: {msg.Id} | Bot: {msg.Author.IsBot}]");
 
 				return Task.CompletedTask;
 			};
 
 			_client.RoleCreated += role =>
 			{
-				_logger.Log(LogLevel.Debug,
-					$"Role Created [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]");
+				_logger.Log(LogLevel.Debug, $"Role Created [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]");
 
 				return Task.CompletedTask;
 			};
 
 			_client.RoleDeleted += role =>
 			{
-				_logger.Log(LogLevel.Debug,
-					$"Role Deleted [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]");
+				_logger.Log(LogLevel.Debug, $"Role Deleted [Name: {role.Name} | Role ID: {role.Id} | Guild: {role.Guild}]");
 
 				return Task.CompletedTask;
 			};
@@ -233,16 +229,14 @@ namespace Kaguya.Workers
 
 			_client.UserUnbanned += (user, guild) =>
 			{
-				_logger.Log(LogLevel.Debug,
-					$"User Un-Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]");
+				_logger.Log(LogLevel.Debug, $"User Un-Banned [User: {user} | User ID: {user.Id} | Guild: {guild.Name}]");
 
 				return Task.CompletedTask;
 			};
 
 			_client.UserJoined += user =>
 			{
-				_logger.Log(LogLevel.Debug,
-					$"User Joined Guild [User: {user} | User ID: {user.Id} | Guild: {user.Guild}]");
+				_logger.Log(LogLevel.Debug, $"User Joined Guild [User: {user} | User ID: {user.Id} | Guild: {user.Guild}]");
 
 				return Task.CompletedTask;
 			};
@@ -264,8 +258,7 @@ namespace Kaguya.Workers
 			{
 				if (logMessage.Exception is CommandException cmdEx)
 				{
-					_logger.Log(LogLevel.Error, cmdEx,
-						$"Exception encountered when executing command. Message: {logMessage.Message}");
+					_logger.Log(LogLevel.Error, cmdEx, $"Exception encountered when executing command. Message: {logMessage.Message}");
 				}
 
 				return Task.CompletedTask;
@@ -300,8 +293,7 @@ namespace Kaguya.Workers
 			var scope = _serviceProvider.CreateScope();
 			var dbContext = scope.ServiceProvider.GetRequiredService<KaguyaDbContext>();
 
-			var server = await dbContext.KaguyaServers.AsQueryable()
-			                            .FirstOrDefaultAsync(s => s.ServerId == guildChannel.Guild.Id);
+			var server = await dbContext.KaguyaServers.AsQueryable().FirstOrDefaultAsync(s => s.ServerId == guildChannel.Guild.Id);
 
 			if (server == null)
 			{
@@ -313,8 +305,7 @@ namespace Kaguya.Workers
 				await dbContext.SaveChangesAsync();
 			}
 
-			var user = await dbContext.KaguyaUsers.AsQueryable()
-			                          .FirstOrDefaultAsync(u => u.UserId == message.Author.Id);
+			var user = await dbContext.KaguyaUsers.AsQueryable().FirstOrDefaultAsync(u => u.UserId == message.Author.Id);
 
 			if (user == null)
 			{
@@ -356,8 +347,8 @@ namespace Kaguya.Workers
 			// We only want to attempt to add EXP if all shards are ready.
 			if (_client.AllShardsReady())
 			{
-				var expService = new ExperienceService(expLogger, (ITextChannel) commandCtx.Channel, user, server,
-					commandCtx.User, commandCtx.Guild.Id, serverExpRepository, userRepository);
+				var expService = new ExperienceService(expLogger, (ITextChannel) commandCtx.Channel, user, server, commandCtx.User,
+					commandCtx.Guild.Id, serverExpRepository, userRepository);
 
 				await expService.TryAddGlobalExperienceAsync();
 				await expService.TryAddServerExperienceAsync();
@@ -366,9 +357,7 @@ namespace Kaguya.Workers
 			// If the channel is blacklisted and the user isn't an Admin, return.
 			if (!commandCtx.Guild.GetUser(commandCtx.User.Id).GuildPermissions.Administrator &&
 			    await dbContext.BlacklistedEntities.AsQueryable()
-			                   .AnyAsync(x =>
-				                   x.EntityId == commandCtx.Channel.Id &&
-				                   x.EntityType == BlacklistedEntityType.Channel))
+			                   .AnyAsync(x => x.EntityId == commandCtx.Channel.Id && x.EntityType == BlacklistedEntityType.Channel))
 			{
 				scope.Dispose();
 
@@ -378,8 +367,7 @@ namespace Kaguya.Workers
 			// Parsing of osu! beatmaps.
 			if (server.AutomaticOsuLinkParsingEnabled)
 			{
-				if (Regex.IsMatch(msg.Content,
-					    @"https?://osu\.ppy\.sh/beatmapsets/[0-9]+#(?:osu|taiko|mania|fruits)/[0-9]+",
+				if (Regex.IsMatch(msg.Content, @"https?://osu\.ppy\.sh/beatmapsets/[0-9]+#(?:osu|taiko|mania|fruits)/[0-9]+",
 					    RegexOptions.IgnoreCase) ||
 				    Regex.IsMatch(msg.Content, @"https?://osu\.ppy\.sh/b/[0-9]+"))
 				{
@@ -391,8 +379,7 @@ namespace Kaguya.Workers
 			int argPos = 0;
 
 			if (message.Author.IsBot ||
-			    !(message.HasStringPrefix(server.CommandPrefix, ref argPos) ||
-			      message.HasMentionPrefix(_client.CurrentUser, ref argPos)))
+			    !(message.HasStringPrefix(server.CommandPrefix, ref argPos) || message.HasMentionPrefix(_client.CurrentUser, ref argPos)))
 			{
 				scope.Dispose();
 
@@ -426,8 +413,7 @@ namespace Kaguya.Workers
 				foreach (var filter in filters.Where(filter => FilterMatch(message.Content, filter.Word)))
 				{
 					await ctx.Channel.DeleteMessageAsync(message);
-					_logger.Log(LogLevel.Information,
-						$"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
+					_logger.Log(LogLevel.Information, $"Filtered phrase detected: [Guild: {server.ServerId} | Phrase: {filter.Word}]");
 
 					KaguyaEvents.OnFilteredWordDetectedTrigger(new FilteredWordEventData
 					{
@@ -442,8 +428,7 @@ namespace Kaguya.Workers
 			}
 			catch (Exception e)
 			{
-				_logger.LogCritical(e,
-					$"Error occurred when processing filtered phrase detection for guild {server.ServerId}.");
+				_logger.LogCritical(e, $"Error occurred when processing filtered phrase detection for guild {server.ServerId}.");
 			}
 
 			return false;
@@ -551,8 +536,7 @@ namespace Kaguya.Workers
 						try
 						{
 							string cmdString = $"{server.CommandPrefix}{command.Value.GetFullCommandName()}".AsBold();
-							string helpCmdString = $"{server.CommandPrefix}help {command.Value.GetFullCommandName()}"
-								.AsBold();
+							string helpCmdString = $"{server.CommandPrefix}help {command.Value.GetFullCommandName()}".AsBold();
 
 							var embed = new KaguyaEmbedBuilder(KaguyaColors.Red).WithDescription(
 								                                                    $"{ctx.User.Mention} ⛔ Command Error: {cmdString}.\n" +
@@ -569,14 +553,13 @@ namespace Kaguya.Workers
 							if (httpException.DiscordCode.HasValue && httpException.DiscordCode.Value == 50013)
 							{
 								var owner = await ctx.Guild.GetOwnerAsync();
-								var embed = new KaguyaEmbedBuilder(KaguyaColors.Red)
-								            .WithTitle("Kaguya Auto-Ejection: Missing Permissions")
-								            .WithDescription("Urgent Notice:\n\n".AsBold() +
-								                             "I was unable to send a command response into the text channel " +
-								                             $"#{ctx.Channel.Name.AsBold()}! I have auto-ejected myself from this server " +
-								                             "to prevent further errors. If you wish to reinvite me, you may do " +
-								                             $"so [here]({Global.InviteUrl}).")
-								            .Build();
+								var embed = new KaguyaEmbedBuilder(KaguyaColors.Red).WithTitle("Kaguya Auto-Ejection: Missing Permissions")
+								                                                    .WithDescription("Urgent Notice:\n\n".AsBold() +
+								                                                                     "I was unable to send a command response into the text channel " +
+								                                                                     $"#{ctx.Channel.Name.AsBold()}! I have auto-ejected myself from this server " +
+								                                                                     "to prevent further errors. If you wish to reinvite me, you may do " +
+								                                                                     $"so [here]({Global.InviteUrl}).")
+								                                                    .Build();
 
 								bool ownerNotified = false;
 
@@ -587,8 +570,7 @@ namespace Kaguya.Workers
 								}
 								catch (Exception)
 								{
-									_logger.LogWarning(
-										$"Failed to notify server owner with id {owner.Id} of auto-ejection.");
+									_logger.LogWarning($"Failed to notify server owner with id {owner.Id} of auto-ejection.");
 								}
 
 								await ctx.Guild.LeaveAsync();

@@ -106,9 +106,8 @@ namespace Kaguya.Discord.Commands.Administration
 				}
 				catch (Exception e)
 				{
-					await SendBasicErrorEmbedAsync(
-						$"An error occurred when trying to remove {user.Mention}'s shadowban role:\n" +
-						$"Error message: {e.Message.AsBold()}");
+					await SendBasicErrorEmbedAsync($"An error occurred when trying to remove {user.Mention}'s shadowban role:\n" +
+					                               $"Error message: {e.Message.AsBold()}");
 
 					return;
 				}
@@ -133,16 +132,14 @@ namespace Kaguya.Discord.Commands.Administration
 				return;
 			}
 
-			var embed =
-				GetBasicSuccessEmbedBuilder($"Synced permissions for the shadowban role {shadowbanRole.Mention}.")
-					.WithFields(embedFields)
-					.Build();
+			var embed = GetBasicSuccessEmbedBuilder($"Synced permissions for the shadowban role {shadowbanRole.Mention}.")
+			            .WithFields(embedFields)
+			            .Build();
 
 			await SendEmbedAsync(embed);
 		}
 
-		private async Task ShadowbanUserAsync(SocketGuildUser user, DateTimeOffset? expiration, string reason,
-			KaguyaServer server)
+		private async Task ShadowbanUserAsync(SocketGuildUser user, DateTimeOffset? expiration, string reason, KaguyaServer server)
 		{
 			var adminAction = new AdminAction
 			{
@@ -226,8 +223,7 @@ namespace Kaguya.Discord.Commands.Administration
 
 			if (!permanentShadowbans)
 			{
-				currentUserShadowbans = currentUserShadowbans.OrderByDescending(x => x.Expiration ?? DateTime.MinValue)
-				                                             .ToList();
+				currentUserShadowbans = currentUserShadowbans.OrderByDescending(x => x.Expiration ?? DateTime.MinValue).ToList();
 			}
 
 			var longestShadowban = permanentShadowbans
@@ -239,10 +235,9 @@ namespace Kaguya.Discord.Commands.Administration
 				return;
 			}
 
-			string oldShadowbanDurationStr =
-				(permanentShadowbans ? "never".AsBold() : longestShadowban.Expiration?.Humanize())
-				.Humanize(LetterCasing.Sentence)
-				.AsBold();
+			string oldShadowbanDurationStr = (permanentShadowbans ? "never".AsBold() : longestShadowban.Expiration?.Humanize())
+			                                 .Humanize(LetterCasing.Sentence)
+			                                 .AsBold();
 
 			string newShadowbanDurationStr = (!expiration.HasValue
 				? "permanent"
@@ -254,25 +249,22 @@ namespace Kaguya.Discord.Commands.Administration
 
 			var overwriteEmbed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
 			{
-				Description =
-					"This user is already shadowbanned. Would you like to overwrite their current shadowban? Details of " +
-					"the current shadowbans are described below:\n" +
-					$"- Expiration: [current: {oldShadowbanDurationStr} | new: {newShadowbanDurationStr}]\n" +
-					$"- Reason: {reasonStr}\n" +
-					"- Moderator: " +
-					(oldMod?.Mention ?? "Not found".AsItalics()) +
-					"\n\n" +
-					"Response will expire in 60 seconds, defaulting to ✅.".AsItalics() +
-					"\n" +
-					"Note: Overwriting does not erase shadowban history.".AsItalics() +
-					"\n\n" +
-					"✅ = Replace old duration with new. (default)\n" +
-					"❌ = Don't replace old. User will be unshadowbanned at latest possible time."
+				Description = "This user is already shadowbanned. Would you like to overwrite their current shadowban? Details of " +
+				              "the current shadowbans are described below:\n" +
+				              $"- Expiration: [current: {oldShadowbanDurationStr} | new: {newShadowbanDurationStr}]\n" +
+				              $"- Reason: {reasonStr}\n" +
+				              "- Moderator: " +
+				              (oldMod?.Mention ?? "Not found".AsItalics()) +
+				              "\n\n" +
+				              "Response will expire in 60 seconds, defaulting to ✅.".AsItalics() +
+				              "\n" +
+				              "Note: Overwriting does not erase shadowban history.".AsItalics() +
+				              "\n\n" +
+				              "✅ = Replace old duration with new. (default)\n" +
+				              "❌ = Don't replace old. User will be unshadowbanned at latest possible time."
 			};
 
-			var result =
-				await _interactivityService.SendConfirmationAsync(overwriteEmbed, Context.Channel,
-					TimeSpan.FromSeconds(60));
+			var result = await _interactivityService.SendConfirmationAsync(overwriteEmbed, Context.Channel, TimeSpan.FromSeconds(60));
 
 			// If the user wants to overwrite...
 			if (result.Value)
@@ -280,8 +272,7 @@ namespace Kaguya.Discord.Commands.Administration
 				// We force expire as we want to keep the shadowban reason history.
 				// Forcing expiration ensures it won't be actioned on by any background services.
 				await _adminActionRepository.ForceExpireRangeAsync(currentUserShadowbans);
-				await SendBasicSuccessEmbedAsync(
-					"Okay, I'll replace the old shadowban duration with the one you just provided.");
+				await SendBasicSuccessEmbedAsync("Okay, I'll replace the old shadowban duration with the one you just provided.");
 			}
 			else
 			{
@@ -311,11 +302,9 @@ namespace Kaguya.Discord.Commands.Administration
 
 		private async Task<IRole> CreateShadowbanRoleAsync()
 		{
-			_logger.LogDebug(
-				$"Shadowban role created in guild {Context.Guild.Id}. Guild roles: {Context.Guild.Roles.Humanize()}");
+			_logger.LogDebug($"Shadowban role created in guild {Context.Guild.Id}. Guild roles: {Context.Guild.Roles.Humanize()}");
 
-			return await Context.Guild.CreateRoleAsync(ROLE_NAME, GuildPermissions.None, KaguyaColors.Default, false,
-				false);
+			return await Context.Guild.CreateRoleAsync(ROLE_NAME, GuildPermissions.None, KaguyaColors.Default, false, false);
 		}
 
 		private async Task<List<EmbedFieldBuilder>> SetShadowbanPermissionsAsync(IRole role)
@@ -430,8 +419,7 @@ namespace Kaguya.Discord.Commands.Administration
 			return await _adminActionRepository.GetAllUnexpiredAsync(userId, serverId, AdminAction.ShadowbanAction);
 		}
 
-		private Embed GetFinalEmbed(SocketGuildUser target, DateTimeOffset? expiration, string reason,
-			List<EmbedFieldBuilder> fields)
+		private Embed GetFinalEmbed(SocketGuildUser target, DateTimeOffset? expiration, string reason, List<EmbedFieldBuilder> fields)
 		{
 			string durationStr = expiration.HasValue
 				? $" for {(expiration.Value - DateTimeOffset.Now).HumanizeTraditionalReadable().AsBold()}"
@@ -440,8 +428,7 @@ namespace Kaguya.Discord.Commands.Administration
 			string reasonStr = reason == null ? "<No reason provided>".AsBold() : reason.AsBold();
 
 			return new KaguyaEmbedBuilder(KaguyaColors.Purple)
-			       .WithDescription($"{Context.User.Mention} Shadowbanned user {target.Mention}{durationStr}." +
-			                        $"\nReason: {reasonStr}")
+			       .WithDescription($"{Context.User.Mention} Shadowbanned user {target.Mention}{durationStr}." + $"\nReason: {reasonStr}")
 			       .WithFooter("To unshadowban this user, use the shadowban -u command.")
 			       .WithFields(fields)
 			       .Build();

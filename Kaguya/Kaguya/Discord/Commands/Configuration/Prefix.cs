@@ -22,9 +22,8 @@ namespace Kaguya.Discord.Commands.Configuration
 		}
 
 		[Command]
-		[Summary(
-			"Changes the command prefix for this server. Maximum length is 5 characters, and may not contain spaces. " +
-			"Remember, prefixes are case sensitive phrases.")]
+		[Summary("Changes the command prefix for this server. Maximum length is 5 characters, and may not contain spaces. " +
+		         "Remember, prefixes are case sensitive phrases.")]
 		[Remarks("<prefix>")]
 		public async Task PrefixCommand(string prefix)
 		{
@@ -47,16 +46,14 @@ namespace Kaguya.Discord.Commands.Configuration
 
 			if (prefix.Length > 5)
 			{
-				await SendBasicErrorEmbedAsync(
-					"The prefix you provided is longer than the maximum length of 5 characters.");
+				await SendBasicErrorEmbedAsync("The prefix you provided is longer than the maximum length of 5 characters.");
 
 				return;
 			}
 
 			if (string.IsNullOrWhiteSpace(prefix))
 			{
-				await SendBasicErrorEmbedAsync(
-					"The prefix you provided is invalid. Please try again with a new prefix.");
+				await SendBasicErrorEmbedAsync("The prefix you provided is invalid. Please try again with a new prefix.");
 
 				return;
 			}
@@ -64,12 +61,12 @@ namespace Kaguya.Discord.Commands.Configuration
 			server.CommandPrefix = prefix;
 			await _kaguyaServerRepository.UpdateAsync(server);
 
-			var embed = GetBasicSuccessEmbedBuilder("Successfully changed this server's command prefix to " +
-			                                        prefix.AsCodeBlockSingleLine())
-				.WithFooter(new EmbedFooterBuilder
-				{
-					Text = "If you forget the prefix, " + "execute \"@Kaguya prefix -v\" to view the current prefix."
-				});
+			var embed =
+				GetBasicSuccessEmbedBuilder("Successfully changed this server's command prefix to " + prefix.AsCodeBlockSingleLine())
+					.WithFooter(new EmbedFooterBuilder
+					{
+						Text = "If you forget the prefix, " + "execute \"@Kaguya prefix -v\" to view the current prefix."
+					});
 
 			await SendEmbedAsync(embed);
 		}
@@ -84,17 +81,15 @@ namespace Kaguya.Discord.Commands.Configuration
 
 			if (string.IsNullOrWhiteSpace(commandPrefix))
 			{
-				await SendBasicErrorEmbedAsync(
-					"The command prefix for this server is empty or is set to white-space only characters. " +
-					"Please reset the prefix using the " +
-					"prefix".AsCodeBlockSingleLine() +
-					" command.");
+				await SendBasicErrorEmbedAsync("The command prefix for this server is empty or is set to white-space only characters. " +
+				                               "Please reset the prefix using the " +
+				                               "prefix".AsCodeBlockSingleLine() +
+				                               " command.");
 
 				return;
 			}
 
-			await SendBasicEmbedAsync("The current prefix for this server is " + commandPrefix.AsCodeBlockSingleLine(),
-				KaguyaColors.Blue);
+			await SendBasicEmbedAsync("The current prefix for this server is " + commandPrefix.AsCodeBlockSingleLine(), KaguyaColors.Blue);
 		}
 	}
 }

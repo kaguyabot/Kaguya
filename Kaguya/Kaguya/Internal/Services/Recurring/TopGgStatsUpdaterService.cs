@@ -52,9 +52,8 @@ namespace Kaguya.Internal.Services.Recurring
 
 			if (_discordBotListApi == null)
 			{
-				_logger.LogWarning(
-					"Could not create a successfull connection to top.gg. Statistics will not be posted. " +
-					"This warning can be safely ignored by developer contributors");
+				_logger.LogWarning("Could not create a successfull connection to top.gg. Statistics will not be posted. " +
+				                   "This warning can be safely ignored by developer contributors");
 
 				return;
 			}
@@ -79,8 +78,7 @@ namespace Kaguya.Internal.Services.Recurring
 					int guildCount = curStats.ConnectedServers;
 					int shardCount = curStats.Shards;
 
-					await dblBot.UpdateStatsAsync(guildCount, shardCount,
-						_client.Shards.Select(x => x.ShardId).ToArray());
+					await dblBot.UpdateStatsAsync(guildCount, shardCount, _client.Shards.Select(x => x.ShardId).ToArray());
 
 					_logger.LogInformation($"top.gg stats updated: {guildCount} servers | {shardCount} shards");
 				}
@@ -93,10 +91,7 @@ namespace Kaguya.Internal.Services.Recurring
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			if (stoppingToken.IsCancellationRequested)
-			{
-				return;
-			}
+			if (stoppingToken.IsCancellationRequested) {}
 
 			//await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
 		}

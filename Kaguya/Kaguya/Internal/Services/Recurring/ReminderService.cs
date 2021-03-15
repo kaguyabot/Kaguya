@@ -22,8 +22,8 @@ namespace Kaguya.Internal.Services.Recurring
 		private readonly IServiceProvider _serviceProvider;
 		private readonly ITimerService _timerService;
 
-		public ReminderService(ILogger<ReminderService> logger, IServiceProvider serviceProvider,
-			ITimerService timerService, DiscordShardedClient client)
+		public ReminderService(ILogger<ReminderService> logger, IServiceProvider serviceProvider, ITimerService timerService,
+			DiscordShardedClient client)
 		{
 			_logger = logger;
 			_serviceProvider = serviceProvider;
@@ -84,8 +84,7 @@ namespace Kaguya.Internal.Services.Recurring
 					catch (Exception e)
 					{
 						_logger.LogWarning(e,
-							$"Failed to message user {reminder.UserId} their reminder notification. " +
-							$"Remind Id: {reminder.Id}");
+							$"Failed to message user {reminder.UserId} their reminder notification. " + $"Remind Id: {reminder.Id}");
 					}
 					finally
 					{

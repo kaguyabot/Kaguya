@@ -101,8 +101,7 @@ namespace Kaguya.Discord.Commands.Configuration
 		}
 
 		[Command("-reset")]
-		[Summary("Resets a logtype back to it's default state (disabled). Pass in \"all\" as the log type " +
-		         "to reset all log types.")]
+		[Summary("Resets a logtype back to it's default state (disabled). Pass in \"all\" as the log type " + "to reset all log types.")]
 		[Remarks("<log type>")]
 		public async Task LogSetCommand(string logType) { await ModifyLogConfigAsync(logType, null, true); }
 
@@ -114,8 +113,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
 				if (textChannel == null)
 				{
-					await SendBasicErrorEmbedAsync(
-						"Invalid text channel. Channel could not be found or does not exist.");
+					await SendBasicErrorEmbedAsync("Invalid text channel. Channel could not be found or does not exist.");
 
 					return;
 				}
@@ -134,9 +132,8 @@ namespace Kaguya.Discord.Commands.Configuration
 
 			if (!properties.Any())
 			{
-				await SendBasicErrorEmbedAsync(
-					"An unexpected error occurred. Properties for type LogConfiguration could not be found. " +
-					"Please contact the developer.");
+				await SendBasicErrorEmbedAsync("An unexpected error occurred. Properties for type LogConfiguration could not be found. " +
+				                               "Please contact the developer.");
 
 				return;
 			}
@@ -144,8 +141,7 @@ namespace Kaguya.Discord.Commands.Configuration
 			if (!all)
 			{
 				string[] validLogtypes = properties.Select(x => x.Name).ToArray();
-				string exactMatch =
-					validLogtypes.FirstOrDefault(x => x.Equals(logType, StringComparison.OrdinalIgnoreCase));
+				string exactMatch = validLogtypes.FirstOrDefault(x => x.Equals(logType, StringComparison.OrdinalIgnoreCase));
 
 				if (string.IsNullOrWhiteSpace(exactMatch))
 				{
@@ -155,8 +151,7 @@ namespace Kaguya.Discord.Commands.Configuration
 					string[] likelyMatches = LikelyMatches(logType, validLogtypes);
 					if (likelyMatches.Any())
 					{
-						finalSb.Append(
-							$" Did you mean:\n\n{likelyMatches.Humanize(x => x.AsBold()).Replace("and", "or")}?");
+						finalSb.Append($" Did you mean:\n\n{likelyMatches.Humanize(x => x.AsBold()).Replace("and", "or")}?");
 					}
 
 					await SendBasicErrorEmbedAsync(finalSb.ToString());
@@ -164,14 +159,12 @@ namespace Kaguya.Discord.Commands.Configuration
 					return;
 				}
 
-				var propMatch =
-					properties.FirstOrDefault(x => x.Name.Equals(exactMatch, StringComparison.OrdinalIgnoreCase));
+				var propMatch = properties.FirstOrDefault(x => x.Name.Equals(exactMatch, StringComparison.OrdinalIgnoreCase));
 
 				if (propMatch == null)
 				{
-					await SendBasicErrorEmbedAsync(
-						"An unexpected error occurred. Property could not be found for exact match. " +
-						"Please contact the developer.");
+					await SendBasicErrorEmbedAsync("An unexpected error occurred. Property could not be found for exact match. " +
+					                               "Please contact the developer.");
 
 					return;
 				}

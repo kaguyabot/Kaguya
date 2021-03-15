@@ -16,9 +16,9 @@ namespace Kaguya.Discord.Overrides
 	/// <typeparam name="TValue">The type of the values to select from</typeparam>
 	public sealed class KaguyaReactionSelection<TValue> : BaseReactionSelection<TValue>
 	{
-		public KaguyaReactionSelection(IReadOnlyDictionary<IEmote, TValue> selectables,
-			IReadOnlyCollection<SocketUser> users, Page selectionPage, Page cancelledPage, Page timeoutedPage,
-			bool allowCancel, IEmote cancelEmote, DeletionOptions deletion) : base(users, deletion)
+		public KaguyaReactionSelection(IReadOnlyDictionary<IEmote, TValue> selectables, IReadOnlyCollection<SocketUser> users,
+			Page selectionPage, Page cancelledPage, Page timeoutedPage, bool allowCancel,
+			IEmote cancelEmote, DeletionOptions deletion) : base(users, deletion)
 		{
 			this.Selectables = selectables;
 			this.SelectionPage = selectionPage;
@@ -56,8 +56,7 @@ namespace Kaguya.Discord.Overrides
 
 		protected override bool ShouldProcess(SocketReaction reaction)
 		{
-			return (this.AllowCancel && reaction.Emote.Equals(this.CancelEmote)) ||
-			       this.Selectables.ContainsKey(reaction.Emote);
+			return (this.AllowCancel && reaction.Emote.Equals(this.CancelEmote)) || this.Selectables.ContainsKey(reaction.Emote);
 		}
 
 		protected override Optional<TValue> ParseValue(SocketReaction reaction)

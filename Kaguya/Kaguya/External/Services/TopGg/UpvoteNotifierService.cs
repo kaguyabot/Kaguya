@@ -20,8 +20,7 @@ namespace Kaguya.External.Services.TopGg
 		private readonly IServiceProvider _serviceProvider;
 		private Task _runner;
 
-		public UpvoteNotifierService(ILogger<UpvoteNotifierService> logger, IServiceProvider serviceProvider,
-			DiscordShardedClient client)
+		public UpvoteNotifierService(ILogger<UpvoteNotifierService> logger, IServiceProvider serviceProvider, DiscordShardedClient client)
 		{
 			_logger = logger;
 			_serviceProvider = serviceProvider;
@@ -67,8 +66,7 @@ namespace Kaguya.External.Services.TopGg
 						{
 							var dmCh = await socketUser.GetOrCreateDMChannelAsync();
 
-							string weekendStr = "Because you voted on the weekend, you have been given " +
-							                    "double coins and double exp!";
+							string weekendStr = "Because you voted on the weekend, you have been given " + "double coins and double exp!";
 
 							var embed = new KaguyaEmbedBuilder(KaguyaColors.IceBlue)
 							{
@@ -85,8 +83,7 @@ namespace Kaguya.External.Services.TopGg
 							catch (Exception e)
 							{
 								_logger.LogDebug(e,
-									$"Failed to DM user {user.UserId} with their " +
-									"Top.GG authorized vote notification.");
+									$"Failed to DM user {user.UserId} with their " + "Top.GG authorized vote notification.");
 							}
 						}
 
@@ -94,19 +91,15 @@ namespace Kaguya.External.Services.TopGg
 						{
 							// todo: Move debug logs into the repositories themselves.
 							await kaguyaUserRepository.UpdateAsync(user);
-							_logger.LogDebug(
-								$"User {user.UserId} has successfully upvoted and been rewarded on top.gg. " +
-								"Object updated in database.");
+							_logger.LogDebug($"User {user.UserId} has successfully upvoted and been rewarded on top.gg. " +
+							                 "Object updated in database.");
 
 							await upvoteRepository.InsertAsync(vote);
-							_logger.LogDebug(
-								$"Upvote object with ID {vote.Id} has successfully been inserted into the database.");
+							_logger.LogDebug($"Upvote object with ID {vote.Id} has successfully been inserted into the database.");
 						}
 						catch (Exception e)
 						{
-							_logger.LogError(e,
-								"Failed to insert authorized Top.GG webhook into database " +
-								$"for user {user.UserId}.");
+							_logger.LogError(e, "Failed to insert authorized Top.GG webhook into database " + $"for user {user.UserId}.");
 						}
 					}
 				}

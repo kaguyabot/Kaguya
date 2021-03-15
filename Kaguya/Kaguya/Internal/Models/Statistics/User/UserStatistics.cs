@@ -16,8 +16,7 @@ namespace Kaguya.Internal.Models.Statistics.User
 		private readonly IServiceProvider _serviceProvider;
 		private readonly KaguyaUser _user;
 
-		public UserStatistics(KaguyaUser user, KaguyaServer server, IServiceProvider serviceProvider) : base(user,
-			server)
+		public UserStatistics(KaguyaUser user, KaguyaServer server, IServiceProvider serviceProvider) : base(user, server)
 		{
 			_user = user;
 			_serviceProvider = serviceProvider;
@@ -46,19 +45,14 @@ namespace Kaguya.Internal.Models.Statistics.User
 				this.RepGiven = repRepository.GetCountRepGivenAsync(user.UserId).GetAwaiter().GetResult();
 				this.RepReceived = repRepository.GetCountRepReceivedAsync(user.UserId).GetAwaiter().GetResult();
 
-				this.CommandsExecuted = commandHistoryRepository.GetSuccessfulCountAsync(user.UserId)
-				                                                .GetAwaiter()
-				                                                .GetResult();
+				this.CommandsExecuted = commandHistoryRepository.GetSuccessfulCountAsync(user.UserId).GetAwaiter().GetResult();
 
 				this.CommandsExecutedLastTwentyFourHours = commandHistoryRepository
-				                                           .GetRecentSuccessfulCountAsync(user.UserId,
-					                                           TimeSpan.FromHours(24))
+				                                           .GetRecentSuccessfulCountAsync(user.UserId, TimeSpan.FromHours(24))
 				                                           .GetAwaiter()
 				                                           .GetResult();
 
-				this.MostUsedCommand = commandHistoryRepository.GetFavoriteCommandAsync(user.UserId)
-				                                               .GetAwaiter()
-				                                               .GetResult();
+				this.MostUsedCommand = commandHistoryRepository.GetFavoriteCommandAsync(user.UserId).GetAwaiter().GetResult();
 			}
 		}
 

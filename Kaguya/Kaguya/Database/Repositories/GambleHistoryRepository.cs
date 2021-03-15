@@ -30,10 +30,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<GambleHistory> GetMostRecentForUserAsync(ulong userId)
 		{
-			return await Table.AsNoTracking()
-			                  .Where(x => x.UserId == userId)
-			                  .OrderByDescending(x => x.Timestamp)
-			                  .FirstOrDefaultAsync();
+			return await Table.AsNoTracking().Where(x => x.UserId == userId).OrderByDescending(x => x.Timestamp).FirstOrDefaultAsync();
 		}
 
 		public async Task<GambleHistory> GetBiggestLossAsync(ulong userId)
@@ -58,25 +55,10 @@ namespace Kaguya.Database.Repositories
 			await DbContext.SaveChangesAsync();
 		}
 
-		public async Task<int> TotalGambleWins()
-		{
-			return await Table.AsNoTracking().Where(x => x.IsWinner).CountAsync();
-		}
-
-		public async Task<int> TotalGambleLosses()
-		{
-			return await Table.AsNoTracking().Where(x => !x.IsWinner).CountAsync();
-		}
-
-		public async Task<long> TotalGambleWinsCoins()
-		{
-			return await Table.AsNoTracking().SumAsync(x => x.AmountRewarded);
-		}
-
-		public async Task<long> TotalGambleLossesCoins()
-		{
-			return await Table.AsNoTracking().SumAsync(x => x.AmountBet);
-		}
+		public async Task<int> TotalGambleWins() { return await Table.AsNoTracking().Where(x => x.IsWinner).CountAsync(); }
+		public async Task<int> TotalGambleLosses() { return await Table.AsNoTracking().Where(x => !x.IsWinner).CountAsync(); }
+		public async Task<long> TotalGambleWinsCoins() { return await Table.AsNoTracking().SumAsync(x => x.AmountRewarded); }
+		public async Task<long> TotalGambleLossesCoins() { return await Table.AsNoTracking().SumAsync(x => x.AmountBet); }
 
 		[Obsolete("Use the GetMostRecentForUserAsync method for this.", true)]
 #pragma warning disable 108,114

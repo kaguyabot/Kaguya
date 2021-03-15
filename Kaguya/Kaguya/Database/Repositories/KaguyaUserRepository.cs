@@ -65,9 +65,8 @@ namespace Kaguya.Database.Repositories
 		{
 			var match = await GetOrCreateAsync(id);
 
-			return (await DbContext.KaguyaUserExperienceRanks.AsNoTracking()
-			                       .Where(x => x.UserId == match.UserId)
-			                       .FirstOrDefaultAsync()).Rank;
+			return (await DbContext.KaguyaUserExperienceRanks.AsNoTracking().Where(x => x.UserId == match.UserId).FirstOrDefaultAsync())
+				.Rank;
 		}
 
 		public async Task<long> CountCoinsAsync()
@@ -86,25 +85,18 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<IList<KaguyaUser>> GetTopExpHoldersAsync(int count = 10)
 		{
-			return await DbContext.KaguyaUsers.AsNoTracking()
-			                      .OrderByDescending(x => x.GlobalExp)
-			                      .Take(count)
-			                      .ToListAsync();
+			return await DbContext.KaguyaUsers.AsNoTracking().OrderByDescending(x => x.GlobalExp).Take(count).ToListAsync();
 		}
 
 		public async Task<IList<KaguyaUser>> GetTopFishHoldersAsync(int count = 10)
 		{
-			return await DbContext.KaguyaUsers.AsNoTracking()
-			                      .OrderByDescending(x => x.FishExp)
-			                      .Take(count)
-			                      .ToListAsync();
+			return await DbContext.KaguyaUsers.AsNoTracking().OrderByDescending(x => x.FishExp).Take(count).ToListAsync();
 		}
 
 		public async Task<IList<ulong>> GetAllActivePremiumAsync()
 		{
 			return await DbContext.KaguyaUsers.AsNoTracking()
-			                      .Where(x => x.PremiumExpiration.HasValue &&
-			                                  x.PremiumExpiration.Value > DateTimeOffset.Now)
+			                      .Where(x => x.PremiumExpiration.HasValue && x.PremiumExpiration.Value > DateTimeOffset.Now)
 			                      .Select(x => x.UserId)
 			                      .Distinct()
 			                      .ToListAsync();

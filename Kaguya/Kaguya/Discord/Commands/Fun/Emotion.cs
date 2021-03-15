@@ -33,10 +33,7 @@ namespace Kaguya.Discord.Commands.Fun
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-hug")]
-		public async Task HugCommand(string user = null)
-		{
-			await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Hug, user));
-		}
+		public async Task HugCommand(string user = null) { await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Hug, user)); }
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-hug")]
@@ -47,10 +44,7 @@ namespace Kaguya.Discord.Commands.Fun
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-kiss")]
-		public async Task KissCommand(string user = null)
-		{
-			await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Kiss, user));
-		}
+		public async Task KissCommand(string user = null) { await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Kiss, user)); }
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-kiss")]
@@ -61,10 +55,7 @@ namespace Kaguya.Discord.Commands.Fun
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-cuddle")]
-		public async Task CuddleCommand(string user = null)
-		{
-			await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Cuddle, user));
-		}
+		public async Task CuddleCommand(string user = null) { await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Cuddle, user)); }
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-cuddle")]
@@ -75,10 +66,7 @@ namespace Kaguya.Discord.Commands.Fun
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-feed")]
-		public async Task FeedCommand(string user = null)
-		{
-			await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Feed, user));
-		}
+		public async Task FeedCommand(string user = null) { await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Feed, user)); }
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-feed")]
@@ -89,10 +77,7 @@ namespace Kaguya.Discord.Commands.Fun
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-pat")]
-		public async Task PatCommand(string user = null)
-		{
-			await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Pat, user));
-		}
+		public async Task PatCommand(string user = null) { await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Pat, user)); }
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-pat")]
@@ -103,10 +88,7 @@ namespace Kaguya.Discord.Commands.Fun
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-poke")]
-		public async Task PokeCommand(string user = null)
-		{
-			await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Poke, user));
-		}
+		public async Task PokeCommand(string user = null) { await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Poke, user)); }
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-poke")]
@@ -117,10 +99,7 @@ namespace Kaguya.Discord.Commands.Fun
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-slap")]
-		public async Task SlapCommand(string user = null)
-		{
-			await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Slap, user));
-		}
+		public async Task SlapCommand(string user = null) { await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Slap, user)); }
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-slap")]
@@ -131,10 +110,7 @@ namespace Kaguya.Discord.Commands.Fun
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-tickle")]
-		public async Task TickleCommand(string user = null)
-		{
-			await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Tickle, user));
-		}
+		public async Task TickleCommand(string user = null) { await SendEmbedAsync(await GetEmotionEmbed(EmotionType.Tickle, user)); }
 
 		[InheritMetadata(CommandMetadata.Summary | CommandMetadata.Remarks)]
 		[Command("-tickle")]
@@ -188,11 +164,10 @@ namespace Kaguya.Discord.Commands.Fun
 				? $"needs to be {GetEmotionPastTense(emotion)}."
 				: $"just {GetEmotionPastTense(emotion)} {user}!";
 
-			return new KaguyaEmbedBuilder(KaguyaColors.Blue)
-			       .WithAuthor(Context.User.Username, Context.User.GetAvatarUrl())
-			       .WithDescription($"{Context.User.Mention} {emotionString}")
-			       .WithImageUrl((await GetRequest(emotion)).ImageUrl)
-			       .Build();
+			return new KaguyaEmbedBuilder(KaguyaColors.Blue).WithAuthor(Context.User.Username, Context.User.GetAvatarUrl())
+			                                                .WithDescription($"{Context.User.Mention} {emotionString}")
+			                                                .WithImageUrl((await GetRequest(emotion)).ImageUrl)
+			                                                .Build();
 		}
 	}
 }

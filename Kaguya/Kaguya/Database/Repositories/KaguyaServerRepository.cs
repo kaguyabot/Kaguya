@@ -11,8 +11,7 @@ namespace Kaguya.Database.Repositories
 	{
 		private readonly ILogger<KaguyaServerRepository> _logger;
 
-		public KaguyaServerRepository(KaguyaDbContext dbContext, ILogger<KaguyaServerRepository> logger) :
-			base(dbContext)
+		public KaguyaServerRepository(KaguyaDbContext dbContext, ILogger<KaguyaServerRepository> logger) : base(dbContext)
 		{
 			_logger = logger;
 		}

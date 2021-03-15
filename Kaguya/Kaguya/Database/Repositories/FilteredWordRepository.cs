@@ -11,11 +11,7 @@ namespace Kaguya.Database.Repositories
 	public class FilteredWordRepository : RepositoryBase<FilteredWord>, IWordFilterRepository
 	{
 		private readonly KaguyaServerRepository _ksRepo;
-
-		public FilteredWordRepository(KaguyaDbContext dbContext, KaguyaServerRepository ksRepo) : base(dbContext)
-		{
-			_ksRepo = ksRepo;
-		}
+		public FilteredWordRepository(KaguyaDbContext dbContext, KaguyaServerRepository ksRepo) : base(dbContext) { _ksRepo = ksRepo; }
 
 		public async Task<bool> DeleteIfExistsAsync(ulong key, string word)
 		{
@@ -29,8 +25,7 @@ namespace Kaguya.Database.Repositories
 			var server = await _ksRepo.GetOrCreateAsync(dbMatch.ServerId);
 			var curFilteres = await GetAllAsync(server.ServerId, true);
 
-			var match = curFilteres.FirstOrDefault(x =>
-				x.Word.Equals(dbMatch.Word, StringComparison.OrdinalIgnoreCase));
+			var match = curFilteres.FirstOrDefault(x => x.Word.Equals(dbMatch.Word, StringComparison.OrdinalIgnoreCase));
 
 			if (match == null)
 			{

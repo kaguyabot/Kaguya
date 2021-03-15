@@ -20,9 +20,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<IList<Giveaway>> GetActiveGiveawaysAsync(ulong serverId)
 		{
-			return await Table.AsNoTracking()
-			                  .Where(x => x.ServerId == serverId && x.Expiration < DateTimeOffset.Now)
-			                  .ToListAsync();
+			return await Table.AsNoTracking().Where(x => x.ServerId == serverId && x.Expiration < DateTimeOffset.Now).ToListAsync();
 		}
 	}
 }

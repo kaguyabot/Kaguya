@@ -12,9 +12,7 @@ namespace Kaguya.Database.Interfaces
 		public Task<IList<AdminAction>> GetAllAsync(ulong serverId, string action, bool showHidden = false);
 		public Task<int> GetCountAsync(ulong serverId);
 		public Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, bool showHidden = false);
-
-		public Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, string action,
-			bool showHidden = false);
+		public Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, string action, bool showHidden = false);
 
 		/// <summary>
 		///  Gets a collection of <see cref="AdminAction" /> that need to be undone.

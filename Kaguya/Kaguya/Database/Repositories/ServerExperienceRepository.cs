@@ -42,11 +42,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<IList<ServerExperience>> GetTopAsync(ulong serverId, int count = 10)
 		{
-			return await Table.AsNoTracking()
-			                  .Where(x => x.ServerId == serverId)
-			                  .OrderByDescending(x => x.Exp)
-			                  .Take(count)
-			                  .ToListAsync();
+			return await Table.AsNoTracking().Where(x => x.ServerId == serverId).OrderByDescending(x => x.Exp).Take(count).ToListAsync();
 		}
 
 		public async Task AddOrUpdateAsync(ServerExperience value)
@@ -76,10 +72,8 @@ namespace Kaguya.Database.Repositories
 			var match = await GetOrCreateAsync(serverId, userId);
 
 			// todo: Revisit. Current method is inefficient.
-			return (await Table.AsNoTracking()
-			                   .Where(x => x.ServerId == serverId)
-			                   .OrderByDescending(x => x.Exp)
-			                   .ToListAsync()).IndexOf(match) +
+			return (await Table.AsNoTracking().Where(x => x.ServerId == serverId).OrderByDescending(x => x.Exp).ToListAsync())
+			       .IndexOf(match) +
 			       1;
 		}
 

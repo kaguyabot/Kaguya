@@ -63,9 +63,7 @@ namespace Kaguya.Internal.Music
 				dispCount++;
 			}
 
-			return new KaguyaEmbedBuilder(Color.DarkTeal).WithTitle("🗒️ Kaguya Music Queue")
-			                                             .WithDescription(descSb.ToString())
-			                                             .Build();
+			return new KaguyaEmbedBuilder(Color.DarkTeal).WithTitle("🗒️ Kaguya Music Queue").WithDescription(descSb.ToString()).Build();
 		}
 	}
 }

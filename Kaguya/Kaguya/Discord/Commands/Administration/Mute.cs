@@ -37,8 +37,8 @@ namespace Kaguya.Discord.Commands.Administration
 		private readonly KaguyaServerRepository _kaguyaServerRepository;
 		private readonly ILogger<Mute> _logger;
 
-		public Mute(ILogger<Mute> logger, AdminActionRepository adminActionRepository,
-			KaguyaServerRepository kaguyaServerRepository, InteractivityService interactivityService) : base(logger)
+		public Mute(ILogger<Mute> logger, AdminActionRepository adminActionRepository, KaguyaServerRepository kaguyaServerRepository,
+			InteractivityService interactivityService) : base(logger)
 		{
 			_logger = logger;
 			_adminActionRepository = adminActionRepository;
@@ -111,9 +111,8 @@ namespace Kaguya.Discord.Commands.Administration
 				}
 				catch (Exception e)
 				{
-					await SendBasicErrorEmbedAsync(
-						$"An error occurred when trying to remove {user.Mention}'s mute role:\n" +
-						$"Error message: {e.Message.AsBold()}");
+					await SendBasicErrorEmbedAsync($"An error occurred when trying to remove {user.Mention}'s mute role:\n" +
+					                               $"Error message: {e.Message.AsBold()}");
 
 					return;
 				}
@@ -145,8 +144,7 @@ namespace Kaguya.Discord.Commands.Administration
 			await SendEmbedAsync(embed);
 		}
 
-		private async Task MuteUserAsync(SocketGuildUser user, DateTimeOffset? expiration, string reason,
-			KaguyaServer server)
+		private async Task MuteUserAsync(SocketGuildUser user, DateTimeOffset? expiration, string reason, KaguyaServer server)
 		{
 			var adminAction = new AdminAction
 			{
@@ -258,25 +256,22 @@ namespace Kaguya.Discord.Commands.Administration
 
 			var overwriteEmbed = new KaguyaEmbedBuilder(KaguyaColors.Magenta)
 			{
-				Description =
-					"This user is already muted. Would you like to overwrite their current mute? Details of " +
-					"the current mute are described below:\n" +
-					$"- Expiration: [current: {oldMuteDurationStr} | new: {newMuteDurationStr}]\n" +
-					$"- Reason: {reasonStr}\n" +
-					"- Moderator: " +
-					(oldMod?.Mention ?? "Not found".AsItalics()) +
-					"\n\n" +
-					"Response will expire in 60 seconds, defaulting to ✅.".AsItalics() +
-					"\n" +
-					"Note: Overwriting does not erase mute history.".AsItalics() +
-					"\n\n" +
-					"✅ = Replace old duration with new. (default)\n" +
-					"❌ = Don't replace old. User will be unmuted at latest possible time."
+				Description = "This user is already muted. Would you like to overwrite their current mute? Details of " +
+				              "the current mute are described below:\n" +
+				              $"- Expiration: [current: {oldMuteDurationStr} | new: {newMuteDurationStr}]\n" +
+				              $"- Reason: {reasonStr}\n" +
+				              "- Moderator: " +
+				              (oldMod?.Mention ?? "Not found".AsItalics()) +
+				              "\n\n" +
+				              "Response will expire in 60 seconds, defaulting to ✅.".AsItalics() +
+				              "\n" +
+				              "Note: Overwriting does not erase mute history.".AsItalics() +
+				              "\n\n" +
+				              "✅ = Replace old duration with new. (default)\n" +
+				              "❌ = Don't replace old. User will be unmuted at latest possible time."
 			};
 
-			var result =
-				await _interactivityService.SendConfirmationAsync(overwriteEmbed, Context.Channel,
-					TimeSpan.FromSeconds(60));
+			var result = await _interactivityService.SendConfirmationAsync(overwriteEmbed, Context.Channel, TimeSpan.FromSeconds(60));
 
 			// If the user wants to overwrite...
 			if (result.Value)
@@ -284,8 +279,7 @@ namespace Kaguya.Discord.Commands.Administration
 				// We force expire as we want to keep the mute reason history.
 				// Forcing expiration ensures it won't be actioned on by any background services.
 				await _adminActionRepository.ForceExpireRangeAsync(currentUserMutes);
-				await SendBasicSuccessEmbedAsync(
-					"Okay, I'll replace the old mute duration with the one you just provided.");
+				await SendBasicSuccessEmbedAsync("Okay, I'll replace the old mute duration with the one you just provided.");
 			}
 			else
 			{
@@ -315,11 +309,9 @@ namespace Kaguya.Discord.Commands.Administration
 
 		private async Task<IRole> CreateMuteRoleAsync()
 		{
-			_logger.LogDebug(
-				$"Mute role created in guild {Context.Guild.Id}. Guild roles: {Context.Guild.Roles.Humanize()}");
+			_logger.LogDebug($"Mute role created in guild {Context.Guild.Id}. Guild roles: {Context.Guild.Roles.Humanize()}");
 
-			return await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, KaguyaColors.Default,
-				false, false);
+			return await Context.Guild.CreateRoleAsync("kaguya-mute", GuildPermissions.None, KaguyaColors.Default, false, false);
 		}
 
 		private async Task<List<EmbedFieldBuilder>> SetMutePermissionsAsync(IRole role)
@@ -414,10 +406,9 @@ namespace Kaguya.Discord.Commands.Administration
 		/// <returns></returns>
 		public static OverwritePermissions GetMuteOverwritePermissions()
 		{
-			return new(PermValue.Deny, addReactions: PermValue.Deny, sendMessages: PermValue.Deny,
-				muteMembers: PermValue.Deny, useVoiceActivation: PermValue.Deny, attachFiles: PermValue.Deny,
-				embedLinks: PermValue.Deny, connect: PermValue.Deny, speak: PermValue.Deny,
-				useExternalEmojis: PermValue.Deny, viewChannel: PermValue.Inherit);
+			return new(PermValue.Deny, addReactions: PermValue.Deny, sendMessages: PermValue.Deny, muteMembers: PermValue.Deny,
+				useVoiceActivation: PermValue.Deny, attachFiles: PermValue.Deny, embedLinks: PermValue.Deny, connect: PermValue.Deny,
+				speak: PermValue.Deny, useExternalEmojis: PermValue.Deny, viewChannel: PermValue.Inherit);
 		}
 
 		private async Task<bool> UserIsCurrentlyMutedAsync(SocketGuildUser user, IRole muteRole)
@@ -438,8 +429,7 @@ namespace Kaguya.Discord.Commands.Administration
 			return await _adminActionRepository.GetAllUnexpiredAsync(userId, serverId, AdminAction.MuteAction);
 		}
 
-		private Embed GetFinalEmbed(SocketGuildUser target, DateTimeOffset? expiration, string reason,
-			List<EmbedFieldBuilder> fields)
+		private Embed GetFinalEmbed(SocketGuildUser target, DateTimeOffset? expiration, string reason, List<EmbedFieldBuilder> fields)
 		{
 			string durationStr = expiration.HasValue
 				? $" for {(expiration.Value - DateTimeOffset.Now).HumanizeTraditionalReadable().AsBold()}"
@@ -448,8 +438,7 @@ namespace Kaguya.Discord.Commands.Administration
 			string reasonStr = reason == null ? "<No reason provided>".AsBold() : reason.AsBold();
 
 			return new KaguyaEmbedBuilder(KaguyaColors.Purple)
-			       .WithDescription($"{Context.User.Mention} Muted user {target.Mention}{durationStr}." +
-			                        $"\nReason: {reasonStr}")
+			       .WithDescription($"{Context.User.Mention} Muted user {target.Mention}{durationStr}." + $"\nReason: {reasonStr}")
 			       .WithFooter("To unmute this user, use the mute -u command.")
 			       .WithFields(fields)
 			       .Build();

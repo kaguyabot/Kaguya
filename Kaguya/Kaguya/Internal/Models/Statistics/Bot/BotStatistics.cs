@@ -36,33 +36,27 @@ namespace Kaguya.Internal.Models.Statistics.Bot
 				this.CountCommon = fishRepository.CountAllOfRarityAsync(FishRarity.Common).GetAwaiter().GetResult();
 				this.CountUncommon = fishRepository.CountAllOfRarityAsync(FishRarity.Uncommon).GetAwaiter().GetResult();
 				this.CountRare = fishRepository.CountAllOfRarityAsync(FishRarity.Rare).GetAwaiter().GetResult();
-				this.CountUltraRare =
-					fishRepository.CountAllOfRarityAsync(FishRarity.UltraRare).GetAwaiter().GetResult();
+				this.CountUltraRare = fishRepository.CountAllOfRarityAsync(FishRarity.UltraRare).GetAwaiter().GetResult();
 
-				this.CountLegendary =
-					fishRepository.CountAllOfRarityAsync(FishRarity.Legendary).GetAwaiter().GetResult();
+				this.CountLegendary = fishRepository.CountAllOfRarityAsync(FishRarity.Legendary).GetAwaiter().GetResult();
 
 				this.PlayCount = fishRepository.GetCountAsync().GetAwaiter().GetResult();
 				this.GrossCoinsEarned = fishRepository.CountAllCoinsEarnedAsync().GetAwaiter().GetResult();
 				this.NetCoinsEarned = fishRepository.CountNetCoinsEarnedAsync().GetAwaiter().GetResult();
 
-				this.SuccessfulCommandCount =
-					commandHistoryRepository.GetSuccessfulCountAsync().GetAwaiter().GetResult();
+				this.SuccessfulCommandCount = commandHistoryRepository.GetSuccessfulCountAsync().GetAwaiter().GetResult();
 
-				this.SuccessfulCommandCountLast24Hours = commandHistoryRepository
-				                                         .GetRecentSuccessfulCountAsync(TimeSpan.FromHours(24))
-				                                         .GetAwaiter()
-				                                         .GetResult();
+				this.SuccessfulCommandCountLast24Hours = commandHistoryRepository.GetRecentSuccessfulCountAsync(TimeSpan.FromHours(24))
+				                                                                 .GetAwaiter()
+				                                                                 .GetResult();
 
-				this.MostPopularCommand =
-					commandHistoryRepository.GetMostPopularCommandAsync().GetAwaiter().GetResult();
+				this.MostPopularCommand = commandHistoryRepository.GetMostPopularCommandAsync().GetAwaiter().GetResult();
 
 				this.TotalGambleWins = gambleHistoryRepository.TotalGambleWins().GetAwaiter().GetResult();
 				this.TotalGambleLosses = gambleHistoryRepository.TotalGambleLosses().GetAwaiter().GetResult();
 				this.TotalGambleWinsCoins = gambleHistoryRepository.TotalGambleWinsCoins().GetAwaiter().GetResult();
 				this.TotalGambleLossesCoins = gambleHistoryRepository.TotalGambleLossesCoins().GetAwaiter().GetResult();
-				this.TotalGambleWinPercent =
-					this.TotalGambleWins / ((double) this.TotalGambleWins + this.TotalGambleLosses);
+				this.TotalGambleWinPercent = this.TotalGambleWins / ((double) this.TotalGambleWins + this.TotalGambleLosses);
 
 				this.Uptime = DateTimeOffset.UtcNow - Process.GetCurrentProcess().StartTime.ToUniversalTime();
 			}
@@ -162,8 +156,7 @@ namespace Kaguya.Internal.Models.Statistics.Bot
 
 			var stats = (IBotGamblingStatistics) this;
 
-			double gambleWinPercent =
-				(stats.TotalGambleWins / ((double) stats.TotalGambleWins + stats.TotalGambleLosses)) * 100;
+			double gambleWinPercent = (stats.TotalGambleWins / ((double) stats.TotalGambleWins + stats.TotalGambleLosses)) * 100;
 
 			string winPercentDisp = Double.IsNaN(gambleWinPercent) ? "N/A" : gambleWinPercent.ToString("N2");
 

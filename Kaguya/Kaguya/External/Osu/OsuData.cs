@@ -26,11 +26,8 @@ namespace Kaguya.External.Osu
 			GameMode = gameMode;
 		}
 
-		public OsuData(long osuId, GameMode gameMode, OsuClient osuClient) :
-			this(osuId.ToString(), gameMode, osuClient) {}
-
-		public OsuData(long osuId, string gameModeString, OsuClient osuClient) : this(osuId.ToString(), gameModeString,
-			osuClient) {}
+		public OsuData(long osuId, GameMode gameMode, OsuClient osuClient) : this(osuId.ToString(), gameMode, osuClient) {}
+		public OsuData(long osuId, string gameModeString, OsuClient osuClient) : this(osuId.ToString(), gameModeString, osuClient) {}
 
 		/// <summary>
 		///  Tries to get the user through user input. Checks first for username match, then id match.
@@ -68,8 +65,7 @@ namespace Kaguya.External.Osu
 				"mania" => GameMode.Mania,
 				"taiko" => GameMode.Taiko,
 				"ctb" => GameMode.Catch,
-				_ => throw new OsuException(
-					"Invalid gamemode provided.\n**Valid Game Modes:** `std`, `mania`, `taiko`, `ctb`")
+				_ => throw new OsuException("Invalid gamemode provided.\n**Valid Game Modes:** `std`, `mania`, `taiko`, `ctb`")
 			};
 		}
 	}

@@ -23,8 +23,7 @@ namespace Kaguya.External.Osu
 
 			if (userRecentPlays.Count == 0)
 			{
-				return new KaguyaEmbedBuilder(KaguyaColors.Red).WithDescription("The user has no recent plays.")
-				                                               .Build();
+				return new KaguyaEmbedBuilder(KaguyaColors.Red).WithDescription("The user has no recent plays.").Build();
 			}
 
 			var recentPlay = userRecentPlays[0];
@@ -73,13 +72,11 @@ namespace Kaguya.External.Osu
 			string gradeEmote = GetEmoteForRank(recentPlay.Rank);
 
 			string listingUrl = "Listing".AsUrl(recentMapInfo.BeatmapUri.AbsoluteUri);
-			string downloadUrl =
-				"Download".AsUrl("https://osu.ppy.sh/beatmapsets/" + recentMapInfo.BeatmapsetId + "/download");
+			string downloadUrl = "Download".AsUrl("https://osu.ppy.sh/beatmapsets/" + recentMapInfo.BeatmapsetId + "/download");
 
 			string line1 = "Map Info:".AsBold() + " " + listingUrl + " " + POINT_RIGHT + downloadUrl;
 
-			string comboInformation = "Combo:".AsBold() +
-			                          $" x{recentPlay.MaxCombo:N0}/{recentMapInfo.MaxCombo?.ToString("N0") ?? "???"}";
+			string comboInformation = "Combo:".AsBold() + $" x{recentPlay.MaxCombo:N0}/{recentMapInfo.MaxCombo?.ToString("N0") ?? "???"}";
 
 			string scoreInformation = "Score:".AsBold() + $" {recentPlay.TotalScore:N0}";
 			string line2 = $"{gradeEmote} {POINT_RIGHT} {comboInformation} {POINT_RIGHT} {scoreInformation}";
@@ -148,8 +145,7 @@ namespace Kaguya.External.Osu
 			string line6 = $"{bpmInformation} {POINT_RIGHT} {drainInformation}" +
 			               (canDisplayCircleData ? $" {POINT_RIGHT} [{mapPropertyInformation}]" : "");
 
-			string ppInformation = "PP:".AsBold() +
-			                       $" {recentPpInfo.Pp:N2}pp ({ppVariants[4].Pp:N0}pp for {recentPpInfo.Accuracy:N2}% FC)";
+			string ppInformation = "PP:".AsBold() + $" {recentPpInfo.Pp:N2}pp ({ppVariants[4].Pp:N0}pp for {recentPpInfo.Accuracy:N2}% FC)";
 
 			string variantPpLine =
 				$"95%: {ppVariants[0].Pp:N0}pp | 98%: {ppVariants[1].Pp:N0}pp | 99%: {ppVariants[2].Pp:N0}pp | 100%: {ppVariants[3].Pp:N0}pp";

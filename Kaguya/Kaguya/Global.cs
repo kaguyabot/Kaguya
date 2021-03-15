@@ -16,15 +16,13 @@ namespace Kaguya
 		/// </summary>
 		public const string StoreLink = "[Kaguya Premium](" + StoreUrl + ")";
 		public const string SupportDiscordUrl = "https://discord.gg/aumCJhr";
-		public const string InviteUrl =
-			"https://discord.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=536341759";
+		public const string InviteUrl = "https://discord.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=536341759";
 		public const string LocalDebugInviteUrl =
 			"https://discord.com/api/oauth2/authorize?client_id=664032361679159309&permissions=8&scope=bot";
 		public const string TopGgUpvoteUrl = "https://top.gg/bot/538910393918160916";
 		public const string WikiPremiumBenefitsUrl = "https://github.com/kaguyabot/Kaguya/wiki/Premium";
 		public const string WikiPrivacyUrl = "https://github.com/kaguyabot/Kaguya/wiki/Privacy";
-		public const string WikiQuickStartUrl =
-			"https://github.com/kaguyabot/Kaguya/wiki/Using-Kaguya:-Quick-Start-Guide";
+		public const string WikiQuickStartUrl = "https://github.com/kaguyabot/Kaguya/wiki/Using-Kaguya:-Quick-Start-Guide";
 		public const string WikiV4WhatIsNew = "https://github.com/kaguyabot/Kaguya/wiki/What's-new-in-v4%3F";
 		public const string WikiChangelog = "https://github.com/kaguyabot/Kaguya/wiki/Changelog";
 		public const string DiscordTermsLink = "[Terms of Service](https://discord.com/terms)";

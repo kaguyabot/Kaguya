@@ -78,8 +78,7 @@ namespace Kaguya.Internal
 			catch (Exception e)
 			{
 				_logger.LogError(e,
-					"Exception encountered during processing of sys-action automated mute for " +
-					$"user {user.Id} in guild {guild.Id}.");
+					"Exception encountered during processing of sys-action automated mute for " + $"user {user.Id} in guild {guild.Id}.");
 
 				return false;
 			}
@@ -159,8 +158,7 @@ namespace Kaguya.Internal
 			}
 			catch (Exception e)
 			{
-				_logger.LogWarning(e,
-					$"Failed to silently remove role {role!.Name} from user {user.Id} " + $"in guild {guild.Id}");
+				_logger.LogWarning(e, $"Failed to silently remove role {role!.Name} from user {user.Id} " + $"in guild {guild.Id}");
 			}
 		}
 	}

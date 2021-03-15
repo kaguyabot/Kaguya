@@ -38,16 +38,15 @@ namespace Kaguya.Discord.Commands.Configuration
 		[Restriction(ModuleRestriction.PremiumServer)]
 		[Command("-history", RunMode = RunMode.Async)]
 		[Alias("-hist")]
-		[Summary(
-			"Displays administration action history for events in this server. Filter down the results using the " +
-			"arguments described below. If no filters are provided, all items will be displayed.\n\n" +
-			"**Filters:**\n" +
-			"`ban`, `unban`, `kick`, `warn`, `unwarn`, `mute`, `unmute`\n" +
-			"**Arguments:**\n" +
-			"`-f <filter type> [...]`\n" +
-			"`--se` - Show expired entries (only applicable to mute, ban, and shadowban)\n" +
-			"`--sh` - Show hidden entries\n\n" +
-			"")]
+		[Summary("Displays administration action history for events in this server. Filter down the results using the " +
+		         "arguments described below. If no filters are provided, all items will be displayed.\n\n" +
+		         "**Filters:**\n" +
+		         "`ban`, `unban`, `kick`, `warn`, `unwarn`, `mute`, `unmute`\n" +
+		         "**Arguments:**\n" +
+		         "`-f <filter type> [...]`\n" +
+		         "`--se` - Show expired entries (only applicable to mute, ban, and shadowban)\n" +
+		         "`--sh` - Show hidden entries\n\n" +
+		         "")]
 		[Remarks("[-f <filter type> [...]] [--se] [--sh]")]
 		[Example("")]
 		[Example("-f kick ban shadowban")]
@@ -76,8 +75,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
 			if (invalid)
 			{
-				await SendBasicErrorEmbedAsync("You provided an invalid filter. Valid filters are " +
-				                               validFilters.Humanize(x => $"`{x}`"));
+				await SendBasicErrorEmbedAsync("You provided an invalid filter. Valid filters are " + validFilters.Humanize(x => $"`{x}`"));
 
 				return;
 			}
@@ -93,8 +91,7 @@ namespace Kaguya.Discord.Commands.Configuration
 					break;
 				}
 
-				var toAdd = unFilteredCollection.Where(x =>
-					x.Action.Equals(filter, StringComparison.OrdinalIgnoreCase));
+				var toAdd = unFilteredCollection.Where(x => x.Action.Equals(filter, StringComparison.OrdinalIgnoreCase));
 
 				collection.AddRange(toAdd);
 			}
@@ -129,8 +126,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
 				var curCollection = collection.GetRange(minIndex, maxRange);
 
-				var page = new PageBuilder().WithTitle($"Administration History: {Context.Guild.Name}")
-				                            .WithColor(KaguyaColors.LightYellow);
+				var page = new PageBuilder().WithTitle($"Administration History: {Context.Guild.Name}").WithColor(KaguyaColors.LightYellow);
 
 				page.Description = GetPageDescription(curCollection, durationFilters, server);
 				pages[i] = page;
@@ -151,20 +147,16 @@ namespace Kaguya.Discord.Commands.Configuration
 			await _interactivityService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(30));
 		}
 
-		private string GetPageDescription(List<AdminAction> curCollection, string[] durationFilters,
-			KaguyaServer server)
+		private string GetPageDescription(List<AdminAction> curCollection, string[] durationFilters, KaguyaServer server)
 		{
 			var sb = new StringBuilder();
 			foreach (var current in curCollection)
 			{
-				bool hasDuration =
-					durationFilters.Any(x => x.Equals(current.Action, StringComparison.OrdinalIgnoreCase));
+				bool hasDuration = durationFilters.Any(x => x.Equals(current.Action, StringComparison.OrdinalIgnoreCase));
 
-				string moderatorUser = Context.Guild.GetUser(current.ModeratorId)?.Mention ??
-				                       current.ModeratorId.ToString();
+				string moderatorUser = Context.Guild.GetUser(current.ModeratorId)?.Mention ?? current.ModeratorId.ToString();
 
-				string actionedUser = Context.Guild.GetUser(current.ActionedUserId)?.Mention ??
-				                      current.ActionedUserId.ToString();
+				string actionedUser = Context.Guild.GetUser(current.ActionedUserId)?.Mention ?? current.ActionedUserId.ToString();
 
 				string reason = current.Reason ?? "<No reason provided>";
 				string hiddenString = current.IsHidden ? " " + "[Hidden]".AsBold() + " " : default;
@@ -205,19 +197,8 @@ namespace Kaguya.Discord.Commands.Configuration
 			return invalid;
 		}
 
-		private bool ShowAll(string[] args)
-		{
-			return !args.Any() || !args[0].Equals("-f", StringComparison.OrdinalIgnoreCase);
-		}
-
-		private bool ShowExpired(string[] args)
-		{
-			return args.Any(x => x.Equals("--se", StringComparison.OrdinalIgnoreCase));
-		}
-
-		private bool ShowHidden(string[] args)
-		{
-			return args.Any(x => x.Equals("--sh", StringComparison.OrdinalIgnoreCase));
-		}
+		private bool ShowAll(string[] args) { return !args.Any() || !args[0].Equals("-f", StringComparison.OrdinalIgnoreCase); }
+		private bool ShowExpired(string[] args) { return args.Any(x => x.Equals("--se", StringComparison.OrdinalIgnoreCase)); }
+		private bool ShowHidden(string[] args) { return args.Any(x => x.Equals("--sh", StringComparison.OrdinalIgnoreCase)); }
 	}
 }

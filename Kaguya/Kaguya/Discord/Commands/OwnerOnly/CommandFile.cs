@@ -20,11 +20,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 	public class CommandFile : KaguyaBase<CommandFile>
 	{
 		private readonly CommandService _commandService;
-
-		public CommandFile(ILogger<CommandFile> logger, CommandService commandService) : base(logger)
-		{
-			_commandService = commandService;
-		}
+		public CommandFile(ILogger<CommandFile> logger, CommandService commandService) : base(logger) { _commandService = commandService; }
 
 		[Command]
 		[Summary("Generates a text file with all known command names, formatted nicely.")]
@@ -74,9 +70,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 				ms.Seek(0, SeekOrigin.Begin);
 
 				await Context.Channel.SendFileAsync(ms,
-					"Kaguya-Commands-" +
-					DateTimeOffset.Now.LocalDateTime.ToShortDateString().Replace("/", "-") +
-					".txt");
+					"Kaguya-Commands-" + DateTimeOffset.Now.LocalDateTime.ToShortDateString().Replace("/", "-") + ".txt");
 			}
 		}
 

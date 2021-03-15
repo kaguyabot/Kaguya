@@ -92,15 +92,14 @@ namespace Kaguya.Discord.Overrides
 
 			return new KaguyaReactionSelection<TValue>(this.Selectables.AsReadOnlyDictionary(),
 				Users?.AsReadOnlyCollection() ?? throw new ArgumentException(nameof(Users)),
-				this.SelectionPage?.Build() ?? throw new ArgumentNullException(nameof(this.SelectionPage)),
-				this.CancelledPage?.Build(), this.TimeoutedPage?.Build(), this.AllowCancel, this.CancelEmote, Deletion);
+				this.SelectionPage?.Build() ?? throw new ArgumentNullException(nameof(this.SelectionPage)), this.CancelledPage?.Build(),
+				this.TimeoutedPage?.Build(), this.AllowCancel, this.CancelEmote, Deletion);
 		}
 
 		/// <summary>
 		///  Sets the values to select from.
 		/// </summary>
-		public KaguyaReactionSelectionBuilder<TValue> WithSelectables<TKey>(IDictionary<TKey, TValue> selectables)
-			where TKey : IEmote
+		public KaguyaReactionSelectionBuilder<TValue> WithSelectables<TKey>(IDictionary<TKey, TValue> selectables) where TKey : IEmote
 		{
 			this.Selectables = selectables.ToDictionary(x => x.Key as IEmote, x => x.Value);
 			return this;
@@ -200,8 +199,7 @@ namespace Kaguya.Discord.Overrides
 		/// <summary>
 		///  Sets whether the selectionembed will be added by a default value visualizer.
 		/// </summary>
-		public KaguyaReactionSelectionBuilder<TValue> WithEnableDefaultSelectionDescription(
-			bool enableDefaultSelectionDescription)
+		public KaguyaReactionSelectionBuilder<TValue> WithEnableDefaultSelectionDescription(bool enableDefaultSelectionDescription)
 		{
 			this.EnableDefaultSelectionDescription = enableDefaultSelectionDescription;
 			return this;

@@ -20,9 +20,8 @@ namespace Kaguya.Database.Repositories
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 
 		public KaguyaStatisticsRepository(KaguyaDbContext dbContext, KaguyaUserRepository kaguyaUserRepository,
-			KaguyaServerRepository kaguyaServerRepository, DiscordShardedClient client,
-			CommandHistoryRepository commandHistoryRepository, FishRepository fishRepository,
-			GambleHistoryRepository gambleHistoryRepository) : base(dbContext)
+			KaguyaServerRepository kaguyaServerRepository, DiscordShardedClient client, CommandHistoryRepository commandHistoryRepository,
+			FishRepository fishRepository, GambleHistoryRepository gambleHistoryRepository) : base(dbContext)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;
 			_kaguyaServerRepository = kaguyaServerRepository;
@@ -42,8 +41,7 @@ namespace Kaguya.Database.Repositories
 			int curServers = _client.Guilds.Count;
 			int shards = _client.Shards.Count;
 			int commandsExecuted = await _commandHistoryRepository.GetSuccessfulCountAsync();
-			int commandsLastTwentyFourHours =
-				await _commandHistoryRepository.GetRecentSuccessfulCountAsync(TimeSpan.FromHours(24));
+			int commandsLastTwentyFourHours = await _commandHistoryRepository.GetRecentSuccessfulCountAsync(TimeSpan.FromHours(24));
 
 			int fish = await _fishRepository.GetCountAsync();
 			int gambles = await _gambleHistoryRepository.GetCountAsync();

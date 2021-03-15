@@ -71,13 +71,11 @@ namespace Kaguya.Discord.Commands.Music
 			catch (HttpRequestException e)
 			{
 				string pvtError = "Lavalink is not connected. Please start lavalink in " +
-				                  Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\",
-					                  "Lavalink.jar"));
+				                  Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\", "Lavalink.jar"));
 
 				_logger.LogError(e, pvtError);
 
-				await SendBasicErrorEmbedAsync("Failure, core dependency missing. Please check the " +
-				                               "console logs for more details.");
+				await SendBasicErrorEmbedAsync("Failure, core dependency missing. Please check the " + "console logs for more details.");
 
 				return;
 			}
@@ -96,8 +94,8 @@ namespace Kaguya.Discord.Commands.Music
 			    player.PlayerState != PlayerState.Paused)
 			{
 				await player.PlayAsync(track);
-				_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel,
-					deleteDelay: TimeSpan.FromSeconds(15), embed: MusicEmbeds.GetNowPlayingEmbedForTrack(track));
+				_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15),
+					embed: MusicEmbeds.GetNowPlayingEmbedForTrack(track));
 			}
 			else
 			{
@@ -106,8 +104,7 @@ namespace Kaguya.Discord.Commands.Music
 					player.Queue.Enqueue(track);
 				}
 
-				_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel,
-					deleteDelay: TimeSpan.FromSeconds(15),
+				_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15),
 					embed: MusicEmbeds.GetQueuedEmbedForTrack(track, player.Queue.Count));
 			}
 		}

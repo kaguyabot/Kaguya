@@ -12,27 +12,21 @@ namespace Kaguya.Discord.Overrides.Extensions
 {
 	internal static class KaguyaInteractivityExtensions
 	{
-		public static ReadOnlyCollection<T> AsReadOnlyCollection<T>(this IEnumerable<T> collection)
-		{
-			return new(collection.ToArray());
-		}
+		public static ReadOnlyCollection<T> AsReadOnlyCollection<T>(this IEnumerable<T> collection) { return new(collection.ToArray()); }
 
-		public static ReadOnlyDictionary<TKey, TValue> AsReadOnlyDictionary<TKey, TValue>(
-			this Dictionary<TKey, TValue> dictionary)
+		public static ReadOnlyDictionary<TKey, TValue> AsReadOnlyDictionary<TKey, TValue>(this Dictionary<TKey, TValue> dictionary)
 		{
 			return new(dictionary);
 		}
 
-		public static async Task<InteractivityResult<bool>> SendConfirmationAsync(
-			this InteractivityService interactivityService, EmbedBuilder embed, ISocketMessageChannel channel,
-			TimeSpan? timeout = null)
+		public static async Task<InteractivityResult<bool>> SendConfirmationAsync(this InteractivityService interactivityService,
+			EmbedBuilder embed, ISocketMessageChannel channel, TimeSpan? timeout = null)
 		{
 			return await SendConfirmationAsync(interactivityService, embed.Build(), channel, timeout);
 		}
 
-		public static async Task<InteractivityResult<bool>> SendConfirmationAsync(
-			this InteractivityService interactivityService, Embed embed, ISocketMessageChannel channel,
-			TimeSpan? timeout = null)
+		public static async Task<InteractivityResult<bool>> SendConfirmationAsync(this InteractivityService interactivityService,
+			Embed embed, ISocketMessageChannel channel, TimeSpan? timeout = null)
 		{
 			var confirmation = new ConfirmationBuilder().WithContent(PageBuilder.FromEmbed(embed)).Build();
 

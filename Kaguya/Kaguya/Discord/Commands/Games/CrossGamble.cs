@@ -26,8 +26,8 @@ namespace Kaguya.Discord.Commands.Games
 		private readonly DiscordShardedClient _client;
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 
-		public CrossGambling(ILogger<CrossGambling> logger, KaguyaUserRepository kaguyaUserRepository,
-			DiscordShardedClient client) : base(logger)
+		public CrossGambling(ILogger<CrossGambling> logger, KaguyaUserRepository kaguyaUserRepository, DiscordShardedClient client) :
+			base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;
 			_client = client;
@@ -53,8 +53,7 @@ namespace Kaguya.Discord.Commands.Games
 
 			if (hostUser.Coins < maxAmount)
 			{
-				await SendBasicErrorEmbedAsync(
-					$"You cannot start a game for this many coins. You only have `{hostUser.Coins:N0}` coins.");
+				await SendBasicErrorEmbedAsync($"You cannot start a game for this many coins. You only have `{hostUser.Coins:N0}` coins.");
 
 				return;
 			}
@@ -107,8 +106,7 @@ namespace Kaguya.Discord.Commands.Games
 
 				_client.ReactionAdded += OnClientReactionAdded;
 
-				Task OnClientReactionAdded(Cacheable<IUserMessage, ulong> cacheable, ISocketMessageChannel channel,
-					SocketReaction reaction)
+				Task OnClientReactionAdded(Cacheable<IUserMessage, ulong> cacheable, ISocketMessageChannel channel, SocketReaction reaction)
 				{
 					bool validSysReaction = cacheable.HasValue &&
 					                        channel.Id == Context.Channel.Id &&
@@ -166,8 +164,7 @@ namespace Kaguya.Discord.Commands.Games
 
 				if (gamblerUsers.Count < 2)
 				{
-					await AbortAsync(curMsg, "There were not enough players to start this game. Aborting!",
-						OnClientReactionAdded);
+					await AbortAsync(curMsg, "There were not enough players to start this game. Aborting!", OnClientReactionAdded);
 
 					return;
 				}
@@ -188,8 +185,7 @@ namespace Kaguya.Discord.Commands.Games
 			if (highRoll.Key.Equals(lowRoll.Key))
 			{
 				await SafeSetInactiveEmbedAsync(toModify);
-				await SendBasicErrorEmbedAsync($"{highRoll.Key.Mention} is the only user in the game! " +
-				                               "Cancelling...");
+				await SendBasicErrorEmbedAsync($"{highRoll.Key.Mention} is the only user in the game! " + "Cancelling...");
 
 				return;
 			}

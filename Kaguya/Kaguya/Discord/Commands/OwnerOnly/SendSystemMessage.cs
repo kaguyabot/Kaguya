@@ -17,11 +17,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 	public class SendSystemMessage : KaguyaBase<SendSystemMessage>
 	{
 		private readonly DiscordShardedClient _client;
-
-		public SendSystemMessage(ILogger<SendSystemMessage> logger, DiscordShardedClient client) : base(logger)
-		{
-			_client = client;
-		}
+		public SendSystemMessage(ILogger<SendSystemMessage> logger, DiscordShardedClient client) : base(logger) { _client = client; }
 
 		[Command]
 		[Summary("Sends a message to the user from the bot account.")]
@@ -39,14 +35,12 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 			}
 
 			var embed = new KaguyaEmbedBuilder(KaguyaColors.Orange).WithTitle("System Message")
-			                                                       .WithDescription(
-				                                                       "The owner of the bot has sent you a message.\n\n" +
-				                                                       "Contents:".AsBoldUnderlined() +
-				                                                       $"\n{message}")
+			                                                       .WithDescription("The owner of the bot has sent you a message.\n\n" +
+			                                                                        "Contents:".AsBoldUnderlined() +
+			                                                                        $"\n{message}")
 			                                                       .WithFooter(new EmbedFooterBuilder
 			                                                       {
-				                                                       Text =
-					                                                       "Please note, replies in this chat channel will not be seen."
+				                                                       Text = "Please note, replies in this chat channel will not be seen."
 			                                                       });
 
 			try
@@ -58,8 +52,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 			}
 			catch (Exception e)
 			{
-				await SendBasicErrorEmbedAsync($"Failed to send user {socketUser} the message. Error:\n\n" +
-				                               $"{e.Message.AsBold()}");
+				await SendBasicErrorEmbedAsync($"Failed to send user {socketUser} the message. Error:\n\n" + $"{e.Message.AsBold()}");
 			}
 		}
 	}

@@ -30,7 +30,7 @@ namespace Kaguya.Database.Repositories
 		public async Task ClearAllAsync(ulong serverId)
 		{
 			var matches = await GetAllAsync(serverId);
-			
+
 			Table.RemoveRange(matches);
 			await DbContext.SaveChangesAsync();
 		}

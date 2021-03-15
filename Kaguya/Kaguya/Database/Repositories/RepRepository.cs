@@ -19,10 +19,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<Rep> GetMostRecentAsync(ulong userId)
 		{
-			return await Table.AsNoTracking()
-			                  .OrderByDescending(x => x.TimeGiven)
-			                  .Where(x => x.UserId == userId)
-			                  .FirstOrDefaultAsync();
+			return await Table.AsNoTracking().OrderByDescending(x => x.TimeGiven).Where(x => x.UserId == userId).FirstOrDefaultAsync();
 		}
 
 		public async Task<int> GetCountRepReceivedAsync(ulong userId)

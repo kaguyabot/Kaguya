@@ -101,18 +101,12 @@ namespace Kaguya.Internal.Services
 			{FishType.Shoe, FishRarity.Trash},
 			{FishType.BaitStolen, FishRarity.Trash}
 		};
-		private static KeyValuePair<FishType, FishRarity>[] LegendaryFish =>
-			FishMap.Where(x => x.Value == FishRarity.Legendary).ToArray();
-		private static KeyValuePair<FishType, FishRarity>[] UltraRareFish =>
-			FishMap.Where(x => x.Value == FishRarity.UltraRare).ToArray();
-		private static KeyValuePair<FishType, FishRarity>[] RareFish =>
-			FishMap.Where(x => x.Value == FishRarity.Rare).ToArray();
-		private static KeyValuePair<FishType, FishRarity>[] UncommonFish =>
-			FishMap.Where(x => x.Value == FishRarity.Uncommon).ToArray();
-		private static KeyValuePair<FishType, FishRarity>[] CommonFish =>
-			FishMap.Where(x => x.Value == FishRarity.Common).ToArray();
-		private static KeyValuePair<FishType, FishRarity>[] TrashFish =>
-			FishMap.Where(x => x.Value == FishRarity.Trash).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] LegendaryFish => FishMap.Where(x => x.Value == FishRarity.Legendary).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] UltraRareFish => FishMap.Where(x => x.Value == FishRarity.UltraRare).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] RareFish => FishMap.Where(x => x.Value == FishRarity.Rare).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] UncommonFish => FishMap.Where(x => x.Value == FishRarity.Uncommon).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] CommonFish => FishMap.Where(x => x.Value == FishRarity.Common).ToArray();
+		private static KeyValuePair<FishType, FishRarity>[] TrashFish => FishMap.Where(x => x.Value == FishRarity.Trash).ToArray();
 
 		public static FishRarity SelectRarity(decimal roll)
 		{
@@ -189,9 +183,6 @@ namespace Kaguya.Internal.Services
 			};
 		}
 
-		private static bool IsBetween(decimal num, (decimal min, decimal max) range)
-		{
-			return range.min <= num && num <= range.max;
-		}
+		private static bool IsBetween(decimal num, (decimal min, decimal max) range) { return range.min <= num && num <= range.max; }
 	}
 }

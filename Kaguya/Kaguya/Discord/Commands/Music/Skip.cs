@@ -67,9 +67,7 @@ namespace Kaguya.Discord.Commands.Music
 			if (emptyQueue)
 			{
 				await player.StopAsync();
-				var embed = GetBasicEmbedBuilder($"Skipped {curTrack.Title.AsBold()}. No more tracks remaining.",
-						Color.Purple)
-					.Build();
+				var embed = GetBasicEmbedBuilder($"Skipped {curTrack.Title.AsBold()}. No more tracks remaining.", Color.Purple).Build();
 
 				_interactivityService.SendEmbedWithDeletion(Context, embed, TimeSpan.FromSeconds(15));
 			}
@@ -80,8 +78,8 @@ namespace Kaguya.Discord.Commands.Music
 				var embed = GetBasicSuccessEmbedBuilder($"Skipped {curTrack.Title.AsBold()}").Build();
 				_interactivityService.SendEmbedWithDeletion(Context, embed, TimeSpan.FromSeconds(15));
 
-				_interactivityService.SendEmbedWithDeletion(Context,
-					MusicEmbeds.GetNowPlayingEmbedForTrack(player.Track), TimeSpan.FromSeconds(15));
+				_interactivityService.SendEmbedWithDeletion(Context, MusicEmbeds.GetNowPlayingEmbedForTrack(player.Track),
+					TimeSpan.FromSeconds(15));
 			}
 			else
 			{

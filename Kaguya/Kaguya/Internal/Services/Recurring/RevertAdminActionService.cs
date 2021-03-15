@@ -58,11 +58,9 @@ namespace Kaguya.Internal.Services.Recurring
 
 					var socketGuildUser = socketGuild.GetUser(action.ActionedUserId);
 
-					if (socketGuildUser == null &&
-					    !action.Action.Equals(AdminAction.BanAction, StringComparison.OrdinalIgnoreCase))
+					if (socketGuildUser == null && !action.Action.Equals(AdminAction.BanAction, StringComparison.OrdinalIgnoreCase))
 					{
-						_logger.LogDebug("Failed to un-do admin action, " +
-						                 $"socketguilduser {action.ActionedUserId} was null");
+						_logger.LogDebug("Failed to un-do admin action, " + $"socketguilduser {action.ActionedUserId} was null");
 
 						continue;
 					}
@@ -103,8 +101,7 @@ namespace Kaguya.Internal.Services.Recurring
 						catch (Exception e)
 						{
 							_logger.LogWarning(e,
-								$"Failed to silently unban user {action.ActionedUserId} in " +
-								$"guild {socketGuild.Id}.");
+								$"Failed to silently unban user {action.ActionedUserId} in " + $"guild {socketGuild.Id}.");
 						}
 					}
 					else

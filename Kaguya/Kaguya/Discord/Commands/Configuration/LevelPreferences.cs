@@ -94,8 +94,7 @@ namespace Kaguya.Discord.Commands.Configuration
 			var embed = new KaguyaEmbedBuilder(KaguyaColors.ConfigurationColor)
 			{
 				Title = "Notifications Setup",
-				Description = "Type a response in chat below to set " +
-				              "the notification preferences for this server.\n\n"
+				Description = "Type a response in chat below to set " + "the notification preferences for this server.\n\n"
 			}.WithFooter(
 				$"Respond with only a number. Example: 1 | Current config: {server.LevelNotifications.Humanize(LetterCasing.Title)}");
 
@@ -125,8 +124,7 @@ namespace Kaguya.Discord.Commands.Configuration
 				}
 
 				msg = await _interactivityService.NextMessageAsync(
-					x => int.TryParse(x.Content, out res) ||
-					     x.Content.Contains("cancel", StringComparison.OrdinalIgnoreCase),
+					x => int.TryParse(x.Content, out res) || x.Content.Contains("cancel", StringComparison.OrdinalIgnoreCase),
 					timeout: TimeSpan.FromSeconds(60));
 
 				if (msg.IsSuccess)
@@ -143,8 +141,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
 				if (res < 0 || res > _notifications.Count)
 				{
-					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel,
-						deleteDelay: TimeSpan.FromSeconds(3),
+					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(3),
 						embed: GetBasicErrorEmbedBuilder("Invalid entry, please try again.").Build());
 
 					errCount++;
@@ -197,9 +194,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
 			var resetEmbed = GetBasicEmbedBuilder(modifyString, KaguyaColors.ConfigurationColor);
 
-			var confirmation =
-				await _interactivityService.SendConfirmationAsync(resetEmbed, Context.Channel,
-					TimeSpan.FromSeconds(60));
+			var confirmation = await _interactivityService.SendConfirmationAsync(resetEmbed, Context.Channel, TimeSpan.FromSeconds(60));
 
 			if (confirmation.IsSuccess)
 			{
@@ -218,8 +213,7 @@ namespace Kaguya.Discord.Commands.Configuration
 						return;
 					}
 
-					await SendBasicSuccessEmbedAsync(
-						$"Okay! I'll send all level notifications into {textChannel.Mention}.");
+					await SendBasicSuccessEmbedAsync($"Okay! I'll send all level notifications into {textChannel.Mention}.");
 
 					server.LevelAnnouncementsChannelId = channel.Id;
 					await _kaguyaServerRepository.UpdateAsync(server);

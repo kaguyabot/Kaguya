@@ -39,9 +39,10 @@ namespace Kaguya.Discord.Commands.Reference
 				await SendBasicErrorEmbedAsync($"Sorry, the {role.Mention} role isn't supported by this command!");
 				return;
 			}
-			
+
 			var usersWithRole = Context.Guild.Users.Where(x => x.Roles.Contains(role))
-			                           .OrderByDescending(x => x.Nickname ?? x.Username).ToList();
+			                           .OrderByDescending(x => x.Nickname ?? x.Username)
+			                           .ToList();
 
 			if (!usersWithRole.Any())
 			{
@@ -83,15 +84,15 @@ namespace Kaguya.Discord.Commands.Reference
 						{
 							break;
 						}
-						
+
 						pageDescription.AppendLine(usersWithRole.ElementAt(accessIdx).Mention);
 					}
 
 					pageDescription.AppendLine();
 					pageDescription.Append($"Total members with role: {memberCount:N0}");
-					
+
 					pageBuilder.WithDescription(pageDescription.ToString()).WithColor(KaguyaColors.IceBlue);
-					
+
 					pages[i] = pageBuilder;
 				}
 

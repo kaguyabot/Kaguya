@@ -140,8 +140,7 @@ namespace Kaguya.Discord.Commands.Nsfw
 				server.NsfwAllowedId = null;
 				server.NsfwAllowanceTime = null;
 
-				await SendBasicSuccessEmbedAsync("You have successfully disabled the nsfw " +
-				                                 "command set for this server.");
+				await SendBasicSuccessEmbedAsync("You have successfully disabled the nsfw " + "command set for this server.");
 			}
 			else
 			{
@@ -149,8 +148,7 @@ namespace Kaguya.Discord.Commands.Nsfw
 				server.NsfwAllowedId = Context.User.Id;
 				server.NsfwAllowanceTime = DateTimeOffset.Now;
 
-				await SendBasicSuccessEmbedAsync("You have successfully enabled the nsfw " +
-				                                 "command set for this server.");
+				await SendBasicSuccessEmbedAsync("You have successfully enabled the nsfw " + "command set for this server.");
 			}
 
 			await _kaguyaServerRepository.UpdateAsync(server);

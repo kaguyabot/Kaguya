@@ -69,8 +69,8 @@ namespace Kaguya.Discord.Commands.Administration
 
 			string delString = $"Deleted {amount.ToString().AsBold()} messages{userString}.";
 
-			_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null, TimeSpan.FromSeconds(3), null,
-				false, new KaguyaEmbedBuilder(KaguyaColors.Magenta).WithDescription(delString).Build());
+			_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null, TimeSpan.FromSeconds(3), null, false,
+				new KaguyaEmbedBuilder(KaguyaColors.Magenta).WithDescription(delString).Build());
 		}
 
 		[Command(RunMode = RunMode.Async)]

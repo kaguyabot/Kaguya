@@ -50,8 +50,7 @@ namespace Kaguya.Discord.Commands.Music
 				await SendBasicErrorEmbedAsync($"Failed to disconnect from {vcName}. If the issue " +
 				                               "persists, please contact the developers for support.");
 
-				_logger.LogError(e,
-					$"Failed to disconnect from voice channel '{vcName}' in {Context.Guild.Id} via $leave.");
+				_logger.LogError(e, $"Failed to disconnect from voice channel '{vcName}' in {Context.Guild.Id} via $leave.");
 
 				return;
 			}

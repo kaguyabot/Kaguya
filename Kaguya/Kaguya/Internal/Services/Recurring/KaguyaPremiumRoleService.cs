@@ -81,8 +81,7 @@ namespace Kaguya.Internal.Services.Recurring
 						continue;
 					}
 
-					var role = socketGuild.Roles.FirstOrDefault(x =>
-						x.Name.Contains("premium", StringComparison.OrdinalIgnoreCase));
+					var role = socketGuild.Roles.FirstOrDefault(x => x.Name.Contains("premium", StringComparison.OrdinalIgnoreCase));
 
 					if (role == null)
 					{
@@ -140,8 +139,7 @@ namespace Kaguya.Internal.Services.Recurring
 						continue;
 					}
 
-					var role = socketGuild.Roles.FirstOrDefault(x =>
-						x.Name.Contains("premium", StringComparison.OrdinalIgnoreCase));
+					var role = socketGuild.Roles.FirstOrDefault(x => x.Name.Contains("premium", StringComparison.OrdinalIgnoreCase));
 
 					if (role == null)
 					{

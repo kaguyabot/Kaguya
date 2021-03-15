@@ -18,13 +18,13 @@ namespace Kaguya.Internal.Events
 	public class EventImplementations
 	{
 		private readonly IAntiraidService _arService;
+		private readonly AutoRoleService _autoRoleService;
 		private readonly DiscordShardedClient _client;
 		private readonly LavaNode _lavaNode;
-		private readonly AutoRoleService _autoRoleService;
 		private readonly ILogger<EventImplementations> _logger;
 
-		public EventImplementations(ILogger<EventImplementations> logger, IAntiraidService arService,
-			DiscordShardedClient client, LavaNode lavaNode, AutoRoleService autoRoleService)
+		public EventImplementations(ILogger<EventImplementations> logger, IAntiraidService arService, DiscordShardedClient client,
+			LavaNode lavaNode, AutoRoleService autoRoleService)
 		{
 			_logger = logger;
 			_arService = arService;
@@ -55,22 +55,21 @@ namespace Kaguya.Internal.Events
 		public async Task SendOwnerDmAsync(SocketGuild guild)
 		{
 			var owner = guild.Owner;
-			var messageBuilder = new StringBuilder()
-			                     .AppendLine($"Hello {owner.Username}, thanks for adding me to your server!")
-			                     .AppendLine()
-			                     .AppendLine("Here's a list of links and suggestions to help you get started.")
-			                     .AppendLine()
-			                     .AppendLine($"- [YouTube Tutorial]({Global.VideoTutorialUrl})")
-			                     .AppendLine()
-			                     .AppendLine($"- [Quick start guide]({Global.WikiQuickStartUrl})")
-			                     .AppendLine($"- [Privacy statement]({Global.WikiPrivacyUrl})")
-			                     .AppendLine($"- [Kaguya Support]({Global.SupportDiscordUrl})")
-			                     .AppendLine($"- [Invite Kaguya]({Global.InviteUrl})")
-			                     .AppendLine()
-			                     .AppendLine($"- [Kaguya Premium Store]({Global.StoreUrl})")
-			                     .AppendLine($"- [Kaguya Premium Benefits]({Global.WikiPremiumBenefitsUrl})")
-			                     .AppendLine()
-			                     .AppendLine($"- Support us by upvoting on [top.gg]({Global.TopGgUpvoteUrl})!");
+			var messageBuilder = new StringBuilder().AppendLine($"Hello {owner.Username}, thanks for adding me to your server!")
+			                                        .AppendLine()
+			                                        .AppendLine("Here's a list of links and suggestions to help you get started.")
+			                                        .AppendLine()
+			                                        .AppendLine($"- [YouTube Tutorial]({Global.VideoTutorialUrl})")
+			                                        .AppendLine()
+			                                        .AppendLine($"- [Quick start guide]({Global.WikiQuickStartUrl})")
+			                                        .AppendLine($"- [Privacy statement]({Global.WikiPrivacyUrl})")
+			                                        .AppendLine($"- [Kaguya Support]({Global.SupportDiscordUrl})")
+			                                        .AppendLine($"- [Invite Kaguya]({Global.InviteUrl})")
+			                                        .AppendLine()
+			                                        .AppendLine($"- [Kaguya Premium Store]({Global.StoreUrl})")
+			                                        .AppendLine($"- [Kaguya Premium Benefits]({Global.WikiPremiumBenefitsUrl})")
+			                                        .AppendLine()
+			                                        .AppendLine($"- Support us by upvoting on [top.gg]({Global.TopGgUpvoteUrl})!");
 
 			var embed = new KaguyaEmbedBuilder(Color.Gold)
 			{
@@ -115,8 +114,7 @@ namespace Kaguya.Internal.Events
 				{
 					await _lavaNode.LeaveAsync(player.VoiceChannel);
 					await player.DisposeAsync();
-					_logger.LogInformation($"Guild {arg.Id} had an active music player. " +
-					                       "It has been properly disposed of.");
+					_logger.LogInformation($"Guild {arg.Id} had an active music player. " + "It has been properly disposed of.");
 				}
 				catch (Exception)
 				{
@@ -134,8 +132,7 @@ namespace Kaguya.Internal.Events
 		/// <param name="arg2"></param>
 		/// <param name="arg3"></param>
 		/// <returns></returns>
-		public async Task ProtectPlayerIntegrityOnDisconnectAsync(SocketUser arg1, SocketVoiceState arg2,
-			SocketVoiceState arg3)
+		public async Task ProtectPlayerIntegrityOnDisconnectAsync(SocketUser arg1, SocketVoiceState arg2, SocketVoiceState arg3)
 		{
 			if (!_client.AllShardsReady())
 			{

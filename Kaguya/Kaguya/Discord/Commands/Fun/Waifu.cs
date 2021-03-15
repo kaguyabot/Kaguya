@@ -19,10 +19,9 @@ namespace Kaguya.Discord.Commands.Fun
 		public async Task WaifuCommand()
 		{
 			var image = await _nekoClient.Image_v3.Waifu();
-			var embed = new KaguyaEmbedBuilder(KaguyaColors.Green)
-			            .WithDescription($"{Context.User.Mention} here is your new waifu!")
-			            .WithImageUrl(image.ImageUrl)
-			            .Build();
+			var embed = new KaguyaEmbedBuilder(KaguyaColors.Green).WithDescription($"{Context.User.Mention} here is your new waifu!")
+			                                                      .WithImageUrl(image.ImageUrl)
+			                                                      .Build();
 
 			await SendEmbedAsync(embed);
 		}

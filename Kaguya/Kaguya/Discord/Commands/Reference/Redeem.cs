@@ -23,9 +23,8 @@ namespace Kaguya.Discord.Commands.Reference
 		private readonly ILogger<Redeem> _logger;
 		private readonly PremiumKeyRepository _premiumKeyRepository;
 
-		public Redeem(ILogger<Redeem> logger, PremiumKeyRepository premiumKeyRepository,
-			InteractivityService interactivityService, KaguyaUserRepository kaguyaUserRepository,
-			KaguyaServerRepository kaguyaServerRepository) : base(logger)
+		public Redeem(ILogger<Redeem> logger, PremiumKeyRepository premiumKeyRepository, InteractivityService interactivityService,
+			KaguyaUserRepository kaguyaUserRepository, KaguyaServerRepository kaguyaServerRepository) : base(logger)
 		{
 			_logger = logger;
 			_premiumKeyRepository = premiumKeyRepository;
@@ -53,8 +52,7 @@ namespace Kaguya.Discord.Commands.Reference
 
 			if (keys.Length > 5)
 			{
-				await SendBasicErrorEmbedAsync("You are trying to redeem too many items at once. Please " +
-				                               "paste in up to 5 keys.");
+				await SendBasicErrorEmbedAsync("You are trying to redeem too many items at once. Please " + "paste in up to 5 keys.");
 
 				return;
 			}
@@ -65,8 +63,8 @@ namespace Kaguya.Discord.Commands.Reference
 				if (match == null)
 				{
 					var responseEmbed = GetBasicErrorEmbedBuilder("This premium key is invalid.").Build();
-					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null,
-						TimeSpan.FromSeconds(5), null, false, responseEmbed);
+					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null, TimeSpan.FromSeconds(5), null, false,
+						responseEmbed);
 
 					return;
 				}
@@ -74,8 +72,8 @@ namespace Kaguya.Discord.Commands.Reference
 				if (match.IsRedeemed)
 				{
 					var responseEmbed = GetBasicErrorEmbedBuilder("This key has already been redeemed.").Build();
-					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null,
-						TimeSpan.FromSeconds(5), null, false, responseEmbed);
+					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, null, TimeSpan.FromSeconds(5), null, false,
+						responseEmbed);
 
 					return;
 				}
@@ -83,8 +81,7 @@ namespace Kaguya.Discord.Commands.Reference
 				var user = await _kaguyaUserRepository.GetOrCreateAsync(Context.User.Id);
 				var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
 
-				int additionalCoins =
-					(int) (((double) 25000 / 30) * TimeSpan.FromSeconds(match.LengthInSeconds).TotalDays);
+				int additionalCoins = (int) (((double) 25000 / 30) * TimeSpan.FromSeconds(match.LengthInSeconds).TotalDays);
 
 				var duration = new TimeSpan(0, 0, match.LengthInSeconds);
 
@@ -97,16 +94,14 @@ namespace Kaguya.Discord.Commands.Reference
 				user.AdjustCoins(additionalCoins);
 				user.TotalDaysPremium += (int) duration.TotalDays;
 				user.TotalPremiumRedemptions++;
-				user.PremiumExpiration =
-					user.PremiumExpiration <= DateTimeOffset.Now || !user.PremiumExpiration.HasValue
-						? match.Expiration
-						: user.PremiumExpiration.Value.Add(duration);
+				user.PremiumExpiration = user.PremiumExpiration <= DateTimeOffset.Now || !user.PremiumExpiration.HasValue
+					? match.Expiration
+					: user.PremiumExpiration.Value.Add(duration);
 
 				// Modify Server
-				server.PremiumExpiration =
-					server.PremiumExpiration < DateTimeOffset.Now || !server.PremiumExpiration.HasValue
-						? match.Expiration
-						: server.PremiumExpiration.Value.Add(duration);
+				server.PremiumExpiration = server.PremiumExpiration < DateTimeOffset.Now || !server.PremiumExpiration.HasValue
+					? match.Expiration
+					: server.PremiumExpiration.Value.Add(duration);
 
 				// Update in DB.
 				await _kaguyaUserRepository.UpdateAsync(user);
@@ -119,20 +114,19 @@ namespace Kaguya.Discord.Commands.Reference
 				_logger.LogInformation(
 					$"User {Context.User.Id} has redeemed a Kaguya Premium key in guild {Context.Guild.Id}: duration = {match.HumanizedLength}.");
 
-				var response = new KaguyaEmbedBuilder(KaguyaColors.Gold)
-				               .WithTitle("Kaguya Premium: Redemption Successful")
-				               .WithDescription(
-					               $"{Context.User.Mention} You have successfully redeemed a {Global.StoreLink} key " +
-					               $"with a duration of {match.HumanizedLength.AsBold()}.\n" +
-					               $"You have been awarded {additionalCoins.ToString("N0").AsBold()} coins.")
-				               .WithFooter(new EmbedFooterBuilder
-				               {
-					               Text =
-						               $"Premium Expiration: {Context.User.Username}: {userPremiumRemaining.Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day)} | " +
-						               $"{Context.Guild.Name}: {serverPremiumRemaining.Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day)}\n" +
-						               $"{Context.User.Username} has {user.TotalDaysPremium:N0} days premium across {user.TotalPremiumRedemptions:N0} redemptions."
-				               })
-				               .Build();
+				var response = new KaguyaEmbedBuilder(KaguyaColors.Gold).WithTitle("Kaguya Premium: Redemption Successful")
+				                                                        .WithDescription(
+					                                                        $"{Context.User.Mention} You have successfully redeemed a {Global.StoreLink} key " +
+					                                                        $"with a duration of {match.HumanizedLength.AsBold()}.\n" +
+					                                                        $"You have been awarded {additionalCoins.ToString("N0").AsBold()} coins.")
+				                                                        .WithFooter(new EmbedFooterBuilder
+				                                                        {
+					                                                        Text =
+						                                                        $"Premium Expiration: {Context.User.Username}: {userPremiumRemaining.Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day)} | " +
+						                                                        $"{Context.Guild.Name}: {serverPremiumRemaining.Humanize(2, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Day)}\n" +
+						                                                        $"{Context.User.Username} has {user.TotalDaysPremium:N0} days premium across {user.TotalPremiumRedemptions:N0} redemptions."
+				                                                        })
+				                                                        .Build();
 
 				await SendEmbedAsync(response);
 			}

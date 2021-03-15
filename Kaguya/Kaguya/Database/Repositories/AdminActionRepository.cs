@@ -27,8 +27,7 @@ namespace Kaguya.Database.Repositories
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
-		public async Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId,
-			bool showHidden = false)
+		public async Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, bool showHidden = false)
 		{
 			var collection = Table.AsNoTracking()
 			                      .Where(x => x.ActionedUserId == userId &&
@@ -38,8 +37,7 @@ namespace Kaguya.Database.Repositories
 			return showHidden ? await collection.ToListAsync() : await collection.Where(x => !x.IsHidden).ToListAsync();
 		}
 
-		public async Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, string action,
-			bool showHidden = false)
+		public async Task<IList<AdminAction>> GetAllUnexpiredAsync(ulong userId, ulong serverId, string action, bool showHidden = false)
 		{
 			var collection = Table.AsNoTracking()
 			                      .Where(x => x.ActionedUserId == userId &&

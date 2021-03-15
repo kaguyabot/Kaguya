@@ -42,15 +42,13 @@ namespace Kaguya.Discord.Commands.Configuration
 		         "- `{MEMBERCOUNT}` -> The count of members in the server, formatted as `1st`, `2nd`, `3rd`, `4th`\n" +
 		         "- `{SERVERNAME}` -> The name of the server")]
 		[Remarks("<message>")]
-		[Example("Welcome {USERMENTION} to {SERVERNAME}, you are the {MEMBERCOUNT} member!",
-			ExampleStringFormat.CodeblockMultiLine)]
+		[Example("Welcome {USERMENTION} to {SERVERNAME}, you are the {MEMBERCOUNT} member!", ExampleStringFormat.CodeblockMultiLine)]
 		public async Task GreetingSetMessageCommandAsync([Remainder]
 			string message)
 		{
 			if (message.Length > 1750)
 			{
-				await SendBasicErrorEmbedAsync("Sorry, your message needs to contain no more than " +
-				                               "1,750 characters.");
+				await SendBasicErrorEmbedAsync("Sorry, your message needs to contain no more than " + "1,750 characters.");
 
 				return;
 			}
@@ -76,19 +74,16 @@ namespace Kaguya.Discord.Commands.Configuration
 				};
 
 				var confirmation = new ConfirmationBuilder().WithContent(PageBuilder.FromEmbedBuilder(secondEmbed))
-				                                            .WithDeletion(DeletionOptions.AfterCapturedContext |
-				                                                          DeletionOptions.Invalids)
+				                                            .WithDeletion(DeletionOptions.AfterCapturedContext | DeletionOptions.Invalids)
 				                                            .Build();
 
-				var response =
-					await _interactivityService.SendConfirmationAsync(confirmation, Context.Channel,
-						TimeSpan.FromMinutes(5));
+				var response = await _interactivityService.SendConfirmationAsync(confirmation, Context.Channel, TimeSpan.FromMinutes(5));
 
 				if (response.IsSuccess)
 				{
 					await SendEmbedAsync(GetBasicEmbedBuilder(
-						"Where do you want to send your greetings?\n" +
-						"Mention a text channel. Example: `#my-channel`", KaguyaColors.ConfigurationColor));
+						"Where do you want to send your greetings?\n" + "Mention a text channel. Example: `#my-channel`",
+						KaguyaColors.ConfigurationColor));
 
 					var channelReponse = await _interactivityService.NextMessageAsync(x => x.MentionedChannels.Any(),
 						timeout: TimeSpan.FromMinutes(5));
@@ -125,8 +120,8 @@ namespace Kaguya.Discord.Commands.Configuration
 				{
 					var embed = GetBasicErrorEmbedBuilder("Response timed out. No action will be taken.");
 
-					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel,
-						deleteDelay: TimeSpan.FromSeconds(15), embed: embed.Build());
+					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15),
+						embed: embed.Build());
 				}
 			}
 
@@ -162,13 +157,10 @@ namespace Kaguya.Discord.Commands.Configuration
 			if (!server.CustomGreetingIsEnabled)
 			{
 				var toggleEmbed =
-					GetBasicEmbedBuilder(
-						"I see that your greetings are disabled.\n" + "Would you like to turn them on?".AsBold(),
+					GetBasicEmbedBuilder("I see that your greetings are disabled.\n" + "Would you like to turn them on?".AsBold(),
 						KaguyaColors.LightYellow);
 
-				var result =
-					await _interactivityService.SendConfirmationAsync(toggleEmbed, Context.Channel,
-						TimeSpan.FromMinutes(5));
+				var result = await _interactivityService.SendConfirmationAsync(toggleEmbed, Context.Channel, TimeSpan.FromMinutes(5));
 
 				if (result.IsSuccess)
 				{
@@ -200,8 +192,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
 			await _serverRepository.UpdateAsync(server);
 
-			await SendBasicSuccessEmbedAsync("The custom greeting message has been cleared. Greetings " +
-			                                 "have been disabled.");
+			await SendBasicSuccessEmbedAsync("The custom greeting message has been cleared. Greetings " + "have been disabled.");
 		}
 
 		[Command("-toggle")]
@@ -249,8 +240,7 @@ namespace Kaguya.Discord.Commands.Configuration
 				return;
 			}
 
-			await SendBasicEmbedAsync("Current Greeting:".AsBoldUnderlined() + $"\n```{msg}```", KaguyaColors.Tan,
-				false);
+			await SendBasicEmbedAsync("Current Greeting:".AsBoldUnderlined() + $"\n```{msg}```", KaguyaColors.Tan, false);
 		}
 	}
 }

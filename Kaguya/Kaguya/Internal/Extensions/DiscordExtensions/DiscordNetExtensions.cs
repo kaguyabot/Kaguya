@@ -54,16 +54,12 @@ namespace Kaguya.Internal.Extensions.DiscordExtensions
 			return await user.SendMessageAsync(embed: embed);
 		}
 
-		public static void SendEmbedWithDeletion(this InteractivityService interactivityService,
-			ICommandContext context, Embed embed, TimeSpan deletionDelay)
+		public static void SendEmbedWithDeletion(this InteractivityService interactivityService, ICommandContext context, Embed embed,
+			TimeSpan deletionDelay)
 		{
-			interactivityService.DelayedSendMessageAndDeleteAsync(context.Channel, embed: embed,
-				deleteDelay: deletionDelay);
+			interactivityService.DelayedSendMessageAndDeleteAsync(context.Channel, embed: embed, deleteDelay: deletionDelay);
 		}
 
-		public static bool AllShardsReady(this DiscordShardedClient client)
-		{
-			return client.Shards.Count == Global.ShardsReady.Count;
-		}
+		public static bool AllShardsReady(this DiscordShardedClient client) { return client.Shards.Count == Global.ShardsReady.Count; }
 	}
 }

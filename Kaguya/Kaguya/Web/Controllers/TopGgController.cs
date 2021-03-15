@@ -21,8 +21,7 @@ namespace Kaguya.Web.Controllers
 		private readonly ILogger<TopGgController> _logger;
 		private readonly IServiceProvider _serviceProvider;
 
-		public TopGgController(IOptions<TopGgConfigurations> configs, ILogger<TopGgController> logger,
-			IServiceProvider serviceProvider)
+		public TopGgController(IOptions<TopGgConfigurations> configs, ILogger<TopGgController> logger, IServiceProvider serviceProvider)
 		{
 			_configs = configs;
 			_logger = logger;

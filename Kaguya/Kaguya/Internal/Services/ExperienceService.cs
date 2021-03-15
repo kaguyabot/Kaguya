@@ -33,9 +33,9 @@ namespace Kaguya.Internal.Services
 		private readonly ITextChannel _textChannel;
 		private readonly KaguyaUser _user;
 
-		public ExperienceService(ILogger<ExperienceService> logger, ITextChannel textChannel, KaguyaUser user,
-			KaguyaServer server, IUser discordUser, ulong serverId,
-			ServerExperienceRepository serverExperienceRepository, KaguyaUserRepository kaguyaUserRepository)
+		public ExperienceService(ILogger<ExperienceService> logger, ITextChannel textChannel, KaguyaUser user, KaguyaServer server,
+			IUser discordUser, ulong serverId, ServerExperienceRepository serverExperienceRepository,
+			KaguyaUserRepository kaguyaUserRepository)
 		{
 			_logger = logger;
 			_textChannel = textChannel;
@@ -132,16 +132,13 @@ namespace Kaguya.Internal.Services
 			}
 			catch (Exception e)
 			{
-				_logger.LogDebug(e,
-					$"Failed to send level up message to channel {_textChannel.Id} in guild " +
-					$"{_textChannel.GuildId}");
+				_logger.LogDebug(e, $"Failed to send level up message to channel {_textChannel.Id} in guild " + $"{_textChannel.GuildId}");
 			}
 		}
 
 		private bool CanReceiveGlobalExperience()
 		{
-			return !_user.LastGivenExp.HasValue ||
-			       _user.LastGivenExp.Value < DateTimeOffset.Now.Subtract(SpamPreventionWindow);
+			return !_user.LastGivenExp.HasValue || _user.LastGivenExp.Value < DateTimeOffset.Now.Subtract(SpamPreventionWindow);
 		}
 
 		private async Task<bool> CanReceiveServerExperienceAsync()
@@ -149,8 +146,7 @@ namespace Kaguya.Internal.Services
 			var serverExp = await FetchExperienceAsync();
 
 			// Whether the user was given server EXP in the last 2 minutes.
-			return !serverExp.LastGivenExp.HasValue ||
-			       serverExp.LastGivenExp.Value < DateTimeOffset.Now.Subtract(SpamPreventionWindow);
+			return !serverExp.LastGivenExp.HasValue || serverExp.LastGivenExp.Value < DateTimeOffset.Now.Subtract(SpamPreventionWindow);
 		}
 
 		private async Task<ServerExperience> FetchExperienceAsync()
@@ -213,10 +209,7 @@ namespace Kaguya.Internal.Services
 			return CalculateLevel(oldExp).ToFloor() < CalculateLevel(newExp).ToFloor();
 		}
 
-		public static bool HasLeveledUp(decimal oldLevel, decimal newLevel)
-		{
-			return oldLevel.ToFloor() < newLevel.ToFloor();
-		}
+		public static bool HasLeveledUp(decimal oldLevel, decimal newLevel) { return oldLevel.ToFloor() < newLevel.ToFloor(); }
 
 		public static decimal CalculateLevel(int exp)
 		{

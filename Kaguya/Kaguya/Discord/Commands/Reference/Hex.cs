@@ -69,8 +69,7 @@ namespace Kaguya.Discord.Commands.Reference
 
 			if (hexString.Length != 3 && hexString.Length != 6)
 			{
-				await SendBasicErrorEmbedAsync(
-					"Your hex value is invalid. The hexadecimal number must be 3 or 6 digits long.");
+				await SendBasicErrorEmbedAsync("Your hex value is invalid. The hexadecimal number must be 3 or 6 digits long.");
 
 				return;
 			}
@@ -118,8 +117,7 @@ namespace Kaguya.Discord.Commands.Reference
 			var color = new Color(colorValue);
 
 			// Output embed
-			string message = $"Your hex value is **#{completeHex.ToUpper()}**.\n" +
-			                 "The color of this embed is what your hex looks like.";
+			string message = $"Your hex value is **#{completeHex.ToUpper()}**.\n" + "The color of this embed is what your hex looks like.";
 
 			await SendBasicEmbedAsync(message, color);
 		}

@@ -25,8 +25,7 @@ namespace Kaguya.Discord
 			new Emoji("9️⃣")
 		};
 
-		public CommonEmotes(ILogger<CommonEmotes> logger, DiscordShardedClient client,
-			IOptions<DiscordConfigurations> configurations)
+		public CommonEmotes(ILogger<CommonEmotes> logger, DiscordShardedClient client, IOptions<DiscordConfigurations> configurations)
 		{
 			_logger = logger;
 			_client = client;

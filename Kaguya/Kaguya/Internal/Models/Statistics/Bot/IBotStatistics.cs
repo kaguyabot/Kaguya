@@ -3,8 +3,7 @@ using System;
 
 namespace Kaguya.Internal.Models.Statistics.Bot
 {
-	public interface IBotStatistics : IBotCommandStatistics, IBotDiscordStatistics, IBotFishingStatistics,
-		IBotGamblingStatistics
+	public interface IBotStatistics : IBotCommandStatistics, IBotDiscordStatistics, IBotFishingStatistics, IBotGamblingStatistics
 	{
 		/// <summary>
 		///  The most recent entry of statistics from the database.

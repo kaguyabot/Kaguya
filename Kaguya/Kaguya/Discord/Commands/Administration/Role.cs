@@ -43,14 +43,12 @@ namespace Kaguya.Discord.Commands.Administration
 			try
 			{
 				await guildUser.AddRoleAsync(role);
-				await SendBasicSuccessEmbedAsync(
-					$"Successfully added role {role.Name.AsBold()} to {guildUser.ToString().AsBold()}");
+				await SendBasicSuccessEmbedAsync($"Successfully added role {role.Name.AsBold()} to {guildUser.ToString().AsBold()}");
 			}
 			catch (Exception e)
 			{
-				await SendBasicErrorEmbedAsync(
-					$"Failed to add role {role.Name.AsBold()} to user {guildUser.ToString().AsBold()}.\n" +
-					$"Error Message: {e.Message.AsBold()}");
+				await SendBasicErrorEmbedAsync($"Failed to add role {role.Name.AsBold()} to user {guildUser.ToString().AsBold()}.\n" +
+				                               $"Error Message: {e.Message.AsBold()}");
 			}
 		}
 
@@ -65,21 +63,18 @@ namespace Kaguya.Discord.Commands.Administration
 			try
 			{
 				await guildUser.RemoveRoleAsync(role);
-				await SendBasicSuccessEmbedAsync(
-					$"Successfully removed role {role.Name.AsBold()} from {guildUser.ToString().AsBold()}");
+				await SendBasicSuccessEmbedAsync($"Successfully removed role {role.Name.AsBold()} from {guildUser.ToString().AsBold()}");
 			}
 			catch (Exception e)
 			{
-				await SendBasicErrorEmbedAsync(
-					$"Failed to remove role {role.Name.AsBold()} from user {guildUser.ToString().AsBold()}.\n" +
-					$"Error Message: {e.Message.AsBold()}");
+				await SendBasicErrorEmbedAsync($"Failed to remove role {role.Name.AsBold()} from user {guildUser.ToString().AsBold()}.\n" +
+				                               $"Error Message: {e.Message.AsBold()}");
 			}
 		}
 
 		[Command("-addlist")]
 		[Alias("-al")]
-		[Summary(
-			"Adds a list of roles to the user. If any roles have spaces, wrap each of them in \"quotation marks\".")]
+		[Summary("Adds a list of roles to the user. If any roles have spaces, wrap each of them in \"quotation marks\".")]
 		[Remarks("<user> <role 1> [...]")]
 		public async Task AddRoleCommand(SocketGuildUser guildUser, params SocketRole[] roles)
 		{
@@ -115,10 +110,9 @@ namespace Kaguya.Discord.Commands.Administration
 
 		[Command("-removelist")]
 		[Alias("-remlist", "-reml", "-rl")]
-		[Summary(
-			"Removes a list of roles from the user. If any roles have spaces, wrap each of them in \"quotation marks\".\n\n" +
-			"If you encounter any \"403 Forbidden\" errors, you need to move " +
-			"my 'Kaguya' role above any other roles in the heirarchy and try again.")]
+		[Summary("Removes a list of roles from the user. If any roles have spaces, wrap each of them in \"quotation marks\".\n\n" +
+		         "If you encounter any \"403 Forbidden\" errors, you need to move " +
+		         "my 'Kaguya' role above any other roles in the heirarchy and try again.")]
 		[Remarks("<user> <role 1> [...]")]
 		public async Task RemoveRoleCommand(SocketGuildUser guildUser, params SocketRole[] roles)
 		{
@@ -194,8 +188,7 @@ namespace Kaguya.Discord.Commands.Administration
 				}
 				catch (Exception e)
 				{
-					errorBuilder.AppendLine(
-						$"Role assignment for {user.ToString().AsBold()} failed: {e.Message.AsBold()}");
+					errorBuilder.AppendLine($"Role assignment for {user.ToString().AsBold()} failed: {e.Message.AsBold()}");
 				}
 			}
 
@@ -274,9 +267,8 @@ namespace Kaguya.Discord.Commands.Administration
 			}
 			catch (Exception)
 			{
-				await SendBasicErrorEmbedAsync(
-					$"The color {hex.AsBold()} is invalid. If your role has spaces, please " +
-					"wrap the role name in \"quotation marks\" and specify an optional color after that.");
+				await SendBasicErrorEmbedAsync($"The color {hex.AsBold()} is invalid. If your role has spaces, please " +
+				                               "wrap the role name in \"quotation marks\" and specify an optional color after that.");
 
 				return;
 			}
@@ -287,15 +279,12 @@ namespace Kaguya.Discord.Commands.Administration
 			}
 			catch (Exception e)
 			{
-				await SendBasicErrorEmbedAsync("Failed to create role " +
-				                               roleName.AsBold() +
-				                               $"\nError: {e.Message.AsBold()}");
+				await SendBasicErrorEmbedAsync("Failed to create role " + roleName.AsBold() + $"\nError: {e.Message.AsBold()}");
 
 				return;
 			}
 
-			await SendBasicEmbedAsync($"Created role {roleName.AsBold()} with color {hex.Replace("0x", "#").AsBold()}",
-				color);
+			await SendBasicEmbedAsync($"Created role {roleName.AsBold()} with color {hex.Replace("0x", "#").AsBold()}", color);
 		}
 
 		public async Task CreateRoleCommand(string roleName)
@@ -306,9 +295,7 @@ namespace Kaguya.Discord.Commands.Administration
 			}
 			catch (Exception e)
 			{
-				await SendBasicErrorEmbedAsync("Failed to create role " +
-				                               roleName.AsBold() +
-				                               $"\nError: {e.Message.AsBold()}");
+				await SendBasicErrorEmbedAsync("Failed to create role " + roleName.AsBold() + $"\nError: {e.Message.AsBold()}");
 			}
 
 			await SendBasicEmbedAsync("Created role " + roleName.AsBold(), KaguyaColors.Default);
@@ -316,8 +303,7 @@ namespace Kaguya.Discord.Commands.Administration
 
 		[Command("-createlist")]
 		[Alias("-cl")]
-		[Summary("Creates a list of roles with the names provided.\n" +
-		         "If a role name has spaces, wrap it in \"quotation marks\".")]
+		[Summary("Creates a list of roles with the names provided.\n" + "If a role name has spaces, wrap it in \"quotation marks\".")]
 		[Remarks("<role> [role] [...]")]
 		public async Task CreateRolesCommand(params string[] names)
 		{
@@ -395,8 +381,7 @@ namespace Kaguya.Discord.Commands.Administration
 
 			if (failure)
 			{
-				finalBuilder.AppendLine($"{Context.User.Mention} Failed to delete roles:")
-				            .AppendLine(errorBuilder.ToString());
+				finalBuilder.AppendLine($"{Context.User.Mention} Failed to delete roles:").AppendLine(errorBuilder.ToString());
 			}
 
 			Color color = default;
@@ -494,9 +479,7 @@ namespace Kaguya.Discord.Commands.Administration
 			var success = new List<SocketRole>();
 			var fail = new List<(SocketRole, string)>();
 
-			var unusedRoles = Context.Guild.Roles
-			                         .Where(x => !x.Members.Any() && x.Id != server.MuteRoleId && !x.IsManaged)
-			                         .ToArray();
+			var unusedRoles = Context.Guild.Roles.Where(x => !x.Members.Any() && x.Id != server.MuteRoleId && !x.IsManaged).ToArray();
 
 			if (!unusedRoles.Any())
 			{
@@ -570,8 +553,7 @@ namespace Kaguya.Discord.Commands.Administration
 			{
 				embedBuilder.Footer = new EmbedFooterBuilder
 				{
-					Text =
-						"Errors often come from lack of permissions. Ensure the \"Kaguya\" role is at the top of the role hierarchy."
+					Text = "Errors often come from lack of permissions. Ensure the \"Kaguya\" role is at the top of the role hierarchy."
 				};
 			}
 
@@ -595,8 +577,7 @@ namespace Kaguya.Discord.Commands.Administration
 			}
 			catch (Exception e)
 			{
-				await SendBasicErrorEmbedAsync($"Failed to rename role {role.Mention}.\n" +
-				                               $"Error: {e.Message.AsBold()}");
+				await SendBasicErrorEmbedAsync($"Failed to rename role {role.Mention}.\n" + $"Error: {e.Message.AsBold()}");
 
 				return;
 			}

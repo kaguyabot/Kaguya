@@ -60,8 +60,7 @@ namespace Kaguya.Internal.Services
 				catch (Exception e)
 				{
 					_logger.LogDebug(e,
-						$"Exception encountered when sending greeting message to {channel.Id} " +
-						$"in guild {server.ServerId}.");
+						$"Exception encountered when sending greeting message to {channel.Id} " + $"in guild {server.ServerId}.");
 				}
 			}
 		}

@@ -81,7 +81,7 @@ namespace Kaguya.Internal.Events
 
 		public void InitEvents()
 		{
-			var eventImplementations = 
+			var eventImplementations =
 				new EventImplementations(_implementationsLogger, _antiraidService, _client, _lavaNode, _autoRoleService);
 
 			_logger.LogDebug("Kaguya Events initialized");

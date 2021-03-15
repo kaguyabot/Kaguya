@@ -32,8 +32,8 @@ namespace Kaguya.Discord.Commands.Music
 		private readonly LavaNode _lavaNode;
 		private readonly ILogger<Search> _logger;
 
-		public Search(ILogger<Search> logger, LavaNode lavaNode, InteractivityService interactivityService,
-			CommonEmotes commonEmotes, AudioQueueLocker queueLocker) : base(logger)
+		public Search(ILogger<Search> logger, LavaNode lavaNode, InteractivityService interactivityService, CommonEmotes commonEmotes,
+			AudioQueueLocker queueLocker) : base(logger)
 		{
 			_logger = logger;
 			_lavaNode = lavaNode;
@@ -43,9 +43,8 @@ namespace Kaguya.Discord.Commands.Music
 		}
 
 		[Command(RunMode = RunMode.Async)]
-		[Summary(
-			"Searches for the desired song. Returns top 5 most popular results. Click on one of the reaction icons to play " +
-			"the appropriate track.")]
+		[Summary("Searches for the desired song. Returns top 5 most popular results. Click on one of the reaction icons to play " +
+		         "the appropriate track.")]
 		[Remarks("<song name>")]
 		public async Task SearchCommand([Remainder]
 			string search)
@@ -65,13 +64,11 @@ namespace Kaguya.Discord.Commands.Music
 			catch (HttpRequestException e)
 			{
 				string pvtError = "Lavalink is not connected. Please start lavalink in " +
-				                  Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\",
-					                  "Lavalink.jar"));
+				                  Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\", "Lavalink.jar"));
 
 				_logger.LogError(e, pvtError);
 
-				await SendBasicErrorEmbedAsync("Failure, core dependency missing. Please check the " +
-				                               "console logs for more details.");
+				await SendBasicErrorEmbedAsync("Failure, core dependency missing. Please check the " + "console logs for more details.");
 
 				return;
 			}
@@ -83,9 +80,7 @@ namespace Kaguya.Discord.Commands.Music
 				return;
 			}
 
-			var topResults = searchResult.Tracks.Count <= 5
-				? searchResult.Tracks.ToList()
-				: searchResult.Tracks.Take(5).ToList();
+			var topResults = searchResult.Tracks.Count <= 5 ? searchResult.Tracks.ToList() : searchResult.Tracks.Take(5).ToList();
 
 			string line1 = topResults.Count <= 5
 				? $"I found {topResults.Count} tracks matching your search."
@@ -113,13 +108,10 @@ namespace Kaguya.Discord.Commands.Music
 			                                                       .WithDeletion(DeletionOptions.AfterCapturedContext |
 			                                                                     DeletionOptions.Invalids)
 			                                                       .WithEnableDefaultSelectionDescription(false)
-			                                                       .WithSelectionEmbed(
-				                                                       PageBuilder.FromEmbedBuilder(embed))
+			                                                       .WithSelectionEmbed(PageBuilder.FromEmbedBuilder(embed))
 			                                                       .WithUsers(Context.User);
 
-			var result =
-				await _interactivityService.SendSelectionAsync(builder.Build(), Context.Channel,
-					TimeSpan.FromMinutes(2));
+			var result = await _interactivityService.SendSelectionAsync(builder.Build(), Context.Channel, TimeSpan.FromMinutes(2));
 
 			if (result.IsSuccess)
 			{
@@ -137,8 +129,8 @@ namespace Kaguya.Discord.Commands.Music
 				if (player.Queue.Count == 0 && player.PlayerState != PlayerState.Playing)
 				{
 					await player.PlayAsync(track);
-					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel,
-						deleteDelay: TimeSpan.FromSeconds(15), embed: MusicEmbeds.GetNowPlayingEmbedForTrack(track));
+					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15),
+						embed: MusicEmbeds.GetNowPlayingEmbedForTrack(track));
 				}
 				else
 				{
@@ -147,8 +139,7 @@ namespace Kaguya.Discord.Commands.Music
 						player.Queue.Enqueue(track);
 					}
 
-					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel,
-						deleteDelay: TimeSpan.FromSeconds(15),
+					_interactivityService.DelayedSendMessageAndDeleteAsync(Context.Channel, deleteDelay: TimeSpan.FromSeconds(15),
 						embed: MusicEmbeds.GetQueuedEmbedForTrack(track, player.Queue.Count));
 				}
 			}

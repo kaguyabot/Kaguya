@@ -17,8 +17,7 @@ namespace Kaguya.Discord.Commands.Reference
 		private readonly CommonEmotes _commonEmotes;
 		private readonly KaguyaUserRepository _kaguyaUserRepository;
 
-		public Cooldowns(ILogger<Cooldowns> logger, KaguyaUserRepository kaguyaUserRepository,
-			CommonEmotes commonEmotes) : base(logger)
+		public Cooldowns(ILogger<Cooldowns> logger, KaguyaUserRepository kaguyaUserRepository, CommonEmotes commonEmotes) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;
 			_commonEmotes = commonEmotes;
@@ -38,12 +37,10 @@ namespace Kaguya.Discord.Commands.Reference
 				desc.Append($"{cooldown}: ")
 				    .AppendLine(cooldown.HasExpired()
 					    ? $"{_commonEmotes.CheckMarkEmoji} " + "EXPIRED".AsBlueCode()
-					    : $"{_commonEmotes.RedCrossEmote} " +
-					      cooldown.CooldownRemaining()!.Value.HumanizeTraditionalReadable());
+					    : $"{_commonEmotes.RedCrossEmote} " + cooldown.CooldownRemaining()!.Value.HumanizeTraditionalReadable());
 			}
 
-			var embed = new KaguyaEmbedBuilder().WithDescription(
-				$"{Context.User.Mention}'s Cooldowns".AsBoldUnderlined() + "\n\n" + desc);
+			var embed = new KaguyaEmbedBuilder().WithDescription($"{Context.User.Mention}'s Cooldowns".AsBoldUnderlined() + "\n\n" + desc);
 
 			await SendEmbedAsync(embed);
 		}

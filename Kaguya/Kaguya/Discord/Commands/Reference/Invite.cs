@@ -14,11 +14,7 @@ namespace Kaguya.Discord.Commands.Reference
 	public class Invite : KaguyaBase<Invite>
 	{
 		private readonly IOptions<AdminConfigurations> _adminConfig;
-
-		public Invite(ILogger<Invite> logger, IOptions<AdminConfigurations> adminConfig) : base(logger)
-		{
-			_adminConfig = adminConfig;
-		}
+		public Invite(ILogger<Invite> logger, IOptions<AdminConfigurations> adminConfig) : base(logger) { _adminConfig = adminConfig; }
 
 		[Command]
 		[Summary("Displays an invitation URL for Kaguya. You can use this to add Kaguya to your " + "Discord servers.")]
@@ -30,9 +26,8 @@ namespace Kaguya.Discord.Commands.Reference
 			if (ownerId == curUserId)
 			{
 				await SendBasicSuccessEmbedAsync(
-					"Invite Kaguya".AsBold() +
-					$"\n\n[Here you go!]({Global.InviteUrl})\n" +
-					$"[Development]({Global.LocalDebugInviteUrl})", false);
+					"Invite Kaguya".AsBold() + $"\n\n[Here you go!]({Global.InviteUrl})\n" + $"[Development]({Global.LocalDebugInviteUrl})",
+					false);
 			}
 			else
 			{

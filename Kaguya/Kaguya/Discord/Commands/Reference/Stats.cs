@@ -61,8 +61,7 @@ namespace Kaguya.Discord.Commands.Reference
 				{
 					if (Context.User.Id != _adminConfig.Value.OwnerId && userId != Context.User.Id)
 					{
-						await SendBasicErrorEmbedAsync("Sorry, only Kaguya Administration can view " +
-						                               "statistics on other users.");
+						await SendBasicErrorEmbedAsync("Sorry, only Kaguya Administration can view " + "statistics on other users.");
 
 						return;
 					}

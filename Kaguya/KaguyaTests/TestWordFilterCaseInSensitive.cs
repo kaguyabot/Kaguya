@@ -14,10 +14,7 @@ namespace KaguyaTests
 		[InlineData("the quick brown fox jumped over the lazy dog", "OVER")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "LAZY")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "DOG")]
-		public void ShouldExactMatch(string content, string pattern)
-		{
-			Assert.True(DiscordWorker.FilterMatch(content, pattern));
-		}
+		public void ShouldExactMatch(string content, string pattern) { Assert.True(DiscordWorker.FilterMatch(content, pattern)); }
 
 		[Theory]
 		[InlineData("the quick brown fox jumped over the lazy dog", "MOM")]
@@ -29,10 +26,7 @@ namespace KaguyaTests
 		[InlineData("the quick brown fox jumped over the lazy dog", "JU*PED")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "QUI*K")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "L*Z")]
-		public void ShouldNotExactMatch(string content, string pattern)
-		{
-			Assert.False(DiscordWorker.FilterMatch(content, pattern));
-		}
+		public void ShouldNotExactMatch(string content, string pattern) { Assert.False(DiscordWorker.FilterMatch(content, pattern)); }
 
 		[Theory]
 		[InlineData("the quick brown fox jumped over the lazy dog", "*HE")]
@@ -43,10 +37,7 @@ namespace KaguyaTests
 		[InlineData("the quick brown fox jumped over the lazy dog", "*VER")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "*ZY")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "*G")]
-		public void ShouldWildCardStartMatch(string content, string pattern)
-		{
-			Assert.True(DiscordWorker.FilterMatch(content, pattern));
-		}
+		public void ShouldWildCardStartMatch(string content, string pattern) { Assert.True(DiscordWorker.FilterMatch(content, pattern)); }
 
 		[Theory]
 		[InlineData("the quick brown fox jumped over the lazy dog", "*QASDF")]
@@ -71,10 +62,7 @@ namespace KaguyaTests
 		[InlineData("the quick brown fox jumped over the lazy dog", "OV*")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "LAZ*")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "D*")]
-		public void ShouldWildCardEndMatch(string content, string pattern)
-		{
-			Assert.True(DiscordWorker.FilterMatch(content, pattern));
-		}
+		public void ShouldWildCardEndMatch(string content, string pattern) { Assert.True(DiscordWorker.FilterMatch(content, pattern)); }
 
 		[Theory]
 		[InlineData("the quick brown fox jumped over the lazy dog", "MORK*")]
@@ -85,9 +73,6 @@ namespace KaguyaTests
 		[InlineData("the quick brown fox jumped over the lazy dog", "MURICA*")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "FRANCE*")]
 		[InlineData("the quick brown fox jumped over the lazy dog", "CANADA*")]
-		public void ShouldNotWildCardEndMatch(string content, string pattern)
-		{
-			Assert.False(DiscordWorker.FilterMatch(content, pattern));
-		}
+		public void ShouldNotWildCardEndMatch(string content, string pattern) { Assert.False(DiscordWorker.FilterMatch(content, pattern)); }
 	}
 }

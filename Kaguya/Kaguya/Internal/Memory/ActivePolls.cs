@@ -23,29 +23,13 @@ namespace Kaguya.Internal.Memory
 					InsertId(p.ServerId);
 				}
 
-				logger.LogInformation($"Active polls initialized. There are currently {_currentlyActivePolls.Count} " +
-				                      $"active polls.");
+				logger.LogInformation($"Active polls initialized. There are currently {_currentlyActivePolls.Count} " + "active polls.");
 			}
 		}
-		
-		public static int CountActivePolls(ulong serverId)
-		{
-			return _currentlyActivePolls.Count(x => x == serverId);
-		}
 
-		public static void InsertId(ulong serverId)
-		{
-			_currentlyActivePolls.Add(serverId);
-		}
-
-		public static void RemoveId(ulong serverId)
-		{
-			_currentlyActivePolls.Remove(serverId);
-		}
-
-		public SynchronizedCollection<ulong> GetCollection()
-		{
-			return _currentlyActivePolls;
-		}
+		public static int CountActivePolls(ulong serverId) { return _currentlyActivePolls.Count(x => x == serverId); }
+		public static void InsertId(ulong serverId) { _currentlyActivePolls.Add(serverId); }
+		public static void RemoveId(ulong serverId) { _currentlyActivePolls.Remove(serverId); }
+		public SynchronizedCollection<ulong> GetCollection() { return _currentlyActivePolls; }
 	}
 }

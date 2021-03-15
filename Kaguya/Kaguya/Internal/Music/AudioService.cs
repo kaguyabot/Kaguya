@@ -94,8 +94,7 @@ namespace Kaguya.Internal.Music
 			await args.Player.PlayAsync(queueable);
 
 			var npEmbed = MusicEmbeds.GetNowPlayingEmbedForTrack(queueable, true);
-			_interactivityService.DelayedSendMessageAndDeleteAsync(args.Player.TextChannel, null,
-				TimeSpan.FromSeconds(10), embed: npEmbed);
+			_interactivityService.DelayedSendMessageAndDeleteAsync(args.Player.TextChannel, null, TimeSpan.FromSeconds(10), embed: npEmbed);
 		}
 
 		private async Task InitiateDisconnectAsync(LavaPlayer player, TimeSpan timeSpan)
@@ -128,8 +127,8 @@ namespace Kaguya.Internal.Music
 				Description = "🎵 No more songs in queue, disconnecting!"
 			};
 
-			_interactivityService.DelayedSendMessageAndDeleteAsync(player.TextChannel,
-				deleteDelay: TimeSpan.FromSeconds(10), embed: dcEmbed.Build());
+			_interactivityService.DelayedSendMessageAndDeleteAsync(player.TextChannel, deleteDelay: TimeSpan.FromSeconds(10),
+				embed: dcEmbed.Build());
 
 			await _lavaNode.LeaveAsync(player.VoiceChannel);
 		}

@@ -38,8 +38,7 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 
 			var collection = await _premiumKeyRepository.GenerateAndInsertAsync(Context.User.Id, amount, parsedTime);
 
-			await SendBasicSuccessEmbedAsync(
-				$"Successfully bulk-inserted {amount.ToString("N0").AsBold()} {timeString} premium keys.");
+			await SendBasicSuccessEmbedAsync($"Successfully bulk-inserted {amount.ToString("N0").AsBold()} {timeString} premium keys.");
 
 			var builder = new StringBuilder();
 			foreach (var key in collection)
@@ -73,9 +72,8 @@ namespace Kaguya.Discord.Commands.OwnerOnly
 					}
 					catch (Exception e)
 					{
-						await SendBasicErrorEmbedAsync(
-							"An error occured while writing key contents to memory to send as a file.\n" +
-							$"Error: {e.ToString().AsBold()}");
+						await SendBasicErrorEmbedAsync("An error occured while writing key contents to memory to send as a file.\n" +
+						                               $"Error: {e.ToString().AsBold()}");
 					}
 					finally
 					{

@@ -83,8 +83,7 @@ namespace Kaguya.Discord.Commands.Music
 			var embed = new KaguyaEmbedBuilder(KaguyaColors.Purple)
 			{
 				Title = "🔂 Loop Tracks",
-				Description = $"Successfully looped {curTrack.Title.AsBold()} {amount.ToString().AsBold()} " +
-				              $"time{s}"
+				Description = $"Successfully looped {curTrack.Title.AsBold()} {amount.ToString().AsBold()} " + $"time{s}"
 			};
 
 			await SendEmbedAsync(embed);

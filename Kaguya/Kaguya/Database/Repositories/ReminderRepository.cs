@@ -28,9 +28,7 @@ namespace Kaguya.Database.Repositories
 		public async Task<IList<Reminder>> GetAllToDeliverAsync()
 		{
 			// We cannot use x.NeedsDelivery for this query.
-			return await Table.AsNoTracking()
-			                  .Where(x => x.Expiration < DateTimeOffset.Now && !x.HasTriggered)
-			                  .ToListAsync();
+			return await Table.AsNoTracking().Where(x => x.Expiration < DateTimeOffset.Now && !x.HasTriggered).ToListAsync();
 		}
 	}
 }

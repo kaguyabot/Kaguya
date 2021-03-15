@@ -48,9 +48,8 @@ namespace Kaguya.Discord.Commands.Music
 			}
 			else
 			{
-				await SendBasicErrorEmbedAsync(
-					"The player must be either in a playing or paused state to use this command.\n" +
-					$"Current state is {player.PlayerState.Humanize().AsBold()}.");
+				await SendBasicErrorEmbedAsync("The player must be either in a playing or paused state to use this command.\n" +
+				                               $"Current state is {player.PlayerState.Humanize().AsBold()}.");
 			}
 		}
 	}

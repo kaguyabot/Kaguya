@@ -38,9 +38,8 @@ namespace Kaguya.Discord.Commands.Configuration
 		private readonly InteractivityService _interactivityService;
 		private readonly KaguyaServerRepository _kaguyaServerRepository;
 
-		public Antiraid(ILogger<Antiraid> logger, InteractivityService interactivityService,
-			KaguyaServerRepository kaguyaServerRepository, AntiraidConfigRepository antiraidConfigRepository,
-			CommonEmotes commonEmotes) : base(logger)
+		public Antiraid(ILogger<Antiraid> logger, InteractivityService interactivityService, KaguyaServerRepository kaguyaServerRepository,
+			AntiraidConfigRepository antiraidConfigRepository, CommonEmotes commonEmotes) : base(logger)
 		{
 			_interactivityService = interactivityService;
 			_kaguyaServerRepository = kaguyaServerRepository;
@@ -193,10 +192,8 @@ namespace Kaguya.Discord.Commands.Configuration
 				var confirmationBuilder = new ConfirmationBuilder().WithConfirmEmote(_commonEmotes.CheckMarkEmoji)
 				                                                   .WithDeclineEmote(_commonEmotes.RedCrossEmote)
 				                                                   .WithUsers(Context.User)
-				                                                   .WithContent(
-					                                                   PageBuilder.FromEmbed(
-						                                                   GetStageFourConfirmationEmbed(newArConfig
-							                                                   .Action)))
+				                                                   .WithContent(PageBuilder.FromEmbed(
+					                                                   GetStageFourConfirmationEmbed(newArConfig.Action)))
 				                                                   .Build();
 
 				var confirmation = await _interactivityService.SendConfirmationAsync(confirmationBuilder,
@@ -248,8 +245,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
 		[Priority(0)]
 		[Command(RunMode = RunMode.Async)]
-		public async Task AntiraidSetupCommand(uint userThreshold, uint secondsThreshold, string action,
-			string timeString = null)
+		public async Task AntiraidSetupCommand(uint userThreshold, uint secondsThreshold, string action, string timeString = null)
 		{
 			if (_currentlyActiveSetups.ContainsKey(Context.Guild.Id))
 			{
@@ -374,10 +370,8 @@ namespace Kaguya.Discord.Commands.Configuration
 			await _antiraidConfigRepository.UpdateAsync(curConfig);
 
 			await SendBasicEmbedAsync(
-				"This antiraid config is now " +
-				newState.AsBold() +
-				".\n\n" +
-				$"Config:\n{GetAntiraidConfigString(curConfig)}", KaguyaColors.LightYellow);
+				"This antiraid config is now " + newState.AsBold() + ".\n\n" + $"Config:\n{GetAntiraidConfigString(curConfig)}",
+				KaguyaColors.LightYellow);
 		}
 
 		[Command("-setmsg")]
@@ -403,8 +397,7 @@ namespace Kaguya.Discord.Commands.Configuration
 			"Dear {USERNAME},\n\nYou were flagged as part of a raid and were {ACTION} from {SERVERNAME}.\n\n" +
 			"Ban appeal form: (some URL)\n" +
 			"Invite link: (some URL)\n\n" +
-			"We apologize for the inconvenience, we hope to see you in our server soon!",
-			ExampleStringFormat.CodeblockMultiLine)]
+			"We apologize for the inconvenience, we hope to see you in our server soon!", ExampleStringFormat.CodeblockMultiLine)]
 		public async Task SetAntiraidMessageCommand([Remainder]
 			string message)
 		{
@@ -468,8 +461,7 @@ namespace Kaguya.Discord.Commands.Configuration
 		{
 			if (failureAttempts > 2)
 			{
-				await SendBasicErrorEmbedAsync(
-					"You have entered an incorrect response too many times. Please try again.");
+				await SendBasicErrorEmbedAsync("You have entered an incorrect response too many times. Please try again.");
 
 				return true;
 			}
@@ -496,8 +488,7 @@ namespace Kaguya.Discord.Commands.Configuration
 			                                       .WithDeclineEmote(_commonEmotes.RedCrossEmote)
 			                                       .Build();
 
-			var response =
-				await _interactivityService.SendConfirmationAsync(builder, Context.Channel, TimeSpan.FromMinutes(2));
+			var response = await _interactivityService.SendConfirmationAsync(builder, Context.Channel, TimeSpan.FromMinutes(2));
 
 			if (!response.IsSuccess)
 			{
@@ -570,8 +561,7 @@ namespace Kaguya.Discord.Commands.Configuration
 			if (userThreshold < 2)
 			{
 				await SendBasicErrorEmbedAsync("Please enter a user value that is greater than 1. " +
-				                               "A raid of 1 user would mean any user who joins your server would be actioned."
-					                               .AsItalics() +
+				                               "A raid of 1 user would mean any user who joins your server would be actioned.".AsItalics() +
 				                               "\n\nPlease try again.");
 
 				return false;
@@ -579,8 +569,7 @@ namespace Kaguya.Discord.Commands.Configuration
 
 			if (userThreshold > 500)
 			{
-				await SendBasicErrorEmbedAsync(
-					"The user threshold must be no greater than 500. Please try again with a new number.");
+				await SendBasicErrorEmbedAsync("The user threshold must be no greater than 500. Please try again with a new number.");
 
 				return false;
 			}
@@ -616,9 +605,7 @@ namespace Kaguya.Discord.Commands.Configuration
 			var timeParser = new TimeParser(input);
 			var parsedTime = timeParser.ParseTime();
 
-			return parsedTime != TimeSpan.Zero &&
-			       parsedTime >= TimeSpan.FromSeconds(5) &&
-			       parsedTime <= TimeSpan.FromDays(365);
+			return parsedTime != TimeSpan.Zero && parsedTime >= TimeSpan.FromSeconds(5) && parsedTime <= TimeSpan.FromDays(365);
 		}
 
 		private TimeSpan GetPunishmentDurationTimeSpan(string input) { return new TimeParser(input).ParseTime(); }
@@ -646,9 +633,8 @@ namespace Kaguya.Discord.Commands.Configuration
 
 		private async Task SendSetupConflictErrorEmbedAsync()
 		{
-			await SendBasicErrorEmbedAsync(
-				"There is already an active antiraid setup running in this server. Please complete the first " +
-				"setup before beginning this one.");
+			await SendBasicErrorEmbedAsync("There is already an active antiraid setup running in this server. Please complete the first " +
+			                               "setup before beginning this one.");
 		}
 
 		private Embed GetStageOneEmbed()
@@ -677,8 +663,7 @@ namespace Kaguya.Discord.Commands.Configuration
 			return new KaguyaEmbedBuilder(KaguyaColors.NeonPurple).WithTitle("Anti Raid: Action")
 			                                                      .WithDescription(
 				                                                      $"{Context.User.Mention} Okay, so you've now told me that " +
-				                                                      $"{userThreshold} users who join within {seconds} seconds "
-					                                                      .AsBold() +
+				                                                      $"{userThreshold} users who join within {seconds} seconds ".AsBold() +
 				                                                      "of each other is to be flagged as a raid.\n\n" +
 				                                                      "What action should I perform on these users?\n\n" +
 				                                                      "Respond with: `mute`, `kick`, `ban`, or `shadowban`.\n" +

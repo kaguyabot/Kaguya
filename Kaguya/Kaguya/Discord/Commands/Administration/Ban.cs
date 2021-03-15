@@ -65,15 +65,11 @@ namespace Kaguya.Discord.Commands.Administration
 			catch (Exception e)
 			{
 				string errorString = new StringBuilder()
-				                     .AppendLine(
-					                     $"{Context.User.Mention} Failed to ban user {user.ToString().AsBold()}.")
+				                     .AppendLine($"{Context.User.Mention} Failed to ban user {user.ToString().AsBold()}.")
 				                     .AppendLine("Do I have enough permissions?".AsItalics())
-				                     .AppendLine(
-					                     "This error can also occur if the user you are trying to ban has more permissions than me."
-						                     .AsItalics())
-				                     .AppendLine(
-					                     "Ensure my role is also at the top of the role heirarchy, then try again."
-						                     .AsItalics())
+				                     .AppendLine("This error can also occur if the user you are trying to ban has more permissions than me."
+					                     .AsItalics())
+				                     .AppendLine("Ensure my role is also at the top of the role heirarchy, then try again.".AsItalics())
 				                     .Append($"Error: {e.Message.AsBold()}")
 				                     .ToString();
 
@@ -141,8 +137,7 @@ namespace Kaguya.Discord.Commands.Administration
 					}
 				}
 
-				await SendBasicErrorEmbedAsync(
-					$"Failed to unban user with id {id.ToString().AsBold()}. Error: {e.Message.AsBold()}");
+				await SendBasicErrorEmbedAsync($"Failed to unban user with id {id.ToString().AsBold()}. Error: {e.Message.AsBold()}");
 
 				_logger.LogDebug(e, $"Exception encountered with ban in guild {Context.Guild}.");
 			}
@@ -175,8 +170,7 @@ namespace Kaguya.Discord.Commands.Administration
 					Reason = reason,
 					Expiration = DateTimeOffset.Now + parsedTime,
 					Timestamp = DateTimeOffset.Now,
-					HasTriggered =
-						false // We specify this value if the user is temporarily actioned. Otherwise, leave it null.
+					HasTriggered = false // We specify this value if the user is temporarily actioned. Otherwise, leave it null.
 				};
 
 				await BanAsync(user, adminAction, reason);

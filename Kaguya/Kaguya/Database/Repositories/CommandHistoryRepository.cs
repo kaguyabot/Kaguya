@@ -26,9 +26,7 @@ namespace Kaguya.Database.Repositories
 		{
 			var constraint = DateTimeOffset.Now - threshold;
 
-			return await Table.AsNoTracking()
-			                  .Where(x => x.ExecutedSuccessfully && x.ExecutionTime > constraint)
-			                  .CountAsync();
+			return await Table.AsNoTracking().Where(x => x.ExecutedSuccessfully && x.ExecutionTime > constraint).CountAsync();
 		}
 
 		public async Task<int> GetRecentSuccessfulCountAsync(ulong userId, TimeSpan threshold)

@@ -13,10 +13,7 @@ namespace KaguyaTests
 		[InlineData("2 ")]
 		[InlineData("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ _")]
 		[InlineData("1 2 3 4 5 6 7 8 9 0")]
-		public void ShouldValidate(string channelName)
-		{
-			Assert.True(TextChannel.IsValidTextChannelName(channelName, out string _));
-		}
+		public void ShouldValidate(string channelName) { Assert.True(TextChannel.IsValidTextChannelName(channelName, out string _)); }
 
 		[Theory]
 		[InlineData("!@#$%^&*()+")]
@@ -31,9 +28,6 @@ namespace KaguyaTests
 		[InlineData("1*2*3*4/5*6-7+8+9")]
 		[InlineData("`channel`")]
 		[InlineData("t~est")]
-		public void ShouldFail(string channelName)
-		{
-			Assert.False(TextChannel.IsValidTextChannelName(channelName, out string _));
-		}
+		public void ShouldFail(string channelName) { Assert.False(TextChannel.IsValidTextChannelName(channelName, out string _)); }
 	}
 }

@@ -71,9 +71,7 @@ namespace Kaguya.Database.Repositories
 		public async Task<IList<Upvote>> GetAllUpvotesForNotificationServiceAsync()
 		{
 			return await Table.AsNoTracking()
-			                  .Where(x => !x.ReminderSent &&
-			                              x.Type.ToLower() != "test" &&
-			                              x.Timestamp < DateTimeOffset.Now.AddHours(-12))
+			                  .Where(x => !x.ReminderSent && x.Type.ToLower() != "test" && x.Timestamp < DateTimeOffset.Now.AddHours(-12))
 			                  .ToListAsync();
 		}
 	}

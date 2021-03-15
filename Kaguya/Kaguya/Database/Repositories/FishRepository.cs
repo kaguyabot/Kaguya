@@ -35,9 +35,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<IList<Fish>> GetAllNonTrashAsync(ulong userId)
 		{
-			return await Table.AsNoTracking()
-			                  .Where(x => x.UserId == userId && x.Rarity != FishRarity.Trash)
-			                  .ToListAsync();
+			return await Table.AsNoTracking().Where(x => x.UserId == userId && x.Rarity != FishRarity.Trash).ToListAsync();
 		}
 
 		public async Task<int> CountAllOfRarityAsync(FishRarity rarity)
@@ -45,10 +43,7 @@ namespace Kaguya.Database.Repositories
 			return await Table.AsNoTracking().Where(x => x.Rarity == rarity).CountAsync();
 		}
 
-		public async Task<int> CountAllCoinsEarnedAsync()
-		{
-			return await Table.AsNoTracking().SumAsync(x => x.CoinValue);
-		}
+		public async Task<int> CountAllCoinsEarnedAsync() { return await Table.AsNoTracking().SumAsync(x => x.CoinValue); }
 
 		public async Task<int> CountNetCoinsEarnedAsync()
 		{
@@ -60,9 +55,7 @@ namespace Kaguya.Database.Repositories
 
 		public async Task<int> CountAllNonTrashAsync(ulong userId)
 		{
-			return await Table.AsNoTracking()
-			                  .Where(x => x.UserId == userId && x.Rarity != FishRarity.Trash)
-			                  .CountAsync();
+			return await Table.AsNoTracking().Where(x => x.UserId == userId && x.Rarity != FishRarity.Trash).CountAsync();
 		}
 	}
 }

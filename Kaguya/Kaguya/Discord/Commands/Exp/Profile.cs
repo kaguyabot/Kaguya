@@ -23,8 +23,7 @@ namespace Kaguya.Discord.Commands.Exp
 		private readonly ServerExperienceRepository _serverExperienceRepository;
 
 		public Profile(ILogger<Profile> logger, KaguyaUserRepository kaguyaUserRepository,
-			ServerExperienceRepository serverExperienceRepository, FishRepository fishRepository,
-			CommonEmotes commonEmotes) : base(logger)
+			ServerExperienceRepository serverExperienceRepository, FishRepository fishRepository, CommonEmotes commonEmotes) : base(logger)
 		{
 			_kaguyaUserRepository = kaguyaUserRepository;
 			_serverExperienceRepository = serverExperienceRepository;
@@ -62,15 +61,13 @@ namespace Kaguya.Discord.Commands.Exp
 			                     .AppendLine(
 				                     $"Fish Exp: {user.FishExp.ToString("N0").AsBold()} | Fish Level: {user.FishLevel.ToString("N0").AsBold()} " +
 				                     $"| Fish Caught: {fishCount.ToString("N0").AsBold()}")
-			                     .AppendLine(
-				                     $"Global Rank: #{globalExpRank.ToString("N0").AsBold()} of {globalUserCount:N0} | " +
-				                     $"Server Rank: #{serverExpRank.ToString("N0").AsBold()} of {serverExpCount:N0}")
+			                     .AppendLine($"Global Rank: #{globalExpRank.ToString("N0").AsBold()} of {globalUserCount:N0} | " +
+			                                 $"Server Rank: #{serverExpRank.ToString("N0").AsBold()} of {serverExpCount:N0}")
 			                     .AppendLine($"Coins: {user.Coins.ToString("N0").AsBold()}");
 
 			if (user.IsPremium)
 			{
-				profileBuilder.AppendLine(
-					$"{diamondsEmote} Thanks for being a Kaguya Premium subscriber! {diamondsEmote}".AsItalics());
+				profileBuilder.AppendLine($"{diamondsEmote} Thanks for being a Kaguya Premium subscriber! {diamondsEmote}".AsItalics());
 			}
 
 			var embed = new KaguyaEmbedBuilder(KaguyaColors.Blue).WithTitle(title)

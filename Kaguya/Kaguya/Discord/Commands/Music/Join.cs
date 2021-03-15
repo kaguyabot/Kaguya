@@ -47,8 +47,7 @@ namespace Kaguya.Discord.Commands.Music
 			}
 			catch (Exception exception)
 			{
-				await SendBasicErrorEmbedAsync($"Failed to join {voiceState.VoiceChannel.Name}.\n\nError:\n" +
-				                               exception.Message);
+				await SendBasicErrorEmbedAsync($"Failed to join {voiceState.VoiceChannel.Name}.\n\nError:\n" + exception.Message);
 			}
 		}
 	}

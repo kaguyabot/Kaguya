@@ -58,8 +58,7 @@ namespace Kaguya.Discord.Commands.Reference
 
 			await _kaguyaUserRepository.UpdateAsync(kaguyaUser);
 
-			await SendBasicEmbedAsync("Successfully set your osu! username: " + osuUser.Username.AsBold(),
-				KaguyaColors.Blue);
+			await SendBasicEmbedAsync("Successfully set your osu! username: " + osuUser.Username.AsBold(), KaguyaColors.Blue);
 		}
 
 		[Priority(2)]
@@ -115,8 +114,7 @@ namespace Kaguya.Discord.Commands.Reference
 			var osuUser = await data.GetOsuUserAsync();
 			if (osuUser == null)
 			{
-				await SendBasicErrorEmbedAsync(
-					$"I couldn't find anyone with the username {data.OsuUsername.AsBold()}.");
+				await SendBasicErrorEmbedAsync($"I couldn't find anyone with the username {data.OsuUsername.AsBold()}.");
 
 				return;
 			}

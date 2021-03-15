@@ -20,10 +20,7 @@ namespace Kaguya.Discord
 		/// </summary>
 		/// <param name="embed"></param>
 		/// <returns></returns>
-		protected async Task<RestUserMessage> SendEmbedAsync(EmbedBuilder embed)
-		{
-			return await SendEmbedAsync(embed.Build());
-		}
+		protected async Task<RestUserMessage> SendEmbedAsync(EmbedBuilder embed) { return await SendEmbedAsync(embed.Build()); }
 
 		/// <summary>
 		///  Sends a basic <see cref="KaguyaEmbedBuilder" /> in chat with a red color.
@@ -52,8 +49,7 @@ namespace Kaguya.Discord
 			return await SendEmbedAsync(GetBasicSuccessEmbedBuilder(description, mentionUser).Build());
 		}
 
-		protected async Task<RestUserMessage> SendBasicEmbedAsync(string description, Color color,
-			bool mentionUser = true)
+		protected async Task<RestUserMessage> SendBasicEmbedAsync(string description, Color color, bool mentionUser = true)
 		{
 			return await SendEmbedAsync(GetBasicEmbedBuilder(description, color, mentionUser));
 		}
@@ -70,9 +66,7 @@ namespace Kaguya.Discord
 
 		protected EmbedBuilder GetBasicEmbedBuilder(string description, Color color, bool mentionUser = true)
 		{
-			return new KaguyaEmbedBuilder(color).WithDescription(mentionUser
-				? Context.User.Mention + " " + description
-				: description);
+			return new KaguyaEmbedBuilder(color).WithDescription(mentionUser ? Context.User.Mention + " " + description : description);
 		}
 
 		/// <summary>

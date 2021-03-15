@@ -89,7 +89,7 @@ namespace Kaguya.Internal.Services
 				catch (Exception e)
 				{
 					_logger.LogWarning(e, $"Failed to add {allRoles.Count} roles to user {userId} in guild {serverId}.");
-					
+
 					// Iterate through all roles and eliminate problematic ones from the auto-role system.
 					// Typically, these are roles that are too high in the role heirarchy for Kaguya to add.
 					foreach (var role in rolesToAdd)
@@ -101,8 +101,8 @@ namespace Kaguya.Internal.Services
 						catch (Exception e2)
 						{
 							await autoRoleRepository.DeleteByRoleIdAsync(role.Id);
-							_logger.LogWarning($"Identified problematic role: {role.Id}. Message: {e2.Message}." +
-							                   $" Deleted from database.");
+							_logger.LogWarning(
+								$"Identified problematic role: {role.Id}. Message: {e2.Message}." + " Deleted from database.");
 						}
 					}
 				}
