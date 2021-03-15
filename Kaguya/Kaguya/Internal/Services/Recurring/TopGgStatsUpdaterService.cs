@@ -44,7 +44,7 @@ namespace Kaguya.Internal.Services.Recurring
 				return;
 			}
 
-			await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(15), this);
+			//await _timerService.TriggerAtAsync(DateTimeOffset.Now.AddMinutes(15), this);
 
 			// We init here because we cannot init through DI. This is because the bot ID is 
 			// retrieved through the client, which is not logged in at the time of injection.
@@ -98,7 +98,7 @@ namespace Kaguya.Internal.Services.Recurring
 				return;
 			}
 
-			await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
+			//await _timerService.TriggerAtAsync(DateTimeOffset.Now, this);
 		}
 
 		private AuthDiscordBotListApi GetConfguredApi()
