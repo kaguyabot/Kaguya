@@ -13,10 +13,10 @@ namespace Kaguya.Discord.Commands.Reference
 	[Group("math")]
 	[Summary("Performs a simple mathematical calculation. You can add, subtract, " +
 	         "multiply, divide, and use the modulus operator.")]
-	public class Math : KaguyaBase<Math>
+	public class MathCommand : KaguyaBase<MathCommand>
 	{
-		private readonly ILogger<Math> _logger;
-		public Math(ILogger<Math> logger) : base(logger) { _logger = logger; }
+		private readonly ILogger<MathCommand> _logger;
+		public MathCommand(ILogger<MathCommand> logger) : base(logger) { _logger = logger; }
 
 		[Command]
 		[InheritMetadata(CommandMetadata.Summary)]
