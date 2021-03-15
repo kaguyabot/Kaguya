@@ -92,10 +92,7 @@ namespace Kaguya.External.Services.TopGg
 							// todo: Move debug logs into the repositories themselves.
 							await kaguyaUserRepository.UpdateAsync(user);
 							_logger.LogDebug($"User {user.UserId} has successfully upvoted and been rewarded on top.gg. " +
-							                 "Object updated in database.");
-
-							await upvoteRepository.InsertAsync(vote);
-							_logger.LogDebug($"Upvote object with ID {vote.Id} has successfully been inserted into the database.");
+							                 "User object updated in database.");
 						}
 						catch (Exception e)
 						{
