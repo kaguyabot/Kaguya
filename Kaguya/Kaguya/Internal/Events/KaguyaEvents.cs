@@ -17,6 +17,7 @@ namespace Kaguya.Internal.Events
 	{
 		private readonly IAntiraidService _antiraidService;
 		private readonly AudioService _audioService;
+		private readonly AutoRoleService _autoRoleService;
 		private readonly DiscordShardedClient _client;
 		private readonly GreetingService _greetingService;
 		private readonly GuildLoggerService _guildLoggerService;
@@ -25,10 +26,9 @@ namespace Kaguya.Internal.Events
 		private readonly ILogger<KaguyaEvents> _logger;
 		private readonly UpvoteNotifierService _upvoteNotifierService;
 
-		public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService,
-			LavaNode lavaNode, AudioService audioService, ILogger<EventImplementations> implementationsLogger,
-			GuildLoggerService guildLoggerService, GreetingService greetingService,
-			UpvoteNotifierService upvoteNotifierService)
+		public KaguyaEvents(ILogger<KaguyaEvents> logger, DiscordShardedClient client, IAntiraidService antiraidService, LavaNode lavaNode,
+			AudioService audioService, ILogger<EventImplementations> implementationsLogger, GuildLoggerService guildLoggerService,
+			GreetingService greetingService, UpvoteNotifierService upvoteNotifierService, AutoRoleService autoRoleService)
 		{
 			_logger = logger;
 			_client = client;
@@ -39,6 +39,7 @@ namespace Kaguya.Internal.Events
 			_guildLoggerService = guildLoggerService;
 			_greetingService = greetingService;
 			_upvoteNotifierService = upvoteNotifierService;
+			_autoRoleService = autoRoleService;
 		}
 
 		/// <summary>
@@ -65,10 +66,7 @@ namespace Kaguya.Internal.Events
 		///  Invokes the <see cref="OnFilteredWordDetected" /> event.
 		/// </summary>
 		/// <param name="data"></param>
-		public static void OnFilteredWordDetectedTrigger(FilteredWordEventData data)
-		{
-			OnFilteredWordDetected?.Invoke(data);
-		}
+		public static void OnFilteredWordDetectedTrigger(FilteredWordEventData data) { OnFilteredWordDetected?.Invoke(data); }
 
 		/// <summary>
 		///  Fired whenever an authorized top.gg upvote is received.
@@ -83,8 +81,8 @@ namespace Kaguya.Internal.Events
 
 		public void InitEvents()
 		{
-			var eventImplementations =
-				new EventImplementations(_implementationsLogger, _antiraidService, _client, _lavaNode);
+			var eventImplementations = 
+				new EventImplementations(_implementationsLogger, _antiraidService, _client, _lavaNode, _autoRoleService);
 
 			_logger.LogDebug("Kaguya Events initialized");
 

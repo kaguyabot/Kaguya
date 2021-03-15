@@ -57,7 +57,7 @@ namespace Kaguya
 			// All database repositories are added as scoped here.
 			services.AddScoped<AdminActionRepository>();
 			services.AddScoped<AntiraidConfigRepository>();
-			services.AddScoped<AutoAssignedRoleRepository>();
+			services.AddScoped<AutoRoleRepository>();
 			services.AddScoped<BlacklistedEntityRepository>();
 			services.AddScoped<CommandHistoryRepository>();
 			services.AddScoped<EightballRepository>();
@@ -155,6 +155,7 @@ namespace Kaguya
 
 			services.AddLavaNode(x => { x.SelfDeaf = true; });
 			services.AddSingleton<AudioService>();
+			services.AddSingleton<AutoRoleService>();
 
 			// CommonEmotes setup
 			services.AddSingleton<CommonEmotes>();

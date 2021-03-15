@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using Kaguya.Discord;
 using Kaguya.Internal.Extensions.DiscordExtensions;
+using Kaguya.Internal.Services;
 using Kaguya.Internal.Services.Recurring;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,15 +20,17 @@ namespace Kaguya.Internal.Events
 		private readonly IAntiraidService _arService;
 		private readonly DiscordShardedClient _client;
 		private readonly LavaNode _lavaNode;
+		private readonly AutoRoleService _autoRoleService;
 		private readonly ILogger<EventImplementations> _logger;
 
 		public EventImplementations(ILogger<EventImplementations> logger, IAntiraidService arService,
-			DiscordShardedClient client, LavaNode lavaNode)
+			DiscordShardedClient client, LavaNode lavaNode, AutoRoleService autoRoleService)
 		{
 			_logger = logger;
 			_arService = arService;
 			_client = client;
 			_lavaNode = lavaNode;
+			_autoRoleService = autoRoleService;
 		}
 
 		/// <summary>
@@ -41,6 +44,7 @@ namespace Kaguya.Internal.Events
 			ulong serverId = user.Guild.Id;
 
 			await _arService.TriggerAsync(serverId, userId);
+			await _autoRoleService.TriggerAsync(serverId, userId);
 		}
 
 		/// <summary>

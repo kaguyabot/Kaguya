@@ -15,7 +15,7 @@ namespace Kaguya.Database.Context
 		// DbSet (Models)
 		public DbSet<AdminAction> AdminActions { get; set; }
 		public DbSet<AntiRaidConfig> AntiRaidConfigs { get; set; }
-		public DbSet<AutoAssignedRole> AutoAssignedRoles { get; set; }
+		public DbSet<AutoRole> AutoRoles { get; set; }
 		public DbSet<BlacklistedEntity> BlacklistedEntities { get; set; }
 		public DbSet<CommandHistory> CommandHistories { get; set; }
 		public DbSet<Eightball> Eightballs { get; set; }
@@ -51,13 +51,6 @@ namespace Kaguya.Database.Context
 		{
 			OnModelCreatingPartial(modelBuilder);
 			// Keys - Only specify if key is complex (unique by more than 1 property)
-
-			modelBuilder.Entity<AutoAssignedRole>()
-			            .HasKey(x => new
-			            {
-				            x.ServerId,
-				            x.RoleId
-			            });
 
 			modelBuilder.Entity<FavoriteTrack>()
 			            .HasKey(x => new
@@ -142,6 +135,19 @@ namespace Kaguya.Database.Context
 				            x.ServerId,
 				            x.Action,
 				            x.Expiration
+			            });
+
+			// Index: AutoRole
+			modelBuilder.Entity<AutoRole>()
+			            .HasIndex(x => new
+			            {
+				            x.ServerId
+			            });
+
+			modelBuilder.Entity<AutoRole>()
+			            .HasIndex(x => new
+			            {
+				            x.RoleId
 			            });
 
 			// Index: CommandHistory
