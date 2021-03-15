@@ -54,9 +54,12 @@ namespace Kaguya.Internal.Services
 					return;
 				}
 
+				var rolesToAdd = new List<IRole>();
+				var allRoles = await autoRoleRepository.GetAllAsync(serverId);
+				
 				// Check to see whether bot has permission to add roles.
 				var botPerms = guild.GetUser(_client.CurrentUser.Id).GuildPermissions;
-				if (!botPerms.ManageRoles && !botPerms.Administrator)
+				if (allRoles.Any() && !botPerms.ManageRoles && !botPerms.Administrator)
 				{
 					_logger.LogWarning($"Permissions invalid: ManageRoles permission returned false in guild {guild.Id}");
 
@@ -64,8 +67,7 @@ namespace Kaguya.Internal.Services
 					return;
 				}
 
-				var rolesToAdd = new List<IRole>();
-				var allRoles = await autoRoleRepository.GetAllAsync(serverId);
+				
 				foreach (ulong roleId in allRoles.Select(x => x.RoleId))
 				{
 					var role = guild.GetRole(roleId);
