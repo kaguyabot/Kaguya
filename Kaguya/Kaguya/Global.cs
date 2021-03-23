@@ -16,7 +16,7 @@ namespace Kaguya
 		/// </summary>
 		public const string StoreLink = "[Kaguya Premium](" + StoreUrl + ")";
 		public const string SupportDiscordUrl = "https://discord.gg/aumCJhr";
-		public const string InviteUrl = "https://discord.com/oauth2/authorize?client_id=538910393918160916&scope=bot&permissions=536341759";
+		public const string InviteUrl = "https://discord.com/oauth2/authorize?client_id=538910393918160916&permissions=2683825239&scope=applications.commands%20bot";
 		public const string LocalDebugInviteUrl =
 			"https://discord.com/api/oauth2/authorize?client_id=664032361679159309&permissions=8&scope=bot";
 		public const string TopGgUpvoteUrl = "https://top.gg/bot/538910393918160916";
@@ -27,7 +27,7 @@ namespace Kaguya
 		public const string WikiChangelog = "https://github.com/kaguyabot/Kaguya/wiki/Changelog";
 		public const string DiscordTermsLink = "[Terms of Service](https://discord.com/terms)";
 		public const string DiscordCommunityGuidelinesLink = "[Community Guidelines](https://discord.com/guidelines)";
-		public static readonly string Version = "4.5";
+		public static readonly string Version = "4.5.1";
 		/// <summary>
 		///  The number of shards currently logged into Discord.
 		/// </summary>
