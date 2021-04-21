@@ -22,7 +22,6 @@ namespace Kaguya.Discord.Commands.Configuration
 	[Group("notifications")]
 	[Alias("notifs")]
 	[RequireUserPermission(GuildPermission.Administrator)]
-	[Summary("Displays the currently configured level notification preferences for the server.")]
 	public class LevelPreferences : KaguyaBase<LevelPreferences>
 	{
 		private static readonly List<string> _notifications = new()
@@ -47,7 +46,7 @@ namespace Kaguya.Discord.Commands.Configuration
 		}
 
 		[Command]
-		[InheritMetadata(CommandMetadata.Summary)]
+		[Summary("Displays the currently configured level notification preferences for the server.")]
 		public async Task ToggleLevelsCommandAsync()
 		{
 			var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);
@@ -88,6 +87,7 @@ namespace Kaguya.Discord.Commands.Configuration
 		}
 
 		[Command("-set", RunMode = RunMode.Async)]
+		[Summary("Displays an interactive setup for configuring level notifications.")]
 		public async Task SetNotificationsCommandAsync()
 		{
 			var server = await _kaguyaServerRepository.GetOrCreateAsync(Context.Guild.Id);

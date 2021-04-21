@@ -54,7 +54,7 @@ namespace Kaguya.Internal.Services
 				string content = string.IsNullOrEmpty(message.Content) ? "<Message contained no text>" : $"{message.Content}";
 
 				var sb = new StringBuilder($"🗑️ `[{GetFormattedTimestamp()}]` ");
-				sb.Append($"Message deleted. Author: {message.Author.Mention}. Channel: {((SocketTextChannel) message.Channel).Mention}.");
+				sb.Append($"Message deleted.\nAuthor: {message.Author.Mention}. Channel: {((SocketTextChannel) message.Channel).Mention}.");
 
 				// Premium servers get more content in the log.
 				if (server.IsPremium)
@@ -71,11 +71,13 @@ namespace Kaguya.Internal.Services
 					}
 				}
 
-				string msg = sb.ToString();
+				var embed = new KaguyaEmbedBuilder(KaguyaColors.Magenta).WithDescription(sb.ToString());
 
 				try
 				{
-					await _client.GetGuild(server.ServerId).GetTextChannel(config.MessageDeleted.Value).SendMessageAsync(msg);
+					await _client.GetGuild(server.ServerId)
+					             .GetTextChannel(config.MessageDeleted.Value)
+					             .SendMessageAsync(embed: embed.Build());
 				}
 				catch (Exception)
 				{
@@ -129,7 +131,7 @@ namespace Kaguya.Internal.Services
 				}
 
 				var sb = new StringBuilder($"📝 `[{GetFormattedTimestamp()}]` ");
-				sb.Append($"Message updated. Author: {oldMsg.Author.Mention}. Channel: {((SocketTextChannel) oldMsg.Channel).Mention}.");
+				sb.Append($"Message updated.\nAuthor: {oldMsg.Author.Mention}. Channel: {((SocketTextChannel) oldMsg.Channel).Mention}.");
 
 				if (server.IsPremium)
 				{
@@ -138,11 +140,13 @@ namespace Kaguya.Internal.Services
 					sb.Append($"New Content:\n\"**{arg2Content}**\"");
 				}
 
-				string msg = sb.ToString();
+				var embed = new KaguyaEmbedBuilder(KaguyaColors.Orange).WithDescription(sb.ToString());
 
 				try
 				{
-					await _client.GetGuild(server.ServerId).GetTextChannel(config.MessageUpdated.Value).SendMessageAsync(msg);
+					await _client.GetGuild(server.ServerId)
+					             .GetTextChannel(config.MessageUpdated.Value)
+					             .SendMessageAsync(embed: embed.Build());
 				}
 				catch (Exception)
 				{
@@ -174,9 +178,11 @@ namespace Kaguya.Internal.Services
 				string msg =
 					$"✅ `[{GetFormattedTimestamp()}]` {user.Mention} joined the server. Member Count: **{user.Guild.MemberCount:N0}**";
 
+				var embed = new KaguyaEmbedBuilder(KaguyaColors.Green).WithDescription(msg);
+
 				try
 				{
-					await _client.GetGuild(server.ServerId).GetTextChannel(config.UserJoins.Value).SendMessageAsync(msg);
+					await _client.GetGuild(server.ServerId).GetTextChannel(config.UserJoins.Value).SendMessageAsync(embed: embed.Build());
 				}
 				catch (Exception)
 				{
@@ -208,9 +214,11 @@ namespace Kaguya.Internal.Services
 				string msg = $"{_commonEmotes.RedCrossEmote} `[{GetFormattedTimestamp()}]` {user.Mention} left the server. " +
 				             $"Member Count: **{user.Guild.MemberCount:N0}**";
 
+				var embed = new KaguyaEmbedBuilder(KaguyaColors.Red).WithDescription(msg);
+
 				try
 				{
-					await _client.GetGuild(server.ServerId).GetTextChannel(config.UserLeaves.Value).SendMessageAsync(msg);
+					await _client.GetGuild(server.ServerId).GetTextChannel(config.UserLeaves.Value).SendMessageAsync(embed: embed.Build());
 				}
 				catch (Exception)
 				{
@@ -242,12 +250,12 @@ namespace Kaguya.Internal.Services
 				}
 
 				string punishString = AntiraidData.FormattedAntiraidPunishment(action.Action);
-				string logString =
-					$"🛡️ `[Anti-Raid]` `[{GetFormattedTimestamp()}]` {socketUser.Mention} was automatically {punishString}.";
+				string msg = $"🛡️ `[Anti-Raid]` `[{GetFormattedTimestamp()}]` {socketUser.Mention} was {punishString}.";
+				var embed = new KaguyaEmbedBuilder(KaguyaColors.Blue).WithDescription(msg);
 
 				try
 				{
-					await _client.GetGuild(action.ServerId).GetTextChannel(config.Antiraids.Value).SendMessageAsync(logString);
+					await _client.GetGuild(action.ServerId).GetTextChannel(config.Antiraids.Value).SendMessageAsync(embed: embed.Build());
 				}
 				catch (Exception)
 				{
@@ -279,9 +287,11 @@ namespace Kaguya.Internal.Services
 				string msg = $"⛔ `[{GetFormattedTimestamp()}]` {bannedUser.Mention} was banned from the server. " +
 				             $"Member Count: **{guild.MemberCount - 1:N0}**"; // - 1 on count b/c guild is a cached object.
 
+				var embed = new KaguyaEmbedBuilder(KaguyaColors.DarkRed).WithDescription(msg);
+
 				try
 				{
-					await guild.GetTextChannel(config.Bans.Value).SendMessageAsync(msg);
+					await guild.GetTextChannel(config.Bans.Value).SendMessageAsync(embed: embed.Build());
 				}
 				catch (Exception)
 				{
@@ -311,10 +321,11 @@ namespace Kaguya.Internal.Services
 				}
 
 				string msg = $"♻ `[{GetFormattedTimestamp()}]` {unbannedUser.Mention} has been unbanned.";
+				var embed = new KaguyaEmbedBuilder(KaguyaColors.LightYellow).WithDescription(msg);
 
 				try
 				{
-					await guild.GetTextChannel(config.UnBans.Value).SendMessageAsync(msg);
+					await guild.GetTextChannel(config.UnBans.Value).SendMessageAsync(embed: embed.Build());
 				}
 				catch (Exception)
 				{
@@ -330,6 +341,12 @@ namespace Kaguya.Internal.Services
 
 		public async Task LogUserVoiceStateUpdatedAsync(SocketUser user, SocketVoiceState curVoiceState, SocketVoiceState nextVoiceState)
 		{
+			// We only log voice channel changes.
+			if (user == null || (curVoiceState.VoiceChannel != null && curVoiceState.VoiceChannel.Equals(nextVoiceState.VoiceChannel)))
+			{
+				return;
+			}
+
 			using (var scope = _serviceProvider.CreateScope())
 			{
 				var kaguyaServerRepository = scope.ServiceProvider.GetRequiredService<KaguyaServerRepository>();
@@ -377,11 +394,13 @@ namespace Kaguya.Internal.Services
 				var sb = new StringBuilder($"{emoji} `[{GetFormattedTimestamp()}]` {user.Mention} ");
 				sb.Append($"has {changeString}.");
 
-				string msg = sb.ToString();
+				var embed = new KaguyaEmbedBuilder(KaguyaColors.IceBlue).WithDescription(sb.ToString());
 
 				try
 				{
-					await _client.GetGuild(server.ServerId).GetTextChannel(config.VoiceUpdates.Value).SendMessageAsync(msg);
+					await _client.GetGuild(server.ServerId)
+					             .GetTextChannel(config.VoiceUpdates.Value)
+					             .SendMessageAsync(embed: embed.Build());
 				}
 				catch (Exception)
 				{
@@ -420,11 +439,13 @@ namespace Kaguya.Internal.Services
 					sb.Append($"\nMessage Contents: \"**{fwData.Message.Content}**\"");
 				}
 
-				string msg = sb.ToString();
+				var embed = new KaguyaEmbedBuilder(KaguyaColors.DarkBlue).WithDescription(sb.ToString());
 
 				try
 				{
-					await _client.GetGuild(fwData.ServerId).GetTextChannel(config.FilteredWord.Value).SendMessageAsync(msg);
+					await _client.GetGuild(fwData.ServerId)
+					             .GetTextChannel(config.FilteredWord.Value)
+					             .SendMessageAsync(embed: embed.Build());
 				}
 				catch (Exception)
 				{
