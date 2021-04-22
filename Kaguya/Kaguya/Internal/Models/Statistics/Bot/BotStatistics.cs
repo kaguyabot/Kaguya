@@ -56,7 +56,8 @@ namespace Kaguya.Internal.Models.Statistics.Bot
 				this.TotalGambleLosses = gambleHistoryRepository.TotalGambleLosses().GetAwaiter().GetResult();
 				this.TotalGambleWinsCoins = gambleHistoryRepository.TotalGambleWinsCoins().GetAwaiter().GetResult();
 				this.TotalGambleLossesCoins = gambleHistoryRepository.TotalGambleLossesCoins().GetAwaiter().GetResult();
-				this.TotalGambleWinPercent = this.TotalGambleWins / ((double) this.TotalGambleWins + this.TotalGambleLosses);
+				this.TotalGambleWinPercent = this.TotalGambleWins == 0 ? 0 : this.TotalGambleWins / ((double) this.TotalGambleWins + this
+				.TotalGambleLosses);
 
 				this.Uptime = DateTimeOffset.UtcNow - Process.GetCurrentProcess().StartTime.ToUniversalTime();
 			}

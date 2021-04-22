@@ -18,6 +18,12 @@ namespace Kaguya.Internal.PrimitiveExtensions
 		public static string ToShorthandFormat(this long num)
 		{
 			long i = (long) Math.Pow(10, (long) Math.Max(0, Math.Log10(num) - 2));
+
+			if (i == 0)
+			{
+				return "0";
+			}
+			
 			num = (num / i) * i;
 
 			if (num >= 1000000000)
