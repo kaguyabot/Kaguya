@@ -1,3 +1,12 @@
+# NOTICE
+**THIS PROJECT IS DISCONTINUED!**
+
+Anyone may fork or otherwise continue this project on their own accord, if they wish, by following the 
+instructions below. I will no longer be maintaining this project in any shape or form. The project is simply too large for me to continue maintaining part time, especially with new Discord API features such as slash commands and components.
+
+Please consider checking out my other projects! Notably my fishing bot 'King Mackerel' written in Python. [stageosu/king-mackerel](https://www.github.com/stageosu/king-mackerel)
+
+
 # Kaguya
 [![CodeFactor](https://www.codefactor.io/repository/github/kaguyabot/kaguya/badge/v4-open-beta)](https://www.codefactor.io/repository/github/kaguyabot/kaguya/overview/v4-open-beta)
 <a class="discord-widget" href="http://discord.gg/aumCJhr" title="Join us on Discord"> <img src="https://discordapp.com/api/guilds/546880579057221644/widget.png?style=shield"> </a> </a>
